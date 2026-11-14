@@ -65,6 +65,7 @@ export function ConfigRequestModal({
   onSuccess,
   parentAlbum,
   preloadedTracks,
+  keepRequesting,
 }: ConfigRequestModalProps) {
   const [selection, setSelection] = useState<RequestSelection | null>(null);
   const [lidarrSelection, setLidarrSelection] = useState<LidarrSelection>({
@@ -311,7 +312,7 @@ export function ConfigRequestModal({
         )}
       </div>
 
-      <RequestFooter summary={footerSummary} note={footerNote}>
+      <RequestFooter summary={footerSummary} note={footerNote} keepRequesting={keepRequesting}>
         <Button
           onClick={isLidarrArtistMode ? handleDelegateArtist : handleDownload}
           disabled={isBusy}

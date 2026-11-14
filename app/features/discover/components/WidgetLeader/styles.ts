@@ -2,20 +2,17 @@ import { cva } from "class-variance-authority";
 
 export const leaderFrame = cva("@container flex min-h-0 flex-1 flex-col");
 
-export const leaderLayout = cva("flex min-h-0 flex-1 flex-col gap-3 @3xl:flex-row @3xl:gap-5");
+export const leaderLayout = cva("flex min-h-0 flex-1 flex-col gap-3 @xl:flex-row @xl:gap-5");
 
-export const leader = cva(
-  "relative flex min-h-52 shrink-0 overflow-hidden rounded-2xl @3xl:min-h-0 @3xl:w-[clamp(14rem,30%,18rem)]",
-  {
-    variants: {
-      fill: {
-        true: "flex-1 @3xl:flex-none",
-        false: "",
-      },
+export const leader = cva("relative flex min-h-36 shrink-0 overflow-hidden rounded-2xl @xl:min-h-0", {
+  variants: {
+    fill: {
+      true: "flex-1",
+      false: "@xl:w-[clamp(14rem,30%,18rem)]",
     },
-    defaultVariants: { fill: false },
-  }
-);
+  },
+  defaultVariants: { fill: false },
+});
 
 export const leaderCover = cva("absolute inset-0 [&_img]:object-cover");
 
@@ -29,7 +26,7 @@ export const leaderBadge = cva(
 
 export const leaderBody = cva("relative z-10 mt-auto flex w-full min-w-0 flex-col items-start gap-1 p-4");
 
-export const leaderRank = cva("text-overlay-fg text-4xl leading-none font-black tabular-nums @3xl:text-5xl");
+export const leaderRank = cva("text-overlay-fg text-4xl leading-none font-black tabular-nums @xl:text-5xl");
 
 export const leaderTitle = cva("text-overlay-fg w-full truncate text-lg font-semibold");
 

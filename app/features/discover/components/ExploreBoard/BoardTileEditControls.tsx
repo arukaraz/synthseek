@@ -17,6 +17,7 @@ export function BoardTileEditControls({
   name,
   custom,
   editable,
+  rowSized,
   position,
   total,
   actions,
@@ -56,6 +57,7 @@ export function BoardTileEditControls({
           item={item}
           device={device}
           name={name}
+          rowSized={rowSized}
           position={position}
           total={total}
           actions={actions}

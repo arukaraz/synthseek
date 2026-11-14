@@ -3,10 +3,11 @@ import type { ParseKeys } from "i18next";
 import i18n from "@locale";
 import type { BoardSize } from "@hooks/api/queries/board/types";
 
+import { isWideSize } from "../helpers";
 import type { EmptyReason, ScrobbleLayout } from "./types";
 
 export function scrobbleLayoutFor(size: BoardSize): ScrobbleLayout {
-  return size === "L" ? "rail" : "timeline";
+  return isWideSize(size) ? "rail" : "timeline";
 }
 
 const EMPTY_TEXT_KEYS: Record<EmptyReason, ParseKeys<"discover">> = {

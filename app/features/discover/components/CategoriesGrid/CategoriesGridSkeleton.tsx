@@ -3,13 +3,14 @@
 import { glassPanelCard } from "@components/ui/styles";
 import { WidgetHeaderSkeleton } from "@components/WidgetHeader";
 import { gradientOverlay } from "@theme/utilities/styles";
+import { cn } from "@utils/cn";
 import { useTranslation } from "react-i18next";
 
 import { SIZE_PATTERN } from "./constants";
+import { mosaicSlotClass } from "./helpers";
 import { mosaicGrid, panelBody, skeletonCard } from "./styles";
-import type { CategoriesGridSkeletonProps } from "./types";
 
-export function CategoriesGridSkeleton({ layout }: CategoriesGridSkeletonProps) {
+export function CategoriesGridSkeleton() {
   const { t } = useTranslation("discover");
 
   return (
@@ -18,9 +19,9 @@ export function CategoriesGridSkeleton({ layout }: CategoriesGridSkeletonProps) 
 
       <div className={panelBody()}>
         <WidgetHeaderSkeleton />
-        <div className={mosaicGrid({ layout })}>
-          {SIZE_PATTERN[layout].map((size, i) => (
-            <div key={i} className={skeletonCard({ size })} />
+        <div className={mosaicGrid()}>
+          {SIZE_PATTERN.map((size, i) => (
+            <div key={i} className={cn(skeletonCard({ size }), mosaicSlotClass(i))} />
           ))}
         </div>
       </div>

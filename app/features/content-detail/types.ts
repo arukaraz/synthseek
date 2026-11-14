@@ -27,6 +27,7 @@ export interface DetailTarget {
 
 export interface ContentDetailModalProps {
   open: boolean;
+  session?: number;
   onClose: () => void;
   target: DetailTarget | null;
   actions: ContentDetailActions;

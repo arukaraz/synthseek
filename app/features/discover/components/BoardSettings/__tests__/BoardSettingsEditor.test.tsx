@@ -40,7 +40,7 @@ describe("BoardSettingsEditor", () => {
   it("hands the saved board, the member's look and the device to the form", () => {
     layout.isLoading = false;
     layout.data = {
-      schemaVersion: 4,
+      schemaVersion: 5,
       items: [{ kind: "builtin", id: "a", widget: "scrobbles", size: "M" }],
       mobile: [{ kind: "builtin", id: "m", widget: "requests", size: "S" }],
     };

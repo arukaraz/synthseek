@@ -44,4 +44,23 @@ describe("BoardGrid", () => {
     expect(grid()?.style.getPropertyValue("--board-gap")).toBe("24px");
     expect(grid()?.style.getPropertyValue("--text-sm")).toBe("");
   });
+
+  it("lays its rows out from a template only when it is handed one", () => {
+    const { rerender } = render(
+      <BoardGrid device="wide">
+        <span>tile</span>
+      </BoardGrid>
+    );
+    const grid = () => screen.getByText("tile").parentElement;
+    expect(grid()?.style.getPropertyValue("--board-template-rows")).toBe("");
+    expect(grid()?.className).not.toContain("grid-rows-");
+
+    rerender(
+      <BoardGrid device="wide" templateRows="2rem repeat(4, var(--board-row))">
+        <span>tile</span>
+      </BoardGrid>
+    );
+    expect(grid()?.style.getPropertyValue("--board-template-rows")).toBe("2rem repeat(4, var(--board-row))");
+    expect(grid()?.className).toContain("grid-rows-[var(--board-template-rows)]");
+  });
 });

@@ -11,6 +11,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import type { BoardWidgetProps } from "../ExploreBoard/types";
+import { isWideSize } from "../helpers";
 import { TAB_MODES } from "./constants";
 import { leaderboardEntries } from "./helpers";
 import { LeaderboardRanking } from "./LeaderboardRanking";
@@ -66,7 +67,7 @@ export function LibraryLeaderboard({ size, info }: BoardWidgetProps) {
       </div>
       <LibraryStatsRow summary={summary} />
 
-      {size === "L" ? (
+      {isWideSize(size) ? (
         <div className={rankingColumns()}>
           {TAB_MODES.map((ranked) => (
             <LeaderboardRanking

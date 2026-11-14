@@ -8,7 +8,16 @@ import { boardMetricsOf } from "./helpers";
 import type { BoardDevice, BoardMetrics } from "./types";
 
 export const boardGrid = cva(
-  "grid auto-rows-[var(--board-row)] grid-cols-[repeat(var(--board-cols),minmax(0,1fr))] gap-[var(--board-gap)]"
+  "grid auto-rows-[var(--board-row)] grid-cols-[repeat(var(--board-cols),minmax(0,1fr))] gap-[var(--board-gap)]",
+  {
+    variants: {
+      framed: {
+        true: "grid-rows-[var(--board-template-rows)]",
+        false: "",
+      },
+    },
+    defaultVariants: { framed: false },
+  }
 );
 
 function typeScaleVars(scale: number): CssVars {
@@ -16,6 +25,13 @@ function typeScaleVars(scale: number): CssVars {
   return Object.fromEntries(
     Object.entries(BOARD_TYPE_STEPS_REM).map(([step, rem]) => [`--text-${step}`, `${rem * scale}rem`])
   );
+}
+
+export function boardGridStyle(device: BoardDevice, appearance?: BoardAppearance, templateRows?: string): CssVars {
+  return {
+    ...boardGridVars(device, appearance),
+    ...(templateRows === undefined ? {} : { "--board-template-rows": templateRows }),
+  };
 }
 
 export function boardGridVars(

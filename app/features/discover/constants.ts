@@ -52,7 +52,7 @@ export const DEFAULT_PLAYLIST_SET: PlaylistSetQuery = {
 
 export const NEW_WIDGET_DRAFT: WidgetDraft = {
   kind: "synthseek-widget",
-  schemaVersion: 2,
+  schemaVersion: 3,
   meta: { name: "", description: "", icon: "sparkles", accent: "weekly", visibility: "private" },
   query: DEFAULT_QUERIES.recipe,
   view: { block: "list", action: "play" },

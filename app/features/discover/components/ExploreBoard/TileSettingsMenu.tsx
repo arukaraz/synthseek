@@ -32,6 +32,7 @@ export function TileSettingsMenu({
   item,
   device,
   name,
+  rowSized,
   position,
   total,
   dense,
@@ -82,7 +83,13 @@ export function TileSettingsMenu({
           <PaintBucket />
           {tileHasBackground(item) ? t("board.tile.backgroundOff") : t("board.tile.backgroundOn")}
         </DropdownMenuItem>
-        {item.kind === "spacer" ? (
+        {item.kind === "spacer" && rowSized ? (
+          <DropdownMenuItem disabled>
+            <UnfoldVertical />
+            {t("board.spacer.followsRow")}
+          </DropdownMenuItem>
+        ) : null}
+        {item.kind === "spacer" && !rowSized ? (
           <>
             <DropdownMenuItem
               disabled={item.rows <= SPACER_MIN_ROWS}

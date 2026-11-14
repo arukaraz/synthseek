@@ -25,7 +25,7 @@ export const SEARCH_MENU_LIMIT = 30;
 
 export const UNSET_RULE_VALUE = "-";
 
-export const WORKSHOP_SIZES: readonly BoardSize[] = ["S", "M", "L"];
+export const WORKSHOP_SIZES: readonly BoardSize[] = ["S", "M", "L", "XL"];
 
 export const WIDGET_KINDS: readonly WidgetKind[] = ["recipe", "feed"];
 

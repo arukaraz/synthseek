@@ -14,16 +14,15 @@ import { useTranslation } from "react-i18next";
 import { CategoriesGridSkeleton } from "./CategoriesGridSkeleton";
 import { CategoryCard } from "./CategoryCard";
 import { CATEGORIES_LIMIT } from "./constants";
-import { getCardSize, mosaicLayoutFor } from "./helpers";
+import { getCardSize, mosaicSlotClass } from "./helpers";
 import { emptyWrap, mosaicGrid, panelBody } from "./styles";
 import type { CategoriesGridProps } from "./types";
 
-export function CategoriesGrid({ size, info }: CategoriesGridProps) {
+export function CategoriesGrid({ info }: CategoriesGridProps) {
   const { t } = useTranslation("discover");
   const router = useRouter();
   const { data, isLoading, isError } = useCategories(CATEGORIES_LIMIT);
   const categories = data?.data?.items ?? [];
-  const layout = mosaicLayoutFor(size);
 
   const handleCategoryClick = (categoryId: string, categoryName: string) => {
     router.push(`/discover/category/${categoryId}?name=${encodeURIComponent(categoryName)}`);
@@ -34,7 +33,7 @@ export function CategoriesGrid({ size, info }: CategoriesGridProps) {
   };
 
   if (isLoading) {
-    return <CategoriesGridSkeleton layout={layout} />;
+    return <CategoriesGridSkeleton />;
   }
 
   const header = (
@@ -91,12 +90,13 @@ export function CategoriesGrid({ size, info }: CategoriesGridProps) {
       <div className={panelBody()}>
         {header}
 
-        <div className={mosaicGrid({ layout })}>
+        <div className={mosaicGrid()}>
           {categories.slice(0, CATEGORIES_LIMIT).map((category, index) => (
             <CategoryCard
               key={category.id}
               category={category}
-              size={getCardSize(index, layout)}
+              size={getCardSize(index)}
+              className={mosaicSlotClass(index)}
               onClick={handleCategoryClick}
             />
           ))}

@@ -193,7 +193,7 @@ describe("WidgetsDialog gallery", () => {
     expect(cardTitles()).toHaveLength(25);
     expect(cardTitles().slice(0, 3)).toEqual(["Trending now", "Continue listening", "Jump back in"]);
     expect(screen.queryByRole("heading", { level: 3 })).not.toBeInTheDocument();
-    expect(document.querySelector("[data-preview='mixes']")).toHaveAttribute("data-size", "L");
+    expect(document.querySelector("[data-preview='mixes']")).toHaveAttribute("data-size", "XL");
   });
 
   it("searches titles and descriptions, and says when nothing matches", () => {

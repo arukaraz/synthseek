@@ -67,6 +67,7 @@
   },
   "artistSpotlight": {
     "title": "Des artistes qui pourraient vous plaire",
+    "rail": "Tous les artistes suggérés, faites défiler sur le côté",
     "subtitle": "Proches de ce que vous écoutez",
     "errorTitle": "Échec du chargement des artistes",
     "errorDescription": "Impossible de récupérer les artistes. Veuillez réessayer plus tard.",
@@ -125,6 +126,7 @@
   },
   "mixes": {
     "title": "Mixs de découverte",
+    "rail": "Tous les mixs, faites défiler sur le côté",
     "subtitle": "ListenBrainz",
     "cardAriaLabel": "Ouvrir le mix {{label}}, {{count}} pistes",
     "trackCount": "{{count}} pistes",
@@ -189,10 +191,20 @@
     "add": {
       "action": "Ajouter"
     },
+    "row": {
+      "label": "Ligne {{position}}",
+      "height": "Hauteur de la ligne {{position}}",
+      "heights": {
+        "short": "Basse",
+        "regular": "Normale",
+        "tall": "Haute"
+      }
+    },
     "spacer": {
       "name": "Espaceur",
       "shorter": "Réduire la hauteur de l’espaceur",
-      "taller": "Augmenter la hauteur de l’espaceur"
+      "taller": "Augmenter la hauteur de l’espaceur",
+      "followsRow": "Aussi haut que sa ligne. Changez la hauteur sur la ligne."
     },
     "arrange": {
       "hint": "Faites glisser un widget pour le déplacer, ou déposez-le sous le tableau pour commencer une nouvelle rangée. Rien ne change avant d’enregistrer.",
@@ -224,12 +236,14 @@
     "sizes": {
       "S": "S",
       "M": "M",
-      "L": "L"
+      "L": "L",
+      "XL": "XL"
     },
     "sizeNames": {
       "S": "Petit",
       "M": "Moyen",
-      "L": "Grand"
+      "L": "Grand",
+      "XL": "Très grand"
     },
     "gallery": {
       "subtitle": "Ajouter place un widget à la fin de la disposition choisie. Personnaliser ouvre une copie dans l’atelier.",
@@ -263,6 +277,7 @@
     "announce": {
       "moved": "{{name}} déplacé en position {{position}} sur {{total}}",
       "resized": "{{name}} est maintenant {{size}}",
+      "rowHeight": "La ligne {{position}} est maintenant {{height}}",
       "removed": "{{name}} retiré"
     },
     "empty": {

@@ -49,6 +49,7 @@ export function BoardTile({
           name={name}
           custom={custom}
           editable={item.kind === "custom" && custom.has(item.widgetId)}
+          rowSized={tile.rowSized}
           position={position}
           total={total}
           actions={actions}

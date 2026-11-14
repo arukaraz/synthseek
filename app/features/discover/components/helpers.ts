@@ -5,12 +5,16 @@ import type { BoardSize } from "@hooks/api/queries/board/types";
 import { CARD_FIT, CARD_ROW_LIMITS } from "./constants";
 import type { WidgetListColumns } from "./WidgetRow/types";
 
+export function isWideSize(size: BoardSize): boolean {
+  return size === "L" || size === "XL";
+}
+
 export function cardRowLimit(size: BoardSize): number {
-  return size === "L" ? CARD_ROW_LIMITS.full : CARD_ROW_LIMITS.half;
+  return CARD_ROW_LIMITS[size];
 }
 
 export function listColumns(size: BoardSize): WidgetListColumns {
-  return size === "L" ? "two" : "one";
+  return isWideSize(size) ? "two" : "one";
 }
 
 export function cardRowFit(width: number, size: BoardSize): number {

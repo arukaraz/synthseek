@@ -44,10 +44,10 @@ export function BoardArrangePanel({
   );
 
   const placements = useMemo(
-    () => placementsById(packBoard(arrange.displayItems, device, custom)),
-    [arrange.displayItems, device, custom]
+    () => placementsById(packBoard(arrange.displayItems, device)),
+    [arrange.displayItems, device]
   );
-  const settled = useMemo(() => packBoard(arrange.draft, device, custom), [arrange.draft, device, custom]);
+  const settled = useMemo(() => packBoard(arrange.draft, device), [arrange.draft, device]);
   const base = boardMetricsOf(appearance);
   const layout = arrangeLayoutOf({ width, height }, device, boardWidth, settled, base);
 

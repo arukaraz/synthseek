@@ -4,7 +4,7 @@ import type { BoardAppearance, BoardItem, BoardLayout, BoardList, BoardLists } f
 import { createWidget } from "@test/factories";
 import { act, fireEvent, renderHook } from "@test/test-utils";
 
-import { customWidgetsById } from "../../components/ExploreBoard/helpers";
+import { customWidgetsById, layOutBoard } from "../../components/ExploreBoard/helpers";
 import type { BoardCustomWidgets, CustomWidgetsStatus } from "../../components/ExploreBoard/types";
 import { useBoardEditor } from "../useBoardEditor";
 
@@ -94,7 +94,7 @@ describe("useBoardEditor", () => {
 
     act(() => result.current.actions.move("a", -1));
 
-    expect(lastSaved()).toEqual({ schemaVersion: 4, items: ITEMS, mobile: [MOBILE[1], MOBILE[0]] });
+    expect(lastSaved()).toEqual({ schemaVersion: 5, items: ITEMS, mobile: [MOBILE[1], MOBILE[0]] });
     expect(result.current.displayItems).toEqual(MOBILE);
   });
 
@@ -138,6 +138,31 @@ describe("useBoardEditor", () => {
     act(() => result.current.actions.resize("a", "L"));
     expect(lastSaved().items[0]?.size).toBe("L");
     expect(result.current.announcement).toBe("Recent Scrobbles is now Large");
+  });
+
+  it("saves a row's new height on every tile of that row and announces it", () => {
+    const { result } = editor();
+    const [row] = layOutBoard(ITEMS, "wide").rows;
+    if (!row) throw new Error("the board has no row");
+
+    act(() => result.current.setRowHeight(row, "tall"));
+
+    expect(lastSaved().items.map((item) => item.height)).toEqual(["tall", "tall", undefined]);
+    expect(lastSaved().mobile).toEqual(MOBILE);
+    expect(result.current.announcement).toBe("Row 1 is now Tall");
+  });
+
+  it("saves nothing for the height a row already has, or for a row of nothing but spacers", () => {
+    const spacers: BoardItem[] = [{ kind: "spacer", id: "sp", size: "XL", rows: 2 }];
+    const { result } = editor(spacers);
+    const [spacerRow] = layOutBoard(spacers, "wide").rows;
+    const [row] = layOutBoard(ITEMS, "wide").rows;
+    if (!row || !spacerRow) throw new Error("the board has no row");
+
+    act(() => result.current.setRowHeight(row, "regular"));
+    act(() => result.current.setRowHeight(spacerRow, "tall"));
+
+    expect(saveMock).not.toHaveBeenCalled();
   });
 
   it("removes a tile with an Undo that saves the previous list back", () => {
@@ -194,10 +219,10 @@ describe("useBoardEditor", () => {
     act(() => result.current.saveBoard({ lists: next, appearance: null }));
 
     expect(result.current.widgets).toBeNull();
-    expect(saveMock.mock.calls).toEqual([[{ schemaVersion: 4, ...next }, "optimistic"]]);
+    expect(saveMock.mock.calls).toEqual([[{ schemaVersion: 5, ...next }, "optimistic"]]);
     expect(toastMock.success.mock.calls.at(-1)?.[0]).toBe("Board saved");
     lastToastAction().onClick();
-    expect(lastSaved()).toEqual({ schemaVersion: 4, items: ITEMS, mobile: MOBILE });
+    expect(lastSaved()).toEqual({ schemaVersion: 5, items: ITEMS, mobile: MOBILE });
   });
 
   it("closes without saving or offering an undo when nothing changed", () => {

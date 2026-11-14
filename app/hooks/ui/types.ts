@@ -1,5 +1,5 @@
 import type { ContentType, MusicItem, MusicTrack } from "@api/__generated__/types";
-import type { ConfigRequestMode } from "@features/search/components/ConfigRequestModal/types";
+import type { ConfigRequestMode, KeepRequestingControl } from "@features/search/components/ConfigRequestModal/types";
 import type { DetailTarget } from "@features/content-detail";
 import type { LucideIcon } from "lucide-react";
 import type { MouseEventHandler, PointerEventHandler, RefObject } from "react";
@@ -46,10 +46,14 @@ export interface FlowState {
   parentAlbumFromContext: MusicItem | null;
   preloadedTracks: MusicTrack[] | null;
   configRequestMode: ConfigRequestMode;
+  detailSession: number;
+  configFromDetail: boolean;
+  keepRequesting: boolean;
 }
 
 export interface ContentDetailModalFlowProps {
   open: boolean;
+  session: number;
   onClose: () => void;
   onRequestClick: (item: MusicItem, context?: RequestContext) => void;
   onRequestArtistLidarr: (artist: MusicItem) => void;
@@ -63,6 +67,8 @@ export interface ConfigRequestModalFlowProps {
   onClose: () => void;
   parentAlbum: MusicItem | null;
   preloadedTracks: MusicTrack[] | undefined;
+  onSuccess: () => void;
+  keepRequesting: KeepRequestingControl | undefined;
 }
 
 export interface UseContentRequestModalsResult {

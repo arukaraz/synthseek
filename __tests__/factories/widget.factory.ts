@@ -26,7 +26,7 @@ export function createWidget(overrides: Partial<WidgetDocument> = {}): WidgetDoc
   return {
     id: "w_1",
     kind: "synthseek-widget",
-    schemaVersion: 2,
+    schemaVersion: 3,
     meta: { name: "Most played", description: "Your month", icon: "flame", accent: "daily", visibility: "private" },
     query: {
       type: "recipe",

@@ -215,9 +215,15 @@ export interface ChoicePillsProps<T extends string> {
   onChange: (value: T) => void;
 }
 
+export interface KeepRequestingControl {
+  checked: boolean;
+  onChange: (checked: boolean) => void;
+}
+
 export interface RequestFooterProps {
   summary: string | null;
   note: string | null;
+  keepRequesting?: KeepRequestingControl;
   children: ReactNode;
 }
 
@@ -236,6 +242,7 @@ export interface ConfigRequestModalProps {
   onSuccess?: (itemName: string) => void;
   parentAlbum?: MusicItem | null;
   preloadedTracks?: MusicTrack[];
+  keepRequesting?: KeepRequestingControl;
 }
 
 export interface BitrateOption {

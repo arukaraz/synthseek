@@ -1,7 +1,8 @@
 import type { CssVars } from "@theme/utilities/types";
 import { cva } from "class-variance-authority";
 
-import type { PlacedTile } from "./types";
+import { BOARD_ROW_FRAME_HEAD } from "./constants";
+import type { BoardRow, PlacedTile } from "./types";
 
 export const boardRoot = cva("flex flex-col gap-4", {
   variants: {
@@ -153,6 +154,20 @@ export const editIcon = cva("size-7 shrink-0");
 export const emptyBoard = cva("border-fg/10 flex flex-col items-center gap-2 rounded-2xl border border-dashed pb-8");
 
 export const liveRegion = cva("sr-only");
+
+export const rowFrame = cva(
+  "border-fg/20 bg-fg/[0.03] pointer-events-none -mx-2 -mb-1.5 min-w-0 rounded-2xl border border-dashed [grid-column:1/-1] [grid-row:var(--row-frame)]"
+);
+
+export const rowFrameHead = cva(
+  "pointer-events-auto flex h-[var(--row-frame-head)] min-w-0 items-center justify-between gap-2 px-3"
+);
+
+export const rowFrameLabel = cva("text-fg/60 min-w-0 truncate font-mono text-[10.5px] tracking-[0.08em] uppercase");
+
+export function rowFrameVars(row: BoardRow): CssVars {
+  return { "--row-frame": `${row.row + 1} / span ${row.rows}`, "--row-frame-head": BOARD_ROW_FRAME_HEAD };
+}
 
 export function tileVars(tile: PlacedTile): CssVars {
   return {

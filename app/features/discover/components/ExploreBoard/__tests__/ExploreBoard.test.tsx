@@ -88,7 +88,7 @@ vi.mock("../../Landed/Landed", () => ({ Landed: stub("landed") }));
 vi.mock("../../ServerPlaylists/ServerPlaylists", () => ({ ServerPlaylists: stub("serverPlaylists") }));
 
 const TWO_TILES: BoardLayout = {
-  schemaVersion: 4,
+  schemaVersion: 5,
   items: [
     { kind: "builtin", id: "a", widget: "scrobbles", size: "M" },
     { kind: "builtin", id: "b", widget: "requests", size: "M" },
@@ -97,7 +97,7 @@ const TWO_TILES: BoardLayout = {
 };
 
 function only(items: BoardLayout["items"]): BoardLayout {
-  return { schemaVersion: 4, items, mobile: items };
+  return { schemaVersion: 5, items, mobile: items };
 }
 
 async function openWidgets() {
@@ -265,6 +265,52 @@ describe("ExploreBoard", () => {
       widget: "scrobbles",
       size: "L",
     });
+  });
+
+  it("frames each row only in edit mode, opening a head track above it without changing a tile's rows", () => {
+    useBoardLayoutMock.mockReturnValue({ data: TWO_TILES, isLoading: false });
+
+    const { container } = render(<ExploreBoard />, { wrapper: TooltipProvider });
+    expect(screen.queryByRole("group", { name: "Height of row 1" })).toBeNull();
+    expect(tile(container, "b").style.getPropertyValue("--tile-row")).toBe("1 / span 4");
+
+    fireEvent.click(screen.getByRole("button", { name: i18n.t("discover:board.customize") }));
+
+    expect(screen.getByRole("group", { name: "Height of row 1" })).toBeInTheDocument();
+    expect(tile(container, "b").style.getPropertyValue("--tile-row")).toBe("2 / span 4");
+    expect(tile(container, "b").parentElement?.style.getPropertyValue("--board-template-rows")).toBe(
+      "2rem repeat(4, var(--board-row))"
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: i18n.t("discover:board.done") }));
+
+    expect(screen.queryByRole("group", { name: "Height of row 1" })).toBeNull();
+    expect(tile(container, "b").style.getPropertyValue("--tile-row")).toBe("1 / span 4");
+  });
+
+  it("saves the height picked on a row's frame on every tile of that row", () => {
+    useBoardLayoutMock.mockReturnValue({ data: TWO_TILES, isLoading: false });
+
+    render(<ExploreBoard />, { wrapper: TooltipProvider });
+    fireEvent.click(screen.getByRole("button", { name: i18n.t("discover:board.customize") }));
+    fireEvent.click(
+      within(screen.getByRole("group", { name: "Height of row 1" })).getByRole("button", { name: "Short" })
+    );
+
+    expect(saveMock.mock.calls.at(-1)?.[0].items.map((item) => [item.id, item.height])).toEqual([
+      ["a", "short"],
+      ["b", "short"],
+    ]);
+    expect(screen.getByText("Row 1 is now Short")).toBeInTheDocument();
+  });
+
+  it("draws a row at the height its tiles carry", () => {
+    const tall = only([{ kind: "builtin", id: "a", widget: "scrobbles", size: "M", height: "tall" }]);
+    useBoardLayoutMock.mockReturnValue({ data: tall, isLoading: false });
+
+    const { container } = render(<ExploreBoard />, { wrapper: TooltipProvider });
+
+    expect(tile(container, "a").style.getPropertyValue("--tile-row")).toBe("1 / span 6");
   });
 
   it("offers an empty state that opens the Widgets dialog when every tile is gone", () => {

@@ -2,6 +2,7 @@
 
 import { FadeScroll } from "@components/FadeScroll";
 
+import { isWideSize } from "../helpers";
 import { WidgetRow } from "../WidgetRow/WidgetRow";
 import { BLOCK_LIMITS } from "./constants";
 import { blockBody, blockList, blockValue } from "./styles";
@@ -11,7 +12,7 @@ export function ListBlock({ items, size, accent, controls }: WidgetBlockProps) {
   return (
     <div data-acc={accent} className={blockBody()}>
       <FadeScroll>
-        <ol className={blockList({ wide: size === "L" })}>
+        <ol className={blockList({ wide: isWideSize(size) })}>
           {items.slice(0, BLOCK_LIMITS.list[size]).map((item, index) => (
             <WidgetRow
               key={item.key}

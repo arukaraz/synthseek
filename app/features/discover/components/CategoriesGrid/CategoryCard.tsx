@@ -9,7 +9,7 @@ import { useState } from "react";
 import { sizeClasses } from "./styles";
 import type { CategoryCardProps } from "./types";
 
-export function CategoryCard({ category, size = "small", onClick }: CategoryCardProps) {
+export function CategoryCard({ category, size = "small", className, onClick }: CategoryCardProps) {
   const [imageError, setImageError] = useState(false);
   const imageUrl = category.images?.[0]?.url;
 
@@ -24,7 +24,8 @@ export function CategoryCard({ category, size = "small", onClick }: CategoryCard
         "group relative h-full cursor-pointer overflow-hidden rounded-lg",
         "transition-transform duration-200 hover:-translate-y-0.5",
         "transform-gpu [contain:layout_paint]",
-        sizeClasses[size]
+        sizeClasses[size],
+        className
       )}
     >
       {imageUrl && !imageError ? (

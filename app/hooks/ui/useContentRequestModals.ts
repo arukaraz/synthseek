@@ -16,6 +16,9 @@ export function useContentRequestModals(): UseContentRequestModalsResult {
     parentAlbumFromContext: null,
     preloadedTracks: null,
     configRequestMode: "download",
+    detailSession: 0,
+    configFromDetail: false,
+    keepRequesting: false,
   });
 
   const openForResult = useCallback((result: MusicItem) => {
@@ -26,6 +29,7 @@ export function useContentRequestModals(): UseContentRequestModalsResult {
         directTarget: null,
         selectedContentToRequest: result,
         showConfigRequestModal: true,
+        configFromDetail: false,
       }));
     } else {
       setState((prev) => ({
@@ -33,6 +37,7 @@ export function useContentRequestModals(): UseContentRequestModalsResult {
         selectedResult: result,
         directTarget: null,
         showContentDetailModal: true,
+        detailSession: prev.detailSession + 1,
       }));
     }
   }, []);
@@ -43,6 +48,7 @@ export function useContentRequestModals(): UseContentRequestModalsResult {
       selectedResult: null,
       directTarget: target,
       showContentDetailModal: true,
+      detailSession: prev.detailSession + 1,
     }));
   }, []);
 
@@ -63,6 +69,7 @@ export function useContentRequestModals(): UseContentRequestModalsResult {
         preloadedTracks: null,
         showConfigRequestModal: true,
         showContentDetailModal: false,
+        configFromDetail: prev.showContentDetailModal,
         configRequestMode: "download",
       }));
     }
@@ -77,6 +84,7 @@ export function useContentRequestModals(): UseContentRequestModalsResult {
       preloadedTracks: null,
       showConfigRequestModal: true,
       showContentDetailModal: false,
+      configFromDetail: prev.showContentDetailModal,
       configRequestMode: "lidarr-artist",
     }));
   }, []);
@@ -90,6 +98,7 @@ export function useContentRequestModals(): UseContentRequestModalsResult {
       preloadedTracks,
       showConfigRequestModal: true,
       showContentDetailModal: false,
+      configFromDetail: prev.showContentDetailModal,
       configRequestMode: "download",
     }));
   }, []);
@@ -103,6 +112,7 @@ export function useContentRequestModals(): UseContentRequestModalsResult {
       preloadedTracks: tracks,
       showConfigRequestModal: true,
       showContentDetailModal: false,
+      configFromDetail: prev.showContentDetailModal,
       configRequestMode: "artist-tracks",
     }));
   }, []);
@@ -115,7 +125,18 @@ export function useContentRequestModals(): UseContentRequestModalsResult {
       parentAlbumFromContext: null,
       preloadedTracks: null,
       configRequestMode: "download",
+      configFromDetail: false,
     }));
+  }, []);
+
+  const resumeDetail = useCallback(() => {
+    setState((prev) =>
+      prev.keepRequesting && prev.configFromDetail ? { ...prev, showContentDetailModal: true } : prev
+    );
+  }, []);
+
+  const setKeepRequesting = useCallback((keepRequesting: boolean) => {
+    setState((prev) => ({ ...prev, keepRequesting }));
   }, []);
 
   return {
@@ -130,6 +151,7 @@ export function useContentRequestModals(): UseContentRequestModalsResult {
     requestArtistTracksConfig,
     contentDetailModalProps: {
       open: state.showContentDetailModal,
+      session: state.detailSession,
       onClose: closeDetail,
       onRequestClick: requestContent,
       onRequestArtistLidarr: requestArtistLidarr,
@@ -142,6 +164,10 @@ export function useContentRequestModals(): UseContentRequestModalsResult {
       onClose: closeConfig,
       parentAlbum: state.parentAlbumFromContext,
       preloadedTracks: state.preloadedTracks ?? undefined,
+      onSuccess: resumeDetail,
+      keepRequesting: state.configFromDetail
+        ? { checked: state.keepRequesting, onChange: setKeepRequesting }
+        : undefined,
     },
   };
 }

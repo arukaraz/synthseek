@@ -6,13 +6,20 @@ import { toast } from "sonner";
 
 import { TOAST_ACTION_DURATION_MS } from "@components/ui/Toaster/constants";
 import { useSaveBoardLayout } from "@hooks/api/mutations/board/useSaveBoardLayout";
-import type { BoardItem, BoardList, BoardLists, BoardSize, BoardWidgetKey } from "@hooks/api/queries/board/types";
+import type {
+  BoardItem,
+  BoardList,
+  BoardLists,
+  BoardRowHeight,
+  BoardSize,
+  BoardWidgetKey,
+} from "@hooks/api/queries/board/types";
 import { focusBoardTile } from "@hooks/ui/board/helpers";
 import type { BoardFlip } from "@hooks/ui/board/types";
 import { useBoardDrag } from "@hooks/ui/board/useBoardDrag";
 import { useBoardFlip } from "@hooks/ui/board/useBoardFlip";
 
-import { BOARD_SIZE_NAME_KEYS, SPACER_ID } from "../components/ExploreBoard/constants";
+import { BOARD_ROW_HEIGHT_KEYS, BOARD_SIZE_NAME_KEYS, SPACER_ID } from "../components/ExploreBoard/constants";
 import {
   appendSpacer,
   layoutOf,
@@ -23,6 +30,7 @@ import {
   resizeItem,
   resizeSpacer,
   sameSlot,
+  setRowHeight,
   tileNameOf,
   toggleBackground,
   uniqueTileId,
@@ -33,6 +41,7 @@ import type {
   BoardEdge,
   BoardEditor,
   BoardGalleryTarget,
+  BoardRow,
   BoardSave,
   CustomWidgetsStatus,
   MoveDelta,
@@ -75,8 +84,7 @@ export function useBoardEditor(
     [commit, offerUndo, items, t]
   );
   const settling = useCallback(() => flipRef.current?.settling() ?? false, []);
-  const sameSlotOn = useCallback((a: BoardItem, b: BoardItem) => sameSlot(a, b, custom), [custom]);
-  const drag = useBoardDrag({ items, onDrop: drop, sameSlot: sameSlotOn, settling });
+  const drag = useBoardDrag({ items, onDrop: drop, sameSlot, settling });
   const displayItems = drag.order ?? items;
   const flip = useBoardFlip({ orderKey: orderKeyOf(displayItems), skipId: drag.draggingId });
   flipRef.current = flip;
@@ -120,6 +128,17 @@ export function useBoardEditor(
   const resizeSpacerTile = useCallback(
     (id: string, delta: MoveDelta) => commit(resizeSpacer(items, id, delta)),
     [commit, items]
+  );
+
+  const changeRowHeight = useCallback(
+    (row: BoardRow, height: BoardRowHeight) => {
+      if (!row.sizable || row.height === height) return;
+      commit(setRowHeight(items, row, height));
+      setAnnouncement(
+        t("board.announce.rowHeight", { position: row.position, height: t(BOARD_ROW_HEIGHT_KEYS[height]) })
+      );
+    },
+    [commit, items, t]
   );
 
   const toggleTileBackground = useCallback((id: string) => commit(toggleBackground(items, id)), [commit, items]);
@@ -200,6 +219,7 @@ export function useBoardEditor(
     closeWidgets,
     saveBoard,
     addSpacer,
+    setRowHeight: changeRowHeight,
     actions,
   };
 }

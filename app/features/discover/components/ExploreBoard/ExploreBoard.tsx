@@ -13,10 +13,19 @@ import { useBoardDevice } from "@hooks/ui/board/useBoardDevice";
 import { useBoardEditor } from "../../hooks/useBoardEditor";
 import { WidgetsDialog } from "../WidgetsDialog/WidgetsDialog";
 import { BoardEmpty } from "./BoardEmpty";
+import { BoardRowFrame } from "./BoardRowFrame";
 import { BoardTile } from "./BoardTile";
 import { BoardToolbar } from "./BoardToolbar";
 import { BOARD_LIST_OF } from "./constants";
-import { boardListsOf, customStatusOf, customWidgetsById, packBoard, placementsById } from "./helpers";
+import {
+  boardListsOf,
+  customStatusOf,
+  customWidgetsById,
+  frameBoard,
+  frameTemplateOf,
+  layOutBoard,
+  placementsById,
+} from "./helpers";
 import { boardRoot, liveRegion } from "./styles";
 
 export function ExploreBoard() {
@@ -31,10 +40,11 @@ export function ExploreBoard() {
   const items = lists[list];
   const customStatus = customStatusOf(myWidgets);
   const editor = useBoardEditor(lists, list, custom, customStatus);
-  const placements = useMemo(
-    () => placementsById(packBoard(editor.displayItems, device, custom)),
-    [editor.displayItems, device, custom]
-  );
+  const board = useMemo(() => {
+    const packed = layOutBoard(editor.displayItems, device);
+    return editor.editing ? frameBoard(packed) : packed;
+  }, [editor.displayItems, editor.editing, device]);
+  const placements = useMemo(() => placementsById(board.tiles), [board.tiles]);
 
   if (isLoading) return <SectionLoading />;
 
@@ -47,7 +57,14 @@ export function ExploreBoard() {
       {items.length === 0 ? (
         <BoardEmpty onAddWidget={editor.openWidgets} />
       ) : (
-        <BoardGrid device={device} appearance={appearance.data}>
+        <BoardGrid
+          device={device}
+          appearance={appearance.data}
+          templateRows={editor.editing ? frameTemplateOf(board) : undefined}
+        >
+          {editor.editing
+            ? board.rows.map((row) => <BoardRowFrame key={row.id} row={row} onHeight={editor.setRowHeight} />)
+            : null}
           {items.map((item, index) => {
             const tile = placements.get(item.id);
             if (!tile) return null;

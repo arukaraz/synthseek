@@ -62,11 +62,19 @@ describe("JumpBackIn", () => {
   it("fills a full-width row with every album that fits and plays the album chosen", () => {
     jumpQuery.mockReturnValue({ data: NINE, isLoading: false, isError: false });
     measured.width = 1400;
-    renderWithProviders(<JumpBackIn size="L" info="x" />);
+    renderWithProviders(<JumpBackIn size="XL" info="x" />);
 
     expect(screen.getAllByRole("heading", { level: 3 })).toHaveLength(8);
     fireEvent.click(screen.getByRole("button", { name: "Play Album b" }));
     expect(playEntity).toHaveBeenCalledWith({ kind: "album", albumExternalId: "b" });
+  });
+
+  it("keeps a three-quarter tile to six albums however wide it measures", () => {
+    jumpQuery.mockReturnValue({ data: NINE, isLoading: false, isError: false });
+    measured.width = 1400;
+    renderWithProviders(<JumpBackIn size="L" info="x" />);
+
+    expect(screen.getAllByRole("heading", { level: 3 })).toHaveLength(6);
   });
 
   it("keeps a quarter tile to two albums however wide it measures", () => {

@@ -14,6 +14,7 @@ export type BoardSize = BoardItem["size"];
 export type BoardAppearance = BoardOutputs["appearance"];
 export type BoardDensity = BoardAppearance["density"];
 export type BoardTextScale = BoardAppearance["text"];
+export type BoardRowHeight = NonNullable<BoardItem["height"]>;
 export type BoardTemplatePreview = BoardOutputs["templatePreview"];
 export type BoardTemplateApplied = BoardOutputs["templateApply"];
 export type BoardTemplateUndo = BoardInputs["templateUndo"];

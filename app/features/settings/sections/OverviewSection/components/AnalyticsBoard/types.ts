@@ -1,7 +1,9 @@
 import type { ReactNode } from "react";
 
-import type { BoardDevice, BoardHeight } from "@components/BoardGrid";
+import type { BoardDevice } from "@components/BoardGrid";
 import type { BoardSize } from "@hooks/api/queries/board/types";
+
+export type AnalyticsHeight = "short" | "regular";
 
 export type DeltaTone = "success" | "danger" | "muted";
 
@@ -24,7 +26,7 @@ export interface QualityRow {
 export interface AnalyticsCellProps {
   device: BoardDevice;
   size: BoardSize;
-  height: BoardHeight;
+  height: AnalyticsHeight;
   children: ReactNode;
 }
 

@@ -33,8 +33,7 @@ export function useBoardArrange({ items, custom }: UseBoardArrangeOptions) {
   const flipRef = useRef<BoardFlip | null>(null);
 
   const settling = useCallback(() => flipRef.current?.settling() ?? false, []);
-  const sameSlotOn = useCallback((a: BoardItem, b: BoardItem) => sameSlot(a, b, custom), [custom]);
-  const drag = useBoardDrag({ items: draft, onDrop: setDraft, sameSlot: sameSlotOn, settling });
+  const drag = useBoardDrag({ items: draft, onDrop: setDraft, sameSlot, settling });
   const displayItems = drag.order ?? draft;
   const flip = useBoardFlip({ orderKey: orderKeyOf(displayItems), skipId: drag.draggingId });
   flipRef.current = flip;

@@ -67,6 +67,7 @@
   },
   "artistSpotlight": {
     "title": "Artists you might want next",
+    "rail": "All suggested artists, scroll sideways",
     "subtitle": "Similar to what you play",
     "errorTitle": "Failed to load artists",
     "errorDescription": "Unable to fetch artists. Please try again later.",
@@ -125,6 +126,7 @@
   },
   "mixes": {
     "title": "Discover Mixes",
+    "rail": "All mixes, scroll sideways",
     "subtitle": "ListenBrainz",
     "cardAriaLabel": "Open {{label}} mix, {{count}} tracks",
     "trackCount": "{{count}} tracks",
@@ -189,10 +191,20 @@
     "add": {
       "action": "Add"
     },
+    "row": {
+      "label": "Row {{position}}",
+      "height": "Height of row {{position}}",
+      "heights": {
+        "short": "Short",
+        "regular": "Regular",
+        "tall": "Tall"
+      }
+    },
     "spacer": {
       "name": "Spacer",
       "shorter": "Make the spacer shorter",
-      "taller": "Make the spacer taller"
+      "taller": "Make the spacer taller",
+      "followsRow": "As tall as its row. Set the height on the row."
     },
     "arrange": {
       "hint": "Drag a widget to move it, or drop it below the board to start a new row. Nothing changes until you save.",
@@ -224,12 +236,14 @@
     "sizes": {
       "S": "S",
       "M": "M",
-      "L": "L"
+      "L": "L",
+      "XL": "XL"
     },
     "sizeNames": {
       "S": "Small",
       "M": "Medium",
-      "L": "Large"
+      "L": "Large",
+      "XL": "Extra large"
     },
     "gallery": {
       "subtitle": "Add puts a widget at the end of the layout you pick. Customize opens a copy in the workshop.",
@@ -263,6 +277,7 @@
     "announce": {
       "moved": "{{name}} moved to position {{position}} of {{total}}",
       "resized": "{{name}} is now {{size}}",
+      "rowHeight": "Row {{position}} is now {{height}}",
       "removed": "{{name}} removed"
     },
     "empty": {

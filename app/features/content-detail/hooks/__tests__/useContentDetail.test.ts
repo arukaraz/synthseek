@@ -87,6 +87,75 @@ describe("the detail navigation stack", () => {
     expect(result.current.canGoBack).toBe(false);
   });
 
+  it("returns to the entry it was on when the same session reopens", () => {
+    const first = target("a");
+    const { result, rerender } = renderHook(
+      (props: { open: boolean; target: DetailTarget | null; session: number }) => useContentDetail(props),
+      { initialProps: { open: true, target: first, session: 1 } }
+    );
+    act(() => {
+      result.current.navigateTo(target("b"));
+    });
+
+    rerender({ open: false, target: first, session: 1 });
+    rerender({ open: true, target: first, session: 1 });
+
+    expect(result.current.current?.id).toBe("b");
+    expect(result.current.canGoBack).toBe(true);
+  });
+
+  it("starts over when a new session opens on the same entry", () => {
+    const first = target("a");
+    const { result, rerender } = renderHook(
+      (props: { open: boolean; target: DetailTarget | null; session: number }) => useContentDetail(props),
+      { initialProps: { open: true, target: first, session: 1 } }
+    );
+    act(() => {
+      result.current.navigateTo(target("b"));
+    });
+
+    rerender({ open: false, target: first, session: 1 });
+    rerender({ open: true, target: first, session: 2 });
+
+    expect(result.current.current?.id).toBe("a");
+    expect(result.current.canGoBack).toBe(false);
+  });
+
+  it("starts over on a reopen when the caller tracks no session", () => {
+    const first = target("a");
+    const { result, rerender } = renderHook(
+      (props: { open: boolean; target: DetailTarget | null }) => useContentDetail(props),
+      { initialProps: { open: true, target: first } }
+    );
+    act(() => {
+      result.current.navigateTo(target("b"));
+    });
+
+    rerender({ open: false, target: first });
+    rerender({ open: true, target: first });
+
+    expect(result.current.current?.id).toBe("a");
+  });
+
+  it("starts over after a dismissal even inside one session", () => {
+    const first = target("a");
+    const { result, rerender } = renderHook(
+      (props: { open: boolean; target: DetailTarget | null; session: number }) => useContentDetail(props),
+      { initialProps: { open: true, target: first, session: 1 } }
+    );
+    act(() => {
+      result.current.navigateTo(target("b"));
+    });
+    act(() => {
+      result.current.handleOpenChange(false, vi.fn());
+    });
+
+    rerender({ open: false, target: first, session: 1 });
+    rerender({ open: true, target: first, session: 1 });
+
+    expect(result.current.current?.id).toBe("a");
+  });
+
   it("empties the stack and tells the caller when the modal is dismissed", () => {
     const onClose = vi.fn();
     const { result } = open(target("a"));

@@ -20,9 +20,13 @@ import { useContentDetail } from "./hooks/useContentDetail";
 import { backBar, modalContainer, modalShell } from "./styles";
 import type { ContentDetailModalProps } from "./types";
 
-export function ContentDetailModal({ open, onClose, target, actions }: ContentDetailModalProps) {
+export function ContentDetailModal({ open, session, onClose, target, actions }: ContentDetailModalProps) {
   const { t } = useTranslation("contentDetail");
-  const { current, previous, canGoBack, navigateTo, goBack, handleOpenChange } = useContentDetail({ open, target });
+  const { current, previous, canGoBack, navigateTo, goBack, handleOpenChange } = useContentDetail({
+    open,
+    target,
+    session,
+  });
   const pathname = usePathname();
   const showInLibraryPill = showsInLibraryPill(pathname);
   const shellRef = useRef<HTMLDivElement | null>(null);

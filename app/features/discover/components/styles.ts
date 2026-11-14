@@ -20,6 +20,10 @@ export function cardRowVars(columns: number): CssVars {
 
 export const railScroller = cva("flex min-h-0 flex-1");
 
+export const snapRail = cva(
+  "flex h-full snap-x snap-mandatory gap-3 [&>*]:w-[calc((100cqw-0.75rem)/2)] [&>*]:shrink-0 [&>*]:snap-start @3xl:[&>*]:w-[calc((100cqw-1.5rem)/3)] @5xl:[&>*]:w-[calc((100cqw-2.25rem)/4)]"
+);
+
 export const cardRowSkeleton = cva("bg-fg/5 h-full min-h-32 animate-pulse rounded-2xl");
 
 export const widgetNote = cva(
@@ -232,26 +236,6 @@ export const hoverBorder = cva("absolute inset-0 border-2 border-transparent tra
 
 export type HoverBorderProps = VariantProps<typeof hoverBorder>;
 
-export const topArtistsContainer = cva("mt-6 flex flex-1 flex-col border-t border-white/10 pt-6", {
-  variants: {},
-  defaultVariants: {},
-});
-
-export type TopArtistsContainerProps = VariantProps<typeof topArtistsContainer>;
-
-export const scrollableGrid = cva("grid flex-1 content-start overflow-y-auto", {
-  variants: {
-    cols: {
-      2: "grid-cols-2 gap-x-6 gap-y-3",
-    },
-  },
-  defaultVariants: {
-    cols: 2,
-  },
-});
-
-export type ScrollableGridProps = VariantProps<typeof scrollableGrid>;
-
 export const categoryPlaceholder = cva(
   "flex h-full w-full items-center justify-center bg-linear-to-br from-primary-500/30 to-accent-500/30",
   {
@@ -301,13 +285,6 @@ export const cardBottomContentLg = cva("absolute right-0 bottom-0 left-0 z-10 p-
 });
 
 export type CardBottomContentLgProps = VariantProps<typeof cardBottomContentLg>;
-
-export const skeletonListItem = cva("border-fg/10 bg-surface/20 flex items-center gap-3 rounded-lg border p-3", {
-  variants: {},
-  defaultVariants: {},
-});
-
-export type SkeletonListItemProps = VariantProps<typeof skeletonListItem>;
 
 export const sidebarContainer = cva("flex flex-col gap-4 sm:pl-4", {
   variants: {

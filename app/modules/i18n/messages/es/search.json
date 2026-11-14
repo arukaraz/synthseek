@@ -251,6 +251,10 @@
         "remove": "Quitar etiqueta {{tag}}"
       }
     },
+    "keepRequesting": {
+      "label": "Seguir solicitando",
+      "hint": "Después de esta solicitud, vuelve a donde estabas para que puedas solicitar algo más"
+    },
     "actions": {
       "cancel": "Cancelar",
       "request": "Solicitar",

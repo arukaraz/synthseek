@@ -177,6 +177,7 @@ describe("CustomWidget", () => {
     ["S", 5],
     ["M", 8],
     ["L", 12],
+    ["XL", 12],
   ] as const)("lists as many rows as a %s list holds", (size, rows) => {
     show("list", size, TRACKS);
     expect(screen.getAllByRole("listitem")).toHaveLength(rows);
@@ -207,7 +208,7 @@ describe("CustomWidget", () => {
     expect(screen.queryByRole("button", { name: "Request Album 0 with custom settings" })).not.toBeInTheDocument();
   });
 
-  it.each(["S", "M", "L"] as const)("scrolls every item sideways in a %s rail", (size) => {
+  it.each(["S", "M", "L", "XL"] as const)("scrolls every item sideways in a %s rail", (size) => {
     show("rail", size, ALBUMS);
     expect(screen.getAllByRole("article")).toHaveLength(12);
     expect(screen.getByRole("region", { name: "Widget items" })).toBeInTheDocument();
@@ -250,6 +251,7 @@ describe("CustomWidget", () => {
     ["S", 0],
     ["M", 6],
     ["L", 8],
+    ["XL", 8],
   ] as const)("keeps the leader at %s with %s rows below it", (size, rows) => {
     show("leader", size, TRACKS);
     expect(screen.getByText("#1")).toBeInTheDocument();
@@ -273,6 +275,7 @@ describe("CustomWidget", () => {
     ["S", 1],
     ["M", 3],
     ["L", 4],
+    ["XL", 4],
   ] as const)("shows %s stats side by side", (size, count) => {
     show("stats", size, BUCKETS, "none");
     expect(screen.getAllByRole("term")).toHaveLength(count);
@@ -282,6 +285,7 @@ describe("CustomWidget", () => {
     ["S", 3],
     ["M", 6],
     ["L", 10],
+    ["XL", 10],
   ] as const)("shows %s feed headlines", (size, count) => {
     show("feed", size, TRACKS);
     expect(screen.getAllByRole("listitem")).toHaveLength(count);
@@ -291,6 +295,7 @@ describe("CustomWidget", () => {
     ["S", 4],
     ["M", 6],
     ["L", 10],
+    ["XL", 10],
   ] as const)("dates %s calendar entries by their release day", (size, count) => {
     show("calendar", size, ALBUMS);
     const rows = screen.getAllByRole("listitem");
@@ -308,7 +313,8 @@ describe("CustomWidget", () => {
   it.each([
     ["S", 8],
     ["M", 16],
-    ["L", 32],
+    ["L", 24],
+    ["XL", 32],
   ] as const)("draws the latest %s series points as bars with the first and last labels", (size, bars) => {
     show("bars", size, YEAR, "none");
     const items = screen.getAllByRole("listitem");
@@ -322,13 +328,13 @@ describe("CustomWidget", () => {
     expect(screen.getByRole("listitem", { name: "Rock: 12 plays" })).toHaveTextContent("Rock");
   });
 
-  it.each(["S", "M", "L"] as const)("draws a sparkline with the latest value in %s", (size) => {
+  it.each(["S", "M", "L", "XL"] as const)("draws a sparkline with the latest value in %s", (size) => {
     show("sparkline", size, WEEKS, "none");
     expect(screen.getByRole("img", { name: "Trend, latest Oct 26: 42 plays" })).toBeInTheDocument();
     expect(screen.queryAllByText("Oct 5")).toHaveLength(size === "S" ? 0 : 1);
   });
 
-  it.each(["M", "L"] as const)("draws the weekday and hour heatmap in %s", (size) => {
+  it.each(["M", "L", "XL"] as const)("draws the weekday and hour heatmap in %s", (size) => {
     show("heatmap", size, MATRIX, "none");
     expect(screen.getByRole("img", { name: "Listening by weekday and hour" })).toBeInTheDocument();
     expect(screen.getByTitle("Fri 21:00, 9")).toBeInTheDocument();
@@ -344,7 +350,7 @@ describe("CustomWidget", () => {
     expect(days[4]).toHaveTextContent("11");
   });
 
-  it.each(["S", "M", "L"] as const)("shows the latest value of a trend with its change in %s", (size) => {
+  it.each(["S", "M", "L", "XL"] as const)("shows the latest value of a trend with its change in %s", (size) => {
     show("statTrend", size, WEEKS, "none");
     expect(screen.getByText("42 plays")).toBeInTheDocument();
     expect(screen.getByText("12 more than the previous period")).toBeInTheDocument();
@@ -354,6 +360,7 @@ describe("CustomWidget", () => {
     ["S", 5],
     ["M", 8],
     ["L", 12],
+    ["XL", 12],
   ] as const)("ranks %s rows with how far each one moved", (size, rows) => {
     show("rankingMoves", size, MOVES, "none");
     const items = screen.getAllByRole("listitem");
@@ -367,6 +374,7 @@ describe("CustomWidget", () => {
     ["S", 3],
     ["M", 5],
     ["L", 5],
+    ["XL", 5],
   ] as const)("compares %s buckets with the previous period", (size, rows) => {
     show("compare", size, BUCKETS, "none");
     expect(screen.getAllByRole("listitem")).toHaveLength(rows);
@@ -377,7 +385,8 @@ describe("CustomWidget", () => {
   it.each([
     ["S", 4],
     ["M", 10],
-    ["L", 20],
+    ["L", 16],
+    ["XL", 20],
   ] as const)("tiles %s covers in a mosaic and plays one from its cover", (size, tiles) => {
     show("mosaic", size, TRACKS);
     expect(screen.getAllByRole("listitem")).toHaveLength(Math.min(tiles, 14));
@@ -387,7 +396,8 @@ describe("CustomWidget", () => {
 
   it.each([
     ["M", 179],
-    ["L", 368],
+    ["L", 270],
+    ["XL", 368],
   ] as const)("lays out the latest weeks of daily listening in %s", (size, cells) => {
     show("yearCalendar", size, YEAR, "none");
     const grid = screen.getByRole("img", { name: "1.3K in this year" });
@@ -406,6 +416,7 @@ describe("CustomWidget", () => {
     ["S", 4],
     ["M", 5],
     ["L", 5],
+    ["XL", 5],
   ] as const)("splits the total into %s shares", (size, rows) => {
     show("share", size, BUCKETS, "none");
     const items = screen.getAllByRole("listitem");

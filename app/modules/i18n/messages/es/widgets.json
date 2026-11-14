@@ -599,7 +599,8 @@
   "sizes": {
     "S": "S",
     "M": "M",
-    "L": "L"
+    "L": "L",
+    "XL": "XL"
   },
   "playlist": {
     "title": "Playlist",

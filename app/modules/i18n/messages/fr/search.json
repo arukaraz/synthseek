@@ -251,6 +251,10 @@
         "remove": "Retirer l'étiquette {{tag}}"
       }
     },
+    "keepRequesting": {
+      "label": "Continuer à demander",
+      "hint": "Après cette demande, vous revenez là où vous étiez pour demander autre chose"
+    },
     "actions": {
       "cancel": "Annuler",
       "request": "Demander",

@@ -1,7 +1,13 @@
 import i18n from "@locale";
 import { toast } from "sonner";
 
-import { BOARD_COLUMNS, BOARD_GAP_PX, BOARD_ROW_PX, BOARD_SPANS, type BoardSpan } from "@components/BoardGrid";
+import {
+  BOARD_COLUMNS,
+  BOARD_GAP_PX,
+  BOARD_ROW_PX,
+  DEFAULT_BOARD_ROW_HEIGHT,
+  type BoardSpan,
+} from "@components/BoardGrid";
 import type { BoardItem, BoardList, BoardSize, BoardWidgetKey } from "@hooks/api/queries/board/types";
 import type {
   WidgetBlock,
@@ -17,7 +23,7 @@ import {
   BOARD_MAX_ITEMS,
   BOARD_WIDGET_ORDER,
   BOARD_WIDGETS,
-  CUSTOM_BLOCK_HEIGHTS,
+  CUSTOM_BLOCK_ROW_HEIGHTS,
 } from "../ExploreBoard/constants";
 import { spanOf } from "../ExploreBoard/helpers";
 import type { BoardCategory } from "../ExploreBoard/types";
@@ -118,11 +124,11 @@ function frameOfSpan(span: BoardSpan, box: PreviewBox): PreviewFrame {
 }
 
 export function previewFrame(widget: BoardWidgetKey): PreviewFrame {
-  return frameOfSpan(spanOf(widget, BOARD_WIDGETS[widget].defaultSize, "wide"), PREVIEW_BOX);
+  return frameOfSpan(spanOf(BOARD_WIDGETS[widget].defaultSize, DEFAULT_BOARD_ROW_HEIGHT, "wide"), PREVIEW_BOX);
 }
 
 export function customPreviewFrame(block: WidgetBlock, size: BoardSize, width?: number): PreviewFrame {
-  const span = BOARD_SPANS.wide[size][CUSTOM_BLOCK_HEIGHTS[block][size]];
+  const span = spanOf(size, CUSTOM_BLOCK_ROW_HEIGHTS[block] ?? DEFAULT_BOARD_ROW_HEIGHT, "wide");
   return frameOfSpan(span, width ? { width, height: Number.POSITIVE_INFINITY } : PREVIEW_BOX);
 }
 

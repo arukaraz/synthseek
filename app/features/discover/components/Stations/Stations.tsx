@@ -12,9 +12,8 @@ import { useStartRadio } from "@hooks/ui/player";
 import { PlaySetCard } from "../PlaySetCard/PlaySetCard";
 import { CARD_ROW_SKELETONS } from "../constants";
 import { cardRowLimit } from "../helpers";
-import { cardRow, cardRowBody, cardRowSkeleton, cardRowVars, railScroller, widgetNote } from "../styles";
+import { cardRow, cardRowBody, cardRowSkeleton, cardRowVars, railScroller, snapRail, widgetNote } from "../styles";
 import { STATION_ACCENTS, STATION_TAG_KEYS, STATION_TITLE_KEYS } from "./constants";
-import { stationRail } from "./styles";
 import type { StationsProps } from "./types";
 
 export function Stations({ size, info }: StationsProps) {
@@ -66,7 +65,7 @@ export function Stations({ size, info }: StationsProps) {
       ) : rail ? (
         <div className={cardRowBody()}>
           <FadeScroll axis="x" arrows className={railScroller()} label={t("stations.rail")}>
-            <div className={stationRail()}>{cards}</div>
+            <div className={snapRail()}>{cards}</div>
           </FadeScroll>
         </div>
       ) : (

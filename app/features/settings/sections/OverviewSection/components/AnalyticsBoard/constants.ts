@@ -1,6 +1,21 @@
 import type { ParseKeys } from "i18next";
 
+import type { BoardDevice } from "@components/BoardGrid";
 import type { ClockPeriod } from "@hooks/api/queries/analytics/types";
+import type { BoardSize } from "@hooks/api/queries/board/types";
+
+import type { AnalyticsHeight } from "./types";
+
+export const ANALYTICS_CELL_ROWS: Record<BoardDevice, Record<AnalyticsHeight, Record<BoardSize, number>>> = {
+  wide: {
+    short: { S: 2, M: 2, L: 2, XL: 2 },
+    regular: { S: 4, M: 4, L: 4, XL: 4 },
+  },
+  narrow: {
+    short: { S: 2, M: 2, L: 2, XL: 2 },
+    regular: { S: 4, M: 4, L: 5, XL: 5 },
+  },
+};
 
 export const SUMMARY_WINDOW_DAYS = 7;
 

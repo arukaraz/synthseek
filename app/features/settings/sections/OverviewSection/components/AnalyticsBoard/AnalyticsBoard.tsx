@@ -48,7 +48,7 @@ export function AnalyticsBoard() {
         <AnalyticsCell device={device} size="M" height="regular">
           <GrowthTile />
         </AnalyticsCell>
-        <AnalyticsCell device={device} size="L" height="regular">
+        <AnalyticsCell device={device} size="XL" height="regular">
           <ListeningClockTile />
         </AnalyticsCell>
       </BoardGrid>

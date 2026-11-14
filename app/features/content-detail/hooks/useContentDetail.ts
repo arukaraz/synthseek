@@ -7,16 +7,24 @@ import type { DetailTarget } from "../types";
 interface UseContentDetailArgs {
   open: boolean;
   target: DetailTarget | null;
+  session?: number;
 }
 
-export function useContentDetail({ open, target }: UseContentDetailArgs) {
-  const [stack, setStack] = useState<DetailTarget[]>([]);
+interface DetailStack {
+  session: number | undefined;
+  items: DetailTarget[];
+}
+
+export function useContentDetail({ open, target, session }: UseContentDetailArgs) {
+  const [stack, setStack] = useState<DetailStack>({ session: undefined, items: [] });
 
   useEffect(() => {
     if (open && target) {
-      setStack([target]);
+      setStack((prev) =>
+        session !== undefined && prev.session === session && prev.items.length > 0 ? prev : { session, items: [target] }
+      );
     }
-  }, [open, target]);
+  }, [open, target, session]);
 
   useEffect(() => {
     if (!open) return;
@@ -27,21 +35,22 @@ export function useContentDetail({ open, target }: UseContentDetailArgs) {
     };
   }, [open]);
 
-  const current = stack.length > 0 ? stack[stack.length - 1] : null;
-  const previous = stack.length > 1 ? stack[stack.length - 2] : null;
-  const canGoBack = stack.length > 1;
+  const items = stack.items;
+  const current = items.length > 0 ? items[items.length - 1] : null;
+  const previous = items.length > 1 ? items[items.length - 2] : null;
+  const canGoBack = items.length > 1;
 
   const navigateTo = useCallback((next: DetailTarget) => {
-    setStack((prev) => [...prev, next]);
+    setStack((prev) => ({ ...prev, items: [...prev.items, next] }));
   }, []);
 
   const goBack = useCallback(() => {
-    setStack((prev) => (prev.length > 1 ? prev.slice(0, -1) : prev));
+    setStack((prev) => (prev.items.length > 1 ? { ...prev, items: prev.items.slice(0, -1) } : prev));
   }, []);
 
   const handleOpenChange = useCallback((nextOpen: boolean, onClose: () => void) => {
     if (nextOpen) return;
-    setStack([]);
+    setStack((prev) => ({ ...prev, items: [] }));
     onClose();
   }, []);
 

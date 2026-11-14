@@ -41,7 +41,7 @@ import { BOARD_SAVE_SCOPE } from "../mutations/board/constants";
 import { useSaveBoardLayout } from "../mutations/board/useSaveBoardLayout";
 
 const LAYOUT: BoardLayout = {
-  schemaVersion: 4,
+  schemaVersion: 5,
   items: [{ kind: "builtin", id: "a", widget: "mixes", size: "L" }],
   mobile: [{ kind: "builtin", id: "a", widget: "mixes", size: "M" }],
 };

@@ -193,3 +193,96 @@ describe("useContentRequestModals", () => {
     expect(result.current.configModalProps.mode).toBe("download");
   });
 });
+
+describe("keep requesting", () => {
+  function requestFromDetail() {
+    const hook = renderHook(() => useContentRequestModals());
+    act(() => hook.result.current.openForResult(makeArtist("ar1")));
+    act(() => hook.result.current.requestContent(makeAlbum("al1")));
+    return hook;
+  }
+
+  it("offers the choice when the request window was opened from a detail", () => {
+    const { result } = requestFromDetail();
+
+    expect(result.current.contentDetailModalProps.open).toBe(false);
+    expect(result.current.configModalProps.keepRequesting?.checked).toBe(false);
+  });
+
+  it("offers no choice when the request window opened with no detail behind it", () => {
+    const { result } = renderHook(() => useContentRequestModals());
+
+    act(() => result.current.requestContent(makeAlbum("al1")));
+
+    expect(result.current.configModalProps.keepRequesting).toBeUndefined();
+  });
+
+  it("offers no choice for a track opened straight from a result", () => {
+    const { result } = renderHook(() => useContentRequestModals());
+
+    act(() => result.current.openForResult(makeTrack("t1")));
+
+    expect(result.current.configModalProps.keepRequesting).toBeUndefined();
+  });
+
+  it("returns to the detail after a request while the choice is on", () => {
+    const { result } = requestFromDetail();
+
+    act(() => result.current.configModalProps.keepRequesting?.onChange(true));
+    act(() => {
+      result.current.configModalProps.onSuccess();
+      result.current.configModalProps.onClose();
+    });
+
+    expect(result.current.configModalProps.isOpen).toBe(false);
+    expect(result.current.contentDetailModalProps.open).toBe(true);
+  });
+
+  it("leaves the detail shut after a request while the choice is off", () => {
+    const { result } = requestFromDetail();
+
+    act(() => {
+      result.current.configModalProps.onSuccess();
+      result.current.configModalProps.onClose();
+    });
+
+    expect(result.current.contentDetailModalProps.open).toBe(false);
+  });
+
+  it("leaves the detail shut when the request window is dismissed without a request", () => {
+    const { result } = requestFromDetail();
+
+    act(() => result.current.configModalProps.keepRequesting?.onChange(true));
+    act(() => result.current.configModalProps.onClose());
+
+    expect(result.current.contentDetailModalProps.open).toBe(false);
+  });
+
+  it("remembers the choice for the next request", () => {
+    const { result } = requestFromDetail();
+
+    act(() => result.current.configModalProps.keepRequesting?.onChange(true));
+    act(() => {
+      result.current.configModalProps.onSuccess();
+      result.current.configModalProps.onClose();
+    });
+    act(() => result.current.requestContent(makeAlbum("al2")));
+
+    expect(result.current.configModalProps.keepRequesting?.checked).toBe(true);
+  });
+
+  it("keeps the detail session across a return and starts a new one on the next open", () => {
+    const { result } = requestFromDetail();
+    const session = result.current.contentDetailModalProps.session;
+
+    act(() => result.current.configModalProps.keepRequesting?.onChange(true));
+    act(() => {
+      result.current.configModalProps.onSuccess();
+      result.current.configModalProps.onClose();
+    });
+    expect(result.current.contentDetailModalProps.session).toBe(session);
+
+    act(() => result.current.openForResult(makeArtist("ar2")));
+    expect(result.current.contentDetailModalProps.session).toBe(session + 1);
+  });
+});

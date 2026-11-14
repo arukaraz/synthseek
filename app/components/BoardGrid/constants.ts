@@ -1,6 +1,6 @@
-import type { BoardDensity, BoardSize, BoardTextScale } from "@hooks/api/queries/board/types";
+import type { BoardDensity, BoardRowHeight, BoardSize, BoardTextScale } from "@hooks/api/queries/board/types";
 
-import type { BoardDevice, BoardHeight, BoardMetrics, BoardSpan } from "./types";
+import type { BoardDevice, BoardMetrics } from "./types";
 
 export const BOARD_WIDE_QUERY = "(min-width: 48rem)";
 
@@ -16,6 +16,10 @@ export const BOARD_DENSITY_METRICS: Record<BoardDensity, BoardMetrics> = {
   spacious: { rowPx: 80, gapPx: 24 },
 };
 
+export const BOARD_ROW_UNITS: Record<BoardRowHeight, number> = { short: 3, regular: 4, tall: 6 };
+
+export const DEFAULT_BOARD_ROW_HEIGHT: BoardRowHeight = "regular";
+
 export const BOARD_TEXT_SCALE: Record<BoardTextScale, number> = { small: 0.92, default: 1, large: 1.08 };
 export const BOARD_TYPE_STEPS_REM = {
   xs: 0.75,
@@ -28,15 +32,7 @@ export const BOARD_TYPE_STEPS_REM = {
   "4xl": 2.25,
 } as const;
 
-export const BOARD_SPANS: Record<BoardDevice, Record<BoardSize, Record<BoardHeight, BoardSpan>>> = {
-  wide: {
-    S: { short: { cols: 3, rows: 2 }, regular: { cols: 3, rows: 4 }, tall: { cols: 3, rows: 8 } },
-    M: { short: { cols: 6, rows: 2 }, regular: { cols: 6, rows: 4 }, tall: { cols: 6, rows: 8 } },
-    L: { short: { cols: 12, rows: 2 }, regular: { cols: 12, rows: 4 }, tall: { cols: 12, rows: 8 } },
-  },
-  narrow: {
-    S: { short: { cols: 2, rows: 2 }, regular: { cols: 2, rows: 4 }, tall: { cols: 2, rows: 5 } },
-    M: { short: { cols: 4, rows: 2 }, regular: { cols: 4, rows: 4 }, tall: { cols: 4, rows: 7 } },
-    L: { short: { cols: 4, rows: 2 }, regular: { cols: 4, rows: 5 }, tall: { cols: 4, rows: 7 } },
-  },
+export const BOARD_SIZE_COLS: Record<BoardDevice, Record<BoardSize, number>> = {
+  wide: { S: 3, M: 6, L: 9, XL: 12 },
+  narrow: { S: 2, M: 4, L: 4, XL: 4 },
 };

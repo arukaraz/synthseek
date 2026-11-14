@@ -1,16 +1,18 @@
 import { cva } from "class-variance-authority";
 
-export const railWrap = cva("relative");
+export const railWrap = cva("relative flex min-h-0 flex-1 flex-col [container-type:size]");
 
 export const rail = cva(
-  "relative flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-smooth pb-2 pt-7 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+  "relative flex h-full snap-x snap-mandatory gap-3 overflow-x-auto scroll-smooth pb-2 pt-7 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
 );
 
 export const axisLine = cva(
   "pointer-events-none absolute left-3 right-3 top-[36px] z-0 h-[2px] bg-linear-to-r from-primary-400 via-fg/15 to-fg/15"
 );
 
-export const node = cva("relative flex w-[112px] shrink-0 snap-start flex-col items-stretch px-2 sm:w-[120px]");
+export const node = cva(
+  "relative flex w-[clamp(4.5rem,min(calc(100cqh-6rem),45cqw),14rem)] shrink-0 snap-start flex-col items-stretch px-2"
+);
 
 export const nodeTime = cva(
   "text-fg/45 pointer-events-none absolute -top-5 left-2 whitespace-nowrap font-mono text-[10px] leading-none"
@@ -54,4 +56,6 @@ export const timelineArtist = cva("text-fg/60 truncate text-[11.5px]");
 
 export const skeletonRow = cva("bg-fg/5 h-12 w-full shrink-0 animate-pulse rounded-lg");
 
-export const skeletonNode = cva("bg-fg/5 h-[152px] w-[112px] shrink-0 animate-pulse rounded-lg sm:w-[120px]");
+export const skeletonNode = cva(
+  "bg-fg/5 h-full w-[clamp(4.5rem,min(calc(100cqh-6rem),45cqw),14rem)] shrink-0 animate-pulse rounded-lg"
+);

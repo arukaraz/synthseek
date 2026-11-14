@@ -88,6 +88,10 @@ export const footerSummaryTitle = cva("text-fg truncate text-xs font-semibold");
 
 export const footerSummaryNote = cva("text-fg/50 truncate text-[11px]");
 
+export const footerKeepRequesting = cva(
+  "text-fg/70 hover:text-fg flex shrink-0 cursor-pointer items-center gap-1.5 text-xs whitespace-nowrap select-none"
+);
+
 export const fieldGroup = cva("space-y-3");
 
 export const sectionStack = cva("space-y-3 sm:space-y-4");

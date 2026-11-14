@@ -120,26 +120,26 @@ export const BLOCK_COMPONENTS: Record<WidgetBlock, ComponentType<WidgetBlockProp
 
 export const FRAMELESS_BLOCKS: ReadonlySet<WidgetBlock> = new Set(["mix", "hero"]);
 
-export const SET_POSTER_COLUMNS = { S: 1, M: 2, L: 6 } as const;
+export const SET_POSTER_COLUMNS = { S: 1, M: 2, L: 4, XL: 6 } as const;
 
-export const SET_POSTER_LIMITS = { S: 2, M: 4, L: 6 } as const;
+export const SET_POSTER_LIMITS = { S: 2, M: 4, L: 4, XL: 6 } as const;
 
 export const MINUTE_MS = 60_000;
 
 export const BLOCK_LIMITS = {
-  list: { S: 5, M: 8, L: 12 },
-  feed: { S: 3, M: 6, L: 10 },
-  calendar: { S: 4, M: 6, L: 10 },
-  leader: { S: 0, M: 6, L: 8 },
-  stats: { S: 1, M: 3, L: 4 },
-  rail: { S: 50, M: 50, L: 50 },
-  rankingMoves: { S: 5, M: 8, L: 12 },
-  mosaic: { S: 4, M: 10, L: 20 },
-  spotlight: { S: 2, M: 4, L: 4 },
-  cards: { S: 4, M: 6, L: 12 },
+  list: { S: 5, M: 8, L: 12, XL: 12 },
+  feed: { S: 3, M: 6, L: 10, XL: 10 },
+  calendar: { S: 4, M: 6, L: 10, XL: 10 },
+  leader: { S: 0, M: 6, L: 8, XL: 8 },
+  stats: { S: 1, M: 3, L: 4, XL: 4 },
+  rail: { S: 50, M: 50, L: 50, XL: 50 },
+  rankingMoves: { S: 5, M: 8, L: 12, XL: 12 },
+  mosaic: { S: 4, M: 10, L: 16, XL: 20 },
+  spotlight: { S: 2, M: 4, L: 4, XL: 4 },
+  cards: { S: 4, M: 6, L: 9, XL: 12 },
 } as const satisfies Record<string, Record<BoardSize, number>>;
 
-export const CARD_COLUMNS: Record<BoardSize, number> = { S: 1, M: 2, L: 4 };
+export const CARD_COLUMNS: Record<BoardSize, number> = { S: 1, M: 2, L: 3, XL: 4 };
 
 export const MIX_COVER_LIMIT = 4;
 
@@ -155,7 +155,7 @@ export const SUGGESTED_BLOCKS: Record<WidgetShape, readonly WidgetBlock[]> = {
   feedItems: ["feed", "list", "cards", "rail"],
 };
 
-export const MOSAIC_COLUMNS: Record<BoardSize, number> = { S: 2, M: 5, L: 10 };
+export const MOSAIC_COLUMNS: Record<BoardSize, number> = { S: 2, M: 5, L: 8, XL: 10 };
 
 export const MOSAIC_ROWS = 2;
 

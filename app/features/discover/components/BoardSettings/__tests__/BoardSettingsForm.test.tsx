@@ -215,12 +215,12 @@ describe("BoardSettingsForm", () => {
     fireEvent.click(saveButton());
 
     expect(saveMock.mock.calls).toEqual([
-      [{ schemaVersion: 4, items: ITEMS, mobile: [expect.objectContaining({ id: "m", size: "L" })] }, "confirmed"],
+      [{ schemaVersion: 5, items: ITEMS, mobile: [expect.objectContaining({ id: "m", size: "L" })] }, "confirmed"],
     ]);
     expect(appearanceMock).not.toHaveBeenCalled();
     await waitFor(() => expect(toastMock.success.mock.calls.at(-1)?.[0]).toBe("Board saved"));
     lastToastAction().onClick();
-    expect(saveMock.mock.calls.at(-1)).toEqual([{ schemaVersion: 4, items: ITEMS, mobile: MOBILE }]);
+    expect(saveMock.mock.calls.at(-1)).toEqual([{ schemaVersion: 5, items: ITEMS, mobile: MOBILE }]);
   });
 
   it("keeps a change to one layout while the member arranges the other", () => {
@@ -233,7 +233,7 @@ describe("BoardSettingsForm", () => {
 
     expect(saveMock).toHaveBeenCalledWith(
       {
-        schemaVersion: 4,
+        schemaVersion: 5,
         items: [ITEMS[0], expect.objectContaining({ id: "b", size: "L" })],
         mobile: [],
       },
@@ -339,7 +339,7 @@ describe("BoardSettingsForm", () => {
 
     expect(saveMock).toHaveBeenCalledWith(
       {
-        schemaVersion: 4,
+        schemaVersion: 5,
         items: withBackgrounds(ITEMS, false),
         mobile: withBackgrounds(MOBILE, false),
       },
@@ -387,7 +387,7 @@ describe("BoardSettingsForm", () => {
 
   it("applies a staged template on Save with both layouts and the look the member left it in, then offers an undo", async () => {
     templates.apply.mockResolvedValue({
-      layout: { schemaVersion: 4, items: [], mobile: [] },
+      layout: { schemaVersion: 5, items: [], mobile: [] },
       appearance: { density: "spacious", text: "large" },
       undo: { layout: null, appearance: LOOK, widgetIds: [] },
     });
@@ -471,7 +471,7 @@ describe("BoardSettingsForm", () => {
     expect(screen.getByText("Your board will be empty.")).toBeInTheDocument();
 
     fireEvent.click(saveButton());
-    expect(saveMock).toHaveBeenCalledWith({ schemaVersion: 4, items: [], mobile: MOBILE }, "confirmed");
+    expect(saveMock).toHaveBeenCalledWith({ schemaVersion: 5, items: [], mobile: MOBILE }, "confirmed");
   });
 
   it("starts a drag from a mouse press on the tile but not from its buttons", () => {

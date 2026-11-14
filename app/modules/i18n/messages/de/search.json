@@ -251,6 +251,10 @@
         "remove": "Tag {{tag}} entfernen"
       }
     },
+    "keepRequesting": {
+      "label": "Weiter anfordern",
+      "hint": "Nach dieser Anforderung geht es dorthin zurück, wo du warst, damit du etwas anderes anfordern kannst"
+    },
     "actions": {
       "cancel": "Abbrechen",
       "request": "Anfordern",

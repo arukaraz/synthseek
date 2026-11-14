@@ -67,6 +67,7 @@
   },
   "artistSpotlight": {
     "title": "Künstler, die dir gefallen könnten",
+    "rail": "Alle vorgeschlagenen Künstler, seitlich scrollen",
     "subtitle": "Ähnlich wie das, was du hörst",
     "errorTitle": "Künstler konnten nicht geladen werden",
     "errorDescription": "Künstler konnten nicht abgerufen werden. Bitte versuche es später erneut.",
@@ -125,6 +126,7 @@
   },
   "mixes": {
     "title": "Mixe zum Entdecken",
+    "rail": "Alle Mixe, seitlich scrollen",
     "subtitle": "ListenBrainz",
     "cardAriaLabel": "Mix {{label}} öffnen, {{count}} Titel",
     "trackCount": "{{count}} Titel",
@@ -189,10 +191,20 @@
     "add": {
       "action": "Hinzufügen"
     },
+    "row": {
+      "label": "Zeile {{position}}",
+      "height": "Höhe von Zeile {{position}}",
+      "heights": {
+        "short": "Niedrig",
+        "regular": "Normal",
+        "tall": "Hoch"
+      }
+    },
     "spacer": {
       "name": "Abstandshalter",
       "shorter": "Abstandshalter niedriger machen",
-      "taller": "Abstandshalter höher machen"
+      "taller": "Abstandshalter höher machen",
+      "followsRow": "So hoch wie seine Zeile. Ändere die Höhe an der Zeile."
     },
     "arrange": {
       "hint": "Zieh ein Widget, um es zu verschieben, oder lass es unter dem Board los, um eine neue Reihe zu beginnen. Erst beim Speichern ändert sich etwas.",
@@ -224,12 +236,14 @@
     "sizes": {
       "S": "S",
       "M": "M",
-      "L": "L"
+      "L": "L",
+      "XL": "XL"
     },
     "sizeNames": {
       "S": "Klein",
       "M": "Mittel",
-      "L": "Groß"
+      "L": "Groß",
+      "XL": "Sehr groß"
     },
     "gallery": {
       "subtitle": "Hinzufügen setzt ein Widget ans Ende der gewählten Anordnung. Anpassen öffnet eine Kopie in der Werkstatt.",
@@ -263,6 +277,7 @@
     "announce": {
       "moved": "{{name}} an Position {{position}} von {{total}} verschoben",
       "resized": "{{name}} ist jetzt {{size}}",
+      "rowHeight": "Zeile {{position}} ist jetzt {{height}}",
       "removed": "{{name}} entfernt"
     },
     "empty": {

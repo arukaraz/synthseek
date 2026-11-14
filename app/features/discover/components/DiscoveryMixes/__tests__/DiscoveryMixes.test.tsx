@@ -128,6 +128,24 @@ describe("DiscoveryMixes", () => {
     expect(screen.getByRole("heading", { name: enDiscover.mixes.title })).toBeInTheDocument();
   });
 
+  it("lays the mixes on a rail at half width and on a grid in a wide tile", () => {
+    useDiscoveryMixesMock.mockReturnValue(
+      buildResult({
+        lbConfig: buildConfig({ selectedKinds: ["daily-jams", "weekly-jams"] }),
+        mixes: [createReadyMix({ kind: "daily-jams" }), createEmptyMix({ kind: "weekly-jams" })],
+      })
+    );
+
+    const { unmount } = renderWithProviders(<DiscoveryMixes size="M" info="Your ListenBrainz mixes" />);
+    expect(screen.getByRole("region", { name: enDiscover.mixes.rail })).toHaveAttribute("tabindex", "0");
+    expect(screen.getByTestId("ready-card")).toBeInTheDocument();
+    unmount();
+
+    renderWithProviders(<DiscoveryMixes size="L" info="Your ListenBrainz mixes" />);
+    expect(screen.queryByRole("region", { name: enDiscover.mixes.rail })).not.toBeInTheDocument();
+    expect(screen.getByTestId("ready-card")).toBeInTheDocument();
+  });
+
   it("lists each mix as a row in a quarter tile, opening only the ready ones", () => {
     useDiscoveryMixesMock.mockReturnValue(
       buildResult({

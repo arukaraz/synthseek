@@ -5,6 +5,7 @@ import type {
   BoardItem,
   BoardLayout,
   BoardLists,
+  BoardTemplateApplied,
   BoardTemplateUndo,
 } from "@hooks/api/queries/board/types";
 import { act, renderHook } from "@test/test-utils";
@@ -54,11 +55,11 @@ describe("useBoardSave", () => {
 
     act(() => void result.current.saveChanges({ lists: next, appearance: null }));
 
-    expect(saveMock.mock.calls).toEqual([[{ schemaVersion: 4, ...next }, "optimistic"]]);
+    expect(saveMock.mock.calls).toEqual([[{ schemaVersion: 5, ...next }, "optimistic"]]);
     expect(appearanceMock).not.toHaveBeenCalled();
     expect(toastMock.success.mock.calls.at(-1)?.[0]).toBe("Board saved");
     lastToastAction().onClick();
-    expect(saveMock.mock.calls.at(-1)).toEqual([{ schemaVersion: 4, items: ITEMS, mobile: MOBILE }]);
+    expect(saveMock.mock.calls.at(-1)).toEqual([{ schemaVersion: 5, items: ITEMS, mobile: MOBILE }]);
   });
 
   it("saves a new look alone and undoes it back to the look it replaced", () => {
@@ -92,7 +93,7 @@ describe("useBoardSave", () => {
 
     saveMock.mockResolvedValueOnce(false);
     await expect(result.current.saveChanges({ lists: next, appearance: null }, "confirmed")).resolves.toBe(false);
-    expect(saveMock.mock.calls).toEqual([[{ schemaVersion: 4, ...next }, "confirmed"]]);
+    expect(saveMock.mock.calls).toEqual([[{ schemaVersion: 5, ...next }, "confirmed"]]);
     expect(toastMock.success).not.toHaveBeenCalled();
 
     await expect(result.current.saveChanges({ lists: next, appearance: null }, "confirmed")).resolves.toBe(true);
@@ -111,7 +112,7 @@ describe("useBoardSave", () => {
 
   it("offers to undo an applied template with what the server handed back, and confirms once it is undone", () => {
     const { result } = renderHook(() => useBoardSave(LISTS));
-    const undo: BoardTemplateUndo = {
+    const undo: BoardTemplateApplied["undo"] = {
       layout: null,
       appearance: { density: "comfortable", text: "default" },
       widgetIds: ["w_new"],
@@ -119,7 +120,7 @@ describe("useBoardSave", () => {
 
     act(() =>
       result.current.templateApplied({
-        layout: { schemaVersion: 4, items: [], mobile: [] },
+        layout: { schemaVersion: 5, items: [], mobile: [] },
         appearance: { density: "compact", text: "large" },
         undo,
       })

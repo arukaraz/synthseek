@@ -2,12 +2,13 @@ import type { ParseKeys } from "i18next";
 import type { LucideIcon } from "lucide-react";
 import type { ComponentType, PointerEvent as ReactPointerEvent, RefObject } from "react";
 
-import type { BoardDevice, BoardHeight } from "@components/BoardGrid";
+import type { BoardDevice } from "@components/BoardGrid";
 import type { BoardWriteMode } from "@hooks/api/mutations/board/types";
 import type {
   BoardAppearance,
   BoardItem,
   BoardLists,
+  BoardRowHeight,
   BoardSize,
   BoardTemplateApplied,
   BoardWidgetKey,
@@ -31,7 +32,6 @@ export interface BoardWidgetDefinition {
   icon: LucideIcon;
   titleKey: ParseKeys<"discover">;
   descriptionKey: ParseKeys<"discover">;
-  sizes: Record<BoardSize, BoardHeight>;
   defaultSize: BoardSize;
   lockedTo?: BoardSize;
 }
@@ -43,9 +43,28 @@ export interface PlacedTile {
   row: number;
   cols: number;
   rows: number;
+  rowSized: boolean;
 }
 
-export type WidgetTile = Exclude<BoardItem, { kind: "spacer" }>;
+export interface BoardRow {
+  id: string;
+  position: number;
+  row: number;
+  rows: number;
+  height: BoardRowHeight;
+  sizable: boolean;
+  itemIds: string[];
+}
+
+export interface PackedBoard {
+  tiles: PlacedTile[];
+  rows: BoardRow[];
+}
+
+export interface BoardRowFrameProps {
+  row: BoardRow;
+  onHeight: (row: BoardRow, height: BoardRowHeight) => void;
+}
 
 export type MoveDelta = -1 | 1;
 
@@ -107,6 +126,7 @@ export interface BoardTileEditControlsProps {
   name: string;
   custom: BoardCustomWidgets;
   editable: boolean;
+  rowSized: boolean;
   position: number;
   total: number;
   actions: BoardTileActions;
@@ -122,6 +142,7 @@ export interface TileSettingsMenuProps {
   item: BoardItem;
   device: BoardDevice;
   name: string;
+  rowSized: boolean;
   position: number;
   total: number;
   dense?: boolean;
@@ -174,5 +195,6 @@ export interface BoardEditor {
   closeWidgets: () => void;
   saveBoard: (changes: BoardSave) => void;
   addSpacer: () => void;
+  setRowHeight: (row: BoardRow, height: BoardRowHeight) => void;
   actions: BoardTileActions;
 }

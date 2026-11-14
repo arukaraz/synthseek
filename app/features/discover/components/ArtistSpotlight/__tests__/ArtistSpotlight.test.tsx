@@ -140,6 +140,24 @@ describe("ArtistSpotlight", () => {
     expect(cards[0]).toHaveAttribute("data-id", "a");
   });
 
+  it("lays the cards on a rail at half width and on a grid in a wide tile", () => {
+    useArtistsForYouMock.mockReturnValue(
+      buildQuery({ data: [buildArtist("a", "Boards of Canada"), buildArtist("b", "Autechre")] })
+    );
+
+    const { unmount } = renderWithProviders(<ArtistSpotlight size="M" info="Artists to explore next" />);
+    expect(screen.getByRole("region", { name: "All suggested artists, scroll sideways" })).toHaveAttribute(
+      "tabindex",
+      "0"
+    );
+    expect(screen.getAllByTestId("artist-card")).toHaveLength(2);
+    unmount();
+
+    renderWithProviders(<ArtistSpotlight size="XL" info="Artists to explore next" />);
+    expect(screen.queryByRole("region", { name: "All suggested artists, scroll sideways" })).not.toBeInTheDocument();
+    expect(screen.getAllByTestId("artist-card")).toHaveLength(2);
+  });
+
   it("lists the artists as rows with their latest release in a quarter tile, without the photo cards", () => {
     useArtistsForYouMock.mockReturnValue(
       buildQuery({

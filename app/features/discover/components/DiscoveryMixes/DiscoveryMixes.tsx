@@ -12,6 +12,8 @@ import { useContentRequestFlow } from "@features/search/components/ContentReques
 import { useDiscoveryMixes } from "@hooks/api/queries/discovery/useDiscoveryMixes";
 import { fadeIn } from "@utils/animations";
 
+import { isWideSize } from "../helpers";
+import { railScroller, snapRail } from "../styles";
 import { widgetList } from "../WidgetRow/styles";
 import { WidgetRow } from "../WidgetRow/WidgetRow";
 import { DiscoveryMixCard } from "./DiscoveryMixCard";
@@ -51,7 +53,14 @@ export function DiscoveryMixes({ size, info }: DiscoveryMixesProps) {
   if (!lbConfig.username) return <DiscoveryMixesEmpty reason="no-username" info={info} />;
   if (mixes.length === 0) return <DiscoveryMixesEmpty reason="no-kinds" info={info} />;
 
-  const compact = size === "L";
+  const compact = isWideSize(size);
+  const cards = mixes.map((mix) =>
+    mix.status === "ready" ? (
+      <DiscoveryMixCard key={mix.kind} mix={mix} compact={compact} onClick={() => handleCardClick(mix)} />
+    ) : (
+      <DiscoveryMixCardEmpty key={mix.kind} mix={mix} compact={compact} />
+    )
+  );
 
   return (
     <motion.section
@@ -94,16 +103,12 @@ export function DiscoveryMixes({ size, info }: DiscoveryMixesProps) {
               )}
             </ul>
           </FadeScroll>
+        ) : compact ? (
+          <div className={mixGrid()}>{cards}</div>
         ) : (
-          <div className={mixGrid()}>
-            {mixes.map((mix) =>
-              mix.status === "ready" ? (
-                <DiscoveryMixCard key={mix.kind} mix={mix} compact={compact} onClick={() => handleCardClick(mix)} />
-              ) : (
-                <DiscoveryMixCardEmpty key={mix.kind} mix={mix} compact={compact} />
-              )
-            )}
-          </div>
+          <FadeScroll axis="x" arrows className={railScroller()} label={t("mixes.rail")}>
+            <div className={snapRail()}>{cards}</div>
+          </FadeScroll>
         )}
       </div>
     </motion.section>

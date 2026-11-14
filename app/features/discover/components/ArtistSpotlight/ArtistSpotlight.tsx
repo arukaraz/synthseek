@@ -13,6 +13,8 @@ import { fadeIn } from "@utils/animations";
 import { motion } from "framer-motion";
 import { AlertCircle, Users } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { isWideSize } from "../helpers";
+import { railScroller, snapRail } from "../styles";
 import { widgetList } from "../WidgetRow/styles";
 import { WidgetRow } from "../WidgetRow/WidgetRow";
 import { ArtistSpotlightCard } from "./ArtistSpotlightCard";
@@ -35,6 +37,16 @@ export function ArtistSpotlight({ size, info }: ArtistSpotlightProps) {
 
   const shuffleOf = (name: string, inLibrary: boolean) =>
     inLibrary ? () => void shuffleEntity({ kind: "artist", artist: name }) : undefined;
+
+  const cards = artists.map((item) => (
+    <ArtistSpotlightCard
+      key={item.artist.id}
+      artist={item.artist}
+      latestAlbum={item.latestAlbum}
+      onClick={() => handleArtistClick(item.artist)}
+      onPlay={shuffleOf(item.artist.name, item.inLibrary)}
+    />
+  ));
 
   return (
     <motion.section
@@ -99,18 +111,14 @@ export function ArtistSpotlight({ size, info }: ArtistSpotlightProps) {
           </FadeScroll>
         )}
 
-        {!isLoading && !isError && artists.length > 0 && size !== "S" && (
-          <div className={spotlightGrid()}>
-            {artists.map((item) => (
-              <ArtistSpotlightCard
-                key={item.artist.id}
-                artist={item.artist}
-                latestAlbum={item.latestAlbum}
-                onClick={() => handleArtistClick(item.artist)}
-                onPlay={shuffleOf(item.artist.name, item.inLibrary)}
-              />
-            ))}
-          </div>
+        {!isLoading && !isError && artists.length > 0 && size === "M" && (
+          <FadeScroll axis="x" arrows className={railScroller()} label={t("artistSpotlight.rail")}>
+            <div className={snapRail()}>{cards}</div>
+          </FadeScroll>
+        )}
+
+        {!isLoading && !isError && artists.length > 0 && isWideSize(size) && (
+          <div className={spotlightGrid()}>{cards}</div>
         )}
       </div>
     </motion.section>

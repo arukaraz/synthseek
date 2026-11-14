@@ -86,11 +86,12 @@ export function ContentRequestFlow({ children }: ContentRequestFlowProps) {
       {children}
       <ContentDetailModal
         open={flow.contentDetailModalProps.open}
+        session={flow.contentDetailModalProps.session}
         onClose={flow.contentDetailModalProps.onClose}
         target={detailTarget}
         actions={detailActions}
       />
-      {flow.selectedContentToRequest && <ConfigRequestModal {...flow.configModalProps} onSuccess={() => {}} />}
+      {flow.selectedContentToRequest && <ConfigRequestModal {...flow.configModalProps} />}
       <DirectRequestConfirm pending={direct.pending} onConfirm={direct.confirm} onCancel={direct.cancel} />
     </ContentRequestFlowContext.Provider>
   );

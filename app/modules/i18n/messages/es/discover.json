@@ -67,6 +67,7 @@
   },
   "artistSpotlight": {
     "title": "Artistas que te pueden gustar",
+    "rail": "Todos los artistas sugeridos, desliza hacia los lados",
     "subtitle": "Parecidos a lo que escuchas",
     "errorTitle": "No se pudieron cargar los artistas",
     "errorDescription": "No se pudieron obtener los artistas. Inténtalo de nuevo más tarde.",
@@ -125,6 +126,7 @@
   },
   "mixes": {
     "title": "Mezclas para descubrir",
+    "rail": "Todas las mezclas, desliza hacia los lados",
     "subtitle": "ListenBrainz",
     "cardAriaLabel": "Abrir la mezcla {{label}}, {{count}} canciones",
     "trackCount": "{{count}} canciones",
@@ -189,10 +191,20 @@
     "add": {
       "action": "Añadir"
     },
+    "row": {
+      "label": "Fila {{position}}",
+      "height": "Altura de la fila {{position}}",
+      "heights": {
+        "short": "Baja",
+        "regular": "Normal",
+        "tall": "Alta"
+      }
+    },
     "spacer": {
       "name": "Espaciador",
       "shorter": "Hacer el espaciador más bajo",
-      "taller": "Hacer el espaciador más alto"
+      "taller": "Hacer el espaciador más alto",
+      "followsRow": "Tan alto como su fila. Cambia la altura en la fila."
     },
     "arrange": {
       "hint": "Arrastra un widget para moverlo, o suéltalo bajo el tablero para empezar una fila nueva. Nada cambia hasta que guardes.",
@@ -224,12 +236,14 @@
     "sizes": {
       "S": "S",
       "M": "M",
-      "L": "L"
+      "L": "L",
+      "XL": "XL"
     },
     "sizeNames": {
       "S": "Pequeño",
       "M": "Mediano",
-      "L": "Grande"
+      "L": "Grande",
+      "XL": "Extragrande"
     },
     "gallery": {
       "subtitle": "Añadir coloca un widget al final de la disposición que elijas. Personalizar abre una copia en el taller.",
@@ -263,6 +277,7 @@
     "announce": {
       "moved": "{{name}} movido a la posición {{position}} de {{total}}",
       "resized": "{{name}} ahora es {{size}}",
+      "rowHeight": "La fila {{position}} ahora es {{height}}",
       "removed": "{{name}} quitado"
     },
     "empty": {

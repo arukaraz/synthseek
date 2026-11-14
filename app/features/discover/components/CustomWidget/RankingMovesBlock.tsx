@@ -2,6 +2,7 @@
 
 import { FadeScroll } from "@components/FadeScroll";
 
+import { isWideSize } from "../helpers";
 import { WidgetRow } from "../WidgetRow/WidgetRow";
 import { BLOCK_LIMITS, MOVE_ICONS } from "./constants";
 import { moveDirection, moveText } from "./helpers";
@@ -12,7 +13,7 @@ export function RankingMovesBlock({ items, size, accent, controls }: WidgetBlock
   return (
     <div data-acc={accent} className={blockBody()}>
       <FadeScroll>
-        <ol className={blockList({ wide: size === "L" })}>
+        <ol className={blockList({ wide: isWideSize(size) })}>
           {items.slice(0, BLOCK_LIMITS.rankingMoves[size]).map((item, index) => {
             const direction = item.move ? moveDirection(item.move) : null;
             const Icon = direction ? MOVE_ICONS[direction] : null;

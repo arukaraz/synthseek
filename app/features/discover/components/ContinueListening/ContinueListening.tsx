@@ -11,6 +11,7 @@ import { useEntityPlayback } from "@hooks/ui/useEntityPlayback";
 import { formatRelativeTime } from "@utils/formatters";
 
 import type { BoardWidgetProps } from "../ExploreBoard/types";
+import { isWideSize } from "../helpers";
 import { widgetEyebrow, widgetNote } from "../styles";
 import { leaderFrame, leaderLayout } from "../WidgetLeader/styles";
 import { widgetList } from "../WidgetRow/styles";
@@ -22,7 +23,7 @@ export function ContinueListening({ size, info }: BoardWidgetProps) {
   const { t } = useTranslation("discover");
   const { point, toggle } = useResumePoint();
   const { playEntity } = useEntityPlayback();
-  const withRecent = size === "L";
+  const withRecent = isWideSize(size);
   const recent = useRecentPlays(withRecent);
   const plays = withRecent ? (recent.data ?? []) : [];
 

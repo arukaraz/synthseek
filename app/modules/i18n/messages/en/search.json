@@ -251,6 +251,10 @@
         "remove": "Remove tag {{tag}}"
       }
     },
+    "keepRequesting": {
+      "label": "Keep requesting",
+      "hint": "After this request, go back to where you were so you can request something else"
+    },
     "actions": {
       "cancel": "Cancel",
       "request": "Request",

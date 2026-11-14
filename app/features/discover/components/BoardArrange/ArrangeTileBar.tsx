@@ -8,7 +8,16 @@ import { TileSettingsMenu } from "../ExploreBoard/TileSettingsMenu";
 import { arrangeBar, arrangeButton, arrangeHandle, arrangeName, arrangeTools } from "./styles";
 import type { ArrangeTileBarProps } from "./types";
 
-export function ArrangeTileBar({ item, device, name, custom, position, total, actions }: ArrangeTileBarProps) {
+export function ArrangeTileBar({
+  item,
+  device,
+  name,
+  custom,
+  rowSized,
+  position,
+  total,
+  actions,
+}: ArrangeTileBarProps) {
   const { t } = useTranslation("discover");
 
   return (
@@ -32,6 +41,7 @@ export function ArrangeTileBar({ item, device, name, custom, position, total, ac
           item={item}
           device={device}
           name={name}
+          rowSized={rowSized}
           position={position}
           total={total}
           dense

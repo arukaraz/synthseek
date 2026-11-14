@@ -81,20 +81,14 @@ describe("CategoriesGrid", () => {
     expect(mockRouter.push).toHaveBeenCalledWith("/discover/categories");
   });
 
-  it("lays the mosaic out in two columns at the half-width size", () => {
+  it("gives the mosaic two columns and a four-column step keyed on its container, not on the tile's size", () => {
     useCategoriesMock.mockReturnValue(createMockQuery<CategoriesPayload>(buildPayload(genres)));
 
     renderWithProviders(<CategoriesGrid size="M" info="Browse genres" />);
 
-    expect(screen.getByText("Rock").closest(".grid")).toHaveClass("grid-cols-2");
-  });
-
-  it("lays the mosaic out in four columns at the full-width size", () => {
-    useCategoriesMock.mockReturnValue(createMockQuery<CategoriesPayload>(buildPayload(genres)));
-
-    renderWithProviders(<CategoriesGrid size="L" info="Browse genres" />);
-
-    expect(screen.getByText("Rock").closest(".grid")).toHaveClass("grid-cols-4");
+    const grid = screen.getByText("Rock").closest(".grid");
+    expect(grid).toHaveClass("grid-cols-2");
+    expect(grid).toHaveClass("@xl:grid-cols-4");
   });
 
   it("encodes category names with spaces in the navigation URL", () => {

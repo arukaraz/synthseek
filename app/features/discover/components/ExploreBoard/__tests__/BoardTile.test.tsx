@@ -28,6 +28,7 @@ const TILE: PlacedTile = {
   row: 0,
   cols: 12,
   rows: 4,
+  rowSized: true,
 };
 
 vi.mock("@hooks/api/queries/widgets/useWidgetPresets", () => ({ useWidgetPresets: () => ({ data: [] }) }));
@@ -109,7 +110,7 @@ describe("BoardTile", () => {
 
     expect(handlers.move).toHaveBeenCalledWith("t", 1);
     expect(handlers.resize).toHaveBeenNthCalledWith(1, "t", "M");
-    expect(handlers.resize).toHaveBeenNthCalledWith(2, "t", "S");
+    expect(handlers.resize).toHaveBeenNthCalledWith(2, "t", "XL");
     expect(handlers.remove).toHaveBeenCalledWith("t");
   });
 

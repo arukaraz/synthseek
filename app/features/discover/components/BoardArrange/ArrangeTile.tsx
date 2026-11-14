@@ -61,6 +61,7 @@ export function ArrangeTile({
             device={device}
             name={name}
             custom={custom}
+            rowSized={tile.rowSized}
             position={position}
             total={total}
             actions={actions}

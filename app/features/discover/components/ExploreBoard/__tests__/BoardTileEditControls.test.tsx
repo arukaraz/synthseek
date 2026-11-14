@@ -33,13 +33,14 @@ const NO_CUSTOM = customWidgetsById([]);
 
 const SPACER: BoardItem = { kind: "spacer", id: "s", size: "S", rows: 4 };
 
-function renderControls(item: BoardItem, handlers = actions(), position = 2, total = 3) {
+function renderControls(item: BoardItem, handlers = actions(), position = 2, total = 3, rowSized = false) {
   return render(
     <BoardTileEditControls
       item={item}
       device="wide"
       name="Tile"
       editable={item.kind === "custom"}
+      rowSized={rowSized}
       position={position}
       total={total}
       actions={handlers}
@@ -65,7 +66,15 @@ describe("BoardTileEditControls", () => {
   it("leaves the drag handle, the sizes, the settings and the remove button on the bar, and the title beside them", () => {
     renderControls(ITEM);
 
-    expect(barButtons()).toEqual(["Drag Tile", "Small", "Medium", "Large", "Settings for Tile", "Remove Tile"]);
+    expect(barButtons()).toEqual([
+      "Drag Tile",
+      "Small",
+      "Medium",
+      "Large",
+      "Extra large",
+      "Settings for Tile",
+      "Remove Tile",
+    ]);
     expect(screen.getByText("Tile")).toBeInTheDocument();
   });
 
@@ -78,6 +87,7 @@ describe("BoardTileEditControls", () => {
           device="wide"
           name="Tile"
           editable={false}
+          rowSized
           position={1}
           total={1}
           actions={handlers}
@@ -86,8 +96,8 @@ describe("BoardTileEditControls", () => {
       </TooltipProvider>
     );
 
-    const locked = screen.getAllByRole("button", { name: /Medium|Large/ });
-    expect(locked).toHaveLength(2);
+    const locked = screen.getAllByRole("button", { name: /Medium|Large|Extra large/ });
+    expect(locked).toHaveLength(3);
     for (const chip of locked) {
       expect(chip).toHaveAttribute("aria-disabled", "true");
       fireEvent.click(chip);
@@ -170,6 +180,17 @@ describe("BoardTileEditControls", () => {
     expect(screen.queryByRole("menuitem", { name: "Make the spacer shorter" })).toBeNull();
   });
 
+  it("offers a spacer beside a widget no height of its own, and says its row sets it", async () => {
+    const handlers = actions();
+    renderControls(SPACER, handlers, 2, 3, true);
+
+    await openSettings();
+
+    expect(screen.queryByRole("menuitem", { name: "Make the spacer shorter" })).toBeNull();
+    expect(screen.queryByRole("menuitem", { name: "Make the spacer taller" })).toBeNull();
+    expect(menuItem("As tall as its row. Set the height on the row.")).toHaveAttribute("aria-disabled", "true");
+  });
+
   it("stops a spacer at its shortest", async () => {
     renderControls({ ...SPACER, rows: 1 });
 
@@ -183,6 +204,7 @@ describe("BoardTileEditControls", () => {
     renderControls(ITEM, handlers);
 
     expect(screen.getByRole("button", { name: "Large" })).toHaveAttribute("aria-pressed", "true");
+    expect(screen.getByRole("button", { name: "Extra large" })).toHaveAttribute("aria-pressed", "false");
     expect(screen.getByRole("button", { name: "Medium" })).toHaveAttribute("aria-pressed", "false");
 
     fireEvent.click(screen.getByRole("button", { name: "Medium" }));
@@ -202,6 +224,7 @@ describe("BoardTileEditControls", () => {
           device="wide"
           name="Mine"
           editable
+          rowSized
           position={1}
           total={1}
           actions={actions()}
@@ -209,7 +232,12 @@ describe("BoardTileEditControls", () => {
         />
       );
       const group = screen.getByRole("group", { name: "Size of Mine" });
-      expect(Array.from(group.querySelectorAll("button"), (button) => button.textContent)).toEqual(["S", "M", "L"]);
+      expect(Array.from(group.querySelectorAll("button"), (button) => button.textContent)).toEqual([
+        "S",
+        "M",
+        "L",
+        "XL",
+      ]);
 
       rerender(
         <BoardTileEditControls
@@ -217,6 +245,7 @@ describe("BoardTileEditControls", () => {
           device="narrow"
           name="Mine"
           editable
+          rowSized
           position={1}
           total={1}
           actions={actions()}
@@ -224,7 +253,12 @@ describe("BoardTileEditControls", () => {
         />
       );
       const narrow = screen.getByRole("group", { name: "Size of Mine" });
-      expect(Array.from(narrow.querySelectorAll("button"), (button) => button.textContent)).toEqual(["S", "M", "L"]);
+      expect(Array.from(narrow.querySelectorAll("button"), (button) => button.textContent)).toEqual([
+        "S",
+        "M",
+        "L",
+        "XL",
+      ]);
       expect(screen.getByRole("button", { name: "Remove Mine" })).toBeInTheDocument();
     }
   );
@@ -285,6 +319,7 @@ describe("BoardTileEditControls", () => {
         device="wide"
         name="Tile"
         editable={false}
+        rowSized
         position={1}
         total={2}
         actions={handlers}
