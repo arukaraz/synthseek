@@ -79,6 +79,8 @@ export const cardActions = cva("border-fg/10 mt-auto flex flex-wrap items-center
 
 export const layoutChevron = cva("size-3.5 opacity-70");
 
+export const bulkTrigger = cva("shrink-0 aria-disabled:cursor-not-allowed aria-disabled:opacity-50");
+
 export const cardAction = cva("shrink-0");
 
 export const lockedAction = cva(

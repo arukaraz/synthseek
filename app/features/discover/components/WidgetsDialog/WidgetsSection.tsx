@@ -4,19 +4,30 @@ import { Search } from "lucide-react";
 import { Fragment, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
+import { toast } from "sonner";
+
 import { Input } from "@components/ui/Input";
 import { SectionLoading } from "@components/ui/SectionLoading";
 import { SegmentTabs } from "@components/ui/SegmentTabs";
+import type { BoardList, BoardWidgetKey } from "@hooks/api/queries/board/types";
 import { useMyWidgets } from "@hooks/api/queries/widgets/useMyWidgets";
 
 import { NEW_WIDGET_DRAFT } from "../../constants";
-import { BOARD_WIDGET_ORDER, BOARD_WIDGETS } from "../ExploreBoard/constants";
+import { BOARD_LIST_KEYS, BOARD_MAX_ITEMS, BOARD_WIDGET_ORDER, BOARD_WIDGETS } from "../ExploreBoard/constants";
 import { widgetsOnBoard } from "../ExploreBoard/helpers";
 import { NeverIncludeCard } from "../NeverInclude/NeverIncludeCard";
+import { BulkLayoutMenu } from "../WidgetGallery/BulkLayoutMenu";
 import { CategoryBand } from "../WidgetGallery/CategoryBand";
 import { GALLERY_MODES } from "../WidgetGallery/constants";
 import { GalleryFilterMenu } from "../WidgetGallery/GalleryFilterMenu";
-import { categoryCounts, draftOf, galleryGroups, layoutPlacementOf } from "../WidgetGallery/helpers";
+import {
+  bulkAddRoomOf,
+  bulkPlacementOf,
+  categoryCounts,
+  draftOf,
+  galleryGroups,
+  layoutPlacementOf,
+} from "../WidgetGallery/helpers";
 import { MyWidgetsPanel } from "../WidgetGallery/MyWidgetsPanel";
 import {
   galleryEmpty,
@@ -50,6 +61,16 @@ export function WidgetsSection({ draft, gallery, filters, onFiltersChange, onImp
   const onList = useMemo(() => ({ items: widgetsOnBoard(lists.items), mobile: widgetsOnBoard(lists.mobile) }), [lists]);
   const groups = galleryGroups(entries, filters, onBoard);
   const counts = useMemo(() => categoryCounts(entries), [entries]);
+  const shown = groups.flatMap((group) => group.entries.map((entry) => entry.widget));
+  const isOnList = (list: BoardList, widget: BoardWidgetKey) => onList[list].has(widget);
+  const bulk = bulkPlacementOf(shown, isOnList);
+  const addShown = (targets: readonly BoardList[]) => {
+    const room = bulkAddRoomOf(shown, targets, lists, isOnList);
+    shown.forEach((widget) => draft.addWidget(widget, room.fits));
+    room.full.forEach((list) =>
+      toast.warning(t("board.gallery.bulk.noRoom", { layout: t(BOARD_LIST_KEYS[list]), max: BOARD_MAX_ITEMS }))
+    );
+  };
 
   return (
     <>
@@ -70,6 +91,14 @@ export function WidgetsSection({ draft, gallery, filters, onFiltersChange, onImp
               />
             </label>
           </div>
+        ) : null}
+        {gallery.mode === "widgets" ? (
+          <BulkLayoutMenu
+            addable={bulk.addable}
+            removable={bulk.removable}
+            onAdd={addShown}
+            onRemove={(targets) => shown.forEach((widget) => draft.removeWidget(widget, targets))}
+          />
         ) : null}
         <SegmentTabs
           items={GALLERY_MODES.map((value) => ({ value, label: t(`widgets:gallery.tabs.${value}`) }))}

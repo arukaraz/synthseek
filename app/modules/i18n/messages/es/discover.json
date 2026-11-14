@@ -244,7 +244,14 @@
       "onBoard": "En el tablero",
       "addNamed": "Añadir {{name}}",
       "categoryCount": "{{onBoard}} de {{total}} en el tablero",
-      "empty": "Ningún widget coincide con «{{query}}»."
+      "empty": "Ningún widget coincide con «{{query}}».",
+      "bulk": {
+        "label": "Añadir o quitar todos los widgets mostrados",
+        "addTo": "Añadir todos los mostrados a",
+        "removeFrom": "Quitar todos los mostrados de",
+        "nothing": "No hay ningún widget mostrado que añadir o quitar",
+        "noRoom": "No se añadió nada a {{layout}}: una disposición admite {{max}} elementos como máximo. Quita algunos primero."
+      }
     },
     "toast": {
       "added": "{{name}} añadido al final",

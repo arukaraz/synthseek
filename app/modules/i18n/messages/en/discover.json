@@ -244,7 +244,14 @@
       "onBoard": "On board",
       "addNamed": "Add {{name}}",
       "categoryCount": "{{onBoard}} of {{total}} on board",
-      "empty": "No widget matches “{{query}}”."
+      "empty": "No widget matches “{{query}}”.",
+      "bulk": {
+        "label": "Add or remove all the widgets shown",
+        "addTo": "Add all shown to",
+        "removeFrom": "Remove all shown from",
+        "nothing": "No widget is shown to add or remove",
+        "noRoom": "Nothing was added to {{layout}}: a layout holds {{max}} tiles at most. Remove some first."
+      }
     },
     "toast": {
       "added": "{{name}} added at the end",

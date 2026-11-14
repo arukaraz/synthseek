@@ -14,6 +14,7 @@ import type {
 import {
   BOARD_CATEGORY_ORDER,
   BOARD_LISTS,
+  BOARD_MAX_ITEMS,
   BOARD_WIDGET_ORDER,
   BOARD_WIDGETS,
   CUSTOM_BLOCK_HEIGHTS,
@@ -22,6 +23,8 @@ import { spanOf } from "../ExploreBoard/helpers";
 import type { BoardCategory } from "../ExploreBoard/types";
 import { BYTES_PER_KB, GALLERY_BOARD_FILTERS, PREVIEW_BOARD_WIDTH, PREVIEW_BOX } from "./constants";
 import type {
+  BulkAddRoom,
+  BulkPlacement,
   GalleryBoardFilter,
   GalleryCategoryFilter,
   GalleryEntry,
@@ -134,6 +137,29 @@ export function customTilesOf(items: readonly BoardItem[], widgetId: string): nu
 export function layoutPlacementOf(onList: (list: BoardList) => boolean): LayoutPlacement {
   const placed = BOARD_LISTS.filter(onList);
   return { placed, free: BOARD_LISTS.filter((list) => !placed.includes(list)) };
+}
+
+export function bulkPlacementOf(
+  widgets: readonly BoardWidgetKey[],
+  onList: (list: BoardList, widget: BoardWidgetKey) => boolean
+): BulkPlacement {
+  return {
+    addable: BOARD_LISTS.filter((list) => widgets.some((widget) => !onList(list, widget))),
+    removable: BOARD_LISTS.filter((list) => widgets.some((widget) => onList(list, widget))),
+  };
+}
+
+export function bulkAddRoomOf(
+  widgets: readonly BoardWidgetKey[],
+  targets: readonly BoardList[],
+  lists: Record<BoardList, readonly BoardItem[]>,
+  onList: (list: BoardList, widget: BoardWidgetKey) => boolean
+): BulkAddRoom {
+  const fits = targets.filter((list) => {
+    const missing = widgets.filter((widget) => !onList(list, widget)).length;
+    return lists[list].length + missing <= BOARD_MAX_ITEMS;
+  });
+  return { fits, full: targets.filter((list) => !fits.includes(list)) };
 }
 
 export function draftOf(widget: WidgetDocument): WidgetDraft {

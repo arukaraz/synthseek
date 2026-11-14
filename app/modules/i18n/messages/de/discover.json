@@ -244,7 +244,14 @@
       "onBoard": "Auf dem Board",
       "addNamed": "{{name}} hinzufügen",
       "categoryCount": "{{onBoard}} von {{total}} auf dem Board",
-      "empty": "Kein Widget passt zu „{{query}}“."
+      "empty": "Kein Widget passt zu „{{query}}“.",
+      "bulk": {
+        "label": "Alle angezeigten Widgets hinzufügen oder entfernen",
+        "addTo": "Alle angezeigten hinzufügen zu",
+        "removeFrom": "Alle angezeigten entfernen aus",
+        "nothing": "Kein Widget angezeigt, das hinzugefügt oder entfernt werden kann",
+        "noRoom": "Zu {{layout}} wurde nichts hinzugefügt: Eine Anordnung fasst höchstens {{max}} Elemente. Entferne zuerst einige."
+      }
     },
     "toast": {
       "added": "{{name}} am Ende hinzugefügt",

@@ -3,7 +3,7 @@ import { resolve } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
-import { SPACER_MAX_ROWS, SPACER_MIN_ROWS } from "../constants";
+import { BOARD_MAX_ITEMS, SPACER_MAX_ROWS, SPACER_MIN_ROWS } from "../constants";
 
 const serverConstantsPath = resolve(process.cwd(), "../server/utils/constants/board.ts");
 const serverSchemaPath = resolve(process.cwd(), "../server/services/board/schema.ts");
@@ -20,6 +20,10 @@ describe.skipIf(!serverSourcePresent)("spacer rows parity (web <-> server)", () 
     expect(serverNumber(serverSchemaPath, /SpacerRowsSchema = z\.number\(\)\.int\(\)\.min\((\d+)\)/)).toBe(
       SPACER_MIN_ROWS
     );
+  });
+
+  it("refuses a bulk add at the list size the server's schema refuses", () => {
+    expect(serverNumber(serverConstantsPath, /MAX_ITEMS:\s*(\d+)/)).toBe(BOARD_MAX_ITEMS);
   });
 });
 

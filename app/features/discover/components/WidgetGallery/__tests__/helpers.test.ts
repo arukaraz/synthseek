@@ -1,11 +1,19 @@
 import { describe, expect, it } from "vitest";
 
-import type { BoardWidgetKey } from "@hooks/api/queries/board/types";
+import type { BoardItem, BoardList, BoardWidgetKey } from "@hooks/api/queries/board/types";
 import type { WidgetProblem } from "@hooks/api/queries/widgets/types";
 
-import { BOARD_WIDGETS } from "../../ExploreBoard/constants";
+import { BOARD_MAX_ITEMS, BOARD_WIDGETS } from "../../ExploreBoard/constants";
 import { DEFAULT_GALLERY_FILTERS, PREVIEW_BOX } from "../constants";
-import { countInCategory, galleryGroups, matchesQuery, previewFrame, problemText } from "../helpers";
+import {
+  bulkAddRoomOf,
+  bulkPlacementOf,
+  countInCategory,
+  galleryGroups,
+  matchesQuery,
+  previewFrame,
+  problemText,
+} from "../helpers";
 import type { GalleryEntry, GalleryFilters } from "../types";
 
 function entry(widget: BoardWidgetKey, title: string, description = ""): GalleryEntry {
@@ -19,6 +27,49 @@ const ENTRIES: GalleryEntry[] = [
   entry("mixes", "Discover mixes", "ListenBrainz playlists"),
   entry("requests", "Recent requests", "What you asked for"),
 ];
+
+describe("bulkPlacementOf", () => {
+  const onList = (placed: Record<BoardList, readonly BoardWidgetKey[]>) => (list: BoardList, widget: BoardWidgetKey) =>
+    placed[list].includes(widget);
+
+  it("offers to add where a shown widget is missing and to remove where one is placed", () => {
+    expect(bulkPlacementOf(["trending", "mixes"], onList({ items: ["trending"], mobile: [] }))).toEqual({
+      addable: ["items", "mobile"],
+      removable: ["items"],
+    });
+  });
+
+  it("offers no add where every shown widget is placed, and nothing at all for an empty list", () => {
+    expect(bulkPlacementOf(["trending"], onList({ items: ["trending"], mobile: ["trending", "mixes"] }))).toEqual({
+      addable: [],
+      removable: ["items", "mobile"],
+    });
+    expect(bulkPlacementOf([], onList({ items: ["trending"], mobile: [] }))).toEqual({ addable: [], removable: [] });
+  });
+});
+
+describe("bulkAddRoomOf", () => {
+  const tiles = (count: number): BoardItem[] =>
+    Array.from({ length: count }, (_, index) => ({ kind: "custom", id: `t${index}`, widgetId: "w", size: "M" }));
+  const none = () => false;
+
+  it("fits a layout the missing widgets fill exactly, and refuses one they would take past the limit", () => {
+    const lists = { items: tiles(BOARD_MAX_ITEMS - 2), mobile: tiles(BOARD_MAX_ITEMS - 1) };
+
+    expect(bulkAddRoomOf(["trending", "mixes"], ["items", "mobile"], lists, none)).toEqual({
+      fits: ["items"],
+      full: ["mobile"],
+    });
+  });
+
+  it("counts only the widgets a layout is missing, and judges only the layouts picked", () => {
+    const lists = { items: tiles(BOARD_MAX_ITEMS), mobile: tiles(BOARD_MAX_ITEMS) };
+    const placed = (list: BoardList) => list === "items";
+
+    expect(bulkAddRoomOf(["trending"], ["items"], lists, placed)).toEqual({ fits: ["items"], full: [] });
+    expect(bulkAddRoomOf(["trending"], ["mobile"], lists, placed)).toEqual({ fits: [], full: ["mobile"] });
+  });
+});
 
 describe("matchesQuery", () => {
   it("matches title or description, ignoring case and outer spaces", () => {

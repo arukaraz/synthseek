@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import i18n from "@locale";
+import { TooltipProvider } from "@components/ui/Tooltip";
 import type { BoardLayout } from "@hooks/api/queries/board/types";
 import { PHONE_QUERY } from "@hooks/ui/constants";
 import { fireEvent, render, screen, within } from "@test/test-utils";
@@ -136,12 +137,12 @@ describe("ExploreBoard", () => {
     const custom = only([{ kind: "custom", id: "c", widgetId: "w_1", size: "M" }]);
     useBoardLayoutMock.mockReturnValue({ data: custom, isLoading: false });
 
-    const { unmount } = render(<ExploreBoard />);
+    const { unmount } = render(<ExploreBoard />, { wrapper: TooltipProvider });
     expect(screen.getByText("Deleted widget")).toBeInTheDocument();
     unmount();
 
     myWidgets.isError = true;
-    render(<ExploreBoard />);
+    render(<ExploreBoard />, { wrapper: TooltipProvider });
     expect(screen.queryByText("Deleted widget")).not.toBeInTheDocument();
     expect(screen.getByText("Couldn't load this right now.")).toBeInTheDocument();
   });
@@ -149,7 +150,7 @@ describe("ExploreBoard", () => {
   it("shows the section loader while the saved layout loads", () => {
     useBoardLayoutMock.mockReturnValue({ data: undefined, isLoading: true });
 
-    const { container } = render(<ExploreBoard />);
+    const { container } = render(<ExploreBoard />, { wrapper: TooltipProvider });
 
     expect(container.querySelector("[data-board-tile]")).toBeNull();
     expect(container.querySelector(".animate-spin")).not.toBeNull();
@@ -158,7 +159,7 @@ describe("ExploreBoard", () => {
   it("renders the default board in order when nothing is saved", () => {
     useBoardLayoutMock.mockReturnValue({ data: null, isLoading: false });
 
-    const { container } = render(<ExploreBoard />);
+    const { container } = render(<ExploreBoard />, { wrapper: TooltipProvider });
 
     expect(screen.getByRole("region", { name: i18n.t("discover:board.regionLabel") })).toBeInTheDocument();
     expect(renderedTileIds(container)).toEqual(DEFAULT_BOARD.map((item) => item.id));
@@ -170,7 +171,7 @@ describe("ExploreBoard", () => {
       isLoading: false,
     });
 
-    const { container } = render(<ExploreBoard />);
+    const { container } = render(<ExploreBoard />, { wrapper: TooltipProvider });
 
     expect(renderedTileIds(container)).toEqual(["b", "a"]);
     const requests = container.querySelector("[data-widget='requests']");
@@ -181,7 +182,7 @@ describe("ExploreBoard", () => {
   it("places the tiles on the grid with their packed column and row spans", () => {
     useBoardLayoutMock.mockReturnValue({ data: TWO_TILES, isLoading: false });
 
-    const { container } = render(<ExploreBoard />);
+    const { container } = render(<ExploreBoard />, { wrapper: TooltipProvider });
 
     const second = tile(container, "b");
     expect(second.style.getPropertyValue("--tile-col")).toBe("7 / span 6");
@@ -192,7 +193,7 @@ describe("ExploreBoard", () => {
     viewport.wide = false;
     useBoardLayoutMock.mockReturnValue({ data: TWO_TILES, isLoading: false });
 
-    const { container } = render(<ExploreBoard />);
+    const { container } = render(<ExploreBoard />, { wrapper: TooltipProvider });
 
     expect(renderedTileIds(container)).toEqual(["g"]);
     expect(container.querySelector("[data-widget='genres']")).toHaveAttribute("data-size", "S");
@@ -203,7 +204,7 @@ describe("ExploreBoard", () => {
     viewport.wide = false;
     useBoardLayoutMock.mockReturnValue({ data: TWO_TILES, isLoading: false });
 
-    const { container } = render(<ExploreBoard />);
+    const { container } = render(<ExploreBoard />, { wrapper: TooltipProvider });
     fireEvent.click(screen.getByRole("button", { name: i18n.t("discover:board.customize") }));
     fireEvent.click(within(tile(container, "g")).getByRole("button", { name: "Large" }));
 
@@ -216,7 +217,7 @@ describe("ExploreBoard", () => {
   it("shows no edit controls until Customize is pressed, and hides them again on Done", () => {
     useBoardLayoutMock.mockReturnValue({ data: TWO_TILES, isLoading: false });
 
-    const { container } = render(<ExploreBoard />);
+    const { container } = render(<ExploreBoard />, { wrapper: TooltipProvider });
     expect(screen.queryByRole("button", { name: /^Remove/ })).not.toBeInTheDocument();
 
     fireEvent.click(screen.getByRole("button", { name: i18n.t("discover:board.customize") }));
@@ -233,7 +234,7 @@ describe("ExploreBoard", () => {
   it("leaves edit mode on Escape", () => {
     useBoardLayoutMock.mockReturnValue({ data: TWO_TILES, isLoading: false });
 
-    render(<ExploreBoard />);
+    render(<ExploreBoard />, { wrapper: TooltipProvider });
     fireEvent.click(screen.getByRole("button", { name: i18n.t("discover:board.customize") }));
     fireEvent.keyDown(document.body, { key: "Escape" });
 
@@ -243,7 +244,7 @@ describe("ExploreBoard", () => {
   it("saves the whole reordered list when a tile moves with the keyboard and announces it", () => {
     useBoardLayoutMock.mockReturnValue({ data: TWO_TILES, isLoading: false });
 
-    const { container } = render(<ExploreBoard />);
+    const { container } = render(<ExploreBoard />, { wrapper: TooltipProvider });
     fireEvent.click(screen.getByRole("button", { name: i18n.t("discover:board.customize") }));
     fireEvent.keyDown(tile(container, "b"), { key: "ArrowLeft" });
 
@@ -254,7 +255,7 @@ describe("ExploreBoard", () => {
   it("saves a new size picked from the size chips", () => {
     useBoardLayoutMock.mockReturnValue({ data: TWO_TILES, isLoading: false });
 
-    const { container } = render(<ExploreBoard />);
+    const { container } = render(<ExploreBoard />, { wrapper: TooltipProvider });
     fireEvent.click(screen.getByRole("button", { name: i18n.t("discover:board.customize") }));
     fireEvent.click(within(tile(container, "a")).getByRole("button", { name: "Large" }));
 
@@ -269,7 +270,7 @@ describe("ExploreBoard", () => {
   it("offers an empty state that opens the Widgets dialog when every tile is gone", () => {
     useBoardLayoutMock.mockReturnValue({ data: only([]), isLoading: false });
 
-    render(<ExploreBoard />);
+    render(<ExploreBoard />, { wrapper: TooltipProvider });
     expect(screen.getByText(i18n.t("discover:board.empty.title"))).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole("button", { name: i18n.t("discover:board.addWidget") }));
@@ -281,7 +282,7 @@ describe("ExploreBoard", () => {
   it("adds a widget to the layout picked at the end of that arrangement, only once the member saves", async () => {
     useBoardLayoutMock.mockReturnValue({ data: TWO_TILES, isLoading: false });
 
-    render(<ExploreBoard />);
+    render(<ExploreBoard />, { wrapper: TooltipProvider });
     await openWidgets();
     const dialog = screen.getByRole("dialog");
     fireEvent.pointerDown(within(dialog).getByRole("button", { name: "Add Discover Mixes" }), {
@@ -300,7 +301,7 @@ describe("ExploreBoard", () => {
   it("keeps the edit menu on an empty board, so widgets can still be added and the board settings reached", async () => {
     useBoardLayoutMock.mockReturnValue({ data: only([]), isLoading: false });
 
-    render(<ExploreBoard />);
+    render(<ExploreBoard />, { wrapper: TooltipProvider });
     fireEvent.click(screen.getByRole("button", { name: i18n.t("discover:board.customize") }));
 
     expect(screen.getByRole("link", { name: i18n.t("widgets:board.appearance.title") })).toHaveAttribute(
@@ -326,7 +327,7 @@ describe("ExploreBoard", () => {
   it("sends a tile to the bottom of the board and saves the whole list", async () => {
     useBoardLayoutMock.mockReturnValue({ data: TWO_TILES, isLoading: false });
 
-    const { container } = render(<ExploreBoard />);
+    const { container } = render(<ExploreBoard />, { wrapper: TooltipProvider });
     fireEvent.click(screen.getByRole("button", { name: i18n.t("discover:board.customize") }));
     await openTileSettings(tile(container, "a"));
     fireEvent.click(screen.getByRole("menuitem", { name: "Move to bottom" }));
@@ -337,7 +338,7 @@ describe("ExploreBoard", () => {
   it("saves a tile without its background when it is switched off", async () => {
     useBoardLayoutMock.mockReturnValue({ data: TWO_TILES, isLoading: false });
 
-    const { container } = render(<ExploreBoard />);
+    const { container } = render(<ExploreBoard />, { wrapper: TooltipProvider });
     fireEvent.click(screen.getByRole("button", { name: i18n.t("discover:board.customize") }));
     await openTileSettings(tile(container, "a"));
     fireEvent.click(screen.getByRole("menuitem", { name: "Hide background" }));

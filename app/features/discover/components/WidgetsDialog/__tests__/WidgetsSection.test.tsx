@@ -1,4 +1,5 @@
 import userEvent from "@testing-library/user-event";
+import { toast } from "sonner";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import i18n from "@locale";
@@ -8,6 +9,7 @@ import type { WidgetDocument } from "@hooks/api/queries/widgets/types";
 import { createWidget, createWidgetCatalog, createWidgetGrammar, createWidgetPreset } from "@test/factories";
 import { fireEvent, render, screen, within } from "@test/test-utils";
 
+import { BOARD_MAX_ITEMS } from "../../ExploreBoard/constants";
 import { customWidgetsById } from "../../ExploreBoard/helpers";
 import type { BoardGalleryTarget, BoardSave } from "../../ExploreBoard/types";
 import { WidgetsDialog } from "../WidgetsDialog";
@@ -170,6 +172,15 @@ async function pickLayout(trigger: string, layout: string) {
   fireEvent.click(await screen.findByRole("menuitem", { name: layout }));
 }
 
+async function pickBulk(group: "addTo" | "removeFrom", layout: string) {
+  fireEvent.pointerDown(screen.getByRole("button", { name: i18n.t("discover:board.gallery.bulk.label") }), {
+    button: 0,
+    pointerType: "mouse",
+  });
+  const picked = await screen.findByRole("group", { name: i18n.t(`discover:board.gallery.bulk.${group}`) });
+  fireEvent.click(within(picked).getByRole("menuitem", { name: layout }));
+}
+
 afterEach(() => {
   myWidgets.data = [];
   vi.clearAllMocks();
@@ -212,6 +223,84 @@ describe("WidgetsDialog gallery", () => {
       },
       appearance: null,
     });
+  });
+
+  it("adds every widget to the one layout picked from the All menu, leaving the other as it was", async () => {
+    const handlers = renderGallery();
+
+    await pickBulk("addTo", "Mobile");
+    fireEvent.click(screen.getByRole("button", { name: "Save changes" }));
+
+    const [[saved]] = handlers.onSave.mock.calls;
+    expect(saved.lists?.items).toEqual(ON_BOARD);
+    expect(saved.lists?.mobile.filter((item) => item.kind === "builtin")).toHaveLength(25);
+    expect(saved.lists?.mobile.slice(0, 2)).toEqual(ON_BOARD);
+  });
+
+  it("removes only the widgets the search shows, from both layouts, and keeps a custom widget", async () => {
+    const handlers = renderGallery([
+      ...ON_BOARD,
+      { kind: "builtin", id: "trending", widget: "trending", size: "L" },
+      { kind: "builtin", id: "mixes", widget: "mixes", size: "L" },
+    ]);
+
+    fireEvent.change(screen.getByRole("searchbox", { name: i18n.t("discover:board.gallery.search") }), {
+      target: { value: "listenbrainz" },
+    });
+    await pickBulk("removeFrom", "Both");
+    fireEvent.click(screen.getByRole("button", { name: "Save changes" }));
+
+    const kept = [...ON_BOARD, expect.objectContaining({ widget: "trending" })];
+    expect(handlers.onSave).toHaveBeenCalledWith({ lists: { items: kept, mobile: kept }, appearance: null });
+  });
+
+  it("adds nothing to a layout the shown widgets would push past its limit, and says so", async () => {
+    const warned = vi.spyOn(toast, "warning").mockImplementation(() => "");
+    const crowded: BoardItem[] = Array.from({ length: 24 }, (_, index) => ({
+      kind: "custom",
+      id: `filler_${index}`,
+      widgetId: "w_1",
+      size: "M",
+    }));
+    renderGallery(crowded);
+
+    await pickBulk("addTo", "Both");
+
+    expect(warned).toHaveBeenCalledTimes(2);
+    expect(warned).toHaveBeenCalledWith(
+      i18n.t("discover:board.gallery.bulk.noRoom", { layout: "Desktop", max: BOARD_MAX_ITEMS })
+    );
+    expect(screen.queryByText(i18n.t("discover:board.gallery.onBoard"))).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Save changes" })).toBeDisabled();
+    warned.mockRestore();
+  });
+
+  it("offers no bulk group that would change nothing, and locks the All menu when the search matches nothing", async () => {
+    renderGallery([]);
+
+    fireEvent.pointerDown(screen.getByRole("button", { name: i18n.t("discover:board.gallery.bulk.label") }), {
+      button: 0,
+      pointerType: "mouse",
+    });
+    expect(await screen.findByText(i18n.t("discover:board.gallery.bulk.addTo"))).toBeInTheDocument();
+    expect(screen.queryByText(i18n.t("discover:board.gallery.bulk.removeFrom"))).not.toBeInTheDocument();
+    fireEvent.keyDown(screen.getByRole("menu"), { key: "Escape" });
+
+    const trigger = screen.getByRole("button", { name: i18n.t("discover:board.gallery.bulk.label") });
+    trigger.focus();
+    fireEvent.change(screen.getByRole("searchbox", { name: i18n.t("discover:board.gallery.search") }), {
+      target: { value: "zzz" },
+    });
+
+    const locked = screen.getByRole("button", { name: i18n.t("discover:board.gallery.bulk.label") });
+    expect(locked).toBe(trigger);
+    expect(locked).toHaveAttribute("aria-disabled", "true");
+    expect(document.activeElement).toBe(trigger);
+    fireEvent.pointerDown(locked, { button: 0, pointerType: "mouse" });
+    expect(screen.queryByRole("menu")).not.toBeInTheDocument();
+
+    await userEvent.setup().hover(locked);
+    expect(await screen.findByRole("tooltip")).toHaveTextContent(i18n.t("discover:board.gallery.bulk.nothing"));
   });
 
   it("offers the widgets and My widgets as the lists of the Widgets dialog", () => {

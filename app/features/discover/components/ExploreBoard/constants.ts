@@ -69,6 +69,8 @@ export const SPACER_MIN_ROWS = 1;
 
 export const SPACER_MAX_ROWS = 7;
 
+export const BOARD_MAX_ITEMS = 48;
+
 export const EDIT_PASSTHROUGH_SELECTOR = "[data-info-tooltip]";
 
 export const BOARD_CATEGORY_ORDER: readonly BoardCategory[] = ["now", "history", "discover", "library"];

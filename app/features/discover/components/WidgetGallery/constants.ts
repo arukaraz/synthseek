@@ -30,3 +30,5 @@ export const DEFAULT_GALLERY_FILTERS: GalleryFilters = {
 };
 
 export const BYTES_PER_KB = 1024;
+
+export const BULK_MENU_EDGE_PX = 16;

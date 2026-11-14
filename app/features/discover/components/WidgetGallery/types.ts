@@ -56,6 +56,26 @@ export interface LayoutPlacement {
 
 export type PickLayouts = (lists: readonly BoardList[]) => void;
 
+export interface LayoutMenuItemsProps {
+  lists: readonly BoardList[];
+  onPick: PickLayouts;
+}
+
+export interface BulkPlacement {
+  addable: BoardList[];
+  removable: BoardList[];
+}
+
+export interface BulkAddRoom {
+  fits: BoardList[];
+  full: BoardList[];
+}
+
+export interface BulkLayoutMenuProps extends BulkPlacement {
+  onAdd: PickLayouts;
+  onRemove: PickLayouts;
+}
+
 export interface LayoutMenuProps {
   lists: readonly BoardList[];
   tone: "add" | "remove";
