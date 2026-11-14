@@ -29,8 +29,13 @@ vi.mock("../../steps/AdminStep", () => ({
 }));
 
 vi.mock("../../steps/SlskdStep", () => ({
-  SlskdStep: ({ onBack }: SlskdStepProps) => (
-    <div data-testid="slskd-step">{onBack ? <button type="button">slskd-back</button> : null}</div>
+  SlskdStep: ({ onBack, onSkip }: SlskdStepProps) => (
+    <div data-testid="slskd-step">
+      {onBack ? <button type="button">slskd-back</button> : null}
+      <button type="button" onClick={onSkip}>
+        slskd-skip
+      </button>
+    </div>
   ),
 }));
 
@@ -74,5 +79,15 @@ describe("SetupWizard", () => {
 
     expect(screen.getByTestId("slskd-step")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "slskd-back" })).toBeInTheDocument();
+  });
+
+  it("moves on to Plex when the slskd step is skipped", () => {
+    authState = { currentUser: { id: "u1" } };
+    render(<SetupWizard />);
+
+    fireEvent.click(screen.getByRole("button", { name: "slskd-skip" }));
+
+    expect(screen.getByTestId("plex-step")).toBeInTheDocument();
+    expect(screen.queryByTestId("slskd-step")).not.toBeInTheDocument();
   });
 });

@@ -7,11 +7,12 @@ order: 2
 
 ## Before you begin
 
-You need three things.
+You need two things.
 
 - **Docker and Docker Compose**, on a machine that stays on.
-- **A running slskd instance**, with its web API reachable from the Synthseek container. slskd is what actually performs peer-to-peer downloads; Synthseek drives it and never speaks the Soulseek protocol itself. Full setup is on the [Download Sources page](/download-sources).
-- **Two folders**: one where slskd puts completed downloads, and one where your organised music library lives. Synthseek reads from the first and writes to the second.
+- **Two folders**: one where your download clients put completed downloads, and one where your organised music library lives. Synthseek reads from the first and writes to the second.
+
+A running slskd instance is optional. It is the peer-to-peer source: slskd is what actually performs those downloads, and Synthseek drives it through its web API, which must be reachable from the Synthseek container, and never speaks the Soulseek protocol itself. Without it, Synthseek downloads through the other sources you turn on. Full setup is on the [Download Sources page](/download-sources).
 
 An AcoustID key is optional but strongly recommended. Without one, Synthseek cannot verify by listening that a downloaded file is what you asked for. It is free and takes a minute to obtain.
 
@@ -85,7 +86,7 @@ If the downloads or music folder is not usable, Synthseek still starts, and down
 The first time you open Synthseek, a setup wizard walks you through five steps.
 
 1. **Administrator account.** Create the first account. This account is the instance owner and cannot be demoted or deleted.
-2. **slskd.** Enter the URL and API key of your slskd instance. Synthseek tests the connection and tells you what it found. You can continue past a failed test, and Synthseek will boot anyway and show the integration as unhealthy so you can fix it from Settings.
+2. **slskd.** Optional. Enter the URL and API key of your slskd instance. Synthseek tests the connection and tells you what it found. You can continue past a failed test, and Synthseek will boot anyway and show the integration as unhealthy so you can fix it from Settings. You can also skip the step and connect slskd later from Settings.
 3. **Plex.** Optional. A popup opens for you to sign in at plex.tv, then you pick which of your servers Synthseek should target. This is what enables Plex rescans and playlist sync to Plex. Navidrome and Jellyfin are connected later, under **Settings**, then **Media & playback**.
 4. **Enrichment services.** Optional. An AcoustID key, a Last.fm key, a fanart.tv key, a Songlink key, and a MusicBrainz contact email. All are free, and each one improves a different thing: verification accuracy, discovery, artist images, link imports, and rate limits. Discogs is added later, from Settings.
 5. **Done.** You land in the application.

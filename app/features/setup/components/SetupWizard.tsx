@@ -44,6 +44,7 @@ export function SetupWizard() {
           stepIndex={stepIndex}
           totalSteps={totalSteps}
           onComplete={() => goTo("plex")}
+          onSkip={() => goTo("plex")}
           onBack={adminShown ? () => goTo("admin") : undefined}
         />
       );

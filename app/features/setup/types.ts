@@ -45,6 +45,7 @@ export interface SlskdStepProps {
   totalSteps: number;
   onComplete: () => void;
   onBack?: () => void;
+  onSkip: () => void;
 }
 
 export interface PlexStepProps {

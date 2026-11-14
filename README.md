@@ -45,7 +45,7 @@ https://github.com/user-attachments/assets/50c3988e-7ec1-41dc-9a9e-a8407043b552
 
 ## Quick start
 
-Requires [Docker](https://docs.docker.com/get-docker/) with [Compose](https://docs.docker.com/compose/install/). The setup wizard asks for a running [slskd](https://github.com/slskd/slskd), the peer-to-peer source, and lets you continue past a failed connection test if you use other sources.
+Requires [Docker](https://docs.docker.com/get-docker/) with [Compose](https://docs.docker.com/compose/install/). The setup wizard asks for a running [slskd](https://github.com/slskd/slskd), the peer-to-peer source, and lets you skip that step if you use other sources.
 
 Use the provided [docker-compose.yml](docker-compose.yml) as a starting point:
 

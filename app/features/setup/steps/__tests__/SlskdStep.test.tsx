@@ -29,7 +29,9 @@ vi.mock("@hooks/api/queries/useSettings", () => ({
 
 const onComplete = vi.fn();
 
-const renderStep = () => render(<SlskdStep stepIndex={1} totalSteps={5} onComplete={onComplete} />);
+const onSkip = vi.fn();
+
+const renderStep = () => render(<SlskdStep stepIndex={1} totalSteps={5} onComplete={onComplete} onSkip={onSkip} />);
 
 const fillFields = () => {
   fireEvent.change(screen.getByLabelText("API URL"), { target: { value: "http://localhost:5030" } });
@@ -64,6 +66,17 @@ describe("SlskdStep", () => {
     await waitFor(() =>
       expect(updateMutateAsync).toHaveBeenCalledWith({ apiUrl: "http://slskd:5030", apiKey: "••••••••" })
     );
+  });
+
+  it("skips without testing or saving a connection", () => {
+    renderStep();
+
+    fireEvent.click(screen.getByRole("button", { name: "Skip" }));
+
+    expect(onSkip).toHaveBeenCalledTimes(1);
+    expect(onComplete).not.toHaveBeenCalled();
+    expect(testMutateAsync).not.toHaveBeenCalled();
+    expect(updateMutateAsync).not.toHaveBeenCalled();
   });
 
   it("keeps Continue disabled while fields are filled but untested", () => {

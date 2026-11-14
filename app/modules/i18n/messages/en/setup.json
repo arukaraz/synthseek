@@ -27,8 +27,8 @@
     "passwordError": "Use at least 8 characters."
   },
   "slskd": {
-    "title": "Connect to slskd",
-    "description": "Synthseek talks to the Soulseek network through your slskd daemon. This step is required.",
+    "title": "Connect to slskd (optional)",
+    "description": "Synthseek reaches the Soulseek network through your slskd daemon. You can do this later from Settings.",
     "apiUrlLabel": "API URL",
     "apiUrlPlaceholder": "http://localhost:5030",
     "apiKeyLabel": "API Key",
@@ -40,7 +40,7 @@
     "overrideLink": "Continue without a verified connection",
     "overrideArmed": "Continuing without a verified connection. You can fix this later in Settings.",
     "saveFailed": "Could not save the slskd connection. Confirm the URL and API key, then try again.",
-    "blockedHint": "Test the connection before continuing"
+    "blockedHint": "Test the connection or skip this step to continue"
   },
   "plex": {
     "title": "Connect Plex (optional)",
@@ -78,7 +78,7 @@
     "title": "You're all set",
     "description": "Synthseek is ready to go. You can adjust everything later under Settings.",
     "cardHeading": "Setup complete",
-    "cardBody": "Slskd is wired up. Plex and metadata enrichment can be added or edited any time.",
+    "cardBody": "slskd, Plex and metadata enrichment can be added or edited any time.",
     "primaryRest": "Go to dashboard",
     "primaryBusy": "Finishing...",
     "primaryRetry": "Retry",

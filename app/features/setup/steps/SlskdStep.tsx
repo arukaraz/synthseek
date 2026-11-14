@@ -24,7 +24,7 @@ import {
 import { StepShell } from "./StepShell";
 import type { SlskdConnectState, SlskdStepProps } from "../types";
 
-export function SlskdStep({ stepIndex, totalSteps, onComplete, onBack }: SlskdStepProps) {
+export function SlskdStep({ stepIndex, totalSteps, onComplete, onBack, onSkip }: SlskdStepProps) {
   const { t } = useTranslation("setup");
   const update = useUpdateConnectionsSlskd();
   const testConn = useTestSlskd();
@@ -127,6 +127,8 @@ export function SlskdStep({ stepIndex, totalSteps, onComplete, onBack }: SlskdSt
       primaryLoading={isSaving}
       primaryHint={t("slskd.blockedHint")}
       onPrimary={handleContinue}
+      secondaryLabel={t("actions.skip")}
+      onSecondary={onSkip}
       showBack={Boolean(onBack)}
       onBack={onBack}
       footerError={footerError}

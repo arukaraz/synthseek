@@ -43,7 +43,7 @@ export const FAQ_ITEMS = [
   {
     question: "What do I need before installing?",
     answer:
-      "Docker, a running slskd instance with its own Soulseek account, and two folders: one where slskd puts completed downloads, one where your library lives. The wizard and Settings take care of the rest, media servers included.",
+      "Docker and two folders: one where completed downloads land, one where your library lives. A running slskd instance with its own Soulseek account is the peer-to-peer source, and it is optional. The wizard and Settings take care of the rest, media servers included.",
   },
   {
     question: "What happens when a download is wrong?",
