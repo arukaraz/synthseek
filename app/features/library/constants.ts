@@ -103,6 +103,7 @@ const TRACKS_CONFIG: TracksViewConfig = {
   searchPlaceholderKey: "page.toolbar.searchTracks",
   emptyTitleKey: "page.empty.tracksTitle",
   emptyDescriptionKey: "page.empty.tracksDescription",
+  emptyLibraryDescriptionKey: "page.empty.tracksNothingYet",
   defaultSort: "recent",
   sortOptions: [
     { value: "recent", labelKey: "page.sort.newest", defaultDirection: "desc" },
@@ -151,6 +152,7 @@ const ALBUMS_CONFIG: AlbumsViewConfig = {
   searchPlaceholderKey: "page.toolbar.searchAlbums",
   emptyTitleKey: "page.empty.albumsTitle",
   emptyDescriptionKey: "page.empty.albumsDescription",
+  emptyLibraryDescriptionKey: "page.empty.albumsNothingYet",
   defaultSort: "recent",
   sortOptions: [
     { value: "recent", labelKey: "page.sort.newest", defaultDirection: "desc" },
@@ -182,6 +184,7 @@ const ARTISTS_CONFIG: ArtistsViewConfig = {
   searchPlaceholderKey: "page.toolbar.searchArtists",
   emptyTitleKey: "page.empty.artistsTitle",
   emptyDescriptionKey: "page.empty.artistsDescription",
+  emptyLibraryDescriptionKey: "page.empty.artistsNothingYet",
   defaultSort: "name",
   sortOptions: [
     { value: "name", labelKey: "page.sort.name", defaultDirection: "asc" },
@@ -208,6 +211,7 @@ const PLAYLISTS_CONFIG: PlaylistsViewConfig = {
   searchPlaceholderKey: "page.toolbar.searchPlaylists",
   emptyTitleKey: "page.empty.playlistsTitle",
   emptyDescriptionKey: "page.empty.playlistsDescription",
+  emptyLibraryDescriptionKey: "page.empty.playlistsNothingYet",
   defaultSort: "recent",
   sortOptions: [
     { value: "recent", labelKey: "page.sort.newest", defaultDirection: "desc" },

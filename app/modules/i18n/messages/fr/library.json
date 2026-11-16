@@ -412,7 +412,11 @@
       "artistsTitle": "Aucun artiste trouvé",
       "artistsDescription": "Rien ne correspond aux filtres ou à la recherche actuels. Essayez d'effacer un filtre.",
       "playlistsTitle": "Aucune playlist trouvée",
-      "playlistsDescription": "Rien ne correspond aux filtres ou à la recherche actuels. Essayez d'effacer un filtre."
+      "playlistsDescription": "Rien ne correspond aux filtres ou à la recherche actuels. Essayez d'effacer un filtre.",
+      "tracksNothingYet": "Votre bibliothèque ne contient pas encore de pistes. Elles apparaîtront ici après un téléchargement ou une analyse de la bibliothèque.",
+      "albumsNothingYet": "Votre bibliothèque ne contient pas encore d'albums. Ils apparaîtront ici après un téléchargement ou une analyse de la bibliothèque.",
+      "artistsNothingYet": "Votre bibliothèque ne contient pas encore d'artistes. Ils apparaîtront ici après un téléchargement ou une analyse de la bibliothèque.",
+      "playlistsNothingYet": "Il n'y a pas encore de playlists."
     },
     "error": {
       "title": "Impossible de charger la bibliothèque",

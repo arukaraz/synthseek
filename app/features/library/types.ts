@@ -77,6 +77,7 @@ interface BaseViewConfig<TSort extends string> {
   searchPlaceholderKey: LibraryKey;
   emptyTitleKey: LibraryKey;
   emptyDescriptionKey: LibraryKey;
+  emptyLibraryDescriptionKey: LibraryKey;
 }
 
 export interface TracksViewConfig extends BaseViewConfig<TrackSort> {

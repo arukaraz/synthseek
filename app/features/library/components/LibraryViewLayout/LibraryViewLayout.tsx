@@ -34,6 +34,7 @@ export function LibraryViewLayout<TItem>({
   const { config } = controller;
   const [scrollRoot, setScrollRoot] = useState<HTMLDivElement | null>(null);
   const activeFilterCount = countActiveFilters(controller.filters);
+  const narrowed = activeFilterCount > 0 || controller.search.trim().length > 0;
   const collapsed = useShelfCollapse(scrollRoot, shell.phone);
 
   const sidebarProps: LibraryFilterSidebarProps = {
@@ -78,7 +79,7 @@ export function LibraryViewLayout<TItem>({
             <EmptyState
               icon={config.icon}
               title={t(config.emptyTitleKey)}
-              description={t(config.emptyDescriptionKey)}
+              description={t(narrowed ? config.emptyDescriptionKey : config.emptyLibraryDescriptionKey)}
             />
           </div>
         ) : (

@@ -412,7 +412,11 @@
       "artistsTitle": "No se encontraron artistas",
       "artistsDescription": "Nada coincide con los filtros o la búsqueda actuales. Prueba a quitar un filtro.",
       "playlistsTitle": "No se encontraron listas",
-      "playlistsDescription": "Nada coincide con los filtros o la búsqueda actuales. Prueba a quitar un filtro."
+      "playlistsDescription": "Nada coincide con los filtros o la búsqueda actuales. Prueba a quitar un filtro.",
+      "tracksNothingYet": "Tu biblioteca aún no tiene canciones. Aparecerán aquí tras una descarga o un escaneo de la biblioteca.",
+      "albumsNothingYet": "Tu biblioteca aún no tiene álbumes. Aparecerán aquí tras una descarga o un escaneo de la biblioteca.",
+      "artistsNothingYet": "Tu biblioteca aún no tiene artistas. Aparecerán aquí tras una descarga o un escaneo de la biblioteca.",
+      "playlistsNothingYet": "Aún no hay listas."
     },
     "error": {
       "title": "No se pudo cargar la biblioteca",

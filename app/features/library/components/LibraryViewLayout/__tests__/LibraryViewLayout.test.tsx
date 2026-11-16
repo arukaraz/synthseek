@@ -150,6 +150,23 @@ describe("LibraryViewLayout", () => {
     expect(screen.getByText(VIEW_CONFIG.tracks.emptyTitleKey)).toBeInTheDocument();
   });
 
+  it("says the library has nothing yet when no filter or search narrowed the empty list", () => {
+    renderWithProviders(<LibraryViewLayout {...tableProps({ items: [] })} />);
+
+    expect(screen.getByText(VIEW_CONFIG.tracks.emptyLibraryDescriptionKey)).toBeInTheDocument();
+    expect(screen.queryByText(VIEW_CONFIG.tracks.emptyDescriptionKey)).not.toBeInTheDocument();
+  });
+
+  it.each([
+    ["a filter", createLibraryController({ filters: { format: ["flac"] } })],
+    ["a search", createLibraryController({ search: "zzz" })],
+  ])("suggests clearing when %s narrowed the list to nothing", (_label, controller) => {
+    renderWithProviders(<LibraryViewLayout {...tableProps({ items: [], controller })} />);
+
+    expect(screen.getByText(VIEW_CONFIG.tracks.emptyDescriptionKey)).toBeInTheDocument();
+    expect(screen.queryByText(VIEW_CONFIG.tracks.emptyLibraryDescriptionKey)).not.toBeInTheDocument();
+  });
+
   it("renders the table with the load-more sentinel for a table layout with results", () => {
     renderWithProviders(<LibraryViewLayout {...tableProps()} />);
 

@@ -412,7 +412,11 @@
       "artistsTitle": "No artists found",
       "artistsDescription": "Nothing matches the current filters or search. Try clearing a filter.",
       "playlistsTitle": "No playlists found",
-      "playlistsDescription": "Nothing matches the current filters or search. Try clearing a filter."
+      "playlistsDescription": "Nothing matches the current filters or search. Try clearing a filter.",
+      "tracksNothingYet": "Your library has no tracks yet. They show up here after a download or a library scan.",
+      "albumsNothingYet": "Your library has no albums yet. They show up here after a download or a library scan.",
+      "artistsNothingYet": "Your library has no artists yet. They show up here after a download or a library scan.",
+      "playlistsNothingYet": "There are no playlists yet."
     },
     "error": {
       "title": "Could not load the library",

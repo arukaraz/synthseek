@@ -412,7 +412,11 @@
       "artistsTitle": "Keine Künstler gefunden",
       "artistsDescription": "Nichts passt zu den aktuellen Filtern oder zur Suche. Versuche, einen Filter zu entfernen.",
       "playlistsTitle": "Keine Playlists gefunden",
-      "playlistsDescription": "Nichts passt zu den aktuellen Filtern oder zur Suche. Versuche, einen Filter zu entfernen."
+      "playlistsDescription": "Nichts passt zu den aktuellen Filtern oder zur Suche. Versuche, einen Filter zu entfernen.",
+      "tracksNothingYet": "Deine Bibliothek enthält noch keine Titel. Sie erscheinen hier nach einem Download oder einem Bibliotheksscan.",
+      "albumsNothingYet": "Deine Bibliothek enthält noch keine Alben. Sie erscheinen hier nach einem Download oder einem Bibliotheksscan.",
+      "artistsNothingYet": "Deine Bibliothek enthält noch keine Künstler. Sie erscheinen hier nach einem Download oder einem Bibliotheksscan.",
+      "playlistsNothingYet": "Es gibt noch keine Playlists."
     },
     "error": {
       "title": "Die Bibliothek konnte nicht geladen werden",
