@@ -7,6 +7,7 @@ import {
   comparedCopiesOf,
   describeCopies,
   percent,
+  placeOf,
   positionAtPointer,
   rulerTicks,
   spansLibraryPaths,
@@ -20,6 +21,7 @@ function copy(overrides: Partial<DuplicateCopy> = {}): DuplicateCopy {
     libraryPath: "Music",
     relativePath: "A/B/01 - Song.flac",
     fileName: "01 - Song.flac",
+    album: null,
     sizeBytes: 1000,
     fileFormat: "flac",
     durationSeconds: 180,
@@ -75,6 +77,12 @@ describe("the timeline drawing", () => {
 
   it("spreads the ruler ticks evenly from the start to the end", () => {
     expect(rulerTicks({ start: 0, end: 100 })).toEqual([0, 20, 40, 60, 80, 100]);
+  });
+
+  it("says where a copy lives by its album tag, and by its folder when it carries none", () => {
+    expect(placeOf(copy({ album: "Discovery" }))).toEqual({ label: "Discovery", folder: "A/B" });
+    expect(placeOf(copy({ album: null }))).toEqual({ label: "B", folder: "A/B" });
+    expect(placeOf(copy({ album: null, relativePath: "loose.flac" }))).toEqual({ label: "", folder: "" });
   });
 
   it("keeps a percentage inside the box", () => {

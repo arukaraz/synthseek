@@ -77,6 +77,8 @@ export const AUDIO_ANALYSIS_JOB = "audio-analysis";
 
 export const AUDIO_ANALYSIS_SPEEDS = ["background", "balanced", "fast"] as const;
 
+export const COVER_ART_LEFT_ALONE = ["anotherAlbum", "withoutCatalogArt", "unwritable", "unreadable"] as const;
+
 export const FIELD_OPS: FieldOps = {
   requested_by: ["is", "is_not"],
   genre: ["contains", "not_contains"],

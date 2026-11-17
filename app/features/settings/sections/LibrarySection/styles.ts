@@ -50,6 +50,12 @@ export const previewFrom = cva("text-fg/50 w-0 min-w-0 flex-1 truncate");
 
 export const previewTo = cva("text-fg/90 w-0 min-w-0 flex-1 truncate");
 
+export const previewToCell = cva("flex w-0 min-w-0 flex-1 items-center gap-2");
+
+export const previewToPath = cva("text-fg/90 min-w-0 truncate");
+
+export const previewTagAlbum = cva("text-warning-vivid max-w-[45%] shrink-0 truncate text-[11px] font-medium");
+
 export const previewScopeNote = cva("text-fg/60 text-xs");
 
 export const tokenGroup = cva("flex flex-col gap-2.5");
@@ -240,3 +246,5 @@ export const analysisFactLabel = cva("text-fg/60 text-xs");
 export const analysisFactValue = cva("text-fg text-sm font-medium tabular-nums");
 
 export const analysisRow = cva("flex flex-wrap items-center gap-3");
+
+export const coverArtNote = cva("text-fg/60 text-sm tabular-nums");

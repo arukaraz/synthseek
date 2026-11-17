@@ -448,7 +448,7 @@
       "sectionTitle": "Zurückgebliebene Dateien",
       "check": {
         "label": "Nach Dateien suchen, deren Titel fehlt",
-        "description": "Liedtexte und titelbezogene Bilder bleiben auf der Festplatte, wenn die zugehörige Musik entfernt wird. Die Prüfung liest deine gesamte Bibliothek und läuft daher nicht automatisch.",
+        "description": "Liedtexte, titelbezogene Bilder und ganze Ordner ohne Musik bleiben auf der Festplatte, wenn die zugehörige Musik entfernt wird. Die Prüfung liest deine gesamte Bibliothek und läuft daher nicht automatisch.",
         "action": "Prüfen"
       },
       "status": {
@@ -456,7 +456,7 @@
         "loadError": "Die Bibliothek konnte nicht gelesen werden.",
         "found": {
           "label": "Gefundene Dateien",
-          "description": "Jede gehört zu einem Titel, den es nicht mehr gibt."
+          "description": "Jede gehört zu einem Titel, den es nicht mehr gibt, oder liegt in einem Ordner ohne Musik. Das Aufräumen entfernt auch die Ordner, die es leert."
         },
         "size": {
           "label": "Belegter Platz",
@@ -2331,6 +2331,9 @@
       "noMatches": "Nichts passt dazu",
       "loadFailed": "Die Änderungen konnten nicht berechnet werden",
       "reassignWarning": "Diese landen in einem Ordner, in dem sie heute nicht sind, was ein anderes Album oder ein anderer Künstler sein kann. Lies ein paar davon, bevor du bestätigst.",
+      "taggedAs": "Getaggt als {{album}}",
+      "tagAlbumDiffers_one": "1 davon trägt Tags, die ein anderes Album nennen als das, unter dem es abgelegt würde.",
+      "tagAlbumDiffers_other": "{{formatted}} davon tragen Tags, die ein anderes Album nennen als das, unter dem sie abgelegt würden.",
       "cancel": "Abbrechen",
       "columnBefore": "Jetzt",
       "columnAfter": "Danach",
@@ -2443,6 +2446,49 @@
     "start": "Jetzt ausführen",
     "hint": "Stimmungslisten nutzen das bisher Analysierte und wachsen bei jeder Aktualisierung von selbst."
   },
+  "coverArt": {
+    "title": "Cover",
+    "description": "Ein Titel, den Synthseek herunterlädt, bekommt das Cover seines Albums in die Datei geschrieben. Ein Titel, der schon in deiner Bibliothek war, trägt vielleicht keins. Das hier schreibt das Albumcover in die verknüpften Titel, die keins haben, und ersetzt nie ein Cover, das eine Datei schon trägt.",
+    "check": {
+      "label": "Titel ohne Cover suchen",
+      "description": "Die Prüfung öffnet jeden verknüpften Titel deiner Bibliothek und läuft deshalb nicht automatisch.",
+      "action": "Prüfen"
+    },
+    "status": {
+      "reading": "Deine Bibliothek wird gelesen... {{checked}} von {{total}}",
+      "missing": {
+        "label": "Titel ohne Cover",
+        "description": "Verknüpfte Titel, die kein Cover tragen und deren Album eins zu vergeben hat."
+      },
+      "anotherAlbum": {
+        "label": "Mit einem anderen Album getaggt",
+        "description": "Ihr eigenes Album-Tag nennt ein anderes Album, das Cover könnte also das falsche sein."
+      },
+      "withoutCatalogArt": {
+        "label": "Kein Cover zu vergeben",
+        "description": "Sie tragen kein Cover, und ihr Album hat auch keins."
+      },
+      "unwritable": {
+        "label": "Bleiben, wie sie sind",
+        "description": "Ihr Format nimmt kein Cover auf, oder ihre Tags müssten zuerst umgeschrieben werden, deshalb wird nichts in sie geschrieben."
+      },
+      "unreadable": {
+        "label": "Nicht lesbar",
+        "description": "In eine Datei, die sich nicht öffnen ließ, wird nichts geschrieben."
+      },
+      "none": "Keinem verknüpften Titel fehlt ein Cover, das geschrieben werden könnte.",
+      "loadError": "Die Bibliothek konnte nicht gelesen werden. Prüfe erneut."
+    },
+    "fill": {
+      "action": "Cover schreiben",
+      "confirmTitle": "Cover in deine Dateien schreiben?",
+      "confirmMessage_one": "Das schreibt das Albumcover in 1 deiner Musikdateien. Eine Datei, die schon ein Cover trägt, wird nicht angefasst. Ein geschriebenes Cover lässt sich nicht aus dem Papierkorb zurückholen.",
+      "confirmMessage_other": "Das schreibt das Albumcover in {{formatted}} deiner Musikdateien. Eine Datei, die schon ein Cover trägt, wird nicht angefasst. Ein geschriebenes Cover lässt sich nicht aus dem Papierkorb zurückholen.",
+      "confirm": "Cover schreiben",
+      "running": "Cover werden geschrieben... {{processed}} von {{total}}",
+      "lastRun": "Letzter Lauf: {{embedded}} Cover geschrieben, {{kept}} Dateien blieben, wie sie waren, {{failed}} ließen sich nicht schreiben."
+    }
+  },
   "libraryScan": {
     "card": {
       "title": "Bibliotheksscan",
@@ -2537,6 +2583,8 @@
         "listLabel": "Dateien, die vielleicht mit dem falschen Song verknüpft sind",
         "linkedTo": "Verknüpft mit {{artist}} · {{title}} · {{length}}",
         "linkedToNoLength": "Verknüpft mit {{artist}} · {{title}}",
+        "taggedAs": "Getaggt als {{artist}} · {{title}}",
+        "taggedAsNoArtist": "Getaggt als {{title}}",
         "keep": "Verknüpfung behalten",
         "reject": "Nicht dieser Song"
       },
@@ -2656,6 +2704,17 @@
       "position": "Position",
       "soundCopy": "Kopie {{number}} abspielen",
       "noneFits": "Keine passt…",
+      "resolve": {
+        "label": "Kopien desselben Songs",
+        "options": {
+          "ask": "Mich fragen",
+          "automatic": "Selbst klären"
+        },
+        "descriptions": {
+          "ask": "Jeder Song mit mehr als einer Kopie wartet hier auf deine Entscheidung. Nichts wandert von selbst in den Papierkorb.",
+          "automatic": "Eine schlechtere Kopie derselben Aufnahme im selben Albumordner wandert in den Papierkorb, und eine Kopie, die ein anderer Song ist, zu Titel zur Prüfung. Der Rest wartet hier."
+        }
+      },
       "reject": {
         "title_one": "Die Kopie von „{{title}}“ ablehnen",
         "title_other": "Die {{count}} Kopien von „{{title}}“ ablehnen",
@@ -2694,7 +2753,7 @@
     },
     "duplicates": {
       "title": "Doppelte Titel",
-      "description": "Songs mit mehr als einer Kopie auf der Festplatte, die Synthseek nicht selbst klären konnte. Hör sie dir an und behalte die, die du willst."
+      "description": "Songs mit mehr als einer Kopie auf der Festplatte, die auf deine Entscheidung warten. Hör sie dir an und behalte die, die du willst."
     },
     "recycleBin": {
       "title": "Papierkorb",

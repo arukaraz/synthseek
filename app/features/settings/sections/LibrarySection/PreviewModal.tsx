@@ -28,9 +28,12 @@ import {
   previewScopeNote,
   previewSearchBox,
   previewTable,
+  previewTagAlbum,
   previewTemplate,
   previewTitleRow,
   previewTo,
+  previewToCell,
+  previewToPath,
   previewToolbar,
   statNumber,
   statPair,
@@ -73,6 +76,7 @@ export function PreviewModal({ open, onOpenChange, pathId, pathLabel, template }
 
   const data = moves.data?.outcome === "valid" ? moves.data : null;
   const matched = data?.matched ?? 0;
+  const tagAlbumDiffers = data?.tagAlbumDiffers ?? 0;
   const relocating = countFrom(data?.byClass, "relocate");
   const renaming = countFrom(data?.byClass, "rename");
   const reassigning = countFrom(data?.byClass, "reassign");
@@ -151,6 +155,16 @@ export function PreviewModal({ open, onOpenChange, pathId, pathLabel, template }
               <Notice variant="warning" title={t("libraryNaming.preview.reassignWarning")} />
             ) : null}
 
+            {tagAlbumDiffers > 0 ? (
+              <Notice
+                variant="warning"
+                title={t("libraryNaming.preview.tagAlbumDiffers", {
+                  count: tagAlbumDiffers,
+                  formatted: tagAlbumDiffers.toLocaleString(),
+                })}
+              />
+            ) : null}
+
             {moves.isError ? <Notice variant="danger" title={t("libraryNaming.preview.loadFailed")} /> : null}
 
             <div className={previewTable()}>
@@ -170,9 +184,20 @@ export function PreviewModal({ open, onOpenChange, pathId, pathLabel, template }
                       {row.from}
                     </span>
                     <ArrowRight className="text-fg/30 size-3.5 shrink-0" />
-                    <span className={previewTo()} title={row.to}>
-                      {row.to}
-                    </span>
+                    {row.tagAlbum === null ? (
+                      <span className={previewTo()} title={row.to}>
+                        {row.to}
+                      </span>
+                    ) : (
+                      <span className={previewToCell()}>
+                        <span className={previewToPath()} title={row.to}>
+                          {row.to}
+                        </span>
+                        <span className={previewTagAlbum()} title={row.tagAlbum}>
+                          {t("libraryNaming.preview.taggedAs", { album: row.tagAlbum })}
+                        </span>
+                      </span>
+                    )}
                   </div>
                 ))
               )}

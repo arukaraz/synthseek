@@ -76,6 +76,8 @@
     "qualitySaved": "Qualitätseinstellungen gespeichert",
     "qualityFailed": "Qualitätseinstellungen konnten nicht gespeichert werden",
     "recycleBinSaved": "Papierkorb-Einstellungen gespeichert",
+    "duplicateResolutionSaved": "Umgang mit Duplikaten gespeichert",
+    "duplicateResolutionFailed": "Der Umgang mit Duplikaten konnte nicht gespeichert werden",
     "recycleBinSaveFailed": "Papierkorb-Einstellungen konnten nicht gespeichert werden",
     "recycleBinEmptied_one": "Papierkorb geleert, {{count}} Datei entfernt",
     "recycleBinEmptied_other": "Papierkorb geleert, {{count}} Dateien entfernt",
@@ -92,7 +94,13 @@
     "orphanedCompanionsSweepFailed": "Die Dateien konnten nicht in den Papierkorb verschoben werden",
     "orphanedCompanionsSweepStarted": "Dateien werden in den Papierkorb verschoben",
     "orphanedCompanionsSweepAlreadyRunning": "Das läuft bereits",
-    "orphanedCompanionsSweepLibraryBusy": "Die Bibliothek ist gerade beschäftigt, versuche es danach erneut"
+    "orphanedCompanionsSweepLibraryBusy": "Die Bibliothek ist gerade beschäftigt, versuche es danach erneut",
+    "coverArtCountFailed": "Das Lesen deiner Bibliothek konnte nicht gestartet werden",
+    "coverArtFillFailed": "Das Schreiben der Cover konnte nicht gestartet werden",
+    "coverArtFillStarted": "Cover werden geschrieben",
+    "coverArtFillAlreadyRunning": "Das läuft bereits",
+    "coverArtFillLibraryBusy": "Die Bibliothek ist gerade beschäftigt, versuche es danach erneut",
+    "coverArtFillNothing": "Prüfe die Bibliothek zuerst erneut"
   },
   "plexConnect": {
     "timedOut": "Plex-Anmeldung hat das Zeitlimit überschritten",

@@ -734,6 +734,13 @@ export const SETTINGS_SEARCH_ENTRIES: readonly SettingsSearchEntry[] = [
     placeKey: "shell.tabs.library.paths",
   },
   {
+    labelKey: "coverArt.title",
+    page: "library",
+    href: "/settings/library/paths",
+    anchor: "library-cover-art",
+    placeKey: "shell.tabs.library.paths",
+  },
+  {
     labelKey: "libraryScan.card.title",
     page: "library",
     href: "/settings/library/scan",
@@ -891,6 +898,13 @@ export const SETTINGS_SEARCH_ENTRIES: readonly SettingsSearchEntry[] = [
     labelKey: "maintenance.duplicates.title",
     page: "maintenance",
     href: "/settings/maintenance/duplicates",
+    placeKey: "shell.tabs.maintenance.duplicates",
+  },
+  {
+    labelKey: "libraryScan.duplicates.resolve.label",
+    page: "maintenance",
+    href: "/settings/maintenance/duplicates",
+    anchor: "library.duplicates.resolve",
     placeKey: "shell.tabs.maintenance.duplicates",
   },
   {

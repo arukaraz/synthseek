@@ -61,9 +61,12 @@ beforeAll(() => {
 beforeEach(() => {
   state.moves = createMockQuery({
     outcome: "valid",
-    items: [{ from: "pearl jam/dark matter/03 - wreckage.mp3", to: "Pearl Jam/Wreckage/01 - Wreckage.mp3" }],
+    items: [
+      { from: "pearl jam/dark matter/03 - wreckage.mp3", to: "Pearl Jam/Wreckage/01 - Wreckage.mp3", tagAlbum: null },
+    ],
     total: 163,
     matched: 163,
+    tagAlbumDiffers: 0,
     byClass: BY_CLASS,
   });
   state.applyMutate = vi.fn();
@@ -181,6 +184,33 @@ describe("PreviewModal", () => {
     await user.click(screen.getByRole("tab", { name: /A new folder/ }));
 
     expect(screen.getByText(enSettings.libraryNaming.preview.reassignWarning)).toBeInTheDocument();
+  });
+
+  it("says which album a file's own tags name when it is not the album it would be filed under", () => {
+    state.moves = createMockQuery({
+      outcome: "valid",
+      items: [
+        { from: "a/Blue Lines/03 - Teardrop.mp3", to: "A/Mezzanine/03 - Teardrop.mp3", tagAlbum: "Blue Lines" },
+        { from: "a/old/04 - Angel.mp3", to: "A/Mezzanine/04 - Angel.mp3", tagAlbum: null },
+      ],
+      total: 2,
+      matched: 2,
+      tagAlbumDiffers: 7,
+      byClass: BY_CLASS,
+    });
+    open();
+
+    expect(screen.getAllByText("Tagged as Blue Lines")).toHaveLength(1);
+    expect(
+      screen.getByText("7 of these carry tags that name another album than the one they would be filed under.")
+    ).toBeInTheDocument();
+  });
+
+  it("keeps quiet about tags when every file agrees with its album", () => {
+    open();
+
+    expect(screen.queryByText(/carry tags that name another album/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Tagged as/)).not.toBeInTheDocument();
   });
 
   it("moves only the open list, which is what the explanation promises the button does", async () => {

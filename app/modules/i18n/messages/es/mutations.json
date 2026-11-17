@@ -76,6 +76,8 @@
     "qualitySaved": "Ajustes de calidad guardados",
     "qualityFailed": "No se pudieron guardar los ajustes de calidad",
     "recycleBinSaved": "Ajustes de la papelera guardados",
+    "duplicateResolutionSaved": "Manejo de duplicados guardado",
+    "duplicateResolutionFailed": "No se pudo guardar cómo se manejan los duplicados",
     "recycleBinSaveFailed": "No se pudieron guardar los ajustes de la papelera",
     "recycleBinEmptied_one": "Papelera vaciada, {{count}} archivo eliminado",
     "recycleBinEmptied_other": "Papelera vaciada, {{count}} archivos eliminados",
@@ -92,7 +94,13 @@
     "orphanedCompanionsSweepFailed": "No se pudieron mover los ficheros a la papelera",
     "orphanedCompanionsSweepStarted": "Moviendo los ficheros a la papelera",
     "orphanedCompanionsSweepAlreadyRunning": "Eso ya está en marcha",
-    "orphanedCompanionsSweepLibraryBusy": "La biblioteca está ocupada ahora mismo, inténtalo cuando termine"
+    "orphanedCompanionsSweepLibraryBusy": "La biblioteca está ocupada ahora mismo, inténtalo cuando termine",
+    "coverArtCountFailed": "No se pudo empezar a leer tu biblioteca",
+    "coverArtFillFailed": "No se pudo empezar a escribir las carátulas",
+    "coverArtFillStarted": "Escribiendo las carátulas",
+    "coverArtFillAlreadyRunning": "Eso ya está en marcha",
+    "coverArtFillLibraryBusy": "La biblioteca está ocupada ahora mismo, inténtalo cuando termine",
+    "coverArtFillNothing": "Revisa la biblioteca de nuevo primero"
   },
   "plexConnect": {
     "timedOut": "El inicio de sesión de Plex agotó el tiempo de espera",

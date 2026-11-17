@@ -13,6 +13,10 @@ vi.mock("../AudioAnalysisCard", () => ({
   AudioAnalysisCard: () => <section data-testid="audio-analysis" />,
 }));
 
+vi.mock("../CoverArtCard", () => ({
+  CoverArtCard: () => <section data-testid="cover-art" />,
+}));
+
 import { LibrarySection } from "../LibrarySection";
 
 afterEach(() => {

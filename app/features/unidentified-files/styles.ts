@@ -119,6 +119,8 @@ export const doubtMeta = cva("text-fg/55 flex min-w-0 items-center gap-x-2.5 tex
 
 export const doubtPath = cva("min-w-0 truncate");
 
+export const doubtTagged = cva("text-fg/80 max-w-[50%] min-w-0 shrink-0 truncate font-medium");
+
 export const showMoreRow = cva("border-fg/10 border-t px-3 py-2");
 
 export const menuTrigger = cva(

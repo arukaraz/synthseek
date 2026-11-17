@@ -76,6 +76,8 @@
     "qualitySaved": "Réglages de qualité enregistrés",
     "qualityFailed": "Échec de l'enregistrement des réglages de qualité",
     "recycleBinSaved": "Réglages de la corbeille enregistrés",
+    "duplicateResolutionSaved": "Gestion des doublons enregistrée",
+    "duplicateResolutionFailed": "Impossible d'enregistrer la gestion des doublons",
     "recycleBinSaveFailed": "Échec de l'enregistrement des réglages de la corbeille",
     "recycleBinEmptied_one": "Corbeille vidée, {{count}} fichier supprimé",
     "recycleBinEmptied_other": "Corbeille vidée, {{count}} fichiers supprimés",
@@ -92,7 +94,13 @@
     "orphanedCompanionsSweepFailed": "Impossible de mettre les fichiers à la corbeille",
     "orphanedCompanionsSweepStarted": "Déplacement des fichiers vers la corbeille",
     "orphanedCompanionsSweepAlreadyRunning": "C'est déjà en cours",
-    "orphanedCompanionsSweepLibraryBusy": "La bibliothèque est occupée pour le moment, réessayez ensuite"
+    "orphanedCompanionsSweepLibraryBusy": "La bibliothèque est occupée pour le moment, réessayez ensuite",
+    "coverArtCountFailed": "Impossible de commencer la lecture de votre bibliothèque",
+    "coverArtFillFailed": "Impossible de commencer l'écriture des pochettes",
+    "coverArtFillStarted": "Écriture des pochettes",
+    "coverArtFillAlreadyRunning": "C'est déjà en cours",
+    "coverArtFillLibraryBusy": "La bibliothèque est occupée pour le moment, réessayez ensuite",
+    "coverArtFillNothing": "Vérifiez d'abord la bibliothèque à nouveau"
   },
   "plexConnect": {
     "timedOut": "Délai de connexion Plex dépassé",

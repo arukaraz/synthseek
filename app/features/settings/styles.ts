@@ -423,6 +423,8 @@ export const dupPathBadge = cva(
   "text-fg/70 bg-fg/10 shrink-0 truncate rounded-full px-1.5 py-0.5 text-[10px] font-semibold whitespace-nowrap"
 );
 
+export const dupAlbum = cva("text-fg/75 max-w-[40%] min-w-0 shrink truncate text-xs font-medium");
+
 export const dupFileName = cva("text-fg/50 border-fg/15 min-w-0 truncate border-l pl-2 font-mono text-[11.5px]");
 
 export const dupFooter = cva("flex justify-end");

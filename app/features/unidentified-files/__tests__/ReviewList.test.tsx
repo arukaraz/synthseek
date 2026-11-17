@@ -91,6 +91,7 @@ const LIVE_TAKE: VersionDoubt = {
   relativePath: "Underworld/03 - Threat Of Rain (Live).flac",
   durationSeconds: 272,
   format: "flac",
+  taggedAs: { title: "Threat Of Rain (Live)", artist: "Underworld" },
   linkedTo: { title: "Threat Of Rain", artist: "Underworld", durationSeconds: 364 },
 };
 
@@ -122,6 +123,23 @@ describe("ReviewList", () => {
     expect(state.keepLinks).toHaveBeenCalledWith({ fileIds: ["live"] });
     fireEvent.click(screen.getByRole("button", { name: "Not this song" }));
     expect(state.rejectLinks).toHaveBeenCalledWith({ fileIds: ["live"] });
+  });
+
+  it("says what the file's own tags call it, which is the reason it is in doubt", () => {
+    const wrongSong: VersionDoubt = {
+      ...LIVE_TAKE,
+      relativePath: "Hale/Hale/01 - Take No.mp3",
+      taggedAs: { title: "take on me", artist: "a ha" },
+    };
+    const untitled: VersionDoubt = { ...LIVE_TAKE, id: "untitled", taggedAs: { title: null, artist: "a ha" } };
+    const noArtist: VersionDoubt = { ...LIVE_TAKE, id: "solo", taggedAs: { title: "Solo Title", artist: null } };
+    listQuery = listOf([], { review: 3, ignored: 0 }, false, [wrongSong, untitled, noArtist]);
+
+    render(<ReviewList enabled active onMatchAlbum={vi.fn()} onMatchSong={vi.fn()} />);
+
+    expect(screen.getByText("Tagged a ha · take on me")).toBeInTheDocument();
+    expect(screen.getByText("Tagged Solo Title")).toBeInTheDocument();
+    expect(screen.getAllByText(/^Tagged /)).toHaveLength(2);
   });
 
   it("names the linked song without a length when the song has none", () => {

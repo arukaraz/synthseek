@@ -448,7 +448,7 @@
       "sectionTitle": "Files left behind",
       "check": {
         "label": "Look for files whose track is gone",
-        "description": "Lyrics and per-track artwork stay on disk when the music they belonged to is removed. Checking reads your whole library, so it is not done automatically.",
+        "description": "Lyrics, per-track artwork and whole folders with no music left stay on disk when the music they belonged to is removed. Checking reads your whole library, so it is not done automatically.",
         "action": "Check"
       },
       "status": {
@@ -456,7 +456,7 @@
         "loadError": "Could not read your library.",
         "found": {
           "label": "Files found",
-          "description": "Each one belongs to a track that is no longer there."
+          "description": "Each one belongs to a track that is no longer there, or sits in a folder with no music left. Cleaning up also removes the folders it empties."
         },
         "size": {
           "label": "Space they take",
@@ -2331,6 +2331,9 @@
       "noMatches": "Nothing matches that",
       "loadFailed": "The changes could not be worked out",
       "reassignWarning": "These land in a folder they are not in today, which can be another album or artist. Read a few before you confirm.",
+      "taggedAs": "Tagged as {{album}}",
+      "tagAlbumDiffers_one": "1 of these carries tags that name another album than the one it would be filed under.",
+      "tagAlbumDiffers_other": "{{formatted}} of these carry tags that name another album than the one they would be filed under.",
       "cancel": "Cancel",
       "columnBefore": "Now",
       "columnAfter": "After",
@@ -2443,6 +2446,49 @@
     "start": "Run now",
     "hint": "Mood lists use what is analyzed so far and grow on their own at each refresh."
   },
+  "coverArt": {
+    "title": "Cover art",
+    "description": "A song Synthseek downloads gets its album cover written inside the file. A song that was already in your library may carry none. This writes the album cover into the linked songs that have none, and never replaces a cover a file already carries.",
+    "check": {
+      "label": "Look for songs without a cover",
+      "description": "Checking opens every linked song in your library, so it is not done automatically.",
+      "action": "Check"
+    },
+    "status": {
+      "reading": "Reading your library... {{checked}} of {{total}}",
+      "missing": {
+        "label": "Songs without a cover",
+        "description": "Linked songs that carry no cover and whose album has one to give."
+      },
+      "anotherAlbum": {
+        "label": "Tagged with another album",
+        "description": "Their own album tag names a different album, so the cover could be the wrong one."
+      },
+      "withoutCatalogArt": {
+        "label": "No cover to give",
+        "description": "These carry no cover, and their album has none either."
+      },
+      "unwritable": {
+        "label": "Left as they are",
+        "description": "Their format takes no cover, or their tags would have to be rewritten first, so nothing is written to them."
+      },
+      "unreadable": {
+        "label": "Could not be read",
+        "description": "Nothing is written to a file that could not be opened."
+      },
+      "none": "No linked song is missing a cover that could be written.",
+      "loadError": "Could not read your library. Check again."
+    },
+    "fill": {
+      "action": "Write the covers",
+      "confirmTitle": "Write covers into your files?",
+      "confirmMessage_one": "This writes the album cover inside 1 of your music files. A file that already carries a cover is not touched. A written cover cannot be taken back from the recycle bin.",
+      "confirmMessage_other": "This writes the album cover inside {{formatted}} of your music files. A file that already carries a cover is not touched. A written cover cannot be taken back from the recycle bin.",
+      "confirm": "Write the covers",
+      "running": "Writing covers... {{processed}} of {{total}}",
+      "lastRun": "Last run: {{embedded}} covers written, {{kept}} files left as they were, {{failed}} could not be written."
+    }
+  },
   "libraryScan": {
     "card": {
       "title": "Library scan",
@@ -2537,6 +2583,8 @@
         "listLabel": "Files that may be linked to the wrong song",
         "linkedTo": "Linked to {{artist}} · {{title}} · {{length}}",
         "linkedToNoLength": "Linked to {{artist}} · {{title}}",
+        "taggedAs": "Tagged {{artist}} · {{title}}",
+        "taggedAsNoArtist": "Tagged {{title}}",
         "keep": "Keep the link",
         "reject": "Not this song"
       },
@@ -2656,6 +2704,17 @@
       "position": "Position",
       "soundCopy": "Play copy {{number}}",
       "noneFits": "None of them fits…",
+      "resolve": {
+        "label": "Copies of the same song",
+        "options": {
+          "ask": "Ask me",
+          "automatic": "Settle on their own"
+        },
+        "descriptions": {
+          "ask": "Every song with more than one copy waits here for you. Nothing is recycled on its own.",
+          "automatic": "A lesser copy of the same recording in the same album folder goes to the recycle bin, and a copy that is another song goes to Songs to review. The rest wait here."
+        }
+      },
       "reject": {
         "title_one": "Reject the copy of “{{title}}”",
         "title_other": "Reject the {{count}} copies of “{{title}}”",
@@ -2694,7 +2753,7 @@
     },
     "duplicates": {
       "title": "Duplicated tracks",
-      "description": "Songs with more than one copy on disk that Synthseek could not settle on its own. Listen to them and keep the one you want."
+      "description": "Songs with more than one copy on disk that wait for your call. Listen to them and keep the one you want."
     },
     "recycleBin": {
       "title": "Recycle bin",

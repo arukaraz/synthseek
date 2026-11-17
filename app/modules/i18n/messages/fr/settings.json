@@ -448,7 +448,7 @@
       "sectionTitle": "Fichiers restés en arrière",
       "check": {
         "label": "Chercher les fichiers dont le morceau a disparu",
-        "description": "Les paroles et les pochettes de piste restent sur le disque quand la musique qu'elles accompagnaient est retirée. La vérification parcourt toute votre bibliothèque, elle n'est donc pas automatique.",
+        "description": "Les paroles, les pochettes de piste et des dossiers entiers sans musique restent sur le disque quand la musique qu'ils accompagnaient est retirée. La vérification parcourt toute votre bibliothèque, elle n'est donc pas automatique.",
         "action": "Vérifier"
       },
       "status": {
@@ -456,7 +456,7 @@
         "loadError": "Impossible de lire votre bibliothèque.",
         "found": {
           "label": "Fichiers trouvés",
-          "description": "Chacun appartient à un morceau qui n'est plus là."
+          "description": "Chacun appartient à un morceau qui n'est plus là, ou se trouve dans un dossier sans musique. Le nettoyage supprime aussi les dossiers qu'il vide."
         },
         "size": {
           "label": "Espace occupé",
@@ -2331,6 +2331,9 @@
       "noMatches": "Rien ne correspond",
       "loadFailed": "Impossible de calculer les changements",
       "reassignWarning": "Ceux-ci atterrissent dans un dossier où ils ne sont pas aujourd'hui, ce qui peut être un autre album ou un autre artiste. Lisez-en quelques-uns avant de confirmer.",
+      "taggedAs": "Étiqueté comme {{album}}",
+      "tagAlbumDiffers_one": "1 de ceux-ci porte des étiquettes qui nomment un autre album que celui où il serait classé.",
+      "tagAlbumDiffers_other": "{{formatted}} de ceux-ci portent des étiquettes qui nomment un autre album que celui où ils seraient classés.",
       "cancel": "Annuler",
       "columnBefore": "Maintenant",
       "columnAfter": "Après",
@@ -2443,6 +2446,49 @@
     "start": "Lancer maintenant",
     "hint": "Les listes d'humeur utilisent ce qui est déjà analysé et grandissent seules à chaque actualisation."
   },
+  "coverArt": {
+    "title": "Pochettes",
+    "description": "Un morceau que Synthseek télécharge reçoit la pochette de son album dans le fichier. Un morceau déjà présent dans votre bibliothèque peut n'en porter aucune. Ceci écrit la pochette de l'album dans les morceaux liés qui n'en ont pas, et ne remplace jamais celle qu'un fichier porte déjà.",
+    "check": {
+      "label": "Chercher les morceaux sans pochette",
+      "description": "La vérification ouvre chaque morceau lié de votre bibliothèque, elle n'est donc pas faite automatiquement.",
+      "action": "Vérifier"
+    },
+    "status": {
+      "reading": "Lecture de votre bibliothèque... {{checked}} sur {{total}}",
+      "missing": {
+        "label": "Morceaux sans pochette",
+        "description": "Morceaux liés qui ne portent aucune pochette et dont l'album en a une à donner."
+      },
+      "anotherAlbum": {
+        "label": "Balisés avec un autre album",
+        "description": "Leur propre balise d'album nomme un album différent, donc la pochette pourrait être la mauvaise."
+      },
+      "withoutCatalogArt": {
+        "label": "Aucune pochette à donner",
+        "description": "Ils ne portent aucune pochette, et leur album n'en a pas non plus."
+      },
+      "unwritable": {
+        "label": "Laissés tels quels",
+        "description": "Leur format n'accepte pas de pochette, ou il faudrait d'abord réécrire leurs balises, donc rien n'y est écrit."
+      },
+      "unreadable": {
+        "label": "Impossibles à lire",
+        "description": "Rien n'est écrit dans un fichier qui n'a pas pu être ouvert."
+      },
+      "none": "Aucun morceau lié ne manque d'une pochette qui pourrait être écrite.",
+      "loadError": "Impossible de lire votre bibliothèque. Vérifiez à nouveau."
+    },
+    "fill": {
+      "action": "Écrire les pochettes",
+      "confirmTitle": "Écrire des pochettes dans vos fichiers ?",
+      "confirmMessage_one": "Ceci écrit la pochette de l'album dans 1 de vos fichiers de musique. Un fichier qui porte déjà une pochette n'est pas touché. Une pochette écrite ne peut pas être annulée depuis la corbeille.",
+      "confirmMessage_other": "Ceci écrit la pochette de l'album dans {{formatted}} de vos fichiers de musique. Un fichier qui porte déjà une pochette n'est pas touché. Une pochette écrite ne peut pas être annulée depuis la corbeille.",
+      "confirm": "Écrire les pochettes",
+      "running": "Écriture des pochettes... {{processed}} sur {{total}}",
+      "lastRun": "Dernier passage : {{embedded}} pochettes écrites, {{kept}} fichiers laissés tels quels, {{failed}} n'ont pas pu être écrites."
+    }
+  },
   "libraryScan": {
     "card": {
       "title": "Analyse de la bibliothèque",
@@ -2537,6 +2583,8 @@
         "listLabel": "Fichiers peut-être liés au mauvais morceau",
         "linkedTo": "Lié à {{artist}} · {{title}} · {{length}}",
         "linkedToNoLength": "Lié à {{artist}} · {{title}}",
+        "taggedAs": "Étiqueté {{artist}} · {{title}}",
+        "taggedAsNoArtist": "Étiqueté {{title}}",
         "keep": "Garder le lien",
         "reject": "Pas ce morceau"
       },
@@ -2656,6 +2704,17 @@
       "position": "Position",
       "soundCopy": "Écouter la copie {{number}}",
       "noneFits": "Aucune ne convient…",
+      "resolve": {
+        "label": "Copies du même morceau",
+        "options": {
+          "ask": "Me demander",
+          "automatic": "Régler seules"
+        },
+        "descriptions": {
+          "ask": "Chaque morceau ayant plus d'une copie attend ici votre décision. Rien n'est mis à la corbeille tout seul.",
+          "automatic": "Une copie inférieure du même enregistrement dans le même dossier d'album va à la corbeille, et une copie qui est un autre morceau va dans Titres à vérifier. Le reste attend ici."
+        }
+      },
       "reject": {
         "title_one": "Rejeter la copie de « {{title}} »",
         "title_other": "Rejeter les {{count}} copies de « {{title}} »",
@@ -2694,7 +2753,7 @@
     },
     "duplicates": {
       "title": "Morceaux en double",
-      "description": "Morceaux ayant plus d'une copie sur le disque que Synthseek n'a pas pu régler seul. Écoutez-les et gardez celle que vous voulez."
+      "description": "Morceaux ayant plus d'une copie sur le disque qui attendent votre décision. Écoutez-les et gardez celle que vous voulez."
     },
     "recycleBin": {
       "title": "Corbeille",

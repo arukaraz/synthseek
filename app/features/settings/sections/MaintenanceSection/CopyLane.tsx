@@ -7,6 +7,7 @@ import { fractionOf, lengthOf, startOf } from "@hooks/ui/copyComparison";
 import { formatBytes } from "@utils/formatters";
 
 import {
+  dupAlbum,
   dupDiffSpan,
   dupDiffStrip,
   dupFileName,
@@ -23,7 +24,7 @@ import {
   dupWave,
 } from "../../styles";
 import { WAVEFORM } from "./constants";
-import { clockLabel, positionAtPointer, waveformPath } from "./helpers";
+import { clockLabel, placeOf, positionAtPointer, waveformPath } from "./helpers";
 import { insetSpanStyle, spanStyle } from "./styles";
 import type { CopyLaneProps } from "./types";
 
@@ -35,6 +36,7 @@ export function CopyLane({ copy, index, comparison, compared, isReference, showP
   const length = lengthOf(compared, durations);
   const begins = fractionOf(startOf(compared, aligned), bounds);
   const spans = length <= 0 ? 0 : length / Math.max(bounds.end - bounds.start, length);
+  const place = placeOf(copy);
 
   return (
     <div className={dupLane()}>
@@ -95,6 +97,11 @@ export function CopyLane({ copy, index, comparison, compared, isReference, showP
               <span className={dupStateBadge({ tone: "destructive" })}>{t("libraryScan.duplicates.wontPlay")}</span>
             ) : null}
             {showPath ? <span className={dupPathBadge()}>{copy.libraryPath}</span> : null}
+            {place.label === "" ? null : (
+              <span className={dupAlbum()} title={place.folder}>
+                {place.label}
+              </span>
+            )}
             <span className={dupFileName()} title={copy.relativePath}>
               {copy.fileName}
             </span>

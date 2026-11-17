@@ -63,6 +63,11 @@ export interface DuplicateComparatorProps {
   onNoneFits: () => void;
 }
 
+export interface CopyPlace {
+  label: string;
+  folder: string;
+}
+
 export interface CopyLaneProps {
   copy: DuplicateCopy;
   index: number;

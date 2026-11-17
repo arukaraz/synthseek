@@ -41,7 +41,7 @@ https://github.com/user-attachments/assets/50c3988e-7ec1-41dc-9a9e-a8407043b552
 
 - **No API keys to get started.** The catalog is provider-agnostic and runs on Deezer by default, so a first run needs nothing you have to register for.
 - **Seven download sources, and you decide the order.** Peer-to-peer, Usenet, torrent, another Subsonic server, and fallbacks to YouTube, SoundCloud and the Internet Archive, set in a request preset and, for trusted members and administrators, per request.
-- **It treats your library as something to keep honest.** Files are checked before they are imported, Synthseek only recycles a duplicate on its own when it sounds like the same recording, and nothing in your library is ever deleted outright.
+- **It treats your library as something to keep honest.** Files are checked before they are imported, Synthseek recycles a duplicate on its own only if you turn that on, and only when it sounds like the same recording, and nothing in your library is ever deleted outright.
 
 ## Quick start
 
@@ -83,7 +83,7 @@ Open the web interface and follow the setup wizard: an admin account, slskd, the
 - Keep your music in more than one library path, such as a second disk, with rules that decide which music goes where, by artist, genre, year, who asked for it and more
 - You decide the folders and filename every track gets in each path, and a preview shows every change before anything moves
 - Files already on disk can be brought in line with that format, or left exactly where they are
-- Tracks with more than one copy are listed a track at a time, and only copies it can prove are the same recording are settled automatically, which means agreeing on both title and length
+- Tracks with more than one copy are listed a track at a time and wait for you. If you turn it on, a lesser copy that sounds like the same recording in the same album folder is settled automatically
 - What it cannot prove waits for you, with every copy playable before you choose
 - Nothing is deleted outright: replaced files go to a recycle bin with a restore, for as long as the retention window keeps them
 

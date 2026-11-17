@@ -451,7 +451,7 @@
       "sectionTitle": "Ficheros que quedaron atrás",
       "check": {
         "label": "Buscar ficheros cuya pista ya no está",
-        "description": "Las letras y las carátulas de pista se quedan en el disco cuando se retira la música a la que acompañaban. Comprobarlo recorre toda tu biblioteca, así que no se hace solo.",
+        "description": "Las letras, las carátulas de pista y carpetas enteras que ya no tienen música se quedan en el disco cuando se retira la música a la que acompañaban. Comprobarlo recorre toda tu biblioteca, así que no se hace solo.",
         "action": "Comprobar"
       },
       "status": {
@@ -459,7 +459,7 @@
         "loadError": "No se pudo leer tu biblioteca.",
         "found": {
           "label": "Ficheros encontrados",
-          "description": "Cada uno pertenece a una pista que ya no está."
+          "description": "Cada uno pertenece a una pista que ya no está, o está en una carpeta que ya no tiene música. La limpieza también quita las carpetas que deja vacías."
         },
         "size": {
           "label": "Espacio que ocupan",
@@ -2334,6 +2334,9 @@
       "noMatches": "Nada coincide con eso",
       "loadFailed": "No se pudieron calcular los cambios",
       "reassignWarning": "Estas acaban en una carpeta en la que hoy no están, que puede ser otro álbum u otro artista. Lee algunas antes de confirmar.",
+      "taggedAs": "Etiquetada como {{album}}",
+      "tagAlbumDiffers_one": "1 de estas lleva etiquetas que nombran otro álbum que aquel en el que quedaría archivada.",
+      "tagAlbumDiffers_other": "{{formatted}} de estas llevan etiquetas que nombran otro álbum que aquel en el que quedarían archivadas.",
       "cancel": "Cancelar",
       "columnBefore": "Ahora",
       "columnAfter": "Después",
@@ -2446,6 +2449,49 @@
     "start": "Ejecutar ahora",
     "hint": "Las listas de estado de ánimo usan lo analizado hasta ahora y crecen solas en cada refresco."
   },
+  "coverArt": {
+    "title": "Carátulas",
+    "description": "Una canción que Synthseek descarga recibe la carátula de su álbum dentro del archivo. Una que ya estaba en tu biblioteca puede no traer ninguna. Esto escribe la carátula del álbum en las canciones enlazadas que no tienen, y nunca reemplaza la que un archivo ya trae.",
+    "check": {
+      "label": "Buscar canciones sin carátula",
+      "description": "Revisar abre cada canción enlazada de tu biblioteca, así que no se hace de forma automática.",
+      "action": "Revisar"
+    },
+    "status": {
+      "reading": "Leyendo tu biblioteca... {{checked}} de {{total}}",
+      "missing": {
+        "label": "Canciones sin carátula",
+        "description": "Canciones enlazadas que no traen carátula y cuyo álbum tiene una que darles."
+      },
+      "anotherAlbum": {
+        "label": "Etiquetadas con otro álbum",
+        "description": "Su propia etiqueta de álbum nombra un álbum distinto, así que la carátula podría ser la equivocada."
+      },
+      "withoutCatalogArt": {
+        "label": "Sin carátula que darles",
+        "description": "No traen carátula, y su álbum tampoco tiene una."
+      },
+      "unwritable": {
+        "label": "Se dejan como están",
+        "description": "Su formato no admite carátula, o habría que reescribir antes sus etiquetas, así que no se les escribe nada."
+      },
+      "unreadable": {
+        "label": "No se pudieron leer",
+        "description": "No se escribe nada en un archivo que no se pudo abrir."
+      },
+      "none": "A ninguna canción enlazada le falta una carátula que se pueda escribir.",
+      "loadError": "No se pudo leer tu biblioteca. Vuelve a comprobar."
+    },
+    "fill": {
+      "action": "Escribir las carátulas",
+      "confirmTitle": "¿Escribir carátulas en tus archivos?",
+      "confirmMessage_one": "Esto escribe la carátula del álbum dentro de 1 de tus archivos de música. Un archivo que ya trae carátula no se toca. Una carátula escrita no se puede deshacer desde la papelera.",
+      "confirmMessage_other": "Esto escribe la carátula del álbum dentro de {{formatted}} de tus archivos de música. Un archivo que ya trae carátula no se toca. Una carátula escrita no se puede deshacer desde la papelera.",
+      "confirm": "Escribir las carátulas",
+      "running": "Escribiendo carátulas... {{processed}} de {{total}}",
+      "lastRun": "Última pasada: {{embedded}} carátulas escritas, {{kept}} archivos se dejaron como estaban, {{failed}} no se pudieron escribir."
+    }
+  },
   "libraryScan": {
     "card": {
       "title": "Escaneo de biblioteca",
@@ -2540,6 +2586,8 @@
         "listLabel": "Archivos que quizá estén ligados a la canción equivocada",
         "linkedTo": "Ligado a {{artist}} · {{title}} · {{length}}",
         "linkedToNoLength": "Ligado a {{artist}} · {{title}}",
+        "taggedAs": "Etiquetado {{artist}} · {{title}}",
+        "taggedAsNoArtist": "Etiquetado {{title}}",
         "keep": "Mantener el vínculo",
         "reject": "No es esta canción"
       },
@@ -2659,6 +2707,17 @@
       "position": "Posición",
       "soundCopy": "Sonar copia {{number}}",
       "noneFits": "Ninguna sirve…",
+      "resolve": {
+        "label": "Copias de la misma canción",
+        "options": {
+          "ask": "Preguntarme",
+          "automatic": "Resolver solas"
+        },
+        "descriptions": {
+          "ask": "Cada canción con más de una copia espera aquí tu decisión. Nada se recicla por su cuenta.",
+          "automatic": "Una copia inferior de la misma grabación en la misma carpeta de álbum va a la papelera, y una copia que es otra canción va a Canciones por revisar. El resto espera aquí."
+        }
+      },
       "reject": {
         "title_one": "Rechazar la copia de “{{title}}”",
         "title_other": "Rechazar las {{count}} copias de “{{title}}”",
@@ -2697,7 +2756,7 @@
     },
     "duplicates": {
       "title": "Pistas duplicadas",
-      "description": "Canciones con más de una copia en disco que Synthseek no pudo resolver por su cuenta. Escúchalas y quédate con la que quieras."
+      "description": "Canciones con más de una copia en disco que esperan tu decisión. Escúchalas y quédate con la que quieras."
     },
     "recycleBin": {
       "title": "Papelera",

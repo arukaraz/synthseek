@@ -58,6 +58,7 @@ function copy(overrides: Partial<DuplicateCopy> = {}): DuplicateCopy {
     libraryPath: "Music",
     relativePath: "Daft Punk/Discovery/03 - Digital Love.flac",
     fileName: "03 - Digital Love.flac",
+    album: "Discovery",
     sizeBytes: 31_457_280,
     fileFormat: "flac",
     durationSeconds: 301,

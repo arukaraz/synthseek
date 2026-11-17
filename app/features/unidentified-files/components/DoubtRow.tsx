@@ -10,6 +10,7 @@ import {
   desktopOnly,
   doubtMeta,
   doubtPath,
+  doubtTagged,
   groupInfo,
   groupRow,
   groupThumb,
@@ -33,6 +34,14 @@ export function DoubtRow({ doubt, busy, onKeep, onReject }: DoubtRowProps) {
           length: lengthLabel(linked.durationSeconds),
         });
 
+  const tagged = doubt.taggedAs;
+  const taggedLabel =
+    tagged.title === null
+      ? null
+      : tagged.artist === null
+        ? t("libraryScan.review.doubt.taggedAsNoArtist", { title: tagged.title })
+        : t("libraryScan.review.doubt.taggedAs", { artist: tagged.artist, title: tagged.title });
+
   return (
     <li className={groupRow()}>
       <span className={selectCell()} />
@@ -46,6 +55,11 @@ export function DoubtRow({ doubt, busy, onKeep, onReject }: DoubtRowProps) {
           {linkedLabel}
         </span>
         <span className={doubtMeta()}>
+          {taggedLabel === null ? null : (
+            <span className={doubtTagged()} title={taggedLabel}>
+              {taggedLabel}
+            </span>
+          )}
           <span className={doubtPath()} title={doubt.relativePath}>
             {doubt.relativePath}
           </span>

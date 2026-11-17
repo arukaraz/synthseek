@@ -7,7 +7,14 @@ import { matchesTerms, searchTerms } from "@utils/search";
 
 import type { SystemProblem } from "../../types";
 import { CONTAINER_DEFAULT_OWNER_ID, MS_PER_SECOND, RULER_TICKS, WAVEFORM } from "./constants";
-import type { DownloadedAlbum, DownloadedAlbumFilter, DuplicateGroup, SystemProblemCopyParams } from "./types";
+import type {
+  CopyPlace,
+  DownloadedAlbum,
+  DownloadedAlbumFilter,
+  DuplicateCopy,
+  DuplicateGroup,
+  SystemProblemCopyParams,
+} from "./types";
 
 export function downloadedAlbumsIn(
   entries: readonly DownloadedAlbum[],
@@ -66,6 +73,11 @@ export function problemCopyParams(problem: SystemProblem): SystemProblemCopyPara
 export function describeCopies(group: DuplicateGroup, t: TFunction<"settings">): string {
   const formats = [...new Set(group.copies.map((copy) => copy.fileFormat.toUpperCase()))].join(", ");
   return [t("libraryScan.duplicates.copies", { count: group.copies.length }), formats].join(" · ");
+}
+
+export function placeOf(copy: DuplicateCopy): CopyPlace {
+  const segments = copy.relativePath.split("/").slice(0, -1);
+  return { label: copy.album ?? segments.at(-1) ?? "", folder: segments.join("/") };
 }
 
 export function spansLibraryPaths(group: DuplicateGroup): boolean {

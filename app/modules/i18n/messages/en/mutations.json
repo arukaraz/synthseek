@@ -76,6 +76,8 @@
     "qualitySaved": "Quality settings saved",
     "qualityFailed": "Failed to save quality settings",
     "recycleBinSaved": "Recycle bin settings saved",
+    "duplicateResolutionSaved": "Duplicate handling saved",
+    "duplicateResolutionFailed": "Failed to save how duplicates are handled",
     "recycleBinSaveFailed": "Failed to save recycle bin settings",
     "recycleBinEmptied_one": "Recycle bin emptied, {{count}} file removed",
     "recycleBinEmptied_other": "Recycle bin emptied, {{count}} files removed",
@@ -92,7 +94,13 @@
     "orphanedCompanionsSweepFailed": "Could not move the files to the recycle bin",
     "orphanedCompanionsSweepStarted": "Moving the files to the recycle bin",
     "orphanedCompanionsSweepAlreadyRunning": "That is already under way",
-    "orphanedCompanionsSweepLibraryBusy": "The library is busy right now, try again when it is done"
+    "orphanedCompanionsSweepLibraryBusy": "The library is busy right now, try again when it is done",
+    "coverArtCountFailed": "Could not start reading your library",
+    "coverArtFillFailed": "Could not start writing the covers",
+    "coverArtFillStarted": "Writing the covers",
+    "coverArtFillAlreadyRunning": "That is already under way",
+    "coverArtFillLibraryBusy": "The library is busy right now, try again when it is done",
+    "coverArtFillNothing": "Check the library again first"
   },
   "plexConnect": {
     "timedOut": "Plex login timed out",
