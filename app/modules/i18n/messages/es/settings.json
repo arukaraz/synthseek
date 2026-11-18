@@ -2455,7 +2455,7 @@
     "description": "Muchos álbumes existen en más de una edición. Synthseek mantiene las canciones de una carpeta en la misma edición cuando puede, la que indican tus archivos. Estas opciones deciden solo cuando tus archivos encajan en más de una.",
     "content": {
       "label": "Explícita o limpia",
-      "description": "La que se elige cuando un álbum tiene las dos.",
+      "description": "La que se elige cuando el catálogo tiene las dos. Muchos álbumes no tienen ahí una edición limpia.",
       "options": { "explicit": "Explícita", "clean": "Limpia" }
     },
     "length": {

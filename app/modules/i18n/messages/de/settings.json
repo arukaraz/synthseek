@@ -2452,7 +2452,7 @@
     "description": "Viele Alben gibt es in mehr als einer Edition. Synthseek hält die Titel eines Ordners nach Möglichkeit auf derselben Edition, auf die deine Dateien hinweisen. Diese Auswahl entscheidet nur, wenn deine Dateien zu mehr als einer passen.",
     "content": {
       "label": "Explizit oder bereinigt",
-      "description": "Welche gewählt wird, wenn ein Album beide hat.",
+      "description": "Welche gewählt wird, wenn der Katalog beide hat. Viele Alben haben dort keine bereinigte Edition.",
       "options": { "explicit": "Explizit", "clean": "Bereinigt" }
     },
     "length": {

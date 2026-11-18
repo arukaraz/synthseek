@@ -2452,7 +2452,7 @@
     "description": "Beaucoup d'albums existent en plusieurs éditions. Synthseek garde les titres d'un dossier sur la même édition quand il le peut, celle que vos fichiers indiquent. Ces choix ne décident que lorsque vos fichiers correspondent à plusieurs.",
     "content": {
       "label": "Explicite ou censurée",
-      "description": "Celle qui est choisie quand un album a les deux.",
+      "description": "Celle qui est choisie quand le catalogue a les deux. Beaucoup d'albums n'y ont pas d'édition censurée.",
       "options": { "explicit": "Explicite", "clean": "Censurée" }
     },
     "length": {

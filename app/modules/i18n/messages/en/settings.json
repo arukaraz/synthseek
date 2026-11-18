@@ -2452,7 +2452,7 @@
     "description": "Many albums exist in more than one edition. Synthseek keeps the songs of a folder on the same edition when it can, the one your files point to. These choices decide only when your files fit more than one.",
     "content": {
       "label": "Explicit or clean",
-      "description": "The one to pick when an album has both.",
+      "description": "The one to pick when the catalog has both. Many albums have no clean edition there.",
       "options": { "explicit": "Explicit", "clean": "Clean" }
     },
     "length": {
