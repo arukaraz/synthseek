@@ -734,6 +734,14 @@ export const SETTINGS_SEARCH_ENTRIES: readonly SettingsSearchEntry[] = [
     placeKey: "shell.tabs.library.paths",
   },
   {
+    labelKey: "editions.title",
+    page: "library",
+    href: "/settings/library/paths",
+    anchor: "library-editions",
+    placeKey: "shell.tabs.library.paths",
+    keywordsKey: "shell.search.keywords.editions",
+  },
+  {
     labelKey: "coverArt.title",
     page: "library",
     href: "/settings/library/paths",

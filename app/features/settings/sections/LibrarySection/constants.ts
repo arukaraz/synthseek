@@ -77,6 +77,10 @@ export const AUDIO_ANALYSIS_JOB = "audio-analysis";
 
 export const AUDIO_ANALYSIS_SPEEDS = ["background", "balanced", "fast"] as const;
 
+export const EDITION_CONTENTS = ["explicit", "clean"] as const;
+
+export const EDITION_LENGTHS = ["shortest", "longest"] as const;
+
 export const COVER_ART_LEFT_ALONE = ["anotherAlbum", "withoutCatalogArt", "unwritable", "unreadable"] as const;
 
 export const FIELD_OPS: FieldOps = {

@@ -21,6 +21,8 @@
   "settings": {
     "audioAnalysisSaved": "Vitesse de l'analyse audio enregistrée",
     "audioAnalysisFailed": "Impossible d'enregistrer la vitesse de l'analyse audio",
+    "libraryEditionsSaved": "Préférence d'édition enregistrée",
+    "libraryEditionsFailed": "Impossible d'enregistrer la préférence d'édition",
     "formattingFailed": "Échec de l'enregistrement du formatage",
     "namingFailed": "Échec de l'enregistrement du modèle de nommage",
     "libraryPathFailed": "Échec de l'enregistrement du chemin de bibliothèque",

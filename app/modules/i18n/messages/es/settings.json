@@ -1782,6 +1782,7 @@
         "channels": "discord ntfy telegram webhook apprise",
         "musicApps": "subsonic feishin symfonium dsub credencial",
         "libraryPaths": "carpeta nombres plantilla renombrar",
+        "editions": "explícita limpia deluxe remasterizada versión",
         "unidentified": "sin identificar sin reconocer asociar ignorar",
         "jobs": "cron programación ejecutar",
         "updates": "actualizaciones versión lanzamiento changelog notas",
@@ -2448,6 +2449,20 @@
     "pause": "Pausar",
     "start": "Ejecutar ahora",
     "hint": "Las listas de estado de ánimo usan lo analizado hasta ahora y crecen solas en cada refresco."
+  },
+  "editions": {
+    "title": "Ediciones de álbum",
+    "description": "Muchos álbumes existen en más de una edición. Synthseek mantiene las canciones de una carpeta en la misma edición cuando puede, la que indican tus archivos. Estas opciones deciden solo cuando tus archivos encajan en más de una.",
+    "content": {
+      "label": "Explícita o limpia",
+      "description": "La que se elige cuando un álbum tiene las dos.",
+      "options": { "explicit": "Explícita", "clean": "Limpia" }
+    },
+    "length": {
+      "label": "La más corta o la más larga",
+      "description": "La que se elige entre un álbum y una edición más larga del mismo, como una deluxe.",
+      "options": { "shortest": "Más corta", "longest": "Más larga" }
+    }
   },
   "coverArt": {
     "title": "Carátulas",

@@ -21,6 +21,8 @@
   "settings": {
     "audioAnalysisSaved": "Velocidad del análisis de audio guardada",
     "audioAnalysisFailed": "No se pudo guardar la velocidad del análisis de audio",
+    "libraryEditionsSaved": "Preferencia de edición guardada",
+    "libraryEditionsFailed": "No se pudo guardar la preferencia de edición",
     "formattingFailed": "No se pudo guardar el formato",
     "namingFailed": "No se pudo guardar la plantilla de nombrado",
     "libraryPathFailed": "No se pudo guardar la ruta de biblioteca",

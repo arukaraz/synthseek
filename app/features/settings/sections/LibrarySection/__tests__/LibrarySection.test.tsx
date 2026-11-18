@@ -9,6 +9,10 @@ vi.mock("../LibraryRulesCard", () => ({
   LibraryRulesCard: () => <section data-testid="library-rules" />,
 }));
 
+vi.mock("../EditionsCard", () => ({
+  EditionsCard: () => <section data-testid="editions" />,
+}));
+
 vi.mock("../AudioAnalysisCard", () => ({
   AudioAnalysisCard: () => <section data-testid="audio-analysis" />,
 }));
@@ -30,6 +34,14 @@ describe("LibrarySection", () => {
     const paths = screen.getByTestId("library-paths");
     const rules = screen.getByTestId("library-rules");
     expect(paths.compareDocumentPosition(rules) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  });
+
+  it("puts the edition preference after the rules that file the music", () => {
+    render(<LibrarySection />);
+
+    const rules = screen.getByTestId("library-rules");
+    const editions = screen.getByTestId("editions");
+    expect(rules.compareDocumentPosition(editions) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
   });
 
   it("leaves the page heading to the library tabs", () => {

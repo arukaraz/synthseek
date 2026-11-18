@@ -1779,6 +1779,7 @@
         "channels": "discord ntfy telegram webhook apprise",
         "musicApps": "subsonic feishin symfonium dsub credential",
         "libraryPaths": "folder naming template rename",
+        "editions": "explicit clean deluxe remaster version",
         "unidentified": "unidentified unrecognized match ignore",
         "jobs": "cron schedule run",
         "updates": "updates version release changelog patch notes",
@@ -2445,6 +2446,20 @@
     "pause": "Pause",
     "start": "Run now",
     "hint": "Mood lists use what is analyzed so far and grow on their own at each refresh."
+  },
+  "editions": {
+    "title": "Album editions",
+    "description": "Many albums exist in more than one edition. Synthseek keeps the songs of a folder on the same edition when it can, the one your files point to. These choices decide only when your files fit more than one.",
+    "content": {
+      "label": "Explicit or clean",
+      "description": "The one to pick when an album has both.",
+      "options": { "explicit": "Explicit", "clean": "Clean" }
+    },
+    "length": {
+      "label": "Shortest or longest",
+      "description": "The one to pick between an album and a longer edition of it, such as a deluxe.",
+      "options": { "shortest": "Shortest", "longest": "Longest" }
+    }
   },
   "coverArt": {
     "title": "Cover art",

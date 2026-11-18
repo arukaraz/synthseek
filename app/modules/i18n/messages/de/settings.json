@@ -1779,6 +1779,7 @@
         "channels": "discord ntfy telegram webhook apprise",
         "musicApps": "subsonic feishin symfonium dsub zugangsdaten",
         "libraryPaths": "ordner benennung vorlage umbenennen",
+        "editions": "explizit bereinigt clean deluxe remaster version",
         "unidentified": "unerkannt nicht erkannt zuordnen ignorieren",
         "jobs": "cron zeitplan ausführen",
         "updates": "updates aktualisierung version release changelog patchnotes",
@@ -2445,6 +2446,20 @@
     "pause": "Pausieren",
     "start": "Jetzt ausführen",
     "hint": "Stimmungslisten nutzen das bisher Analysierte und wachsen bei jeder Aktualisierung von selbst."
+  },
+  "editions": {
+    "title": "Album-Editionen",
+    "description": "Viele Alben gibt es in mehr als einer Edition. Synthseek hält die Titel eines Ordners nach Möglichkeit auf derselben Edition, auf die deine Dateien hinweisen. Diese Auswahl entscheidet nur, wenn deine Dateien zu mehr als einer passen.",
+    "content": {
+      "label": "Explizit oder bereinigt",
+      "description": "Welche gewählt wird, wenn ein Album beide hat.",
+      "options": { "explicit": "Explizit", "clean": "Bereinigt" }
+    },
+    "length": {
+      "label": "Kürzeste oder längste",
+      "description": "Welche zwischen einem Album und einer längeren Edition davon gewählt wird, etwa einer Deluxe.",
+      "options": { "shortest": "Kürzeste", "longest": "Längste" }
+    }
   },
   "coverArt": {
     "title": "Cover",

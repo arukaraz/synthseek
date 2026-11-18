@@ -1779,6 +1779,7 @@
         "channels": "discord ntfy telegram webhook apprise",
         "musicApps": "subsonic feishin symfonium dsub identifiant",
         "libraryPaths": "dossier nommage modèle renommer",
+        "editions": "explicite censurée clean deluxe remaster version",
         "unidentified": "non identifié non reconnu associer ignorer",
         "jobs": "cron planification lancer",
         "updates": "mises à jour version publication changelog notes",
@@ -2445,6 +2446,20 @@
     "pause": "Mettre en pause",
     "start": "Lancer maintenant",
     "hint": "Les listes d'humeur utilisent ce qui est déjà analysé et grandissent seules à chaque actualisation."
+  },
+  "editions": {
+    "title": "Éditions d'album",
+    "description": "Beaucoup d'albums existent en plusieurs éditions. Synthseek garde les titres d'un dossier sur la même édition quand il le peut, celle que vos fichiers indiquent. Ces choix ne décident que lorsque vos fichiers correspondent à plusieurs.",
+    "content": {
+      "label": "Explicite ou censurée",
+      "description": "Celle qui est choisie quand un album a les deux.",
+      "options": { "explicit": "Explicite", "clean": "Censurée" }
+    },
+    "length": {
+      "label": "La plus courte ou la plus longue",
+      "description": "Celle qui est choisie entre un album et une édition plus longue, comme une deluxe.",
+      "options": { "shortest": "Plus courte", "longest": "Plus longue" }
+    }
   },
   "coverArt": {
     "title": "Pochettes",

@@ -21,6 +21,8 @@
   "settings": {
     "audioAnalysisSaved": "Audio analysis speed saved",
     "audioAnalysisFailed": "Failed to save the audio analysis speed",
+    "libraryEditionsSaved": "Edition preference saved",
+    "libraryEditionsFailed": "Failed to save the edition preference",
     "formattingFailed": "Failed to save formatting",
     "namingFailed": "Failed to save the naming template",
     "libraryPathFailed": "Failed to save the library path",
