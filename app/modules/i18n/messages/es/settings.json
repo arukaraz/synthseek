@@ -120,6 +120,7 @@
       "wanted_sweep": "El barrido de seguimiento buscó de nuevo",
       "media_server_sync": "Playlists del servidor multimedia sincronizadas",
       "review_new": "Importaciones nuevas por revisar",
+      "release_new": "Lanzamientos nuevos de los artistas que sigues",
       "duplicates_new": "Nuevas copias duplicadas",
       "unidentified_new": "Archivos sin reconocer",
       "quarantine_new": "Archivos en cuarentena",
@@ -1526,6 +1527,10 @@
       "smart-playlists": {
         "name": "Playlists inteligentes",
         "description": "Renueva las playlists cuyas canciones elige la regla de un widget, según el horario de cada una."
+      },
+      "release-watch": {
+        "name": "Vigilancia de lanzamientos",
+        "description": "Revisa dos veces al día si los artistas que sigue la gente tienen lanzamientos nuevos."
       }
     }
   },
@@ -1689,6 +1694,10 @@
       "notifications": {
         "title": "Notificaciones"
       },
+      "calendar": {
+        "title": "Calendario",
+        "description": "Lanzamientos nuevos de los artistas que sigues."
+      },
       "overview": {
         "title": "Resumen",
         "description": "Este servidor de un vistazo. Cada elemento lleva a la página donde se resuelve."
@@ -1752,6 +1761,10 @@
       "connections": {
         "services": "Servicios",
         "apps": "Apps y claves de API"
+      },
+      "calendar": {
+        "releases": "Lanzamientos",
+        "following": "Siguiendo"
       }
     },
     "search": {
@@ -1768,7 +1781,11 @@
         "jellyfinAccount": "Cuenta de Jellyfin",
         "lastfmFeeds": "Feeds de descubrimiento de Last.fm",
         "listenbrainzFeeds": "Feeds de descubrimiento de ListenBrainz",
-        "listenbrainzAutoRequest": "Solicitar automáticamente las playlists de ListenBrainz"
+        "listenbrainzAutoRequest": "Solicitar automáticamente las playlists de ListenBrainz",
+        "releaseTypes": "Tipos de lanzamiento",
+        "followedArtists": "Artistas seguidos",
+        "followAutoRequest": "Pedir automáticamente los lanzamientos nuevos",
+        "followMostPlayed": "Seguir a mis más escuchados"
       },
       "keywords": {
         "playbackAccount": "normalización de volumen sonoridad ganancia autoplay reproducción automática pistas similares",

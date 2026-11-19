@@ -18,7 +18,17 @@ import {
 } from "./styles";
 import type { WidgetRowProps } from "./types";
 
-export function WidgetRow({ cover, seed, title, subtitle, lead, trailing, onSelect, coverAction }: WidgetRowProps) {
+export function WidgetRow({
+  cover,
+  seed,
+  title,
+  subtitle,
+  lead,
+  trailing,
+  more,
+  onSelect,
+  coverAction,
+}: WidgetRowProps) {
   const copy = (
     <span className={widgetRowCopy()}>
       <span className={widgetRowTitle()}>{title}</span>
@@ -61,6 +71,7 @@ export function WidgetRow({ cover, seed, title, subtitle, lead, trailing, onSele
           />
         </span>
       ) : null}
+      {more === undefined ? null : <span className={widgetRowTrailing()}>{more}</span>}
     </li>
   );
 }

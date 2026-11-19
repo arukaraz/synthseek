@@ -117,6 +117,7 @@
       "wanted_sweep": "Wanted-Durchlauf hat erneut gesucht",
       "media_server_sync": "Media-Server-Playlists synchronisiert",
       "review_new": "Neue Importe zu prüfen",
+      "release_new": "Neue Veröffentlichungen von Künstlern, denen du folgst",
       "duplicates_new": "Neue doppelte Kopien",
       "unidentified_new": "Nicht erkannte Dateien",
       "quarantine_new": "Dateien in Quarantäne",
@@ -1523,6 +1524,10 @@
       "smart-playlists": {
         "name": "Smarte Playlists",
         "description": "Erneuert die Playlists, deren Titel eine Widget-Regel auswählt, nach dem Zeitplan jeder einzelnen."
+      },
+      "release-watch": {
+        "name": "Veröffentlichungen im Blick",
+        "description": "Prüft zweimal täglich, ob die Künstler, denen Nutzer folgen, Neues veröffentlicht haben."
       }
     }
   },
@@ -1686,6 +1691,10 @@
       "notifications": {
         "title": "Benachrichtigungen"
       },
+      "calendar": {
+        "title": "Kalender",
+        "description": "Neue Veröffentlichungen von Künstlern, denen du folgst."
+      },
       "overview": {
         "title": "Übersicht",
         "description": "Dieser Server auf einen Blick. Jeder Eintrag führt zu der Seite, auf der er geregelt wird."
@@ -1749,6 +1758,10 @@
       "connections": {
         "services": "Dienste",
         "apps": "Apps und API-Schlüssel"
+      },
+      "calendar": {
+        "releases": "Veröffentlichungen",
+        "following": "Gefolgt"
       }
     },
     "search": {
@@ -1765,7 +1778,11 @@
         "jellyfinAccount": "Jellyfin-Konto",
         "lastfmFeeds": "Last.fm-Entdeckungsfeeds",
         "listenbrainzFeeds": "ListenBrainz-Entdeckungsfeeds",
-        "listenbrainzAutoRequest": "ListenBrainz-Playlists automatisch anfragen"
+        "listenbrainzAutoRequest": "ListenBrainz-Playlists automatisch anfragen",
+        "releaseTypes": "Veröffentlichungstypen",
+        "followedArtists": "Gefolgte Künstler",
+        "followAutoRequest": "Neue Veröffentlichungen automatisch anfragen",
+        "followMostPlayed": "Meine meistgespielten folgen"
       },
       "keywords": {
         "playbackAccount": "lautstärke normalisierung lautheit gain autoplay ähnliche titel",

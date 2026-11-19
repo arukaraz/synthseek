@@ -1,0 +1,179 @@
+import { afterEach, describe, expect, it, vi } from "vitest";
+
+import { TooltipProvider } from "@components/ui/Tooltip";
+import type { WidgetBlock, WidgetResult } from "@hooks/api/queries/widgets/types";
+import { createFeedAlbumResult, createFeedAlbumRow, createWidget } from "@test/factories";
+import { renderWithProviders, screen } from "@test/test-utils";
+
+import { CustomWidget } from "../CustomWidget";
+
+const { dataQuery } = vi.hoisted(() => ({ dataQuery: vi.fn() }));
+
+vi.mock("@hooks/api/queries/widgets/useWidgetData", () => ({
+  useWidgetData: (_widget: unknown, _timeZone: string, enabled: boolean) => dataQuery(enabled),
+}));
+vi.mock("@hooks/api/queries/widgets/useWidgetPreview", () => ({
+  useWidgetPreview: () => ({ data: undefined, isLoading: false, isError: false }),
+}));
+vi.mock("@modules/providers/AuthProvider", () => ({
+  useAuthContext: () => ({ isAdmin: true, currentUser: { role: "admin" } }),
+}));
+vi.mock("@hooks/ui/useEntityPlayback", () => ({
+  useEntityPlayback: () => ({ playEntity: vi.fn(), shuffleEntity: vi.fn(), startRadio: vi.fn() }),
+}));
+vi.mock("@features/search/components/ContentRequestFlow", () => ({
+  useContentRequestFlow: () => ({ openForTarget: vi.fn(), requestResult: vi.fn() }),
+}));
+vi.mock("@hooks/api/queries/artist-follow/useFollowedTotal", () => ({ useFollowedTotal: () => 0 }));
+vi.mock("@components/ReleaseActions", () => ({
+  ReleaseMoreMenu: ({ label }: { label: string }) => <button type="button">{label}</button>,
+}));
+vi.mock("next/image", () => ({
+  // eslint-disable-next-line @next/next/no-img-element
+  default: ({ src }: { src: string }) => <img src={src} alt="" />,
+}));
+
+function follow(state: "announced" | "available" | "in_library") {
+  return { catalogArtistId: "ar1", autoRequest: false, state };
+}
+
+function show(block: WidgetBlock, result: WidgetResult) {
+  dataQuery.mockReturnValue({ data: result, isLoading: false, isError: false });
+  renderWithProviders(
+    <TooltipProvider>
+      <CustomWidget widget={createWidget({ view: { block, action: "request" } })} status="ready" size="L" />
+    </TooltipProvider>
+  );
+}
+
+afterEach(() => {
+  vi.clearAllMocks();
+});
+
+describe("follow rows in a widget", () => {
+  it("offers More only on rows that carry follow data", () => {
+    show(
+      "list",
+      createFeedAlbumResult([
+        createFeedAlbumRow({ id: "f1", name: "Followed One", catalogAlbumId: "dz-1", follow: follow("available") }),
+        createFeedAlbumRow({ id: "f2", name: "Plain Two", catalogAlbumId: "dz-2", follow: null }),
+      ])
+    );
+
+    expect(screen.getByRole("button", { name: "More for Followed One" })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "More for Plain Two" })).not.toBeInTheDocument();
+  });
+
+  it("offers More on a card only for a followed row too", () => {
+    show(
+      "cards",
+      createFeedAlbumResult([
+        createFeedAlbumRow({ id: "f1", name: "Followed One", catalogAlbumId: "dz-1", follow: follow("available") }),
+        createFeedAlbumRow({ id: "f2", name: "Plain Two", catalogAlbumId: "dz-2", follow: null }),
+      ])
+    );
+
+    expect(screen.getAllByRole("button", { name: /^More for / })).toHaveLength(1);
+  });
+
+  it("names the artist beside the date and swaps the request button for the state when nothing can be requested", () => {
+    show(
+      "list",
+      createFeedAlbumResult([
+        createFeedAlbumRow({
+          id: "f1",
+          name: "Already Here",
+          artist: "Ada",
+          catalogAlbumId: "dz-1",
+          follow: follow("in_library"),
+        }),
+      ])
+    );
+
+    expect(screen.getByText(/^Ada · /)).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Request Already Here" })).not.toBeInTheDocument();
+    expect(screen.getByRole("img", { name: "In library" })).toBeInTheDocument();
+  });
+
+  it("keeps the request button for a release that is not in the library yet", () => {
+    show(
+      "list",
+      createFeedAlbumResult([
+        createFeedAlbumRow({ id: "f1", name: "Missing", catalogAlbumId: "dz-1", follow: follow("available") }),
+      ])
+    );
+
+    expect(screen.getByRole("button", { name: "Request Missing" })).toBeInTheDocument();
+  });
+
+  it("draws a Today divider in the calendar only when releases lie on both sides of today", () => {
+    show(
+      "calendar",
+      createFeedAlbumResult([
+        createFeedAlbumRow({ id: "p", name: "Past", releaseDate: "2000-01-01", follow: follow("in_library") }),
+        createFeedAlbumRow({ id: "n", name: "Next", releaseDate: "2999-01-01", follow: follow("announced") }),
+      ])
+    );
+
+    expect(screen.getByRole("separator")).toHaveTextContent("Today");
+  });
+
+  it("places the divider between upcoming and past releases when the newest comes first", () => {
+    show(
+      "calendar",
+      createFeedAlbumResult([
+        createFeedAlbumRow({ id: "n", name: "Next", releaseDate: "2999-01-01", follow: follow("announced") }),
+        createFeedAlbumRow({ id: "p", name: "Past", releaseDate: "2000-01-01", follow: follow("in_library") }),
+      ])
+    );
+
+    const divider = screen.getByRole("separator");
+    expect(divider).toHaveTextContent("Today");
+    expect(divider.previousElementSibling).toHaveTextContent("Next");
+    expect(divider.nextElementSibling).toHaveTextContent("Past");
+  });
+
+  it("splits on what the server says is out, whatever day the browser thinks it is", () => {
+    show(
+      "calendar",
+      createFeedAlbumResult([
+        createFeedAlbumRow({ id: "n", name: "Next", releaseDate: "2999-01-02", follow: follow("announced") }),
+        createFeedAlbumRow({ id: "o", name: "Out", releaseDate: "2999-01-01", follow: follow("available") }),
+      ])
+    );
+
+    const divider = screen.getByRole("separator");
+    expect(divider.previousElementSibling).toHaveTextContent("Next");
+    expect(divider.nextElementSibling).toHaveTextContent("Out");
+  });
+
+  it("leaves out the divider when every release is still to come", () => {
+    show(
+      "calendar",
+      createFeedAlbumResult([
+        createFeedAlbumRow({ id: "n", name: "Next", releaseDate: "2999-01-01", follow: follow("announced") }),
+      ])
+    );
+
+    expect(screen.queryByRole("separator")).not.toBeInTheDocument();
+  });
+
+  it("points an empty follows feed at the Followed artists tab", () => {
+    dataQuery.mockReturnValue({
+      data: { ...createFeedAlbumResult([]), source: "follows.releases" },
+      isLoading: false,
+      isError: false,
+    });
+    renderWithProviders(
+      <TooltipProvider>
+        <CustomWidget widget={createWidget({ view: { block: "list", action: "request" } })} status="ready" size="L" />
+      </TooltipProvider>
+    );
+
+    expect(screen.getByText(/Follow artists to see their releases here/)).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Start with your most played" })).toHaveAttribute(
+      "href",
+      "/settings/calendar/following"
+    );
+  });
+});

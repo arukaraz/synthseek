@@ -2,7 +2,7 @@
 
 import { useTranslation } from "react-i18next";
 
-import { LockedAction } from "../WidgetGallery/LockedAction";
+import { LockedAction } from "@components/ui/LockedAction";
 import { BOARD_SIZE_LABEL_KEYS, BOARD_SIZE_NAME_KEYS, BOARD_SIZE_ORDER } from "./constants";
 import { allowedSizesOf } from "./helpers";
 import { sizeChip, sizeGroup } from "./styles";

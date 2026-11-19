@@ -248,6 +248,18 @@ export const moveBadge = cva(
   }
 );
 
+export const followMoreTrigger = cva(
+  "text-fg/60 hover:bg-fg/10 hover:text-fg focus-visible:ring-primary-400 inline-flex size-8 shrink-0 cursor-pointer items-center justify-center rounded-full outline-none focus-visible:ring-2 [&_svg]:size-4"
+);
+
+export const followToday = cva(
+  "text-fg/60 flex items-center gap-2 px-1.5 py-1 text-[11px] font-semibold uppercase before:bg-current/30 before:h-px before:flex-1 after:bg-current/30 after:h-px after:flex-1"
+);
+
+export const cardMore = cva(
+  "text-overlay-fg absolute end-1 top-1 z-10 flex items-center gap-1 rounded-full bg-black/50 p-0.5 [&_button]:text-overlay-fg [&_svg]:text-overlay-fg"
+);
+
 export const mosaicGrid = cva(
   "grid min-h-0 flex-1 gap-2 [grid-template-columns:repeat(var(--mosaic-cols),minmax(0,1fr))] [grid-template-rows:repeat(var(--mosaic-rows),minmax(0,1fr))] @max-md:[grid-template-columns:repeat(3,minmax(0,1fr))] @max-md:[&>li:nth-child(n+7)]:hidden"
 );

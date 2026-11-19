@@ -8,6 +8,7 @@ import { DEFAULT_QUERIES, NEW_WIDGET_DRAFT } from "../../../constants";
 import {
   clampedNumber,
   dailyYearOf,
+  feedOrderIsFixed,
   feedReadbackOf,
   feedServerOf,
   fittingBlocksOf,
@@ -238,6 +239,16 @@ describe("withSource and feedReadbackOf", () => {
 
   it("reads a feed back with its rules", () => {
     expect(feedReadbackOf(FEED)).toBe("Show me 5 items from Similar artists (Last.fm), where is not in my library.");
+  });
+
+  it("says the order is fixed only for followed releases shown on both sides of today", () => {
+    const follows = withSource(FEED, "follows.releases", catalog, "US");
+    expect(follows.params).toMatchObject({ window: "both" });
+    expect(feedOrderIsFixed(follows)).toBe(true);
+    if (follows.source !== "follows.releases") throw new Error("expected the follows source");
+    expect(feedOrderIsFixed({ ...follows, params: { ...follows.params, window: "upcoming" } })).toBe(false);
+    expect(feedOrderIsFixed({ ...follows, params: { ...follows.params, window: "recent" } })).toBe(false);
+    expect(feedOrderIsFixed(FEED)).toBe(false);
   });
 
   it("offers the connected servers and keeps a chosen one that is not connected among the choices", () => {

@@ -111,6 +111,7 @@ Open the web interface and follow the setup wizard: an admin account, slskd, the
 
 - A built-in MCP server, so assistants can search, request, manage your library and run the player
 - A Discover board each member arranges, with mixes from Last.fm and ListenBrainz, sets and stations built from your own plays, charts, and artists and albums similar to what you play
+- Follow artists to see their releases on a calendar and get a notice when something new is out, with automatic requests as an option
 - Lidarr delegation, with tag and monitor-scope selection
 - Library import from Spotify, and playlist import from Plex, Navidrome or Jellyfin
 - Playlist import from JSPF, XSPF, or CSV, and export as JSPF

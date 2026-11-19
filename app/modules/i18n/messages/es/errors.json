@@ -415,6 +415,22 @@
     "title": "Cuota de canciones alcanzada",
     "description": "Cuota de canciones: {{used}} de {{limit}} usadas, y esta solicitud suma {{requested}} más. Habrá sitio el {{freesAt}}."
   },
+  "FOLLOW_RELEASE_TYPE_REQUIRED": {
+    "title": "Deja al menos un tipo de lanzamiento",
+    "description": "Activa otro tipo antes de desactivar este."
+  },
+  "FOLLOW_ARTIST_NOT_FOUND": {
+    "title": "Artista no encontrado",
+    "description": "Este artista no está en el catálogo, así que no se pueden rastrear sus lanzamientos."
+  },
+  "FOLLOW_CALENDAR_RANGE_INVALID": {
+    "title": "Ese rango de fechas no es válido",
+    "description": "El calendario muestra como máximo unos tres meses a la vez."
+  },
+  "FOLLOW_BULK_ALREADY_RUNNING": {
+    "title": "Ya se están siguiendo tus más escuchados",
+    "description": "Espera a que termine la ejecución actual y vuelve a intentarlo."
+  },
   "QUOTA_REQUEST_TOO_LARGE": {
     "title": "Solicitud mayor que tu cuota",
     "description": "Esta solicitud suma {{requested}} canciones y tu cuota entera es de {{limit}}. Pide menos de una vez."

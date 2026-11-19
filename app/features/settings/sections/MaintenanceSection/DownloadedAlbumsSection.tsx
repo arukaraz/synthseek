@@ -15,9 +15,10 @@ import { useClearStagedReleases, useRemoveStagedRelease } from "@hooks/api/mutat
 import { useStagedReleases } from "@hooks/api/queries/useStagedReleases";
 import { useDownloadSourceLabel } from "@hooks/ui/useDownloadSourceLabel";
 import { formatBytes, formatRelativeTime, formatTimeUntil } from "@utils/formatters";
+import { requestLinkFor } from "@utils/request-helpers";
 
 import { DOWNLOADED_ALBUM_FILTERS } from "./constants";
-import { downloadedAlbumsIn, requestLinkFor, totalBytesOf } from "./helpers";
+import { downloadedAlbumsIn, totalBytesOf } from "./helpers";
 import { MaintenancePage } from "./MaintenancePage";
 import {
   downloadedAlbumBody,

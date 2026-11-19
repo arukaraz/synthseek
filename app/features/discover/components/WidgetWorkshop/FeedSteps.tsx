@@ -15,6 +15,7 @@ import {
   defaultRuleFor,
   rotationChoicesOf,
   feedReadbackOf,
+  feedOrderIsFixed,
   feedSeedOf,
   feedServerOf,
   feedSourceOf,
@@ -64,7 +65,7 @@ export function FeedSteps({ workshop, feed, context }: FeedStepsProps) {
           <StepRow label={t("steps.seed")}>
             <SelectMenu
               ariaLabel={t("steps.seed")}
-              value={seed.kind === "favorites" ? "favorites" : "myTopArtists"}
+              value={seed.kind === "favorites" || seed.kind === "followed" ? seed.kind : "myTopArtists"}
               options={FEED_SEED_KINDS.map((kind) => ({ value: kind, label: t(`feeds.seeds.${kind}`) }))}
               onChange={(kind) => workshop.setQuery(withSeed(feed, seedFor(kind, seed)))}
             />
@@ -181,6 +182,28 @@ export function FeedSteps({ workshop, feed, context }: FeedStepsProps) {
             <span className={stepText()}>{t("time.days")}</span>
           </StepRow>
         ) : null}
+        {feed.source === "follows.releases" ? (
+          <StepRow label={t("steps.params")}>
+            <SegmentedControl
+              ariaLabel={t("feeds.followWindow")}
+              value={feed.params.window}
+              options={catalog.feeds.limits.followReleaseWindows.map((window) => ({
+                value: window,
+                label: t(`feeds.followWindows.${window}`),
+              }))}
+              onChange={(window) => workshop.setQuery({ ...feed, params: { ...feed.params, window } })}
+            />
+            <span className={stepText()}>{t("feeds.followWithin")}</span>
+            <NumberField
+              label={t("time.days")}
+              value={feed.params.days}
+              min={NUMBER_BOUNDS.daysMin}
+              max={catalog.feeds.limits.followReleasesDaysMax}
+              onChange={(days) => workshop.setQuery({ ...feed, params: { ...feed.params, days } })}
+            />
+            <span className={stepText()}>{t("time.days")}</span>
+          </StepRow>
+        ) : null}
         {feed.source === "feed.rss" ? (
           <StepRow label={t("steps.params")}>
             <NewsUrlField
@@ -210,31 +233,33 @@ export function FeedSteps({ workshop, feed, context }: FeedStepsProps) {
           />
           <span className={stepText()}>{t("feeds.items")}</span>
         </StepRow>
-        <StepRow label={t("steps.pickBy")}>
-          <SelectMenu
-            ariaLabel={t("steps.pickBy")}
-            value={feed.pick.by}
-            options={(source?.pickBy ?? []).map((by) => ({ value: by, label: t(`feeds.pickBy.${by}`) }))}
-            onChange={(by) => workshop.setQuery({ ...feed, pick: { ...feed.pick, by } })}
-          />
-          <SelectMenu
-            ariaLabel={t("steps.measure")}
-            value={feed.pick.order}
-            options={grammar.pick.orders.map((order) => ({ value: order, label: t(`feeds.orders.${order}`) }))}
-            onChange={(order) => workshop.setQuery({ ...feed, pick: { ...feed.pick, order } })}
-          />
-          <SegmentedControl
-            ariaLabel={t("steps.random")}
-            value={rotation}
-            options={rotationChoicesOf(grammar).map((entry) => ({ value: entry, label: t(`rotations.${entry}`) }))}
-            onChange={(next) =>
-              workshop.setQuery({
-                ...feed,
-                pick: { ...feed.pick, random: next === NO_ROTATION ? null : { rotate: next } },
-              })
-            }
-          />
-        </StepRow>
+        {feedOrderIsFixed(feed) ? null : (
+          <StepRow label={t("steps.pickBy")}>
+            <SelectMenu
+              ariaLabel={t("steps.pickBy")}
+              value={feed.pick.by}
+              options={(source?.pickBy ?? []).map((by) => ({ value: by, label: t(`feeds.pickBy.${by}`) }))}
+              onChange={(by) => workshop.setQuery({ ...feed, pick: { ...feed.pick, by } })}
+            />
+            <SelectMenu
+              ariaLabel={t("steps.measure")}
+              value={feed.pick.order}
+              options={grammar.pick.orders.map((order) => ({ value: order, label: t(`feeds.orders.${order}`) }))}
+              onChange={(order) => workshop.setQuery({ ...feed, pick: { ...feed.pick, order } })}
+            />
+            <SegmentedControl
+              ariaLabel={t("steps.random")}
+              value={rotation}
+              options={rotationChoicesOf(grammar).map((entry) => ({ value: entry, label: t(`rotations.${entry}`) }))}
+              onChange={(next) =>
+                workshop.setQuery({
+                  ...feed,
+                  pick: { ...feed.pick, random: next === NO_ROTATION ? null : { rotate: next } },
+                })
+              }
+            />
+          </StepRow>
+        )}
         {showWhere ? (
           <WhereStep workshop={workshop} rules={rules} fields={fields} limits={limits} people={context.people} />
         ) : null}

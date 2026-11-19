@@ -83,10 +83,6 @@ export const bulkTrigger = cva("shrink-0 aria-disabled:cursor-not-allowed aria-d
 
 export const cardAction = cva("shrink-0");
 
-export const lockedAction = cva(
-  "focus-visible:ring-primary-400 inline-flex shrink-0 cursor-not-allowed rounded-md outline-none focus-visible:ring-2"
-);
-
 export const cardIcon = cva(
   "bg-primary-500/15 text-primary-400 flex size-8 shrink-0 items-center justify-center rounded-lg"
 );

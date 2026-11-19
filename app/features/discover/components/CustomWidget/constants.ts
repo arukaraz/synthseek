@@ -168,6 +168,8 @@ export const MOVE_ICONS: Record<MoveDirection, LucideIcon> = {
 
 export const MONTH_KEY_LENGTH = 7;
 
+export const FOLLOWING_HREF = "/settings/calendar/following";
+
 export const MATRIX_WEEKDAYS = 7;
 
 export const MATRIX_HOURS = 24;

@@ -27,10 +27,6 @@ export function totalBytesOf(entries: readonly DownloadedAlbum[]): number {
   return entries.reduce((total, entry) => total + entry.sizeBytes, 0);
 }
 
-export function requestLinkFor(albumExternalId: string): string {
-  return `/requests?selected=${encodeURIComponent(albumExternalId)}`;
-}
-
 export function matchingRecycled<T extends { relativePath: string }>(
   entries: readonly T[] | undefined,
   search: string

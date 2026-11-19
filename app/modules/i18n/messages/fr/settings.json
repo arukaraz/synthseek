@@ -117,6 +117,7 @@
       "wanted_sweep": "Le balayage de suivi a relancé des recherches",
       "media_server_sync": "Playlists du serveur multimédia synchronisées",
       "review_new": "Nouvelles importations à réviser",
+      "release_new": "Nouvelles sorties des artistes que vous suivez",
       "duplicates_new": "Nouvelles copies en double",
       "unidentified_new": "Fichiers non reconnus",
       "quarantine_new": "Fichiers mis en quarantaine",
@@ -1523,6 +1524,10 @@
       "smart-playlists": {
         "name": "Playlists intelligentes",
         "description": "Renouvelle les playlists dont une règle de widget choisit les titres, selon le calendrier de chacune."
+      },
+      "release-watch": {
+        "name": "Veille des sorties",
+        "description": "Vérifie deux fois par jour si les artistes suivis par les membres ont sorti du nouveau."
       }
     }
   },
@@ -1686,6 +1691,10 @@
       "notifications": {
         "title": "Notifications"
       },
+      "calendar": {
+        "title": "Calendrier",
+        "description": "Les nouvelles sorties des artistes que vous suivez."
+      },
       "overview": {
         "title": "Vue d'ensemble",
         "description": "Ce serveur en un coup d'œil. Chaque élément mène à la page où il se règle."
@@ -1749,6 +1758,10 @@
       "connections": {
         "services": "Services",
         "apps": "Applications et clés d'API"
+      },
+      "calendar": {
+        "releases": "Sorties",
+        "following": "Suivis"
       }
     },
     "search": {
@@ -1765,7 +1778,11 @@
         "jellyfinAccount": "Compte Jellyfin",
         "lastfmFeeds": "Flux de découverte Last.fm",
         "listenbrainzFeeds": "Flux de découverte ListenBrainz",
-        "listenbrainzAutoRequest": "Demander automatiquement les playlists ListenBrainz"
+        "listenbrainzAutoRequest": "Demander automatiquement les playlists ListenBrainz",
+        "releaseTypes": "Types de sortie",
+        "followedArtists": "Artistes suivis",
+        "followAutoRequest": "Demander automatiquement les nouvelles sorties",
+        "followMostPlayed": "Suivre mes artistes les plus écoutés"
       },
       "keywords": {
         "playbackAccount": "normalisation du volume sonie gain lecture automatique pistes similaires",

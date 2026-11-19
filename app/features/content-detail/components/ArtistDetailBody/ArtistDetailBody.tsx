@@ -17,6 +17,7 @@ import {
   ArtistTopTracksWidget,
 } from "../../widgets";
 import { DetailHero } from "../DetailHero/DetailHero";
+import { FollowControl } from "../FollowControl";
 import { buildSocialLinks } from "../DetailHero/helpers";
 import { modalFullRow, modalGrid, modalLayout, modalMain, modalScrollArea, modalSide } from "../../styles";
 import type { ArtistDetailBodyProps } from "./types";
@@ -69,6 +70,7 @@ function ArtistDetailBodyComponent({ target, onClose, onNavigate }: ArtistDetail
         showRequest={showRequest}
         socials={socials}
         statsSlot={statsSlot}
+        followSlot={<FollowControl catalogArtistId={target.id} artistName={target.name} />}
         degradedSources={degradedSources}
       />
 

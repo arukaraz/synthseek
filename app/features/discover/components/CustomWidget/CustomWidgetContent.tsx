@@ -7,8 +7,10 @@ import { WidgetFrame } from "@components/WidgetFrame";
 
 import { useWidgetControls } from "../../hooks/useWidgetControls";
 import { BLOCK_COMPONENTS, FRAMELESS_BLOCKS } from "./constants";
+import { FollowEmptyNote } from "./FollowEmptyNote";
 import {
   customWidgetNote,
+  isFollowFeedEmpty,
   setHiddenNote,
   setStatusOf,
   viewIsEmpty,
@@ -34,8 +36,10 @@ export function CustomWidgetContent({
   const controls = useMemo(() => withListOpening(itemActions, onOpenList), [itemActions, onOpenList]);
   const Block = BLOCK_COMPONENTS[widget.view.block];
   const view = useMemo(() => widgetViewOf(result, widget.view.bind), [result, widget.view.bind]);
-  const noted = customWidgetNote({ result, isError, empty: viewIsEmpty(view) });
-  const note = noted === null || typeof noted === "string" ? noted : <SettingsLinkNote {...noted} />;
+  const empty = viewIsEmpty(view);
+  const noted = customWidgetNote({ result, isError, empty });
+  const plainNote = noted === null || typeof noted === "string" ? noted : <SettingsLinkNote {...noted} />;
+  const note = isFollowFeedEmpty(result, empty, isError) ? <FollowEmptyNote /> : plainNote;
   const icon = widgetIconOf(widget.meta.icon);
   const blockProps = {
     ...view,

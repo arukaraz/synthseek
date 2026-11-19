@@ -415,6 +415,22 @@
     "title": "Track quota reached",
     "description": "Track quota: {{used}} of {{limit}} used, and this request adds {{requested}} more. Room frees up on {{freesAt}}."
   },
+  "FOLLOW_RELEASE_TYPE_REQUIRED": {
+    "title": "Keep at least one release type",
+    "description": "Turn another type on before turning this one off."
+  },
+  "FOLLOW_ARTIST_NOT_FOUND": {
+    "title": "Artist not found",
+    "description": "This artist isn't in the catalog, so new releases can't be tracked."
+  },
+  "FOLLOW_CALENDAR_RANGE_INVALID": {
+    "title": "That date range isn't valid",
+    "description": "The calendar shows at most about three months at a time."
+  },
+  "FOLLOW_BULK_ALREADY_RUNNING": {
+    "title": "Already following your most played",
+    "description": "Wait for the current run to finish, then try again."
+  },
   "QUOTA_REQUEST_TOO_LARGE": {
     "title": "Request larger than your quota",
     "description": "This request adds {{requested}} tracks and your whole quota is {{limit}}. Request fewer at a time."

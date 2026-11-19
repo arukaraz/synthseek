@@ -6,6 +6,7 @@ import type {
   CuratedFeed,
   FeedSeed,
   FeedSeedKind,
+  FollowWindow,
   ListenBrainzPlaylist,
   MediaServer,
   NamedPeriod,
@@ -59,6 +60,10 @@ export const DEFAULT_EVENTS_DAYS = 90;
 
 export const DEFAULT_LIDARR_CALENDAR_DAYS = 30;
 
+export const DEFAULT_FOLLOW_RELEASE_DAYS = 30;
+
+export const DEFAULT_FOLLOW_WINDOW: FollowWindow = "both";
+
 export const DEFAULT_MEDIA_SERVER: MediaServer = "plex";
 
 export const ANY_COUNTRY = "any";
@@ -77,7 +82,7 @@ export const PLAYLIST_SET_ACTION: WidgetAction = "play";
 
 export const PLAYLIST_SET_ACTIONS: readonly WidgetAction[] = [PLAYLIST_SET_ACTION, "shuffle", "radio", "open"];
 
-export const FEED_SEED_KINDS: readonly FeedSeedKind[] = ["myTopArtists", "favorites"];
+export const FEED_SEED_KINDS: readonly FeedSeedKind[] = ["myTopArtists", "favorites", "followed"];
 
 export const DAILY_YEAR_MIN_DAYS = 180;
 

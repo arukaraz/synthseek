@@ -31,6 +31,8 @@ import {
   DEFAULT_CURATED_FEED,
   DEFAULT_EVENTS_DAYS,
   DEFAULT_FEED_SHAPE,
+  DEFAULT_FOLLOW_RELEASE_DAYS,
+  DEFAULT_FOLLOW_WINDOW,
   DEFAULT_LIDARR_CALENDAR_DAYS,
   DEFAULT_LISTENBRAINZ_PLAYLIST,
   DEFAULT_MEDIA_SERVER,
@@ -419,8 +421,13 @@ export function feedSeedOf(feed: FeedQuery): FeedSeed | null {
     case "mediaServer.playlists":
     case "lidarr.calendar":
     case "lidarr.wanted":
+    case "follows.releases":
       return null;
   }
+}
+
+export function feedOrderIsFixed(feed: FeedQuery): boolean {
+  return feed.source === "follows.releases" && feed.params.window === "both";
 }
 
 export function feedServerOf(feed: FeedQuery): MediaServer | null {
@@ -445,6 +452,7 @@ export function feedServerOf(feed: FeedQuery): MediaServer | null {
     case "feed.curated":
     case "lidarr.calendar":
     case "lidarr.wanted":
+    case "follows.releases":
       return null;
   }
 }
@@ -482,6 +490,8 @@ function feedWithSource(base: FeedBase, source: FeedSource, defaults: FeedDefaul
       return { ...base, source, params: { days: DEFAULT_LIDARR_CALENDAR_DAYS } };
     case "lidarr.wanted":
       return { ...base, source, params: {} };
+    case "follows.releases":
+      return { ...base, source, params: { window: DEFAULT_FOLLOW_WINDOW, days: DEFAULT_FOLLOW_RELEASE_DAYS } };
   }
 }
 
@@ -535,6 +545,7 @@ export function withSeed(feed: FeedQuery, seed: FeedSeed): FeedQuery {
     case "mediaServer.playlists":
     case "lidarr.calendar":
     case "lidarr.wanted":
+    case "follows.releases":
       return feed;
   }
 }
@@ -566,6 +577,7 @@ export function withServer(feed: FeedQuery, server: MediaServer): FeedQuery {
     case "feed.curated":
     case "lidarr.calendar":
     case "lidarr.wanted":
+    case "follows.releases":
       return feed;
   }
 }
@@ -576,18 +588,26 @@ export function seedFor(kind: FeedSeedKind, current: FeedSeed | null): FeedSeed 
     case "myTopArtists":
       return DEFAULT_FEED_SEED;
     case "favorites":
+    case "followed":
       return { kind };
   }
+}
+
+function feedHeadOf(feed: FeedQuery): string {
+  if (feed.source === "follows.releases") {
+    return i18n.t("widgets:readback.followReleases", { count: feed.pick.limit, days: feed.params.days });
+  }
+  return i18n.t("widgets:readback.feed", {
+    count: feed.pick.limit,
+    source: i18n.t(`widgets:feeds.sources.${feed.source}`),
+  });
 }
 
 export function feedReadbackOf(feed: FeedQuery): string {
   const { mode, list } = ruleListOf(feed.rules);
   const joiner = i18n.t(mode === "all" ? "widgets:readback.and" : "widgets:readback.or");
   return [
-    i18n.t("widgets:readback.feed", {
-      count: feed.pick.limit,
-      source: i18n.t(`widgets:feeds.sources.${feed.source}`),
-    }),
+    feedHeadOf(feed),
     list.length > 0 ? i18n.t("widgets:readback.where", { rules: list.map((rule) => ruleText(rule)).join(joiner) }) : "",
     i18n.t("widgets:readback.end"),
   ].join("");

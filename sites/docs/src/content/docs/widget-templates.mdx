@@ -290,12 +290,14 @@ A feed starts from an outside source. You then narrow it with [rules](#rules) an
 | `mediaServer.playlists`        | Playlists | `server`                                                        | Your linked account        |
 | `lidarr.calendar`              | Albums    | `days`, 1 to 90                                                 | Lidarr, admin or trusted   |
 | `lidarr.wanted`                | Albums    | None                                                            | Lidarr, admin or trusted   |
+| `follows.releases`             | Albums    | `window`, `days` 1 to 90                                        | Artists you follow         |
 
 | Option     | Values                                               |
 | ---------- | ---------------------------------------------------- |
 | `playlist` | `weekly-jams`, `weekly-exploration` or `daily-jams`. |
 | `feed`     | `pitchforkBestNewAlbums` or `nprMusic`.              |
 | `server`   | `plex`, `navidrome` or `jellyfin`.                   |
+| `window`   | `upcoming`, `recent` or `both`.                      |
 
 A `seed` tells a source where to start.
 
@@ -305,6 +307,7 @@ A `seed` tells a source where to start.
 | `favorites`    | None                          | Your favorites.        |
 | `artist`       | `id`                          | One artist.            |
 | `playlist`     | `id`                          | One of your playlists. |
+| `followed`     | None                          | Artists you follow.    |
 
 What you can put in `pick.by` depends on what the source returns.
 
@@ -314,6 +317,8 @@ What you can put in `pick.by` depends on what the source returns.
 | `name`                             | Tracks, albums, artists, playlists             |
 | `plays`, `lastPlayed`, `listeners` | Tracks, albums, artists                        |
 | `releaseDate`                      | Albums, headlines, shows                       |
+
+`follows.releases` with `window` set to `both` keeps its own order, upcoming releases first and then the latest ones.
 
 Headlines give headlines results. Everything else gives ranked results.
 

@@ -444,6 +444,8 @@
     "or": " or ",
     "end": ".",
     "feed": "Show me {{count}} items from {{source}}",
+    "followReleases_one": "Show {{count}} release from followed artists within {{days}} days",
+    "followReleases_other": "Show {{count}} releases from followed artists within {{days}} days",
     "recap": "Show me a recap of my listening {{time}}."
   },
   "feeds": {
@@ -480,10 +482,20 @@
       "lidarr": {
         "calendar": "Coming releases (Lidarr)",
         "wanted": "Wanted albums (Lidarr)"
+      },
+      "follows": {
+        "releases": "Releases from followed artists"
       }
     },
     "server": "Media server",
     "comingWithin": "Releasing in the next",
+    "followWithin": "within",
+    "followWindow": "Which releases",
+    "followWindows": {
+      "upcoming": "Upcoming",
+      "recent": "Recent",
+      "both": "Both"
+    },
     "curatedLabel": "News source",
     "curated": {
       "pitchforkBestNewAlbums": "Pitchfork, Best New Albums",
@@ -517,7 +529,8 @@
     },
     "seeds": {
       "myTopArtists": "My top artists",
-      "favorites": "My favorites"
+      "favorites": "My favorites",
+      "followed": "Artists I follow"
     },
     "overDays": "over the last",
     "releasedInLast": "Released in the last",
@@ -790,6 +803,7 @@
     "loved": "Loved, not here yet",
     "gaps": "Gaps",
     "releaseRadar": "Release radar",
+    "freshFromLibrary": "Fresh from your library",
     "discoverWeekly": "Discover weekly",
     "newThisWeek": "New this week",
     "freshFinds": "Fresh finds",

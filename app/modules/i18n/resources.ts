@@ -7,6 +7,7 @@ import de_contentDetail from "./messages/de/contentDetail.json";
 import de_countries from "./messages/de/countries.json";
 import de_discover from "./messages/de/discover.json";
 import de_errors from "./messages/de/errors.json";
+import de_follows from "./messages/de/follows.json";
 import de_health from "./messages/de/health.json";
 import de_library from "./messages/de/library.json";
 import de_mutations from "./messages/de/mutations.json";
@@ -25,6 +26,7 @@ import en_contentDetail from "./messages/en/contentDetail.json";
 import en_countries from "./messages/en/countries.json";
 import en_discover from "./messages/en/discover.json";
 import en_errors from "./messages/en/errors.json";
+import en_follows from "./messages/en/follows.json";
 import en_health from "./messages/en/health.json";
 import en_library from "./messages/en/library.json";
 import en_mutations from "./messages/en/mutations.json";
@@ -43,6 +45,7 @@ import es_contentDetail from "./messages/es/contentDetail.json";
 import es_countries from "./messages/es/countries.json";
 import es_discover from "./messages/es/discover.json";
 import es_errors from "./messages/es/errors.json";
+import es_follows from "./messages/es/follows.json";
 import es_health from "./messages/es/health.json";
 import es_library from "./messages/es/library.json";
 import es_mutations from "./messages/es/mutations.json";
@@ -61,6 +64,7 @@ import fr_contentDetail from "./messages/fr/contentDetail.json";
 import fr_countries from "./messages/fr/countries.json";
 import fr_discover from "./messages/fr/discover.json";
 import fr_errors from "./messages/fr/errors.json";
+import fr_follows from "./messages/fr/follows.json";
 import fr_health from "./messages/fr/health.json";
 import fr_library from "./messages/fr/library.json";
 import fr_mutations from "./messages/fr/mutations.json";
@@ -82,6 +86,7 @@ export const resources = {
     countries: de_countries,
     discover: de_discover,
     errors: de_errors,
+    follows: de_follows,
     health: de_health,
     library: de_library,
     mutations: de_mutations,
@@ -102,6 +107,7 @@ export const resources = {
     countries: en_countries,
     discover: en_discover,
     errors: en_errors,
+    follows: en_follows,
     health: en_health,
     library: en_library,
     mutations: en_mutations,
@@ -122,6 +128,7 @@ export const resources = {
     countries: es_countries,
     discover: es_discover,
     errors: es_errors,
+    follows: es_follows,
     health: es_health,
     library: es_library,
     mutations: es_mutations,
@@ -142,6 +149,7 @@ export const resources = {
     countries: fr_countries,
     discover: fr_discover,
     errors: fr_errors,
+    follows: fr_follows,
     health: fr_health,
     library: fr_library,
     mutations: fr_mutations,

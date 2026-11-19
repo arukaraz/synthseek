@@ -3,6 +3,7 @@ import {
   ArrowUpCircle,
   AudioLines,
   Bell,
+  CalendarDays,
   CopyCheck,
   Download,
   FileText,
@@ -26,6 +27,7 @@ import {
   Timer,
   Trash2,
   User,
+  UserCheck,
   Users,
   Wrench,
 } from "lucide-react";
@@ -86,6 +88,14 @@ export const SETTINGS_PAGE_BY_ID = {
     labelKey: "shell.pages.notifications.title",
     descriptionKey: "notifications.pageDescription",
     icon: Bell,
+  },
+  calendar: {
+    id: "calendar",
+    group: "you",
+    href: "/settings/calendar",
+    labelKey: "shell.pages.calendar.title",
+    descriptionKey: "shell.pages.calendar.description",
+    icon: CalendarDays,
   },
   overview: {
     id: "overview",
@@ -182,6 +192,10 @@ export const SETTINGS_TABS: Readonly<Record<SettingsTabbedPageId, readonly Setti
     { href: "/settings/appearance/theme", labelKey: "shell.tabs.appearance.theme", icon: Palette },
     { href: "/settings/appearance/board", labelKey: "shell.tabs.appearance.board", icon: LayoutDashboard },
   ],
+  calendar: [
+    { href: "/settings/calendar/releases", labelKey: "shell.tabs.calendar.releases", icon: CalendarDays },
+    { href: "/settings/calendar/following", labelKey: "shell.tabs.calendar.following", icon: UserCheck },
+  ],
   connections: [
     { href: "/settings/connections/services", labelKey: "shell.tabs.connections.services", icon: Link2 },
     { href: "/settings/connections/apps", labelKey: "shell.tabs.connections.apps", icon: KeyRound },
@@ -260,6 +274,7 @@ export const JOB_NAME_KEYS: Record<JobSummary["id"], ParseKeys<"settings">> = {
   "scrobble-relay": "jobs.registry.scrobble-relay.name",
   "playback-source-links": "jobs.registry.playback-source-links.name",
   "smart-playlists": "jobs.registry.smart-playlists.name",
+  "release-watch": "jobs.registry.release-watch.name",
 };
 
 export const JOB_DESCRIPTION_KEYS: Record<JobSummary["id"], ParseKeys<"settings">> = {
@@ -274,6 +289,7 @@ export const JOB_DESCRIPTION_KEYS: Record<JobSummary["id"], ParseKeys<"settings"
   "scrobble-relay": "jobs.registry.scrobble-relay.description",
   "playback-source-links": "jobs.registry.playback-source-links.description",
   "smart-playlists": "jobs.registry.smart-playlists.description",
+  "release-watch": "jobs.registry.release-watch.description",
 };
 
 export const SOURCE_TITLE_KEYS: Readonly<Record<DownloadSourceKey, ParseKeys<"settings">>> = {

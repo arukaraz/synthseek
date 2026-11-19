@@ -1,6 +1,7 @@
 import type { LucideIcon } from "lucide-react";
 
 import { ContentType } from "@api/__generated__/types";
+import { isRequestable } from "@components/ReleaseState";
 import i18n from "@locale";
 
 import {
@@ -140,6 +141,20 @@ export function calendarPartsOf(value: string | null): { month: string; day: str
   };
 }
 
+export function isFollowFeedEmpty(result: WidgetResult | undefined, empty: boolean, isError: boolean): boolean {
+  return empty && !isError && result?.type === "feed" && result.source === "follows.releases";
+}
+
+export function todayBoundaryIndex(items: readonly WidgetItem[]): number {
+  const upcoming = (item: WidgetItem): boolean | null => (item.follow ? item.follow.state === "announced" : null);
+  return items.findIndex((item, index) => {
+    if (index === 0) return false;
+    const here = upcoming(item);
+    const before = upcoming(items[index - 1] ?? item);
+    return here !== null && before !== null && here !== before;
+  });
+}
+
 function whenOf(measure: WidgetMeasure, row: { playedAt: Date | null; addedAt?: Date | null }): Date | null {
   return measure === "addedAt" ? (row.addedAt ?? null) : row.playedAt;
 }
@@ -257,18 +272,30 @@ function feedAlbumItem(row: FeedAlbum, bind: Bind): WidgetItem {
   const album = row.catalogAlbumId
     ? { id: row.catalogAlbumId, name: row.name, artistName: row.artist, cover: row.cover }
     : null;
+  const follow = row.follow
+    ? {
+        catalogArtistId: row.follow.catalogArtistId,
+        artistName: row.artist,
+        autoRequest: row.follow.autoRequest,
+        state: row.follow.state,
+      }
+    : undefined;
+  const requestable = follow === undefined || isRequestable(follow.state);
+  const date = formatCalendarDate(row.releaseDate);
+  const subtitle = follow ? i18n.t("follows:widget.subtitle", { artist: row.artist, date }) : row.artist;
   return {
     key: row.id,
     title: bound(row, bind, "title", row.name) ?? row.name,
-    subtitle: bound(row, bind, "subtitle", row.artist) ?? "",
+    subtitle: bound(row, bind, "subtitle", subtitle) ?? "",
     cover: bound(row, bind, "cover", row.cover),
-    value: bound(row, bind, "value", formatCalendarDate(row.releaseDate)),
+    value: bound(row, bind, "value", follow ? null : date),
     date: row.releaseDate,
     move: null,
     play: row.inLibrary && row.catalogAlbumId ? { kind: "album", albumExternalId: row.catalogAlbumId } : null,
-    request: album ? albumRequestItem(album) : null,
+    request: album && requestable ? albumRequestItem(album) : null,
     open: album ? albumTarget(album) : null,
     link: null,
+    ...(follow ? { follow } : {}),
   };
 }
 

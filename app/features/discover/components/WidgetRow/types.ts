@@ -19,6 +19,7 @@ export interface WidgetRowProps {
   subtitle: string;
   lead?: ReactNode;
   trailing?: ReactNode;
+  more?: ReactNode;
   onSelect?: () => void;
   coverAction?: WidgetRowCoverAction;
 }

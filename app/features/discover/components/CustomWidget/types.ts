@@ -3,6 +3,7 @@ import type { LucideIcon } from "lucide-react";
 import type { MusicItem } from "@api/__generated__/types";
 import type { DetailTarget } from "@features/content-detail";
 import type { BoardSize } from "@hooks/api/queries/board/types";
+import type { FollowReleaseState } from "@hooks/api/queries/artist-follow/types";
 import type { PlayableTracksTarget } from "@hooks/api/queries/library/types";
 import type {
   FeedNeed,
@@ -26,6 +27,13 @@ export type WidgetMove = { kind: "rank"; by: number } | { kind: "value"; by: num
 
 export type MoveDirection = "up" | "down" | "same" | "new";
 
+export interface WidgetFollow {
+  catalogArtistId: string;
+  artistName: string;
+  autoRequest: boolean;
+  state: FollowReleaseState;
+}
+
 export interface WidgetItem {
   key: string;
   title: string;
@@ -38,6 +46,7 @@ export interface WidgetItem {
   request: MusicItem | null;
   open: DetailTarget | null;
   link: string | null;
+  follow?: WidgetFollow;
   covers?: readonly string[];
   listSlot?: string;
   pinned?: boolean;
@@ -149,6 +158,10 @@ export interface WidgetCardProps {
   controls: WidgetItemControls;
   surface: WidgetCardSurface;
   single?: boolean;
+}
+
+export interface FollowItemMoreProps {
+  item: WidgetItem;
 }
 
 export interface CoverActionButtonProps {

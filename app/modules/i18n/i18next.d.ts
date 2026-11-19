@@ -9,6 +9,7 @@ import contentDetail from "./messages/en/contentDetail.json";
 import countries from "./messages/en/countries.json";
 import discover from "./messages/en/discover.json";
 import errors from "./messages/en/errors.json";
+import follows from "./messages/en/follows.json";
 import health from "./messages/en/health.json";
 import library from "./messages/en/library.json";
 import mutations from "./messages/en/mutations.json";
@@ -32,6 +33,7 @@ declare module "i18next" {
       countries: typeof countries;
       discover: typeof discover;
       errors: typeof errors;
+      follows: typeof follows;
       health: typeof health;
       library: typeof library;
       mutations: typeof mutations;

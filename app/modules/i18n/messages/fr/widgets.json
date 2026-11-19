@@ -444,6 +444,8 @@
     "or": " ou ",
     "end": ".",
     "feed": "Montre-moi {{count}} éléments de {{source}}",
+    "followReleases_one": "Montre-moi {{count}} sortie des artistes suivis à moins de {{days}} jours",
+    "followReleases_other": "Montre-moi {{count}} sorties des artistes suivis à moins de {{days}} jours",
     "recap": "Montre-moi un bilan de mes écoutes {{time}}."
   },
   "feeds": {
@@ -480,10 +482,20 @@
       "lidarr": {
         "calendar": "Sorties à venir (Lidarr)",
         "wanted": "Albums recherchés (Lidarr)"
+      },
+      "follows": {
+        "releases": "Sorties des artistes suivis"
       }
     },
     "server": "Serveur multimédia",
     "comingWithin": "Sortent dans les prochains",
+    "followWithin": "à moins de",
+    "followWindow": "Quelles sorties",
+    "followWindows": {
+      "upcoming": "À venir",
+      "recent": "Récentes",
+      "both": "Les deux"
+    },
     "curatedLabel": "Source d’actualités",
     "curated": {
       "pitchforkBestNewAlbums": "Pitchfork, Best New Albums",
@@ -517,7 +529,8 @@
     },
     "seeds": {
       "myTopArtists": "Mes artistes favoris",
-      "favorites": "Mes favoris"
+      "favorites": "Mes favoris",
+      "followed": "Artistes que je suis"
     },
     "overDays": "sur les derniers",
     "releasedInLast": "Sorti dans les derniers",
@@ -798,6 +811,7 @@
     "loved": "Coups de cœur absents",
     "gaps": "Manques",
     "releaseRadar": "Radar des sorties",
+    "freshFromLibrary": "Du frais dans ta bibliothèque",
     "discoverWeekly": "Découverte de la semaine",
     "newThisWeek": "Nouveautés de la semaine",
     "freshFinds": "Trouvailles fraîches",

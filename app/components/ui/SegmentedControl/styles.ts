@@ -24,6 +24,10 @@ export const segmentedOption = cva("rounded-md text-xs font-medium whitespace-no
       true: "min-h-9 min-w-0 flex-1 px-2 py-1.5",
       false: "px-3 py-1",
     },
+    withIcon: {
+      true: "inline-flex items-center justify-center gap-1.5",
+      false: "",
+    },
   },
-  defaultVariants: { active: false, block: false, unavailable: false },
+  defaultVariants: { active: false, block: false, unavailable: false, withIcon: false },
 });

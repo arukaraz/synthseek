@@ -50,6 +50,7 @@ export interface DetailHeroProps {
   requestState: HeroRequestState;
   socials: SocialLink[];
   statsSlot?: ReactNode;
+  followSlot?: ReactNode;
   onRequest?: () => void;
   onCustomizeRequest?: () => void;
   onPlay?: () => Promise<void>;

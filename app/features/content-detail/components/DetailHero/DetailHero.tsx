@@ -62,6 +62,7 @@ function DetailHeroComponent({
   requestState,
   socials,
   statsSlot,
+  followSlot,
   onRequest,
   onCustomizeRequest,
   onPlay,
@@ -207,7 +208,7 @@ function DetailHeroComponent({
 
         {statsSlot ? <div className={heroStats()}>{statsSlot}</div> : null}
 
-        {showActions || onPlay || onShuffle || onStartRadio ? (
+        {showActions || onPlay || onShuffle || onStartRadio || followSlot ? (
           <div className={heroActions()}>
             {showInLibrary ? (
               <TooltipProvider delayDuration={150}>
@@ -249,6 +250,7 @@ function DetailHeroComponent({
             {onPlay ? <HeroPlayButton name={name} onPlay={onPlay} /> : null}
             {onShuffle ? <HeroShuffleButton name={name} onShuffle={onShuffle} /> : null}
             {onStartRadio ? <HeroRadioButton name={name} onStartRadio={onStartRadio} /> : null}
+            {followSlot}
           </div>
         ) : null}
 

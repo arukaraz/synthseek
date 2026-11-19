@@ -13,7 +13,7 @@ import { useElementWidth } from "@hooks/ui/useElementWidth";
 import { CustomWidgetContent } from "../CustomWidget/CustomWidgetContent";
 import { lockedBlockSize } from "../ExploreBoard/helpers";
 import { copyWidgetJson, customPreviewFrame, draftJsonOf } from "../WidgetGallery/helpers";
-import { LockedAction } from "../WidgetGallery/LockedAction";
+import { LockedAction } from "@components/ui/LockedAction";
 import { ScaledPreview } from "../WidgetGallery/ScaledPreview";
 import { WORKSHOP_SIZES } from "./constants";
 import {

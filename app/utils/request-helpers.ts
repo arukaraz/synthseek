@@ -6,6 +6,10 @@ import { toast } from "sonner";
 import i18n from "@locale";
 import { emitFriendlyToast, resolveCodedRefusal } from "@modules/errors";
 
+export function requestLinkFor(albumExternalId: string): string {
+  return `/requests?selected=${encodeURIComponent(albumExternalId)}`;
+}
+
 type ReclaimKind = "download" | "album" | "playlist";
 
 type RequestsOutputs = inferRouterOutputs<AppRouter>["requests"];

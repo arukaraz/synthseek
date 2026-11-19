@@ -106,6 +106,7 @@ export function createFeedAlbumRow(overrides: Partial<FeedAlbumRow> = {}): FeedA
     lastPlayed: null,
     favorite: false,
     listeners: null,
+    follow: null,
     ...overrides,
   };
 }
@@ -318,12 +319,18 @@ export function createWidgetCatalog(): WidgetCatalog {
           pickBy: ["rank", "releaseDate"],
         },
       ],
-      seeds: ["myTopArtists", "favorites", "artist", "playlist"],
+      seeds: ["myTopArtists", "favorites", "artist", "playlist", "followed"],
       playlists: ["weekly-jams", "weekly-exploration", "daily-jams"],
       curated: ["pitchforkBestNewAlbums", "nprMusic"],
       servers: ["plex", "navidrome", "jellyfin"],
       defaultServer: "jellyfin",
-      limits: { freshReleaseDaysMax: 90, eventsDaysMax: 180, lidarrCalendarDaysMax: 90 },
+      limits: {
+        freshReleaseDaysMax: 90,
+        eventsDaysMax: 180,
+        lidarrCalendarDaysMax: 90,
+        followReleasesDaysMax: 90,
+        followReleaseWindows: ["upcoming", "recent", "both"],
+      },
     },
     recap: {
       shape: "facts",

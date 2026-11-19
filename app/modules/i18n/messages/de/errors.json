@@ -415,6 +415,22 @@
     "title": "Titelkontingent erreicht",
     "description": "Titelkontingent: {{used}} von {{limit}} genutzt, und diese Anfrage fügt {{requested}} hinzu. Platz wird am {{freesAt}} frei."
   },
+  "FOLLOW_RELEASE_TYPE_REQUIRED": {
+    "title": "Mindestens ein Veröffentlichungstyp muss bleiben",
+    "description": "Schalte einen anderen Typ ein, bevor du diesen ausschaltest."
+  },
+  "FOLLOW_ARTIST_NOT_FOUND": {
+    "title": "Künstler nicht gefunden",
+    "description": "Dieser Künstler ist nicht im Katalog, deshalb lassen sich neue Veröffentlichungen nicht verfolgen."
+  },
+  "FOLLOW_CALENDAR_RANGE_INVALID": {
+    "title": "Dieser Zeitraum ist ungültig",
+    "description": "Der Kalender zeigt höchstens etwa drei Monate auf einmal."
+  },
+  "FOLLOW_BULK_ALREADY_RUNNING": {
+    "title": "Deine meistgehörten werden bereits gefolgt",
+    "description": "Warte, bis der laufende Durchgang fertig ist, und versuche es dann erneut."
+  },
   "QUOTA_REQUEST_TOO_LARGE": {
     "title": "Anfrage größer als dein Kontingent",
     "description": "Diese Anfrage umfasst {{requested}} Titel, dein gesamtes Kontingent sind {{limit}}. Fordere weniger auf einmal an."

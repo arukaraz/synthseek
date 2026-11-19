@@ -415,6 +415,22 @@
     "title": "Quota de pistes atteint",
     "description": "Quota de pistes : {{used}} sur {{limit}} utilisées, et cette demande en ajoute {{requested}}. De la place se libère le {{freesAt}}."
   },
+  "FOLLOW_RELEASE_TYPE_REQUIRED": {
+    "title": "Gardez au moins un type de sortie",
+    "description": "Activez un autre type avant de désactiver celui-ci."
+  },
+  "FOLLOW_ARTIST_NOT_FOUND": {
+    "title": "Artiste introuvable",
+    "description": "Cet artiste n'est pas dans le catalogue, ses nouvelles sorties ne peuvent donc pas être suivies."
+  },
+  "FOLLOW_CALENDAR_RANGE_INVALID": {
+    "title": "Cette période n'est pas valide",
+    "description": "Le calendrier affiche trois mois au plus à la fois."
+  },
+  "FOLLOW_BULK_ALREADY_RUNNING": {
+    "title": "Vos plus écoutés sont déjà en cours de suivi",
+    "description": "Attendez la fin de l'exécution en cours, puis réessayez."
+  },
   "QUOTA_REQUEST_TOO_LARGE": {
     "title": "Demande plus grande que votre quota",
     "description": "Cette demande ajoute {{requested}} pistes et votre quota entier est de {{limit}}. Demandez-en moins à la fois."

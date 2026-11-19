@@ -1,7 +1,10 @@
+import type { LucideIcon } from "lucide-react";
+
 export interface SegmentedOption<T extends string> {
   value: T;
   label: string;
   disabled?: boolean;
+  icon?: LucideIcon;
 }
 
 export interface SegmentedControlProps<T extends string> {
@@ -11,4 +14,5 @@ export interface SegmentedControlProps<T extends string> {
   disabled?: boolean;
   ariaLabel?: string;
   block?: boolean;
+  glyphOnlyOnPhone?: boolean;
 }

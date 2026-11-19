@@ -5,6 +5,7 @@ import { FadeScroll } from "@components/FadeScroll";
 import { isWideSize } from "../helpers";
 import { WidgetRow } from "../WidgetRow/WidgetRow";
 import { BLOCK_LIMITS } from "./constants";
+import { FollowItemMore } from "./FollowItemMore";
 import { blockBody, blockList, blockValue } from "./styles";
 import type { WidgetBlockProps } from "./types";
 
@@ -22,6 +23,7 @@ export function ListBlock({ items, size, accent, controls }: WidgetBlockProps) {
               subtitle={item.subtitle}
               lead={index + 1}
               trailing={item.value ? <span className={blockValue()}>{item.value}</span> : undefined}
+              more={item.follow ? <FollowItemMore item={item} /> : undefined}
               {...controls(item)}
             />
           ))}

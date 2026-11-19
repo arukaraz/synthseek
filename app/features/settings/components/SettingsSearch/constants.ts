@@ -12,6 +12,34 @@ const SOURCES = "/settings/download-sources";
 const MEDIA = "/settings/media";
 
 export const SETTINGS_SEARCH_ENTRIES: readonly SettingsSearchEntry[] = [
+  {
+    labelKey: "shell.search.entries.releaseTypes",
+    page: "calendar",
+    href: "/settings/calendar/releases",
+    anchor: "release-types",
+    placeKey: "shell.tabs.calendar.releases",
+  },
+  {
+    labelKey: "shell.search.entries.followedArtists",
+    page: "calendar",
+    href: "/settings/calendar/following",
+    anchor: "followed-artists",
+    placeKey: "shell.tabs.calendar.following",
+  },
+  {
+    labelKey: "shell.search.entries.followAutoRequest",
+    page: "calendar",
+    href: "/settings/calendar/following",
+    anchor: "followed-artists",
+    placeKey: "shell.tabs.calendar.following",
+  },
+  {
+    labelKey: "shell.search.entries.followMostPlayed",
+    page: "calendar",
+    href: "/settings/calendar/following",
+    anchor: "followed-artists",
+    placeKey: "shell.tabs.calendar.following",
+  },
   { labelKey: "profile.account.title", page: "account", href: "/settings/account", anchor: "account" },
   { labelKey: "profile.quota.title", page: "account", href: "/settings/account", anchor: "quota" },
   { labelKey: "requestPreset.own.title", page: "account", href: "/settings/account", anchor: "requestPreset" },

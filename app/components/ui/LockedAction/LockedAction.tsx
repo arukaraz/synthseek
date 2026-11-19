@@ -1,7 +1,6 @@
 "use client";
 
-import { Tooltip, TooltipContent, TooltipTrigger } from "@components/ui/Tooltip";
-
+import { Tooltip, TooltipContent, TooltipTrigger } from "../Tooltip";
 import { lockedAction } from "./styles";
 import type { LockedActionProps } from "./types";
 

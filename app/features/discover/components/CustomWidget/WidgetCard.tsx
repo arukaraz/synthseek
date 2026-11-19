@@ -2,7 +2,8 @@
 
 import { CoverArt } from "../WidgetRow/CoverArt";
 import { CoverActionButton } from "./CoverActionButton";
-import { card, cardCopy, cardCover, cardFoot, cardSubtitle, cardTitle } from "./styles";
+import { FollowItemMore } from "./FollowItemMore";
+import { card, cardCopy, cardCover, cardFoot, cardMore, cardSubtitle, cardTitle } from "./styles";
 import type { WidgetCardProps } from "./types";
 
 export function WidgetCard({
@@ -17,6 +18,11 @@ export function WidgetCard({
       <span className={cardCover({ surface, single })}>
         <CoverArt src={item.cover} seed={item.key} sizes={single ? "400px" : "200px"} />
         {coverAction ? <CoverActionButton action={coverAction} /> : null}
+        {item.follow ? (
+          <span className={cardMore()}>
+            <FollowItemMore item={item} />
+          </span>
+        ) : null}
       </span>
       <span className={cardCopy({ surface, single })}>
         {onSelect ? (

@@ -117,6 +117,7 @@
       "wanted_sweep": "Wanted sweep searched again",
       "media_server_sync": "Media server playlists synced",
       "review_new": "New imports to review",
+      "release_new": "New releases from artists you follow",
       "duplicates_new": "New duplicate copies",
       "unidentified_new": "Unrecognized files",
       "quarantine_new": "Files quarantined",
@@ -1523,6 +1524,10 @@
       "smart-playlists": {
         "name": "Smart Playlists",
         "description": "Refreshes the playlists whose tracks a widget rule picks, on the schedule each one sets."
+      },
+      "release-watch": {
+        "name": "Release Watch",
+        "description": "Checks the artists people follow for new releases twice a day."
       }
     }
   },
@@ -1686,6 +1691,10 @@
       "notifications": {
         "title": "Notifications"
       },
+      "calendar": {
+        "title": "Calendar",
+        "description": "New releases from artists you follow."
+      },
       "overview": {
         "title": "Overview",
         "description": "This server at a glance. Each item links to the page where it is handled."
@@ -1749,6 +1758,10 @@
       "connections": {
         "services": "Services",
         "apps": "Apps & API keys"
+      },
+      "calendar": {
+        "releases": "Releases",
+        "following": "Following"
       }
     },
     "search": {
@@ -1765,7 +1778,11 @@
         "jellyfinAccount": "Jellyfin account",
         "lastfmFeeds": "Last.fm discovery feeds",
         "listenbrainzFeeds": "ListenBrainz discovery feeds",
-        "listenbrainzAutoRequest": "Request ListenBrainz playlists automatically"
+        "listenbrainzAutoRequest": "Request ListenBrainz playlists automatically",
+        "releaseTypes": "Release types",
+        "followedArtists": "Followed artists",
+        "followAutoRequest": "Request new releases automatically",
+        "followMostPlayed": "Follow my most played"
       },
       "keywords": {
         "playbackAccount": "volume normalization loudness gain autoplay similar tracks",

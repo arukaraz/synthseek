@@ -84,12 +84,6 @@ export interface LayoutMenuProps {
   onPick: PickLayouts;
 }
 
-export interface LockedActionProps {
-  label: string;
-  hint: string;
-  children: ReactNode;
-}
-
 export interface ClampedTextProps {
   text: string;
   className?: string;
