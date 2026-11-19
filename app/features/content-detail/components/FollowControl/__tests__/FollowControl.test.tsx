@@ -137,7 +137,7 @@ describe("FollowControl", () => {
     await user.click(await screen.findByRole("button", { name: "Follow Ada" }));
 
     await waitFor(() => expect(toasts.error).toHaveBeenCalledWith("Couldn't follow Ada. Try again."));
-    await user.keyboard("{Escape}");
-    expect(await screen.findByRole("button", { name: "Follow Ada" })).toBeInTheDocument();
+    await waitFor(() => expect(screen.queryByText("Request new releases")).not.toBeInTheDocument());
+    expect(screen.getByRole("button", { name: "Follow Ada" })).toBeInTheDocument();
   });
 });

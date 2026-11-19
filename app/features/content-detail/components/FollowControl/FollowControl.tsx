@@ -48,12 +48,12 @@ export function FollowControl({ catalogArtistId, artistName }: FollowControlProp
     );
   }
 
+  const close = () => setOpen(false);
+
   const handlePress = () => {
-    if (!following) follow.mutate({ catalogArtistId, autoRequest: false });
+    if (!following) follow.mutate({ catalogArtistId, autoRequest: false }, { onError: close });
     setOpen(true);
   };
-
-  const close = () => setOpen(false);
 
   const trigger = (
     <button
