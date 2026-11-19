@@ -19,7 +19,7 @@ vi.mock("@hooks/api/mutations/settings/useUpdateEngine", () => ({
 }));
 
 vi.mock("next/navigation", () => ({
-  usePathname: () => "/settings/engine",
+  usePathname: () => "/settings/download/engine",
 }));
 
 import { TimeoutsCard } from "../TimeoutsCard";
@@ -50,12 +50,12 @@ describe("TimeoutsCard", () => {
     expect(screen.getByLabelText(enSettings.timeouts.importPhase.ariaLabel)).toHaveValue(300);
   });
 
-  it("points at the Soulseek timeouts under Download sources", () => {
+  it("points at the Soulseek timeouts under Download, Sources", () => {
     render(<TimeoutsCard initial={initial} />);
 
-    expect(screen.getByRole("link", { name: enSettings.shell.pages.downloadSources.title })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: "Download, Sources" })).toHaveAttribute(
       "href",
-      "/settings/download-sources?source=slskd#engine.timeouts.searchPhase"
+      "/settings/download/sources?source=slskd#engine.timeouts.searchPhase"
     );
   });
 

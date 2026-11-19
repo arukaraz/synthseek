@@ -206,7 +206,6 @@
     }
   },
   "header": {
-    "description": "Controles avanzados para la canalización de búsqueda, descarga e importación. Los valores predeterminados están ajustados a un punto equilibrado que funciona bien en la mayoría de las configuraciones, cámbialos solo si sabes lo que haces. Ante la duda, déjalos como están o pulsa Restablecer valores por defecto en la tarjeta afectada si las canciones empiezan a fallar tras un cambio.",
     "loading": "Cargando ajustes…",
     "loadError": "No se pudieron cargar los ajustes: {{message}}",
     "unknownError": "Error desconocido"
@@ -258,7 +257,7 @@
   },
   "timeouts": {
     "title": "Tiempos de espera",
-    "soulseek": "Los tiempos de espera propios de Soulseek están con el resto de ajustes de slskd, en <slskd>Fuentes de descarga</slskd>.",
+    "soulseek": "Los tiempos de espera propios de Soulseek están con el resto de ajustes de slskd, en <slskd>Descargas, Fuentes</slskd>.",
     "searchPhase": {
       "label": "Fase de búsqueda",
       "description": "Cuánto tiempo mantiene abierta Slskd cada solicitud de búsqueda en la red de Soulseek antes de dejar de recopilar resultados nuevos.",
@@ -1706,19 +1705,12 @@
         "title": "Miembros y acceso",
         "description": "Las personas que comparten este Synthseek, lo que pueden hacer y cuánto pueden descargar."
       },
-      "downloadSources": {
-        "title": "Fuentes de descarga",
-        "description": "Synthseek prueba las fuentes de arriba abajo. Cuando una no puede entregar una canción, la siguiente la recibe en la misma solicitud."
-      },
-      "engine": {
-        "title": "Motor de descargas"
+      "download": {
+        "title": "Descargas",
+        "description": "De dónde descarga Synthseek y el motor que busca, descarga e importa. Los valores predeterminados del motor están ajustados a un punto equilibrado que funciona bien en la mayoría de las configuraciones, cámbialos solo si sabes lo que haces. Ante la duda, déjalos como están o pulsa Restablecer valores por defecto en la tarjeta afectada si las canciones empiezan a fallar tras un cambio."
       },
       "library": {
         "title": "Biblioteca"
-      },
-      "media": {
-        "title": "Multimedia y reproducción",
-        "description": "Los servidores multimedia que Synthseek mantiene sincronizados y el orden en que el reproductor los prueba."
       },
       "metadata": {
         "title": "Metadatos",
@@ -1740,6 +1732,10 @@
       "appearance": {
         "theme": "Tema e idioma",
         "board": "Tablero"
+      },
+      "download": {
+        "sources": "Fuentes",
+        "engine": "Motor"
       },
       "library": {
         "paths": "Rutas y reglas",
@@ -1838,6 +1834,7 @@
     },
     "downloadSources": {
       "order": "Orden de búsqueda",
+      "orderDescription": "Synthseek prueba las fuentes de arriba abajo. Cuando una no puede entregar una canción, la siguiente la recibe en la misma solicitud.",
       "orderHint": "Arrastra una fuente, o usa sus flechas, para cambiar el orden.",
       "handOff": "Delegar en lugar de descargar",
       "panelLabel": "Ajustes de la fuente seleccionada"
@@ -2018,7 +2015,7 @@
   },
   "library": {
     "page": {
-      "description": "Cómo están organizados tus ficheros en disco, qué encuentra el escaneo y desde dónde se importan bibliotecas."
+      "description": "Los servidores multimedia y las bibliotecas a los que Synthseek se conecta, cómo están organizados tus ficheros en disco y qué hace el escaneo."
     },
     "sync": {
       "title": "Sincronización de bibliotecas externas",
@@ -2028,14 +2025,6 @@
         "description": "Cada cuánto busca Synthseek canciones nuevas en lo que los miembros siguen y guardan en otros servicios.",
         "suffix": "min"
       }
-    },
-    "mediaServerSources": {
-      "title": "Tus servidores multimedia",
-      "description": "Los miembros también pueden importar listas desde Plex, Navidrome y Jellyfin. Aquí no se configura nada: la conexión del servidor está en Multimedia y reproducción, y cada miembro importa con la cuenta que vincula en Conexiones.",
-      "available": "Disponible para los miembros",
-      "notConfigured": "Sin configurar",
-      "open": "Abrir",
-      "setUp": "Configurar"
     }
   },
   "libraryPaths": {

@@ -4,10 +4,9 @@ import { useTranslation } from "react-i18next";
 
 import { useSettings } from "@hooks/api/queries/useSettings";
 
-import { serverConnections } from "../../helpers";
 import { emptyPanel, sectionGrid } from "../../styles";
 import { LibrarySyncCard } from "./LibrarySyncCard";
-import { MediaServerSourcesCard } from "./MediaServerSourcesCard";
+import { MediaServersSection } from "./MediaServersSection";
 import { SpotifySourceCard } from "./SpotifySourceCard";
 
 export function LibrarySourcesSection() {
@@ -33,12 +32,12 @@ export function LibrarySourcesSection() {
   }
 
   return (
-    <div className={sectionGrid()}>
-      <SpotifySourceCard spotify={data.connections.spotify} />
-      <div className="flex flex-col gap-5 sm:gap-6">
-        <MediaServerSourcesCard connected={serverConnections(data.connections)} />
+    <>
+      <MediaServersSection settings={data} />
+      <div className={sectionGrid()}>
+        <SpotifySourceCard spotify={data.connections.spotify} />
         <LibrarySyncCard initial={{ syncIntervalMinutes: data.library.syncIntervalMinutes }} />
       </div>
-    </div>
+    </>
   );
 }

@@ -74,7 +74,7 @@ export function TimeoutsCard({ initial }: TimeoutsCardProps) {
           components={{
             slskd: (
               <HashLink
-                href="/settings/download-sources?source=slskd#engine.timeouts.searchPhase"
+                href="/settings/download/sources?source=slskd#engine.timeouts.searchPhase"
                 className={inlineLink()}
               />
             ),

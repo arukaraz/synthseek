@@ -84,14 +84,14 @@ describe("internalHrefOf", () => {
   });
 
   it("resolves a click on an element nested inside the link", () => {
-    const link = anchor("/settings/media");
+    const link = anchor("/settings/library/sources");
     const inner = document.createElement("span");
     link.append(inner);
-    expect(hrefOfClick(inner)).toBe("/settings/media");
+    expect(hrefOfClick(inner)).toBe("/settings/library/sources");
   });
 
   it("accepts a link that explicitly targets the same frame", () => {
-    expect(hrefOfClick(anchor("/settings/media", { target: "_self" }))).toBe("/settings/media");
+    expect(hrefOfClick(anchor("/settings/library/sources", { target: "_self" }))).toBe("/settings/library/sources");
   });
 
   it.each([["metaKey"], ["ctrlKey"], ["shiftKey"], ["altKey"]])("lets the browser handle a %s click", (key) => {

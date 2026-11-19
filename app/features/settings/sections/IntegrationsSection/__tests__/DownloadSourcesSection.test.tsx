@@ -37,7 +37,7 @@ const updateOrder = createMockMutation();
 
 vi.mock("next/navigation", () => ({
   useRouter: () => ({ replace: navigation.replace, push: vi.fn() }),
-  usePathname: () => "/settings/download-sources",
+  usePathname: () => "/settings/download/sources",
   useSearchParams: () => new URLSearchParams(navigation.search),
 }));
 
@@ -240,7 +240,7 @@ describe("DownloadSourcesSection", () => {
 
     await userEvent.click(screen.getByRole("button", { name: openName("usenet") }));
 
-    expect(navigation.replace).toHaveBeenCalledWith("/settings/download-sources?source=usenet", { scroll: false });
+    expect(navigation.replace).toHaveBeenCalledWith("/settings/download/sources?source=usenet", { scroll: false });
   });
 
   it("brings the chosen source's panel into view, Lidarr included", async () => {

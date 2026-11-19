@@ -70,7 +70,8 @@
     "dayTitle": "Lanzamientos del {{date}}",
     "selectedDay": "Lanzamientos del {{date}}",
     "noneOnDay": "Este día no sale nada.",
-    "by": "de {{artist}}"
+    "by": "de {{artist}}",
+    "reissue": "Reedición"
   },
   "state": {
     "announced": "Anunciado",

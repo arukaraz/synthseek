@@ -33,15 +33,15 @@ vi.mock("next/image", () => ({
   default: ({ src }: { src: string }) => <img src={src} alt="" />,
 }));
 
-function follow(state: "announced" | "available" | "in_library") {
-  return { catalogArtistId: "ar1", autoRequest: false, state };
+function follow(state: "announced" | "available" | "in_library", reissue = false) {
+  return { catalogArtistId: "ar1", autoRequest: false, state, reissue };
 }
 
-function show(block: WidgetBlock, result: WidgetResult) {
+function show(block: WidgetBlock, result: WidgetResult, size: "M" | "L" = "L") {
   dataQuery.mockReturnValue({ data: result, isLoading: false, isError: false });
   renderWithProviders(
     <TooltipProvider>
-      <CustomWidget widget={createWidget({ view: { block, action: "request" } })} status="ready" size="L" />
+      <CustomWidget widget={createWidget({ view: { block, action: "request" } })} status="ready" size={size} />
     </TooltipProvider>
   );
 }
@@ -104,6 +104,51 @@ describe("follow rows in a widget", () => {
     );
 
     expect(screen.getByRole("button", { name: "Request Missing" })).toBeInTheDocument();
+  });
+
+  it("says a followed release is a reissue beside its date, and nothing on one that is not", () => {
+    show(
+      "list",
+      createFeedAlbumResult([
+        createFeedAlbumRow({ id: "f1", name: "Old Again", artist: "Ada", follow: follow("available", true) }),
+        createFeedAlbumRow({ id: "f2", name: "Brand New", artist: "Bo", follow: follow("available") }),
+      ])
+    );
+
+    expect(screen.getByText(/^Ada · .* · Reissue$/)).toBeInTheDocument();
+    expect(screen.getByText(/^Bo · /)).not.toHaveTextContent("Reissue");
+  });
+
+  it("keeps releases from both sides of today when the calendar has room for fewer rows than it was sent", () => {
+    const upcoming = ["u1", "u2", "u3", "u4", "u5", "u6"].map((id, index) =>
+      createFeedAlbumRow({ id, name: `Next ${id}`, releaseDate: `2999-01-0${index + 1}`, follow: follow("announced") })
+    );
+    const recent = ["r1", "r2", "r3", "r4"].map((id, index) =>
+      createFeedAlbumRow({ id, name: `Past ${id}`, releaseDate: `2000-01-0${9 - index}`, follow: follow("available") })
+    );
+
+    show("calendar", createFeedAlbumResult([...upcoming, ...recent]), "M");
+
+    expect(screen.getByRole("separator")).toHaveTextContent("Today");
+    expect(screen.getAllByText(/^Next u/).map((node) => node.textContent)).toEqual(["Next u1", "Next u2", "Next u3"]);
+    expect(screen.getAllByText(/^Past r/).map((node) => node.textContent)).toEqual(["Past r1", "Past r2", "Past r3"]);
+  });
+
+  it("keeps the releases nearest to today whatever order they were sent in", () => {
+    const upcoming = ["u1", "u2", "u3", "u4", "u5", "u6"].map((id, index) =>
+      createFeedAlbumRow({ id, name: `Next ${id}`, releaseDate: `2999-01-0${index + 1}`, follow: follow("announced") })
+    );
+    const recent = ["r1", "r2", "r3", "r4"].map((id, index) =>
+      createFeedAlbumRow({ id, name: `Past ${id}`, releaseDate: `2000-01-0${9 - index}`, follow: follow("available") })
+    );
+
+    show("calendar", createFeedAlbumResult([...recent.reverse(), ...upcoming.reverse()]), "M");
+
+    expect(screen.getAllByText(/^Next u/).map((node) => node.textContent)).toEqual(["Next u1", "Next u2", "Next u3"]);
+    expect(screen.getAllByText(/^Past r/).map((node) => node.textContent)).toEqual(["Past r1", "Past r2", "Past r3"]);
+    const divider = screen.getByRole("separator");
+    expect(divider.previousElementSibling).toHaveTextContent("Next u3");
+    expect(divider.nextElementSibling).toHaveTextContent("Past r1");
   });
 
   it("draws a Today divider in the calendar only when releases lie on both sides of today", () => {

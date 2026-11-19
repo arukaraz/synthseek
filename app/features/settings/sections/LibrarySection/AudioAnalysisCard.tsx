@@ -32,7 +32,11 @@ export function AudioAnalysisCard() {
   const speed = settings?.library.audioAnalysis.speed;
 
   return (
-    <SettingsCard title={t("audioAnalysis.title")} description={t("audioAnalysis.description")}>
+    <SettingsCard
+      title={t("audioAnalysis.title")}
+      description={t("audioAnalysis.description")}
+      anchor="library-audio-analysis"
+    >
       <ProgressBar progress={coverage ? coveragePercent(coverage) : 0} isActive={running} size="sm" />
       <div className={analysisFacts()}>
         <div className={analysisFact()}>

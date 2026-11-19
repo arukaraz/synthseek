@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event";
 import type { ReactNode } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-const navigation = vi.hoisted(() => ({ pathname: "/settings/integrations/download-sources" }));
+const navigation = vi.hoisted(() => ({ pathname: "/settings/download/sources" }));
 
 vi.mock("next/navigation", () => ({
   usePathname: () => navigation.pathname,
@@ -23,7 +23,7 @@ import { HashLink } from "../HashLink";
 import { pathnameOf, splitHashHref } from "../helpers";
 
 const GLOW_ATTR = "data-glow";
-const SAME_PAGE_HREF = "/settings/integrations/download-sources#ban-threshold";
+const SAME_PAGE_HREF = "/settings/download/sources#ban-threshold";
 
 function renderWithTarget(href: string) {
   const target = document.createElement("div");
@@ -37,9 +37,9 @@ function renderWithTarget(href: string) {
 
 describe("HashLink", () => {
   beforeEach(() => {
-    navigation.pathname = "/settings/integrations/download-sources";
+    navigation.pathname = "/settings/download/sources";
     Element.prototype.scrollIntoView = vi.fn();
-    window.history.replaceState({}, "", "/settings/integrations/download-sources");
+    window.history.replaceState({}, "", "/settings/download/sources");
     document.body.innerHTML = "";
   });
 
@@ -76,7 +76,7 @@ describe("HashLink", () => {
 
   it("leaves a cross-page link to the navigation-driven hook", async () => {
     const user = userEvent.setup();
-    navigation.pathname = "/settings/engine";
+    navigation.pathname = "/settings/download/engine";
     const target = renderWithTarget(SAME_PAGE_HREF);
 
     await user.click(screen.getByRole("link", { name: "Configure threshold" }));
@@ -88,22 +88,22 @@ describe("HashLink", () => {
 describe("splitHashHref", () => {
   it("splits a path and its anchor", () => {
     expect(splitHashHref(SAME_PAGE_HREF)).toEqual({
-      path: "/settings/integrations/download-sources",
+      path: "/settings/download/sources",
       hash: "ban-threshold",
     });
   });
 
   it("returns an empty hash for a plain path", () => {
-    expect(splitHashHref("/settings/engine")).toEqual({ path: "/settings/engine", hash: "" });
+    expect(splitHashHref("/settings/download/engine")).toEqual({ path: "/settings/download/engine", hash: "" });
   });
 });
 
 describe("pathnameOf", () => {
   it.each([
-    ["/settings/download-sources?source=slskd#ban-threshold", "/settings/download-sources"],
+    ["/settings/download/sources?source=slskd#ban-threshold", "/settings/download/sources"],
     ["/settings/metadata?tab=lidarr", "/settings/metadata"],
-    ["/settings/engine#queue", "/settings/engine"],
-    ["/settings/engine", "/settings/engine"],
+    ["/settings/download/engine#queue", "/settings/download/engine"],
+    ["/settings/download/engine", "/settings/download/engine"],
   ])("reads %s as the page %s", (href, pathname) => {
     expect(pathnameOf(href)).toBe(pathname);
   });

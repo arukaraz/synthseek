@@ -247,5 +247,5 @@ export const FEED_NEED_HREFS: Record<FeedNeed, string> = {
   plex: "/settings/connections/services#plex",
   jellyfin: "/settings/connections/services#jellyfin",
   navidrome: "/settings/connections/services#navidrome",
-  lidarr: "/settings/download-sources?source=lidarr#lidarr",
+  lidarr: "/settings/download/sources?source=lidarr#lidarr",
 };

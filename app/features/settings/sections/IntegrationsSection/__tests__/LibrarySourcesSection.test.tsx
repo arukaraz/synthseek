@@ -33,10 +33,10 @@ vi.mock("../SpotifySourceCard", () => ({
   },
 }));
 
-vi.mock("../MediaServerSourcesCard", () => ({
-  MediaServerSourcesCard: (props: { connected: unknown }) => {
+vi.mock("../MediaServersSection", () => ({
+  MediaServersSection: (props: { settings: unknown }) => {
     cards.mediaServers(props);
-    return <div data-testid="media-server-sources-card" />;
+    return <div data-testid="playback-order" />;
   },
 }));
 
@@ -85,12 +85,22 @@ describe("LibrarySourcesSection", () => {
     expect(screen.queryByTestId("spotify-source-card")).not.toBeInTheDocument();
   });
 
-  it("renders the Spotify, media server and library sync cards when data is present", () => {
+  it("puts the playback order first, across the full width, and the Spotify and sync cards under it", () => {
     settingsQuery = createMockQuery<SettingsData | undefined>(data);
     render(<LibrarySourcesSection />);
-    expect(screen.getByTestId("spotify-source-card")).toBeInTheDocument();
-    expect(screen.getByTestId("media-server-sources-card")).toBeInTheDocument();
-    expect(screen.getByTestId("library-sync-card")).toBeInTheDocument();
+    const order = screen.getByTestId("playback-order");
+    const spotify = screen.getByTestId("spotify-source-card");
+    const sync = screen.getByTestId("library-sync-card");
+    expect(order.compareDocumentPosition(spotify) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(spotify.compareDocumentPosition(sync) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(spotify.parentElement).toBe(sync.parentElement);
+    expect(order.parentElement).not.toBe(spotify.parentElement);
+  });
+
+  it("no longer lists the media servers as a card of links", () => {
+    settingsQuery = createMockQuery<SettingsData | undefined>(data);
+    render(<LibrarySourcesSection />);
+    expect(screen.queryByText("Your media servers")).toBeNull();
   });
 
   it("hands each card the slice of the settings it edits", () => {
@@ -100,11 +110,9 @@ describe("LibrarySourcesSection", () => {
     expect(cards.sync).toHaveBeenCalledWith({ initial: { syncIntervalMinutes: 45 } });
   });
 
-  it("counts a media server as connected only when every credential it needs is set", () => {
+  it("hands the playback order the settings it reads", () => {
     settingsQuery = createMockQuery<SettingsData | undefined>(data);
     render(<LibrarySourcesSection />);
-    expect(cards.mediaServers).toHaveBeenCalledWith({
-      connected: { plex: true, navidrome: false, jellyfin: false },
-    });
+    expect(cards.mediaServers).toHaveBeenCalledWith({ settings: data });
   });
 });

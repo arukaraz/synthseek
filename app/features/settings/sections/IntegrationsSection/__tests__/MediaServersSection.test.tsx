@@ -6,13 +6,7 @@ import i18n from "@modules/i18n";
 import enSettings from "@modules/i18n/messages/en/settings.json";
 
 import { createMockSettings } from "@test/mocks/feature-hooks.mock";
-import {
-  createErrorQuery,
-  createLoadingQuery,
-  createMockMutation,
-  createMockQuery,
-  type MockQueryResult,
-} from "@test/mocks/trpc.mock";
+import { createMockMutation } from "@test/mocks/trpc.mock";
 import { PLAYBACK_SERVER_NAMES, type PlaybackServerKey } from "@utils/playback-servers";
 
 type Settings = ReturnType<typeof createMockSettings>;
@@ -21,16 +15,14 @@ type ChainKey = "local" | PlaybackServerKey;
 const navigation = vi.hoisted(() => ({ search: "", replace: vi.fn() }));
 const plexCard = vi.hoisted(() => vi.fn());
 
-let settingsQuery: MockQueryResult<Settings | undefined> = createMockQuery<Settings | undefined>(undefined);
 const updateOrder = createMockMutation();
 
 vi.mock("next/navigation", () => ({
   useRouter: () => ({ replace: navigation.replace, push: vi.fn() }),
-  usePathname: () => "/settings/media",
+  usePathname: () => "/settings/library/sources",
   useSearchParams: () => new URLSearchParams(navigation.search),
 }));
 
-vi.mock("@hooks/api/queries/useSettings", () => ({ useSettings: () => settingsQuery }));
 vi.mock("@hooks/api/mutations/settings/useUpdateEngine", () => ({
   useUpdateEnginePlaybackSources: () => updateOrder,
 }));
@@ -100,7 +92,6 @@ beforeAll(() => {
 
 beforeEach(() => {
   navigation.search = "";
-  settingsQuery = createMockQuery<Settings | undefined>(settings);
   updateOrder.mutateAsync.mockResolvedValue(undefined);
 });
 
@@ -110,25 +101,20 @@ afterEach(() => {
 });
 
 describe("MediaServersSection", () => {
-  it("renders the loading and error states", () => {
-    settingsQuery = createLoadingQuery<Settings | undefined>();
-    render(<MediaServersSection />);
-    expect(screen.getByText(enSettings.common.loading)).toBeInTheDocument();
-    cleanup();
+  it("leaves the page heading to the library tabs", () => {
+    render(<MediaServersSection settings={settings} />);
 
-    settingsQuery = createErrorQuery<Settings | undefined>(new Error("boom"));
-    render(<MediaServersSection />);
-    expect(screen.getByText(enSettings.common.loadFailed)).toBeInTheDocument();
+    expect(screen.queryByRole("heading", { level: 1 })).toBeNull();
   });
 
   it("puts Local first and the servers after it in their saved order", () => {
-    render(<MediaServersSection />);
+    render(<MediaServersSection settings={settings} />);
 
     expect(chainOrder()).toEqual(["local", "navidrome", "plex", "jellyfin"]);
   });
 
   it("gives Local no way to move, and the first server no way to climb above it", () => {
-    render(<MediaServersSection />);
+    render(<MediaServersSection settings={settings} />);
 
     expect(screen.queryByRole("button", { name: moveUp("local") })).toBeNull();
     expect(screen.queryByRole("button", { name: moveDown("local") })).toBeNull();
@@ -136,7 +122,7 @@ describe("MediaServersSection", () => {
   });
 
   it("tells each server apart by whether its connection is complete", () => {
-    render(<MediaServersSection />);
+    render(<MediaServersSection settings={settings} />);
 
     expect(within(chainItem("plex")).getByText(enSettings.mediaServers.order.connected)).toBeInTheDocument();
     expect(within(chainItem("navidrome")).getByText(enSettings.mediaServers.order.notConnected)).toBeInTheDocument();
@@ -144,7 +130,7 @@ describe("MediaServersSection", () => {
   });
 
   it("shows the Local card first, with every server card mounted behind it", () => {
-    render(<MediaServersSection />);
+    render(<MediaServersSection settings={settings} />);
 
     for (const card of CARDS) expect(screen.getByTestId(card)).toBeInTheDocument();
     expect(visibleCards()).toEqual(["local-card"]);
@@ -152,21 +138,21 @@ describe("MediaServersSection", () => {
 
   it("shows the server the URL names", () => {
     navigation.search = "server=jellyfin";
-    render(<MediaServersSection />);
+    render(<MediaServersSection settings={settings} />);
 
     expect(visibleCards()).toEqual(["jellyfin-card"]);
   });
 
   it("puts the chosen server in the URL", async () => {
-    render(<MediaServersSection />);
+    render(<MediaServersSection settings={settings} />);
 
     await userEvent.click(screen.getByRole("button", { name: openName("plex") }));
 
-    expect(navigation.replace).toHaveBeenCalledWith("/settings/media?server=plex", { scroll: false });
+    expect(navigation.replace).toHaveBeenCalledWith("/settings/library/sources?server=plex", { scroll: false });
   });
 
   it("brings the chosen server's panel into view, Local included", async () => {
-    render(<MediaServersSection />);
+    render(<MediaServersSection settings={settings} />);
 
     await userEvent.click(screen.getByRole("button", { name: openName("navidrome") }));
     expect(reveal).toHaveBeenCalledTimes(1);
@@ -176,7 +162,7 @@ describe("MediaServersSection", () => {
   });
 
   it("hands the Plex card its connection, behaviour and playlist naming", () => {
-    render(<MediaServersSection />);
+    render(<MediaServersSection settings={settings} />);
 
     expect(plexCard).toHaveBeenCalledWith({
       initial: {
@@ -188,7 +174,7 @@ describe("MediaServersSection", () => {
   });
 
   it("saves a moved server as the new order of the servers alone", async () => {
-    render(<MediaServersSection />);
+    render(<MediaServersSection settings={settings} />);
 
     await userEvent.click(screen.getByRole("button", { name: moveUp("plex") }));
 
@@ -202,7 +188,7 @@ describe("MediaServersSection", () => {
   });
 
   it("drops the draft once the servers are back in their saved order", async () => {
-    render(<MediaServersSection />);
+    render(<MediaServersSection settings={settings} />);
 
     await userEvent.click(screen.getByRole("button", { name: moveDown("plex") }));
     await userEvent.click(screen.getByRole("button", { name: moveUp("plex") }));

@@ -65,12 +65,12 @@ describe("SettingsPalette with an empty query", () => {
 
   it("opens a picked page", async () => {
     const { dialog, onOpenChange } = renderPalette();
-    const media = within(dialog)
+    const download = within(dialog)
       .getAllByRole("button")
-      .find((button) => button.textContent?.startsWith(t("shell.pages.media.title")));
-    expect(media).toBeDefined();
-    if (media) await userEvent.click(media);
-    expect(state.push).toHaveBeenCalledWith("/settings/media");
+      .find((button) => button.textContent?.startsWith(t("shell.pages.download.title")));
+    expect(download).toBeDefined();
+    if (download) await userEvent.click(download);
+    expect(state.push).toHaveBeenCalledWith("/settings/download");
     expect(onOpenChange).toHaveBeenCalledWith(false);
   });
 

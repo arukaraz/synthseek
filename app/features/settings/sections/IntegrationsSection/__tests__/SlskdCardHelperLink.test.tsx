@@ -20,7 +20,7 @@ const renderHelper = (lng: "en" | "es") => {
       t={t}
       i18nKey="slskd.bannedUploaders.helper"
       components={{
-        threshold: <Link href="/settings/engine#ban-threshold" className="text-primary-400" />,
+        threshold: <Link href="/settings/download/sources?source=slskd#ban-threshold" className="text-primary-400" />,
       }}
     />
   );
@@ -31,7 +31,7 @@ describe("SlskdCard banned-uploaders helper link", () => {
     renderHelper("en");
 
     const anchor = screen.getByRole("link", { name: "Configure threshold" });
-    expect(anchor).toHaveAttribute("href", "/settings/engine#ban-threshold");
+    expect(anchor).toHaveAttribute("href", "/settings/download/sources?source=slskd#ban-threshold");
     expect(anchor.textContent).not.toBe("");
   });
 
@@ -39,7 +39,7 @@ describe("SlskdCard banned-uploaders helper link", () => {
     renderHelper("es");
 
     const anchor = screen.getByRole("link", { name: "Configurar umbral" });
-    expect(anchor).toHaveAttribute("href", "/settings/engine#ban-threshold");
+    expect(anchor).toHaveAttribute("href", "/settings/download/sources?source=slskd#ban-threshold");
     expect(anchor.textContent).not.toBe("");
   });
 });

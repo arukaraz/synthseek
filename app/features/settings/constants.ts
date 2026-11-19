@@ -20,7 +20,6 @@ import {
   Palette,
   Plug,
   ScanSearch,
-  Server,
   Shield,
   ShieldBan,
   Tags,
@@ -114,21 +113,13 @@ export const SETTINGS_PAGE_BY_ID = {
     descriptionKey: "shell.pages.members.description",
     icon: Users,
   },
-  downloadSources: {
-    id: "downloadSources",
+  download: {
+    id: "download",
     group: "server",
-    href: "/settings/download-sources",
-    labelKey: "shell.pages.downloadSources.title",
-    descriptionKey: "shell.pages.downloadSources.description",
+    href: "/settings/download",
+    labelKey: "shell.pages.download.title",
+    descriptionKey: "shell.pages.download.description",
     icon: Download,
-  },
-  engine: {
-    id: "engine",
-    group: "server",
-    href: "/settings/engine",
-    labelKey: "shell.pages.engine.title",
-    descriptionKey: "header.description",
-    icon: ListOrdered,
   },
   library: {
     id: "library",
@@ -137,14 +128,6 @@ export const SETTINGS_PAGE_BY_ID = {
     labelKey: "shell.pages.library.title",
     descriptionKey: "library.page.description",
     icon: Library,
-  },
-  media: {
-    id: "media",
-    group: "server",
-    href: "/settings/media",
-    labelKey: "shell.pages.media.title",
-    descriptionKey: "shell.pages.media.description",
-    icon: Server,
   },
   metadata: {
     id: "metadata",
@@ -196,10 +179,14 @@ export const SETTINGS_TABS: Readonly<Record<SettingsTabbedPageId, readonly Setti
     { href: "/settings/connections/services", labelKey: "shell.tabs.connections.services", icon: Link2 },
     { href: "/settings/connections/apps", labelKey: "shell.tabs.connections.apps", icon: KeyRound },
   ],
+  download: [
+    { href: "/settings/download/sources", labelKey: "shell.tabs.download.sources", icon: Download },
+    { href: "/settings/download/engine", labelKey: "shell.tabs.download.engine", icon: ListOrdered },
+  ],
   library: [
+    { href: "/settings/library/sources", labelKey: "shell.tabs.library.sources", icon: Import },
     { href: "/settings/library/paths", labelKey: "shell.tabs.library.paths", icon: FolderTree },
     { href: "/settings/library/scan", labelKey: "shell.tabs.library.scan", icon: ScanSearch },
-    { href: "/settings/library/sources", labelKey: "shell.tabs.library.sources", icon: Import },
   ],
   releases: [
     { href: "/settings/releases/calendar", labelKey: "shell.tabs.releases.calendar", icon: CalendarDays },

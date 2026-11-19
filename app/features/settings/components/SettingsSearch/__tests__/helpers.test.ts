@@ -49,8 +49,8 @@ const lastfmFeeds: SettingsSearchEntry = {
 
 const slskd: SettingsSearchEntry = {
   labelKey: "slskd.title",
-  page: "downloadSources",
-  href: "/settings/download-sources",
+  page: "download",
+  href: "/settings/download/sources",
 };
 
 function labelsOf(results: readonly SettingsSearchResult[]): string[] {
@@ -222,6 +222,6 @@ describe("entryHref", () => {
   });
 
   it("returns the page href when there is no anchor", () => {
-    expect(entryHref(slskd)).toBe("/settings/download-sources");
+    expect(entryHref(slskd)).toBe("/settings/download/sources");
   });
 });

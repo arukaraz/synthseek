@@ -203,7 +203,6 @@
     }
   },
   "header": {
-    "description": "Advanced controls for the search to download to import pipeline. Defaults are tuned to a balanced sweet spot that works well for most setups, change them only if you know what you are doing. When in doubt, leave them as-is or hit Reset to defaults on the affected card if tracks start failing after a change.",
     "loading": "Loading settings…",
     "loadError": "Failed to load settings: {{message}}",
     "unknownError": "Unknown error"
@@ -255,7 +254,7 @@
   },
   "timeouts": {
     "title": "Timeouts",
-    "soulseek": "Soulseek's own timeouts are with the rest of slskd's settings, under <slskd>Download sources</slskd>.",
+    "soulseek": "Soulseek's own timeouts are with the rest of slskd's settings, under <slskd>Download, Sources</slskd>.",
     "searchPhase": {
       "label": "Search phase",
       "description": "How long slskd keeps each search request open on the Soulseek network before stopping collection of new results.",
@@ -1703,19 +1702,12 @@
         "title": "Members & access",
         "description": "The people who share this Synthseek, what they can do and how much they can download."
       },
-      "downloadSources": {
-        "title": "Download sources",
-        "description": "Synthseek tries the sources from top to bottom. When one cannot deliver a track, the next one gets it in the same request."
-      },
-      "engine": {
-        "title": "Download engine"
+      "download": {
+        "title": "Download",
+        "description": "Where Synthseek downloads from, and the engine that searches, downloads and imports. The engine's defaults are tuned to a balanced sweet spot that works well for most setups, change them only if you know what you are doing. When in doubt, leave them as-is or hit Reset to defaults on the affected card if tracks start failing after a change."
       },
       "library": {
         "title": "Library"
-      },
-      "media": {
-        "title": "Media & playback",
-        "description": "The media servers Synthseek keeps in sync, and the order the player tries them in."
       },
       "metadata": {
         "title": "Metadata",
@@ -1737,6 +1729,10 @@
       "appearance": {
         "theme": "Theme & language",
         "board": "Board"
+      },
+      "download": {
+        "sources": "Sources",
+        "engine": "Engine"
       },
       "library": {
         "paths": "Paths & rules",
@@ -1835,6 +1831,7 @@
     },
     "downloadSources": {
       "order": "Search order",
+      "orderDescription": "Synthseek tries the sources from top to bottom. When one cannot deliver a track, the next one gets it in the same request.",
       "orderHint": "Drag a source, or use its arrows, to change the order.",
       "handOff": "Hand off instead of downloading",
       "panelLabel": "Settings of the selected source"
@@ -2015,7 +2012,7 @@
   },
   "library": {
     "page": {
-      "description": "How your files are organised on disk, what the scan finds, and where libraries are imported from."
+      "description": "The media servers and libraries Synthseek connects to, how your files are organised on disk, and what the scan does."
     },
     "sync": {
       "title": "External library sync",
@@ -2025,14 +2022,6 @@
         "description": "How often Synthseek looks for new tracks in what members follow and save on other services.",
         "suffix": "min"
       }
-    },
-    "mediaServerSources": {
-      "title": "Your media servers",
-      "description": "Members can also import playlists from Plex, Navidrome and Jellyfin. Nothing is set here: the server connection lives in Media & playback, and each member imports with the account they link in Connections.",
-      "available": "Available to members",
-      "notConfigured": "Not configured",
-      "open": "Open",
-      "setUp": "Set up"
     }
   },
   "libraryPaths": {

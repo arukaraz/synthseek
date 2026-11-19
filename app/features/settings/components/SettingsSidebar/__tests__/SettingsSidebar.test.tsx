@@ -89,10 +89,11 @@ describe("SettingsSidebar", () => {
     expect(screen.getByText(groups.server)).toBeInTheDocument();
     expect(linkFor(pages.overview.title)).toHaveAttribute("href", "/settings/overview");
     expect(linkFor(pages.members.title)).toHaveAttribute("href", "/settings/members");
-    expect(linkFor(pages.downloadSources.title)).toHaveAttribute("href", "/settings/download-sources");
-    expect(linkFor(pages.engine.title)).toHaveAttribute("href", "/settings/engine");
+    expect(linkFor(pages.download.title)).toHaveAttribute("href", "/settings/download");
     expect(linkFor(pages.library.title)).toHaveAttribute("href", "/settings/library");
-    expect(linkFor(pages.media.title)).toHaveAttribute("href", "/settings/media");
+    expect(screen.queryByRole("link", { name: "Download sources" })).toBeNull();
+    expect(screen.queryByRole("link", { name: "Download engine" })).toBeNull();
+    expect(screen.queryByRole("link", { name: "Media & playback" })).toBeNull();
     expect(linkFor(pages.metadata.title)).toHaveAttribute("href", "/settings/metadata");
     expect(linkFor(pages.maintenance.title)).toHaveAttribute("href", "/settings/maintenance");
     expect(linkFor(pages.system.title)).toHaveAttribute("href", "/settings/system");
@@ -105,7 +106,7 @@ describe("SettingsSidebar", () => {
     expect(screen.queryByText(groups.server)).not.toBeInTheDocument();
     expect(screen.queryByText(pages.overview.title)).not.toBeInTheDocument();
     expect(screen.queryByText(pages.members.title)).not.toBeInTheDocument();
-    expect(screen.queryByText(pages.downloadSources.title)).not.toBeInTheDocument();
+    expect(screen.queryByText(pages.download.title)).not.toBeInTheDocument();
     expect(screen.getByText(groups.you)).toBeInTheDocument();
     expect(linkFor(pages.notifications.title)).toHaveAttribute("href", "/settings/notifications");
   });

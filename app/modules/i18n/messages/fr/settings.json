@@ -203,7 +203,6 @@
     }
   },
   "header": {
-    "description": "Contrôles avancés pour le pipeline de la recherche au téléchargement puis à l'importation. Les valeurs par défaut sont réglées sur un équilibre qui convient à la plupart des configurations, ne les modifiez que si vous savez ce que vous faites. En cas de doute, laissez-les telles quelles ou appuyez sur Réinitialiser aux valeurs par défaut sur la carte concernée si des pistes commencent à échouer après une modification.",
     "loading": "Chargement des réglages…",
     "loadError": "Échec du chargement des réglages : {{message}}",
     "unknownError": "Erreur inconnue"
@@ -255,7 +254,7 @@
   },
   "timeouts": {
     "title": "Délais d'attente",
-    "soulseek": "Les délais propres à Soulseek sont avec le reste des paramètres slskd, sous <slskd>Sources de téléchargement</slskd>.",
+    "soulseek": "Les délais propres à Soulseek sont avec le reste des paramètres slskd, sous <slskd>Téléchargement, Sources</slskd>.",
     "searchPhase": {
       "label": "Phase de recherche",
       "description": "Durée pendant laquelle slskd garde chaque requête de recherche ouverte sur le réseau Soulseek avant d'arrêter la collecte de nouveaux résultats.",
@@ -1703,19 +1702,12 @@
         "title": "Membres et accès",
         "description": "Les personnes qui partagent ce Synthseek, ce qu'elles peuvent faire et combien elles peuvent télécharger."
       },
-      "downloadSources": {
-        "title": "Sources de téléchargement",
-        "description": "Synthseek essaie les sources de haut en bas. Quand l'une ne peut pas fournir une piste, la suivante la reçoit dans la même demande."
-      },
-      "engine": {
-        "title": "Moteur de téléchargement"
+      "download": {
+        "title": "Téléchargement",
+        "description": "D'où Synthseek télécharge, et le moteur qui cherche, télécharge et importe. Les valeurs par défaut du moteur sont réglées sur un équilibre qui convient à la plupart des configurations, ne les modifiez que si vous savez ce que vous faites. En cas de doute, laissez-les telles quelles ou appuyez sur Réinitialiser aux valeurs par défaut sur la carte concernée si des pistes commencent à échouer après une modification."
       },
       "library": {
         "title": "Bibliothèque"
-      },
-      "media": {
-        "title": "Médias et lecture",
-        "description": "Les serveurs multimédias que Synthseek garde synchronisés, et l'ordre dans lequel le lecteur les essaie."
       },
       "metadata": {
         "title": "Métadonnées",
@@ -1737,6 +1729,10 @@
       "appearance": {
         "theme": "Thème et langue",
         "board": "Tableau"
+      },
+      "download": {
+        "sources": "Sources",
+        "engine": "Moteur"
       },
       "library": {
         "paths": "Chemins et règles",
@@ -1835,6 +1831,7 @@
     },
     "downloadSources": {
       "order": "Ordre de recherche",
+      "orderDescription": "Synthseek essaie les sources de haut en bas. Quand l'une ne peut pas fournir une piste, la suivante la reçoit dans la même demande.",
       "orderHint": "Faites glisser une source, ou utilisez ses flèches, pour changer l'ordre.",
       "handOff": "Déléguer au lieu de télécharger",
       "panelLabel": "Réglages de la source sélectionnée"
@@ -2015,7 +2012,7 @@
   },
   "library": {
     "page": {
-      "description": "Comment vos fichiers sont rangés sur le disque, ce que l'analyse trouve et d'où les bibliothèques sont importées."
+      "description": "Les serveurs multimédias et les bibliothèques auxquels Synthseek se connecte, comment vos fichiers sont rangés sur le disque et ce que fait l'analyse."
     },
     "sync": {
       "title": "Synchronisation des bibliothèques externes",
@@ -2025,14 +2022,6 @@
         "description": "À quelle fréquence Synthseek cherche de nouvelles pistes dans ce que les membres suivent et enregistrent sur d'autres services.",
         "suffix": "min"
       }
-    },
-    "mediaServerSources": {
-      "title": "Vos serveurs multimédias",
-      "description": "Les membres peuvent aussi importer des playlists depuis Plex, Navidrome et Jellyfin. Rien ne se règle ici : la connexion au serveur se trouve dans Médias et lecture, et chaque membre importe avec le compte qu'il lie dans Connexions.",
-      "available": "Disponible pour les membres",
-      "notConfigured": "Non configuré",
-      "open": "Ouvrir",
-      "setUp": "Configurer"
     }
   },
   "libraryPaths": {

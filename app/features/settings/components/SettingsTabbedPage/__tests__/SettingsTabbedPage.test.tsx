@@ -79,6 +79,31 @@ describe("SettingsTabbedPage", () => {
     expect(screen.getByText("tab body")).toBeInTheDocument();
   });
 
+  it("orders the library tabs Sources, Paths & rules, Scan", () => {
+    state.pathname = "/settings/library/sources";
+    render(<SettingsTabbedPage pageId="library">{null}</SettingsTabbedPage>);
+    const links = tabs("Library");
+    expect(links.map((link) => link.textContent)).toEqual(["Sources", "Paths & rules", "Scan"]);
+    expect(links.map((link) => link.getAttribute("href"))).toEqual([
+      "/settings/library/sources",
+      "/settings/library/paths",
+      "/settings/library/scan",
+    ]);
+  });
+
+  it("gives Download a Sources tab and an Engine tab", () => {
+    state.pathname = "/settings/download/engine";
+    render(<SettingsTabbedPage pageId="download">{null}</SettingsTabbedPage>);
+    expect(screen.getByRole("heading", { level: 1, name: "Download" })).toBeInTheDocument();
+    const links = tabs("Download");
+    expect(links.map((link) => link.textContent)).toEqual(["Sources", "Engine"]);
+    expect(links.map((link) => link.getAttribute("href"))).toEqual([
+      "/settings/download/sources",
+      "/settings/download/engine",
+    ]);
+    expect(links.map((link) => link.getAttribute("aria-current"))).toEqual([null, "page"]);
+  });
+
   it("marks the tab of the current path", () => {
     state.pathname = "/settings/system/logs";
     render(<SettingsTabbedPage pageId="system">{null}</SettingsTabbedPage>);

@@ -30,7 +30,7 @@ Synthseek still boots and browsing works, and it says so at startup. Imports int
 ## Downloads
 
 **Everything is stuck at queued and nothing downloads.**
-Check whether the queue is paused first. Pausing is in memory, so a restart clears it, and pending work drains automatically on boot. If it is not paused, check that your download sources are reachable, from their panels under **Download sources**.
+Check whether the queue is paused first. Pausing is in memory, so a restart clears it, and pending work drains automatically on boot. If it is not paused, check that your download sources are reachable, from their panels under **Download**, then **Sources**.
 
 **A track says "not found".**
 No enabled source had a candidate that passed scoring. Turn on the wanted sweep to have Synthseek keep trying on its own, with attempts spaced further apart the longer a track stays missing.
@@ -42,13 +42,13 @@ What arrived positively contradicted what you asked for, and Synthseek refused t
 The problem is on your machine, not the source. Usually a full disk or a downloads folder that stopped being writable. These failures do not consume retry budget, so once you fix the underlying problem the tracks are still waiting.
 
 **A track says it timed out.**
-A step ran out of the time it was given, so nothing was settled about that track either way. It is retried automatically. If it keeps happening on the same tracks, raise that timeout. Each source's own timeouts are in its panel under **Download sources**, and the download and import timeouts are under **Download engine**.
+A step ran out of the time it was given, so nothing was settled about that track either way. It is retried automatically. If it keeps happening on the same tracks, raise that timeout. Each source's own timeouts are in its panel under **Download**, then **Sources**, and the download and import timeouts are on the **Engine** tab beside it.
 
 **Downloads were working and now nothing gets through.**
 Check the queue is not paused, then check the review queue. If verification is rejecting everything, something is systematically wrong with what is arriving. Each held file in the review queue shows why it was rejected, which will tell you what is going on.
 
 **Can I stop the yt-dlp fallback?**
-Yes. Settings, then Download sources. Trusted members and administrators can also choose which sources to try, and in what order, per request.
+Yes. Settings, then Download, then Sources. Trusted members and administrators can also choose which sources to try, and in what order, per request.
 
 ## Library and imports
 

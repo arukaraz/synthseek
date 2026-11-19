@@ -8,13 +8,13 @@ import { FadeScroll } from "@components/FadeScroll";
 import { WidgetRow } from "../WidgetRow/WidgetRow";
 import { BLOCK_LIMITS } from "./constants";
 import { FollowItemMore } from "./FollowItemMore";
-import { calendarPartsOf, todayBoundaryIndex } from "./helpers";
+import { calendarPartsOf, shownAroundToday, todayBoundaryIndex } from "./helpers";
 import { blockBody, blockList, calendarDate, calendarDay, calendarMonth, followToday } from "./styles";
 import type { WidgetBlockProps } from "./types";
 
 export function CalendarBlock({ items, size, accent, controls }: WidgetBlockProps) {
   const { t } = useTranslation("follows");
-  const shown = items.slice(0, BLOCK_LIMITS.calendar[size]);
+  const shown = shownAroundToday(items, BLOCK_LIMITS.calendar[size]);
   const boundary = todayBoundaryIndex(shown);
 
   return (

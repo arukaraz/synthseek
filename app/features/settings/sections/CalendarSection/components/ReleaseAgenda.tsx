@@ -39,7 +39,10 @@ export function ReleaseAgenda({ groups, today, month, width }: ReleaseAgendaProp
               </span>
               <span className={releaseCopy()}>
                 <span className={releaseTitle()}>{release.title}</span>
-                <span className={releaseMeta()}>{t("releases.by", { artist: release.artistName })}</span>
+                <span className={releaseMeta()}>
+                  {t("releases.by", { artist: release.artistName })}
+                  {release.reissue ? ` · ${t("releases.reissue")}` : null}
+                </span>
               </span>
               {showType ? <span className={listColumn({ width: "md" })}>{t(`types.${release.type}`)}</span> : null}
               {showState ? (

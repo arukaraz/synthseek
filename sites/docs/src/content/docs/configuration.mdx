@@ -97,15 +97,15 @@ On Discord, ntfy and Telegram, a download notice shows the cover art when there 
 
 Available to every member. **Calendar** sets which release types count: albums, EPs and singles, with at least one kept on. The choice decides which new releases you are told about and which are requested automatically. **Following** lists the artists you follow and turns automatic requests on or off for each. [Follow artists](/features#follow-artists) says what following does.
 
-### Download sources
+### Download
 
-Administrators only. Enable, disable, and order slskd, another Subsonic server, Usenet, torrent, yt-dlp, SoundCloud and the Internet Archive. Synthseek tries them from the top down. The tuning of each is on the [Download Sources page](/download-sources).
+Administrators only, in two tabs.
 
-**Lidarr**, at the bottom of the page, takes a request instead of downloading it: URL, API key, and the quality and metadata profiles available for delegation.
+The **Sources** tab enables, disables, and orders slskd, another Subsonic server, Usenet, torrent, yt-dlp, SoundCloud and the Internet Archive. Synthseek tries them from the top down. The tuning of each is on the [Download Sources page](/download-sources).
 
-### Download engine
+**Lidarr**, at the bottom of that tab, takes a request instead of downloading it: URL, API key, and the quality and metadata profiles available for delegation.
 
-Administrators only. Most cards have a reset to defaults.
+The **Engine** tab holds the cards below. Most have a reset to defaults.
 
 **Request preset**
 
@@ -126,7 +126,7 @@ The preset for everyone without one of their own. Off by default, which leaves e
 | Download phase | 20 minutes | 1m to 60m  |
 | Import phase   | 5 minutes  | 30s to 60m |
 
-The Soulseek timeouts are with the rest of slskd's settings, under **Download sources**:
+The Soulseek timeouts are with the rest of slskd's settings, on the **Sources** tab:
 
 | Setting                  | Default    | Range      |
 | ------------------------ | ---------- | ---------- |
@@ -165,39 +165,7 @@ Custom mood keywords, which extend the built-in mood classification with terms o
 
 Administrators only, in three tabs. Covered on the [Operations page](/operations).
 
-**Paths & rules** lists the folders Synthseek keeps your music in. The first one comes from `MUSIC_LIBRARY_PATH`. You can add more, turn one off, and choose the default, which takes music that matches no rule. A folder you add has to be mounted into the container first, like `/music`. Each path has its own settings:
-
-| Setting      | Default                                                         | What it does                                                    |
-| ------------ | --------------------------------------------------------------- | --------------------------------------------------------------- |
-| Track naming | `{albumartist}/{album}/<Disc {disc:02d}>/{track:02d} - {title}` | The folders and filename every track is given when it is filed. |
-| Rules        | None                                                            | The rules that send music to this path.                         |
-
-The same tab holds **Audio analysis**, which shows how much of the library has been analyzed.
-
-| Setting | Default    | What it does                                                                |
-| ------- | ---------- | --------------------------------------------------------------------------- |
-| Speed   | Background | How much of the machine the analysis may use: Background, Balanced or Fast. |
-
-It also holds **Album editions**. Many albums exist in more than one edition, and Synthseek keeps the songs of a folder on the same edition when it can, the one the files point to. These two settings decide only when the files fit more than one edition.
-
-| Setting             | Default  | What it does                                                                       |
-| ------------------- | -------- | ---------------------------------------------------------------------------------- |
-| Explicit or clean   | Explicit | The edition to pick when the catalog has both. Many have no clean one there.       |
-| Shortest or longest | Shortest | The edition to pick between an album and a longer edition of it, such as a deluxe. |
-
-**Rules** lists the conditions a request can match, such as who asked for it, its genre or its release year. When several match, the one higher in the list is tried first.
-
-**Scan** shows what the last library scan found, and the files it could not recognise or wants you to confirm, behind **Review files**.
-
-**Sources** is where members' libraries come from. Connect Spotify to import an existing library. It requires a Spotify client ID and a public base URL, since the OAuth callback comes back over the internet. Members can also import playlists from your media servers, through the account each one links under **Connections**.
-
-| Setting                 | Default    | What it does                                                                                    |
-| ----------------------- | ---------- | ----------------------------------------------------------------------------------------------- |
-| Check for changes every | 30 minutes | How often followed playlists and saved albums on other services are checked. 5 to 1440 minutes. |
-
-### Media & playback
-
-Administrators only. Plex, Navidrome and Jellyfin, plus the order the player tries them in when Synthseek has no file for a track. A connected server is a place to play from, with no switch of its own.
+**Sources** starts with the playback order: Plex, Navidrome and Jellyfin, in the order the player tries them when Synthseek has no file for a track. A connected server is a place to play from, with no switch of its own.
 
 Plex shows its connection status, a reconnect button that signs you in at plex.tv and lets you pick a server, and the server URL that sign-in resolved, shown read-only. Plus two behaviour switches:
 
@@ -214,6 +182,36 @@ And how playlists mirrored to Plex are named:
 | Separator      | `_`     | The character between the name and the affix.               |
 
 Navidrome (URL, username, password) and Jellyfin (URL, API key) each have a test button and a switch to sync playlists to that server. The switch starts off.
+
+Under the playback order is where members' libraries come from. Connect Spotify to import an existing library. It requires a Spotify client ID and a public base URL, since the OAuth callback comes back over the internet. Members can also import playlists from your media servers, through the account each one links under **Connections**.
+
+| Setting                 | Default    | What it does                                                                                    |
+| ----------------------- | ---------- | ----------------------------------------------------------------------------------------------- |
+| Check for changes every | 30 minutes | How often followed playlists and saved albums on other services are checked. 5 to 1440 minutes. |
+
+**Paths & rules** lists the folders Synthseek keeps your music in. The first one comes from `MUSIC_LIBRARY_PATH`. You can add more, turn one off, and choose the default, which takes music that matches no rule. A folder you add has to be mounted into the container first, like `/music`. Each path has its own settings:
+
+| Setting      | Default                                                         | What it does                                                    |
+| ------------ | --------------------------------------------------------------- | --------------------------------------------------------------- |
+| Track naming | `{albumartist}/{album}/<Disc {disc:02d}>/{track:02d} - {title}` | The folders and filename every track is given when it is filed. |
+| Rules        | None                                                            | The rules that send music to this path.                         |
+
+**Rules** lists the conditions a request can match, such as who asked for it, its genre or its release year. When several match, the one higher in the list is tried first.
+
+**Scan** shows what the last library scan found, and the files it could not recognise or wants you to confirm, behind **Review files**.
+
+The same tab holds **Audio analysis**, which shows how much of the library has been analyzed.
+
+| Setting | Default    | What it does                                                                |
+| ------- | ---------- | --------------------------------------------------------------------------- |
+| Speed   | Background | How much of the machine the analysis may use: Background, Balanced or Fast. |
+
+It also holds **Album editions**. Many albums exist in more than one edition, and Synthseek keeps the songs of a folder on the same edition when it can, the one the files point to. These two settings decide only when the files fit more than one edition.
+
+| Setting             | Default  | What it does                                                                       |
+| ------------------- | -------- | ---------------------------------------------------------------------------------- |
+| Explicit or clean   | Explicit | The edition to pick when the catalog has both. Many have no clean one there.       |
+| Shortest or longest | Shortest | The edition to pick between an album and a longer edition of it, such as a deluxe. |
 
 ### Metadata
 
@@ -263,7 +261,7 @@ The albums Usenet and torrent fetched whole that are still on disk. Each shows i
 | Setting                | Default        | What it does                                                                                                                                                     |
 | ---------------------- | -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | AcoustID identity gate | On             | Fingerprint the audio and identify it before import, so a file whose tags look right but whose audio is by a different artist is refused. Needs an AcoustID key. |
-| Auto-ban threshold     | 0, meaning off | Ban a peer after this many failures. Shown here, and changed with slskd's settings under **Download sources**.                                                   |
+| Auto-ban threshold     | 0, meaning off | Ban a peer after this many failures. Shown here, and changed with slskd's settings under **Download**, **Sources**.                                              |
 
 Below them, the list of current entries with the reason for each, and the **Banned uploaders** list. A quarantined pairing stays excluded until you remove that entry, clear the list, or approve the held file it came from. Reasons are: wrong file, verification failed, fingerprint mismatch, tags do not match, duration mismatch, tags unreadable, and sounds like a rejected copy.
 

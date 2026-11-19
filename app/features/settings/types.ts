@@ -17,6 +17,8 @@ export interface NextRunParts {
   unit?: string;
 }
 
+export type ServerSettings = RouterOutputs["settings"]["get"];
+
 export type DownloadSourcesConfig = RouterOutputs["settings"]["get"]["downloadSources"];
 
 export type DownloadSourcesAvailability = RouterOutputs["settings"]["downloadSourcesAvailability"];
@@ -47,10 +49,8 @@ export type SettingsPageId =
   | "releases"
   | "overview"
   | "members"
-  | "downloadSources"
-  | "engine"
+  | "download"
   | "library"
-  | "media"
   | "metadata"
   | "maintenance"
   | "system"
@@ -68,7 +68,14 @@ export interface SettingsPage {
   badge?: SettingsBadgeKey;
 }
 
-export type SettingsTabbedPageId = "appearance" | "connections" | "library" | "maintenance" | "releases" | "system";
+export type SettingsTabbedPageId =
+  | "appearance"
+  | "connections"
+  | "download"
+  | "library"
+  | "maintenance"
+  | "releases"
+  | "system";
 
 export interface SettingsTab {
   href: string;

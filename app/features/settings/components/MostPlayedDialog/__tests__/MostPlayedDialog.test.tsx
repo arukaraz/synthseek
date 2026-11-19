@@ -5,7 +5,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { FakeFollowServer } from "@test/follow-server";
 
 const toasts = vi.hoisted(() => ({
-  success: vi.fn<(message: string) => void>(),
+  success: vi.fn<(message: string, options?: { action: { onClick: () => void } }) => void>(),
   error: vi.fn<(message: string) => void>(),
   info: vi.fn<(message: string) => void>(),
   warning: vi.fn<(message: string) => void>(),
@@ -28,22 +28,20 @@ const CANDIDATES = [
 
 const EMPTY_LIST = { items: [], matching: 0, total: 0, withAutoRequest: 0, page: 1, pageSize: 25 };
 
-const RUN = { running: false, total: 2, done: 0, followed: 0, notFound: 0, failed: 0 };
+const RUN = {
+  running: false,
+  total: 2,
+  done: 0,
+  followed: 0,
+  notFound: 0,
+  failed: 0,
+  added: [] as Array<{ catalogArtistId: string; name: string }>,
+};
 
-function followed(catalogArtistId: string, name: string) {
-  return {
-    catalogArtistId,
-    name,
-    image: null,
-    followedAt: new Date("2026-11-18T10:00:00Z"),
-    autoRequest: true,
-    latest: null,
-    checked: false,
-    unresolvable: false,
-  };
-}
-
-const LIST_AFTER = { ...EMPTY_LIST, items: [followed("a1", "Ada"), followed("b1", "Bea")], matching: 2, total: 2 };
+const ADDED = [
+  { catalogArtistId: "a1", name: "Ada" },
+  { catalogArtistId: "b1", name: "Bea" },
+];
 
 function baseServer(): FakeFollowServer {
   return new FakeFollowServer()
@@ -53,6 +51,7 @@ function baseServer(): FakeFollowServer {
       requiresApproval: false,
     }))
     .on("requests.myQuota", () => ({ exempt: true, tracks: { limit: null } }))
+    .on("artistFollow.followMostPlayedStatus", () => ({ ...RUN, total: 0 }))
     .on("artistFollow.list", () => EMPTY_LIST);
 }
 
@@ -87,13 +86,20 @@ describe("MostPlayedDialog", () => {
   it("sends the chosen names with the automatic-request switch and closes once the run finishes", async () => {
     const user = userEvent.setup();
     let polls = 0;
+    let started = false;
     const server = baseServer()
-      .on("artistFollow.followMostPlayed", () => ({ ...RUN, running: true }))
-      .on("artistFollow.followMostPlayedStatus", () => {
-        polls += 1;
-        return polls < 3 ? { ...RUN, running: true, done: 1, followed: 1 } : { ...RUN, done: 2, followed: 2 };
+      .on("artistFollow.followMostPlayed", () => {
+        started = true;
+        return { ...RUN, running: true };
       })
-      .on("artistFollow.list", () => (polls < 3 ? EMPTY_LIST : LIST_AFTER));
+      .on("artistFollow.followMostPlayedStatus", () => {
+        if (!started) return { ...RUN, total: 0 };
+        polls += 1;
+        return polls < 3
+          ? { ...RUN, running: true, done: 1, followed: 1 }
+          : { ...RUN, done: 2, followed: 2, added: ADDED };
+      })
+      .on("artistFollow.unfollow", () => ({ unfollowed: [] }));
     const onOpenChange = renderDialog(server);
 
     await user.click(await screen.findByRole("checkbox", { name: "Select Cy" }));
@@ -107,6 +113,38 @@ describe("MostPlayedDialog", () => {
     });
     expect(polls).toBeGreaterThanOrEqual(3);
     expect(toasts.success).toHaveBeenCalledWith("Following 2 artists", expect.anything());
+
+    toasts.success.mock.calls[0]?.[1]?.action.onClick();
+    await waitFor(() => expect(server.callsTo("artistFollow.unfollow")).toHaveLength(1));
+    expect(server.callsTo("artistFollow.unfollow")[0]?.input).toEqual({ catalogArtistIds: ["a1", "b1"] });
+  });
+
+  it("picks up a run that was already under way when the page opens, and reports it when it ends", async () => {
+    let polls = 0;
+    const server = baseServer().on("artistFollow.followMostPlayedStatus", () => {
+      polls += 1;
+      return polls < 3
+        ? { ...RUN, running: true, done: 1, followed: 1 }
+        : { ...RUN, done: 2, followed: 2, added: ADDED };
+    });
+    render(<MostPlayedDialog open={false} onOpenChange={vi.fn()} />, { wrapper: server.wrapper() });
+
+    await waitFor(() => expect(toasts.success).toHaveBeenCalledWith("Following 2 artists", expect.anything()));
+    expect(server.callsTo("artistFollow.followMostPlayed")).toHaveLength(0);
+  });
+
+  it("says nothing about a run that had already ended when the page opens", async () => {
+    const server = baseServer().on("artistFollow.followMostPlayedStatus", () => ({
+      ...RUN,
+      done: 2,
+      followed: 2,
+      added: ADDED,
+    }));
+    render(<MostPlayedDialog open={false} onOpenChange={vi.fn()} />, { wrapper: server.wrapper() });
+
+    await waitFor(() => expect(server.callsTo("artistFollow.followMostPlayedStatus").length).toBeGreaterThan(0));
+    await new Promise((resolve) => setTimeout(resolve, 60));
+    expect(toasts.success).not.toHaveBeenCalled();
   });
 
   it("offers no Undo when nothing new shows up, and says how many the catalog could not answer for", async () => {

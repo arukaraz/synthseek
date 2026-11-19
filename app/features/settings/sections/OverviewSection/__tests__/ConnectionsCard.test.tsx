@@ -118,6 +118,6 @@ describe("ConnectionsCard", () => {
   it("opens the place to set up a row", async () => {
     render(<ConnectionsCard />);
     await userEvent.click(row("Jellyfin"));
-    expect(state.push).toHaveBeenCalledWith("/settings/media?server=jellyfin");
+    expect(state.push).toHaveBeenCalledWith("/settings/library/sources?server=jellyfin");
   });
 });

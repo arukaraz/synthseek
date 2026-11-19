@@ -61,11 +61,11 @@ describe("connectionRows", () => {
     const rows = connectionRows(ordered(createMockSettings()), availability(), undefined, undefined);
     const hrefs = Object.fromEntries(rows.map((row) => [row.id, row.href]));
     expect(hrefs).toMatchObject({
-      torrent: "/settings/download-sources?source=torrent",
-      slskd: "/settings/download-sources?source=slskd",
-      lidarr: "/settings/download-sources?source=lidarr",
-      plex: "/settings/media?server=plex",
-      jellyfin: "/settings/media?server=jellyfin",
+      torrent: "/settings/download/sources?source=torrent",
+      slskd: "/settings/download/sources?source=slskd",
+      lidarr: "/settings/download/sources?source=lidarr",
+      plex: "/settings/library/sources?server=plex",
+      jellyfin: "/settings/library/sources?server=jellyfin",
       spotify: "/settings/library/sources",
     });
   });
@@ -215,8 +215,8 @@ describe("setupChecks", () => {
   it("lists the four checks with where to fix each", () => {
     const checks = setupChecks(createMockSettings(), undefined);
     expect(checks.map((check) => [check.id, check.labelKey, check.href])).toEqual([
-      ["source", "overview.setup.downloadSource", "/settings/download-sources"],
-      ["mediaServer", "overview.setup.mediaServer", "/settings/media"],
+      ["source", "overview.setup.downloadSource", "/settings/download/sources"],
+      ["mediaServer", "overview.setup.mediaServer", "/settings/library/sources"],
       ["musicbrainz", "overview.setup.musicbrainzEmail", "/settings/metadata#connections.enrichment.musicbrainzEmail"],
       ["acoustid", "overview.setup.acoustidKey", "/settings/metadata#connections.enrichment.acoustidApiKey"],
     ]);

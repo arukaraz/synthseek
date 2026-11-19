@@ -81,14 +81,14 @@ describe("SettingsShell layout", () => {
 describe("SettingsShell access", () => {
   it("shows a member the access denied page on a server page", () => {
     state.isAdmin = false;
-    state.pathname = "/settings/download-sources";
+    state.pathname = "/settings/download/sources";
     renderShell();
     expect(screen.getByRole("heading", { name: shell.accessDenied.title })).toBeInTheDocument();
     expect(screen.queryByText("page body")).not.toBeInTheDocument();
   });
 
   it("shows an admin the server page", () => {
-    state.pathname = "/settings/download-sources";
+    state.pathname = "/settings/download/sources";
     renderShell();
     expect(screen.getByText("page body")).toBeInTheDocument();
     expect(screen.queryByRole("heading", { name: shell.accessDenied.title })).not.toBeInTheDocument();

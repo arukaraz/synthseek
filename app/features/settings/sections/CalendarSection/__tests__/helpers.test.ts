@@ -29,6 +29,7 @@ function release(overrides: Partial<FollowRelease> = {}): FollowRelease {
     explicit: false,
     autoRequest: false,
     state: "announced",
+    reissue: false,
     ...overrides,
   };
 }

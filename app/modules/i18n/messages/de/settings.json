@@ -203,7 +203,6 @@
     }
   },
   "header": {
-    "description": "Erweiterte Steuerungen für die Pipeline von Suche über Download bis Import. Die Standardwerte sind auf einen ausgewogenen Optimalpunkt eingestellt, der für die meisten Setups gut funktioniert, ändere sie nur, wenn du weißt, was du tust. Lass sie im Zweifel unverändert oder klicke auf der betroffenen Karte auf Auf Standard zurücksetzen, falls nach einer Änderung Titel zu scheitern beginnen.",
     "loading": "Einstellungen werden geladen…",
     "loadError": "Einstellungen konnten nicht geladen werden: {{message}}",
     "unknownError": "Unbekannter Fehler"
@@ -255,7 +254,7 @@
   },
   "timeouts": {
     "title": "Zeitlimits",
-    "soulseek": "Die eigenen Zeitlimits von Soulseek stehen bei den übrigen slskd-Einstellungen unter <slskd>Download-Quellen</slskd>.",
+    "soulseek": "Die eigenen Zeitlimits von Soulseek stehen bei den übrigen slskd-Einstellungen unter <slskd>Download, Quellen</slskd>.",
     "searchPhase": {
       "label": "Suchphase",
       "description": "Wie lange slskd jede Suchanfrage im Soulseek-Netzwerk offen hält, bevor das Sammeln neuer Ergebnisse gestoppt wird.",
@@ -1703,19 +1702,12 @@
         "title": "Mitglieder und Zugriff",
         "description": "Die Personen, die dieses Synthseek teilen, was sie tun dürfen und wie viel sie herunterladen können."
       },
-      "downloadSources": {
-        "title": "Download-Quellen",
-        "description": "Synthseek probiert die Quellen von oben nach unten. Kann eine einen Titel nicht liefern, bekommt ihn die nächste in derselben Anfrage."
-      },
-      "engine": {
-        "title": "Download-Engine"
+      "download": {
+        "title": "Download",
+        "description": "Woher Synthseek lädt, und die Engine, die sucht, lädt und importiert. Die Standardwerte der Engine sind auf einen ausgewogenen Optimalpunkt eingestellt, der für die meisten Setups gut funktioniert, ändere sie nur, wenn du weißt, was du tust. Lass sie im Zweifel unverändert oder klicke auf der betroffenen Karte auf Auf Standard zurücksetzen, falls nach einer Änderung Titel zu scheitern beginnen."
       },
       "library": {
         "title": "Bibliothek"
-      },
-      "media": {
-        "title": "Medien und Wiedergabe",
-        "description": "Die Medienserver, die Synthseek synchron hält, und die Reihenfolge, in der der Player sie probiert."
       },
       "metadata": {
         "title": "Metadaten",
@@ -1737,6 +1729,10 @@
       "appearance": {
         "theme": "Design und Sprache",
         "board": "Board"
+      },
+      "download": {
+        "sources": "Quellen",
+        "engine": "Engine"
       },
       "library": {
         "paths": "Pfade und Regeln",
@@ -1835,6 +1831,7 @@
     },
     "downloadSources": {
       "order": "Suchreihenfolge",
+      "orderDescription": "Synthseek probiert die Quellen von oben nach unten. Kann eine einen Titel nicht liefern, bekommt ihn die nächste in derselben Anfrage.",
       "orderHint": "Zieh eine Quelle, oder nutze ihre Pfeile, um die Reihenfolge zu ändern.",
       "handOff": "Weitergeben statt herunterladen",
       "panelLabel": "Einstellungen der ausgewählten Quelle"
@@ -2015,7 +2012,7 @@
   },
   "library": {
     "page": {
-      "description": "Wie deine Dateien auf der Platte geordnet sind, was der Scan findet und woher Bibliotheken importiert werden."
+      "description": "Die Medienserver und Bibliotheken, mit denen Synthseek sich verbindet, wie deine Dateien auf der Platte geordnet sind und was der Scan tut."
     },
     "sync": {
       "title": "Synchronisierung externer Bibliotheken",
@@ -2025,14 +2022,6 @@
         "description": "Wie oft Synthseek in dem, was Mitglieder auf anderen Diensten folgen und speichern, nach neuen Titeln sucht.",
         "suffix": "min"
       }
-    },
-    "mediaServerSources": {
-      "title": "Deine Medienserver",
-      "description": "Mitglieder können auch Playlists aus Plex, Navidrome und Jellyfin importieren. Hier wird nichts eingestellt: Die Serververbindung liegt unter Medien und Wiedergabe, und jedes Mitglied importiert mit dem Konto, das es unter Verbindungen verknüpft.",
-      "available": "Für Mitglieder verfügbar",
-      "notConfigured": "Nicht eingerichtet",
-      "open": "Öffnen",
-      "setUp": "Einrichten"
     }
   },
   "libraryPaths": {

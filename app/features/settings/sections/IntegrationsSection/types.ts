@@ -4,7 +4,7 @@ import type { ParseKeys } from "i18next";
 import type { AppRouter, DownloadSourceKey } from "@api/__generated__/types";
 import type { PlaybackServerKey } from "@utils/playback-servers";
 
-import type { DownloadSourcesConfig, LidarrHealth, SlskdHealth } from "../../types";
+import type { DownloadSourcesConfig, LidarrHealth, ServerSettings, SlskdHealth } from "../../types";
 
 type RouterOutputs = inferRouterOutputs<AppRouter>;
 
@@ -169,6 +169,6 @@ export interface LibrarySyncCardProps {
   initial: { syncIntervalMinutes: number };
 }
 
-export interface MediaServerSourcesCardProps {
-  connected: Readonly<Record<PlaybackServerKey, boolean>>;
+export interface MediaServersSectionProps {
+  settings: Pick<ServerSettings, "connections" | "engine" | "formatting">;
 }

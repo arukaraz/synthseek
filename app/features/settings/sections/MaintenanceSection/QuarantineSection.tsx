@@ -123,7 +123,7 @@ export function QuarantineSection({ initial, sourceTrust }: QuarantineCardProps)
           t={t}
           i18nKey="quarantine.sourceTrust.manage"
           components={{
-            slskd: <HashLink href="/settings/download-sources?source=slskd#ban-threshold" className={inlineLink()} />,
+            slskd: <HashLink href="/settings/download/sources?source=slskd#ban-threshold" className={inlineLink()} />,
           }}
         />
       </p>

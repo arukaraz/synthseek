@@ -70,7 +70,8 @@
     "dayTitle": "Releases on {{date}}",
     "selectedDay": "Releases on {{date}}",
     "noneOnDay": "Nothing comes out on this day.",
-    "by": "by {{artist}}"
+    "by": "by {{artist}}",
+    "reissue": "Reissue"
   },
   "state": {
     "announced": "Announced",

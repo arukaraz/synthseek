@@ -10,7 +10,7 @@ const state = vi.hoisted(() => {
 });
 
 vi.mock("next/navigation", () => ({
-  usePathname: () => "/settings/media",
+  usePathname: () => "/settings/library/sources",
   useRouter: () => state.router,
 }));
 

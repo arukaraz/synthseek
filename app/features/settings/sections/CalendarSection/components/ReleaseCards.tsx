@@ -36,6 +36,7 @@ export function ReleaseCards({ releases, today }: ReleaseCardsProps) {
               <span className={releaseTitle()}>{release.title}</span>
               <span className={releaseMeta()}>
                 {t("releases.by", { artist: release.artistName })} · {t(`types.${release.type}`)}
+                {release.reissue ? ` · ${t("releases.reissue")}` : null}
               </span>
               <span className={releaseMeta()}>
                 {out ? t("releases.out", { date }) : t("releases.comesOut", { date })}

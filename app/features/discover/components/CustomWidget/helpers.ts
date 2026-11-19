@@ -155,6 +155,22 @@ export function todayBoundaryIndex(items: readonly WidgetItem[]): number {
   });
 }
 
+function nearestFirst(direction: 1 | -1): (a: WidgetItem, b: WidgetItem) => number {
+  return (a, b) => {
+    if (a.date === null || b.date === null) return Number(a.date === null) - Number(b.date === null);
+    return direction * a.date.localeCompare(b.date);
+  };
+}
+
+export function shownAroundToday(items: readonly WidgetItem[], limit: number): WidgetItem[] {
+  if (items.some((item) => item.follow === undefined)) return items.slice(0, limit);
+  const upcoming = items.filter((item) => item.follow?.state === "announced").sort(nearestFirst(1));
+  const recent = items.filter((item) => item.follow?.state !== "announced").sort(nearestFirst(-1));
+  const recentShown = Math.min(recent.length, limit - Math.min(upcoming.length, Math.ceil(limit / 2)));
+  const upcomingShown = Math.min(upcoming.length, limit - recentShown);
+  return [...upcoming.slice(0, upcomingShown), ...recent.slice(0, recentShown)];
+}
+
 function whenOf(measure: WidgetMeasure, row: { playedAt: Date | null; addedAt?: Date | null }): Date | null {
   return measure === "addedAt" ? (row.addedAt ?? null) : row.playedAt;
 }
@@ -282,7 +298,9 @@ function feedAlbumItem(row: FeedAlbum, bind: Bind): WidgetItem {
     : undefined;
   const requestable = follow === undefined || isRequestable(follow.state);
   const date = formatCalendarDate(row.releaseDate);
-  const subtitle = follow ? i18n.t("follows:widget.subtitle", { artist: row.artist, date }) : row.artist;
+  const followed = i18n.t("follows:widget.subtitle", { artist: row.artist, date });
+  const marked = row.follow?.reissue ? `${followed} · ${i18n.t("follows:releases.reissue")}` : followed;
+  const subtitle = follow ? marked : row.artist;
   return {
     key: row.id,
     title: bound(row, bind, "title", row.name) ?? row.name,

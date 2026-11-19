@@ -266,7 +266,7 @@ export function SlskdCard({ initial }: SlskdCardProps) {
               i18nKey="slskd.bannedUploaders.helper"
               components={{
                 threshold: (
-                  <HashLink href="/settings/download-sources?source=slskd#ban-threshold" className={inlineLink()} />
+                  <HashLink href="/settings/download/sources?source=slskd#ban-threshold" className={inlineLink()} />
                 ),
               }}
             />

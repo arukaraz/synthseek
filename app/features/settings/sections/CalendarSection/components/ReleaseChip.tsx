@@ -11,16 +11,17 @@ export function ReleaseChip({ release, iso, onOpen }: ReleaseChipProps) {
   const { t } = useTranslation("follows");
   const info = releaseStateInfo(release.state, release.autoRequest);
   const Glyph = info.glyph;
+  const type = t(`types.${release.type}`);
 
   return (
     <button
       type="button"
       tabIndex={-1}
-      className={chip({ dim: release.type === "single" || release.type === "other" })}
+      className={chip({ dim: release.reissue || release.type === "single" || release.type === "other" })}
       aria-label={t("releases.chip", {
         artist: release.artistName,
         title: release.title,
-        type: t(`types.${release.type}`),
+        type: release.reissue ? `${type}, ${t("releases.reissue")}` : type,
         state: t(info.labelKey),
       })}
       onClick={() => onOpen(iso, release.releaseId)}

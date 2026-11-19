@@ -61,7 +61,7 @@ function Harness({ cards, withPageBar = true }: { cards: readonly CardSpec[]; wi
       {withPageBar ? <PageSaveBar /> : null}
       <a href="/settings/apps">apps link</a>
       <a href="/settings/account#password">same page link</a>
-      <NavigateButton href="/settings/media" />
+      <NavigateButton href="/settings/library/sources" />
       <NavigateButton href="/settings/account#password" />
       <div data-anchor-target="password">password target</div>
     </SettingsSaveScope>
@@ -251,15 +251,15 @@ describe("SettingsSaveScope leaving the page", () => {
 describe("useSettingsNavigate", () => {
   it("routes through the scope and asks before leaving a dirty page", async () => {
     render(<Harness cards={[card("Theme")]} />);
-    await userEvent.click(screen.getByRole("button", { name: "go /settings/media" }));
+    await userEvent.click(screen.getByRole("button", { name: "go /settings/library/sources" }));
     expect(screen.getByRole("dialog", { name: leave.title })).toBeInTheDocument();
     expect(nav.push).not.toHaveBeenCalled();
   });
 
   it("navigates straight away when nothing is dirty", async () => {
     render(<Harness cards={[card("Theme", { dirty: false })]} />);
-    await userEvent.click(screen.getByRole("button", { name: "go /settings/media" }));
-    expect(nav.push).toHaveBeenCalledWith("/settings/media");
+    await userEvent.click(screen.getByRole("button", { name: "go /settings/library/sources" }));
+    expect(nav.push).toHaveBeenCalledWith("/settings/library/sources");
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
   });
 
@@ -273,7 +273,7 @@ describe("useSettingsNavigate", () => {
 
   it("does not highlight anything when navigating to another page", async () => {
     render(<Harness cards={[card("Theme", { dirty: false })]} />);
-    await userEvent.click(screen.getByRole("button", { name: "go /settings/media" }));
+    await userEvent.click(screen.getByRole("button", { name: "go /settings/library/sources" }));
     expect(screen.getByText("password target")).not.toHaveAttribute("data-glow");
   });
 

@@ -2,11 +2,10 @@ import { trpc } from "@utils/trpc";
 
 import { FOLLOW_RUN_POLL_MS } from "./constants";
 
-export function useFollowMostPlayedStatus(enabled: boolean) {
+export function useFollowMostPlayedStatus() {
   return trpc.artistFollow.followMostPlayedStatus.useQuery(undefined, {
-    enabled,
     staleTime: 0,
     gcTime: 0,
-    refetchInterval: (query) => (query.state.data?.running === false ? false : FOLLOW_RUN_POLL_MS),
+    refetchInterval: (query) => (query.state.data?.running === true ? FOLLOW_RUN_POLL_MS : false),
   });
 }

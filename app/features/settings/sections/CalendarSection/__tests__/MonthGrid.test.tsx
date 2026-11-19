@@ -27,6 +27,7 @@ function release(id: string, overrides: Partial<FollowRelease> = {}): FollowRele
     explicit: false,
     autoRequest: false,
     state: "announced",
+    reissue: false,
     ...overrides,
   };
 }
@@ -108,6 +109,20 @@ describe("MonthGrid", () => {
     const short = screen.getAllByRole("gridcell")[0];
     expect(short).toHaveClass("min-h-12");
     expect(short).not.toHaveClass("min-h-28");
+  });
+
+  it("names a reissue as one on its chip and leaves the others alone", () => {
+    renderMonth([release("a", { reissue: true }), release("b")]);
+
+    expect(screen.getByRole("button", { name: "Artist a, Title a, Album, Reissue, Announced" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Artist b, Title b, Album, Announced" })).toBeInTheDocument();
+  });
+
+  it("says a release is a reissue in the day list", () => {
+    renderMonth([release("a", { reissue: true }), release("b")], 400);
+
+    expect(screen.getByText("by Artist a · Album · Reissue")).toBeInTheDocument();
+    expect(screen.getByText("by Artist b · Album")).toBeInTheDocument();
   });
 
   it("swaps chips for dots and a day list when the container is narrow", () => {

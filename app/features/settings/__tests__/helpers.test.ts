@@ -76,10 +76,8 @@ describe("isAdminOnlySettingsPath", () => {
     expect(SERVER_PAGES.map((page) => page.id)).toEqual([
       "overview",
       "members",
-      "downloadSources",
-      "engine",
+      "download",
       "library",
-      "media",
       "metadata",
       "maintenance",
       "system",

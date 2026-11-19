@@ -70,7 +70,8 @@
     "dayTitle": "Veröffentlichungen am {{date}}",
     "selectedDay": "Veröffentlichungen am {{date}}",
     "noneOnDay": "An diesem Tag erscheint nichts.",
-    "by": "von {{artist}}"
+    "by": "von {{artist}}",
+    "reissue": "Neuauflage"
   },
   "state": {
     "announced": "Angekündigt",

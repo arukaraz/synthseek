@@ -54,6 +54,9 @@ const nextConfig: NextConfig = {
         destination: "/settings/library/scan?review=files",
         permanent: false,
       },
+      { source: "/settings/download-sources", destination: "/settings/download/sources", permanent: false },
+      { source: "/settings/engine", destination: "/settings/download/engine", permanent: false },
+      { source: "/settings/media", destination: "/settings/library/sources", permanent: false },
     ];
   },
 

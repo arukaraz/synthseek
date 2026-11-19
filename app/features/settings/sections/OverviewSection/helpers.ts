@@ -37,7 +37,7 @@ export function connectionRows(
     name: i18n.t(`settings:${SOURCE_TITLE_KEYS[key]}`),
     role: i18n.t("settings:overview.connections.downloadSource", { position: index + 1 }),
     status: sourceChainStatus(key, settings.downloadSources, availability, slskd),
-    href: `/settings/download-sources?source=${key}`,
+    href: `/settings/download/sources?source=${key}`,
   }));
   const connected = serverConnections(settings.connections);
   const servers = PLAYBACK_SERVER_KEYS.map((server) => ({
@@ -45,7 +45,7 @@ export function connectionRows(
     name: PLAYBACK_SERVER_NAMES[server],
     role: i18n.t("settings:overview.connections.mediaServer"),
     status: serverChainStatus(connected[server]),
-    href: `/settings/media?server=${server}`,
+    href: `/settings/library/sources?server=${server}`,
   }));
   return [
     ...sources,
@@ -54,7 +54,7 @@ export function connectionRows(
       name: i18n.t("settings:lidarr.title"),
       role: i18n.t("settings:overview.connections.handOff"),
       status: lidarrChainStatus(lidarr),
-      href: "/settings/download-sources?source=lidarr",
+      href: "/settings/download/sources?source=lidarr",
     },
     ...servers,
     {
@@ -87,13 +87,13 @@ export function setupChecks(
       id: "source",
       labelKey: "overview.setup.downloadSource",
       done: availability !== undefined && Object.values(availability).some((source) => source.enabled),
-      href: "/settings/download-sources",
+      href: "/settings/download/sources",
     },
     {
       id: "mediaServer",
       labelKey: "overview.setup.mediaServer",
       done: Object.values(connected).some(Boolean),
-      href: "/settings/media",
+      href: "/settings/library/sources",
     },
     {
       id: "musicbrainz",
