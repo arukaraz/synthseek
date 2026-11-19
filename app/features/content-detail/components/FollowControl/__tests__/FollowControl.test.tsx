@@ -14,7 +14,10 @@ vi.mock("sonner", () => ({ toast: toasts }));
 
 import { TooltipProvider } from "@components/ui/Tooltip";
 
+import { ContentDetailCloseProvider } from "../../../ContentDetailCloseContext";
 import { FollowControl } from "../FollowControl";
+
+const closeDetail = vi.fn<() => void>();
 
 const FOLLOWING = { followable: true, following: true, autoRequest: false, followedAt: new Date("2026-11-01") };
 const IDLE = { followable: true, following: false, autoRequest: false, followedAt: null };
@@ -32,7 +35,9 @@ function serverWith(status: unknown): FakeFollowServer {
 function renderControl(server: FakeFollowServer) {
   return render(
     <TooltipProvider>
-      <FollowControl catalogArtistId="a1" artistName="Ada" />
+      <ContentDetailCloseProvider onClose={closeDetail}>
+        <FollowControl catalogArtistId="a1" artistName="Ada" />
+      </ContentDetailCloseProvider>
     </TooltipProvider>,
     { wrapper: server.wrapper() }
   );
@@ -86,6 +91,29 @@ describe("FollowControl", () => {
     await user.click(await screen.findByRole("button", { name: "Following Ada. Follow options" }));
 
     expect(await screen.findByText("Albums and EPs, when they come out.")).toBeInTheDocument();
+  });
+
+  it("closes the artist window when the calendar link is followed", async () => {
+    const user = userEvent.setup();
+    renderControl(serverWith(FOLLOWING));
+
+    await user.click(await screen.findByRole("button", { name: "Following Ada. Follow options" }));
+    const link = await screen.findByRole("link", { name: "See calendar" });
+    link.addEventListener("click", (event) => event.preventDefault());
+    await user.click(link);
+
+    expect(closeDetail).toHaveBeenCalledTimes(1);
+    await waitFor(() => expect(screen.queryByRole("link", { name: "See calendar" })).not.toBeInTheDocument());
+  });
+
+  it("leaves the artist window open when the options are dismissed with Done", async () => {
+    const user = userEvent.setup();
+    renderControl(serverWith(FOLLOWING));
+
+    await user.click(await screen.findByRole("button", { name: "Following Ada. Follow options" }));
+    await user.click(await screen.findByRole("button", { name: "Done" }));
+
+    expect(closeDetail).not.toHaveBeenCalled();
   });
 
   it("puts the control back to Follow and says so when the server refuses", async () => {

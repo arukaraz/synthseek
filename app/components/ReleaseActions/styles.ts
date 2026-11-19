@@ -12,5 +12,3 @@ export const moreTrigger = cva(
 export const moreItemDanger = cva(
   "text-destructive-vivid hover:bg-destructive-vivid/10 hover:text-destructive-vivid focus:bg-destructive-vivid/10 focus:text-destructive-vivid active:bg-destructive-vivid/15 gap-2.5 py-2.5"
 );
-
-export const moreItemHint = cva("text-fg-muted block text-xs");

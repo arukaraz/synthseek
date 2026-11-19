@@ -11,6 +11,8 @@ import { useFollowNotice } from "@hooks/api/queries/artist-follow/useFollowNotic
 import { useFollowPreferences } from "@hooks/api/queries/artist-follow/useFollowPreferences";
 import { followTypesPhrase } from "@utils/follow-format";
 
+import { useContentDetailClose } from "../../ContentDetailCloseContext";
+
 import {
   followFooter,
   followFooterEnd,
@@ -39,6 +41,7 @@ export function FollowPopoverBody({
   const notice = useFollowNotice();
   const setAutoRequest = useSetAutoRequest();
   const { unfollow } = useUnfollowArtists();
+  const closeDetail = useContentDetailClose();
   const hint = preferences.data
     ? t("popover.requestNewHint", { types: followTypesPhrase(preferences.data.types) })
     : "";
@@ -46,6 +49,11 @@ export function FollowPopoverBody({
   const handleUnfollow = async () => {
     onClose();
     await unfollow([{ catalogArtistId, name: artistName }]);
+  };
+
+  const handleSeeCalendar = () => {
+    onClose();
+    closeDetail();
   };
 
   return (
@@ -70,7 +78,7 @@ export function FollowPopoverBody({
           {t("popover.unfollow")}
         </button>
         <div className={followFooterEnd({ stacked: fullWidthDone })}>
-          <Link href="/settings/calendar/releases" className={followLink()} onClick={onClose}>
+          <Link href="/settings/calendar/releases" className={followLink()} onClick={handleSeeCalendar}>
             {t("popover.seeCalendar")}
           </Link>
           <Button variant="secondary" size="sm" onClick={onClose}>

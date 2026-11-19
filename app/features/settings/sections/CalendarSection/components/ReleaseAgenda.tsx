@@ -59,7 +59,6 @@ export function ReleaseAgenda({ groups, today, month, width }: ReleaseAgendaProp
                 <ReleaseMoreMenu
                   artist={artistRefOf(release)}
                   album={albumRefOf(release)}
-                  state={release.state}
                   label={t("action.moreFor", { name: release.title })}
                 />
               </span>

@@ -29,7 +29,6 @@ export interface ReleaseMainActionProps {
 export interface ReleaseMoreMenuProps {
   artist: ReleaseArtistRef;
   album?: ReleaseAlbumRef;
-  state?: FollowReleaseState;
   label: string;
   triggerClassName?: string;
 }

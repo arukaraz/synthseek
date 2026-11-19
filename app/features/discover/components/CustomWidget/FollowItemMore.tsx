@@ -30,7 +30,6 @@ export function FollowItemMore({ item }: FollowItemMoreProps) {
           autoRequest: follow.autoRequest,
         }}
         album={album}
-        state={album ? follow.state : undefined}
         label={t("action.moreFor", { name: item.title })}
         triggerClassName={followMoreTrigger()}
       />

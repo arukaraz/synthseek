@@ -52,7 +52,6 @@ export function ReleaseCards({ releases, today }: ReleaseCardsProps) {
               <ReleaseMoreMenu
                 artist={artistRefOf(release)}
                 album={albumRefOf(release)}
-                state={release.state}
                 label={t("action.moreFor", { name: release.title })}
               />
             </span>
