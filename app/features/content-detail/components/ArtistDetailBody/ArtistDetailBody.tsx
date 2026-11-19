@@ -28,7 +28,7 @@ function ArtistDetailBodyComponent({ target, onClose, onNavigate }: ArtistDetail
   const { data: lidarr } = useLidarrAvailable();
   const { data: playable } = useHasPlayableTracks({ kind: "artist", artist: target.name });
   const { requestArtist } = useContentDetailActions();
-  const { play, radio } = useDetailPlayback(onClose);
+  const { play, shuffle, radio, enqueue } = useDetailPlayback(onClose);
 
   const mbid = identity?.mbid ?? null;
   const cover = identity?.image ?? target.cover;
@@ -40,7 +40,9 @@ function ArtistDetailBodyComponent({ target, onClose, onNavigate }: ArtistDetail
   );
 
   const handlePlay = useCallback(() => play({ kind: "artist", artist: target.name }), [play, target.name]);
+  const handleShuffle = useCallback(() => shuffle({ kind: "artist", artist: target.name }), [shuffle, target.name]);
   const handleStartRadio = useCallback(() => radio({ kind: "artist", artist: target.name }), [radio, target.name]);
+  const handleEnqueue = useCallback(() => enqueue({ kind: "artist", artist: target.name }), [enqueue, target.name]);
 
   const artistInput = useMemo(() => ({ id: target.id, name: target.name, cover }), [target.id, target.name, cover]);
 
@@ -66,7 +68,9 @@ function ArtistDetailBodyComponent({ target, onClose, onNavigate }: ArtistDetail
         requestState="request"
         onRequest={handleRequest}
         onPlay={playable ? handlePlay : undefined}
+        onShuffle={playable ? handleShuffle : undefined}
         onStartRadio={playable ? handleStartRadio : undefined}
+        onEnqueue={playable ? handleEnqueue : undefined}
         showRequest={showRequest}
         socials={socials}
         statsSlot={statsSlot}

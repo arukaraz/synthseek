@@ -8,7 +8,7 @@ import { canCustomizeRequestsFE } from "@utils/authorization";
 import { cn } from "@utils/cn";
 
 import { isolated } from "./helpers";
-import { splitCustomize, splitDirect, splitGroup, splitIcon } from "./styles";
+import { splitCustomize, splitDirect, splitGroup, splitIcon, splitLabel } from "./styles";
 import type { RequestSplitButtonProps } from "./types";
 
 export function RequestSplitButton({
@@ -46,7 +46,7 @@ export function RequestSplitButton({
         data-cy={dataCy ? `${dataCy}-direct` : undefined}
       >
         <Download className={splitIcon({ size })} aria-hidden />
-        {label}
+        {iconOnly ? null : <span className={splitLabel()}>{label}</span>}
       </button>
       {canCustomize ? (
         <button

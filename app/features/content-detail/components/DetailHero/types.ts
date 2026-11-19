@@ -56,6 +56,7 @@ export interface DetailHeroProps {
   onPlay?: () => Promise<void>;
   onShuffle?: () => Promise<void>;
   onStartRadio?: () => Promise<void>;
+  onEnqueue?: () => Promise<void>;
   onSubtitleClick?: () => void;
   showRequest?: boolean;
   showInLibraryPill?: boolean;
@@ -65,19 +66,13 @@ export interface DetailHeroProps {
   degradedSources?: DegradedSource[];
 }
 
-export interface HeroPlayButtonProps {
+export interface HeroPlaySplitProps {
+  mode: DetailMode;
   name: string;
   onPlay: () => Promise<void>;
-}
-
-export interface HeroShuffleButtonProps {
-  name: string;
-  onShuffle: () => Promise<void>;
-}
-
-export interface HeroRadioButtonProps {
-  name: string;
-  onStartRadio: () => Promise<void>;
+  onShuffle?: () => Promise<void>;
+  onStartRadio?: () => Promise<void>;
+  onEnqueue?: () => Promise<void>;
 }
 
 export interface PlaylistSyncToggleProps {

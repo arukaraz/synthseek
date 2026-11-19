@@ -11,7 +11,7 @@ import { useMediaQuery } from "@hooks/ui/useMediaQuery";
 import type { DetailPlayback } from "../types";
 
 export function useDetailPlayback(onClose: () => void): DetailPlayback {
-  const { playEntity, shuffleEntity, startRadio } = useEntityPlayback();
+  const { playEntity, shuffleEntity, enqueueEntity, startRadio } = useEntityPlayback();
   const wide = useMediaQuery(STAGE_WIDE_QUERY, true);
   const sideways = useMediaQuery(TOUCH_SHORT_LANDSCAPE_QUERY);
   const onPhone = !wide || sideways;
@@ -37,6 +37,12 @@ export function useDetailPlayback(onClose: () => void): DetailPlayback {
     async (target: PlayableTracksTarget) => leaveFor(await startRadio(target)),
     [leaveFor, startRadio]
   );
+  const enqueue = useCallback(
+    async (target: PlayableTracksTarget) => {
+      await enqueueEntity(target);
+    },
+    [enqueueEntity]
+  );
   const playTrack = useCallback(
     async (trackId: string) => {
       const started = await playEntity({ kind: "tracks", trackIds: [trackId] });
@@ -45,5 +51,5 @@ export function useDetailPlayback(onClose: () => void): DetailPlayback {
     [leaveFor, onPhone, playEntity]
   );
 
-  return { play, shuffle, radio, playTrack };
+  return { play, shuffle, radio, enqueue, playTrack };
 }

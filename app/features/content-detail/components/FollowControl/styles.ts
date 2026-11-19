@@ -1,7 +1,7 @@
 import { cva } from "class-variance-authority";
 
 export const followPill = cva(
-  "focus-visible:ring-primary-400 inline-flex shrink-0 cursor-pointer items-center gap-2 rounded-full border px-5 py-2.5 text-sm font-semibold transition-colors focus-visible:ring-2 focus-visible:outline-none",
+  "focus-visible:ring-primary-400 inline-flex h-11 min-w-0 cursor-pointer items-center gap-2 rounded-full border px-4 text-sm font-semibold transition-colors focus-visible:ring-2 focus-visible:outline-none sm:px-5 sm:text-base",
   {
     variants: {
       tone: {
@@ -15,7 +15,11 @@ export const followPill = cva(
   }
 );
 
-export const followLabelStack = cva("grid text-center");
+export const followMore = cva(
+  "-mr-1 flex items-center self-stretch border-l border-current/35 pl-2.5 sm:-mr-1.5 sm:pl-3"
+);
+
+export const followLabelStack = cva("grid min-w-0 text-center");
 
 export const followLabelGhost = cva("invisible col-start-1 row-start-1");
 

@@ -30,6 +30,7 @@ import {
 } from "../../helpers";
 import { DetailHero, PlaylistSyncToggle } from "../DetailHero";
 import { DetailEmpty, DetailSection } from "../DetailSection";
+import { StatRow } from "../StatRow";
 import { Tracklist } from "../Tracklist";
 import { useDetailPlayback } from "../../hooks/useDetailPlayback";
 import { useStableTracklistOrder } from "../../hooks/useStableTracklistOrder";
@@ -62,7 +63,8 @@ function PlaylistDetailBodyComponent({
   const canManage = isLibrary && playlist?.canManage === true;
   const requestLocked = isLibrary && playlist?.ownedByViewer === false;
   const { requestPlaylist } = useContentDetailActions();
-  const { play, shuffle } = useDetailPlayback(onClose);
+  const { play, shuffle, enqueue } = useDetailPlayback(onClose);
+  const handleEnqueue = useCallback(() => enqueue({ kind: "playlist", playlistId: target.id }), [enqueue, target.id]);
   const handlePlay = useCallback(() => play({ kind: "playlist", playlistId: target.id }), [play, target.id]);
   const handleShuffle = useCallback(() => shuffle({ kind: "playlist", playlistId: target.id }), [shuffle, target.id]);
 
@@ -275,6 +277,12 @@ function PlaylistDetailBodyComponent({
         showRequest={!loadFailed}
         onPlay={isLibrary && !loadFailed ? handlePlay : undefined}
         onShuffle={isLibrary && !loadFailed ? handleShuffle : undefined}
+        onEnqueue={isLibrary && !loadFailed ? handleEnqueue : undefined}
+        statsSlot={
+          displayTracks.length > 0 ? (
+            <StatRow layout="inline" stats={[{ label: t("stats.tracks"), value: displayTracks.length }]} />
+          ) : undefined
+        }
         requestDisabled={target.requestDisabled || requestLocked}
         requestDisabledTooltip={requestLocked ? t("requestOwnerOnly") : target.requestDisabledTooltip}
         socials={EMPTY_SOCIALS}

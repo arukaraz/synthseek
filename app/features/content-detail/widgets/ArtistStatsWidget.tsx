@@ -8,6 +8,7 @@ import { AboutBio } from "../components/AboutBio";
 import { DetailSection } from "../components/DetailSection";
 import { StatRow } from "../components/StatRow";
 import { countAlbumsInLibrary } from "../helpers";
+import { statSkeleton } from "../styles";
 import type { ArtistStatsWidgetProps, StatItem } from "../types";
 
 function ArtistStatsWidgetComponent({ catalogArtistId, artistName, mbid, slot }: ArtistStatsWidgetProps) {
@@ -31,7 +32,7 @@ function ArtistStatsWidgetComponent({ catalogArtistId, artistName, mbid, slot }:
   ];
 
   if (isLoading) {
-    return <div className="bg-fg/5 h-9 w-full max-w-xs animate-pulse rounded-lg" />;
+    return <div className={statSkeleton()} />;
   }
 
   return <StatRow stats={stats} />;

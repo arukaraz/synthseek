@@ -67,13 +67,40 @@ export const heroEditSave = cva(
   "border-primary-500/40 bg-primary-500/15 text-primary-400 hover:bg-primary-500/25 grid size-9 shrink-0 place-items-center rounded-full border transition-colors"
 );
 
-export const heroPlayButton = cva(
-  "border-fg/15 bg-fg/[0.06] text-fg hover:bg-fg/[0.12] focus-visible:ring-primary-400 inline-flex shrink-0 items-center gap-2 rounded-full border px-5 py-2.5 text-sm font-semibold transition-colors focus-visible:ring-2 focus-visible:outline-none disabled:opacity-60"
+export const playSplit = cva("inline-flex h-11 shrink-0 items-stretch overflow-hidden rounded-full", {
+  variants: {
+    mode: {
+      artist: "type-text-artist",
+      album: "type-text-album",
+      playlist: "type-text-playlist",
+    },
+  },
+});
+
+export const playSplitMain = cva(
+  "focus-visible:ring-fg inline-flex items-center bg-current pl-4 text-sm font-semibold transition-[filter] outline-none hover:brightness-110 focus-visible:ring-2 focus-visible:ring-inset disabled:opacity-60 sm:pl-5 sm:text-base",
+  {
+    variants: {
+      alone: {
+        true: "pr-4 sm:pr-5",
+        false: "pr-3 sm:pr-4",
+      },
+    },
+    defaultVariants: { alone: false },
+  }
 );
 
-export const heroIconButton = cva(
-  "border-fg/15 bg-fg/[0.06] text-fg hover:bg-fg/[0.12] focus-visible:ring-primary-400 inline-flex size-10 shrink-0 items-center justify-center rounded-full border transition-colors focus-visible:ring-2 focus-visible:outline-none disabled:opacity-60"
+export const playSplitMore = cva(
+  "focus-visible:ring-fg border-surface/30 inline-flex w-9 items-center justify-center border-l bg-current transition-[filter] outline-none hover:brightness-110 focus-visible:ring-2 focus-visible:ring-inset disabled:opacity-60 sm:w-10"
 );
+
+export const playSplitInk = cva("text-surface inline-flex items-center gap-2");
+
+export const playSplitLabel = cva("max-[374px]:hidden");
+
+export const playSplitOption = cva("flex min-w-0 flex-col");
+
+export const playSplitHint = cva("text-fg/50 max-w-56 text-xs font-normal");
 
 export const heroBadgeRow = cva("flex flex-wrap items-center justify-center gap-2 sm:justify-start");
 

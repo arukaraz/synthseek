@@ -23,7 +23,7 @@ function AlbumDetailBodyComponent({ target, onClose, onNavigate, showInLibraryPi
   const albumQuery = useAlbumDetail({ catalogAlbumId: target.id });
   const { data: album } = albumQuery;
   const { requestAlbum } = useContentDetailActions();
-  const { play, radio } = useDetailPlayback(onClose);
+  const { play, shuffle, radio, enqueue } = useDetailPlayback(onClose);
 
   const artistName = album?.artist ?? target.artistName;
   const { data: albumStats } = useAlbumStats({ artistName, albumName: target.name, mbid: null });
@@ -53,7 +53,9 @@ function AlbumDetailBodyComponent({ target, onClose, onNavigate, showInLibraryPi
   const handleCustomizeRequest = useCallback(() => requestWith("customize"), [requestWith]);
 
   const handlePlay = useCallback(() => play({ kind: "album", albumExternalId: target.id }), [play, target.id]);
+  const handleShuffle = useCallback(() => shuffle({ kind: "album", albumExternalId: target.id }), [shuffle, target.id]);
   const handleStartRadio = useCallback(() => radio({ kind: "album", albumExternalId: target.id }), [radio, target.id]);
+  const handleEnqueue = useCallback(() => enqueue({ kind: "album", albumExternalId: target.id }), [enqueue, target.id]);
 
   const handleArtistNavigate = useMemo(
     () =>
@@ -82,7 +84,9 @@ function AlbumDetailBodyComponent({ target, onClose, onNavigate, showInLibraryPi
         onRequest={handleRequest}
         onCustomizeRequest={handleCustomizeRequest}
         onPlay={counts.completeCount > 0 ? handlePlay : undefined}
+        onShuffle={counts.completeCount > 0 ? handleShuffle : undefined}
         onStartRadio={counts.completeCount > 0 ? handleStartRadio : undefined}
+        onEnqueue={counts.completeCount > 0 ? handleEnqueue : undefined}
         onSubtitleClick={handleArtistNavigate}
         socials={EMPTY_SOCIALS}
         statsSlot={statsSlot}

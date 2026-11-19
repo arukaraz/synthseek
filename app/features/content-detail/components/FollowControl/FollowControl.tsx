@@ -15,7 +15,7 @@ import { useMediaQuery } from "@hooks/ui/useMediaQuery";
 
 import { FollowLabel } from "./FollowLabel";
 import { FollowPopoverBody } from "./FollowPopoverBody";
-import { followPill, followSheetBody } from "./styles";
+import { followMore, followPill, followSheetBody } from "./styles";
 import type { FollowControlProps } from "./types";
 
 export function FollowControl({ catalogArtistId, artistName }: FollowControlProps) {
@@ -71,7 +71,11 @@ export function FollowControl({ catalogArtistId, artistName }: FollowControlProp
       {following ? <Check className="size-4" aria-hidden /> : <UserPlus className="size-4" aria-hidden />}
       <FollowLabel live={following ? "following" : "follow"} />
       {following && autoRequest ? <Zap className="size-3.5" aria-label={t("control.automatic")} /> : null}
-      {following ? <ChevronDown className="size-3.5" aria-hidden /> : null}
+      {following ? (
+        <span className={followMore()} aria-hidden>
+          <ChevronDown className="size-4" />
+        </span>
+      ) : null}
     </button>
   );
 

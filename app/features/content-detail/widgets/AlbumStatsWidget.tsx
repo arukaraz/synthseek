@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next";
 import { AboutBio } from "../components/AboutBio";
 import { DetailSection } from "../components/DetailSection";
 import { StatRow } from "../components/StatRow";
+import { statSkeleton } from "../styles";
 import type { AlbumStatsWidgetProps, StatItem } from "../types";
 
 function AlbumStatsWidgetComponent({ artistName, albumName, trackCount, slot }: AlbumStatsWidgetProps) {
@@ -29,7 +30,7 @@ function AlbumStatsWidgetComponent({ artistName, albumName, trackCount, slot }: 
   ];
 
   if (isLoading) {
-    return <div className="bg-fg/5 h-24 w-full animate-pulse rounded-xl" />;
+    return <div className={statSkeleton()} />;
   }
 
   return <StatRow stats={stats} />;

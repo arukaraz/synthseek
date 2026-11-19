@@ -70,7 +70,11 @@ vi.mock("@modules/providers/AuthProvider", () => ({
 const playback = vi.hoisted(() => ({
   playEntity: vi.fn(async () => false),
   shuffleEntity: vi.fn(async () => false),
+  enqueueEntity: vi.fn(async () => true),
 }));
+
+const PLAY = "Play everything we have of Road Trip";
+const MORE = "More ways to listen to Road Trip";
 
 vi.mock("@hooks/ui/useEntityPlayback", () => ({ useEntityPlayback: () => playback }));
 
@@ -155,39 +159,73 @@ describe("PlaylistDetailBody shuffle", () => {
     usePlaylistDetailMock.mockReturnValue(playlistDetail());
   });
 
-  it("shuffles a library playlist from the icon beside Play", async () => {
+  it("shuffles a library playlist from the menu behind Play", async () => {
     const { user } = renderWithProviders(
       <PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} onNavigate={vi.fn()} />
     );
 
-    await user.click(screen.getByRole("button", { name: "Shuffle everything we have of Road Trip" }));
+    await user.click(screen.getByRole("button", { name: MORE }));
+    await user.click(screen.getByRole("menuitem", { name: "Shuffle" }));
 
     expect(playback.shuffleEntity).toHaveBeenCalledWith({ kind: "playlist", playlistId: "pl-1" });
     expect(playback.playEntity).not.toHaveBeenCalled();
   });
 
-  it.each([
-    ["Play everything we have of Road Trip", "playEntity"],
-    ["Shuffle everything we have of Road Trip", "shuffleEntity"],
-  ] as const)("closes the modal once %s has started, and keeps it open when it could not", async (name, source) => {
+  it("closes the modal once Play has started, and keeps it open when it could not", async () => {
     const onClose = vi.fn();
     const { user } = renderWithProviders(
       <PlaylistDetailBody target={libraryTarget()} onClose={onClose} onNavigate={vi.fn()} />
     );
 
-    await user.click(screen.getByRole("button", { name }));
+    await user.click(screen.getByRole("button", { name: PLAY }));
     expect(onClose).not.toHaveBeenCalled();
 
-    playback[source].mockResolvedValueOnce(true);
-    await user.click(screen.getByRole("button", { name }));
+    playback.playEntity.mockResolvedValueOnce(true);
+    await user.click(screen.getByRole("button", { name: PLAY }));
     expect(onClose).toHaveBeenCalledTimes(1);
   });
 
-  it("offers no shuffle for a catalog playlist it cannot play", () => {
+  it("closes the modal once a shuffle has started, and keeps it open when it could not", async () => {
+    const onClose = vi.fn();
+    const { user } = renderWithProviders(
+      <PlaylistDetailBody target={libraryTarget()} onClose={onClose} onNavigate={vi.fn()} />
+    );
+
+    await user.click(screen.getByRole("button", { name: MORE }));
+    await user.click(screen.getByRole("menuitem", { name: "Shuffle" }));
+    expect(onClose).not.toHaveBeenCalled();
+
+    playback.shuffleEntity.mockResolvedValueOnce(true);
+    await user.click(screen.getByRole("button", { name: MORE }));
+    await user.click(screen.getByRole("menuitem", { name: "Shuffle" }));
+    expect(onClose).toHaveBeenCalledTimes(1);
+  });
+
+  it("adds a library playlist to the queue and leaves the modal open", async () => {
+    const onClose = vi.fn();
+    const { user } = renderWithProviders(
+      <PlaylistDetailBody target={libraryTarget()} onClose={onClose} onNavigate={vi.fn()} />
+    );
+
+    await user.click(screen.getByRole("button", { name: MORE }));
+    await user.click(screen.getByRole("menuitem", { name: "Add to queue" }));
+
+    expect(playback.enqueueEntity).toHaveBeenCalledWith({ kind: "playlist", playlistId: "pl-1" });
+    expect(onClose).not.toHaveBeenCalled();
+  });
+
+  it("shows how many tracks the playlist holds beside its name", () => {
+    renderWithProviders(<PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} onNavigate={vi.fn()} />);
+
+    expect(screen.getByRole("banner")).toHaveTextContent("2Tracks");
+  });
+
+  it("offers no way to listen for a catalog playlist it cannot play", () => {
     usePlaylistDetailMock.mockReturnValue({ data: undefined });
     renderWithProviders(<PlaylistDetailBody target={catalogTarget()} onClose={vi.fn()} onNavigate={vi.fn()} />);
 
-    expect(screen.queryByRole("button", { name: "Shuffle everything we have of Top Hits" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Play everything we have of Top Hits" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "More ways to listen to Top Hits" })).not.toBeInTheDocument();
   });
 });
 

@@ -6,7 +6,7 @@ import { STAGE_WIDE_QUERY, TOUCH_SHORT_LANDSCAPE_QUERY } from "@components/Playe
 import { useDetailPlayback } from "../useDetailPlayback";
 
 const { playback, stage, media } = vi.hoisted(() => ({
-  playback: { playEntity: vi.fn(), shuffleEntity: vi.fn(), startRadio: vi.fn() },
+  playback: { playEntity: vi.fn(), shuffleEntity: vi.fn(), enqueueEntity: vi.fn(), startRadio: vi.fn() },
   stage: { openStage: vi.fn() },
   media: { matches: new Set<string>() },
 }));
@@ -41,6 +41,19 @@ describe("useDetailPlayback", () => {
       expect(stage.openStage).not.toHaveBeenCalled();
     }
   );
+
+  it("adds to the queue without closing the modal or opening the player, on a phone too", async () => {
+    media.matches = new Set();
+    playback.enqueueEntity.mockResolvedValue(true);
+    const onClose = vi.fn();
+    const { result } = renderHook(() => useDetailPlayback(onClose));
+
+    await act(() => result.current.enqueue(TARGET));
+
+    expect(playback.enqueueEntity).toHaveBeenCalledWith(TARGET);
+    expect(onClose).not.toHaveBeenCalled();
+    expect(stage.openStage).not.toHaveBeenCalled();
+  });
 
   it("opens the full screen player on a phone, after closing the modal", async () => {
     media.matches = new Set();

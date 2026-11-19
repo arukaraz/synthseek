@@ -83,7 +83,15 @@ export const heroImage = cva("h-full w-full object-cover");
 
 export const heroInitials = cva("text-fg/70 flex h-full w-full items-center justify-center text-4xl font-bold");
 
-export const heroInfo = cva("flex min-w-0 flex-col items-center gap-3 sm:items-start");
+export const heroInfo = cva("@container flex w-full min-w-0 flex-col items-center gap-3 sm:flex-1 sm:items-start");
+
+export const heroTop = cva(
+  "flex w-full min-w-0 flex-col items-center gap-4 sm:items-start @2xl:flex-row @2xl:items-center @2xl:gap-7"
+);
+
+export const heroIdentity = cva("flex w-full min-w-0 flex-col items-center gap-3 sm:items-start @2xl:flex-1");
+
+export const heroMeta = cva("flex flex-wrap items-center justify-center gap-x-3 gap-y-2 sm:justify-start");
 
 export const heroName = cva("text-fg font-bold tracking-tight sm:leading-[1.05]", {
   variants: {
@@ -103,9 +111,20 @@ export const heroSubtitleButton = cva(
 
 export const heroTags = cva("flex flex-wrap items-center justify-center gap-2 sm:justify-start");
 
-export const heroActions = cva("mt-3 flex flex-wrap items-center justify-center gap-3 sm:mt-5 sm:justify-start");
+export const heroActions = cva(
+  "mt-2 flex w-full min-w-0 items-center justify-center gap-2 sm:mt-3 sm:flex-wrap sm:justify-start sm:gap-3",
+  {
+    variants: {
+      crowded: {
+        true: "flex-wrap",
+        false: "flex-nowrap",
+      },
+    },
+    defaultVariants: { crowded: false },
+  }
+);
 
-export const heroStats = cva("flex w-full justify-center sm:justify-start");
+export const heroStats = cva("flex w-full justify-center sm:justify-start @2xl:w-auto @2xl:shrink-0");
 
 export const alreadyInLibrary = cva(
   "border-secondary-500/30 bg-secondary-500/10 text-secondary-400 focus-visible:ring-secondary-400 grid size-10.5 place-items-center rounded-full border focus-visible:ring-2 focus-visible:outline-none"
@@ -115,13 +134,48 @@ export const genreChip = cva(
   "border-fg/10 bg-fg/5 text-fg/70 inline-flex rounded-full border px-3 py-1 text-xs font-medium capitalize"
 );
 
-export const statRow = cva("flex flex-wrap items-start justify-center gap-x-8 gap-y-3 sm:justify-start");
+export const statRow = cva("flex flex-wrap justify-center sm:justify-start", {
+  variants: {
+    layout: {
+      aside:
+        "items-start gap-x-7 gap-y-2.5 text-center sm:text-left @2xl:grid @2xl:grid-cols-[auto_auto] @2xl:gap-y-3 @2xl:text-right",
+      inline: "items-center gap-x-3 gap-y-1",
+    },
+  },
+  defaultVariants: { layout: "aside" },
+});
 
-export const statCell = cva("flex flex-col gap-0.5");
+export const statCell = cva("flex", {
+  variants: {
+    layout: {
+      aside: "flex-col",
+      inline: "items-baseline gap-1.5 whitespace-nowrap",
+    },
+  },
+  defaultVariants: { layout: "aside" },
+});
 
-export const statValue = cva("text-fg text-2xl font-bold tabular-nums");
+export const statValue = cva("text-fg tabular-nums", {
+  variants: {
+    layout: {
+      aside: "text-xl leading-tight font-bold",
+      inline: "text-sm font-semibold",
+    },
+  },
+  defaultVariants: { layout: "aside" },
+});
 
-export const statLabel = cva("text-fg/50 text-sm");
+export const statLabel = cva("", {
+  variants: {
+    layout: {
+      aside: "text-fg/50 text-xs",
+      inline: "text-fg/60 text-sm",
+    },
+  },
+  defaultVariants: { layout: "aside" },
+});
+
+export const statSkeleton = cva("bg-fg/5 h-12 w-56 max-w-full animate-pulse rounded-xl");
 
 export const sectionRoot = cva("flex flex-col gap-4");
 

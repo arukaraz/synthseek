@@ -1,4 +1,4 @@
-export type RequestSplitSize = "sm" | "md" | "lg";
+export type RequestSplitSize = "sm" | "md" | "lg" | "hero";
 
 export type RequestSplitTone = "primary" | "ghost";
 

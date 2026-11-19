@@ -10,6 +10,7 @@ export const splitGroup = cva("inline-flex shrink-0 items-stretch overflow-hidde
       sm: "rounded-lg",
       md: "rounded-xl",
       lg: "rounded-xl",
+      hero: "min-w-0 shrink rounded-xl",
     },
     fullWidth: {
       true: "flex w-full",
@@ -36,6 +37,7 @@ export const splitDirect = cva(
         sm: "h-7 px-2.5 text-xs",
         md: "h-9 px-4 text-sm",
         lg: "h-11 px-5 text-base",
+        hero: "h-11 min-w-0 px-3 text-sm sm:px-5 sm:text-base",
       },
       iconOnly: {
         true: "px-0",
@@ -50,6 +52,7 @@ export const splitDirect = cva(
       { iconOnly: true, size: "sm", className: "w-7" },
       { iconOnly: true, size: "md", className: "w-9" },
       { iconOnly: true, size: "lg", className: "w-11" },
+      { iconOnly: true, size: "hero", className: "w-11" },
     ],
     defaultVariants: { tone: "primary", size: "md", iconOnly: false, fullWidth: false },
   }
@@ -67,6 +70,7 @@ export const splitCustomize = cva(
         sm: "h-7 w-7",
         md: "h-9 w-9",
         lg: "h-11 w-11",
+        hero: "h-11 w-9 shrink-0 sm:w-11",
       },
     },
     defaultVariants: { tone: "primary", size: "md" },
@@ -79,7 +83,10 @@ export const splitIcon = cva("shrink-0", {
       sm: "size-3.5",
       md: "size-4",
       lg: "size-4",
+      hero: "size-4",
     },
   },
   defaultVariants: { size: "md" },
 });
+
+export const splitLabel = cva("truncate");
