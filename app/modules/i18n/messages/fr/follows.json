@@ -164,6 +164,8 @@
     "notFound_other": "{{count}} sont introuvables dans le catalogue.",
     "unreached_one": "{{count}} n'a pas pu être suivi pour le moment. Réessayez plus tard.",
     "unreached_other": "{{count}} n'ont pas pu être suivis pour le moment. Réessayez plus tard.",
+    "overLimit_one": "{{count}} n'a pas été suivi. Vous suivez le maximum d'artistes d'un compte.",
+    "overLimit_other": "{{count}} n'ont pas été suivis. Vous suivez le maximum d'artistes d'un compte.",
     "failed": "Impossible de suivre ces artistes. Réessayez.",
     "progress": "{{done}} sur {{total}} suivis",
     "loadError": "Impossible de charger vos artistes les plus écoutés.",

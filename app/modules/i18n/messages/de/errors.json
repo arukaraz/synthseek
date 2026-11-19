@@ -431,6 +431,10 @@
     "title": "Deine meistgehörten werden bereits gefolgt",
     "description": "Warte, bis der laufende Durchgang fertig ist, und versuche es dann erneut."
   },
+  "FOLLOW_LIMIT_REACHED": {
+    "title": "Du folgst der Höchstzahl an Künstlern",
+    "description": "Ein Konto folgt bis zu {{limit}} Künstlern. Entfolge einem, um einem anderen zu folgen."
+  },
   "QUOTA_REQUEST_TOO_LARGE": {
     "title": "Anfrage größer als dein Kontingent",
     "description": "Diese Anfrage umfasst {{requested}} Titel, dein gesamtes Kontingent sind {{limit}}. Fordere weniger auf einmal an."

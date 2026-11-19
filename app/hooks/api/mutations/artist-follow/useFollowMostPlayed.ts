@@ -36,6 +36,7 @@ export function useFollowMostPlayed() {
       }
       if (result.notFound > 0) toast.info(i18n.t("follows:mostPlayed.notFound", { count: result.notFound }));
       if (result.failed > 0) toast.warning(i18n.t("follows:mostPlayed.unreached", { count: result.failed }));
+      if (result.overLimit > 0) toast.warning(i18n.t("follows:mostPlayed.overLimit", { count: result.overLimit }));
     },
     [utils, unfollow]
   );

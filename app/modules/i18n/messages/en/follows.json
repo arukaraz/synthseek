@@ -164,6 +164,8 @@
     "notFound_other": "{{count}} couldn't be found in the catalog.",
     "unreached_one": "{{count}} couldn't be followed right now. Try again later.",
     "unreached_other": "{{count}} couldn't be followed right now. Try again later.",
+    "overLimit_one": "{{count}} wasn't followed. You follow the most artists an account can.",
+    "overLimit_other": "{{count}} weren't followed. You follow the most artists an account can.",
     "failed": "Couldn't follow these artists. Try again.",
     "progress": "Following {{done}} of {{total}}",
     "loadError": "Couldn't load your most played artists.",

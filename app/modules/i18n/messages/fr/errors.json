@@ -431,6 +431,10 @@
     "title": "Vos plus écoutés sont déjà en cours de suivi",
     "description": "Attendez la fin de l'exécution en cours, puis réessayez."
   },
+  "FOLLOW_LIMIT_REACHED": {
+    "title": "Vous suivez le maximum d'artistes",
+    "description": "Un compte suit jusqu'à {{limit}} artistes. Arrêtez d'en suivre un pour en suivre un autre."
+  },
   "QUOTA_REQUEST_TOO_LARGE": {
     "title": "Demande plus grande que votre quota",
     "description": "Cette demande ajoute {{requested}} pistes et votre quota entier est de {{limit}}. Demandez-en moins à la fois."

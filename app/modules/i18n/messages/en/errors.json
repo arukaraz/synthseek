@@ -431,6 +431,10 @@
     "title": "Already following your most played",
     "description": "Wait for the current run to finish, then try again."
   },
+  "FOLLOW_LIMIT_REACHED": {
+    "title": "You follow the most artists you can",
+    "description": "An account follows up to {{limit}} artists. Unfollow one to follow another."
+  },
   "QUOTA_REQUEST_TOO_LARGE": {
     "title": "Request larger than your quota",
     "description": "This request adds {{requested}} tracks and your whole quota is {{limit}}. Request fewer at a time."

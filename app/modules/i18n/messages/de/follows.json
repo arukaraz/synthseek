@@ -164,6 +164,8 @@
     "notFound_other": "{{count}} wurden im Katalog nicht gefunden.",
     "unreached_one": "{{count}} konnte gerade nicht gefolgt werden. Versuche es später erneut.",
     "unreached_other": "{{count}} konnte gerade nicht gefolgt werden. Versuche es später erneut.",
+    "overLimit_one": "{{count}} wurde nicht gefolgt. Du folgst der Höchstzahl an Künstlern eines Kontos.",
+    "overLimit_other": "{{count}} wurde nicht gefolgt. Du folgst der Höchstzahl an Künstlern eines Kontos.",
     "failed": "Diesen Künstlern konnte nicht gefolgt werden. Versuche es erneut.",
     "progress": "{{done}} von {{total}} gefolgt",
     "loadError": "Deine meistgehörten Künstler konnten nicht geladen werden.",

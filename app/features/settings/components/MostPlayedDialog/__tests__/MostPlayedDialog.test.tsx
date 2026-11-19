@@ -35,6 +35,7 @@ const RUN = {
   followed: 0,
   notFound: 0,
   failed: 0,
+  overLimit: 0,
   added: [] as Array<{ catalogArtistId: string; name: string }>,
 };
 
@@ -164,6 +165,25 @@ describe("MostPlayedDialog", () => {
     await waitFor(() => expect(toasts.success.mock.calls).toEqual([["Following 1 artist"]]));
     expect(toasts.warning).toHaveBeenCalledWith("1 couldn't be followed right now. Try again later.");
     expect(toasts.info).not.toHaveBeenCalled();
+  });
+
+  it("says how many were left unfollowed when the run stopped at the limit of followed artists", async () => {
+    const user = userEvent.setup();
+    const server = baseServer().on("artistFollow.followMostPlayed", () => ({
+      ...RUN,
+      done: 2,
+      followed: 1,
+      overLimit: 1,
+    }));
+    const onOpenChange = renderDialog(server);
+
+    await user.click(await screen.findByRole("checkbox", { name: "Select Cy" }));
+    await user.click(screen.getByRole("button", { name: "Follow 2" }));
+
+    await waitFor(() => expect(onOpenChange).toHaveBeenCalledWith(false));
+    await waitFor(() =>
+      expect(toasts.warning.mock.calls).toEqual([["1 wasn't followed. You follow the most artists an account can."]])
+    );
   });
 
   it("keeps the dialog open and says so when the run cannot start", async () => {

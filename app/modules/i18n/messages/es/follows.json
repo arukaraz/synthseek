@@ -164,6 +164,8 @@
     "notFound_other": "{{count}} no se encontraron en el catálogo.",
     "unreached_one": "A {{count}} no se le pudo seguir ahora. Inténtalo más tarde.",
     "unreached_other": "A {{count}} no se les pudo seguir ahora. Inténtalo más tarde.",
+    "overLimit_one": "A {{count}} no se le siguió. Ya sigues el máximo de artistas de una cuenta.",
+    "overLimit_other": "A {{count}} no se les siguió. Ya sigues el máximo de artistas de una cuenta.",
     "failed": "No se pudo seguir a estos artistas. Inténtalo de nuevo.",
     "progress": "Siguiendo {{done}} de {{total}}",
     "loadError": "No se pudieron cargar tus artistas más escuchados.",

@@ -431,6 +431,10 @@
     "title": "Ya se están siguiendo tus más escuchados",
     "description": "Espera a que termine la ejecución actual y vuelve a intentarlo."
   },
+  "FOLLOW_LIMIT_REACHED": {
+    "title": "Ya sigues el máximo de artistas",
+    "description": "Una cuenta sigue hasta {{limit}} artistas. Deja de seguir a uno para seguir a otro."
+  },
   "QUOTA_REQUEST_TOO_LARGE": {
     "title": "Solicitud mayor que tu cuota",
     "description": "Esta solicitud suma {{requested}} canciones y tu cuota entera es de {{limit}}. Pide menos de una vez."
