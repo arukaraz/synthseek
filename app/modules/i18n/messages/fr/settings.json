@@ -1691,8 +1691,8 @@
       "notifications": {
         "title": "Notifications"
       },
-      "calendar": {
-        "title": "Calendrier",
+      "releases": {
+        "title": "Sorties",
         "description": "Les nouvelles sorties des artistes que vous suivez."
       },
       "overview": {
@@ -1759,8 +1759,8 @@
         "services": "Services",
         "apps": "Applications et clés d'API"
       },
-      "calendar": {
-        "releases": "Sorties",
+      "releases": {
+        "calendar": "Calendrier",
         "following": "Suivis"
       }
     },
@@ -1801,7 +1801,8 @@
         "jobs": "cron planification lancer",
         "updates": "mises à jour version publication changelog notes",
         "timeout": "délai expiration timeout attente",
-        "logout": "déconnexion se déconnecter logout session"
+        "logout": "déconnexion se déconnecter logout session",
+        "following": "calendrier"
       }
     },
     "palette": {

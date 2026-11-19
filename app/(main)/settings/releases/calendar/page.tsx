@@ -2,6 +2,6 @@
 
 import { ReleasesSection } from "@features/settings/sections/CalendarSection/ReleasesSection";
 
-export default function CalendarReleasesPage() {
+export default function ReleasesCalendarPage() {
   return <ReleasesSection />;
 }

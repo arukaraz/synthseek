@@ -2,6 +2,6 @@
 
 import { FollowingSection } from "@features/settings/sections/CalendarSection/FollowingSection";
 
-export default function CalendarFollowingPage() {
+export default function ReleasesFollowingPage() {
   return <FollowingSection />;
 }

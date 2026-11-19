@@ -78,7 +78,7 @@ export function FollowPopoverBody({
           {t("popover.unfollow")}
         </button>
         <div className={followFooterEnd({ stacked: fullWidthDone })}>
-          <Link href="/settings/calendar/releases" className={followLink()} onClick={handleSeeCalendar}>
+          <Link href="/settings/releases/calendar" className={followLink()} onClick={handleSeeCalendar}>
             {t("popover.seeCalendar")}
           </Link>
           <Button variant="secondary" size="sm" onClick={onClose}>

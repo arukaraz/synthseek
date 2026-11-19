@@ -173,7 +173,7 @@ describe("follow rows in a widget", () => {
     expect(screen.getByText(/Follow artists to see their releases here/)).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Start with your most played" })).toHaveAttribute(
       "href",
-      "/settings/calendar/following"
+      "/settings/releases/following"
     );
   });
 });

@@ -44,7 +44,7 @@ export type SettingsPageId =
   | "playback"
   | "connections"
   | "notifications"
-  | "calendar"
+  | "releases"
   | "overview"
   | "members"
   | "downloadSources"
@@ -68,7 +68,7 @@ export interface SettingsPage {
   badge?: SettingsBadgeKey;
 }
 
-export type SettingsTabbedPageId = "appearance" | "calendar" | "connections" | "library" | "maintenance" | "system";
+export type SettingsTabbedPageId = "appearance" | "connections" | "library" | "maintenance" | "releases" | "system";
 
 export interface SettingsTab {
   href: string;

@@ -8,7 +8,7 @@ const navigation = vi.hoisted(() => ({ replace: vi.fn<(href: string) => void>() 
 
 vi.mock("next/navigation", () => ({
   useRouter: () => ({ replace: navigation.replace }),
-  usePathname: () => "/settings/calendar",
+  usePathname: () => "/settings/releases",
   useSearchParams: () => new URLSearchParams("month=2026-11"),
 }));
 
@@ -23,12 +23,12 @@ beforeEach(() => {
 });
 
 describe("CalendarIndexSection", () => {
-  it("sends a member who follows someone to the releases tab, keeping the query", async () => {
+  it("sends a member who follows someone to the calendar tab, keeping the query", async () => {
     const server = new FakeFollowServer().on("artistFollow.list", () => listOf(3));
 
     render(<CalendarIndexSection />, { wrapper: server.wrapper() });
 
-    await waitFor(() => expect(navigation.replace).toHaveBeenCalledWith("/settings/calendar/releases?month=2026-11"));
+    await waitFor(() => expect(navigation.replace).toHaveBeenCalledWith("/settings/releases/calendar?month=2026-11"));
   });
 
   it("says the list could not load and loads it again on retry, instead of staying blank", async () => {
@@ -45,7 +45,7 @@ describe("CalendarIndexSection", () => {
     fail = false;
     await userEvent.click(screen.getByRole("button"));
 
-    await waitFor(() => expect(navigation.replace).toHaveBeenCalledWith("/settings/calendar/following?month=2026-11"));
+    await waitFor(() => expect(navigation.replace).toHaveBeenCalledWith("/settings/releases/following?month=2026-11"));
     expect(alert).not.toBeInTheDocument();
   });
 });

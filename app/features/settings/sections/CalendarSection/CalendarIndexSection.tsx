@@ -21,7 +21,7 @@ export function CalendarIndexSection() {
 
   useEffect(() => {
     if (total === undefined) return;
-    const tab = total === 0 ? "following" : "releases";
+    const tab = total === 0 ? "following" : "calendar";
     router.replace(`${pathname}/${tab}${query ? `?${query}` : ""}`);
   }, [total, router, pathname, query]);
 

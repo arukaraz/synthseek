@@ -1691,8 +1691,8 @@
       "notifications": {
         "title": "Notifications"
       },
-      "calendar": {
-        "title": "Calendar",
+      "releases": {
+        "title": "Releases",
         "description": "New releases from artists you follow."
       },
       "overview": {
@@ -1759,8 +1759,8 @@
         "services": "Services",
         "apps": "Apps & API keys"
       },
-      "calendar": {
-        "releases": "Releases",
+      "releases": {
+        "calendar": "Calendar",
         "following": "Following"
       }
     },
@@ -1801,7 +1801,8 @@
         "jobs": "cron schedule run",
         "updates": "updates version release changelog patch notes",
         "timeout": "timeout time limit wait",
-        "logout": "logout log out sign out signout session"
+        "logout": "logout log out sign out signout session",
+        "following": "calendar"
       }
     },
     "palette": {

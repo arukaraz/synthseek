@@ -89,12 +89,12 @@ export const SETTINGS_PAGE_BY_ID = {
     descriptionKey: "notifications.pageDescription",
     icon: Bell,
   },
-  calendar: {
-    id: "calendar",
+  releases: {
+    id: "releases",
     group: "you",
-    href: "/settings/calendar",
-    labelKey: "shell.pages.calendar.title",
-    descriptionKey: "shell.pages.calendar.description",
+    href: "/settings/releases",
+    labelKey: "shell.pages.releases.title",
+    descriptionKey: "shell.pages.releases.description",
     icon: CalendarDays,
   },
   overview: {
@@ -192,10 +192,6 @@ export const SETTINGS_TABS: Readonly<Record<SettingsTabbedPageId, readonly Setti
     { href: "/settings/appearance/theme", labelKey: "shell.tabs.appearance.theme", icon: Palette },
     { href: "/settings/appearance/board", labelKey: "shell.tabs.appearance.board", icon: LayoutDashboard },
   ],
-  calendar: [
-    { href: "/settings/calendar/releases", labelKey: "shell.tabs.calendar.releases", icon: CalendarDays },
-    { href: "/settings/calendar/following", labelKey: "shell.tabs.calendar.following", icon: UserCheck },
-  ],
   connections: [
     { href: "/settings/connections/services", labelKey: "shell.tabs.connections.services", icon: Link2 },
     { href: "/settings/connections/apps", labelKey: "shell.tabs.connections.apps", icon: KeyRound },
@@ -204,6 +200,10 @@ export const SETTINGS_TABS: Readonly<Record<SettingsTabbedPageId, readonly Setti
     { href: "/settings/library/paths", labelKey: "shell.tabs.library.paths", icon: FolderTree },
     { href: "/settings/library/scan", labelKey: "shell.tabs.library.scan", icon: ScanSearch },
     { href: "/settings/library/sources", labelKey: "shell.tabs.library.sources", icon: Import },
+  ],
+  releases: [
+    { href: "/settings/releases/calendar", labelKey: "shell.tabs.releases.calendar", icon: CalendarDays },
+    { href: "/settings/releases/following", labelKey: "shell.tabs.releases.following", icon: UserCheck },
   ],
   maintenance: [
     {

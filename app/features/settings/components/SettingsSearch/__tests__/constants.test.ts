@@ -49,6 +49,16 @@ describe("SETTINGS_SEARCH_ENTRIES", () => {
     expect(results.some((result) => result.entry.page === "about")).toBe(true);
   });
 
+  it.each([
+    ["en", "calendar"],
+    ["es", "calendario"],
+    ["fr", "calendrier"],
+    ["de", "kalender"],
+  ])("still finds the followed artists in %s by searching for %s", (locale, query) => {
+    const results = searchSettings(query, SETTINGS_SEARCH_ENTRIES, i18n.getFixedT(locale, "settings"), false);
+    expect(results.some((result) => result.entry.href === "/settings/releases/following")).toBe(true);
+  });
+
   it("never repeats the same label at the same destination", () => {
     const destinations = SETTINGS_SEARCH_ENTRIES.map(
       (entry) => `${entry.href}#${entry.anchor ?? ""}:${entry.labelKey}`
