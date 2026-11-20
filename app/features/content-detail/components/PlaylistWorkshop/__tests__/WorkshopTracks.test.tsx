@@ -11,10 +11,16 @@ vi.mock("@hooks/api", () => ({ useRetryTracks: () => ({ mutate: vi.fn(), isPendi
 vi.mock("@hooks/api/mutations/playlists/useRemovePlaylistTracksWithUndo", () => ({
   useRemovePlaylistTracksWithUndo: () => ({ remove, isPending: false }),
 }));
-const saveOrder = vi.fn<(input: { trackIds: string[] }, options: { onSettled: () => void }) => void>();
+const orderSaves: (() => void)[] = [];
+const saveOrder = vi.fn(
+  (_input: { playlistId: string; trackIds: string[] }) =>
+    new Promise<void>((resolve) => {
+      orderSaves.push(resolve);
+    })
+);
 
 vi.mock("@hooks/api/mutations/playlists/useReorderPlaylistTracks", () => ({
-  useReorderPlaylistTracks: () => ({ mutate: saveOrder }),
+  useReorderPlaylistTracks: () => saveOrder,
 }));
 vi.mock("@hooks/ui/player", () => ({
   playerActions: { next, togglePlay: vi.fn() },
@@ -75,6 +81,7 @@ function tracks() {
 
 beforeEach(() => {
   vi.clearAllMocks();
+  orderSaves.length = 0;
 });
 
 describe("WorkshopTracks removal", () => {
@@ -115,7 +122,7 @@ describe("WorkshopTracks removal", () => {
     expect(saveOrder.mock.calls[0]?.[0]).toEqual({ playlistId: "pl-1", trackIds: ["b", "a"] });
     expect(remove).not.toHaveBeenCalled();
 
-    saveOrder.mock.calls[0]?.[1].onSettled();
+    orderSaves[0]?.();
 
     await waitFor(() => expect(remove).toHaveBeenCalledTimes(1));
   });

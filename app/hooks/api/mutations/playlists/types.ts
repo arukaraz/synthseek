@@ -1,3 +1,8 @@
+import type { AppRouter } from "@api/__generated__/types";
+import type { inferRouterInputs } from "@trpc/server";
+
+export type ReorderPlaylistTracksInput = inferRouterInputs<AppRouter>["playlists"]["reorderTracks"];
+
 export interface RemovedPlaylistTrack {
   trackId: string;
   position: number;

@@ -42,10 +42,9 @@ export function WorkshopTracks({ playlistId, tracks, lock, onArtistNavigate }: W
   const selection = useSelection<{ id: string }>();
   const retryingId = retryTracks.isPending ? retryTracks.variables?.trackIds[0] : undefined;
 
-  const { mutate: saveOrder } = reorder;
   const save = useCallback<SaveOrder>(
-    (trackIds, settled) => saveOrder({ playlistId, trackIds }, { onSettled: settled }),
-    [saveOrder, playlistId]
+    (trackIds, settled) => void reorder({ playlistId, trackIds }).then(settled),
+    [reorder, playlistId]
   );
   const order = usePlaylistOrder(tracks, save);
   const { ordered, commit: commitOrder } = order;
