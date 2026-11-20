@@ -48,6 +48,7 @@ export function WorkshopDetails({
   trackCount,
   minutes,
   inLibrary,
+  settleOrder,
   onDeleted,
 }: WorkshopDetailsProps) {
   const { t } = useTranslation("contentDetail");
@@ -159,7 +160,13 @@ export function WorkshopDetails({
       </WorkshopField>
 
       <WorkshopField label={t("workshop.details.files")}>
-        <WorkshopFiles playlistId={playlistId} name={name} canImport={canEditTracks} maxChars={limits.fileChars} />
+        <WorkshopFiles
+          playlistId={playlistId}
+          name={name}
+          canImport={canEditTracks}
+          maxChars={limits.fileChars}
+          settleOrder={settleOrder}
+        />
       </WorkshopField>
 
       <WorkshopField label={t("workshop.details.more")}>

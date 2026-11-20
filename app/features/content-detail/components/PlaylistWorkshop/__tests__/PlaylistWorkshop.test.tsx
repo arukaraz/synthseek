@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { renderWithProviders, screen } from "@test/test-utils";
+import { renderWithProviders, screen, waitFor } from "@test/test-utils";
 import userEvent from "@testing-library/user-event";
 
 import type { DetailTarget } from "../../../types";
@@ -23,10 +23,33 @@ vi.mock("../../../hooks/useTrackArtistNavigation", () => ({ useTrackArtistNaviga
 vi.mock("@components/SuggestedTracks", () => ({
   SuggestedTracks: ({ playlistId }: { playlistId: string }) => <div data-testid="suggested">{playlistId}</div>,
 }));
+const orderSaves: (() => void)[] = [];
+const saveOrder = vi.fn(
+  (_input: { playlistId: string; trackIds: string[] }) =>
+    new Promise<void>((resolve) => {
+      orderSaves.push(resolve);
+    })
+);
+vi.mock("@hooks/api/mutations/playlists/useReorderPlaylistTracks", () => ({
+  useReorderPlaylistTracks: () => saveOrder,
+}));
 vi.mock("../WorkshopTracks", () => ({
-  WorkshopTracks: (props: { lock: string | null; tracks: unknown[] }) => {
+  WorkshopTracks: (props: {
+    lock: string | null;
+    order: { ordered: { requestId: string }[]; placeSoon: (ids: string[]) => void };
+  }) => {
     seen.tracks = props;
-    return <div data-testid="tracks">{props.tracks.length}</div>;
+    return (
+      <div>
+        <div data-testid="tracks">{props.order.ordered.length}</div>
+        <button
+          type="button"
+          onClick={() => props.order.placeSoon(props.order.ordered.map((row) => row.requestId).reverse())}
+        >
+          reverse by keyboard
+        </button>
+      </div>
+    );
   },
 }));
 vi.mock("../WorkshopDetails", () => ({
@@ -80,6 +103,7 @@ function workshop() {
 
 beforeEach(() => {
   vi.clearAllMocks();
+  orderSaves.length = 0;
   layout.columns = true;
   seen.tracks = null;
   seen.details = null;
@@ -157,6 +181,31 @@ describe("PlaylistWorkshop", () => {
 
     await userEvent.click(screen.getByRole("button", { name: "Exit workshop" }));
     expect(onExit).toHaveBeenCalledTimes(1);
+  });
+
+  it("saves a keyboard move that is still waiting before it plays, and plays only once that save has settled", async () => {
+    playlistDetail.mockReturnValue(loaded());
+    workshop();
+
+    await userEvent.click(screen.getByRole("button", { name: "reverse by keyboard" }));
+    expect(saveOrder).not.toHaveBeenCalled();
+
+    await userEvent.click(screen.getByRole("button", { name: /^Play/ }));
+
+    await waitFor(() => expect(saveOrder).toHaveBeenCalledTimes(1));
+    expect(saveOrder.mock.calls[0]?.[0]).toEqual({ playlistId: "pl-1", trackIds: ["req-2", "req-1"] });
+    expect(playback.playEntity).not.toHaveBeenCalled();
+
+    orderSaves[0]?.();
+
+    await waitFor(() => expect(playback.playEntity).toHaveBeenCalledWith({ kind: "playlist", playlistId: "pl-1" }));
+  });
+
+  it("hands the details pane the same wait, for the exports and the import", () => {
+    playlistDetail.mockReturnValue(loaded());
+    workshop();
+
+    expect(seen.details).toMatchObject({ settleOrder: expect.any(Function) });
   });
 
   it("shows the name it was opened with while loading, and an error when the playlist cannot be read", () => {

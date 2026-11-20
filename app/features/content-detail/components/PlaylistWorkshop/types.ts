@@ -62,6 +62,7 @@ export interface WorkshopFilesProps {
   name: string;
   canImport: boolean;
   maxChars: number;
+  settleOrder: () => Promise<void>;
 }
 
 export interface M3uPreview {
@@ -84,6 +85,7 @@ export interface WorkshopDetailsProps {
   trackCount: number;
   minutes: number;
   inLibrary: number;
+  settleOrder: () => Promise<void>;
   onDeleted: () => void;
 }
 
@@ -101,7 +103,7 @@ export interface WorkshopSurfaceProps {
 
 export interface WorkshopTracksProps {
   playlistId: string;
-  tracks: WorkshopTrack[];
+  order: PlaylistOrder;
   lock: WorkshopLock;
   onArtistNavigate: (track: TracklistTrack) => void;
 }

@@ -2,6 +2,7 @@
 
 import { SuggestedTracks } from "@components/SuggestedTracks";
 import { SegmentTabs } from "@components/ui/SegmentTabs";
+import { useReorderPlaylistTracks } from "@hooks/api/mutations/playlists/useReorderPlaylistTracks";
 import { usePlaylistDetail } from "@hooks/api/queries/content-detail";
 import { useEntityPlayback } from "@hooks/ui/useEntityPlayback";
 import { useMediaQuery } from "@hooks/ui/useMediaQuery";
@@ -9,6 +10,7 @@ import { useCallback, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { failedToLoad } from "../../helpers";
+import { usePlaylistOrder } from "../../hooks/usePlaylistOrder";
 import { useTrackArtistNavigation } from "../../hooks/useTrackArtistNavigation";
 import { WORKSHOP_COLUMNS_QUERY, WORKSHOP_TABS, WORKSHOP_TABS_LAYOUT_ID } from "./constants";
 import { totalMinutes, workshopTracks } from "./helpers";
@@ -16,7 +18,7 @@ import { workshopBody, workshopError, workshopLoading, workshopPane, workshopScr
 import { WorkshopDetails } from "./WorkshopDetails";
 import { WorkshopHeader } from "./WorkshopHeader";
 import { WorkshopTracks } from "./WorkshopTracks";
-import type { PlaylistWorkshopProps, WorkshopTab } from "./types";
+import type { PlaylistWorkshopProps, SaveOrder, WorkshopTab } from "./types";
 
 export function PlaylistWorkshop({ target, onExit, onClose, onNavigate }: PlaylistWorkshopProps) {
   const { t } = useTranslation("contentDetail");
@@ -25,6 +27,7 @@ export function PlaylistWorkshop({ target, onExit, onClose, onNavigate }: Playli
   const columns = useMediaQuery(WORKSHOP_COLUMNS_QUERY, true);
   const [tab, setTab] = useState<WorkshopTab>("tracks");
   const { playEntity, shuffleEntity, enqueueEntity } = useEntityPlayback();
+  const reorder = useReorderPlaylistTracks();
   const openTrackArtist = useTrackArtistNavigation(onNavigate);
 
   const tracks = useMemo(() => workshopTracks(playlist?.tracks ?? []), [playlist?.tracks]);
@@ -35,21 +38,31 @@ export function PlaylistWorkshop({ target, onExit, onClose, onNavigate }: Playli
   const tabs = useMemo(() => WORKSHOP_TABS.filter((value) => suggestable || value !== "suggested"), [suggestable]);
   const shownTab = tabs.includes(tab) ? tab : "tracks";
 
+  const save = useCallback<SaveOrder>(
+    (trackIds, settled) => void reorder({ playlistId: target.id, trackIds }).then(settled),
+    [reorder, target.id]
+  );
+  const order = usePlaylistOrder(tracks, save);
+  const { commit: settleOrder } = order;
+
   const handlePlay = useCallback(async () => {
+    await settleOrder();
     await playEntity({ kind: "playlist", playlistId: target.id });
-  }, [playEntity, target.id]);
+  }, [settleOrder, playEntity, target.id]);
   const handleShuffle = useCallback(async () => {
+    await settleOrder();
     await shuffleEntity({ kind: "playlist", playlistId: target.id });
-  }, [shuffleEntity, target.id]);
+  }, [settleOrder, shuffleEntity, target.id]);
   const handleEnqueue = useCallback(async () => {
+    await settleOrder();
     await enqueueEntity({ kind: "playlist", playlistId: target.id });
-  }, [enqueueEntity, target.id]);
+  }, [settleOrder, enqueueEntity, target.id]);
 
   const tracksPane = playlist ? (
     <section className={workshopPane({ role: "tracks" })}>
       <WorkshopTracks
         playlistId={playlist.id}
-        tracks={tracks}
+        order={order}
         lock={playlist.tracksLock}
         onArtistNavigate={openTrackArtist}
       />
@@ -81,6 +94,7 @@ export function PlaylistWorkshop({ target, onExit, onClose, onNavigate }: Playli
           trackCount={tracks.length}
           minutes={minutes}
           inLibrary={inLibrary}
+          settleOrder={settleOrder}
           onDeleted={onClose}
         />
       </div>

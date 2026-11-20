@@ -72,6 +72,7 @@ function details(overrides?: Partial<WorkshopDetailsProps>) {
     trackCount: 12,
     minutes: 40,
     inLibrary: 9,
+    settleOrder: vi.fn(async () => undefined),
     onDeleted: vi.fn(),
     ...overrides,
   };
@@ -279,6 +280,26 @@ describe("WorkshopDetails files", () => {
     expect(screen.queryByRole("button", { name: /Add tracks from a file/ })).not.toBeInTheDocument();
 
     await userEvent.click(screen.getByRole("button", { name: /Export as M3U/ }));
+    await waitFor(() => expect(exportM3u).toHaveBeenCalledWith({ playlistId: "pl-1" }));
+  });
+
+  it("exports only once an order save that was still waiting has settled", async () => {
+    let settle: () => void = () => undefined;
+    const saving = new Promise<void>((resolve) => {
+      settle = resolve;
+    });
+    const settleOrder = vi.fn(() => saving);
+    exportCollection.mockResolvedValue({ playlist: { title: "Road Trip" } });
+    details({ settleOrder });
+
+    await userEvent.click(screen.getByRole("button", { name: /Export as M3U/ }));
+    await userEvent.click(screen.getByRole("button", { name: /Export as JSPF/ }));
+    expect(settleOrder).toHaveBeenCalledTimes(2);
+    expect(exportM3u).not.toHaveBeenCalled();
+    expect(exportCollection).not.toHaveBeenCalled();
+
+    settle();
+    await waitFor(() => expect(exportCollection).toHaveBeenCalledTimes(1));
     expect(exportM3u).toHaveBeenCalledWith({ playlistId: "pl-1" });
   });
 

@@ -27,7 +27,7 @@ import {
 } from "./styles";
 import type { M3uPreview, WorkshopFilesProps } from "./types";
 
-export function WorkshopFiles({ playlistId, name, canImport, maxChars }: WorkshopFilesProps) {
+export function WorkshopFiles({ playlistId, name, canImport, maxChars, settleOrder }: WorkshopFilesProps) {
   const { t } = useTranslation("contentDetail");
   const picker = useRef<HTMLInputElement>(null);
   const [preview, setPreview] = useState<M3uPreview | null>(null);
@@ -58,6 +58,7 @@ export function WorkshopFiles({ playlistId, name, canImport, maxChars }: Worksho
 
   const commit = async () => {
     if (preview === null) return;
+    await settleOrder();
     try {
       await importM3u.mutateAsync({ playlistId, content: preview.content, commit: true });
       setPreview(null);
@@ -66,7 +67,13 @@ export function WorkshopFiles({ playlistId, name, canImport, maxChars }: Worksho
     }
   };
 
+  const exportPaths = async () => {
+    await settleOrder();
+    exportM3u.mutate({ playlistId });
+  };
+
   const exportJspf = async () => {
+    await settleOrder();
     try {
       const doc = await exportCollection({ id: playlistId, type: "playlist" });
       downloadText(collectionFilename(name, JSPF_EXTENSION), JSON.stringify(doc, null, 2));
@@ -104,12 +111,7 @@ export function WorkshopFiles({ playlistId, name, canImport, maxChars }: Worksho
             </button>
           </>
         ) : null}
-        <button
-          type="button"
-          className={actionRow()}
-          disabled={exportM3u.isPending}
-          onClick={() => exportM3u.mutate({ playlistId })}
-        >
+        <button type="button" className={actionRow()} disabled={exportM3u.isPending} onClick={() => void exportPaths()}>
           <FileDown className="size-4 shrink-0" aria-hidden />
           <span className={actionRowLabel()}>{t("workshop.details.exportM3u")}</span>
           <span className={actionRowHint()}>{t("workshop.details.exportM3uHint")}</span>

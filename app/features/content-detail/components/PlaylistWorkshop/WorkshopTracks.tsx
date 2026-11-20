@@ -4,7 +4,6 @@ import { BulkActionBar, type ProminentBulkAction } from "@components/ui/BulkActi
 import { Checkbox } from "@components/ui/Checkbox";
 import { useRetryTracks } from "@hooks/api";
 import { useRemovePlaylistTracksWithUndo } from "@hooks/api/mutations/playlists/useRemovePlaylistTracksWithUndo";
-import { useReorderPlaylistTracks } from "@hooks/api/mutations/playlists/useReorderPlaylistTracks";
 import { playerActions, usePlayerResumableHere, useQueuePresence } from "@hooks/ui/player";
 import { useEntityPlayback } from "@hooks/ui/useEntityPlayback";
 import { useSelection } from "@hooks/ui/useSelection";
@@ -14,7 +13,6 @@ import { useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
 import { isRemovableTrack, playableTrackId } from "../../helpers";
-import { usePlaylistOrder } from "../../hooks/usePlaylistOrder";
 import { gathered, nudged, removalsOf } from "./helpers";
 import {
   tracksBulk,
@@ -27,13 +25,12 @@ import {
   workshopScroll,
 } from "./styles";
 import { WorkshopTrackRow } from "./WorkshopTrackRow";
-import type { SaveOrder, WorkshopTracksProps } from "./types";
+import type { WorkshopTracksProps } from "./types";
 
-export function WorkshopTracks({ playlistId, tracks, lock, onArtistNavigate }: WorkshopTracksProps) {
+export function WorkshopTracks({ playlistId, order, lock, onArtistNavigate }: WorkshopTracksProps) {
   const editable = lock === null;
   const { t } = useTranslation("contentDetail");
   const { t: tLibrary } = useTranslation("library");
-  const reorder = useReorderPlaylistTracks();
   const { remove, isPending: removing } = useRemovePlaylistTracksWithUndo();
   const retryTracks = useRetryTracks();
   const { playEntityFrom, enqueueEntity, playNextEntity } = useEntityPlayback();
@@ -42,11 +39,6 @@ export function WorkshopTracks({ playlistId, tracks, lock, onArtistNavigate }: W
   const selection = useSelection<{ id: string }>();
   const retryingId = retryTracks.isPending ? retryTracks.variables?.trackIds[0] : undefined;
 
-  const save = useCallback<SaveOrder>(
-    (trackIds, settled) => void reorder({ playlistId, trackIds }).then(settled),
-    [reorder, playlistId]
-  );
-  const order = usePlaylistOrder(tracks, save);
   const { ordered, commit: commitOrder } = order;
   const orderedIds = useMemo(() => ordered.map((track) => track.requestId), [ordered]);
   const selectedIds = useMemo(() => orderedIds.filter((id) => selection.isSelected(id)), [orderedIds, selection]);
@@ -123,7 +115,14 @@ export function WorkshopTracks({ playlistId, tracks, lock, onArtistNavigate }: W
           if (extend) selection.extendTo(orderedIds, track.requestId);
           else selection.toggle(track.requestId);
         }}
-        onPlay={playableId === null ? undefined : () => playEntityFrom({ kind: "playlist", playlistId }, playableId)}
+        onPlay={
+          playableId === null
+            ? undefined
+            : async () => {
+                await commitOrder();
+                return playEntityFrom({ kind: "playlist", playlistId }, playableId);
+              }
+        }
         onTogglePlay={playableId === null || !resumableHere ? undefined : playerActions.togglePlay}
         onRemove={() => void removeTracks([track.requestId])}
         onNudge={(delta) => order.placeSoon(nudged(orderedIds, track.requestId, delta))}

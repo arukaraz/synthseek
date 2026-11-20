@@ -19,28 +19,32 @@ const saveOrder = vi.fn(
     })
 );
 
-vi.mock("@hooks/api/mutations/playlists/useReorderPlaylistTracks", () => ({
-  useReorderPlaylistTracks: () => saveOrder,
-}));
+const playEntityFrom = vi.hoisted(() => vi.fn(async () => true));
+
 vi.mock("@hooks/ui/player", () => ({
   playerActions: { next, togglePlay: vi.fn() },
   usePlayerResumableHere: () => false,
   useQueuePresence: () => (id: string) => (id === playing.id ? "playing" : "absent"),
 }));
 vi.mock("@hooks/ui/useEntityPlayback", () => ({
-  useEntityPlayback: () => ({ playEntityFrom: vi.fn(), enqueueEntity: vi.fn(), playNextEntity: vi.fn() }),
+  useEntityPlayback: () => ({ playEntityFrom, enqueueEntity: vi.fn(), playNextEntity: vi.fn() }),
 }));
 vi.mock("../WorkshopTrackRow", () => ({
   WorkshopTrackRow: ({
     track,
     onRemove,
     onNudge,
+    onPlay,
   }: {
     track: { title: string };
     onRemove: () => void;
     onNudge: (delta: number) => void;
+    onPlay?: () => Promise<unknown>;
   }) => (
     <li>
+      <button type="button" onClick={() => void onPlay?.()}>
+        play {track.title}
+      </button>
       <button type="button" onClick={onRemove}>
         remove {track.title}
       </button>
@@ -51,8 +55,11 @@ vi.mock("../WorkshopTrackRow", () => ({
   ),
 }));
 
+import { usePlaylistOrder } from "../../../hooks/usePlaylistOrder";
 import { WorkshopTracks } from "../WorkshopTracks";
-import type { WorkshopTrack } from "../types";
+import type { SaveOrder, WorkshopTrack } from "../types";
+
+const save: SaveOrder = (trackIds, settled) => void saveOrder({ playlistId: "pl-1", trackIds }).then(settled);
 
 function track(requestId: string): WorkshopTrack {
   return {
@@ -73,10 +80,15 @@ function track(requestId: string): WorkshopTrack {
   };
 }
 
+const STORED = [track("a"), track("b")];
+
+function Harness() {
+  const order = usePlaylistOrder(STORED, save);
+  return <WorkshopTracks playlistId="pl-1" order={order} lock={null} onArtistNavigate={vi.fn()} />;
+}
+
 function tracks() {
-  return renderWithProviders(
-    <WorkshopTracks playlistId="pl-1" tracks={[track("a"), track("b")]} lock={null} onArtistNavigate={vi.fn()} />
-  );
+  return renderWithProviders(<Harness />);
 }
 
 beforeEach(() => {
@@ -125,6 +137,20 @@ describe("WorkshopTracks removal", () => {
     orderSaves[0]?.();
 
     await waitFor(() => expect(remove).toHaveBeenCalledTimes(1));
+  });
+
+  it("plays from a row only once a keyboard move that is still waiting has been saved", async () => {
+    tracks();
+
+    await userEvent.click(screen.getByRole("button", { name: "lower Title a" }));
+    await userEvent.click(screen.getByRole("button", { name: "play Title b" }));
+
+    await waitFor(() => expect(saveOrder).toHaveBeenCalledTimes(1));
+    expect(playEntityFrom).not.toHaveBeenCalled();
+
+    orderSaves[0]?.();
+
+    await waitFor(() => expect(playEntityFrom).toHaveBeenCalledWith({ kind: "playlist", playlistId: "pl-1" }, "b"));
   });
 
   it("does not move the player when the removed track is not the one playing", async () => {
