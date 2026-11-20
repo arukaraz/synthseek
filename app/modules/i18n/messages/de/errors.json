@@ -107,6 +107,30 @@
     "title": "Titel wird noch heruntergeladen",
     "description": "Warte, bis er fertig ist, oder brich ihn ab, bevor du ihn aus der Playlist entfernst."
   },
+  "PLAYLIST_ORDER_STALE": {
+    "title": "Die Playlist hat sich geändert",
+    "description": "Sie wurde an anderer Stelle bearbeitet, daher wurde die neue Reihenfolge nicht gespeichert. Sie wurde neu geladen; versuche es noch einmal."
+  },
+  "PLAYLIST_COVER_UNSUPPORTED": {
+    "title": "Diese Datei kann kein Cover sein",
+    "description": "Das Cover muss ein JPEG-, PNG-, WebP- oder GIF-Bild sein."
+  },
+  "PLAYLIST_COVER_TOO_LARGE": {
+    "title": "Dieses Bild ist zu groß",
+    "description": "Wähle ein kleineres Bild für das Cover."
+  },
+  "PLAYLIST_COVER_UPLOAD_FAILED": {
+    "title": "Das Cover konnte nicht hochgeladen werden",
+    "description": "Der Upload wurde nicht abgeschlossen. Versuche es erneut."
+  },
+  "PLAYLIST_COVER_NOT_FOUND": {
+    "title": "Cover nicht gefunden",
+    "description": "Diese Playlist hat dieses Cover nicht mehr."
+  },
+  "PLAYLIST_FILE_TOO_LARGE": {
+    "title": "Diese Playlist-Datei ist zu groß",
+    "description": "Teile sie in kleinere Dateien auf und importiere die Teile."
+  },
   "PLAYLIST_RULE_OWNS_TRACKS": {
     "title": "Eine Regel wählt diese Titel",
     "description": "Das ist eine smarte Playlist. Bearbeite ihre Regel, um den Inhalt zu ändern."

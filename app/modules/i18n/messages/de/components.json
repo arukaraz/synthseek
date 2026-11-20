@@ -142,5 +142,22 @@
     "attempts_one": "{{count}} Versuch",
     "attempts_other": "{{count}} Versuche",
     "watching": "Der automatische Wiederholungslauf beobachtet diesen Titel"
+  },
+  "suggestedTracks": {
+    "title": "Vorschläge",
+    "basis": "Anhand der Künstler in dieser Playlist.",
+    "refresh": "Vorschläge erneuern",
+    "play": "{{title}} abspielen",
+    "pause": "{{title}} pausieren",
+    "hide": "Passt nicht zu dieser Playlist: {{title}}",
+    "add": "Hinzufügen",
+    "request": "Anfragen",
+    "andAdd": " und hinzufügen",
+    "addLabel": "{{title}} zur Playlist hinzufügen",
+    "requestAndAddLabel": "{{title}} anfragen und zur Playlist hinzufügen",
+    "end": "Das ist vorerst alles. Erneuere für weitere Vorschläge.",
+    "empty": "Es gibt nichts mehr vorzuschlagen.",
+    "failed": "Die Vorschläge konnten nicht geladen werden.",
+    "retry": "Erneut versuchen"
   }
 }

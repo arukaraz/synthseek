@@ -4,7 +4,11 @@ import type { TracklistSortKey } from "./types";
 
 export const DEFAULT_SORT_KEY: TracklistSortKey = "status";
 
+export const PLAYLIST_SORT_KEY: TracklistSortKey = "order";
+
 export const SORT_KEYS: readonly TracklistSortKey[] = ["name", "status", "length"];
+
+export const PLAYLIST_SORT_KEYS: readonly TracklistSortKey[] = [PLAYLIST_SORT_KEY, ...SORT_KEYS];
 
 export const STATUS_SORT_ORDER: readonly RequestStatus[] = [
   ...UNRESOLVED_STATUSES,

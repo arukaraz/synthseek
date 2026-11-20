@@ -6,6 +6,7 @@ import { cn } from "@utils/cn";
 
 import {
   prominentAction,
+  prominentActionLabel,
   selectionAction,
   selectionActionCount,
   selectionActionLabel,
@@ -49,7 +50,7 @@ export function BulkActionBar(props: BulkActionBarProps) {
               disabled={disabled}
             >
               <Icon className="size-4 shrink-0" aria-hidden />
-              {label}
+              <span className={prominentActionLabel()}>{label}</span>
             </button>
           ))}
           {trailing}

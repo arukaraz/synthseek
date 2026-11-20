@@ -4,14 +4,13 @@ import { FilterSortDropdown } from "@components/ui/FilterSortDropdown";
 import { ArrowDownUp } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
-import { SORT_KEYS } from "./constants";
 import { isTracklistSortKey } from "./helpers";
 import type { TracklistSortProps } from "./types";
 
-export function TracklistSort({ sortKey, direction, onSortKeyChange, onDirectionChange }: TracklistSortProps) {
+export function TracklistSort({ keys, sortKey, direction, onSortKeyChange, onDirectionChange }: TracklistSortProps) {
   const { t } = useTranslation("contentDetail");
 
-  const sortOptions = SORT_KEYS.map((key) => ({ value: key, label: t(`sort.${key}`) }));
+  const sortOptions = keys.map((key) => ({ value: key, label: t(`sort.${key}`) }));
 
   return (
     <FilterSortDropdown

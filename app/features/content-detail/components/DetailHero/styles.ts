@@ -45,26 +45,14 @@ export const genreOverflowChip = cva(
   "border-fg/10 bg-fg/5 text-fg/70 rounded-full border px-3 py-1 text-xs font-medium tabular-nums"
 );
 
-export const heroNameRow = cva("flex items-center justify-center gap-1.5 sm:justify-start");
-
-export const heroKebab = cva(
-  "text-fg/60 hover:bg-fg/10 hover:text-fg data-[state=open]:bg-fg/10 grid size-8 shrink-0 place-items-center rounded-full transition-colors"
-);
-
 export const heroMenuItem = cva("text-fg/80 focus:bg-fg/5 focus:text-fg gap-2.5 py-2");
 
-export const heroMenuItemDanger = cva(
-  "text-destructive-vivid hover:bg-destructive-vivid/10 hover:text-destructive-vivid focus:bg-destructive-vivid/10 focus:text-destructive-vivid active:bg-destructive-vivid/15 gap-2.5 py-2"
-);
+export const heroActionsSpacer = cva("flex-1 max-sm:hidden");
 
-export const heroEditRow = cva("flex w-full items-center gap-2 sm:w-auto");
+export const heroToolDivider = cva("bg-fg/15 h-5.5 w-px shrink-0");
 
-export const heroEditInput = cva(
-  "border-fg/15 bg-surface/60 text-fg focus:border-primary-500/60 focus:ring-primary-500/30 min-w-0 flex-1 rounded-xl border px-3 py-2 text-2xl font-bold tracking-tight outline-none focus:ring-2 sm:flex-none"
-);
-
-export const heroEditSave = cva(
-  "border-primary-500/40 bg-primary-500/15 text-primary-400 hover:bg-primary-500/25 grid size-9 shrink-0 place-items-center rounded-full border transition-colors"
+export const heroToolButton = cva(
+  "text-fg/60 hover:bg-fg/10 hover:text-fg focus-visible:ring-primary-400 grid size-9 shrink-0 place-items-center rounded-md transition-colors outline-none focus-visible:ring-2"
 );
 
 export const playSplit = cva("inline-flex h-11 shrink-0 items-stretch overflow-hidden rounded-full", {

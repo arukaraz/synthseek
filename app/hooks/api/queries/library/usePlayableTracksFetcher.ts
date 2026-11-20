@@ -5,5 +5,8 @@ import type { PlayableTracksTarget } from "./types";
 
 export function usePlayableTracksFetcher() {
   const utils = trpc.useUtils();
-  return useCallback((target: PlayableTracksTarget) => utils.library.getPlayableTracks.fetch(target), [utils]);
+  return useCallback(
+    (target: PlayableTracksTarget) => utils.library.getPlayableTracks.fetch(target, { staleTime: 0 }),
+    [utils]
+  );
 }

@@ -107,6 +107,30 @@
     "title": "Piste en cours de téléchargement",
     "description": "Attendez qu'elle se termine, ou annulez-la, avant de la retirer de la playlist."
   },
+  "PLAYLIST_ORDER_STALE": {
+    "title": "La playlist a changé",
+    "description": "Elle a été modifiée ailleurs, le nouvel ordre n'a donc pas été enregistré. Elle a été rechargée ; réessayez."
+  },
+  "PLAYLIST_COVER_UNSUPPORTED": {
+    "title": "Ce fichier ne peut pas servir de pochette",
+    "description": "La pochette doit être une image JPEG, PNG, WebP ou GIF."
+  },
+  "PLAYLIST_COVER_TOO_LARGE": {
+    "title": "Cette image est trop volumineuse",
+    "description": "Choisissez une image plus petite pour la pochette."
+  },
+  "PLAYLIST_COVER_UPLOAD_FAILED": {
+    "title": "Impossible d'envoyer la pochette",
+    "description": "L'envoi ne s'est pas terminé. Réessayez."
+  },
+  "PLAYLIST_COVER_NOT_FOUND": {
+    "title": "Pochette introuvable",
+    "description": "Cette playlist n'a plus cette pochette."
+  },
+  "PLAYLIST_FILE_TOO_LARGE": {
+    "title": "Ce fichier de playlist est trop volumineux",
+    "description": "Divisez-le en fichiers plus petits et importez les parties."
+  },
   "PLAYLIST_RULE_OWNS_TRACKS": {
     "title": "Une règle choisit ces titres",
     "description": "C'est une playlist intelligente. Modifiez sa règle pour changer son contenu."

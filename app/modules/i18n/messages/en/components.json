@@ -142,5 +142,22 @@
     "attempts_one": "{{count}} attempt",
     "attempts_other": "{{count}} attempts",
     "watching": "The automatic retry sweep is watching this track"
+  },
+  "suggestedTracks": {
+    "title": "Suggested",
+    "basis": "Based on the artists in this playlist.",
+    "refresh": "Refresh suggestions",
+    "play": "Play {{title}}",
+    "pause": "Pause {{title}}",
+    "hide": "Not for this playlist: {{title}}",
+    "add": "Add",
+    "request": "Request",
+    "andAdd": " and add",
+    "addLabel": "Add {{title}} to the playlist",
+    "requestAndAddLabel": "Request {{title}} and add it to the playlist",
+    "end": "That is everything for now. Refresh for a new batch.",
+    "empty": "Nothing left to suggest.",
+    "failed": "Suggestions could not be loaded.",
+    "retry": "Try again"
   }
 }

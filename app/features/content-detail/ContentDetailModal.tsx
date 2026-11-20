@@ -12,6 +12,7 @@ import { ArtistDetailBody } from "./components/ArtistDetailBody";
 import { DetailBackButton } from "./components/DetailBackButton";
 import { DetailMiniHeader } from "./components/DetailMiniHeader";
 import { PlaylistDetailBody } from "./components/PlaylistDetailBody";
+import { PlaylistWorkshop, WorkshopSurface } from "./components/PlaylistWorkshop";
 import { ContentDetailActionsProvider } from "./ContentDetailActionsContext";
 import { ContentDetailCloseProvider } from "./ContentDetailCloseContext";
 import { MINI_HEADER_SCROLL_THRESHOLD } from "./constants";
@@ -32,6 +33,7 @@ export function ContentDetailModal({ open, session, onClose, target, actions }: 
   const shellRef = useRef<HTMLDivElement | null>(null);
   const openerRef = useRef<HTMLElement | null>(null);
   const [miniVisible, setMiniVisible] = useState(false);
+  const [workshopId, setWorkshopId] = useState<string | null>(null);
 
   const currentId = current?.id ?? null;
   const isArtist = current?.mode === "artist";
@@ -60,7 +62,25 @@ export function ContentDetailModal({ open, session, onClose, target, actions }: 
 
   const close = useCallback(() => handleOpenChange(false, onClose), [handleOpenChange, onClose]);
 
+  if (!open && workshopId !== null) setWorkshopId(null);
+
   if (!current) return null;
+
+  if (open && isLibraryPlaylist && workshopId === current.id) {
+    return (
+      <WorkshopSurface open name={playlist?.name ?? current.name} onExit={() => setWorkshopId(null)}>
+        <ContentDetailActionsProvider actions={actions}>
+          <PlaylistWorkshop
+            key={current.id}
+            target={current}
+            onExit={() => setWorkshopId(null)}
+            onClose={close}
+            onNavigate={navigateTo}
+          />
+        </ContentDetailActionsProvider>
+      </WorkshopSurface>
+    );
+  }
 
   const heroImage = (isArtist ? identity?.image : isPlaylist ? playlist?.cover : album?.cover) ?? current.cover;
 
@@ -122,6 +142,7 @@ export function ContentDetailModal({ open, session, onClose, target, actions }: 
                 target={current}
                 onClose={close}
                 onNavigate={navigateTo}
+                onOpenWorkshop={() => setWorkshopId(current.id)}
                 showInLibraryPill={showInLibraryPill}
               />
             ) : (

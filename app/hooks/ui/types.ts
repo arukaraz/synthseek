@@ -152,20 +152,6 @@ export interface UseDismissableResult<TElement extends HTMLElement> {
   containerRef: RefObject<TElement | null>;
 }
 
-export interface UseInlineRenameOptions {
-  value: string;
-  onSave: (name: string) => void;
-}
-
-export interface UseInlineRenameResult {
-  isEditing: boolean;
-  draft: string;
-  setDraft: (value: string) => void;
-  start: () => void;
-  save: () => void;
-  cancel: () => void;
-}
-
 export interface ClientPagination<T> {
   visible: T[];
   paginated: boolean;

@@ -107,6 +107,30 @@
     "title": "La canción aún se está descargando",
     "description": "Espera a que termine, o cancélala, antes de quitarla de la playlist."
   },
+  "PLAYLIST_ORDER_STALE": {
+    "title": "La playlist cambió",
+    "description": "Se editó desde otro lugar y el orden nuevo no se guardó. Ya se recargó; inténtalo de nuevo."
+  },
+  "PLAYLIST_COVER_UNSUPPORTED": {
+    "title": "Ese archivo no puede ser una carátula",
+    "description": "La carátula tiene que ser una imagen JPEG, PNG, WebP o GIF."
+  },
+  "PLAYLIST_COVER_TOO_LARGE": {
+    "title": "Esa imagen es demasiado grande",
+    "description": "Elige una imagen más pequeña para la carátula."
+  },
+  "PLAYLIST_COVER_UPLOAD_FAILED": {
+    "title": "No se pudo subir la carátula",
+    "description": "La subida no terminó. Inténtalo de nuevo."
+  },
+  "PLAYLIST_COVER_NOT_FOUND": {
+    "title": "Carátula no encontrada",
+    "description": "Esta playlist ya no tiene esa carátula."
+  },
+  "PLAYLIST_FILE_TOO_LARGE": {
+    "title": "Ese archivo de playlist es demasiado grande",
+    "description": "Divídelo en archivos más pequeños e importa las partes."
+  },
   "PLAYLIST_RULE_OWNS_TRACKS": {
     "title": "Una regla elige estas canciones",
     "description": "Es una playlist inteligente. Edita su regla para cambiar lo que contiene."

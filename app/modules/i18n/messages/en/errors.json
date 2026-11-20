@@ -107,6 +107,30 @@
     "title": "Track still downloading",
     "description": "Wait until it finishes, or cancel it, before removing it from the playlist."
   },
+  "PLAYLIST_ORDER_STALE": {
+    "title": "The playlist changed",
+    "description": "It was edited somewhere else, so the new order was not saved. It has been reloaded; try again."
+  },
+  "PLAYLIST_COVER_UNSUPPORTED": {
+    "title": "That file cannot be a cover",
+    "description": "The cover has to be a JPEG, PNG, WebP or GIF image."
+  },
+  "PLAYLIST_COVER_TOO_LARGE": {
+    "title": "That image is too large",
+    "description": "Pick a smaller image for the cover."
+  },
+  "PLAYLIST_COVER_UPLOAD_FAILED": {
+    "title": "Could not upload the cover",
+    "description": "The upload did not finish. Try again."
+  },
+  "PLAYLIST_COVER_NOT_FOUND": {
+    "title": "Cover not found",
+    "description": "This playlist no longer has that cover."
+  },
+  "PLAYLIST_FILE_TOO_LARGE": {
+    "title": "That playlist file is too large",
+    "description": "Split it into smaller files and import the parts."
+  },
   "PLAYLIST_RULE_OWNS_TRACKS": {
     "title": "A rule picks these tracks",
     "description": "This is a smart playlist. Edit its rule to change what it holds."

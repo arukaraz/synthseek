@@ -1,31 +1,24 @@
 "use client";
 
 import { RequestSplitButton } from "@components/RequestSplitButton";
-import { Checkbox } from "@components/ui/Checkbox";
 import { PreviewButton, PreviewStateLabel, PreviewTime } from "@components/ui/PreviewButton";
 import { catalogPreviewClip, useTrackPreview } from "@hooks/ui/trackPreview";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@components/ui/Tooltip";
-import { TrackStatusIndicator } from "@components/TrackStatusIndicator";
-import { isRetryableStatus } from "@utils/status-helpers";
 import { formatTrackDuration } from "@utils/formatters";
-import { Loader2, RotateCcw } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
-import { formatPlays, isRemovableTrack } from "../../helpers";
+import { formatPlays } from "../../helpers";
 import {
   trackArtist,
   trackArtistLink,
   trackInfo,
   trackMeta,
-  trackRetryButton,
   trackRow,
-  trackSelectCell,
   trackStatusCell,
-  trackStatusIcon,
   trackTime,
   trackTitle,
 } from "../../styles";
 import { TrackPlaybackActions } from "./TrackPlaybackActions";
+import { TrackStatusMark } from "./TrackStatusMark";
 import type { TrackRowProps } from "./types";
 
 export function TrackRow({
@@ -35,11 +28,6 @@ export function TrackRow({
   onCustomizeRequest,
   onRetry,
   isRetrying,
-  selectable = false,
-  isSelected = false,
-  onSelectTrack,
-  onPreviewHover,
-  previewTone = "none",
   onPlayNow,
   onTogglePlay,
   onEnqueue,
@@ -49,42 +37,10 @@ export function TrackRow({
   onArtistNavigate,
 }: TrackRowProps) {
   const { t } = useTranslation("contentDetail");
-  const { t: tStatus } = useTranslation("status");
   const preview = useTrackPreview(catalogPreviewClip(track.externalId, track.title, previewSlot));
-  const canRetry = !!track.requestId && !!track.status && isRetryableStatus(track.status);
-  const showCheckbox = selectable && isRemovableTrack(track);
 
   return (
-    <li
-      className={trackRow({ previewing: preview.active })}
-      data-range-preview={previewTone === "none" ? undefined : previewTone}
-    >
-      {selectable ? (
-        <span
-          className={trackSelectCell()}
-          onMouseEnter={() => onPreviewHover?.(true)}
-          onMouseLeave={() => onPreviewHover?.(false)}
-          onMouseDownCapture={(event) => {
-            if (event.shiftKey) event.preventDefault();
-          }}
-          onClickCapture={(event) => {
-            if (!showCheckbox) return;
-            event.preventDefault();
-            onSelectTrack?.(event.shiftKey);
-            const box = event.currentTarget.querySelector('[role="checkbox"]');
-            if (box instanceof HTMLElement) box.focus();
-          }}
-        >
-          {showCheckbox ? (
-            <Checkbox
-              checked={isSelected}
-              preview={previewTone}
-              aria-label={t("selectTrack", { title: track.title })}
-            />
-          ) : null}
-        </span>
-      ) : null}
-
+    <li className={trackRow({ previewing: preview.active })}>
       <PreviewButton
         title={track.title}
         status={preview.status}
@@ -142,33 +98,14 @@ export function TrackRow({
 
       <div className={trackStatusCell()}>
         {track.status ? (
-          <>
-            {canRetry ? (
-              <button
-                type="button"
-                className={trackRetryButton()}
-                onClick={onRetry}
-                disabled={isRetrying}
-                aria-label={t("retryTrack", { title: track.title })}
-              >
-                {isRetrying ? (
-                  <Loader2 className="size-4 animate-spin" aria-hidden />
-                ) : (
-                  <RotateCcw className="size-4" aria-hidden />
-                )}
-              </button>
-            ) : null}
-            <TooltipProvider delayDuration={150}>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <span className={trackStatusIcon()}>
-                    <TrackStatusIndicator status={track.status} failureReason={track.failureReason} hideLabel />
-                  </span>
-                </TooltipTrigger>
-                <TooltipContent side="top">{tStatus(`request.${track.status}.label`)}</TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          </>
+          <TrackStatusMark
+            title={track.title}
+            status={track.status}
+            failureReason={track.failureReason}
+            canRetry={!!track.requestId}
+            onRetry={onRetry}
+            isRetrying={isRetrying}
+          />
         ) : (
           <RequestSplitButton
             name={track.title}

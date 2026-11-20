@@ -6,22 +6,12 @@ import { playerActions, usePlayerResumableHere, useQueuePresence } from "@hooks/
 
 import { useContentDetailActions } from "../../ContentDetailActionsContext";
 import { useContentDetailClose } from "../../ContentDetailCloseContext";
-import { isRemovableTrack, playableTrackId, trackRequestInput } from "../../helpers";
+import { playableTrackId, trackRequestInput } from "../../helpers";
 import { useDetailPlayback } from "../../hooks/useDetailPlayback";
-import { tracklistRoot } from "../../styles";
 import { TrackRow } from "./TrackRow";
 import type { TracklistProps } from "./types";
 
-export function Tracklist({
-  tracks,
-  showArtist = false,
-  selectable = false,
-  isSelected,
-  onSelectTrack,
-  onPreviewHover,
-  previewTone,
-  onArtistNavigate,
-}: TracklistProps) {
+export function Tracklist({ tracks, showArtist = false, onArtistNavigate }: TracklistProps) {
   const { requestTrack } = useContentDetailActions();
   const retryTracks = useRetryTracks();
   const { enqueueEntity } = useEntityPlayback();
@@ -32,21 +22,15 @@ export function Tracklist({
   const retryingId = retryTracks.isPending ? retryTracks.variables?.trackIds[0] : undefined;
 
   return (
-    <ul className={tracklistRoot()}>
+    <ul>
       {tracks.map((track, position) => {
         const playableId = playableTrackId(track);
-        const selectableId = selectable && isRemovableTrack(track) ? track.requestId : null;
         return (
           <TrackRow
             key={track.externalId}
             track={track}
             showArtist={showArtist}
             isRetrying={retryingId === track.requestId}
-            selectable={selectable}
-            isSelected={selectableId ? (isSelected?.(selectableId) ?? false) : false}
-            onSelectTrack={selectableId ? (extend) => onSelectTrack?.(selectableId, extend) : undefined}
-            onPreviewHover={selectableId ? (hovering) => onPreviewHover?.(hovering ? selectableId : null) : undefined}
-            previewTone={selectableId ? previewTone?.(selectableId) : undefined}
             onPlayNow={playableId === null ? undefined : () => playTrack(playableId)}
             onTogglePlay={playableId === null || !resumableHere ? undefined : playerActions.togglePlay}
             onEnqueue={

@@ -4,7 +4,7 @@ export const selectionBar = cva("bg-surface/95 sticky top-0 z-10 flex w-full min
   variants: {
     appearance: {
       compact: "border-fg/10 mb-2 flex-wrap gap-1.5 px-3 py-2 sm:gap-2",
-      prominent: "border-primary-500/35 mb-3 gap-2 p-1.5 shadow-lg",
+      prominent: "border-primary-500/35 mb-3 flex-wrap gap-2 p-1.5 shadow-lg",
     },
   },
   defaultVariants: { appearance: "compact" },
@@ -21,7 +21,9 @@ export const selectionCount = cva("flex min-w-0 flex-1 items-baseline gap-1.5 tr
 export const selectionCountNum = cva("text-primary-400 text-lg leading-none font-bold tabular-nums");
 export const selectionCountLabel = cva("text-fg/70 truncate text-sm");
 
-export const selectionActions = cva("flex shrink-0 items-center gap-1.5");
+export const selectionActions = cva("flex min-w-0 flex-wrap items-center justify-end gap-1.5");
+
+export const prominentActionLabel = cva("max-sm:sr-only");
 
 export const selectionAction = cva(
   "border-fg/10 bg-fg/[0.03] text-fg/70 hover:bg-fg/[0.06] hover:text-fg inline-flex shrink-0 items-center gap-1.5 rounded-md border px-2 py-1 text-xs font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-50 sm:px-2.5"

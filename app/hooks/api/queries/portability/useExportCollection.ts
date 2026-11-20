@@ -8,6 +8,6 @@ export interface ExportCollectionArgs {
 export function useExportCollection() {
   const utils = trpc.useUtils();
   return {
-    exportCollection: (args: ExportCollectionArgs) => utils.portability.exportCollection.fetch(args),
+    exportCollection: (args: ExportCollectionArgs) => utils.portability.exportCollection.fetch(args, { staleTime: 0 }),
   };
 }

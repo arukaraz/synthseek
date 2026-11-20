@@ -1,4 +1,3 @@
-import type { MediaServerKey } from "@api/__generated__/types";
 import type { SocialBrand } from "@components/ui/SocialIcon";
 import type { ReactNode } from "react";
 
@@ -11,34 +10,11 @@ export interface SocialLink {
 
 export type HeroRequestState = "request" | "requestMissing" | "inLibrary";
 
-export interface PlaylistHeroLabels {
-  menu: string;
-  rename: string;
-  delete: string;
-  makePrivate: string;
-  makeShared: string;
-  nameField: string;
-  save: string;
-  syncTo: string;
-  syncing: string;
-}
-
 export interface PlaylistHeroControls {
-  canEdit: boolean;
-  onRename: () => void;
-  onDelete: () => void;
-  isPrivate: boolean;
-  onToggleVisibility: () => void;
-  onSyncTo?: (server: MediaServerKey) => void;
-  syncExcludeServer: string | null;
-  isSyncing: boolean;
-  isEditing: boolean;
-  editValue: string;
-  onEditChange: (value: string) => void;
-  onEditSave: () => void;
-  onEditCancel: () => void;
-  labels: PlaylistHeroLabels;
   syncBadge?: ReactNode;
+  quietRequest?: boolean;
+  missingCount?: number;
+  onOpenWorkshop?: () => void;
 }
 
 export interface DetailHeroProps {

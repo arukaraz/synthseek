@@ -206,4 +206,5 @@ export interface DetailPlayback {
   radio: (target: PlayableTracksTarget) => Promise<void>;
   enqueue: (target: PlayableTracksTarget) => Promise<void>;
   playTrack: (trackId: string) => Promise<void>;
+  playTrackFrom: (target: PlayableTracksTarget, trackId: string) => Promise<void>;
 }

@@ -45,6 +45,16 @@
     top: calc(var(--height-header-wide) + var(--height-player-chain));
   }
 
+  @media (min-width: 40rem) {
+    [data-player-mode="compact"] .player-workshop {
+      top: var(--height-header-wide);
+    }
+
+    [data-player-mode="compact"] .player-workshop.player-workshop-chain {
+      top: calc(var(--height-header-wide) + var(--height-player-chain));
+    }
+  }
+
   .player-metrics-chain {
     --player-dock-height: calc(var(--player-bar-height) + var(--height-player-chain) + var(--player-dock-gap));
   }

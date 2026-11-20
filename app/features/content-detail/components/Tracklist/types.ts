@@ -1,5 +1,4 @@
 import type { FailureReason, RequestStatus } from "@api/__generated__/types";
-import type { CheckboxPreview } from "@components/ui/Checkbox";
 import type { QueuePresence } from "@components/ui/QueueAddButton";
 
 interface TrackAlbumContext {
@@ -28,11 +27,6 @@ export interface TracklistTrack {
 export interface TracklistProps {
   tracks: TracklistTrack[];
   showArtist?: boolean;
-  selectable?: boolean;
-  isSelected?: (requestId: string) => boolean;
-  onSelectTrack?: (requestId: string, extend: boolean) => void;
-  onPreviewHover?: (requestId: string | null) => void;
-  previewTone?: (requestId: string) => CheckboxPreview;
   onArtistNavigate?: (track: TracklistTrack) => void;
 }
 
@@ -45,6 +39,15 @@ export interface TrackPlaybackActionsProps {
   onRemove: () => void;
 }
 
+export interface TrackStatusMarkProps {
+  title: string;
+  status: RequestStatus;
+  failureReason: FailureReason | null;
+  canRetry: boolean;
+  onRetry: () => void;
+  isRetrying: boolean;
+}
+
 export interface TrackRowProps {
   track: TracklistTrack;
   showArtist: boolean;
@@ -52,11 +55,6 @@ export interface TrackRowProps {
   onCustomizeRequest: () => void;
   onRetry: () => void;
   isRetrying: boolean;
-  selectable?: boolean;
-  isSelected?: boolean;
-  onSelectTrack?: (extend: boolean) => void;
-  onPreviewHover?: (hovering: boolean) => void;
-  previewTone?: CheckboxPreview;
   onPlayNow?: () => Promise<unknown>;
   onTogglePlay?: () => void;
   onEnqueue?: () => Promise<boolean>;

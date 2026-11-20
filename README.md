@@ -114,7 +114,7 @@ Open the web interface and follow the setup wizard: an admin account, slskd, the
 - Follow artists to see their releases on a calendar and get a notice when something new is out, with automatic requests as an option
 - Lidarr delegation, with tag and monitor-scope selection
 - Library import from Spotify, and playlist import from Plex, Navidrome or Jellyfin
-- Playlist import from JSPF, XSPF, or CSV, and export as JSPF
+- Playlist import from JSPF, XSPF, or CSV, tracks from an M3U file added to a playlist you have, and export as JSPF, or as M3U with each file's path on the server
 
 [AI assistants](https://docs.synthseek.dev/ai-assistants/) · [Integrations](https://docs.synthseek.dev/integrations/)
 

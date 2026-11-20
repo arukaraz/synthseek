@@ -558,12 +558,6 @@
       "description": "Se quita de tu biblioteca. No se puede deshacer.",
       "confirm": "Eliminar"
     },
-    "removeDialog": {
-      "title_one": "¿Quitar {{count}} pista?",
-      "title_other": "¿Quitar {{count}} pistas?",
-      "description": "Quita las pistas seleccionadas de esta playlist. Los archivos descargados se quedan en tu biblioteca.",
-      "confirm": "Quitar"
-    },
     "bulk": {
       "remove": "Quitar"
     },

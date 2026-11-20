@@ -10,8 +10,10 @@ import { toast } from "sonner";
 
 export function useEntityPlayback(): {
   playEntity: (target: PlayableTracksTarget) => Promise<boolean>;
+  playEntityFrom: (target: PlayableTracksTarget, trackId: string) => Promise<boolean>;
   shuffleEntity: (target: PlayableTracksTarget) => Promise<boolean>;
   enqueueEntity: (target: PlayableTracksTarget) => Promise<boolean>;
+  playNextEntity: (target: PlayableTracksTarget) => Promise<boolean>;
   enqueueEntities: (targets: readonly PlayableTracksTarget[]) => Promise<boolean>;
   enqueueTracks: (tracks: readonly PlayerTrack[]) => boolean;
   startRadio: (target: PlayableTracksTarget) => Promise<boolean>;
@@ -63,6 +65,18 @@ export function useEntityPlayback(): {
     [queueFor]
   );
 
+  const playEntityFrom = useCallback(
+    async (target: PlayableTracksTarget, trackId: string) => {
+      const queue = await queueFor(target);
+      if (queue === null) return false;
+      const startIndex = queue.findIndex((track) => track.id === trackId);
+      if (startIndex === -1) return playEntity({ kind: "tracks", trackIds: [trackId] });
+      playerActions.playQueue(queue, startIndex);
+      return true;
+    },
+    [queueFor, playEntity]
+  );
+
   const shuffleEntity = useCallback(
     async (target: PlayableTracksTarget) => {
       const queue = await queueFor(target);
@@ -97,6 +111,19 @@ export function useEntityPlayback(): {
     [resolve, enqueueTracks]
   );
 
+  const playNextEntity = useCallback(
+    async (target: PlayableTracksTarget) => {
+      const tracks = await resolve(target);
+      if (tracks === null) return false;
+      const outcome = playerActions.playNext(tracks);
+      if (outcome.full) toast.info(t("queue.full"));
+      else if (outcome.added === 0) toast.info(t("queue.nothingAdded"));
+      else toast.success(t("queue.playingNext", { count: outcome.added }));
+      return outcome.added > 0;
+    },
+    [resolve, t]
+  );
+
   const enqueueEntities = useCallback(
     async (targets: readonly PlayableTracksTarget[]) => {
       const tracks: PlayerTrack[] = [];
@@ -119,5 +146,14 @@ export function useEntityPlayback(): {
 
   const startRadio = useCallback((target: PlayableTracksTarget) => startStation(target, null), [startStation]);
 
-  return { playEntity, shuffleEntity, enqueueEntity, enqueueEntities, enqueueTracks, startRadio };
+  return {
+    playEntity,
+    playEntityFrom,
+    shuffleEntity,
+    enqueueEntity,
+    playNextEntity,
+    enqueueEntities,
+    enqueueTracks,
+    startRadio,
+  };
 }

@@ -2,9 +2,7 @@
 
 import { Upload } from "lucide-react";
 
-import { ProviderMark, providerTone } from "@components/LibrarySourceModal";
 import {
-  DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuSub,
@@ -14,9 +12,9 @@ import {
 import { usePlaylistSyncTargets } from "@hooks/api";
 import { PHONE_QUERY } from "@hooks/ui/constants";
 import { useMediaQuery } from "@hooks/ui/useMediaQuery";
-import { cn } from "@utils/cn";
 
-import { edgeSeparator, syncTargetChip, syncTargetItem } from "./styles";
+import { edgeSeparator } from "./styles";
+import { SyncTargetItems } from "./SyncTargetItems";
 import type { SyncToSubmenuProps } from "./types";
 
 export function SyncToSubmenu({
@@ -32,19 +30,7 @@ export function SyncToSubmenu({
 
   if (destinations.length === 0) return null;
 
-  const items = destinations.map((target) => (
-    <DropdownMenuItem
-      key={target.server}
-      disabled={disabled}
-      onSelect={() => onSelect(target.server)}
-      className={syncTargetItem()}
-    >
-      <span className={cn(syncTargetChip(), providerTone({ provider: target.server }))}>
-        <ProviderMark provider={target.server} />
-      </span>
-      <span className="flex-1">{target.name}</span>
-    </DropdownMenuItem>
-  ));
+  const items = <SyncTargetItems destinations={destinations} disabled={disabled} onSelect={onSelect} />;
 
   if (inline) {
     return (

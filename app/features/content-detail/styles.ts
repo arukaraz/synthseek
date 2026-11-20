@@ -217,16 +217,6 @@ export const trackTime = cva("", {
   defaultVariants: { tone: "rest" },
 });
 
-export const tracklistRoot = cva(
-  "[&_li[data-range-preview=clear]]:bg-fg/10 [&_li[data-range-preview=select]]:bg-primary-500/10"
-);
-
-export const trackSelectCell = cva("flex w-6 shrink-0 items-center justify-center");
-
-export const selectAllControl = cva("text-fg/60 flex items-center gap-2 text-xs font-medium");
-
-export const tracklistControls = cva("flex items-center gap-5");
-
 export const trackInfo = cva("flex min-w-0 flex-1 flex-col");
 
 export const trackTitle = cva("text-fg truncate text-sm font-medium");

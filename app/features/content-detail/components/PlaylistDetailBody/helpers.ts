@@ -1,11 +1,11 @@
 import type { RequestStatus } from "@api/__generated__/types";
 
 import type { TracklistTrack } from "../Tracklist/types";
-import { SORT_KEYS, STATUS_SORT_ORDER } from "./constants";
+import { PLAYLIST_SORT_KEYS, STATUS_SORT_ORDER } from "./constants";
 import type { SortDirection, TracklistSortKey } from "./types";
 
 export function isTracklistSortKey(value: string): value is TracklistSortKey {
-  return (SORT_KEYS as readonly string[]).includes(value);
+  return PLAYLIST_SORT_KEYS.some((key) => key === value);
 }
 
 function statusRank(status: RequestStatus | null): number {
@@ -14,7 +14,7 @@ function statusRank(status: RequestStatus | null): number {
   return index === -1 ? STATUS_SORT_ORDER.length : index;
 }
 
-function compareByKey(a: TracklistTrack, b: TracklistTrack, sortKey: TracklistSortKey): number {
+function compareByKey(a: TracklistTrack, b: TracklistTrack, sortKey: Exclude<TracklistSortKey, "order">): number {
   if (sortKey === "name") return a.title.localeCompare(b.title);
   if (sortKey === "length") return a.durationMs - b.durationMs;
   return statusRank(a.status) - statusRank(b.status);
@@ -25,6 +25,7 @@ export function sortTracklist(
   sortKey: TracklistSortKey,
   direction: SortDirection
 ): TracklistTrack[] {
+  if (sortKey === "order") return direction === "asc" ? [...tracks] : [...tracks].reverse();
   const factor = direction === "asc" ? 1 : -1;
   return [...tracks].sort((a, b) => compareByKey(a, b, sortKey) * factor);
 }
@@ -34,8 +35,8 @@ export function tracklistOrderSignature(
   sortKey: TracklistSortKey,
   direction: SortDirection
 ): string {
-  const members = tracks.map((track) => track.externalId).sort();
-  return JSON.stringify([sortKey, direction, members]);
+  const members = tracks.map((track) => track.externalId);
+  return JSON.stringify([sortKey, direction, sortKey === "order" ? members : members.sort()]);
 }
 
 export function sortedTrackIds(

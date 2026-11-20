@@ -1,25 +1,14 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import enContentDetail from "@modules/i18n/messages/en/contentDetail.json";
-import { renderWithProviders, screen, within } from "@test/test-utils";
+import { renderWithProviders, screen } from "@test/test-utils";
 import type { DetailTarget } from "../../../types";
 
 const usePlaylistDetailMock = vi.fn();
-const removeMutate = vi.fn();
 const setSyncMutate = vi.fn();
-const setVisibilityMutate = vi.fn();
-const renameMutate = vi.fn();
-const deleteMutate = vi.fn();
-const syncToMutate = vi.fn();
 let setSyncPending = false;
 
 vi.mock("@hooks/api", () => ({
-  usePlaylistSyncTargets: () => ({
-    data: [
-      { server: "plex", name: "Plex" },
-      { server: "navidrome", name: "Navidrome" },
-    ],
-  }),
   useRetryTracks: () => ({ mutate: vi.fn(), isPending: false, variables: undefined }),
   usePlayableTracksFetcher: () => vi.fn(async () => ({ items: [], truncated: false })),
   useRadioTracksFetcher: () => vi.fn(async () => ({ items: [] })),
@@ -33,28 +22,8 @@ vi.mock("@hooks/api/queries/content-detail", () => ({
   useResolveArtistFetcher: () => resolveArtistMock,
 }));
 
-vi.mock("@hooks/api/mutations/playlists/useRemoveTracksFromPlaylist", () => ({
-  useRemoveTracksFromPlaylist: () => ({ mutate: removeMutate, isPending: false }),
-}));
-
 vi.mock("@hooks/api/mutations/playlists/useSetPlaylistSync", () => ({
   useSetPlaylistSync: () => ({ mutate: setSyncMutate, isPending: setSyncPending }),
-}));
-
-vi.mock("@hooks/api/mutations/playlists/useSetPlaylistVisibility", () => ({
-  useSetPlaylistVisibility: () => ({ mutate: setVisibilityMutate, isPending: false }),
-}));
-
-vi.mock("@hooks/api/mutations/playlists/useRenamePlaylist", () => ({
-  useRenamePlaylist: () => ({ mutate: renameMutate, isPending: false }),
-}));
-
-vi.mock("@hooks/api/mutations/playlists/useDeletePlaylist", () => ({
-  useDeletePlaylist: () => ({ mutate: deleteMutate, isPending: false }),
-}));
-
-vi.mock("@hooks/api/mutations/requests/useSyncPlaylistTo", () => ({
-  useSyncPlaylistTo: () => ({ mutate: syncToMutate, isPending: false }),
 }));
 
 vi.mock("../../../ContentDetailActionsContext", () => ({
@@ -235,125 +204,60 @@ describe("PlaylistDetailBody editing", () => {
     setSyncPending = false;
   });
 
-  it("renames in place from the kebab and submits the new name via the mutation", async () => {
+  it("opens the workshop from the wrench beside the request button", async () => {
     usePlaylistDetailMock.mockReturnValue(playlistDetail());
-    const onClose = vi.fn();
+    const onOpenWorkshop = vi.fn();
     const { user } = renderWithProviders(
-      <PlaylistDetailBody target={libraryTarget()} onClose={onClose} onNavigate={vi.fn()} />
+      <PlaylistDetailBody
+        target={libraryTarget()}
+        onClose={vi.fn()}
+        onNavigate={vi.fn()}
+        onOpenWorkshop={onOpenWorkshop}
+      />
     );
 
+    await user.click(screen.getByRole("button", { name: enContentDetail.workshop.open }));
+
+    expect(onOpenWorkshop).toHaveBeenCalledTimes(1);
+  });
+
+  it("keeps editing out of the normal view: no playlist menu, no name field and no row selection", () => {
+    usePlaylistDetailMock.mockReturnValue(playlistDetail());
+    renderWithProviders(
+      <PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} onNavigate={vi.fn()} onOpenWorkshop={vi.fn()} />
+    );
+
+    expect(screen.queryByRole("button", { name: "Playlist actions for Road Trip" })).not.toBeInTheDocument();
     expect(screen.queryByLabelText("Playlist name")).not.toBeInTheDocument();
-
-    await user.click(screen.getByRole("button", { name: "Playlist actions for Road Trip" }));
-    await user.click(screen.getByRole("menuitem", { name: "Rename" }));
-
-    const input = screen.getByLabelText("Playlist name");
-    await user.clear(input);
-    await user.type(input, "Summer Mix");
-    await user.click(screen.getByRole("button", { name: "Save" }));
-
-    expect(renameMutate).toHaveBeenCalledWith({ playlistId: "pl-1", name: "Summer Mix" });
-  });
-
-  it("does not render a rename dialog in the detail modal", async () => {
-    usePlaylistDetailMock.mockReturnValue(playlistDetail());
-    const { user } = renderWithProviders(
-      <PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} onNavigate={vi.fn()} />
-    );
-
-    await user.click(screen.getByRole("button", { name: "Playlist actions for Road Trip" }));
-    await user.click(screen.getByRole("menuitem", { name: "Rename" }));
-
-    expect(screen.queryByText("Rename playlist")).not.toBeInTheDocument();
-  });
-
-  it("opens the delete confirm dialog from the kebab", async () => {
-    usePlaylistDetailMock.mockReturnValue(playlistDetail());
-    const { user } = renderWithProviders(
-      <PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} onNavigate={vi.fn()} />
-    );
-
-    await user.click(screen.getByRole("button", { name: "Playlist actions for Road Trip" }));
-    await user.click(screen.getByRole("menuitem", { name: "Delete" }));
-
-    expect(screen.getByText("Delete playlist?")).toBeInTheDocument();
-  });
-
-  it.each([
-    ["shared", "Make private", "private"],
-    ["private", "Share with everyone", "shared"],
-  ])("offers to change who sees a %s playlist from the kebab", async (visibility, label, next) => {
-    usePlaylistDetailMock.mockReturnValue(playlistDetail({ visibility }));
-    const { user } = renderWithProviders(
-      <PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} onNavigate={vi.fn()} />
-    );
-
-    await user.click(screen.getByRole("button", { name: "Playlist actions for Road Trip" }));
-    await user.click(screen.getByRole("menuitem", { name: label }));
-
-    expect(setVisibilityMutate).toHaveBeenCalledWith({ playlistId: "pl-1", visibility: next });
-  });
-
-  it("syncs the playlist to the server picked in the Sync to submenu", async () => {
-    usePlaylistDetailMock.mockReturnValue(playlistDetail());
-    const { user } = renderWithProviders(
-      <PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} onNavigate={vi.fn()} />
-    );
-
-    await user.click(screen.getByRole("button", { name: "Playlist actions for Road Trip" }));
-    screen.getByRole("menuitem", { name: "Sync to..." }).focus();
-    await user.keyboard("{ArrowRight}");
-    expect(await screen.findByRole("menuitem", { name: "Plex" })).toHaveFocus();
-    await user.keyboard("{ArrowDown}{Enter}");
-
-    expect(syncToMutate).toHaveBeenCalledWith({ playlistId: "pl-1", server: "navidrome" });
-  });
-
-  it("does not offer to sync a playlist back to the server it came from", async () => {
-    usePlaylistDetailMock.mockReturnValue(playlistDetail({ sourceProvider: "navidrome", syncEnabled: false }));
-    const { user } = renderWithProviders(
-      <PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} onNavigate={vi.fn()} />
-    );
-
-    await user.click(screen.getByRole("button", { name: "Playlist actions for Road Trip" }));
-    screen.getByRole("menuitem", { name: "Sync to..." }).focus();
-    await user.keyboard("{ArrowRight}");
-
-    expect(await screen.findByRole("menuitem", { name: "Plex" })).toBeInTheDocument();
-    expect(screen.queryByRole("menuitem", { name: "Navidrome" })).not.toBeInTheDocument();
-  });
-
-  it("only marks complete/failed rows selectable for removal", () => {
-    usePlaylistDetailMock.mockReturnValue(playlistDetail());
-    renderWithProviders(<PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} onNavigate={vi.fn()} />);
-
-    expect(screen.getAllByRole("checkbox")).toHaveLength(2);
-  });
-
-  it("hides the rename menu item when imported and syncing", async () => {
-    usePlaylistDetailMock.mockReturnValue(playlistDetail({ sourceProvider: "spotify", syncEnabled: true }));
-    const { user } = renderWithProviders(
-      <PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} onNavigate={vi.fn()} />
-    );
-
-    await user.click(screen.getByRole("button", { name: "Playlist actions for Road Trip" }));
-
-    expect(screen.queryByRole("menuitem", { name: "Rename" })).not.toBeInTheDocument();
-    expect(screen.getByRole("menuitem", { name: "Delete" })).toBeInTheDocument();
     expect(screen.queryByRole("checkbox")).not.toBeInTheDocument();
   });
 
-  it("re-enables the rename menu item when an imported playlist has sync off", async () => {
-    usePlaylistDetailMock.mockReturnValue(playlistDetail({ sourceProvider: "spotify", syncEnabled: false }));
-    const { user } = renderWithProviders(
-      <PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} onNavigate={vi.fn()} />
+  it("counts on the request button the tracks a request would take, not the ones already on their way", () => {
+    const [first, second] = playlistDetail().data.tracks;
+    usePlaylistDetailMock.mockReturnValue(
+      playlistDetail({
+        tracks: [
+          first,
+          { ...second, status: "failed" },
+          { ...second, externalId: "t3", requestId: "r3", title: "Third", status: "downloading" },
+          { ...second, externalId: "t4", requestId: null, title: "Fourth", status: null },
+        ],
+      })
     );
+    renderWithProviders(<PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} onNavigate={vi.fn()} />);
 
-    expect(screen.getByRole("switch")).toBeInTheDocument();
+    expect(screen.getByRole("banner")).toHaveTextContent(
+      `${enContentDetail.requestMissing}${enContentDetail.request}2`
+    );
+  });
 
-    await user.click(screen.getByRole("button", { name: "Playlist actions for Road Trip" }));
+  it("lists a library playlist in its own order, numbered from one", () => {
+    usePlaylistDetailMock.mockReturnValue(playlistDetail());
+    renderWithProviders(<PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} onNavigate={vi.fn()} />);
 
-    expect(screen.getByRole("menuitem", { name: "Rename" })).toBeInTheDocument();
+    const rows = screen.getAllByRole("listitem");
+    expect(rows[0]).toHaveTextContent(/^1.*First/);
+    expect(rows[1]).toHaveTextContent(/^2.*Second/);
   });
 
   it("says a playlist made in Synthseek was created here, in place of a track count", () => {
@@ -428,22 +332,6 @@ describe("PlaylistDetailBody editing", () => {
     expect(screen.getByRole("switch")).toBeDisabled();
   });
 
-  it("clears the track selection when the keep-in-sync switch flips", async () => {
-    usePlaylistDetailMock.mockReturnValue(playlistDetail({ sourceProvider: "spotify", syncEnabled: false }));
-    const { user } = renderWithProviders(
-      <PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} onNavigate={vi.fn()} />
-    );
-
-    await user.click(screen.getByLabelText("Select all"));
-    expect(screen.getByText("of 1 selected")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Clear" })).toBeInTheDocument();
-
-    await user.click(screen.getByRole("switch"));
-
-    expect(screen.queryByText("of 1 selected")).not.toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: "Clear" })).not.toBeInTheDocument();
-  });
-
   it("shows the already-in-library pill by default but hides it when showInLibraryPill is false", () => {
     usePlaylistDetailMock.mockReturnValue(playlistDetail());
     const { rerender } = renderWithProviders(
@@ -502,63 +390,6 @@ describe("PlaylistDetailBody editing", () => {
     expect(screen.getByTitle(enContentDetail.requestOwnerOnly)).toContainElement(request);
   });
 
-  it("confirms before removing the selected tracks in bulk", async () => {
-    usePlaylistDetailMock.mockReturnValue(
-      playlistDetail({
-        tracks: [
-          {
-            externalId: "t1",
-            title: "First",
-            artist: "A",
-            durationMs: 1000,
-            trackNumber: 1,
-            isrc: null,
-            plays: null,
-            inLibrary: true,
-            requestId: "r1",
-            slskd_request_id: null,
-            status: "complete",
-            failureReason: null,
-          },
-          {
-            externalId: "t2",
-            title: "Second",
-            artist: "B",
-            durationMs: 1000,
-            trackNumber: 2,
-            isrc: null,
-            plays: null,
-            inLibrary: true,
-            requestId: "r2",
-            slskd_request_id: null,
-            status: "failed",
-            failureReason: null,
-          },
-        ],
-      })
-    );
-    const { user } = renderWithProviders(
-      <PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} onNavigate={vi.fn()} />
-    );
-
-    await user.click(screen.getByLabelText("Select all"));
-
-    expect(screen.getByText("of 2 selected")).toBeInTheDocument();
-
-    await user.click(screen.getByRole("button", { name: "Remove" }));
-
-    expect(removeMutate).not.toHaveBeenCalled();
-    const dialog = screen.getByRole("dialog");
-    expect(within(dialog).getByText("Remove 2 tracks?")).toBeInTheDocument();
-
-    await user.click(within(dialog).getByRole("button", { name: "Remove" }));
-
-    expect(removeMutate).toHaveBeenCalledWith(
-      { playlistId: "pl-1", trackIds: ["r1", "r2"] },
-      expect.objectContaining({ onSuccess: expect.any(Function) })
-    );
-  });
-
   it("sorts the tracklist by name and flips direction", async () => {
     usePlaylistDetailMock.mockReturnValue(
       playlistDetail({
@@ -611,13 +442,14 @@ describe("PlaylistDetailBody editing", () => {
     expect(descTitles).toEqual(["Banana", "Apple"]);
   });
 
-  it("draws no playlist menu and no selection for a playlist the viewer cannot manage", () => {
+  it("offers no workshop for a playlist the viewer cannot manage", () => {
     usePlaylistDetailMock.mockReturnValue(playlistDetail({ canManage: false }));
-    renderWithProviders(<PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} onNavigate={vi.fn()} />);
+    renderWithProviders(
+      <PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} onNavigate={vi.fn()} onOpenWorkshop={vi.fn()} />
+    );
 
     expect(screen.getByText("First")).toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: "Playlist actions for Road Trip" })).not.toBeInTheDocument();
-    expect(screen.queryByRole("checkbox", { name: "Select all" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: enContentDetail.workshop.open })).not.toBeInTheDocument();
   });
 });
 

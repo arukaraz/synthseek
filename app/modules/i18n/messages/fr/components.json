@@ -142,5 +142,22 @@
     "attempts_one": "{{count}} tentative",
     "attempts_other": "{{count}} tentatives",
     "watching": "Le balayage de reprise automatique surveille ce morceau"
+  },
+  "suggestedTracks": {
+    "title": "Suggestions",
+    "basis": "D'après les artistes de cette playlist.",
+    "refresh": "Renouveler les suggestions",
+    "play": "Lire {{title}}",
+    "pause": "Mettre {{title}} en pause",
+    "hide": "Pas pour cette playlist : {{title}}",
+    "add": "Ajouter",
+    "request": "Demander",
+    "andAdd": " et ajouter",
+    "addLabel": "Ajouter {{title}} à la playlist",
+    "requestAndAddLabel": "Demander {{title}} et l'ajouter à la playlist",
+    "end": "C'est tout pour le moment. Renouvelez pour une nouvelle série.",
+    "empty": "Plus rien à suggérer.",
+    "failed": "Impossible de charger les suggestions.",
+    "retry": "Réessayer"
   }
 }

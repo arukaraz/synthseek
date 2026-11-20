@@ -558,12 +558,6 @@
       "description": "Cela la retire de votre bibliothèque. Cette action est irréversible.",
       "confirm": "Supprimer"
     },
-    "removeDialog": {
-      "title_one": "Retirer {{count}} piste ?",
-      "title_other": "Retirer {{count}} pistes ?",
-      "description": "Cela retire les pistes sélectionnées de cette playlist. Les fichiers téléchargés restent dans votre bibliothèque.",
-      "confirm": "Retirer"
-    },
     "bulk": {
       "remove": "Retirer"
     },

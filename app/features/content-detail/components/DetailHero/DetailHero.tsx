@@ -1,14 +1,12 @@
 "use client";
 
 import { RequestSplitButton } from "@components/RequestSplitButton";
-import { SyncToSubmenu } from "@components/SyncToSubmenu";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@components/ui/DropdownMenu";
 import { SocialIcon } from "@components/ui/SocialIcon";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@components/ui/Tooltip";
 import { primaryGradientButton } from "@theme/utilities/styles";
 import { cn } from "@utils/cn";
 import { artworkImage } from "@utils/artworkProxy";
-import { Check, CheckCircle, Download, EllipsisVertical, Lock, Pencil, Trash2, Upload, Users } from "lucide-react";
+import { CheckCircle, Download, Wrench } from "lucide-react";
 import Image from "next/image";
 import { memo } from "react";
 import { useTranslation } from "react-i18next";
@@ -37,20 +35,16 @@ import { heroPillVisibility } from "./helpers";
 import { ShareFan } from "./ShareFan";
 import {
   avatarWrap,
+  heroActionsSpacer,
   heroBackdrop,
   heroBackdropImage,
   heroBackdropVeil,
-  heroEditInput,
-  heroEditRow,
   heroBadgeDivider,
   heroBadgeRow,
-  heroEditSave,
-  heroKebab,
-  heroMenuItem,
-  heroMenuItemDanger,
-  heroNameRow,
   heroSocialLink,
   heroSocials,
+  heroToolButton,
+  heroToolDivider,
 } from "./styles";
 import type { DetailHeroProps } from "./types";
 
@@ -81,15 +75,16 @@ function DetailHeroComponent({
   const { t } = useTranslation("contentDetail");
   const badgeType = mode;
   const isArtist = mode === "artist";
-  const canEdit = playlistControls?.canEdit ?? false;
-  const isEditing = playlistControls?.isEditing ?? false;
   const { showInLibrary, showRequestButton, showActions } = heroPillVisibility({
     requestState,
     showRequest,
     showInLibraryPill,
   });
   const isPlaylist = mode === "playlist";
-  const actionCount = [showActions, onPlay, followSlot].filter(Boolean).length;
+  const onOpenWorkshop = playlistControls?.onOpenWorkshop;
+  const quiet = playlistControls?.quietRequest === true;
+  const requestShown = !showInLibrary && showRequestButton;
+  const actionCount = [showActions, onPlay, followSlot, onOpenWorkshop].filter(Boolean).length;
 
   return (
     <header className={hero()}>
@@ -123,77 +118,7 @@ function DetailHeroComponent({
               {degradedSources ? <DegradedSourcesChip sources={degradedSources} /> : null}
             </div>
 
-            {playlistControls && isEditing ? (
-              <div className={heroEditRow()}>
-                <input
-                  autoFocus
-                  className={heroEditInput()}
-                  value={playlistControls.editValue}
-                  onChange={(event) => playlistControls.onEditChange(event.target.value)}
-                  onKeyDown={(event) => {
-                    if (event.key === "Enter") playlistControls.onEditSave();
-                    if (event.key === "Escape") playlistControls.onEditCancel();
-                  }}
-                  aria-label={playlistControls.labels.nameField}
-                />
-                <button
-                  type="button"
-                  className={heroEditSave()}
-                  onClick={playlistControls.onEditSave}
-                  aria-label={playlistControls.labels.save}
-                >
-                  <Check className="size-4" aria-hidden />
-                </button>
-              </div>
-            ) : playlistControls ? (
-              <div className={heroNameRow()}>
-                <h2 className={heroName({ size: "compact" })}>{name}</h2>
-                <DropdownMenu>
-                  <DropdownMenuTrigger className={heroKebab()} aria-label={playlistControls.labels.menu}>
-                    <EllipsisVertical className="size-4" aria-hidden />
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    {canEdit ? (
-                      <DropdownMenuItem className={heroMenuItem()} onSelect={playlistControls.onRename}>
-                        <Pencil className="size-4" aria-hidden />
-                        {playlistControls.labels.rename}
-                      </DropdownMenuItem>
-                    ) : null}
-                    {playlistControls.onSyncTo ? (
-                      playlistControls.isSyncing ? (
-                        <DropdownMenuItem className={heroMenuItem()} disabled>
-                          <Upload className="size-4" aria-hidden />
-                          {playlistControls.labels.syncing}
-                        </DropdownMenuItem>
-                      ) : (
-                        <SyncToSubmenu
-                          label={playlistControls.labels.syncTo}
-                          excludeServer={playlistControls.syncExcludeServer}
-                          triggerClassName={heroMenuItem()}
-                          onSelect={playlistControls.onSyncTo}
-                        />
-                      )
-                    ) : null}
-                    <DropdownMenuItem className={heroMenuItem()} onSelect={playlistControls.onToggleVisibility}>
-                      {playlistControls.isPrivate ? (
-                        <Users className="size-4" aria-hidden />
-                      ) : (
-                        <Lock className="size-4" aria-hidden />
-                      )}
-                      {playlistControls.isPrivate
-                        ? playlistControls.labels.makeShared
-                        : playlistControls.labels.makePrivate}
-                    </DropdownMenuItem>
-                    <DropdownMenuItem className={heroMenuItemDanger()} onSelect={playlistControls.onDelete}>
-                      <Trash2 className="size-4" aria-hidden />
-                      {playlistControls.labels.delete}
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </div>
-            ) : (
-              <h2 className={heroName({ size: mode === "playlist" ? "compact" : "default" })}>{name}</h2>
-            )}
+            <h2 className={heroName({ size: isPlaylist ? "compact" : "default" })}>{name}</h2>
 
             {subtitle ? (
               onSubtitleClick ? (
@@ -221,7 +146,7 @@ function DetailHeroComponent({
             )}
 
             {actionCount > 0 ? (
-              <div className={heroActions({ crowded: actionCount > 2 })}>
+              <div className={heroActions({ crowded: actionCount > 2 && !quiet })}>
                 {onPlay ? (
                   <HeroPlaySplit
                     mode={mode}
@@ -232,6 +157,7 @@ function DetailHeroComponent({
                     onEnqueue={onEnqueue}
                   />
                 ) : null}
+                {quiet ? <span aria-hidden className={heroActionsSpacer()} /> : null}
                 {showInLibrary ? (
                   <TooltipProvider delayDuration={150}>
                     <Tooltip>
@@ -247,7 +173,10 @@ function DetailHeroComponent({
                   <RequestSplitButton
                     name={name}
                     label={requestState === "requestMissing" ? t("requestMissing") : t("request")}
-                    size="hero"
+                    shortLabel={quiet ? t("request") : undefined}
+                    count={quiet ? playlistControls?.missingCount : undefined}
+                    size={quiet ? "md" : "hero"}
+                    tone={quiet ? "outline" : "primary"}
                     onRequest={onRequest}
                     onCustomize={onCustomizeRequest}
                     disabled={requestDisabled}
@@ -270,6 +199,27 @@ function DetailHeroComponent({
                   </button>
                 ) : null}
                 {followSlot}
+                {onOpenWorkshop ? (
+                  <>
+                    {requestShown ? <span aria-hidden className={heroToolDivider()} /> : null}
+                    <TooltipProvider delayDuration={150}>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <button
+                            type="button"
+                            className={heroToolButton()}
+                            onClick={onOpenWorkshop}
+                            aria-label={t("workshop.open")}
+                            data-cy="hero-workshop"
+                          >
+                            <Wrench className="size-4.5" aria-hidden />
+                          </button>
+                        </TooltipTrigger>
+                        <TooltipContent>{t("workshop.open")}</TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  </>
+                ) : null}
               </div>
             ) : null}
           </div>

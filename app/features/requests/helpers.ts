@@ -7,6 +7,7 @@ import {
   UNRESOLVED_STATUSES,
   type RequestListItem,
 } from "@api/__generated__/types";
+import { collectionFilename } from "@utils/filename";
 import {
   DOWNLOAD_ACTIVE_STATUSES,
   SOURCE_FILTERS,
@@ -51,13 +52,7 @@ export function hasActiveDownload(items: RequestListItem[] | undefined): boolean
 }
 
 export function exportFilename(name: string): string {
-  const slug =
-    name
-      .trim()
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/^-+|-+$/g, "") || "playlist";
-  return `${slug}.jspf`;
+  return collectionFilename(name, "jspf");
 }
 
 export function filterRequestsByStatus(

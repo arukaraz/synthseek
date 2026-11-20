@@ -558,12 +558,6 @@
       "description": "This removes it from your library. This cannot be undone.",
       "confirm": "Delete"
     },
-    "removeDialog": {
-      "title_one": "Remove {{count}} track?",
-      "title_other": "Remove {{count}} tracks?",
-      "description": "This removes the selected tracks from this playlist. The downloaded files stay in your library.",
-      "confirm": "Remove"
-    },
     "bulk": {
       "remove": "Remove"
     },
