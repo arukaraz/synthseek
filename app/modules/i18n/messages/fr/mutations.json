@@ -351,6 +351,7 @@
     "reorderFailed": "Impossible d'enregistrer le nouvel ordre",
     "suggestionAdded": "« {{title}} » ajoutée à la playlist",
     "suggestionHideFailed": "Impossible de masquer cette suggestion",
+    "suggestionYearsFailed": "Impossible d'enregistrer les années de ces suggestions",
     "coverUpdated": "Pochette mise à jour",
     "coverRemoved": "Pochette retirée",
     "coverRemoveFailed": "Impossible de retirer la pochette",

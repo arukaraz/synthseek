@@ -155,9 +155,22 @@
     "andAdd": " et ajouter",
     "addLabel": "Ajouter {{title}} à la playlist",
     "requestAndAddLabel": "Demander {{title}} et l'ajouter à la playlist",
-    "end": "C'est tout pour le moment. Renouvelez pour une nouvelle série.",
+    "end": "Vous avez vu tout ce qui se rapproche de cette playlist.",
+    "moreFailed": "Impossible de charger d'autres suggestions.",
     "empty": "Plus rien à suggérer.",
     "failed": "Impossible de charger les suggestions.",
-    "retry": "Réessayer"
+    "retry": "Réessayer",
+    "filters": "Filtrer les suggestions",
+    "apply": "Appliquer",
+    "emptyFiltered": "Rien à suggérer pour ces années.",
+    "years": {
+      "label": "Années de sortie",
+      "any": "Toutes les années",
+      "between": "{{from}} – {{to}}",
+      "from": "À partir de {{from}}",
+      "to": "Jusqu'à {{to}}",
+      "first": "Première année",
+      "last": "Dernière année"
+    }
   }
 }

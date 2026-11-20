@@ -27,7 +27,7 @@ import {
 } from "./styles";
 import type { M3uPreview, WorkshopFilesProps } from "./types";
 
-export function WorkshopFiles({ playlistId, name, canImport, maxChars, settleOrder }: WorkshopFilesProps) {
+export function WorkshopFiles({ playlistId, name, canImport, maxChars, settleEdits }: WorkshopFilesProps) {
   const { t } = useTranslation("contentDetail");
   const picker = useRef<HTMLInputElement>(null);
   const [preview, setPreview] = useState<M3uPreview | null>(null);
@@ -58,7 +58,7 @@ export function WorkshopFiles({ playlistId, name, canImport, maxChars, settleOrd
 
   const commit = async () => {
     if (preview === null) return;
-    await settleOrder();
+    await settleEdits();
     try {
       await importM3u.mutateAsync({ playlistId, content: preview.content, commit: true });
       setPreview(null);
@@ -68,12 +68,12 @@ export function WorkshopFiles({ playlistId, name, canImport, maxChars, settleOrd
   };
 
   const exportPaths = async () => {
-    await settleOrder();
+    await settleEdits();
     exportM3u.mutate({ playlistId });
   };
 
   const exportJspf = async () => {
-    await settleOrder();
+    await settleEdits();
     try {
       const doc = await exportCollection({ id: playlistId, type: "playlist" });
       downloadText(collectionFilename(name, JSPF_EXTENSION), JSON.stringify(doc, null, 2));

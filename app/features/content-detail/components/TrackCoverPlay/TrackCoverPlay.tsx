@@ -11,7 +11,7 @@ import { detailInitials } from "../../helpers";
 import { coverPlay, coverPlayBars, coverPlayImage, coverPlayInitials, coverPlayVeil } from "./styles";
 import type { TrackCoverPlayProps } from "./types";
 
-export function TrackCoverPlay({ title, cover, presence, onPlay, onTogglePlay }: TrackCoverPlayProps) {
+export function TrackCoverPlay({ title, cover, presence, onPlay, onTogglePlay, overlay }: TrackCoverPlayProps) {
   const { t } = useTranslation("player");
   const [starting, setStarting] = useState(false);
   const playing = presence === "playing";
@@ -50,6 +50,7 @@ export function TrackCoverPlay({ title, cover, presence, onPlay, onTogglePlay }:
       <span className={coverPlay()}>
         {art}
         {bars}
+        {overlay}
       </span>
     );
   }

@@ -1,3 +1,4 @@
+import type { PlaylistVisibility } from "@api/__generated__/types";
 import type { SocialBrand } from "@components/ui/SocialIcon";
 import type { ReactNode } from "react";
 
@@ -10,11 +11,23 @@ export interface SocialLink {
 
 export type HeroRequestState = "request" | "requestMissing" | "inLibrary";
 
+export interface HeroVisibilityChoice {
+  value: PlaylistVisibility;
+  onChange: (next: PlaylistVisibility) => void;
+  disabled: boolean;
+}
+
 export interface PlaylistHeroControls {
   syncBadge?: ReactNode;
   quietRequest?: boolean;
   missingCount?: number;
   onOpenWorkshop?: () => void;
+  visibility?: HeroVisibilityChoice;
+}
+
+export interface HeroPlaylistToolsProps {
+  onOpenWorkshop: () => void;
+  visibility?: HeroVisibilityChoice;
 }
 
 export interface DetailHeroProps {

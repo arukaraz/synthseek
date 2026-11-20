@@ -93,6 +93,26 @@ describe("useInfiniteScroll", () => {
     expect(lastObserver().options?.rootMargin).toBe("200px");
   });
 
+  it("observes a sentinel that is taken away and put back while nothing else changed", () => {
+    const onLoadMore = vi.fn();
+    function Toggled({ shown }: { shown: boolean }) {
+      const sentinelRef = useInfiniteScroll({ root: null, hasNextPage: true, isFetchingNextPage: false, onLoadMore });
+      return shown ? createElement("div", { ref: sentinelRef }) : null;
+    }
+    const { rerender } = render(createElement(Toggled, { shown: true }));
+    const first = lastObserver();
+
+    rerender(createElement(Toggled, { shown: false }));
+    expect(first.disconnect).toHaveBeenCalledTimes(1);
+
+    rerender(createElement(Toggled, { shown: true }));
+    expect(lastObserver()).not.toBe(first);
+    expect(lastObserver().observe).toHaveBeenCalledTimes(1);
+
+    triggerIntersect(lastObserver(), true);
+    expect(onLoadMore).toHaveBeenCalledTimes(1);
+  });
+
   it("disconnects the observer on unmount", () => {
     const { unmount } = renderScroll({ hasNextPage: true, isFetchingNextPage: false, onLoadMore: vi.fn() });
     const observer = lastObserver();

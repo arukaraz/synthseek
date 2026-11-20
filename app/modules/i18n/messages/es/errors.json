@@ -123,6 +123,10 @@
     "title": "No se pudo subir la carátula",
     "description": "La subida no terminó. Inténtalo de nuevo."
   },
+  "PLAYLIST_COVER_REMOVE_FAILED": {
+    "title": "No se pudo quitar la carátula",
+    "description": "No se pudo borrar el archivo de la carátula, así que se conservó."
+  },
   "PLAYLIST_COVER_NOT_FOUND": {
     "title": "Carátula no encontrada",
     "description": "Esta playlist ya no tiene esa carátula."

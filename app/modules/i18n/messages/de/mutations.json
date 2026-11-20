@@ -351,6 +351,7 @@
     "reorderFailed": "Die neue Reihenfolge konnte nicht gespeichert werden",
     "suggestionAdded": "„{{title}}“ zur Playlist hinzugefügt",
     "suggestionHideFailed": "Dieser Vorschlag konnte nicht ausgeblendet werden",
+    "suggestionYearsFailed": "Die Jahre für diese Vorschläge konnten nicht gespeichert werden",
     "coverUpdated": "Cover aktualisiert",
     "coverRemoved": "Cover entfernt",
     "coverRemoveFailed": "Das Cover konnte nicht entfernt werden",

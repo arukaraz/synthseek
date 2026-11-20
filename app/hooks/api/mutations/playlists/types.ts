@@ -3,6 +3,8 @@ import type { inferRouterInputs } from "@trpc/server";
 
 export type ReorderPlaylistTracksInput = inferRouterInputs<AppRouter>["playlists"]["reorderTracks"];
 
+export type RenamePlaylistInput = inferRouterInputs<AppRouter>["playlists"]["rename"];
+
 export interface RemovedPlaylistTrack {
   trackId: string;
   position: number;

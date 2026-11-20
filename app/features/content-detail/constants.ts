@@ -1,3 +1,5 @@
+import { PlaylistVisibility } from "@api/__generated__/types";
+
 import type { SocialLink } from "./components/DetailHero/types";
 import type { TracklistTrack } from "./components/Tracklist/types";
 
@@ -16,6 +18,11 @@ export const EMPTY_SOCIALS: SocialLink[] = [];
 export const EMPTY_GENRES: string[] = [];
 
 export const EMPTY_TRACKS: TracklistTrack[] = [];
+
+export const PLAYLIST_VISIBILITY_OPTIONS: readonly PlaylistVisibility[] = [
+  PlaylistVisibility.enum.private,
+  PlaylistVisibility.enum.shared,
+];
 
 export const MISSING_CATALOG_IDS: ReadonlySet<string> = new Set(["", "0"]);
 

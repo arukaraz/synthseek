@@ -155,9 +155,22 @@
     "andAdd": " und hinzufügen",
     "addLabel": "{{title}} zur Playlist hinzufügen",
     "requestAndAddLabel": "{{title}} anfragen und zur Playlist hinzufügen",
-    "end": "Das ist vorerst alles. Erneuere für weitere Vorschläge.",
+    "end": "Du hast alles gesehen, was dieser Playlist nahekommt.",
+    "moreFailed": "Weitere Vorschläge konnten nicht geladen werden.",
     "empty": "Es gibt nichts mehr vorzuschlagen.",
     "failed": "Die Vorschläge konnten nicht geladen werden.",
-    "retry": "Erneut versuchen"
+    "retry": "Erneut versuchen",
+    "filters": "Vorschläge filtern",
+    "apply": "Anwenden",
+    "emptyFiltered": "Aus diesen Jahren gibt es nichts vorzuschlagen.",
+    "years": {
+      "label": "Erscheinungsjahre",
+      "any": "Beliebiges Jahr",
+      "between": "{{from}} – {{to}}",
+      "from": "Ab {{from}}",
+      "to": "Bis {{to}}",
+      "first": "Frühestes Jahr",
+      "last": "Spätestes Jahr"
+    }
   }
 }

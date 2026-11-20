@@ -1,3 +1,5 @@
+import type { PlaylistSuggestionsKey } from "@hooks/api/queries/playlist-suggestions/types";
+import { usePlaylistSuggestionGone } from "@hooks/api/queries/playlist-suggestions/usePlaylistSuggestionGone";
 import i18n from "@locale";
 import { errorToast } from "@modules/errors";
 import { trpc } from "@utils/trpc";
@@ -8,8 +10,9 @@ import { useRequest } from "../requests/useRequest";
 import { suggestedTrackRequest } from "./helpers";
 import type { SuggestedTrackToAdd } from "./types";
 
-export function useAddSuggestedTrack(playlistId: string) {
+export function useAddSuggestedTrack({ playlistId, seed }: PlaylistSuggestionsKey) {
   const utils = trpc.useUtils();
+  const { take } = usePlaylistSuggestionGone({ playlistId, seed });
   const request = useRequest();
   const link = trpc.playlists.addTracks.useMutation({
     onError: (error) => errorToast(error, "playlists.tracksAddedFailed"),
@@ -24,6 +27,7 @@ export function useAddSuggestedTrack(playlistId: string) {
       try {
         const requestId = track.requestId ?? (await requestTrack(suggestedTrackRequest(track))).requestDbId;
         await linkTracks({ playlistId, trackIds: [requestId] });
+        take(track.externalId);
         toast.success(i18n.t("mutations:playlists.suggestionAdded", { title: track.title }));
         return true;
       } catch {
@@ -34,7 +38,7 @@ export function useAddSuggestedTrack(playlistId: string) {
         void utils.library.getPlaylists.invalidate();
       }
     },
-    [linkTracks, playlistId, requestTrack, utils]
+    [linkTracks, playlistId, requestTrack, take, utils]
   );
 
   return { add, pendingId };

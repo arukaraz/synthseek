@@ -1,5 +1,6 @@
 import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import type { ReactNode } from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import enContentDetail from "@modules/i18n/messages/en/contentDetail.json";
@@ -68,14 +69,30 @@ vi.mock("../components/AlbumDetailBody", () => ({
 }));
 
 vi.mock("../components/PlaylistDetailBody", () => ({
-  PlaylistDetailBody: ({ target, onClose }: { target: DetailTarget; onClose: () => void }) => (
+  PlaylistDetailBody: ({
+    target,
+    onClose,
+    onOpenWorkshop,
+  }: {
+    target: DetailTarget;
+    onClose: () => void;
+    onOpenWorkshop: () => void;
+  }) => (
     <div data-testid="playlist-body">
       {target.name}
       <button type="button" onClick={onClose}>
         close from body
       </button>
+      <button type="button" onClick={onOpenWorkshop}>
+        open workshop
+      </button>
     </div>
   ),
+}));
+
+vi.mock("../components/PlaylistWorkshop", () => ({
+  WorkshopSurface: ({ children }: { children: ReactNode }) => <div data-testid="workshop">{children}</div>,
+  PlaylistWorkshop: ({ target }: { target: DetailTarget }) => <div>{target.name} workshop</div>,
 }));
 
 import { ContentDetailModal } from "../ContentDetailModal";
@@ -336,5 +353,58 @@ describe("closing the modal", () => {
     await userEvent.setup().click(screen.getByRole("button", { name: "close from body" }));
 
     expect(onClose).toHaveBeenCalled();
+  });
+});
+
+describe("the playlist workshop and the page under it", () => {
+  const detail = (onClose: () => void) => (
+    <ContentDetailModal
+      open
+      onClose={onClose}
+      target={target({ mode: "playlist", id: "playlist-1", name: "Summer" })}
+      actions={actions()}
+    />
+  );
+
+  it("closes with the modal when the listener goes to another page while it is open", async () => {
+    navigation.pathname = "/library";
+    const onClose = vi.fn();
+    const { rerender } = render(detail(onClose));
+    await userEvent.setup().click(screen.getByRole("button", { name: "open workshop" }));
+    expect(screen.getByTestId("workshop")).toHaveTextContent("Summer workshop");
+    expect(onClose).not.toHaveBeenCalled();
+
+    navigation.pathname = "/settings";
+    rerender(detail(onClose));
+
+    await waitFor(() => expect(onClose).toHaveBeenCalledTimes(1));
+  });
+
+  it("leaves the modal open when the page changes while the workshop is not open", async () => {
+    navigation.pathname = "/library";
+    const onClose = vi.fn();
+    const { rerender } = render(detail(onClose));
+
+    navigation.pathname = "/settings";
+    rerender(detail(onClose));
+    await act(async () => undefined);
+
+    expect(onClose).not.toHaveBeenCalled();
+    expect(screen.getByTestId("playlist-body")).toBeInTheDocument();
+  });
+
+  it("stays open when the workshop is opened on a page reached after the modal was mounted", async () => {
+    navigation.pathname = "/library";
+    const onClose = vi.fn();
+    const { rerender } = render(detail(onClose));
+    navigation.pathname = "/";
+    rerender(detail(onClose));
+    await act(async () => undefined);
+
+    await userEvent.setup().click(screen.getByRole("button", { name: "open workshop" }));
+    await act(async () => undefined);
+
+    expect(screen.getByTestId("workshop")).toBeInTheDocument();
+    expect(onClose).not.toHaveBeenCalled();
   });
 });

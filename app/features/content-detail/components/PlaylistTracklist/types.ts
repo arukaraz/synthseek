@@ -1,4 +1,5 @@
 import type { QueuePresence } from "@components/ui/QueueAddButton";
+import type { ReactNode } from "react";
 
 import type { TracklistTrack } from "../Tracklist/types";
 
@@ -28,6 +29,7 @@ export interface PlaylistRowIdentityProps {
   onPlay?: () => Promise<unknown>;
   onTogglePlay?: () => void;
   onArtistNavigate?: () => void;
+  previewSlot?: ReactNode;
 }
 
 export interface PlaylistRowFiguresProps {

@@ -1,16 +1,15 @@
 "use client";
 
 import { DeletePlaylistDialog } from "@components/DeletePlaylistDialog";
-import { useRenamePlaylist } from "@hooks/api/mutations/playlists/useRenamePlaylist";
 import { useSetPlaylistSync } from "@hooks/api/mutations/playlists/useSetPlaylistSync";
 import { useSetPlaylistVisibility } from "@hooks/api/mutations/playlists/useSetPlaylistVisibility";
 import { playlistOriginLabel } from "@utils/playlist";
 import { Trash2 } from "lucide-react";
-import { useId, useState } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
+import { PLAYLIST_VISIBILITY_OPTIONS } from "../../constants";
 import { PlaylistSyncToggle } from "../DetailHero";
-import { VISIBILITY_OPTIONS } from "./constants";
 import {
   actionList,
   actionRow,
@@ -19,9 +18,6 @@ import {
   factTerm,
   factValue,
   facts,
-  field,
-  fieldLabel,
-  nameInput,
   visibilityGrid,
   visibilityHint,
   visibilityOption,
@@ -30,6 +26,7 @@ import {
 import { WorkshopCover } from "./WorkshopCover";
 import { WorkshopField } from "./WorkshopField";
 import { WorkshopFiles } from "./WorkshopFiles";
+import { WorkshopName } from "./WorkshopName";
 import { WorkshopSyncRow } from "./WorkshopSyncRow";
 import type { WorkshopDetailsProps } from "./types";
 
@@ -41,6 +38,7 @@ export function WorkshopDetails({
   sourceProvider,
   syncEnabled,
   canRename,
+  nameDraft,
   cover,
   hasCustomCover,
   canEditTracks,
@@ -48,75 +46,32 @@ export function WorkshopDetails({
   trackCount,
   minutes,
   inLibrary,
-  settleOrder,
+  settleEdits,
   onDeleted,
 }: WorkshopDetailsProps) {
   const { t } = useTranslation("contentDetail");
   const { t: tLibrary } = useTranslation("library");
-  const nameId = useId();
-  const lockedHint = tLibrary("playlists.syncedReadonly");
   const keepInSyncLabel = tLibrary("playlists.keepInSync");
-  const renamePlaylist = useRenamePlaylist();
   const setVisibility = useSetPlaylistVisibility();
   const setSync = useSetPlaylistSync();
-  const [draft, setDraft] = useState(name);
-  const [seenName, setSeenName] = useState(name);
   const [deleteOpen, setDeleteOpen] = useState(false);
-
-  if (seenName !== name) {
-    setSeenName(name);
-    setDraft(name);
-  }
-
-  const saveName = () => {
-    const next = draft.trim();
-    if (next.length === 0 || next === name) {
-      setDraft(name);
-      return;
-    }
-    renamePlaylist.mutate({ playlistId, name: next });
-  };
 
   return (
     <div className={detailsBody()}>
-      <section className={field()}>
-        <label htmlFor={nameId} className={fieldLabel()}>
-          {t("workshop.details.name")}
-        </label>
-        <input
-          id={nameId}
-          type="text"
-          className={nameInput()}
-          value={draft}
-          maxLength={limits.nameChars}
-          disabled={!canRename}
-          title={canRename ? undefined : lockedHint}
-          onChange={(event) => setDraft(event.target.value)}
-          onBlur={saveName}
-          onKeyDown={(event) => {
-            if (event.key === "Enter") event.currentTarget.blur();
-            if (event.key === "Escape") {
-              event.stopPropagation();
-              setDraft(name);
-            }
-          }}
-        />
-      </section>
+      <WorkshopCover
+        playlistId={playlistId}
+        name={name}
+        cover={cover}
+        hasCustomCover={hasCustomCover}
+        maxBytes={limits.coverBytes}
+        accept={limits.coverTypes}
+      />
 
-      <WorkshopField label={t("workshop.details.cover")}>
-        <WorkshopCover
-          playlistId={playlistId}
-          name={name}
-          cover={cover}
-          hasCustomCover={hasCustomCover}
-          maxBytes={limits.coverBytes}
-          accept={limits.coverTypes}
-        />
-      </WorkshopField>
+      <WorkshopName canRename={canRename} nameDraft={nameDraft} maxChars={limits.nameChars} />
 
       <WorkshopField label={t("workshop.details.visibility")}>
         <div className={visibilityGrid()}>
-          {VISIBILITY_OPTIONS.map((option) => (
+          {PLAYLIST_VISIBILITY_OPTIONS.map((option) => (
             <button
               key={option}
               type="button"
@@ -165,7 +120,7 @@ export function WorkshopDetails({
           name={name}
           canImport={canEditTracks}
           maxChars={limits.fileChars}
-          settleOrder={settleOrder}
+          settleEdits={settleEdits}
         />
       </WorkshopField>
 

@@ -17,6 +17,7 @@ import {
   statusDotClass,
 } from "./helpers";
 import { PlaylistCardMenu } from "./PlaylistCardMenu";
+import { PlaylistVisibilityMark } from "./PlaylistVisibilityMark";
 import {
   cardBody,
   cardBodyRow,
@@ -24,6 +25,7 @@ import {
   cardImage,
   cardInitials as cardInitialsStyle,
   cardMeta,
+  cardMetaRow,
   cardMosaic,
   cardMosaicTile,
   cardRoot,
@@ -93,7 +95,10 @@ export function PlaylistCard({ item, onOpen, onPlay, chrome = "overlay" }: Playl
         <div className={cardBody()}>
           <p className={cardTitle()}>{item.name}</p>
           <p className={cardSubtitle()}>{playlistSubtitle(item, origin, t)}</p>
-          <p className={cardMeta()}>{t("page.counts.tracks", { count: item.total_tracks })}</p>
+          <p className={cardMetaRow()}>
+            <span className={cardMeta()}>{t("page.counts.tracks", { count: item.total_tracks })}</span>
+            <PlaylistVisibilityMark visibility={item.visibility} />
+          </p>
         </div>
         <PlaylistCardMenu item={item} />
       </div>

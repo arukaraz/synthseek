@@ -12,7 +12,7 @@ import { useTranslation } from "react-i18next";
 import { VIEW_CONFIG } from "../constants";
 import { buildPlaylistsInput, shellCardChrome, shellListsRows } from "../helpers";
 import type { LibraryViewModeProps } from "../types";
-import { CardArtwork, LibraryListRow, PlaylistCard, PlaylistCardMenu } from "./LibraryCard";
+import { CardArtwork, LibraryListRow, PlaylistCard, PlaylistCardMenu, PlaylistVisibilityMark } from "./LibraryCard";
 import { joinMeta, playlistSubtitle } from "./LibraryCard/helpers";
 import { LibraryViewLayout } from "./LibraryViewLayout/LibraryViewLayout";
 
@@ -53,7 +53,12 @@ export function PlaylistsViewMode({ controller, shell }: LibraryViewModeProps) {
             openLabel={tDetail("openDetail", { name: item.name })}
             artwork={<CardArtwork src={cover} name={item.name} sizes="56px" />}
             onOpen={open}
-            trailing={<PlaylistCardMenu item={item} />}
+            trailing={
+              <>
+                <PlaylistVisibilityMark visibility={item.visibility} />
+                <PlaylistCardMenu item={item} />
+              </>
+            }
           />
         );
       }

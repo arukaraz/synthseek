@@ -57,7 +57,7 @@ vi.mock("../WorkshopTrackRow", () => ({
 
 import { usePlaylistOrder } from "../../../hooks/usePlaylistOrder";
 import { WorkshopTracks } from "../WorkshopTracks";
-import type { SaveOrder, WorkshopTrack } from "../types";
+import type { SaveOrder, WorkshopLock, WorkshopTrack } from "../types";
 
 const save: SaveOrder = (trackIds, settled) => void saveOrder({ playlistId: "pl-1", trackIds }).then(settled);
 
@@ -82,18 +82,55 @@ function track(requestId: string): WorkshopTrack {
 
 const STORED = [track("a"), track("b")];
 
-function Harness() {
-  const order = usePlaylistOrder(STORED, save);
-  return <WorkshopTracks playlistId="pl-1" order={order} lock={null} onArtistNavigate={vi.fn()} />;
+function Harness({ lock, stored }: { lock: WorkshopLock; stored: typeof STORED }) {
+  const order = usePlaylistOrder(stored, save);
+  return <WorkshopTracks playlistId="pl-1" order={order} lock={lock} onArtistNavigate={vi.fn()} />;
 }
 
-function tracks() {
-  return renderWithProviders(<Harness />);
+function tracks(lock: WorkshopLock = null, stored: typeof STORED = STORED) {
+  return renderWithProviders(<Harness lock={lock} stored={stored} />);
 }
 
 beforeEach(() => {
   vi.clearAllMocks();
   orderSaves.length = 0;
+});
+
+describe("WorkshopTracks lock", () => {
+  it.each([
+    {
+      lock: "synced",
+      text: "This playlist is kept in sync, so its tracks cannot be edited here. Turn off sync to edit them.",
+    },
+    { lock: "rule", text: "This playlist is filled by its rule, so its tracks cannot be edited here." },
+  ] as const)("says as a warning why a $lock playlist cannot be edited, in place of select all", ({ lock, text }) => {
+    tracks(lock);
+
+    const notice = screen.getByRole("note");
+    expect(notice).toHaveTextContent(text);
+    expect(notice.querySelector("svg.lucide-triangle-alert")).not.toBeNull();
+    expect(screen.queryByRole("checkbox", { name: "Select all" })).not.toBeInTheDocument();
+  });
+
+  it("shows no warning on a playlist that can be edited", () => {
+    tracks();
+
+    expect(screen.queryByRole("note")).not.toBeInTheDocument();
+    expect(screen.getByRole("checkbox", { name: "Select all" })).toBeInTheDocument();
+  });
+
+  it("offers no select all on a playlist that can be edited and holds no tracks", () => {
+    tracks(null, []);
+
+    expect(screen.queryByRole("checkbox", { name: "Select all" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("note")).not.toBeInTheDocument();
+  });
+
+  it("still says why a playlist with no tracks cannot be edited when it is locked", () => {
+    tracks("synced", []);
+
+    expect(screen.getByRole("note")).toHaveTextContent("This playlist is kept in sync");
+  });
 });
 
 describe("WorkshopTracks removal", () => {

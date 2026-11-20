@@ -29,6 +29,16 @@ export interface PlaylistOrder {
   placeSoon: (trackIds: string[]) => void;
 }
 
+export type SaveName = (name: string) => Promise<void>;
+
+export interface PlaylistNameDraft {
+  draft: string;
+  shown: string;
+  change: (value: string) => void;
+  finish: () => Promise<void>;
+  commit: () => Promise<void>;
+}
+
 export interface PlaylistWorkshopProps {
   target: DetailTarget;
   onExit: () => void;
@@ -62,7 +72,7 @@ export interface WorkshopFilesProps {
   name: string;
   canImport: boolean;
   maxChars: number;
-  settleOrder: () => Promise<void>;
+  settleEdits: () => Promise<void>;
 }
 
 export interface M3uPreview {
@@ -82,11 +92,18 @@ export interface WorkshopDetailsProps {
   sourceProvider: string | null;
   syncEnabled: boolean;
   canRename: boolean;
+  nameDraft: PlaylistNameDraft;
   trackCount: number;
   minutes: number;
   inLibrary: number;
-  settleOrder: () => Promise<void>;
+  settleEdits: () => Promise<void>;
   onDeleted: () => void;
+}
+
+export interface WorkshopNameProps {
+  canRename: boolean;
+  nameDraft: PlaylistNameDraft;
+  maxChars: number;
 }
 
 export interface WorkshopSyncRowProps {

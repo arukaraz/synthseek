@@ -8,11 +8,38 @@ export const suggestedTitles = cva("flex min-w-0 flex-1 flex-col");
 
 export const suggestedTitle = cva("text-fg text-sm font-bold");
 
-export const suggestedSub = cva("text-fg/50 truncate text-xs");
+export const suggestedSub = cva("truncate text-xs", {
+  variants: {
+    filtered: {
+      true: "text-primary-400 font-medium",
+      false: "text-fg/50",
+    },
+  },
+  defaultVariants: { filtered: false },
+});
 
-export const suggestedRefresh = cva(
-  "text-fg/60 hover:bg-fg/10 hover:text-fg focus-visible:ring-primary-400 grid size-8 shrink-0 place-items-center rounded-md transition-colors outline-none focus-visible:ring-2 disabled:opacity-40"
+export const suggestedTool = cva(
+  "focus-visible:ring-primary-400 grid size-8 shrink-0 place-items-center rounded-md transition-colors outline-none focus-visible:ring-2 disabled:opacity-40",
+  {
+    variants: {
+      active: {
+        true: "bg-primary-500/20 text-primary-400 hover:bg-primary-500/30",
+        false: "text-fg/60 hover:bg-fg/10 hover:text-fg",
+      },
+    },
+    defaultVariants: { active: false },
+  }
 );
+
+export const suggestedFilterPanel = cva("flex w-64 max-w-[calc(100vw-2rem)] flex-col gap-3 p-3 text-sm");
+
+export const suggestedFilterHead = cva("flex items-baseline justify-between gap-3");
+
+export const suggestedFilterLabel = cva("text-fg/60 text-xs font-semibold");
+
+export const suggestedFilterValue = cva("text-fg text-xs font-semibold tabular-nums");
+
+export const suggestedApply = cva("w-full");
 
 export const suggestedScroll = cva("min-h-0 flex-1 overflow-y-auto overscroll-contain px-2 pb-4");
 

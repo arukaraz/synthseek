@@ -6,7 +6,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@compo
 import { primaryGradientButton } from "@theme/utilities/styles";
 import { cn } from "@utils/cn";
 import { artworkImage } from "@utils/artworkProxy";
-import { CheckCircle, Download, Wrench } from "lucide-react";
+import { CheckCircle, Download } from "lucide-react";
 import Image from "next/image";
 import { memo } from "react";
 import { useTranslation } from "react-i18next";
@@ -31,6 +31,7 @@ import {
 import { DegradedSourcesChip } from "../DegradedSourcesChip";
 import { GenreChips } from "./GenreChips";
 import { HeroPlaySplit } from "./HeroPlaySplit";
+import { HeroPlaylistTools } from "./HeroPlaylistTools";
 import { heroPillVisibility } from "./helpers";
 import { ShareFan } from "./ShareFan";
 import {
@@ -43,8 +44,6 @@ import {
   heroBadgeRow,
   heroSocialLink,
   heroSocials,
-  heroToolButton,
-  heroToolDivider,
 } from "./styles";
 import type { DetailHeroProps } from "./types";
 
@@ -83,7 +82,6 @@ function DetailHeroComponent({
   const isPlaylist = mode === "playlist";
   const onOpenWorkshop = playlistControls?.onOpenWorkshop;
   const quiet = playlistControls?.quietRequest === true;
-  const requestShown = !showInLibrary && showRequestButton;
   const actionCount = [showActions, onPlay, followSlot, onOpenWorkshop].filter(Boolean).length;
 
   return (
@@ -146,7 +144,7 @@ function DetailHeroComponent({
             )}
 
             {actionCount > 0 ? (
-              <div className={heroActions({ crowded: actionCount > 2 && !quiet })}>
+              <div className={heroActions({ crowded: quiet ? onOpenWorkshop !== undefined : actionCount > 2 })}>
                 {onPlay ? (
                   <HeroPlaySplit
                     mode={mode}
@@ -200,25 +198,7 @@ function DetailHeroComponent({
                 ) : null}
                 {followSlot}
                 {onOpenWorkshop ? (
-                  <>
-                    {requestShown ? <span aria-hidden className={heroToolDivider()} /> : null}
-                    <TooltipProvider delayDuration={150}>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <button
-                            type="button"
-                            className={heroToolButton()}
-                            onClick={onOpenWorkshop}
-                            aria-label={t("workshop.open")}
-                            data-cy="hero-workshop"
-                          >
-                            <Wrench className="size-4.5" aria-hidden />
-                          </button>
-                        </TooltipTrigger>
-                        <TooltipContent>{t("workshop.open")}</TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                  </>
+                  <HeroPlaylistTools onOpenWorkshop={onOpenWorkshop} visibility={playlistControls?.visibility} />
                 ) : null}
               </div>
             ) : null}

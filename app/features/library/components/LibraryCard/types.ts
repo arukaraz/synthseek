@@ -115,6 +115,10 @@ export interface PlaylistCardProps {
   chrome?: CardChrome;
 }
 
+export interface PlaylistVisibilityMarkProps {
+  visibility: LibraryPlaylistItem["visibility"];
+}
+
 export interface PlaylistCardMenuProps {
   item: LibraryPlaylistItem;
 }

@@ -33,6 +33,33 @@ describe("PreviewButton", () => {
     expect(screen.queryByRole("button", { name: /Play the/ })).not.toBeInTheDocument();
   });
 
+  it("wears headphones while it waits, never the play triangle of the real player, and a stop square while it sounds", () => {
+    const { container, rerender } = renderButton();
+
+    expect(container.querySelector("svg.lucide-headphones")).not.toBeNull();
+    expect(container.querySelector("svg.lucide-play")).toBeNull();
+
+    rerender(
+      <PreviewButton
+        title="Aerodynamic"
+        status="playing"
+        clock={{ elapsedSeconds: 3, totalSeconds: 30 }}
+        available
+        onToggle={vi.fn()}
+      />
+    );
+
+    expect(container.querySelector("svg.lucide-square")).not.toBeNull();
+    expect(container.querySelector("svg.lucide-headphones")).toBeNull();
+  });
+
+  it.each(["row", "overlay", "cover"] as const)("wears the same headphones in its %s shape", (tone) => {
+    const { container } = renderButton({ tone });
+
+    expect(container.querySelector("svg.lucide-headphones")).not.toBeNull();
+    expect(screen.getByRole("button", { name: "Play the 30 second preview of Aerodynamic" })).toBeInTheDocument();
+  });
+
   it("draws half the ring at half the clip", () => {
     const { container } = renderButton({ status: "playing", clock: { elapsedSeconds: 15, totalSeconds: 30 } });
 

@@ -62,6 +62,14 @@ export function ContentDetailModal({ open, session, onClose, target, actions }: 
 
   const close = useCallback(() => handleOpenChange(false, onClose), [handleOpenChange, onClose]);
 
+  const workshopOpen = open && workshopId !== null;
+  const workshopPathRef = useRef(pathname);
+  useEffect(() => {
+    if (workshopPathRef.current === pathname) return;
+    workshopPathRef.current = pathname;
+    if (workshopOpen) close();
+  }, [pathname, workshopOpen, close]);
+
   if (!open && workshopId !== null) setWorkshopId(null);
 
   if (!current) return null;

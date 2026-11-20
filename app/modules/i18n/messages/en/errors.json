@@ -123,6 +123,10 @@
     "title": "Could not upload the cover",
     "description": "The upload did not finish. Try again."
   },
+  "PLAYLIST_COVER_REMOVE_FAILED": {
+    "title": "Could not remove the cover",
+    "description": "The cover file could not be deleted, so the cover was kept."
+  },
   "PLAYLIST_COVER_NOT_FOUND": {
     "title": "Cover not found",
     "description": "This playlist no longer has that cover."

@@ -1,4 +1,5 @@
 import type { QueuePresence } from "@components/ui/QueueAddButton";
+import type { ReactNode } from "react";
 
 export interface TrackCoverPlayProps {
   title: string;
@@ -6,4 +7,5 @@ export interface TrackCoverPlayProps {
   presence: QueuePresence;
   onPlay?: () => Promise<unknown>;
   onTogglePlay?: () => void;
+  overlay?: ReactNode;
 }

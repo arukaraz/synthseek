@@ -1,6 +1,6 @@
 import type { PreviewClock, PreviewStatus, PreviewSubject } from "@hooks/ui/trackPreview";
 
-export type PreviewButtonTone = "overlay" | "row";
+export type PreviewButtonTone = "overlay" | "row" | "cover";
 
 export interface PreviewButtonProps {
   title: string;

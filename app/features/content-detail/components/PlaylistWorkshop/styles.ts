@@ -57,9 +57,9 @@ export const workshopBody = cva("flex min-h-0 flex-1");
 export const workshopPane = cva("flex min-h-0 min-w-0 flex-col", {
   variants: {
     role: {
-      details: "border-fg/10 lg:w-[300px] lg:shrink-0 lg:border-r max-lg:flex-1",
+      details: "border-fg/10 xl:w-[300px] xl:shrink-0 xl:border-r max-xl:flex-1",
       tracks: "flex-1",
-      suggested: "border-fg/10 lg:w-[340px] lg:shrink-0 lg:border-l xl:w-[430px] max-lg:flex-1",
+      suggested: "border-fg/10 xl:w-[400px] xl:shrink-0 xl:border-l 2xl:w-[430px] max-xl:flex-1",
     },
   },
 });
@@ -80,7 +80,11 @@ export const tracksBulk = cva("mx-3 mb-1.5 w-auto");
 
 export const tracksList = cva("px-2 pb-4");
 
-export const tracksNotice = cva("text-fg/60 border-fg/10 bg-fg/5 mx-3 mb-2 rounded-lg border px-3 py-2 text-xs");
+export const tracksNotice = cva(
+  "text-warning-vivid border-warning-vivid/30 bg-warning-vivid/10 mx-3 mb-2 flex items-start gap-2.5 rounded-lg border px-3.5 py-3 text-sm font-medium"
+);
+
+export const tracksNoticeIcon = cva("mt-0.5 size-4 shrink-0");
 
 export const tracksEmpty = cva("text-fg/50 p-6 text-center text-sm");
 
@@ -112,8 +116,12 @@ export const field = cva("flex flex-col gap-1.5");
 export const fieldLabel = cva("text-fg/50 text-[11px] font-bold tracking-[0.08em] uppercase");
 
 export const nameInput = cva(
-  "border-fg/10 bg-fg/5 text-fg focus:border-primary-500/60 focus:ring-primary-500/30 w-full rounded-[10px] border px-3 py-2 text-sm outline-none focus:ring-2 disabled:opacity-60"
+  "border-fg/10 bg-fg/5 text-fg focus:border-primary-500/60 focus:ring-primary-500/30 w-full rounded-[10px] border px-3 py-2 text-sm outline-none focus:ring-2"
 );
+
+export const nameText = cva("text-fg text-sm font-semibold break-words");
+
+export const nameLockedHint = cva("text-fg/50 text-xs");
 
 export const visibilityGrid = cva("grid grid-cols-2 gap-1.5");
 
@@ -157,21 +165,27 @@ export const actionRow = cva(
 
 export const actionRowLabel = cva("min-w-0 flex-1 truncate");
 
-export const coverBlock = cva("flex items-center gap-3");
+export const coverBlock = cva("relative w-full max-w-80 xl:max-w-none");
 
 export const coverPreview = cva(
-  "from-primary-500/20 to-accent-500/20 ring-fg/10 relative size-[72px] shrink-0 overflow-hidden rounded-lg bg-linear-to-br ring-1"
+  "from-primary-500/20 to-accent-500/20 ring-fg/10 relative block aspect-square w-full overflow-hidden rounded-xl bg-linear-to-br ring-1"
 );
 
-export const coverActions = cva("flex min-w-0 flex-1 flex-col items-start gap-1.5");
+export const coverPreviewInitials = cva("text-fg/70 grid h-full w-full place-items-center text-6xl font-bold");
+
+export const coverScrim = cva(
+  "from-surface-overlay/60 pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-linear-to-t to-transparent"
+);
+
+export const coverActions = cva("absolute right-2.5 bottom-2.5 flex items-center gap-2");
 
 export const coverButton = cva(
-  "focus-visible:ring-primary-400 inline-flex h-8 max-w-full items-center gap-2 rounded-md border px-2.5 text-[13px] font-semibold outline-none focus-visible:ring-2 disabled:opacity-60",
+  "bg-surface-overlay/80 ring-overlay-fg/30 focus-visible:ring-primary-400 grid size-10 place-items-center rounded-full shadow-lg ring-1 backdrop-blur-sm transition-colors outline-none focus-visible:ring-2 disabled:opacity-60",
   {
     variants: {
       tone: {
-        default: "border-fg/15 text-fg hover:bg-fg/10 [&>svg]:text-fg/60",
-        quiet: "text-fg/60 hover:text-destructive-vivid border-transparent",
+        default: "text-overlay-fg hover:bg-surface-overlay",
+        danger: "text-overlay-fg hover:text-destructive-vivid hover:bg-surface-overlay",
       },
     },
     defaultVariants: { tone: "default" },

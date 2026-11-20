@@ -14,6 +14,7 @@ export function PlaylistRowIdentity({
   onPlay,
   onTogglePlay,
   onArtistNavigate,
+  previewSlot,
 }: PlaylistRowIdentityProps) {
   const { t } = useTranslation("contentDetail");
   const current = presence === "playing" || presence === "paused";
@@ -27,7 +28,9 @@ export function PlaylistRowIdentity({
         presence={presence}
         onPlay={onPlay}
         onTogglePlay={onTogglePlay}
+        overlay={previewSlot}
       />
+
       <div className={playlistRowInfo()}>
         <span className={playlistRowTitle({ current })}>{track.title}</span>
         {onArtistNavigate ? (

@@ -167,6 +167,25 @@ describe("PlaylistCard", () => {
     expect(screen.queryByText(/^Private · /)).not.toBeInTheDocument();
   });
 
+  it.each([
+    { visibility: "private", label: "Private: only its owner and administrators can see it", icon: "svg.lucide-lock" },
+    { visibility: "shared", label: "Shared: everyone here can see it", icon: "svg.lucide-users" },
+  ] as const)(
+    "marks a $visibility playlist beside its track count, and says who can see it on hover",
+    async ({ visibility, label, icon }) => {
+      const { user } = renderWithProviders(<PlaylistCard item={createLibraryPlaylist({ visibility })} />);
+
+      const mark = screen.getByRole("img", { name: label });
+      expect(mark).toHaveAttribute("data-visibility", visibility);
+      expect(mark.querySelector(icon)).not.toBeNull();
+      expect(mark.parentElement).toHaveTextContent("20 tracks");
+
+      await user.hover(mark);
+
+      expect(await screen.findByRole("tooltip")).toHaveTextContent(label);
+    }
+  );
+
   it("lets the owner make a shared playlist private, and a private one shared", async () => {
     viewer.id = "user-1";
     viewer.role = "member";

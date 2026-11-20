@@ -536,6 +536,10 @@
   "playlists": {
     "smartOrigin": "Smart · {{origin}}",
     "privateOrigin": "Private · {{origin}}",
+    "visibility": {
+      "private": "Private: only its owner and administrators can see it",
+      "shared": "Shared: everyone here can see it"
+    },
     "actions": {
       "rename": "Rename",
       "editRule": "Edit rule",

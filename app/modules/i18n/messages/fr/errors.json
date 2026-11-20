@@ -123,6 +123,10 @@
     "title": "Impossible d'envoyer la pochette",
     "description": "L'envoi ne s'est pas terminé. Réessayez."
   },
+  "PLAYLIST_COVER_REMOVE_FAILED": {
+    "title": "Impossible de retirer la pochette",
+    "description": "Le fichier de la pochette n'a pas pu être supprimé, la pochette a donc été conservée."
+  },
   "PLAYLIST_COVER_NOT_FOUND": {
     "title": "Pochette introuvable",
     "description": "Cette playlist n'a plus cette pochette."

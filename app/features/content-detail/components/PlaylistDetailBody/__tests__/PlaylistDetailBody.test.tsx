@@ -26,6 +26,12 @@ vi.mock("@hooks/api/mutations/playlists/useSetPlaylistSync", () => ({
   useSetPlaylistSync: () => ({ mutate: setSyncMutate, isPending: setSyncPending }),
 }));
 
+const setVisibilityMutate = vi.fn();
+
+vi.mock("@hooks/api/mutations/playlists/useSetPlaylistVisibility", () => ({
+  useSetPlaylistVisibility: () => ({ mutate: setVisibilityMutate, isPending: false }),
+}));
+
 vi.mock("../../../ContentDetailActionsContext", () => ({
   useContentDetailActions: () => ({ requestPlaylist: vi.fn(), requestTrack: vi.fn() }),
 }));
@@ -450,6 +456,45 @@ describe("PlaylistDetailBody editing", () => {
 
     expect(screen.getByText("First")).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: enContentDetail.workshop.open })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /^Who can see it/ })).not.toBeInTheDocument();
+  });
+
+  it.each([
+    { from: "shared", now: "Who can see it: Shared", pick: /^Private/, to: "private" },
+    { from: "private", now: "Who can see it: Private", pick: /^Shared/, to: "shared" },
+  ])(
+    "names a $from playlist's visibility beside the workshop button and changes it to $to from its menu",
+    async ({ from, now, pick, to }) => {
+      usePlaylistDetailMock.mockReturnValue(playlistDetail({ visibility: from }));
+      const { user } = renderWithProviders(
+        <PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} onNavigate={vi.fn()} onOpenWorkshop={vi.fn()} />
+      );
+
+      const trigger = screen.getByRole("button", { name: now });
+      expect(trigger).toHaveAttribute("data-visibility", from);
+      expect(setVisibilityMutate).not.toHaveBeenCalled();
+
+      await user.click(trigger);
+      expect(screen.getAllByRole("menuitemradio").map((option) => option.getAttribute("aria-checked"))).toEqual(
+        from === "private" ? ["true", "false"] : ["false", "true"]
+      );
+      await user.click(screen.getByRole("menuitemradio", { name: pick }));
+
+      expect(setVisibilityMutate).toHaveBeenCalledTimes(1);
+      expect(setVisibilityMutate).toHaveBeenCalledWith({ playlistId: "pl-1", visibility: to });
+    }
+  );
+
+  it("changes nothing when the visibility the playlist already has is picked again", async () => {
+    usePlaylistDetailMock.mockReturnValue(playlistDetail({ visibility: "shared" }));
+    const { user } = renderWithProviders(
+      <PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} onNavigate={vi.fn()} onOpenWorkshop={vi.fn()} />
+    );
+
+    await user.click(screen.getByRole("button", { name: "Who can see it: Shared" }));
+    await user.click(screen.getByRole("menuitemradio", { name: /^Shared/ }));
+
+    expect(setVisibilityMutate).not.toHaveBeenCalled();
   });
 });
 

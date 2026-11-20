@@ -155,9 +155,22 @@
     "andAdd": " y añadir",
     "addLabel": "Añadir {{title}} a la playlist",
     "requestAndAddLabel": "Pedir {{title}} y añadirla a la playlist",
-    "end": "Eso es todo por ahora. Renueva para ver otra tanda.",
+    "end": "Ya viste todo lo cercano a esta playlist.",
+    "moreFailed": "No se pudieron cargar más sugerencias.",
     "empty": "No queda nada que sugerir.",
     "failed": "No se pudieron cargar las sugerencias.",
-    "retry": "Reintentar"
+    "retry": "Reintentar",
+    "filters": "Filtrar sugerencias",
+    "apply": "Aplicar",
+    "emptyFiltered": "No hay nada que sugerir de esos años.",
+    "years": {
+      "label": "Años de lanzamiento",
+      "any": "Cualquier año",
+      "between": "{{from}} – {{to}}",
+      "from": "Desde {{from}}",
+      "to": "Hasta {{to}}",
+      "first": "Primer año",
+      "last": "Último año"
+    }
   }
 }

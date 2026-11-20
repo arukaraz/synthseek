@@ -8,7 +8,7 @@ import { playerActions, usePlayerResumableHere, useQueuePresence } from "@hooks/
 import { useEntityPlayback } from "@hooks/ui/useEntityPlayback";
 import { useSelection } from "@hooks/ui/useSelection";
 import { motion, Reorder } from "framer-motion";
-import { ArrowDownToLine, ArrowUpToLine, ListPlus, ListStart, Trash2 } from "lucide-react";
+import { ArrowDownToLine, ArrowUpToLine, ListPlus, ListStart, Trash2, TriangleAlert } from "lucide-react";
 import { useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -21,6 +21,7 @@ import {
   tracksHint,
   tracksList,
   tracksNotice,
+  tracksNoticeIcon,
   tracksSelectAll,
   workshopScroll,
 } from "./styles";
@@ -136,7 +137,7 @@ export function WorkshopTracks({ playlistId, order, lock, onArtistNavigate }: Wo
 
   return (
     <motion.div layoutScroll className={workshopScroll()}>
-      {editable ? (
+      {editable && ordered.length === 0 ? null : editable ? (
         <div className={tracksHead()}>
           <label className={tracksSelectAll()}>
             <Checkbox
@@ -149,7 +150,10 @@ export function WorkshopTracks({ playlistId, order, lock, onArtistNavigate }: Wo
           <span className={tracksHint()}>{t("workshop.tracks.dragHint")}</span>
         </div>
       ) : (
-        <p className={tracksNotice()}>{t(lock === "rule" ? "workshop.tracks.lockedRule" : "workshop.tracks.locked")}</p>
+        <p className={tracksNotice()} role="note" data-cy="workshop-lock-notice">
+          <TriangleAlert className={tracksNoticeIcon()} aria-hidden />
+          <span>{t(lock === "rule" ? "workshop.tracks.lockedRule" : "workshop.tracks.locked")}</span>
+        </p>
       )}
 
       {editable && selectedIds.length > 0 ? (

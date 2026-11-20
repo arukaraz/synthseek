@@ -47,6 +47,18 @@ export function PlaylistTrackRow({
         onPlay={onPlay}
         onTogglePlay={onTogglePlay}
         onArtistNavigate={onArtistNavigate}
+        previewSlot={
+          onPlay === undefined && track.hasPreview ? (
+            <PreviewButton
+              title={track.title}
+              status={preview.status}
+              clock={preview.clock}
+              available
+              onToggle={preview.toggle}
+              tone="cover"
+            />
+          ) : undefined
+        }
       />
 
       {track.status !== null && track.status !== "complete" ? (
@@ -60,16 +72,6 @@ export function PlaylistTrackRow({
             isRetrying={isRetrying}
           />
         </span>
-      ) : null}
-
-      {onPlay === undefined && track.hasPreview ? (
-        <PreviewButton
-          title={track.title}
-          status={preview.status}
-          clock={preview.clock}
-          available
-          onToggle={preview.toggle}
-        />
       ) : null}
 
       {onPlayNext && onEnqueue ? (

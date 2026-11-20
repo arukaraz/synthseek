@@ -137,6 +137,30 @@ describe("PlaylistsViewMode", () => {
     });
   });
 
+  it.each([
+    { visibility: "private", label: "Private: only its owner and administrators can see it" },
+    { visibility: "shared", label: "Shared: everyone here can see it" },
+  ] as const)("marks a $visibility playlist in a phone's list row, beside its menu", ({ visibility, label }) => {
+    useLibraryPlaylistsMock.mockReturnValue({
+      items: [createPlaylist({ visibility })],
+      total: 1,
+      facets: {},
+      isLoading: false,
+      isError: false,
+      hasNextPage: false,
+      isFetchingNextPage: false,
+      fetchNextPage: vi.fn(),
+    });
+
+    renderWithProviders(
+      <PlaylistsViewMode {...makeProps()} shell={createLibraryShell({ phone: true, density: "list" })} />
+    );
+
+    const mark = screen.getByRole("img", { name: label });
+    const menu = screen.getByRole("button", { name: /Playlist actions for Road Trip/i });
+    expect(mark.compareDocumentPosition(menu) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  });
+
   it("gates the playlists query on the active view being playlists", () => {
     renderWithProviders(<PlaylistsViewMode {...makeProps()} />);
 

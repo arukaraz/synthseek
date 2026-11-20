@@ -536,6 +536,10 @@
   "playlists": {
     "smartOrigin": "Intelligente · {{origin}}",
     "privateOrigin": "Privée · {{origin}}",
+    "visibility": {
+      "private": "Privée : seuls son propriétaire et les administrateurs peuvent la voir",
+      "shared": "Partagée : tout le monde ici peut la voir"
+    },
     "actions": {
       "makePrivate": "Rendre privée",
       "makeShared": "Partager avec tout le monde",

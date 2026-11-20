@@ -49,10 +49,10 @@ export const heroMenuItem = cva("text-fg/80 focus:bg-fg/5 focus:text-fg gap-2.5 
 
 export const heroActionsSpacer = cva("flex-1 max-sm:hidden");
 
-export const heroToolDivider = cva("bg-fg/15 h-5.5 w-px shrink-0");
+export const heroToolGroup = cva("border-fg/15 inline-flex shrink-0 items-stretch overflow-hidden rounded-md border");
 
 export const heroToolButton = cva(
-  "text-fg/60 hover:bg-fg/10 hover:text-fg focus-visible:ring-primary-400 grid size-9 shrink-0 place-items-center rounded-md transition-colors outline-none focus-visible:ring-2"
+  "text-fg/70 hover:bg-fg/5 hover:text-fg focus-visible:ring-primary-400 border-fg/15 grid size-9 shrink-0 place-items-center transition-colors outline-none not-first:border-l focus-visible:ring-2 focus-visible:ring-inset disabled:pointer-events-none disabled:opacity-50"
 );
 
 export const playSplit = cva("inline-flex h-11 shrink-0 items-stretch overflow-hidden rounded-full", {

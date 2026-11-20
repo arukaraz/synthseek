@@ -155,9 +155,22 @@
     "andAdd": " and add",
     "addLabel": "Add {{title}} to the playlist",
     "requestAndAddLabel": "Request {{title}} and add it to the playlist",
-    "end": "That is everything for now. Refresh for a new batch.",
+    "end": "You have seen everything close to this playlist.",
+    "moreFailed": "More suggestions could not be loaded.",
     "empty": "Nothing left to suggest.",
     "failed": "Suggestions could not be loaded.",
-    "retry": "Try again"
+    "retry": "Try again",
+    "filters": "Filter suggestions",
+    "apply": "Apply",
+    "emptyFiltered": "Nothing to suggest from those years.",
+    "years": {
+      "label": "Release years",
+      "any": "Any year",
+      "between": "{{from}} – {{to}}",
+      "from": "From {{from}}",
+      "to": "Up to {{to}}",
+      "first": "Earliest year",
+      "last": "Latest year"
+    }
   }
 }

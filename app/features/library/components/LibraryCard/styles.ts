@@ -135,3 +135,7 @@ export const cardTitle = cva("text-fg truncate text-sm font-semibold");
 export const cardSubtitle = cva("text-fg/60 truncate text-xs");
 
 export const cardMeta = cva("text-fg/45 truncate text-[11px]");
+
+export const cardMetaRow = cva("flex min-w-0 items-center justify-between gap-2");
+
+export const visibilityMark = cva("text-fg/45 hover:text-fg/80 grid shrink-0 place-items-center transition-colors");

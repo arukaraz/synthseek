@@ -1,23 +1,45 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { act, renderWithProviders, screen, waitFor } from "@test/test-utils";
+import { act, fireEvent, renderWithProviders, screen } from "@test/test-utils";
 import userEvent from "@testing-library/user-event";
 
 const suggestionsMock = vi.fn();
 const hideMutate = vi.fn();
+const saveYears = vi.hoisted(() => ({ mutate: vi.fn(), isPending: false }));
+const saveYearsFor = vi.hoisted(() => vi.fn());
+const goneRows = vi.hoisted((): { ids: Set<string>; askedFor: unknown[] } => ({ ids: new Set(), askedFor: [] }));
 const addMock = vi.fn();
+const reseed = vi.fn();
 const playEntity = vi.fn(async () => true);
 const togglePlay = vi.fn();
 const presence = vi.hoisted(() => ({ of: (_id: string): string => "absent" }));
-const scroll = vi.hoisted(() => ({ loadMore: () => {}, hasNextPage: false }));
+const scroll = vi.hoisted(() => ({ loadMore: () => {}, hasNextPage: false, isFetchingNextPage: false }));
 let pendingId: string | null = null;
 
-vi.mock("@hooks/api/queries/usePlaylistSuggestions", () => ({
+vi.mock("@hooks/api/queries/playlist-suggestions/usePlaylistSuggestions", () => ({
   usePlaylistSuggestions: (args: { playlistId: string; seed: number }) => suggestionsMock(args),
+}));
+
+vi.mock("@hooks/api/queries/playlist-suggestions/usePlaylistSuggestionSeed", () => ({
+  usePlaylistSuggestionSeed: () => ({ seed: 7, reseed }),
 }));
 
 vi.mock("@hooks/api/mutations/playlists/useHidePlaylistSuggestion", () => ({
   useHidePlaylistSuggestion: () => ({ mutate: hideMutate }),
+}));
+
+vi.mock("@hooks/api/queries/playlist-suggestions/usePlaylistSuggestionGone", () => ({
+  usePlaylistSuggestionGone: (key: { playlistId: string; seed: number }) => {
+    goneRows.askedFor.push(key);
+    return { gone: goneRows.ids };
+  },
+}));
+
+vi.mock("@hooks/api/mutations/playlists/useSetPlaylistSuggestionYears", () => ({
+  useSetPlaylistSuggestionYears: (playlistId: string) => {
+    saveYearsFor(playlistId);
+    return saveYears;
+  },
 }));
 
 vi.mock("@hooks/api/mutations/playlists/useAddSuggestedTrack", () => ({
@@ -37,10 +59,11 @@ vi.mock(import("@hooks/ui/trackPreview"), async (importOriginal) => ({
 }));
 
 vi.mock("@hooks/ui/useInfiniteScroll", () => ({
-  useInfiniteScroll: (args: { hasNextPage: boolean; onLoadMore: () => void }) => {
+  useInfiniteScroll: (args: { hasNextPage: boolean; isFetchingNextPage: boolean; onLoadMore: () => void }) => {
     scroll.loadMore = args.onLoadMore;
     scroll.hasNextPage = args.hasNextPage;
-    return { current: null };
+    scroll.isFetchingNextPage = args.isFetchingNextPage;
+    return () => {};
   },
 }));
 
@@ -59,14 +82,22 @@ function suggestion(index: number, overrides?: Record<string, unknown>) {
   };
 }
 
-function loaded(tracks: unknown[]) {
+const ANY_YEAR = { from: null, to: null };
+
+function loaded(pages: unknown[][], overrides?: Record<string, unknown>, years: Record<string, unknown> = ANY_YEAR) {
   return {
-    data: { tracks },
+    data: {
+      pages: pages.map((tracks, index) => ({ tracks, years, nextCursor: index + 1, widerCursor: 40 })),
+    },
     isLoading: false,
     isFetching: false,
     isError: false,
-    isPlaceholderData: false,
+    hasNextPage: false,
+    isFetchingNextPage: false,
+    isFetchNextPageError: false,
+    fetchNextPage: vi.fn(),
     refetch: vi.fn(),
+    ...overrides,
   };
 }
 
@@ -77,28 +108,141 @@ function titles() {
 beforeEach(() => {
   vi.clearAllMocks();
   pendingId = null;
+  goneRows.ids = new Set();
+  goneRows.askedFor.length = 0;
+  saveYears.isPending = false;
   presence.of = () => "absent";
   addMock.mockResolvedValue(true);
 });
 
 describe("SuggestedTracks", () => {
-  it("shows the first eight suggestions and reveals eight more when the list is scrolled to its end", () => {
-    suggestionsMock.mockReturnValue(loaded(Array.from({ length: 20 }, (_, index) => suggestion(index))));
+  it("lists every loaded page and asks the server for the next one when the list is scrolled to its end", () => {
+    const fetchNextPage = vi.fn();
+    suggestionsMock.mockReturnValue(
+      loaded(
+        [
+          [suggestion(1), suggestion(2)],
+          [suggestion(2), suggestion(3)],
+        ],
+        { hasNextPage: true, fetchNextPage }
+      )
+    );
     renderWithProviders(<SuggestedTracks playlistId="pl-1" />);
 
-    expect(screen.getAllByRole("listitem")).toHaveLength(8);
+    expect(suggestionsMock).toHaveBeenCalledWith({ playlistId: "pl-1", seed: 7 });
+    expect(titles()).toHaveLength(3);
     expect(scroll.hasNextPage).toBe(true);
 
-    act(() => scroll.loadMore());
-    expect(screen.getAllByRole("listitem")).toHaveLength(16);
+    scroll.loadMore();
+    expect(fetchNextPage).toHaveBeenCalledTimes(1);
+  });
 
-    act(() => scroll.loadMore());
-    expect(screen.getAllByRole("listitem")).toHaveLength(20);
-    expect(screen.getByText("That is everything for now. Refresh for a new batch.")).toBeInTheDocument();
+  it("stops asking and says the list is over once no page is left to read", () => {
+    suggestionsMock.mockReturnValue(loaded([[suggestion(1)], [suggestion(1)]], { hasNextPage: false }));
+    renderWithProviders(<SuggestedTracks playlistId="pl-1" />);
+
+    expect(titles()).toHaveLength(1);
+    expect(scroll.hasNextPage).toBe(false);
+    expect(screen.getByText("You have seen everything close to this playlist.")).toBeInTheDocument();
+  });
+
+  it("says what the suggestions rest on while no years are set", () => {
+    suggestionsMock.mockReturnValue(loaded([[suggestion(1)]]));
+    renderWithProviders(<SuggestedTracks playlistId="pl-1" />);
+
+    expect(screen.getByText("Based on the artists in this playlist.")).toBeInTheDocument();
+  });
+
+  it("names the years the playlist remembers in place of the basis", () => {
+    suggestionsMock.mockReturnValue(loaded([[suggestion(1)]], undefined, { from: 1990, to: 2005 }));
+    renderWithProviders(<SuggestedTracks playlistId="pl-1" />);
+
+    expect(screen.getByText("1990 – 2005")).toBeInTheDocument();
+    expect(screen.queryByText("Based on the artists in this playlist.")).not.toBeInTheDocument();
+  });
+
+  it("keeps naming the remembered years while a refreshed batch is on its way", () => {
+    suggestionsMock.mockReturnValue(loaded([[suggestion(1)]], undefined, { from: 1990, to: 2005 }));
+    const { rerender } = renderWithProviders(<SuggestedTracks playlistId="pl-1" />);
+
+    suggestionsMock.mockReturnValue({ ...loaded([]), data: undefined, isLoading: true, isFetching: true });
+    rerender(<SuggestedTracks playlistId="pl-1" />);
+
+    expect(screen.getByText("1990 – 2005")).toBeInTheDocument();
+    expect(screen.queryByText("Based on the artists in this playlist.")).not.toBeInTheDocument();
+  });
+
+  it("does not carry one playlist's years over to another while that one loads", () => {
+    suggestionsMock.mockReturnValue(loaded([[suggestion(1)]], undefined, { from: 1990, to: 2005 }));
+    const { rerender } = renderWithProviders(<SuggestedTracks playlistId="pl-1" />);
+
+    suggestionsMock.mockReturnValue({ ...loaded([]), data: undefined, isLoading: true, isFetching: true });
+    rerender(<SuggestedTracks playlistId="pl-2" />);
+
+    expect(screen.getByText("Based on the artists in this playlist.")).toBeInTheDocument();
+  });
+
+  it("saves the applied years through this playlist's save, and names them once they are saved", async () => {
+    suggestionsMock.mockReturnValue(loaded([[suggestion(1)]]));
+    const { rerender } = renderWithProviders(<SuggestedTracks playlistId="pl-1" />);
+
+    await userEvent.click(screen.getByRole("button", { name: "Filter suggestions" }));
+    fireEvent.change(screen.getByRole("slider", { name: "Earliest year" }), { target: { value: "1990" } });
+    await userEvent.click(screen.getByRole("button", { name: "Apply" }));
+
+    expect(saveYearsFor).toHaveBeenLastCalledWith("pl-1");
+    expect(saveYears.mutate).toHaveBeenCalledTimes(1);
+    const [input, options] = saveYears.mutate.mock.calls[0];
+    expect(input).toEqual({ playlistId: "pl-1", from: 1990, to: null });
+    const scroller = screen.getByRole("list").parentElement;
+    if (scroller === null) throw new Error("the list has no scroller");
+    scroller.scrollTop = 120;
+
+    suggestionsMock.mockReturnValue({ ...loaded([]), data: undefined, isLoading: true, isFetching: true });
+    rerender(<SuggestedTracks playlistId="pl-1" />);
+    expect(screen.queryByText("From 1990")).not.toBeInTheDocument();
+
+    act(() => options.onSuccess());
+    expect(screen.getByText("From 1990")).toBeInTheDocument();
+    expect(scroller.scrollTop).toBe(0);
+    expect(reseed).not.toHaveBeenCalled();
+  });
+
+  it("leaves out the rows taken out of this playlist's batch and keeps the others", () => {
+    goneRows.ids = new Set(["ext-2"]);
+    suggestionsMock.mockReturnValue(loaded([[suggestion(1), suggestion(2), suggestion(3)]]));
+    renderWithProviders(<SuggestedTracks playlistId="pl-1" />);
+
+    expect(screen.getAllByRole("listitem")).toHaveLength(2);
+    expect(screen.queryByText("Song 2")).not.toBeInTheDocument();
+    expect(goneRows.askedFor.at(-1)).toEqual({ playlistId: "pl-1", seed: 7 });
+  });
+
+  it("says nothing matches those years when a filtered batch comes back empty", () => {
+    suggestionsMock.mockReturnValue(loaded([[]], undefined, { from: 1990, to: 2005 }));
+    renderWithProviders(<SuggestedTracks playlistId="pl-1" />);
+
+    expect(screen.getByText("Nothing to suggest from those years.")).toBeInTheDocument();
+    expect(screen.queryByText("Nothing left to suggest.")).not.toBeInTheDocument();
+  });
+
+  it("keeps the rows and stops loading on its own when a later page fails, until asked to try again", async () => {
+    const fetchNextPage = vi.fn();
+    suggestionsMock.mockReturnValue(
+      loaded([[suggestion(1)]], { hasNextPage: true, isError: true, isFetchNextPageError: true, fetchNextPage })
+    );
+    renderWithProviders(<SuggestedTracks playlistId="pl-1" />);
+
+    expect(titles()).toHaveLength(1);
+    expect(scroll.hasNextPage).toBe(false);
+    expect(screen.getByRole("alert")).toHaveTextContent("More suggestions could not be loaded.");
+
+    await userEvent.click(screen.getByRole("button", { name: "Try again" }));
+    expect(fetchNextPage).toHaveBeenCalledTimes(1);
   });
 
   it("offers Request and add for a catalog track and Add for one already in the library", () => {
-    suggestionsMock.mockReturnValue(loaded([suggestion(1), suggestion(2, { inLibrary: true, requestId: "req-2" })]));
+    suggestionsMock.mockReturnValue(loaded([[suggestion(1), suggestion(2, { inLibrary: true, requestId: "req-2" })]]));
     renderWithProviders(<SuggestedTracks playlistId="pl-1" />);
 
     expect(screen.getByRole("button", { name: "Request Song 1 and add it to the playlist" })).toBeInTheDocument();
@@ -107,34 +251,27 @@ describe("SuggestedTracks", () => {
     expect(screen.queryByRole("button", { name: "Play Song 1" })).not.toBeInTheDocument();
   });
 
-  it("removes a hidden row at once and records the dismissal for this playlist", async () => {
-    suggestionsMock.mockReturnValue(loaded([suggestion(1), suggestion(2)]));
+  it("records the dismissal of a hidden row for this playlist", async () => {
+    suggestionsMock.mockReturnValue(loaded([[suggestion(1), suggestion(2)]]));
     renderWithProviders(<SuggestedTracks playlistId="pl-1" />);
 
     await userEvent.click(screen.getByRole("button", { name: "Not for this playlist: Song 1" }));
 
     expect(hideMutate).toHaveBeenCalledWith({ playlistId: "pl-1", externalId: "ext-1" });
-    expect(titles()).toHaveLength(1);
-    expect(titles()[0]).toContain("Song 2");
   });
 
-  it("drops a row once it was added and keeps it when the add failed", async () => {
-    suggestionsMock.mockReturnValue(loaded([suggestion(1), suggestion(2)]));
+  it("hands the row to the add when its button is pressed", async () => {
+    suggestionsMock.mockReturnValue(loaded([[suggestion(1), suggestion(2)]]));
     renderWithProviders(<SuggestedTracks playlistId="pl-1" />);
 
-    addMock.mockResolvedValueOnce(false);
-    await userEvent.click(screen.getByRole("button", { name: "Request Song 1 and add it to the playlist" }));
-    expect(addMock).toHaveBeenCalledWith(expect.objectContaining({ externalId: "ext-1" }));
-    expect(titles()).toHaveLength(2);
-
     await userEvent.click(screen.getByRole("button", { name: "Request Song 2 and add it to the playlist" }));
-    await waitFor(() => expect(titles()).toHaveLength(1));
-    expect(titles()[0]).toContain("Song 1");
+
+    expect(addMock).toHaveBeenCalledWith(expect.objectContaining({ externalId: "ext-2" }));
   });
 
   it("disables the add button of the row that is being added", () => {
     pendingId = "ext-1";
-    suggestionsMock.mockReturnValue(loaded([suggestion(1), suggestion(2)]));
+    suggestionsMock.mockReturnValue(loaded([[suggestion(1), suggestion(2)]]));
     renderWithProviders(<SuggestedTracks playlistId="pl-1" />);
 
     expect(screen.getByRole("button", { name: "Request Song 1 and add it to the playlist" })).toBeDisabled();
@@ -142,7 +279,7 @@ describe("SuggestedTracks", () => {
   });
 
   it("plays a library suggestion, and toggles the player instead when it is the one playing", async () => {
-    suggestionsMock.mockReturnValue(loaded([suggestion(2, { inLibrary: true, requestId: "req-2" })]));
+    suggestionsMock.mockReturnValue(loaded([[suggestion(2, { inLibrary: true, requestId: "req-2" })]]));
     const { rerender } = renderWithProviders(<SuggestedTracks playlistId="pl-1" />);
 
     await userEvent.click(screen.getByRole("button", { name: "Play Song 2" }));
@@ -150,7 +287,6 @@ describe("SuggestedTracks", () => {
     expect(togglePlay).not.toHaveBeenCalled();
 
     presence.of = () => "playing";
-    suggestionsMock.mockReturnValue(loaded([suggestion(2, { inLibrary: true, requestId: "req-2" })]));
     rerender(<SuggestedTracks playlistId="pl-1" />);
 
     await userEvent.click(screen.getByRole("button", { name: "Pause Song 2" }));
@@ -158,18 +294,16 @@ describe("SuggestedTracks", () => {
     expect(playEntity).toHaveBeenCalledTimes(1);
   });
 
-  it("asks for a new batch with a new seed on refresh and goes back to the first page", async () => {
-    suggestionsMock.mockReturnValue(loaded(Array.from({ length: 20 }, (_, index) => suggestion(index))));
-    renderWithProviders(<SuggestedTracks playlistId="pl-1" />);
-    const firstSeed = suggestionsMock.mock.calls[0][0].seed;
-    act(() => scroll.loadMore());
-    expect(screen.getAllByRole("listitem")).toHaveLength(16);
+  it("asks for a new seed on refresh, and not while a batch is on its way", async () => {
+    suggestionsMock.mockReturnValue(loaded([[suggestion(1)]]));
+    const { rerender } = renderWithProviders(<SuggestedTracks playlistId="pl-1" />);
 
     await userEvent.click(screen.getByRole("button", { name: "Refresh suggestions" }));
+    expect(reseed).toHaveBeenCalledTimes(1);
 
-    const lastSeed = suggestionsMock.mock.lastCall?.[0].seed;
-    expect(lastSeed).not.toBe(firstSeed);
-    expect(screen.getAllByRole("listitem")).toHaveLength(8);
+    suggestionsMock.mockReturnValue(loaded([[suggestion(1)]], { isFetching: true }));
+    rerender(<SuggestedTracks playlistId="pl-1" />);
+    expect(screen.getByRole("button", { name: "Refresh suggestions" })).toBeDisabled();
   });
 
   it("shows placeholders while the first batch loads and no rows", () => {
@@ -181,7 +315,7 @@ describe("SuggestedTracks", () => {
   });
 
   it("says there is nothing left when the batch is empty", () => {
-    suggestionsMock.mockReturnValue(loaded([]));
+    suggestionsMock.mockReturnValue(loaded([[]]));
     renderWithProviders(<SuggestedTracks playlistId="pl-1" />);
 
     expect(screen.getByText("Nothing left to suggest.")).toBeInTheDocument();

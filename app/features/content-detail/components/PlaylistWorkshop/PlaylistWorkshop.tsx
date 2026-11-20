@@ -3,6 +3,7 @@
 import { SuggestedTracks } from "@components/SuggestedTracks";
 import { SegmentTabs } from "@components/ui/SegmentTabs";
 import { useReorderPlaylistTracks } from "@hooks/api/mutations/playlists/useReorderPlaylistTracks";
+import { useSavePlaylistName } from "@hooks/api/mutations/playlists/useSavePlaylistName";
 import { usePlaylistDetail } from "@hooks/api/queries/content-detail";
 import { useEntityPlayback } from "@hooks/ui/useEntityPlayback";
 import { useMediaQuery } from "@hooks/ui/useMediaQuery";
@@ -10,6 +11,7 @@ import { useCallback, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { failedToLoad } from "../../helpers";
+import { usePlaylistNameDraft } from "../../hooks/usePlaylistNameDraft";
 import { usePlaylistOrder } from "../../hooks/usePlaylistOrder";
 import { useTrackArtistNavigation } from "../../hooks/useTrackArtistNavigation";
 import { WORKSHOP_COLUMNS_QUERY, WORKSHOP_TABS, WORKSHOP_TABS_LAYOUT_ID } from "./constants";
@@ -18,7 +20,7 @@ import { workshopBody, workshopError, workshopLoading, workshopPane, workshopScr
 import { WorkshopDetails } from "./WorkshopDetails";
 import { WorkshopHeader } from "./WorkshopHeader";
 import { WorkshopTracks } from "./WorkshopTracks";
-import type { PlaylistWorkshopProps, SaveOrder, WorkshopTab } from "./types";
+import type { PlaylistWorkshopProps, SaveName, SaveOrder, WorkshopTab } from "./types";
 
 export function PlaylistWorkshop({ target, onExit, onClose, onNavigate }: PlaylistWorkshopProps) {
   const { t } = useTranslation("contentDetail");
@@ -28,12 +30,18 @@ export function PlaylistWorkshop({ target, onExit, onClose, onNavigate }: Playli
   const [tab, setTab] = useState<WorkshopTab>("tracks");
   const { playEntity, shuffleEntity, enqueueEntity } = useEntityPlayback();
   const reorder = useReorderPlaylistTracks();
+  const savePlaylistName = useSavePlaylistName();
   const openTrackArtist = useTrackArtistNavigation(onNavigate);
 
   const tracks = useMemo(() => workshopTracks(playlist?.tracks ?? []), [playlist?.tracks]);
   const minutes = useMemo(() => totalMinutes(tracks), [tracks]);
   const inLibrary = playlist?.libraryTrackCount ?? 0;
-  const name = playlist?.name ?? target.name;
+  const saveName = useCallback<SaveName>(
+    (next) => savePlaylistName({ playlistId: target.id, name: next }),
+    [savePlaylistName, target.id]
+  );
+  const nameDraft = usePlaylistNameDraft(playlist?.name ?? target.name, saveName);
+  const { shown: name, commit: settleName } = nameDraft;
   const suggestable = playlist?.tracksLock === null;
   const tabs = useMemo(() => WORKSHOP_TABS.filter((value) => suggestable || value !== "suggested"), [suggestable]);
   const shownTab = tabs.includes(tab) ? tab : "tracks";
@@ -44,6 +52,10 @@ export function PlaylistWorkshop({ target, onExit, onClose, onNavigate }: Playli
   );
   const order = usePlaylistOrder(tracks, save);
   const { commit: settleOrder } = order;
+  const settleEdits = useCallback(async () => {
+    await settleName();
+    await settleOrder();
+  }, [settleName, settleOrder]);
 
   const handlePlay = useCallback(async () => {
     await settleOrder();
@@ -81,12 +93,13 @@ export function PlaylistWorkshop({ target, onExit, onClose, onNavigate }: Playli
       <div className={workshopScroll()}>
         <WorkshopDetails
           playlistId={playlist.id}
-          name={playlist.name}
+          name={name}
           origin={playlist.origin}
           visibility={playlist.visibility}
           sourceProvider={playlist.sourceProvider}
           syncEnabled={playlist.syncEnabled}
           canRename={playlist.nameLock === null}
+          nameDraft={nameDraft}
           cover={playlist.cover}
           hasCustomCover={playlist.hasCustomCover}
           canEditTracks={playlist.tracksLock === null}
@@ -94,7 +107,7 @@ export function PlaylistWorkshop({ target, onExit, onClose, onNavigate }: Playli
           trackCount={tracks.length}
           minutes={minutes}
           inLibrary={inLibrary}
-          settleOrder={settleOrder}
+          settleEdits={settleEdits}
           onDeleted={onClose}
         />
       </div>

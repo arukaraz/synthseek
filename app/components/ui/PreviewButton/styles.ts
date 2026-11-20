@@ -1,19 +1,28 @@
 import { cva } from "class-variance-authority";
 
 export const previewButton = cva(
-  "focus-visible:ring-primary-400 relative grid shrink-0 place-items-center rounded-full transition-[transform,background-color,opacity] outline-none focus-visible:ring-2 motion-reduce:transition-none",
+  "focus-visible:ring-primary-400 grid place-items-center transition-[transform,background-color,opacity] outline-none focus-visible:ring-2 motion-reduce:transition-none",
   {
     variants: {
       tone: {
-        overlay: "bg-surface-overlay/70 text-overlay-fg ring-overlay-fg/20 size-11 shadow-lg ring-1 backdrop-blur-sm",
-        row: "bg-fg/5 text-fg ring-fg/10 size-9 ring-1",
+        overlay:
+          "bg-surface-overlay/70 ring-overlay-fg/20 relative size-11 shrink-0 rounded-full shadow-lg ring-1 backdrop-blur-sm",
+        row: "bg-fg/5 ring-fg/10 relative size-9 shrink-0 rounded-full ring-1",
+        cover:
+          "absolute inset-0 size-full bg-black/65 opacity-0 hover:opacity-100 focus-visible:opacity-100 focus-visible:ring-inset data-[preview=error]:opacity-100 data-[preview=loading]:opacity-100 data-[preview=playing]:opacity-100 [@media(hover:none)]:opacity-100",
       },
       state: {
-        ready: "cursor-pointer hover:scale-105 motion-reduce:hover:scale-100",
-        locked: "cursor-help opacity-55",
+        ready: "cursor-pointer",
+        locked: "cursor-help",
         failed: "text-warning-vivid cursor-help",
       },
     },
+    compoundVariants: [
+      { tone: ["overlay", "cover"], state: ["ready", "locked"], class: "text-overlay-fg" },
+      { tone: "row", state: ["ready", "locked"], class: "text-fg" },
+      { tone: ["overlay", "row"], state: "ready", class: "hover:scale-105 motion-reduce:hover:scale-100" },
+      { tone: ["overlay", "row"], state: "locked", class: "opacity-55" },
+    ],
     defaultVariants: { tone: "row", state: "ready" },
   }
 );
@@ -23,6 +32,7 @@ export const previewGlyph = cva("", {
     tone: {
       overlay: "size-[18px]",
       row: "size-[15px]",
+      cover: "size-4",
     },
   },
   defaultVariants: { tone: "row" },
@@ -35,6 +45,7 @@ export const previewRingRest = cva("", {
     tone: {
       overlay: "stroke-overlay-fg/15",
       row: "stroke-fg/10",
+      cover: "stroke-overlay-fg/15",
     },
   },
   defaultVariants: { tone: "row" },

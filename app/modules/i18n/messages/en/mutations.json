@@ -351,6 +351,7 @@
     "reorderFailed": "Could not save the new order",
     "suggestionAdded": "Added \"{{title}}\" to the playlist",
     "suggestionHideFailed": "Could not hide that suggestion",
+    "suggestionYearsFailed": "Could not save the years for these suggestions",
     "coverUpdated": "Cover updated",
     "coverRemoved": "Cover removed",
     "coverRemoveFailed": "Could not remove the cover",

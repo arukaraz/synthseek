@@ -52,10 +52,30 @@ vi.mock("../WorkshopTracks", () => ({
     );
   },
 }));
+const nameSaves: (() => void)[] = [];
+const saveName = vi.fn(
+  (_input: { playlistId: string; name: string }) =>
+    new Promise<void>((resolve) => {
+      nameSaves.push(resolve);
+    })
+);
+vi.mock("@hooks/api/mutations/playlists/useSavePlaylistName", () => ({
+  useSavePlaylistName: () => saveName,
+}));
 vi.mock("../WorkshopDetails", () => ({
-  WorkshopDetails: (props: Record<string, unknown>) => {
+  WorkshopDetails: (props: {
+    name: string;
+    nameDraft: { change: (value: string) => void };
+    settleEdits: () => Promise<void>;
+  }) => {
     seen.details = props;
-    return <div data-testid="details" />;
+    return (
+      <div data-testid="details" data-name={props.name}>
+        <button type="button" onClick={() => props.nameDraft.change("Night Drive")}>
+          type a name
+        </button>
+      </div>
+    );
   },
 }));
 
@@ -104,6 +124,7 @@ function workshop() {
 beforeEach(() => {
   vi.clearAllMocks();
   orderSaves.length = 0;
+  nameSaves.length = 0;
   layout.columns = true;
   seen.tracks = null;
   seen.details = null;
@@ -179,7 +200,7 @@ describe("PlaylistWorkshop", () => {
     await userEvent.click(screen.getByRole("button", { name: /^Play/ }));
     expect(playback.playEntity).toHaveBeenCalledWith({ kind: "playlist", playlistId: "pl-1" });
 
-    await userEvent.click(screen.getByRole("button", { name: "Exit workshop" }));
+    await userEvent.click(screen.getByRole("button", { name: "Exit playlist workshop" }));
     expect(onExit).toHaveBeenCalledTimes(1);
   });
 
@@ -201,11 +222,39 @@ describe("PlaylistWorkshop", () => {
     await waitFor(() => expect(playback.playEntity).toHaveBeenCalledWith({ kind: "playlist", playlistId: "pl-1" }));
   });
 
-  it("hands the details pane the same wait, for the exports and the import", () => {
+  it("shows a name in the header as it is typed, and saves it once the typing pauses", async () => {
     playlistDetail.mockReturnValue(loaded());
     workshop();
 
-    expect(seen.details).toMatchObject({ settleOrder: expect.any(Function) });
+    await userEvent.click(screen.getByRole("button", { name: "type a name" }));
+
+    expect(screen.getByRole("heading", { name: "Night Drive" })).toBeInTheDocument();
+    expect(screen.getByTestId("details")).toHaveAttribute("data-name", "Night Drive");
+    expect(saveName).not.toHaveBeenCalled();
+
+    await waitFor(() => expect(saveName).toHaveBeenCalledWith({ playlistId: "pl-1", name: "Night Drive" }), {
+      timeout: 2000,
+    });
+  });
+
+  it("hands the details pane a wait that covers a name still unsaved and an order still waiting", async () => {
+    playlistDetail.mockReturnValue(loaded());
+    workshop();
+    await userEvent.click(screen.getByRole("button", { name: "type a name" }));
+    await userEvent.click(screen.getByRole("button", { name: "reverse by keyboard" }));
+    const settled = vi.fn();
+
+    void (seen.details as { settleEdits: () => Promise<void> }).settleEdits().then(settled);
+
+    await waitFor(() => expect(saveName).toHaveBeenCalledTimes(1));
+    expect(saveOrder).not.toHaveBeenCalled();
+
+    nameSaves[0]?.();
+    await waitFor(() => expect(saveOrder).toHaveBeenCalledTimes(1));
+    expect(settled).not.toHaveBeenCalled();
+
+    orderSaves[0]?.();
+    await waitFor(() => expect(settled).toHaveBeenCalledTimes(1));
   });
 
   it("shows the name it was opened with while loading, and an error when the playlist cannot be read", () => {

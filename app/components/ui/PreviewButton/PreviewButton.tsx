@@ -2,7 +2,7 @@
 
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@components/ui/Tooltip";
 import { TRACK_PREVIEW, clockFraction, isSounding } from "@hooks/ui/trackPreview";
-import { Play, Square, TriangleAlert, VolumeX } from "lucide-react";
+import { Headphones, Square, TriangleAlert, VolumeX } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { PREVIEW_ACTION_KEYS, PREVIEW_TOOLTIP_DELAY_MS } from "./constants";
@@ -26,7 +26,7 @@ export function PreviewButton({
   const sounding = isSounding(status);
   const seconds = TRACK_PREVIEW.CLIP_SECONDS;
   const LockedGlyph = failed ? TriangleAlert : VolumeX;
-  const ReadyGlyph = sounding ? Square : Play;
+  const ReadyGlyph = sounding ? Square : Headphones;
 
   return (
     <TooltipProvider delayDuration={PREVIEW_TOOLTIP_DELAY_MS}>

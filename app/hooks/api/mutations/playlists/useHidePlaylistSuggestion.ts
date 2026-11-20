@@ -1,11 +1,16 @@
+import type { PlaylistSuggestionsKey } from "@hooks/api/queries/playlist-suggestions/types";
+import { usePlaylistSuggestionGone } from "@hooks/api/queries/playlist-suggestions/usePlaylistSuggestionGone";
 import { errorToast } from "@modules/errors";
 import { trpc } from "@utils/trpc";
 
-export function useHidePlaylistSuggestion() {
-  const utils = trpc.useUtils();
+export function useHidePlaylistSuggestion(key: PlaylistSuggestionsKey) {
+  const { take, giveBack } = usePlaylistSuggestionGone(key);
 
   return trpc.playlists.hideSuggestion.useMutation({
-    onError: (error) => errorToast(error, "playlists.suggestionHideFailed"),
-    onSettled: (_data, _error, { playlistId }) => utils.playlists.suggestions.invalidate({ playlistId }),
+    onMutate: ({ externalId }) => take(externalId),
+    onError: (error, { externalId }) => {
+      giveBack(externalId);
+      errorToast(error, "playlists.suggestionHideFailed");
+    },
   });
 }

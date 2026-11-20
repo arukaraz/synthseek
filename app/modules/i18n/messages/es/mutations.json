@@ -351,6 +351,7 @@
     "reorderFailed": "No se pudo guardar el orden nuevo",
     "suggestionAdded": "Se añadió \"{{title}}\" a la playlist",
     "suggestionHideFailed": "No se pudo ocultar esa sugerencia",
+    "suggestionYearsFailed": "No se pudieron guardar los años de estas sugerencias",
     "coverUpdated": "Carátula actualizada",
     "coverRemoved": "Carátula quitada",
     "coverRemoveFailed": "No se pudo quitar la carátula",

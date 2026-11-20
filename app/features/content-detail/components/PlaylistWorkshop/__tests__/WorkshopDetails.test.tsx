@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { renderWithProviders, screen, waitFor } from "@test/test-utils";
 import userEvent from "@testing-library/user-event";
 
-const rename = vi.fn();
+const saveName = vi.fn(async (_name: string) => undefined);
 const setVisibility = vi.fn();
 const setSync = vi.fn();
 const upload = vi.fn(async () => true);
@@ -16,9 +16,6 @@ const downloadText = vi.fn();
 const toastError = vi.hoisted(() => vi.fn());
 let uploading = false;
 
-vi.mock("@hooks/api/mutations/playlists/useRenamePlaylist", () => ({
-  useRenamePlaylist: () => ({ mutate: rename, isPending: false }),
-}));
 vi.mock("@hooks/api/mutations/playlists/useSetPlaylistVisibility", () => ({
   useSetPlaylistVisibility: () => ({ mutate: setVisibility, isPending: false }),
 }));
@@ -53,11 +50,19 @@ vi.mock("@components/DeletePlaylistDialog", () => ({
 vi.mock("@utils/download", () => ({ downloadText: (...args: unknown[]) => downloadText(...args) }));
 vi.mock("sonner", () => ({ toast: { error: toastError, success: vi.fn(), info: vi.fn() } }));
 
+import { usePlaylistNameDraft } from "../../../hooks/usePlaylistNameDraft";
 import { WorkshopDetails } from "../WorkshopDetails";
 import type { WorkshopDetailsProps } from "../types";
 
-function details(overrides?: Partial<WorkshopDetailsProps>) {
-  const props: WorkshopDetailsProps = {
+type DetailsProps = Omit<WorkshopDetailsProps, "nameDraft">;
+
+function DetailsWithDraft(props: DetailsProps) {
+  const nameDraft = usePlaylistNameDraft(props.name, saveName);
+  return <WorkshopDetails {...props} nameDraft={nameDraft} />;
+}
+
+function details(overrides?: Partial<DetailsProps>) {
+  const props: DetailsProps = {
     playlistId: "pl-1",
     name: "Road Trip",
     cover: null,
@@ -72,11 +77,11 @@ function details(overrides?: Partial<WorkshopDetailsProps>) {
     trackCount: 12,
     minutes: 40,
     inLibrary: 9,
-    settleOrder: vi.fn(async () => undefined),
+    settleEdits: vi.fn(async () => undefined),
     onDeleted: vi.fn(),
     ...overrides,
   };
-  return renderWithProviders(<WorkshopDetails {...props} />);
+  return renderWithProviders(<DetailsWithDraft {...props} />);
 }
 
 function file(name: string, content: string, type = "text/plain") {
@@ -91,20 +96,53 @@ beforeEach(() => {
 });
 
 describe("WorkshopDetails name", () => {
-  it("saves a changed name when the field loses focus and ignores an unchanged or blank one", async () => {
+  it("saves a changed name the moment the field loses focus, and neither saves nor keeps a blank one", async () => {
     details();
     const input = screen.getByLabelText("Name");
 
     await userEvent.clear(input);
     await userEvent.type(input, "  Night Drive  ");
     await userEvent.tab();
-    expect(rename).toHaveBeenCalledWith({ playlistId: "pl-1", name: "Night Drive" });
+    expect(saveName).toHaveBeenCalledTimes(1);
+    expect(saveName).toHaveBeenCalledWith("Night Drive");
 
-    rename.mockClear();
+    saveName.mockClear();
     await userEvent.clear(input);
     await userEvent.tab();
-    expect(rename).not.toHaveBeenCalled();
-    expect(input).toHaveValue("Road Trip");
+    expect(saveName).not.toHaveBeenCalled();
+    expect(input).toHaveValue("Night Drive");
+  });
+
+  it("saves a name while it is being typed, once the typing pauses, without leaving the field", async () => {
+    details();
+    const input = screen.getByLabelText("Name");
+
+    await userEvent.type(input, " 2");
+    expect(saveName).not.toHaveBeenCalled();
+    expect(input).toHaveFocus();
+
+    await waitFor(() => expect(saveName).toHaveBeenCalledWith("Road Trip 2"), { timeout: 2000 });
+    expect(saveName).toHaveBeenCalledTimes(1);
+    expect(input).toHaveFocus();
+  });
+
+  it("leaves the field on Enter, which saves the name", async () => {
+    details();
+    const input = screen.getByLabelText("Name");
+
+    await userEvent.type(input, "s{Enter}");
+
+    expect(input).not.toHaveFocus();
+    expect(saveName).toHaveBeenCalledWith("Road Trips");
+  });
+
+  it("puts the cover first and the name under it", () => {
+    details();
+
+    const cover = screen.getByRole("button", { name: "Upload a cover" });
+    const name = screen.getByLabelText("Name");
+
+    expect(cover.compareDocumentPosition(name) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
   });
 
   it("takes the longest name, the cover size and the cover formats from what the server allows", () => {
@@ -118,9 +156,12 @@ describe("WorkshopDetails name", () => {
     );
   });
 
-  it("locks the name of a playlist that is kept in sync", () => {
+  it("shows the name of a playlist that is kept in sync as text, with why it cannot be changed", () => {
     details({ canRename: false });
-    expect(screen.getByLabelText("Name")).toBeDisabled();
+
+    expect(screen.queryByRole("textbox")).not.toBeInTheDocument();
+    expect(document.querySelector('[data-cy="workshop-name-text"]')).toHaveTextContent("Road Trip");
+    expect(screen.getByText("Turn off sync to edit")).toBeInTheDocument();
   });
 });
 
@@ -283,18 +324,18 @@ describe("WorkshopDetails files", () => {
     await waitFor(() => expect(exportM3u).toHaveBeenCalledWith({ playlistId: "pl-1" }));
   });
 
-  it("exports only once an order save that was still waiting has settled", async () => {
+  it("exports only once the edits that were still waiting to save have settled", async () => {
     let settle: () => void = () => undefined;
     const saving = new Promise<void>((resolve) => {
       settle = resolve;
     });
-    const settleOrder = vi.fn(() => saving);
+    const settleEdits = vi.fn(() => saving);
     exportCollection.mockResolvedValue({ playlist: { title: "Road Trip" } });
-    details({ settleOrder });
+    details({ settleEdits });
 
     await userEvent.click(screen.getByRole("button", { name: /Export as M3U/ }));
     await userEvent.click(screen.getByRole("button", { name: /Export as JSPF/ }));
-    expect(settleOrder).toHaveBeenCalledTimes(2);
+    expect(settleEdits).toHaveBeenCalledTimes(2);
     expect(exportM3u).not.toHaveBeenCalled();
     expect(exportCollection).not.toHaveBeenCalled();
 

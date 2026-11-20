@@ -1,7 +1,9 @@
 "use client";
 
+import type { PlaylistVisibility } from "@api/__generated__/types";
 import { useCatalogPlaylistTracks, usePlaylistDetail } from "@hooks/api/queries/content-detail";
 import { useSetPlaylistSync } from "@hooks/api/mutations/playlists/useSetPlaylistSync";
+import { useSetPlaylistVisibility } from "@hooks/api/mutations/playlists/useSetPlaylistVisibility";
 import { playlistOriginLabel } from "@utils/playlist";
 import { memo, useCallback, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -58,6 +60,7 @@ function PlaylistDetailBodyComponent({
   const handleShuffle = useCallback(() => shuffle({ kind: "playlist", playlistId: target.id }), [shuffle, target.id]);
 
   const setSync = useSetPlaylistSync();
+  const setVisibility = useSetPlaylistVisibility();
   const [sortKey, setSortKey] = useState<TracklistSortKey>(isLibrary ? PLAYLIST_SORT_KEY : DEFAULT_SORT_KEY);
   const [direction, setDirection] = useState<SortDirection>("asc");
 
@@ -141,11 +144,27 @@ function PlaylistDetailBodyComponent({
     [setSync, target.id]
   );
 
+  const visibility = playlist?.visibility;
+  const handleVisibilityChange = useCallback(
+    (next: PlaylistVisibility) => {
+      if (next !== visibility) setVisibility.mutate({ playlistId: target.id, visibility: next });
+    },
+    [setVisibility, target.id, visibility]
+  );
+
   const playlistControls = isLibrary
     ? {
         quietRequest: true,
         missingCount: unrequestedTracks(displayTracks).length,
         onOpenWorkshop: canManage ? onOpenWorkshop : undefined,
+        visibility:
+          canManage && playlist
+            ? {
+                value: playlist.visibility,
+                onChange: handleVisibilityChange,
+                disabled: setVisibility.isPending,
+              }
+            : undefined,
         syncBadge:
           canManage && isImported ? (
             <PlaylistSyncToggle syncEnabled={syncEnabled} onToggle={handleSyncToggle} disabled={setSync.isPending} />
