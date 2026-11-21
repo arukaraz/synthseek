@@ -1,11 +1,13 @@
 import { errorToast } from "@modules/errors";
 import { trpc } from "@utils/trpc";
 
+import { keepAnswer } from "./helpers";
+
 export function useSelectTheme() {
   const utils = trpc.useUtils();
   return trpc.theme.select.useMutation({
-    onSuccess: (state) => {
-      utils.theme.state.setData(undefined, state);
+    onSuccess: async (state) => {
+      await keepAnswer(utils.theme.state, state);
       void utils.theme.files.invalidate();
     },
     onError: (error) => errorToast(error, "theme.selectFailed"),
@@ -15,8 +17,8 @@ export function useSelectTheme() {
 export function useSaveTheme() {
   const utils = trpc.useUtils();
   return trpc.theme.save.useMutation({
-    onSuccess: (state) => {
-      utils.theme.state.setData(undefined, state);
+    onSuccess: async (state) => {
+      await keepAnswer(utils.theme.state, state);
       void utils.theme.files.invalidate();
       void utils.theme.history.invalidate();
     },
@@ -37,7 +39,7 @@ export function useCheckThemeImport() {
 export function useRemoveThemeFont() {
   const utils = trpc.useUtils();
   return trpc.theme.removeFont.useMutation({
-    onSuccess: (fonts) => utils.theme.fonts.setData(undefined, fonts),
+    onSuccess: (fonts) => keepAnswer(utils.theme.fonts, fonts),
     onError: (error) => errorToast(error, "theme.fontRemoveFailed"),
   });
 }

@@ -6,6 +6,16 @@ const FontErrorCodeSchema = z.enum(["THEME_FONT_UNSUPPORTED", "THEME_FONT_TOO_LA
 
 const FontFailureSchema = z.object({ error: z.string() });
 
+interface AnsweredCache<TAnswer> {
+  cancel: () => Promise<void>;
+  setData: (input: undefined, answer: TAnswer) => unknown;
+}
+
+export async function keepAnswer<TAnswer>(cache: AnsweredCache<TAnswer>, answer: TAnswer): Promise<void> {
+  await cache.cancel();
+  cache.setData(undefined, answer);
+}
+
 export function fontErrorKey(code: string | null) {
   const known = FontErrorCodeSchema.safeParse(code);
   return known.success ? FONT_ERROR_KEYS[known.data] : FONT_ERROR_FALLBACK_KEY;
