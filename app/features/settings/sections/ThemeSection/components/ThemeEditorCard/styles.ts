@@ -14,13 +14,24 @@ export const editorBody = cva("flex flex-col gap-4");
 
 export const editorContent = cva("flex flex-col gap-4 **:scroll-mb-24");
 
-export const noteRow = cva(
-  "border-info-tint/30 bg-info-tint/10 text-info-faint flex flex-wrap items-center justify-between gap-2 rounded-lg border p-2.5 text-sm sm:p-3"
-);
+export const noteRow = cva("flex flex-wrap items-center justify-between gap-2 rounded-lg border p-2.5 text-sm sm:p-3", {
+  variants: {
+    tone: {
+      info: "border-info-tint/30 bg-info-tint/10 text-info-faint",
+      warning: "border-warning-vivid/40 bg-warning-vivid/10 text-fg",
+    },
+  },
+  defaultVariants: { tone: "info" },
+});
 
-export const noteText = cva("min-w-0 flex-1");
+export const noteText = cva("min-w-0 flex-1 basis-56 break-words");
 
-export const noteTitle = cva("text-info-pale font-semibold");
+export const noteActions = cva("flex shrink-0 flex-wrap items-center gap-2");
+
+export const noteTitle = cva("font-semibold", {
+  variants: { tone: { info: "text-info-pale", warning: "text-fg" } },
+  defaultVariants: { tone: "info" },
+});
 
 export const menuPanel = cva("flex w-80 max-w-[calc(100vw-1rem)] flex-col gap-3 p-3 text-sm");
 

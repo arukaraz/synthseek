@@ -9,8 +9,8 @@ import { lightSet } from "@theme/custom";
 import { useThemeContext } from "@theme/ThemeProvider";
 import { formatTimestamp } from "@utils/formatters";
 
-import { schemeMismatchOf } from "./helpers";
-import { noteRow, noteText, noteTitle, outlineButton } from "./styles";
+import { schemeMismatchOf, unseenConflictsOf } from "./helpers";
+import { noteActions, noteRow, noteText, noteTitle, outlineButton } from "./styles";
 import type { EditorNotesProps } from "./types";
 
 export function EditorNotes({ editor, safeEdit }: EditorNotesProps) {
@@ -18,6 +18,11 @@ export function EditorNotes({ editor, safeEdit }: EditorNotesProps) {
   const { theme } = useThemeContext();
   const { draft, restoredAt } = editor;
   const mismatch = useMemo(() => schemeMismatchOf(draft), [draft]);
+  const unseen = unseenConflictsOf(editor);
+
+  const reloadUnseen = () => unseen.forEach((path) => editor.takeTheirs(path));
+
+  const keepUnseen = () => unseen.forEach((path) => editor.keepMine(path));
 
   const startLight = () => {
     editor.change(lightSet(draft));
@@ -28,6 +33,22 @@ export function EditorNotes({ editor, safeEdit }: EditorNotesProps) {
 
   return (
     <>
+      {unseen.length > 0 ? (
+        <div className={noteRow({ tone: "warning" })} role="status">
+          <p className={noteText()}>
+            <span className={noteTitle({ tone: "warning" })}>{t("notes.conflictTitle")}</span>{" "}
+            {t("notes.conflict", { files: unseen.join(", ") })}
+          </p>
+          <div className={noteActions()}>
+            <Button size="sm" variant="secondary" onClick={reloadUnseen}>
+              {t("css.reload")}
+            </Button>
+            <Button size="sm" variant="ghost" onClick={keepUnseen}>
+              {t("css.keepMine")}
+            </Button>
+          </div>
+        </div>
+      ) : null}
       {restoredAt !== null ? (
         <div className={noteRow()} role="status">
           <p className={noteText()}>

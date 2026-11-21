@@ -40,9 +40,20 @@ export interface UndoLog {
   at: number;
 }
 
+export interface DraftBase {
+  meta: ThemeMeta;
+  files: Record<string, string | null>;
+}
+
 export interface StoredDraft {
   at: number;
   draft: ThemeDraft;
+  base?: DraftBase;
+}
+
+export interface FollowedDraft {
+  draft: ThemeDraft;
+  conflicts: string[];
 }
 
 export interface EditorSession {

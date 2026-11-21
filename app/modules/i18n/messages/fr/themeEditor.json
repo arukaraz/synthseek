@@ -49,6 +49,8 @@
     "discardedToast": "Modifications abandonnées."
   },
   "notes": {
+    "conflictTitle": "Modifié sur le disque pendant votre modification.",
+    "conflict": "{{files}}. L'enregistrement conserve votre version.",
     "restoredTitle": "Brouillon de votre dernière visite",
     "restored": "({{time}}). Il n'est pas encore enregistré : enregistrez-le, ou abandonnez-le pour revenir à votre thème enregistré.",
     "safeEditTitle": "Modification sans appliquer.",

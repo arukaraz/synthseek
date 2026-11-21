@@ -15,6 +15,12 @@ export function schemeMismatchOf(draft: ThemeDraft): SchemeMismatch | null {
   return null;
 }
 
+export function unseenConflictsOf(editor: Pick<ThemeEditor, "conflicts" | "view" | "draft">): string[] {
+  const { view, draft } = editor;
+  const open = view.mode === "css" && Object.hasOwn(draft.files, view.file) ? view.file : null;
+  return editor.conflicts.filter((path) => path !== open);
+}
+
 export function barStatusOf(editor: Pick<ThemeEditor, "broken" | "saving" | "dirty">): BarStatus {
   if (editor.broken.length > 0) return { kind: "broken", file: editor.broken[0], others: editor.broken.length - 1 };
   if (editor.saving) return { kind: "saving" };

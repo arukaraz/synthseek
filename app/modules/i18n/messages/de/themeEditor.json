@@ -49,6 +49,8 @@
     "discardedToast": "Änderungen verworfen."
   },
   "notes": {
+    "conflictTitle": "Auf dem Datenträger geändert, während du bearbeitet hast.",
+    "conflict": "{{files}}. Beim Speichern bleibt deine Version erhalten.",
     "restoredTitle": "Entwurf von deinem letzten Besuch",
     "restored": "({{time}}). Er ist noch nicht gespeichert: Speichere ihn oder verwirf ihn, um zu deinem gespeicherten Design zurückzukehren.",
     "safeEditTitle": "Bearbeiten ohne Anwenden.",

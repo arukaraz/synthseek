@@ -49,6 +49,8 @@
     "discardedToast": "Cambios descartados."
   },
   "notes": {
+    "conflictTitle": "Cambió en el disco mientras editabas.",
+    "conflict": "{{files}}. Al guardar se conserva tu versión.",
     "restoredTitle": "Borrador de tu última visita",
     "restored": "({{time}}). Aún no está guardado: guárdalo, o descártalo para volver a tu tema guardado.",
     "safeEditTitle": "Editando sin aplicar.",

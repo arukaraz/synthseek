@@ -50,6 +50,7 @@ export function useThemeEditor(): ThemeEditor | null {
   const saving = state !== null && state.sent !== null;
   const session = state?.session ?? null;
   const draft = session?.draft ?? null;
+  const onServer = session?.saved ?? null;
   const checked = state?.checked ?? null;
   const dirty = session !== null && isDirty(session);
 
@@ -72,13 +73,13 @@ export function useThemeEditor(): ThemeEditor | null {
   }, [account, files.data]);
 
   useEffect(() => {
-    if (account === null || draft === null) return;
+    if (account === null || draft === null || onServer === null) return;
     const timer = window.setTimeout(
-      () => writeStoredDraft(account, dirty ? draft : null, Date.now()),
+      () => writeStoredDraft(account, dirty ? draft : null, onServer, Date.now()),
       DRAFT_PERSIST_DELAY_MS
     );
     return () => window.clearTimeout(timer);
-  }, [account, draft, dirty]);
+  }, [account, draft, onServer, dirty]);
 
   useEffect(() => {
     if (draft === null || checked === null) return;

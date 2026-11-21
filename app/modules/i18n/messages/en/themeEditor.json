@@ -49,6 +49,8 @@
     "discardedToast": "Changes discarded."
   },
   "notes": {
+    "conflictTitle": "Changed on disk while you were editing.",
+    "conflict": "{{files}}. Saving keeps your version.",
     "restoredTitle": "Draft from your last visit",
     "restored": "({{time}}). It is not saved yet: save it, or discard it to go back to your saved theme.",
     "safeEditTitle": "Editing without applying.",

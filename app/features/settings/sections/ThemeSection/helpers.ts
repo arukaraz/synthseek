@@ -35,11 +35,11 @@ export function readStoredDraft(account: string): StoredDraft | null {
   }
 }
 
-export function writeStoredDraft(account: string, draft: ThemeDraft | null, now: number): void {
+export function writeStoredDraft(account: string, draft: ThemeDraft | null, saved: ThemeDraft, now: number): void {
   try {
     const key = `${DRAFT_STORAGE_PREFIX}${account}`;
     if (draft === null) window.localStorage.removeItem(key);
-    else window.localStorage.setItem(key, serializeStoredDraft(draft, now));
+    else window.localStorage.setItem(key, serializeStoredDraft(draft, saved, now));
   } catch {
     return;
   }

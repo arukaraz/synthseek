@@ -6,6 +6,8 @@ import type { ThemeDraft } from "@theme/custom";
 import type { Theme } from "@theme/ThemeProvider";
 
 import { colorOf, makeDraft, makeEditor, surfaceFiles } from "../../../__tests__/fixtures";
+import { DEFAULT_EDITOR_VIEW } from "../../../constants";
+import type { EditorView } from "../../../types";
 import { schemeMismatchOf } from "../helpers";
 import { EditorNotes } from "../EditorNotes";
 
@@ -21,6 +23,7 @@ vi.mock("sonner", () => ({
 }));
 
 const LIGHT_SURFACE = colorOf(0.98);
+const CSS_ON_CUSTOM: EditorView = { ...DEFAULT_EDITOR_VIEW, mode: "css", file: "custom.css" };
 
 beforeEach(() => {
   activeTheme = "custom";
@@ -108,5 +111,61 @@ describe("EditorNotes", () => {
     const { container } = render(<EditorNotes editor={makeEditor({ draft })} safeEdit={false} />);
 
     expect(container).toBeEmptyDOMElement();
+  });
+
+  it("names, in visual mode, the files that changed on disk under unsaved edits", () => {
+    const draft = makeDraft({}, { "custom.css": "mine {}", [DEFAULT_EDITOR_VIEW.file]: ":root {}" });
+    const editor = makeEditor({ draft, conflicts: ["custom.css", DEFAULT_EDITOR_VIEW.file] });
+    render(<EditorNotes editor={editor} safeEdit={false} />);
+
+    expect(screen.getByText("Changed on disk while you were editing.")).toBeInTheDocument();
+    expect(screen.getByText(/custom\.css, tokens\/brand\.css\. Saving keeps your version\./)).toBeInTheDocument();
+  });
+
+  it("reloads every named file from disk in one press", async () => {
+    const editor = makeEditor({ conflicts: ["custom.css", "tokens/brand.css"] });
+    render(<EditorNotes editor={editor} safeEdit={false} />);
+
+    await userEvent.click(screen.getByRole("button", { name: "Reload from disk" }));
+
+    expect(vi.mocked(editor.takeTheirs).mock.calls).toEqual([["custom.css"], ["tokens/brand.css"]]);
+    expect(editor.keepMine).not.toHaveBeenCalled();
+  });
+
+  it("keeps the draft's version of every named file in one press", async () => {
+    const editor = makeEditor({ conflicts: ["custom.css", "tokens/brand.css"] });
+    render(<EditorNotes editor={editor} safeEdit={false} />);
+
+    await userEvent.click(screen.getByRole("button", { name: "Keep mine" }));
+
+    expect(vi.mocked(editor.keepMine).mock.calls).toEqual([["custom.css"], ["tokens/brand.css"]]);
+    expect(editor.takeTheirs).not.toHaveBeenCalled();
+  });
+
+  it("leaves the file open in CSS mode to that mode's own notice", () => {
+    const draft = makeDraft({}, { "custom.css": "mine {}", "tokens/brand.css": ":root {}" });
+    const view = CSS_ON_CUSTOM;
+    const editor = makeEditor({ draft, view, conflicts: ["custom.css", "tokens/brand.css"] });
+    render(<EditorNotes editor={editor} safeEdit={false} />);
+
+    expect(screen.getByText(/^tokens\/brand\.css\. Saving keeps your version\./)).toBeInTheDocument();
+  });
+
+  it("says nothing in CSS mode when the only such file is the open one", () => {
+    const draft = makeDraft({}, { "custom.css": "mine {}" });
+    const view = CSS_ON_CUSTOM;
+    const { container } = render(
+      <EditorNotes editor={makeEditor({ draft, view, conflicts: ["custom.css"] })} safeEdit={false} />
+    );
+
+    expect(container).toBeEmptyDOMElement();
+  });
+
+  it("still names, in CSS mode, a file the draft deleted, which that mode cannot open", () => {
+    const draft = makeDraft({}, { "tokens/brand.css": ":root {}" });
+    const view = CSS_ON_CUSTOM;
+    render(<EditorNotes editor={makeEditor({ draft, view, conflicts: ["custom.css"] })} safeEdit={false} />);
+
+    expect(screen.getByText(/^custom\.css\. Saving keeps your version\./)).toBeInTheDocument();
   });
 });
