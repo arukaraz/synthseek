@@ -185,6 +185,7 @@ export interface HistoryPanelProps {
 
 export interface HistoryRowProps {
   version: ThemeVersion;
+  savedNow: boolean;
   disabled: boolean;
   onRestore: (version: ThemeVersion) => void;
 }

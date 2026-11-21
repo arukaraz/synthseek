@@ -96,6 +96,21 @@ describe("HistoryPanel", () => {
     expect(older).toBeEnabled();
   });
 
+  it("marks only the newest of the versions that hold the saved text, and disables each of them", () => {
+    api.history.data = {
+      versions: [versionOf("a", "settings", true), versionOf("b", "volume"), versionOf("c", "settings", true)],
+    };
+    render(<HistoryPanel editor={editorOf()} path={PATH} generated={false} />);
+
+    const rows = screen.getAllByRole("listitem");
+    expect(within(rows[0]).getByText("Saved now")).toBeInTheDocument();
+    expect(within(rows[2]).queryByText("Saved now")).toBeNull();
+    const [newest, other, older] = screen.getAllByRole("button", { name: /^Restore the version from/ });
+    expect(newest).toBeDisabled();
+    expect(other).toBeEnabled();
+    expect(older).toBeDisabled();
+  });
+
   it("enables the saved version once the file has been edited", () => {
     api.history.data = { versions: [versionOf("a", "settings", true)] };
     const saved = draftOf();

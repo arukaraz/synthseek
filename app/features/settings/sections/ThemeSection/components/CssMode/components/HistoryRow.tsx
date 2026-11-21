@@ -11,14 +11,14 @@ import { HISTORY_TOOLTIP_DELAY_MS } from "../constants";
 import { historyAction, historyNow, historyRow, historySource, historyWhen } from "../styles";
 import type { HistoryRowProps } from "../types";
 
-export function HistoryRow({ version, disabled, onRestore }: HistoryRowProps) {
+export function HistoryRow({ version, savedNow, disabled, onRestore }: HistoryRowProps) {
   const { t } = useTranslation("themeEditor");
   const time = formatDateTime(new Date(version.at));
   return (
     <li className={historyRow()}>
       <span className={historyWhen()}>
         {time}
-        {version.current ? <span className={historyNow()}>{t("history.savedNow")}</span> : null}
+        {savedNow ? <span className={historyNow()}>{t("history.savedNow")}</span> : null}
       </span>
       <span className={historySource()}>{t(`history.sources.${version.source}`)}</span>
       <span className={historyAction()}>

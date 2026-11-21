@@ -37,6 +37,7 @@ export function HistoryPanel({ editor, path, generated }: HistoryPanelProps) {
   const text = generated ? "" : editor.draft.files[path];
   const savedText = Object.hasOwn(editor.saved.files, path) ? editor.saved.files[path] : undefined;
   const versions = history.data?.versions ?? [];
+  const savedNow = versions.find((version) => version.current)?.id;
 
   const restore = (version: ThemeVersion) => {
     void fetchers
@@ -68,6 +69,7 @@ export function HistoryPanel({ editor, path, generated }: HistoryPanelProps) {
             <HistoryRow
               key={version.id}
               version={version}
+              savedNow={version.id === savedNow}
               disabled={versionIsOpen(version.current, text, savedText, fetched.get(`${path}:${version.id}`))}
               onRestore={restore}
             />
