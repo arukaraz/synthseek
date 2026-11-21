@@ -1,7 +1,7 @@
 "use client";
 
 import { Plus } from "lucide-react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import type { FormEvent, KeyboardEvent } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -17,12 +17,14 @@ export function NewFileForm({ draft, onCreate }: NewFileFormProps) {
   const { t } = useTranslation("themeEditor");
   const [open, setOpen] = useState(false);
   const [name, setName] = useState("");
+  const toggle = useRef<HTMLButtonElement>(null);
   const problem = newFileProblem(name, draft);
   const bad = name !== "" && problem !== null;
 
   const close = () => {
     setOpen(false);
     setName("");
+    toggle.current?.focus();
   };
 
   const submit = (event: FormEvent<HTMLFormElement>) => {
@@ -41,6 +43,7 @@ export function NewFileForm({ draft, onCreate }: NewFileFormProps) {
   return (
     <div>
       <button
+        ref={toggle}
         type="button"
         aria-expanded={open}
         className={newFileToggle()}

@@ -138,6 +138,32 @@ describe("component files", () => {
     expect(editor.setView).toHaveBeenCalledWith({ file: "components/nav-bar.css" });
   });
 
+  it("gives the focus back to its button when Escape closes the new file form", async () => {
+    const editor = editorOf();
+    render(<CssMode editor={editor} />);
+    const toggle = screen.getByRole("button", { name: "New file in components" });
+
+    await userEvent.click(toggle);
+    await userEvent.type(screen.getByRole("textbox", { name: "File name" }), "nav-bar{Escape}");
+
+    expect(screen.queryByRole("textbox", { name: "File name" })).toBeNull();
+    expect(toggle).toHaveFocus();
+    expect(editor.change).not.toHaveBeenCalled();
+  });
+
+  it("gives the focus back to its button once the file is created with Enter", async () => {
+    const editor = editorOf();
+    render(<CssMode editor={editor} />);
+    const toggle = screen.getByRole("button", { name: "New file in components" });
+
+    await userEvent.click(toggle);
+    await userEvent.type(screen.getByRole("textbox", { name: "File name" }), "nav-bar{Enter}");
+
+    expect(editor.change).toHaveBeenCalledTimes(1);
+    expect(screen.queryByRole("textbox", { name: "File name" })).toBeNull();
+    expect(toggle).toHaveFocus();
+  });
+
   it("refuses a name with capitals, spaces or a dot", async () => {
     const editor = editorOf();
     render(<CssMode editor={editor} />);
