@@ -26,7 +26,7 @@ export const noteRow = cva("flex flex-wrap items-center justify-between gap-2 ro
 
 export const noteText = cva("min-w-0 flex-1 basis-56 break-words");
 
-export const noteActions = cva("flex shrink-0 flex-wrap items-center gap-2");
+export const noteActions = cva("flex max-w-full flex-wrap items-center gap-2");
 
 export const noteTitle = cva("font-semibold", {
   variants: { tone: { info: "text-info-pale", warning: "text-fg" } },
