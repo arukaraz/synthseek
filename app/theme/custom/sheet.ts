@@ -1,3 +1,4 @@
+import type { ThemeScheme } from "@theme/contract";
 import type { CssVars } from "@theme/utilities/types";
 
 import { THEME_SCOPE_SELECTOR, TOKENS_DIRECTORY } from "./constants";
@@ -40,6 +41,10 @@ function safeTokens(files: readonly ThemeFileText[]): [TokenName, string][] {
     }
   }
   return tokens;
+}
+
+export function schemeBlock(scheme: ThemeScheme): string {
+  return `${THEME_SCOPE_SELECTOR}{color-scheme:${scheme}}`;
 }
 
 export function tokenBlock(files: readonly ThemeFileText[]): string {

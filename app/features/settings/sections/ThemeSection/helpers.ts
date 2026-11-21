@@ -4,6 +4,7 @@ import {
   fontFaceBlock,
   isFreePath,
   parseStoredDraft,
+  schemeBlock,
   serializeStoredDraft,
   tokenBlock,
   tokenPathOf,
@@ -58,7 +59,9 @@ export function draftCss(draft: ThemeDraft, checked: Record<string, CheckedFile>
     .filter((path) => Object.hasOwn(draft.files, path))
     .map((path) => ({ path, text: draft.files[path] }));
   const free = freePathsOf(draft).map((path) => (Object.hasOwn(checked, path) ? checked[path].css : ""));
-  return [fontFaceBlock(fonts), tokenBlock(tokenFiles), ...free].filter((part) => part !== "").join("\n");
+  return [fontFaceBlock(fonts), schemeBlock(draft.meta.scheme), tokenBlock(tokenFiles), ...free]
+    .filter((part) => part !== "")
+    .join("\n");
 }
 
 export function uncheckedFiles(

@@ -2,7 +2,7 @@
 import { describe, expect, it } from "vitest";
 
 import { THEME_SCOPE_SELECTOR } from "../constants";
-import { isInertValue, tokenBlock, tokenVars } from "../sheet";
+import { isInertValue, schemeBlock, tokenBlock, tokenVars } from "../sheet";
 
 import { oklch } from "./fixtures";
 
@@ -30,6 +30,15 @@ describe("isInertValue", () => {
     expect(isInertValue("calc(var(--a) * 2)")).toBe(true);
     expect(isInertValue("")).toBe(true);
   });
+});
+
+describe("schemeBlock", () => {
+  it.each(["dark", "light"] as const)(
+    "scopes the %s scheme under the custom theme, as the saved sheet does",
+    (scheme) => {
+      expect(schemeBlock(scheme)).toBe(`${THEME_SCOPE_SELECTOR}{color-scheme:${scheme}}`);
+    }
+  );
 });
 
 describe("tokenBlock", () => {

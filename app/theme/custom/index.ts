@@ -39,7 +39,7 @@ export {
   takeTheirs,
   undoSession,
 } from "./session";
-export { isInertValue, tokenBlock, tokenVars } from "./sheet";
+export { isInertValue, schemeBlock, tokenBlock, tokenVars } from "./sheet";
 export { canRedo, canUndo, emptyUndoLog, recordSnapshot, redoStep, undoStep } from "./undo";
 export type {
   EditorSession,
