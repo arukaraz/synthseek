@@ -559,7 +559,7 @@
     },
     "deleteDialog": {
       "title": "¿Eliminar playlist?",
-      "description": "Se quita de tu biblioteca. No se puede deshacer.",
+      "description": "No se puede deshacer.",
       "confirm": "Eliminar"
     },
     "bulk": {

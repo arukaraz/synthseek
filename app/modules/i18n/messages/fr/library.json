@@ -559,7 +559,7 @@
     },
     "deleteDialog": {
       "title": "Supprimer la playlist ?",
-      "description": "Cela la retire de votre bibliothèque. Cette action est irréversible.",
+      "description": "Cette action est irréversible.",
       "confirm": "Supprimer"
     },
     "bulk": {

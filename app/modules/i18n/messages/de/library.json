@@ -559,7 +559,7 @@
     },
     "deleteDialog": {
       "title": "Playlist löschen?",
-      "description": "Dadurch wird sie aus deiner Bibliothek entfernt. Dies kann nicht rückgängig gemacht werden.",
+      "description": "Dies kann nicht rückgängig gemacht werden.",
       "confirm": "Löschen"
     },
     "bulk": {
