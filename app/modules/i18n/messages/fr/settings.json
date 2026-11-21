@@ -1783,10 +1783,10 @@
       "keywords": {
         "playbackAccount": "normalisation du volume sonie gain lecture automatique pistes similaires",
         "playbackBrowser": "égaliseur compresseur crossfade fondu gapless transition conversion débit mp3",
-        "theme": "sombre minuit océan couleur personnalisé css police polices rayon ombre importer exporter",
+        "theme": "sombre minuit océan couleur personnalisé css police polices rayon ombre importer exporter apparence",
         "language": "anglais espagnol français allemand",
         "members": "rôle confiance quota préréglage demande qualité format",
-        "board": "densité taille du texte arrière-plan modèles organiser disposition widgets",
+        "board": "densité taille du texte arrière-plan modèles organiser disposition widgets apparence",
         "scrobble": "scrobble écoutes historique",
         "privacy": "privé visibilité partager lecture en cours incognito historique effacer nom",
         "channels": "discord ntfy telegram webhook apprise",

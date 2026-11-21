@@ -1783,10 +1783,10 @@
       "keywords": {
         "playbackAccount": "lautstärke normalisierung lautheit gain autoplay ähnliche titel",
         "playbackBrowser": "equalizer kompressor crossfade gapless übergang konvertierung bitrate mp3",
-        "theme": "dunkel mitternacht ozean farbe eigenes css schrift schriftart radius schatten importieren exportieren",
+        "theme": "dunkel mitternacht ozean farbe eigenes css schrift schriftart radius schatten importieren exportieren darstellung",
         "language": "englisch spanisch französisch deutsch",
         "members": "rolle vertrauenswürdig kontingent anfrage voreinstellung qualität format",
-        "board": "dichte textgröße hintergrund vorlagen anordnen anordnung widgets",
+        "board": "dichte textgröße hintergrund vorlagen anordnen anordnung widgets darstellung",
         "scrobble": "scrobble wiedergaben hörverlauf",
         "privacy": "privat sichtbarkeit teilen aktuelle wiedergabe inkognito verlauf löschen name",
         "channels": "discord ntfy telegram webhook apprise",

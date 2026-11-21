@@ -1783,10 +1783,10 @@
       "keywords": {
         "playbackAccount": "volume normalization loudness gain autoplay similar tracks",
         "playbackBrowser": "equalizer compressor crossfade gapless transition conversion bitrate mp3",
-        "theme": "dark midnight ocean color colour custom css font fonts radius shadow import export",
+        "theme": "dark midnight ocean color colour custom css font fonts radius shadow import export appearance",
         "language": "english spanish french german",
         "members": "role trusted quota request preset quality format",
-        "board": "density text size background templates arrange layout widgets",
+        "board": "density text size background templates arrange layout widgets appearance",
         "scrobble": "scrobble plays listening history",
         "privacy": "private visibility share now playing incognito history clear name",
         "channels": "discord ntfy telegram webhook apprise",

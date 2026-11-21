@@ -1786,10 +1786,10 @@
       "keywords": {
         "playbackAccount": "normalización de volumen sonoridad ganancia autoplay reproducción automática pistas similares",
         "playbackBrowser": "ecualizador compresor crossfade fundido gapless transición conversión bitrate mp3",
-        "theme": "oscuro medianoche océano color personalizado css fuente fuentes radio sombra importar exportar",
+        "theme": "oscuro medianoche océano color personalizado css fuente fuentes radio sombra importar exportar apariencia",
         "language": "inglés español francés alemán",
         "members": "rol confiable cuota preset solicitud calidad formato",
-        "board": "densidad tamaño de texto fondo plantillas organizar disposición widgets",
+        "board": "densidad tamaño de texto fondo plantillas organizar disposición widgets apariencia",
         "scrobble": "scrobble reproducciones historial escucha",
         "privacy": "privado visibilidad compartir reproduciendo ahora incógnito historial borrar nombre",
         "channels": "discord ntfy telegram webhook apprise",
