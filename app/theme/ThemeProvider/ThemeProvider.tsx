@@ -3,7 +3,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 
 import { useSelectTheme } from "@hooks/api/mutations/theme";
-import { useThemeState } from "@hooks/api/queries/theme";
+import { useForgetTheme, useThemeState } from "@hooks/api/queries/theme";
 import { useAuthContext } from "@modules/providers/AuthProvider";
 
 import { FACTORY_BOOT, FALLBACK_THEME_CONTEXT } from "./constants";
@@ -14,18 +14,25 @@ import type { Theme, ThemeContextValue, ThemeDraftPaint, ThemeProviderProps } fr
 const ThemeContext = createContext<ThemeContextValue>(FALLBACK_THEME_CONTEXT);
 
 export function ThemeProvider({ boot, children }: ThemeProviderProps) {
-  const { currentUser } = useAuthContext();
-  const signedIn = currentUser !== null;
+  const { currentUser, isLoading, isError } = useAuthContext();
+  const account = currentUser?.id ?? null;
+  const signedIn = account !== null;
+  const signedOut = !signedIn && !isLoading && !isError;
   const state = useThemeState(signedIn);
+  const forget = useForgetTheme();
   const selection = useSelectTheme();
   const { mutate } = selection;
   const [draft, setDraft] = useState<ThemeDraftPaint | null>(null);
   const [previewAsked, setPreviewAsked] = useState(false);
   const [factoryAsked, setFactoryAsked] = useState(false);
+  const [accountMoved, setAccountMoved] = useState(false);
   const factorySent = useRef(false);
+  const loadedFor = useRef<string | null | undefined>(undefined);
 
-  const custom = state.data?.custom ?? null;
-  const stored = state.data === undefined ? boot : bootOf(state.data.theme, custom);
+  const known = signedOut ? undefined : state.data;
+  const custom = known?.custom ?? null;
+  const first = signedOut || accountMoved ? FACTORY_BOOT : boot;
+  const stored = known === undefined ? first : bootOf(known.theme, custom);
   const choosing = selection.isPending && selection.variables.theme !== "custom" ? selection.variables.theme : null;
   const chosen = choosing === null ? stored : bootOf(choosing, custom);
   const active = factoryAsked ? FACTORY_BOOT : chosen;
@@ -56,10 +63,16 @@ export function ThemeProvider({ boot, children }: ThemeProviderProps) {
   }, [factoryAsked, signedIn, mutate]);
 
   useEffect(() => {
-    if (signedIn) return;
+    if (!signedIn && !signedOut) return;
+    const previous = loadedFor.current;
+    if (previous === account) return;
+    loadedFor.current = account;
+    if (previous === undefined && signedIn) return;
+    setAccountMoved(true);
     setDraft(null);
     setPreviewAsked(false);
-  }, [signedIn]);
+    void forget();
+  }, [signedIn, signedOut, account, forget]);
 
   useEffect(() => {
     paintTheme(document, { theme: painted, base, scheme, fingerprint }, draftCss);
@@ -74,7 +87,7 @@ export function ThemeProvider({ boot, children }: ThemeProviderProps) {
       theme,
       scheme,
       custom,
-      isReady: state.data !== undefined,
+      isReady: known !== undefined,
       isSelecting: selection.isPending,
       select,
       draft,
@@ -83,7 +96,7 @@ export function ThemeProvider({ boot, children }: ThemeProviderProps) {
       startPreview,
       stopPreview,
     }),
-    [theme, scheme, custom, state.data, selection.isPending, select, draft, previewing, startPreview, stopPreview]
+    [theme, scheme, custom, known, selection.isPending, select, draft, previewing, startPreview, stopPreview]
   );
 
   return (

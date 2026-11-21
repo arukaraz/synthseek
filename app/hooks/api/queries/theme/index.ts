@@ -1,1 +1,8 @@
-export { useThemeFetchers, useThemeFiles, useThemeFonts, useThemeHistory, useThemeState } from "./useThemeQueries";
+export {
+  useForgetTheme,
+  useThemeFetchers,
+  useThemeFiles,
+  useThemeFonts,
+  useThemeHistory,
+  useThemeState,
+} from "./useThemeQueries";

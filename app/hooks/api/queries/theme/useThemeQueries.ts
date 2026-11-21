@@ -1,4 +1,6 @@
-import { useMemo } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { getQueryKey } from "@trpc/react-query";
+import { useCallback, useMemo } from "react";
 
 import type { ThemePresetId } from "@theme/contract";
 import { trpc } from "@utils/trpc";
@@ -7,6 +9,11 @@ const THEME_STATE_STALE_MS = 60 * 1000;
 
 export function useThemeState(enabled: boolean) {
   return trpc.theme.state.useQuery(undefined, { enabled, staleTime: THEME_STATE_STALE_MS });
+}
+
+export function useForgetTheme() {
+  const queryClient = useQueryClient();
+  return useCallback(() => queryClient.resetQueries({ queryKey: getQueryKey(trpc.theme) }), [queryClient]);
 }
 
 export function useThemeFiles(enabled: boolean) {
