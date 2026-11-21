@@ -26,6 +26,7 @@ export function ColorRow({
   hint,
   value,
   other,
+  warning,
   following,
   changed,
   presetName,
@@ -67,9 +68,13 @@ export function ColorRow({
       </label>
       <div className={meta()}>
         <span className={metaName()}>{label}</span>
-        <span className={metaHint()} title={hintText}>
-          {hintText}
-        </span>
+        {warning !== null ? (
+          <span className={metaHint({ warn: true })}>{warning}</span>
+        ) : (
+          <span className={metaHint()} title={hintText}>
+            {hintText}
+          </span>
+        )}
       </div>
       {color !== null ? (
         <code className={valueText()}>

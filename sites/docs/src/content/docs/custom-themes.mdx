@@ -32,7 +32,7 @@ A theme holds two kinds of things.
 
 Some colors follow another one. The text step of the primary color follows the primary color, so changing the base moves it too. Set a follower by hand and it stops following. Its dot makes it follow again.
 
-A color that carries text shows its contrast against the surface behind it, and marks a low one.
+A color that carries text shows its contrast against the surface behind it, and marks a low one. A color that text sits on, such as the primary color, warns in its own row when that text gets hard to read.
 
 **Theme options**, the menu beside the mode switch, sets the preset the theme starts from and its scheme, and holds **Share**. The scheme tells the browser to draw its own controls, such as scrollbars and menus, dark or light.
 
@@ -148,8 +148,6 @@ A character a folder name cannot hold is written as `%` and its code. Renaming a
 
 ## Limits
 
-These hold for what you save in Settings, import, or change through an assistant.
-
 | What                                     | Limit  |
 | ---------------------------------------- | ------ |
 | One file                                 | 256 KB |
@@ -159,7 +157,9 @@ These hold for what you save in Settings, import, or change through an assistant
 
 When the files and their history pass 2 MB, the oldest versions go first.
 
-A file changed on the server is not checked against these limits. One over 256 KB is left out of the theme. If the files alone pass 2 MB, or `components/` holds more than 40, Settings refuses to save until they are back under.
+Settings, an import and an assistant refuse a change that goes past a limit.
+
+A file or a font changed on the server is not refused. One over 256 KB is left out of the theme. One that takes the theme past another limit stays in the folder and is left out too, and the editor says which. Make the theme smaller and it applies again. If the files alone pass 2 MB, or `components/` holds more than 40, Settings refuses to save until they are back under.
 
 ## If a theme locks you out
 

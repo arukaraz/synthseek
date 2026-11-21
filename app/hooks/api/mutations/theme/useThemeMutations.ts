@@ -1,7 +1,7 @@
 import { errorToast } from "@modules/errors";
 import { trpc } from "@utils/trpc";
 
-import { keepAnswer } from "./helpers";
+import { isThemeChangedElsewhere, keepAnswer } from "./helpers";
 
 export function useSelectTheme() {
   const utils = trpc.useUtils();
@@ -22,7 +22,9 @@ export function useSaveTheme() {
       void utils.theme.files.invalidate();
       void utils.theme.history.invalidate();
     },
-    onError: (error) => errorToast(error, "theme.saveFailed"),
+    onError: (error) => {
+      if (!isThemeChangedElsewhere(error)) errorToast(error, "theme.saveFailed");
+    },
   });
 }
 

@@ -34,13 +34,29 @@ const custom: CustomThemeSummary = {
 
 const savedFiles = {
   files: [
-    { path: "tokens/surfaces.css", kind: "tokens", text: ":root { --surface: red; }", hash: "h1", unreadable: false },
+    {
+      path: "tokens/surfaces.css",
+      kind: "tokens",
+      text: ":root { --surface: red; }",
+      hash: "h1",
+      unreadable: false,
+      leftOut: false,
+    },
+    {
+      path: "tokens/shape.css",
+      kind: "tokens",
+      text: ":root { --radius: 2rem; }",
+      hash: "h3",
+      unreadable: false,
+      leftOut: true,
+    },
     {
       path: "custom.css",
       kind: "custom",
       text: "@keyframes spin { to { opacity: 0 } }",
       hash: "h2",
       unreadable: false,
+      leftOut: false,
     },
   ],
 };
@@ -116,6 +132,17 @@ describe("ThemePicker", () => {
     expect(useThemeFiles).toHaveBeenLastCalledWith(true);
     expect(miniature?.style.getPropertyValue("--surface")).toBe("red");
     expect(miniature?.getAttribute("style")).not.toContain("keyframes");
+  });
+
+  it("keeps a token file the server left out of the theme off the Custom miniature", () => {
+    context = { theme: "dark", custom, select };
+    useThemeFiles.mockReturnValue({ data: savedFiles });
+    const { container } = render(<ThemePicker editing={false} />);
+
+    const miniature = customMiniature(container);
+
+    expect(miniature?.style.getPropertyValue("--surface")).toBe("red");
+    expect(miniature?.style.getPropertyValue("--radius")).toBe("");
   });
 
   it.each([

@@ -1,3 +1,4 @@
+export { isThemeChangedElsewhere } from "./helpers";
 export {
   useCheckTheme,
   useCheckThemeImport,

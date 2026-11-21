@@ -554,5 +554,9 @@
   "THEME_IMPORT_INVALID": {
     "title": "This theme cannot be imported",
     "description": "The document is not a Synthseek theme this version can read, so nothing was changed."
+  },
+  "THEME_CHANGED_ELSEWHERE": {
+    "title": "The theme changed before your save arrived",
+    "description": "Nothing was overwritten. Your changes are still in the editor, on top of what changed. Check them and save again."
   }
 }

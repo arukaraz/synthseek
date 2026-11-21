@@ -1,4 +1,5 @@
-import { changedPaths, removedPaths, sameDraft } from "./draft";
+import { changedPaths, isTokenPath, removedPaths, sameDraft } from "./draft";
+import { mergeTokenFile, withoutDiscarded } from "./merge";
 import { storedDraftSchema, themeDraftSchema } from "./schema";
 import type { DraftBase, EditorSession, FollowedDraft, StoredDraft, ThemeDraft, ThemeMeta, UndoLog } from "./types";
 import { emptyUndoLog, recordSnapshot, redoStep, undoStep } from "./undo";
@@ -87,11 +88,16 @@ function follow(base: ThemeDraft, theirs: ThemeDraft, mine: ThemeDraft): Followe
     const after = textOf(theirs, path);
     const own = textOf(mine, path);
     if (before === after || own === after) continue;
-    if (own !== before) {
-      conflicts.push(path);
+    if (own === before) {
+      withText(files, path, after);
+      moved = true;
       continue;
     }
-    withText(files, path, after);
+    const mergeable = isTokenPath(path) && before !== null && after !== null && own !== null;
+    const merged = mergeable ? mergeTokenFile(before, after, own) : null;
+    if (merged === null || merged.clash) conflicts.push(path);
+    if (merged === null || merged.text === own) continue;
+    files[path] = merged.text;
     moved = true;
   }
   const meta = followedMeta(base.meta, theirs.meta, mine.meta);
@@ -202,5 +208,8 @@ export function keepMine(session: EditorSession, path: string): EditorSession {
 export function takeTheirs(session: EditorSession, path: string, now: number): EditorSession {
   const files = { ...session.draft.files };
   withText(files, path, textOf(session.saved, path));
-  return keepMine(editSession(session, { ...session.draft, files }, now), path);
+  const loaded = { ...session.draft, files };
+  const draft = isTokenPath(path) ? withoutDiscarded(session.draft, loaded, session.saved, path) : loaded;
+  const settled = keepMine(editSession(session, draft, now), path);
+  return { ...settled, conflicts: unsettled(settled.conflicts, settled.saved, settled.draft) };
 }

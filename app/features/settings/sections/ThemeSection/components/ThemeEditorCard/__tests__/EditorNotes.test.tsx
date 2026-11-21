@@ -113,6 +113,14 @@ describe("EditorNotes", () => {
     expect(container).toBeEmptyDOMElement();
   });
 
+  it("names the files the server left out of the theme for its size", () => {
+    const editor = makeEditor({ leftOut: ["components/huge.css", "custom.css"] });
+    render(<EditorNotes editor={editor} safeEdit={false} />);
+
+    expect(screen.getByText("Not applied: the theme is over its size limit.")).toBeInTheDocument();
+    expect(screen.getByText(/components\/huge\.css, custom\.css\. Make the theme smaller/)).toBeInTheDocument();
+  });
+
   it("names, in visual mode, the files that changed on disk under unsaved edits", () => {
     const draft = makeDraft({}, { "custom.css": "mine {}", [DEFAULT_EDITOR_VIEW.file]: ":root {}" });
     const editor = makeEditor({ draft, conflicts: ["custom.css", DEFAULT_EDITOR_VIEW.file] });

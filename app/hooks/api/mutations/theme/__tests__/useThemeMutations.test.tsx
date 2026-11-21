@@ -5,10 +5,17 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 type Settle = (value: unknown) => void;
 
-const pending = vi.hoisted((): { reads: Record<string, Settle[]>; writes: Settle[] } => ({ reads: {}, writes: [] }));
+const pending = vi.hoisted((): { reads: Record<string, Settle[]>; writes: Settle[]; refusals: Settle[] } => ({
+  reads: {},
+  writes: [],
+  refusals: [],
+}));
 const errorToast = vi.hoisted(() => vi.fn());
 
-vi.mock("@modules/errors", () => ({ errorToast }));
+vi.mock("@modules/errors", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@modules/errors")>()),
+  errorToast,
+}));
 vi.mock("@utils/trpc", async () => {
   const { useMutation, useQuery, useQueryClient } = await import("@tanstack/react-query");
   const keyOf = (name: string) => ["theme", name];
@@ -27,8 +34,9 @@ vi.mock("@utils/trpc", async () => {
     useMutation: (options: object) =>
       useMutation({
         mutationFn: () =>
-          new Promise<unknown>((resolve) => {
+          new Promise<unknown>((resolve, reject) => {
             pending.writes.push(resolve);
+            pending.refusals.push(reject);
           }),
         ...options,
       }),
@@ -96,6 +104,7 @@ beforeEach(() => {
   vi.clearAllMocks();
   pending.reads = {};
   pending.writes.length = 0;
+  pending.refusals.length = 0;
 });
 
 describe("theme mutations against a read still in flight", () => {
@@ -117,6 +126,7 @@ describe("theme mutations against a read still in flight", () => {
 
     act(() =>
       result.current.save.mutate({
+        base: "r1",
         files: [],
         remove: [],
         meta: { name: "Mine", scheme: "dark", startedFrom: "dark", follows: [] },
@@ -148,5 +158,35 @@ describe("theme mutations against a read still in flight", () => {
     await settle(pending.reads.state, CUSTOM);
 
     expect(result.current.state.data).toEqual(CUSTOM);
+  });
+});
+
+describe("a save the server refused", () => {
+  const INPUT = {
+    base: "r1",
+    files: [],
+    remove: [],
+    meta: { name: "Mine", scheme: "dark" as const, startedFrom: "dark" as const, follows: [] },
+  };
+
+  it("says the save failed", async () => {
+    const refusal = { data: { appCode: "THEME_TOO_LARGE" } };
+    const { result } = renderHook(() => useSaveTheme(), { wrapper });
+
+    act(() => result.current.mutate(INPUT));
+    await settle(pending.refusals, refusal);
+
+    expect(errorToast).toHaveBeenCalledTimes(1);
+    expect(errorToast).toHaveBeenCalledWith(refusal, "theme.saveFailed");
+  });
+
+  it("says nothing when the theme changed elsewhere, which the editor answers by merging", async () => {
+    const { result } = renderHook(() => useSaveTheme(), { wrapper });
+
+    act(() => result.current.mutate(INPUT));
+    await settle(pending.refusals, { data: { appCode: "THEME_CHANGED_ELSEWHERE" } });
+
+    expect(result.current.isError).toBe(true);
+    expect(errorToast).not.toHaveBeenCalled();
   });
 });

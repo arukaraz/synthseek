@@ -10,6 +10,7 @@ import { tokenVars } from "@theme/custom";
 import { useThemeContext } from "@theme/ThemeProvider";
 
 import { EDIT_PARAM, EDIT_PARAM_VALUE } from "../../constants";
+import { appliedFiles } from "../../helpers";
 import { THEME_VALUES } from "./constants";
 import { previewPaintOf } from "./helpers";
 import { themeCaption, themeEditLink } from "./styles";
@@ -22,7 +23,7 @@ export function ThemePicker({ editing }: ThemePickerProps) {
   const [, setEditParam] = useUrlParam(EDIT_PARAM);
   const sheetOnPage = theme === "custom" || previewing;
   const saved = useThemeFiles(custom !== null && !sheetOnPage);
-  const savedFiles = sheetOnPage ? undefined : saved.data?.files;
+  const savedFiles = useMemo(() => (sheetOnPage ? undefined : appliedFiles(saved.data)), [sheetOnPage, saved.data]);
 
   const options = useMemo<ThemeOption[]>(() => {
     const labels = {

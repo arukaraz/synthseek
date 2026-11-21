@@ -14,7 +14,7 @@ import type { EditorView, ThemeFontList } from "../../../types";
 import { SECTION_TOKENS } from "../constants";
 import { fontStackOf } from "../helpers";
 import { VisualMode } from "../VisualMode";
-import { ALL_FOLLOWS, makeDraft, makeEditor, PICKED_HEX, pickedWithOpacity } from "./fixtures";
+import { ALL_FOLLOWS, LIME, makeDraft, makeEditor, MID_GRAY, PICKED_HEX, pickedWithOpacity } from "./fixtures";
 
 const mocks = vi.hoisted(() => ({
   fonts: { current: undefined as ThemeFontList | undefined },
@@ -281,6 +281,33 @@ describe("VisualMode color rows", () => {
     expect(warned).toHaveClass("text-warning-vivid");
   });
 
+  it("warns in the row of a color its text can no longer be read on, in place of the hint", () => {
+    const readable = render(<Harness />);
+    const calm = rowOf(readable.container, "--color-primary-500");
+
+    expect(within(calm).getByText(tokens["--color-primary-500"].hint)).toBeInTheDocument();
+    expect(within(calm).queryByText(/is hard to read on this color/)).not.toBeInTheDocument();
+    readable.unmount();
+
+    const lime = render(<Harness draft={setToken(makeDraft(), "--color-primary-500", LIME)} />);
+    const row = rowOf(lime.container, "--color-primary-500");
+    const warning = within(row).getByText(/^Text on primary is hard to read on this color \(1\.\d:1\)\.$/);
+
+    expect(warning).toHaveClass("text-warning-vivid");
+    expect(warning).not.toHaveClass("line-clamp-2");
+    expect(within(row).queryByText(tokens["--color-primary-500"].hint)).not.toBeInTheDocument();
+    expect(within(rowOf(lime.container, "--color-secondary-500")).queryByText(/is hard to read/)).toBeNull();
+  });
+
+  it("warns in the page background row when the text on it cannot be read", () => {
+    const draft = setToken(makeDraft(), "--surface-bg", MID_GRAY);
+    const { container } = render(<Harness draft={draft} view={{ section: "surfaces" }} />);
+
+    expect(
+      within(rowOf(container, "--surface-bg")).getByText(/^Secondary text is hard to read on this color/)
+    ).toBeInTheDocument();
+  });
+
   it("shows no contrast badge for a token drawn on nothing", () => {
     const { container } = render(<Harness view={{ section: "surfaces", showAll: true }} />);
 
@@ -414,7 +441,11 @@ describe("VisualMode reset dot", () => {
 
 describe("VisualMode font rows", () => {
   const sans = tokens["--font-sans"].label;
-  const uploaded: ThemeFontList = { fonts: [{ file: "Inter.woff2", bytes: 2048 }], usedBytes: 2048, maxBytes: 5242880 };
+  const uploaded: ThemeFontList = {
+    fonts: [{ file: "Inter.woff2", bytes: 2048, leftOut: false }],
+    usedBytes: 2048,
+    maxBytes: 5242880,
+  };
 
   it("offers the six stacks and writes the one picked", async () => {
     const change = vi.fn();
@@ -466,7 +497,37 @@ describe("VisualMode font rows", () => {
 });
 
 describe("VisualMode font upload block", () => {
-  const uploaded: ThemeFontList = { fonts: [{ file: "Inter.woff2", bytes: 2048 }], usedBytes: 2048, maxBytes: 5242880 };
+  const uploaded: ThemeFontList = {
+    fonts: [{ file: "Inter.woff2", bytes: 2048, leftOut: false }],
+    usedBytes: 2048,
+    maxBytes: 5242880,
+  };
+  const overTheLimit: ThemeFontList = {
+    fonts: [
+      { file: "Inter.woff2", bytes: 2048, leftOut: false },
+      { file: "Heavy.woff2", bytes: 5242880, leftOut: true },
+    ],
+    usedBytes: 5244928,
+    maxBytes: 5242880,
+  };
+
+  it("marks a font the server left out, offers it for no token and still lets it be removed", async () => {
+    mocks.fonts.current = overTheLimit;
+    render(<Harness view={{ section: "typography" }} />);
+    const heavy = screen.getByText("Heavy.woff2").closest("li");
+    if (heavy === null) throw new Error("no list item for the font left out");
+
+    expect(within(heavy).getByText(enThemeEditor.fonts.leftOut)).toBeInTheDocument();
+    expect(within(heavy).queryByRole("button", { name: "Use Heavy.woff2" })).not.toBeInTheDocument();
+    expect(within(heavy).getByRole("button", { name: "Remove Heavy.woff2" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Use Inter.woff2" })).toBeInTheDocument();
+    expect(screen.getAllByText(enThemeEditor.fonts.leftOut)).toHaveLength(1);
+
+    await userEvent.click(screen.getByRole("button", { name: tokens["--font-sans"].label }));
+    const options = screen.getAllByRole("menuitemradio").map((option) => option.textContent);
+    expect(options).toContain("Inter");
+    expect(options).not.toContain("Heavy");
+  });
 
   it("shows the upload block and the list in Typography only, and not while searching", async () => {
     mocks.fonts.current = uploaded;

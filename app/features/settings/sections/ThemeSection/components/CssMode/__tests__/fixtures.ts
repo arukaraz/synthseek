@@ -22,6 +22,7 @@ export function editorOf(overrides: Partial<ThemeEditor> = {}): ThemeEditor {
     dirty: false,
     restoredAt: null,
     conflicts: [],
+    leftOut: [],
     broken: [],
     checked: {},
     canUndo: false,

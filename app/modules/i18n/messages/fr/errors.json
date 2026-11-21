@@ -554,5 +554,9 @@
   "THEME_IMPORT_INVALID": {
     "title": "Ce thème ne peut pas être importé",
     "description": "Ce document n'est pas un thème Synthseek que cette version sait lire, rien n'a donc été modifié."
+  },
+  "THEME_CHANGED_ELSEWHERE": {
+    "title": "Le thème a changé avant l'arrivée de votre enregistrement",
+    "description": "Rien n'a été écrasé. Vos modifications sont toujours dans l'éditeur, par-dessus ce qui a changé. Vérifiez-les et enregistrez à nouveau."
   }
 }

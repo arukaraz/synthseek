@@ -51,6 +51,8 @@
   "notes": {
     "conflictTitle": "Modifié sur le disque pendant votre modification.",
     "conflict": "{{files}}. L'enregistrement conserve votre version.",
+    "leftOutTitle": "Non appliqué : le thème dépasse sa limite de taille.",
+    "leftOut": "{{files}}. Réduisez le thème, ici ou sur le serveur, et ils s'appliquent à nouveau.",
     "restoredTitle": "Brouillon de votre dernière visite",
     "restored": "({{time}}). Il n'est pas encore enregistré : enregistrez-le, ou abandonnez-le pour revenir à votre thème enregistré.",
     "safeEditTitle": "Modification sans appliquer.",
@@ -74,6 +76,7 @@
     "hiddenChange": "Une valeur modifiée est masquée ici",
     "noMatch": "Aucun token ne correspond à cette recherche.",
     "contrast": "Contraste avec son arrière-plan",
+    "unreadable": "{{text}} se lit mal sur cette couleur ({{ratio}}).",
     "follows": "Suit {{base}}. Choisissez une couleur pour la fixer vous-même",
     "setByHand": "Fixée à la main. {{hint}}",
     "followAgain": "Suivre à nouveau {{base}}",
@@ -102,6 +105,7 @@
     "remove": "Retirer {{file}}",
     "space": "{{used}} utilisés sur {{max}}",
     "useShort": "Utiliser",
+    "leftOut": "Non chargée : au-delà de la limite des polices",
     "removeTitle": "Retirer cette police ?",
     "removeMessage": "{{file}} est supprimé de votre dossier fonts. Un thème qui la nomme utilisera la police suivante de sa liste.",
     "removeConfirm": "Retirer"

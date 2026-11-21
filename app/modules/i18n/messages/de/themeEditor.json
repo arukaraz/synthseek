@@ -51,6 +51,8 @@
   "notes": {
     "conflictTitle": "Auf dem Datenträger geändert, während du bearbeitet hast.",
     "conflict": "{{files}}. Beim Speichern bleibt deine Version erhalten.",
+    "leftOutTitle": "Nicht angewendet: Das Theme überschreitet sein Größenlimit.",
+    "leftOut": "{{files}}. Verkleinere das Theme, hier oder auf dem Server, dann werden sie wieder angewendet.",
     "restoredTitle": "Entwurf von deinem letzten Besuch",
     "restored": "({{time}}). Er ist noch nicht gespeichert: Speichere ihn oder verwirf ihn, um zu deinem gespeicherten Design zurückzukehren.",
     "safeEditTitle": "Bearbeiten ohne Anwenden.",
@@ -74,6 +76,7 @@
     "hiddenChange": "Ein geänderter Wert ist hier ausgeblendet",
     "noMatch": "Kein Token passt zu dieser Suche.",
     "contrast": "Kontrast zum Hintergrund",
+    "unreadable": "{{text}} ist auf dieser Farbe schwer zu lesen ({{ratio}}).",
     "follows": "Folgt {{base}}. Wähle eine Farbe, um sie selbst festzulegen",
     "setByHand": "Von Hand festgelegt. {{hint}}",
     "followAgain": "{{base}} wieder folgen",
@@ -102,6 +105,7 @@
     "remove": "{{file}} entfernen",
     "space": "{{used}} von {{max}} belegt",
     "useShort": "Verwenden",
+    "leftOut": "Nicht geladen: über dem Schriftenlimit",
     "removeTitle": "Diese Schrift entfernen?",
     "removeMessage": "{{file}} wird aus deinem Ordner fonts gelöscht. Ein Theme, das sie nennt, nimmt die nächste Schrift seiner Liste.",
     "removeConfirm": "Entfernen"

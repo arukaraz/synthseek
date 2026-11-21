@@ -51,6 +51,8 @@
   "notes": {
     "conflictTitle": "Changed on disk while you were editing.",
     "conflict": "{{files}}. Saving keeps your version.",
+    "leftOutTitle": "Not applied: the theme is over its size limit.",
+    "leftOut": "{{files}}. Make the theme smaller, here or on the server, and they apply again.",
     "restoredTitle": "Draft from your last visit",
     "restored": "({{time}}). It is not saved yet: save it, or discard it to go back to your saved theme.",
     "safeEditTitle": "Editing without applying.",
@@ -74,6 +76,7 @@
     "hiddenChange": "A changed value is hidden here",
     "noMatch": "No token matches that search.",
     "contrast": "Contrast against its background",
+    "unreadable": "{{text}} is hard to read on this color ({{ratio}}).",
     "follows": "Follows {{base}}. Pick a color to set it yourself",
     "setByHand": "Set by hand. {{hint}}",
     "followAgain": "Follow {{base}} again",
@@ -102,6 +105,7 @@
     "remove": "Remove {{file}}",
     "space": "{{used}} of {{max}} used",
     "useShort": "Use",
+    "leftOut": "Not loaded: over the fonts limit",
     "removeTitle": "Remove this font?",
     "removeMessage": "{{file}} is deleted from your fonts folder. A theme that names it falls back to the next font in its stack.",
     "removeConfirm": "Remove"

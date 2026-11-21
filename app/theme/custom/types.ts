@@ -56,6 +56,11 @@ export interface FollowedDraft {
   conflicts: string[];
 }
 
+export interface MergedTokens {
+  text: string;
+  clash: boolean;
+}
+
 export interface EditorSession {
   saved: ThemeDraft;
   draft: ThemeDraft;

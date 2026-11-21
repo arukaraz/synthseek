@@ -1,4 +1,12 @@
-import { CONTRAST_MINIMUM, contrastRatio, draftValues, isTokenChanged, parseColor, presetValues } from "@theme/custom";
+import {
+  CONTRAST_MINIMUM,
+  CONTRAST_UNREADABLE,
+  contrastRatio,
+  draftValues,
+  isTokenChanged,
+  parseColor,
+  presetValues,
+} from "@theme/custom";
 import type { ThemeDraft } from "@theme/custom";
 import type { ContractToken } from "@theme/contract";
 
@@ -12,8 +20,9 @@ import {
   MONOSPACE_STACK,
   ROUNDED_STACK,
   SERIF_STACK,
+  TEXT_SECTION,
 } from "./constants";
-import type { FontChoice, FontLabelKey, FontPreset, RangeToken, TokenCopy } from "./types";
+import type { FontChoice, FontLabelKey, FontPreset, RangeToken, TokenCopy, UnreadablePair } from "./types";
 
 const NUMBER_CHARACTERS = "0123456789.-+";
 
@@ -58,6 +67,21 @@ export function contrastOf(value: string, other: string | null): number | null {
 
 export function isLowContrast(ratio: number): boolean {
   return ratio < CONTRAST_MINIMUM;
+}
+
+export function unreadableOn(
+  values: ReadonlyMap<string, string>,
+  tokens: readonly ContractToken[]
+): Map<string, UnreadablePair> {
+  const pairs = new Map<string, UnreadablePair>();
+  for (const token of tokens) {
+    if (token.file !== TEXT_SECTION || token.on === undefined) continue;
+    const ratio = contrastOf(values.get(token.name) ?? "", values.get(token.on) ?? null);
+    if (ratio === null || ratio >= CONTRAST_UNREADABLE) continue;
+    const worst = pairs.get(token.on);
+    if (worst === undefined || ratio < worst.ratio) pairs.set(token.on, { text: token.name, ratio });
+  }
+  return pairs;
 }
 
 export function formatRatio(ratio: number): string {

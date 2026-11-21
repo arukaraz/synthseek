@@ -55,7 +55,15 @@ export const meta = cva("flex min-w-0 flex-col");
 
 export const metaName = cva("text-fg truncate text-sm font-semibold");
 
-export const metaHint = cva("text-fg/60 line-clamp-2 text-xs");
+export const metaHint = cva("text-xs", {
+  variants: {
+    warn: {
+      true: "text-warning-vivid",
+      false: "text-fg/60 line-clamp-2",
+    },
+  },
+  defaultVariants: { warn: false },
+});
 
 export const valueText = cva("text-fg/60 font-mono text-xs tabular-nums");
 
@@ -106,5 +114,7 @@ export const fontItem = cva("border-fg/10 flex items-center gap-2 border-t py-1.
 export const fontName = cva("text-fg min-w-0 flex-1 truncate text-sm");
 
 export const fontSize = cva("text-fg/60 text-xs tabular-nums");
+
+export const fontLeftOut = cva("text-warning-vivid text-xs");
 
 export const fontSpace = cva("text-fg/60 mt-2 text-xs");

@@ -1,6 +1,8 @@
 import { z } from "zod";
 
-import { FONT_ERROR_FALLBACK_KEY, FONT_ERROR_KEYS } from "./constants";
+import { extractAppCode } from "@modules/errors";
+
+import { FONT_ERROR_FALLBACK_KEY, FONT_ERROR_KEYS, THEME_CHANGED_ELSEWHERE } from "./constants";
 
 const FontErrorCodeSchema = z.enum(["THEME_FONT_UNSUPPORTED", "THEME_FONT_TOO_LARGE"]);
 
@@ -14,6 +16,10 @@ interface AnsweredCache<TAnswer> {
 export async function keepAnswer<TAnswer>(cache: AnsweredCache<TAnswer>, answer: TAnswer): Promise<void> {
   await cache.cancel();
   cache.setData(undefined, answer);
+}
+
+export function isThemeChangedElsewhere(error: unknown): boolean {
+  return extractAppCode(error) === THEME_CHANGED_ELSEWHERE;
 }
 
 export function fontErrorKey(code: string | null) {

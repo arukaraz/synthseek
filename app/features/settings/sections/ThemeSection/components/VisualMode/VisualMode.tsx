@@ -8,12 +8,22 @@ import { useTranslation } from "react-i18next";
 import { FadeScroll } from "@components/FadeScroll";
 import { useThemeFonts } from "@hooks/api/queries/theme";
 
+import { appliedFontFiles } from "../../helpers";
 import type { EditorModeProps } from "../../types";
 import { ControlsHeader } from "./ControlsHeader";
 import { SECTION_TOKENS, FONT_SANS, TYPOGRAPHY_SECTION } from "./constants";
 import { FontList } from "./FontList";
 import { FontUpload } from "./FontUpload";
-import { changedNamesOf, copyOf, dirtySectionsOf, essentialsOf, fontStackOf, matchesQuery } from "./helpers";
+import {
+  changedNamesOf,
+  copyOf,
+  dirtySectionsOf,
+  essentialsOf,
+  fontStackOf,
+  formatRatio,
+  matchesQuery,
+  unreadableOn,
+} from "./helpers";
 import { SectionNav } from "./SectionNav";
 import { controlsColumn, editorLayout, emptyText, rowList, sectionsScroller } from "./styles";
 import { TokenRow } from "./TokenRow";
@@ -47,11 +57,9 @@ export function VisualMode({ editor }: EditorModeProps) {
 
   const { draft, saved, view } = editor;
   const values = useMemo(() => draftValues(draft), [draft]);
+  const unreadable = useMemo(() => unreadableOn(values, THEME_CONTRACT.tokens), [values]);
   const dirtySections = useMemo(() => dirtySectionsOf(draft, saved, THEME_CONTRACT.tokens), [draft, saved]);
-  const families = useMemo(
-    () => (fonts.data?.fonts ?? []).filter((font) => isFontFile(font.file)).map((font) => fontFamilyOf(font.file)),
-    [fonts.data]
-  );
+  const families = useMemo(() => appliedFontFiles(fonts.data).filter(isFontFile).map(fontFamilyOf), [fonts.data]);
 
   const section = SECTION_TOKENS.has(view.section) ? view.section : THEME_CONTRACT.files[0].id;
   const sectionTokens = SECTION_TOKENS.get(section) ?? [];
@@ -103,6 +111,11 @@ export function VisualMode({ editor }: EditorModeProps) {
           <div className={rowList()}>
             {listed.map((token) => {
               const tokenCopy = copyOf(copy, token.name);
+              const pair = unreadable.get(token.name);
+              const warning =
+                pair === undefined
+                  ? null
+                  : t("visual.unreadable", { text: copyOf(copy, pair.text).label, ratio: formatRatio(pair.ratio) });
               return (
                 <TokenRow
                   key={token.name}
@@ -111,6 +124,7 @@ export function VisualMode({ editor }: EditorModeProps) {
                   hint={tokenCopy.hint}
                   value={values.get(token.name) ?? ""}
                   other={token.on === undefined ? null : (values.get(token.on) ?? null)}
+                  warning={warning}
                   following={draft.meta.follows.includes(token.name)}
                   changed={changed.has(token.name)}
                   presetName={presetName}

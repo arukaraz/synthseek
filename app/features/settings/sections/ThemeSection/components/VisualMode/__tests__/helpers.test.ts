@@ -13,9 +13,10 @@ import {
   formatRatio,
   matchesQuery,
   plainNumber,
+  unreadableOn,
 } from "../helpers";
 import { SECTION_TOKENS } from "../constants";
-import { makeDraft } from "./fixtures";
+import { LIME, makeDraft, MID_GRAY, SOFT_VIOLET } from "./fixtures";
 
 describe("essentialsOf", () => {
   it("keeps only the essential tokens of a section that has some", () => {
@@ -78,6 +79,51 @@ describe("contrastOf", () => {
   it("writes a ratio with one decimal", () => {
     expect(formatRatio(4.4999)).toBe("4.5:1");
     expect(formatRatio(12)).toBe("12.0:1");
+  });
+});
+
+describe("unreadableOn", () => {
+  const factory = new Map(Object.entries(presetValues("dark")));
+
+  function withValues(changes: Record<string, string>): Map<string, string> {
+    return new Map([...factory, ...Object.entries(changes)]);
+  }
+
+  it("names no color while every text on it can be read", () => {
+    expect(unreadableOn(factory, THEME_CONTRACT.tokens).size).toBe(0);
+  });
+
+  it("names the color its text can no longer be read on, with that text and the ratio", () => {
+    const pairs = unreadableOn(withValues({ "--color-primary-500": LIME }), THEME_CONTRACT.tokens);
+
+    expect([...pairs.keys()]).toEqual(["--color-primary-500"]);
+    expect(pairs.get("--color-primary-500")?.text).toBe("--primary-foreground");
+    expect(pairs.get("--color-primary-500")?.ratio).toBeLessThan(3);
+  });
+
+  it("keeps the text that reads worst when two sit on one color", () => {
+    const pairs = unreadableOn(withValues({ "--surface-bg": MID_GRAY }), THEME_CONTRACT.tokens);
+    const worst = pairs.get("--surface-bg");
+
+    expect(worst?.text).toBe("--surface-fg-muted");
+    expect(worst?.ratio).toBeLessThan(1.5);
+  });
+
+  it("does not name a pair that reads above the threshold, even under the badge minimum", () => {
+    const values = withValues({ "--color-primary-500": SOFT_VIOLET });
+    const ratio = contrastOf(values.get("--primary-foreground") ?? "", values.get("--color-primary-500") ?? null);
+
+    expect(ratio).toBeGreaterThanOrEqual(3);
+    expect(ratio).toBeLessThan(4.5);
+    expect(unreadableOn(values, THEME_CONTRACT.tokens).has("--color-primary-500")).toBe(false);
+  });
+
+  it("leaves out the colors that are not text, and a value it cannot read", () => {
+    const flat = withValues({ "--type-album": factory.get("--surface-bg") ?? "" });
+    const unread = withValues({ "--color-primary-500": "var(--x)" });
+
+    expect(unreadableOn(flat, THEME_CONTRACT.tokens).size).toBe(0);
+    expect(unreadableOn(unread, THEME_CONTRACT.tokens).size).toBe(0);
   });
 });
 

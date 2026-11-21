@@ -13,6 +13,10 @@ export const ALL_FOLLOWS = THEME_CONTRACT.tokens
 
 export const PICKED_HEX = toHex({ l: 0.6, c: 0.1, h: 250, alpha: 1 });
 
+export const LIME = formatOklch({ l: 0.9, c: 0.2, h: 130, alpha: 1 });
+export const MID_GRAY = formatOklch({ l: 0.75, c: 0, h: 0, alpha: 1 });
+export const SOFT_VIOLET = formatOklch({ l: 0.66, c: 0.2, h: 285, alpha: 1 });
+
 export function pickedWithOpacity(alpha: number): string {
   const picked = fromHex(PICKED_HEX);
   if (picked === null) throw new Error("the picked hex does not parse");
@@ -31,6 +35,7 @@ export function makeEditor(overrides: Partial<ThemeEditor> = {}): ThemeEditor {
     dirty: false,
     restoredAt: null,
     conflicts: [],
+    leftOut: [],
     broken: [],
     checked: {},
     canUndo: false,

@@ -2,7 +2,9 @@
 import { describe, expect, it } from "vitest";
 
 import { UNDO_GROUP_MS } from "../constants";
-import { changedPaths, removedPaths } from "../draft";
+import { setDeclaration, valuesOf } from "../declarations";
+import { changedPaths, draftValues, removedPaths, sameDraft, tokenPathOf } from "../draft";
+import { setToken } from "../follow";
 import {
   adoptSaved,
   discardSession,
@@ -19,11 +21,35 @@ import {
 import type { ThemeDraft } from "../types";
 import { canUndo } from "../undo";
 
-import { presetDraft } from "./fixtures";
+import { oklch, presetDraft } from "./fixtures";
 
 const STEP = UNDO_GROUP_MS + 1;
 
 const NAV = "components/nav.css";
+const BRAND = tokenPathOf("brand");
+const TYPES = tokenPathOf("content-types");
+const STATUS = tokenPathOf("status");
+const PRIMARY = "--color-primary-500";
+const PRIMARY_SOFT = "--color-primary-400";
+const SECONDARY = "--color-secondary-500";
+const ALBUM = "--type-album";
+const DOWNLOADING = "--status-downloading";
+const LIME = oklch("0.8 0.2 130");
+const CORAL = oklch("0.7 0.18 30");
+const TEAL = oklch("0.7 0.12 190");
+
+function withToken(draft: ThemeDraft, path: string, name: string, value: string): ThemeDraft {
+  return { ...draft, files: { ...draft.files, [path]: setDeclaration(draft.files[path], name, value) } };
+}
+
+function withoutToken(draft: ThemeDraft, path: string, name: string): ThemeDraft {
+  const lines = draft.files[path].split("\n").filter((line) => !line.includes(`${name}:`));
+  return { ...draft, files: { ...draft.files, [path]: lines.join("\n") } };
+}
+
+function tokenOf(draft: ThemeDraft, path: string, name: string): string | undefined {
+  return valuesOf(draft.files[path]).get(name);
+}
 
 function withFile(draft: ThemeDraft, path: string, text: string): ThemeDraft {
   return { ...draft, files: { ...draft.files, [path]: text } };
@@ -352,6 +378,86 @@ describe("adoptSaved", () => {
   });
 });
 
+describe("a token file both sides changed", () => {
+  const saved = presetDraft();
+  const mine = withToken(saved, BRAND, PRIMARY, LIME);
+
+  function adopted(edited: ThemeDraft, remote: ThemeDraft) {
+    return adoptSaved(editSession(openSession(saved, null), edited, STEP), remote, null, STEP * 2);
+  }
+
+  it("takes a token changed elsewhere beside the token the draft changed, and raises no notice", () => {
+    const remote = withToken(saved, BRAND, SECONDARY, CORAL);
+    const session = adopted(mine, remote);
+    expect(tokenOf(session.draft, BRAND, PRIMARY)).toBe(LIME);
+    expect(tokenOf(session.draft, BRAND, SECONDARY)).toBe(CORAL);
+    expect(session.draft.files[BRAND]).toBe(setDeclaration(remote.files[BRAND], PRIMARY, LIME));
+    expect(session.conflicts).toEqual([]);
+    expect(changedPaths(session.saved, session.draft)).toEqual([BRAND]);
+  });
+
+  it("takes a token added elsewhere that the draft's file does not declare", () => {
+    const remote = withToken(saved, BRAND, "--brand-extra", TEAL);
+    const session = adopted(mine, remote);
+    expect(tokenOf(session.draft, BRAND, "--brand-extra")).toBe(TEAL);
+    expect(tokenOf(session.draft, BRAND, PRIMARY)).toBe(LIME);
+    expect(session.conflicts).toEqual([]);
+  });
+
+  it("keeps the draft's value for a token both changed, takes the other tokens, and names the file", () => {
+    const remote = withToken(withToken(saved, BRAND, PRIMARY, CORAL), BRAND, SECONDARY, TEAL);
+    const session = adopted(mine, remote);
+    expect(tokenOf(session.draft, BRAND, PRIMARY)).toBe(LIME);
+    expect(tokenOf(session.draft, BRAND, SECONDARY)).toBe(TEAL);
+    expect(session.conflicts).toEqual([BRAND]);
+  });
+
+  it("raises no notice when both sides set a token to the same value", () => {
+    const remote = withToken(withToken(saved, BRAND, PRIMARY, LIME), BRAND, SECONDARY, TEAL);
+    const session = adopted(mine, remote);
+    expect(session.draft.files[BRAND]).toBe(remote.files[BRAND]);
+    expect(session.conflicts).toEqual([]);
+    expect(isDirty(session)).toBe(false);
+  });
+
+  it("keeps the draft's text and names the file when it changed elsewhere in more than its values", () => {
+    const remote = withFile(saved, BRAND, `/* by hand */\n${setDeclaration(saved.files[BRAND], SECONDARY, CORAL)}`);
+    const session = adopted(mine, remote);
+    expect(session.draft.files[BRAND]).toBe(mine.files[BRAND]);
+    expect(session.conflicts).toEqual([BRAND]);
+  });
+
+  it("keeps the draft's text and names the file when a declaration was removed elsewhere", () => {
+    const remote = withoutToken(saved, BRAND, SECONDARY);
+    const session = adopted(mine, remote);
+    expect(session.draft.files[BRAND]).toBe(mine.files[BRAND]);
+    expect(session.conflicts).toEqual([BRAND]);
+  });
+
+  it("merges a draft the browser kept with the tokens the server changed since", () => {
+    const remote = withToken(saved, BRAND, SECONDARY, CORAL);
+    const stored = parseStoredDraft(serializeStoredDraft(mine, saved, 5));
+    const session = openSession(remote, stored);
+    expect(tokenOf(session.draft, BRAND, PRIMARY)).toBe(LIME);
+    expect(tokenOf(session.draft, BRAND, SECONDARY)).toBe(CORAL);
+    expect(session.conflicts).toEqual([]);
+    expect(session.restoredAt).toBe(5);
+  });
+
+  it("steps back through the draft's own token edits over the tokens as the server has them now", () => {
+    const remote = withToken(saved, BRAND, SECONDARY, CORAL);
+    let session = editSession(openSession(saved, null), mine, STEP);
+    session = editSession(session, withToken(mine, BRAND, PRIMARY, TEAL), STEP * 2);
+    session = adoptSaved(session, remote, null, STEP * 3);
+    session = undoSession(session);
+    expect(tokenOf(session.draft, BRAND, PRIMARY)).toBe(LIME);
+    expect(tokenOf(session.draft, BRAND, SECONDARY)).toBe(CORAL);
+    session = undoSession(session);
+    expect(session.draft.files[BRAND]).toBe(remote.files[BRAND]);
+    expect(isDirty(session)).toBe(false);
+  });
+});
+
 describe("undo after a change made elsewhere", () => {
   const saved = withFile(withFile(presetDraft(), "custom.css", "a {}"), "components/x.css", "x {}");
   const first = withFile(saved, "custom.css", "m1 {}");
@@ -451,5 +557,86 @@ describe("settling a conflict", () => {
     expect(Object.hasOwn(takeTheirs(session, "components/x.css", STEP * 3).draft.files, "components/x.css")).toBe(
       false
     );
+  });
+});
+
+describe("loading the server's token file over a color the draft changed", () => {
+  const saved = presetDraft();
+  const byHand = withToken(saved, BRAND, PRIMARY, CORAL);
+
+  function conflicted(edited: ThemeDraft, remote: ThemeDraft) {
+    return adoptSaved(editSession(openSession(saved, null), edited, STEP), remote, null, STEP * 2);
+  }
+
+  it("puts back the tokens in other files that followed the discarded color, leaving nothing unsaved", () => {
+    const edited = setToken(saved, PRIMARY, LIME);
+    const session = conflicted(edited, byHand);
+    expect(session.conflicts).toEqual([BRAND]);
+    expect(tokenOf(session.draft, TYPES, ALBUM)).not.toBe(tokenOf(saved, TYPES, ALBUM));
+
+    const reloaded = takeTheirs(session, BRAND, STEP * 3);
+
+    expect(tokenOf(reloaded.draft, TYPES, ALBUM)).toBe(tokenOf(saved, TYPES, ALBUM));
+    expect(tokenOf(reloaded.draft, STATUS, DOWNLOADING)).toBe(tokenOf(saved, STATUS, DOWNLOADING));
+    expect(changedPaths(reloaded.saved, reloaded.draft)).toEqual([]);
+    expect(isDirty(reloaded)).toBe(false);
+    expect(reloaded.conflicts).toEqual([]);
+    expect(sameDraft(undoSession(reloaded).draft, session.draft)).toBe(true);
+  });
+
+  it("leaves alone a follower the draft set by hand", () => {
+    const edited = setToken(setToken(saved, PRIMARY, LIME), ALBUM, TEAL);
+    const reloaded = takeTheirs(conflicted(edited, byHand), BRAND, STEP * 3);
+    expect(tokenOf(reloaded.draft, TYPES, ALBUM)).toBe(TEAL);
+    expect(reloaded.draft.meta.follows).not.toContain(ALBUM);
+    expect(tokenOf(reloaded.draft, STATUS, DOWNLOADING)).toBe(tokenOf(saved, STATUS, DOWNLOADING));
+    expect(changedPaths(reloaded.saved, reloaded.draft)).toEqual([TYPES]);
+  });
+
+  it("keeps the draft's other tokens in a file whose follower it puts back", () => {
+    const edited = setToken(setToken(saved, PRIMARY, LIME), "--status-queued", TEAL);
+    const reloaded = takeTheirs(conflicted(edited, byHand), BRAND, STEP * 3);
+    expect(tokenOf(reloaded.draft, STATUS, "--status-queued")).toBe(TEAL);
+    expect(tokenOf(reloaded.draft, STATUS, DOWNLOADING)).toBe(tokenOf(saved, STATUS, DOWNLOADING));
+    expect(reloaded.draft.files[STATUS]).toBe(setDeclaration(saved.files[STATUS], "--status-queued", TEAL));
+  });
+
+  it("makes a token of the loaded file follow its base again when the server's theme says it does", () => {
+    const edited = setToken(saved, PRIMARY_SOFT, LIME);
+    expect(edited.meta.follows).not.toContain(PRIMARY_SOFT);
+    const session = conflicted(edited, withToken(saved, BRAND, PRIMARY_SOFT, CORAL));
+    expect(session.conflicts).toEqual([BRAND]);
+
+    const reloaded = takeTheirs(session, BRAND, STEP * 3);
+
+    expect(reloaded.draft.meta.follows).toContain(PRIMARY_SOFT);
+    expect(tokenOf(reloaded.draft, TYPES, ALBUM)).toBe(tokenOf(saved, TYPES, ALBUM));
+    expect(isDirty(reloaded)).toBe(false);
+  });
+
+  it("removes the declaration of a follower the server's file does not carry", () => {
+    const bare = withoutToken(saved, TYPES, ALBUM);
+    const edited = setToken(bare, PRIMARY, LIME);
+    expect(tokenOf(edited, TYPES, ALBUM)).toBeDefined();
+    const remote = withToken(bare, BRAND, PRIMARY, CORAL);
+    const session = adoptSaved(editSession(openSession(bare, null), edited, STEP), remote, null, STEP * 2);
+
+    const reloaded = takeTheirs(session, BRAND, STEP * 3);
+
+    expect(reloaded.draft.files[TYPES]).toBe(bare.files[TYPES]);
+    expect(isDirty(reloaded)).toBe(false);
+  });
+
+  it("drops the notice of another file the load leaves on the server's text", () => {
+    const edited = setToken(saved, PRIMARY, LIME);
+    const remote = withToken(byHand, STATUS, DOWNLOADING, TEAL);
+    const session = conflicted(edited, remote);
+    expect(session.conflicts).toEqual([BRAND, STATUS]);
+
+    const reloaded = takeTheirs(session, BRAND, STEP * 3);
+
+    expect(reloaded.conflicts).toEqual([]);
+    expect(draftValues(reloaded.draft).get(DOWNLOADING)).toBe(TEAL);
+    expect(isDirty(reloaded)).toBe(false);
   });
 });

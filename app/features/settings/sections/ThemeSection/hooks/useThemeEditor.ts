@@ -9,14 +9,12 @@ import {
   adoptSaved,
   canRedo,
   canUndo,
-  changedPaths,
   discardSession,
   editSession,
   isDirty,
   keepMine,
   openSession,
   redoSession,
-  removedPaths,
   takeTheirs,
   undoSession,
 } from "@theme/custom";
@@ -25,8 +23,10 @@ import { useThemeContext } from "@theme/ThemeProvider";
 
 import { DEFAULT_EDITOR_VIEW, DRAFT_CHECK_DELAY_MS, DRAFT_PERSIST_DELAY_MS } from "../constants";
 import {
+  appliedFontFiles,
   brokenPaths,
   draftCss,
+  leftOutPaths,
   readStoredDraft,
   savedDraftOf,
   uncheckedFiles,
@@ -35,6 +35,7 @@ import {
 } from "../helpers";
 import type { EditorView, ThemeEditor } from "../types";
 import { noEditor, patchEditor, readEditor, subscribeEditor, writeEditor } from "./editorStore";
+import { saveDraft } from "./saveDraft";
 
 export function useThemeEditor(): ThemeEditor | null {
   const { currentUser } = useAuthContext();
@@ -62,6 +63,7 @@ export function useThemeEditor(): ThemeEditor | null {
       writeEditor({
         account,
         session: openSession(saved, readStoredDraft(account)),
+        revision: files.data.revision,
         sent: null,
         checked: {},
         view: DEFAULT_EDITOR_VIEW,
@@ -69,7 +71,11 @@ export function useThemeEditor(): ThemeEditor | null {
       return;
     }
     if (current.sent !== null) return;
-    writeEditor({ ...current, session: adoptSaved(current.session, saved, null, Date.now()) });
+    writeEditor({
+      ...current,
+      revision: files.data.revision,
+      session: adoptSaved(current.session, saved, null, Date.now()),
+    });
   }, [account, files.data]);
 
   useEffect(() => {
@@ -95,10 +101,11 @@ export function useThemeEditor(): ThemeEditor | null {
     return () => window.clearTimeout(timer);
   }, [draft, checked, checkFiles]);
 
-  const fontFiles = useMemo(() => (fonts.data?.fonts ?? []).map((font) => font.file), [fonts.data]);
+  const fontFiles = useMemo(() => appliedFontFiles(fonts.data), [fonts.data]);
+  const leftOut = useMemo(() => leftOutPaths(files.data), [files.data]);
   const css = useMemo(
-    () => (draft === null || checked === null ? null : draftCss(draft, checked, fontFiles)),
-    [draft, checked, fontFiles]
+    () => (draft === null || checked === null ? null : draftCss(draft, checked, fontFiles, leftOut)),
+    [draft, checked, fontFiles, leftOut]
   );
   const base = draft?.meta.startedFrom ?? null;
   const scheme = draft?.meta.scheme ?? null;
@@ -137,24 +144,7 @@ export function useThemeEditor(): ThemeEditor | null {
     patchEditor((current) => ({ ...current, view: { ...current.view, ...patch } }));
   }, []);
   const save = useCallback(() => {
-    const current = readEditor();
-    if (current === null || current.sent !== null) return;
-    const { saved, draft: sent } = current.session;
-    writeEditor({ ...current, sent });
-    void saveTheme({
-      files: changedPaths(saved, sent).map((path) => ({ path, text: sent.files[path] })),
-      remove: removedPaths(saved, sent),
-      meta: sent.meta,
-    })
-      .then(() => fetchFiles())
-      .then((fresh) =>
-        patchEditor((latest) => ({
-          ...latest,
-          sent: null,
-          session: adoptSaved(latest.session, savedDraftOf(fresh), sent, Date.now()),
-        }))
-      )
-      .catch(() => patchEditor((latest) => ({ ...latest, sent: null, checked: {} })));
+    void saveDraft({ saveTheme, fetchFiles }, true);
   }, [saveTheme, fetchFiles]);
 
   return useMemo(() => {
@@ -165,6 +155,7 @@ export function useThemeEditor(): ThemeEditor | null {
       dirty,
       restoredAt: state.session.restoredAt,
       conflicts: state.session.conflicts,
+      leftOut,
       broken: brokenPaths(state.session.draft, state.checked),
       checked: state.checked,
       canUndo: canUndo(state.session.undo),
@@ -185,6 +176,7 @@ export function useThemeEditor(): ThemeEditor | null {
     };
   }, [
     state,
+    leftOut,
     dirty,
     saving,
     previewing,

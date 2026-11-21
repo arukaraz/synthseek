@@ -32,6 +32,11 @@ export interface TokenCopy {
   hint: string;
 }
 
+export interface UnreadablePair {
+  text: string;
+  ratio: number;
+}
+
 export interface SectionEntry {
   id: string;
   label: string;
@@ -52,6 +57,7 @@ export interface RowBaseProps {
 export interface ColorRowProps extends RowBaseProps {
   token: ColorToken;
   other: string | null;
+  warning: string | null;
   following: boolean;
   onEditInCss: (fileId: string) => void;
 }
@@ -69,6 +75,7 @@ export interface RangeRowProps extends RowBaseProps {
 export interface TokenRowProps extends RowBaseProps {
   token: ContractToken;
   other: string | null;
+  warning: string | null;
   following: boolean;
   families: readonly string[];
   onEditInCss: (fileId: string) => void;

@@ -1,4 +1,4 @@
-import type { inferRouterOutputs } from "@trpc/server";
+import type { inferRouterInputs, inferRouterOutputs } from "@trpc/server";
 
 import type { AppRouter } from "@api/__generated__/types";
 import type { EditorSession, ThemeDraft } from "@theme/custom";
@@ -6,6 +6,7 @@ import type { EditorSession, ThemeDraft } from "@theme/custom";
 type RouterOutputs = inferRouterOutputs<AppRouter>;
 
 export type ThemeFilesData = RouterOutputs["theme"]["files"];
+export type ThemeSaveInput = inferRouterInputs<AppRouter>["theme"]["save"];
 export type ThemeCheckResult = RouterOutputs["theme"]["check"]["results"][number];
 export type ThemeDiagnostic = ThemeCheckResult["diagnostics"][number];
 export type ThemeFontList = RouterOutputs["theme"]["fonts"];
@@ -32,9 +33,15 @@ export interface CheckedFile {
 export interface EditorState {
   account: string;
   session: EditorSession;
+  revision: string;
   sent: ThemeDraft | null;
   checked: Record<string, CheckedFile>;
   view: EditorView;
+}
+
+export interface SaveDeps {
+  saveTheme: (input: ThemeSaveInput) => Promise<unknown>;
+  fetchFiles: () => Promise<ThemeFilesData>;
 }
 
 export interface EditorModeProps {
@@ -47,6 +54,7 @@ export interface ThemeEditor {
   dirty: boolean;
   restoredAt: number | null;
   conflicts: string[];
+  leftOut: string[];
   broken: string[];
   checked: Record<string, CheckedFile>;
   canUndo: boolean;

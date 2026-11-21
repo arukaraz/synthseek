@@ -1,6 +1,9 @@
 import type { ParseKeys } from "i18next";
 
+import type { AppErrorCode } from "@modules/errors";
 import { THEME_FONTS_PATH } from "@theme/custom";
+
+export const THEME_CHANGED_ELSEWHERE = "THEME_CHANGED_ELSEWHERE" satisfies AppErrorCode;
 
 export const THEME_FONT_UPLOAD_PATH = THEME_FONTS_PATH;
 

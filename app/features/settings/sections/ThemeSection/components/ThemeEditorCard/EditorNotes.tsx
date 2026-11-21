@@ -16,7 +16,7 @@ import type { EditorNotesProps } from "./types";
 export function EditorNotes({ editor, safeEdit }: EditorNotesProps) {
   const { t } = useTranslation("themeEditor");
   const { theme } = useThemeContext();
-  const { draft, restoredAt } = editor;
+  const { draft, restoredAt, leftOut } = editor;
   const mismatch = useMemo(() => schemeMismatchOf(draft), [draft]);
   const unseen = unseenConflictsOf(editor);
 
@@ -47,6 +47,14 @@ export function EditorNotes({ editor, safeEdit }: EditorNotesProps) {
               {t("css.keepMine")}
             </Button>
           </div>
+        </div>
+      ) : null}
+      {leftOut.length > 0 ? (
+        <div className={noteRow({ tone: "warning" })} role="status">
+          <p className={noteText()}>
+            <span className={noteTitle({ tone: "warning" })}>{t("notes.leftOutTitle")}</span>{" "}
+            {t("notes.leftOut", { files: leftOut.join(", ") })}
+          </p>
         </div>
       ) : null}
       {restoredAt !== null ? (

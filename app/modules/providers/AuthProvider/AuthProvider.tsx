@@ -2,6 +2,7 @@
 
 import { createContext, useContext, type ReactNode } from "react";
 
+import { useAccountEndWatch } from "@hooks/api/queries/useAccountEndWatch";
 import { useSessionExpiryWatch } from "@hooks/api/queries/useSessionExpiryWatch";
 import { trpc } from "@utils/trpc";
 import { isAdminFE } from "@utils/authorization";
@@ -17,6 +18,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useSessionExpiryWatch();
 
   const currentUser = meQuery.data ?? null;
+  useAccountEndWatch(currentUser?.id ?? null, !meQuery.isLoading && !meQuery.isError);
 
   return (
     <AuthContext.Provider

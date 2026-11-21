@@ -554,5 +554,9 @@
   "THEME_IMPORT_INVALID": {
     "title": "Este tema no se puede importar",
     "description": "El documento no es un tema de Synthseek que esta versión pueda leer, así que no se cambió nada."
+  },
+  "THEME_CHANGED_ELSEWHERE": {
+    "title": "El tema cambió antes de que llegara tu guardado",
+    "description": "No se sobrescribió nada. Tus cambios siguen en el editor, encima de lo que cambió. Revísalos y guarda de nuevo."
   }
 }

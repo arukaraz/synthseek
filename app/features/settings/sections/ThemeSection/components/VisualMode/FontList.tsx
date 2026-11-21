@@ -10,7 +10,7 @@ import { IconButton } from "@components/ui/IconButton";
 import { useRemoveThemeFont } from "@hooks/api/mutations/theme";
 import { formatBytes } from "@utils/formatters";
 
-import { fontItem, fontList, fontName, fontSize, fontSpace } from "./styles";
+import { fontItem, fontLeftOut, fontList, fontName, fontSize, fontSpace } from "./styles";
 import type { FontListProps } from "./types";
 
 export function FontList({ fonts, onUse }: FontListProps) {
@@ -28,15 +28,19 @@ export function FontList({ fonts, onUse }: FontListProps) {
             <li key={font.file} className={fontItem()}>
               <span className={fontName()}>{font.file}</span>
               <span className={fontSize()}>{formatBytes(font.bytes)}</span>
-              <Button
-                type="button"
-                variant="ghost"
-                size="sm"
-                aria-label={t("fonts.use", { file: font.file })}
-                onClick={() => onUse(font.file)}
-              >
-                {t("fonts.useShort")}
-              </Button>
+              {font.leftOut ? (
+                <span className={fontLeftOut()}>{t("fonts.leftOut")}</span>
+              ) : (
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  aria-label={t("fonts.use", { file: font.file })}
+                  onClick={() => onUse(font.file)}
+                >
+                  {t("fonts.useShort")}
+                </Button>
+              )}
               <IconButton
                 icon={Trash2}
                 variant="ghostRed"

@@ -8,3 +8,4 @@ export const THEME_FONT_NAME_MAX_CHARS = 64;
 export const UNDO_GROUP_MS = 800;
 export const UNDO_MAX_STEPS = 100;
 export const CONTRAST_MINIMUM = 4.5;
+export const CONTRAST_UNREADABLE = 3;

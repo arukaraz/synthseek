@@ -51,6 +51,8 @@
   "notes": {
     "conflictTitle": "Cambió en el disco mientras editabas.",
     "conflict": "{{files}}. Al guardar se conserva tu versión.",
+    "leftOutTitle": "Sin aplicar: el tema supera su límite de tamaño.",
+    "leftOut": "{{files}}. Reduce el tema, aquí o en el servidor, y se vuelven a aplicar.",
     "restoredTitle": "Borrador de tu última visita",
     "restored": "({{time}}). Aún no está guardado: guárdalo, o descártalo para volver a tu tema guardado.",
     "safeEditTitle": "Editando sin aplicar.",
@@ -74,6 +76,7 @@
     "hiddenChange": "Aquí hay un valor cambiado oculto",
     "noMatch": "Ningún token coincide con esa búsqueda.",
     "contrast": "Contraste con su fondo",
+    "unreadable": "{{text}} se lee mal sobre este color ({{ratio}}).",
     "follows": "Sigue a {{base}}. Elige un color para fijarlo tú",
     "setByHand": "Fijado a mano. {{hint}}",
     "followAgain": "Volver a seguir a {{base}}",
@@ -102,6 +105,7 @@
     "remove": "Quitar {{file}}",
     "space": "{{used}} de {{max}} usados",
     "useShort": "Usar",
+    "leftOut": "Sin cargar: supera el límite de fuentes",
     "removeTitle": "¿Quitar esta fuente?",
     "removeMessage": "{{file}} se borra de tu carpeta fonts. Un tema que la nombre usará la siguiente fuente de su lista.",
     "removeConfirm": "Quitar"

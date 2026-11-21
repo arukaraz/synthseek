@@ -7,6 +7,7 @@ export const SECTION_TOKENS: ReadonlyMap<string, readonly ContractToken[]> = new
 
 export const FACTORY_PRESET = "dark";
 export const TYPOGRAPHY_SECTION = "typography";
+export const TEXT_SECTION = "text";
 export const FONT_SANS = "--font-sans";
 export const FONT_MONO = "--font-mono";
 export const FONT_ACCEPT = ".woff2,.woff,.ttf,.otf";

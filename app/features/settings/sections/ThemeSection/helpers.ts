@@ -12,7 +12,19 @@ import {
 import type { StoredDraft, ThemeDraft } from "@theme/custom";
 
 import { DRAFT_STORAGE_PREFIX } from "./constants";
-import type { CheckedFile, EditorState, ThemeCheckResult, ThemeFilesData } from "./types";
+import type { CheckedFile, EditorState, ThemeCheckResult, ThemeFilesData, ThemeFontList } from "./types";
+
+export function leftOutPaths(data: ThemeFilesData | undefined): string[] {
+  return (data?.files ?? []).filter((file) => file.leftOut).map((file) => file.path);
+}
+
+export function appliedFiles(data: ThemeFilesData | undefined): ThemeFilesData["files"] | undefined {
+  return data?.files.filter((file) => !file.leftOut);
+}
+
+export function appliedFontFiles(fonts: ThemeFontList | undefined): string[] {
+  return (fonts?.fonts ?? []).filter((font) => !font.leftOut).map((font) => font.file);
+}
 
 export function savedDraftOf(data: ThemeFilesData): ThemeDraft {
   const files: Record<string, string> = {};
@@ -53,12 +65,20 @@ function freePathsOf(draft: ThemeDraft): string[] {
   return Object.hasOwn(draft.files, CUSTOM_FILE) ? [...components, CUSTOM_FILE] : components;
 }
 
-export function draftCss(draft: ThemeDraft, checked: Record<string, CheckedFile>, fonts: readonly string[]): string {
+export function draftCss(
+  draft: ThemeDraft,
+  checked: Record<string, CheckedFile>,
+  fonts: readonly string[],
+  leftOut: readonly string[]
+): string {
+  const applied = (path: string) => !leftOut.includes(path);
   const tokenFiles = THEME_CONTRACT.files
     .map((file) => tokenPathOf(file.id))
-    .filter((path) => Object.hasOwn(draft.files, path))
+    .filter((path) => Object.hasOwn(draft.files, path) && applied(path))
     .map((path) => ({ path, text: draft.files[path] }));
-  const free = freePathsOf(draft).map((path) => (Object.hasOwn(checked, path) ? checked[path].css : ""));
+  const free = freePathsOf(draft)
+    .filter(applied)
+    .map((path) => (Object.hasOwn(checked, path) ? checked[path].css : ""));
   return [fontFaceBlock(fonts), schemeBlock(draft.meta.scheme), tokenBlock(tokenFiles), ...free]
     .filter((part) => part !== "")
     .join("\n");
