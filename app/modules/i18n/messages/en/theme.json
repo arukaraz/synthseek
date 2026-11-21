@@ -79,6 +79,10 @@
     "--status-paused": { "label": "Request: paused", "hint": "Held until it is resumed" },
     "--status-pending-import": { "label": "Request: ready to import", "hint": "Downloaded and waiting to be filed" },
     "--status-importing": { "label": "Request: importing", "hint": "Being filed into the library" },
+    "--status-pending-import-review": {
+      "label": "Request: awaiting import review",
+      "hint": "A downloaded file waiting for an admin to approve or discard it"
+    },
     "--status-syncing": { "label": "Request: syncing", "hint": "A library sync under way" },
     "--status-complete": { "label": "Request: complete", "hint": "In the library" },
     "--status-partial": { "label": "Request: partial", "hint": "Some tracks arrived, some did not" },

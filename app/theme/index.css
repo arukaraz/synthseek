@@ -84,6 +84,7 @@
   --color-status-paused: var(--status-paused);
   --color-status-pending-import: var(--status-pending-import);
   --color-status-importing: var(--status-importing);
+  --color-status-pending-import-review: var(--status-pending-import-review);
   --color-status-syncing: var(--status-syncing);
   --color-status-complete: var(--status-complete);
   --color-status-partial: var(--status-partial);

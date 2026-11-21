@@ -38,6 +38,7 @@ const TERMINAL_STATUSES = new Set<string>([
   RequestStatus.enum.failed,
   RequestStatus.enum.cancelled,
   RequestStatus.enum.delegated,
+  RequestStatus.enum.pending_import_review,
 ]);
 
 const MAX_RECONNECT_ATTEMPTS = 3;

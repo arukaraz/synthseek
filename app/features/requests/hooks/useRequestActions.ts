@@ -31,7 +31,7 @@ import { isOwnerOrAdminFE } from "@utils/authorization";
 import { confirm } from "@utils/confirm";
 import { downloadText } from "@utils/download";
 import { librarySourceName } from "@utils/library-sources";
-import { isProcessingStatus, isRetryableStatus } from "@utils/status-helpers";
+import { isCancellableStatus, isProcessingStatus, isRetryableStatus } from "@utils/status-helpers";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
@@ -108,7 +108,7 @@ export function useRequestActions(request: RequestListItem, tracks: TrackRequest
   const canRetry = canManage && retryableTrackCount > 0;
   const missingTrackCount = Math.max(0, request.total_tracks - request.requested_tracks);
   const canRequestMissing = canManage && !isPlaylist && missingTrackCount > 0;
-  const canCancel = canManage && isProcessingStatus(request.status);
+  const canCancel = canManage && isCancellableStatus(request.status);
   const isPaused = request.status === RequestStatus.enum.paused;
   const canPause = canManage && isProcessingStatus(request.status) && !isPaused;
   const canResume = canManage && isPaused;

@@ -34,6 +34,7 @@ export function sourceFilterKeys(
 
 export const STATUS_ORDER: readonly RequestStatus[] = [
   RequestStatus.enum.pending_approval,
+  RequestStatus.enum.pending_import_review,
   ...[...ACTIVE_STATUSES].reverse(),
   ...RESOLVED_STATUSES,
   ...UNRESOLVED_STATUSES,

@@ -6,6 +6,7 @@ import {
   Download,
   ExternalLink,
   FileQuestion,
+  FileSearch,
   FileX,
   HardDrive,
   Hourglass,
@@ -86,6 +87,13 @@ export const REQUEST_STATUS_CONFIG: Record<RequestStatus, StatusConfigItem> = {
     bgGradient: "from-status-importing/10 to-status-importing/5",
     borderColor: "border-status-importing/20",
     glowColor: "bg-status-importing",
+  },
+  [RequestStatus.enum.pending_import_review]: {
+    icon: FileSearch,
+    color: "text-status-pending-import-review",
+    bgGradient: "from-status-pending-import-review/10 to-status-pending-import-review/5",
+    borderColor: "border-status-pending-import-review/20",
+    glowColor: "bg-status-pending-import-review",
   },
   [RequestStatus.enum.complete]: {
     icon: CheckCircle,

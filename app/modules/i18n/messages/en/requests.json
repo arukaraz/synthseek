@@ -246,7 +246,7 @@
     },
     "trackDisplay": "{{title}} - {{artist}}",
     "evidence": {
-      "fingerprintMismatch": "The audio fingerprints as {{artist}} - {{title}}, which scores {{score}} out of 100 for similarity against the track you requested.",
+      "fingerprintMismatch": "The audio fingerprints as {{artist}} - {{title}}. That artist's name scores {{score}} out of 100 for similarity against the artists of the track you requested.",
       "tagMismatch": "The file tags scored {{observed}} out of 100 for confidence, below the {{expected}} this check requires.",
       "durationMismatch": "The audio runs {{observed}} while the requested track runs {{expected}}.",
       "tagsUnreadable": "The file tags could not be read, so nothing could be compared against the request.",

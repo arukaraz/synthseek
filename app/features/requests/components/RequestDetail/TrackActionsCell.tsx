@@ -2,7 +2,7 @@
 
 import { RequestStatus } from "@api/__generated__/types";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@components/ui/DropdownMenu";
-import { isProcessingStatus, isRetryableStatus } from "@utils/status-helpers";
+import { isCancellableStatus, isRetryableStatus } from "@utils/status-helpers";
 import { Check, ChevronsUp, Eye, EyeOff, MoreVertical, RefreshCw, Sparkles, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { mobileActionsButton } from "../styles";
@@ -30,7 +30,7 @@ export function TrackActionsCell({
   const showApproval = canApprove && isPendingApproval;
   const showRetry = isRetryableStatus(track.status);
   const showPrioritize = track.status === RequestStatus.enum.queued && track.priority === 0;
-  const showCancel = isProcessingStatus(track.status);
+  const showCancel = isCancellableStatus(track.status);
   const isFailed = track.status === RequestStatus.enum.failed;
   const showStopWatch = isFailed && track.watch_enabled;
   const showResumeWatch = isFailed && !track.watch_enabled;

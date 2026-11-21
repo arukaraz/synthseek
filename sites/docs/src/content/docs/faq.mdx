@@ -36,7 +36,10 @@ Check whether the queue is paused first. Pausing is in memory, so a restart clea
 No enabled source had a candidate that passed scoring. Turn on the wanted sweep to have Synthseek keep trying on its own, with attempts spaced further apart the longer a track stays missing.
 
 **A track says "wrong file".**
-What arrived positively contradicted what you asked for, and Synthseek refused to put it in your library. The file is in the review queue, where you can listen to it and decide. That exact source and file pairing is excluded from future searches, so the retry looks elsewhere.
+What arrived positively contradicted what you asked for, and Synthseek refused to put it in your library. That exact source and file pairing is excluded from future searches, so the retry looks elsewhere.
+
+**A track says "Waiting for Import Review".**
+A file it downloaded contradicted your request and is in the review queue, where you can listen to it and decide. Nothing else is tried for that track while the file waits there.
 
 **A track says "storage problem".**
 The problem is on your machine, not the source. Usually a full disk or a downloads folder that stopped being writable. These failures do not consume retry budget, so once you fix the underlying problem the tracks are still waiting.

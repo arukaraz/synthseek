@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
 import {
+  isCancellableStatus,
   isDropImportBatchInFlight,
   isProcessingStatus,
   isReimportableFailure,
@@ -57,6 +58,27 @@ describe("isProcessingStatus", () => {
   it("returns false for cancelled status", () => {
     expect(isProcessingStatus(RequestStatus.enum.cancelled)).toBe(false);
   });
+
+  it("returns false for a request waiting on import review, which has no work running", () => {
+    expect(isProcessingStatus(RequestStatus.enum.pending_import_review)).toBe(false);
+  });
+});
+
+describe("isCancellableStatus", () => {
+  it("offers cancel for a request waiting on import review", () => {
+    expect(isCancellableStatus(RequestStatus.enum.pending_import_review)).toBe(true);
+  });
+
+  it("offers cancel for a request still processing", () => {
+    expect(isCancellableStatus(RequestStatus.enum.downloading)).toBe(true);
+  });
+
+  it.each([RequestStatus.enum.complete, RequestStatus.enum.failed, RequestStatus.enum.cancelled])(
+    "offers no cancel for a %s request",
+    (status) => {
+      expect(isCancellableStatus(status)).toBe(false);
+    }
+  );
 });
 
 describe("isSpinningStatus", () => {

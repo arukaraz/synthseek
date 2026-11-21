@@ -32,6 +32,10 @@
       "label": "Importando",
       "description": "Procesando el archivo"
     },
+    "pending_import_review": {
+      "label": "En revisión de importaciones",
+      "description": "Un archivo descargado espera en la revisión de importaciones a que un administrador lo apruebe o lo descarte"
+    },
     "complete": {
       "label": "Completada",
       "description": "Descarga completada"

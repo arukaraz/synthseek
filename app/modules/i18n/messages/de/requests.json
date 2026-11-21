@@ -246,7 +246,7 @@
     },
     "trackDisplay": "{{title}} - {{artist}}",
     "evidence": {
-      "fingerprintMismatch": "Der Fingerabdruck erkennt {{artist}} - {{title}}, mit {{score}} von 100 Punkten Ähnlichkeit zum angeforderten Titel.",
+      "fingerprintMismatch": "Der Fingerabdruck erkennt {{artist}} - {{title}}. Der Name dieses Künstlers hat {{score}} von 100 Punkten Ähnlichkeit mit den Künstlern des angeforderten Titels.",
       "tagMismatch": "Die Datei-Tags erreichten {{observed}} von 100 Punkten Konfidenz und damit weniger als die von dieser Prüfung verlangten {{expected}}.",
       "durationMismatch": "Das Audio läuft {{observed}}, der angeforderte Titel dagegen {{expected}}.",
       "tagsUnreadable": "Die Datei-Tags waren nicht lesbar, es gab also nichts, was mit der Anfrage verglichen werden konnte.",

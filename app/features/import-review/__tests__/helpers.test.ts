@@ -51,7 +51,7 @@ describe("evidenceSentence", () => {
     const item = makeReviewItem({ reason: "fingerprint_mismatch" });
 
     expect(evidenceSentence(item, t)).toBe(
-      "The audio fingerprints as Artist X - Song Y, which scores 32 out of 100 for similarity against the track you requested."
+      "The audio fingerprints as Artist X - Song Y. That artist's name scores 32 out of 100 for similarity against the artists of the track you requested."
     );
   });
 

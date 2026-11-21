@@ -32,6 +32,10 @@
       "label": "Wird importiert",
       "description": "Datei wird verarbeitet"
     },
+    "pending_import_review": {
+      "label": "Wartet auf Import-Prüfung",
+      "description": "Eine heruntergeladene Datei wartet in der Import-Prüfung, bis ein Administrator sie freigibt oder verwirft"
+    },
     "complete": {
       "label": "Abgeschlossen",
       "description": "Download abgeschlossen"

@@ -32,6 +32,10 @@
       "label": "Importation",
       "description": "Traitement du fichier"
     },
+    "pending_import_review": {
+      "label": "En attente de révision des imports",
+      "description": "Un fichier téléchargé attend dans la révision des imports qu'un administrateur l'approuve ou l'écarte"
+    },
     "complete": {
       "label": "Terminé",
       "description": "Téléchargement terminé"

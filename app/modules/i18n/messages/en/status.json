@@ -32,6 +32,10 @@
       "label": "Importing",
       "description": "Processing file"
     },
+    "pending_import_review": {
+      "label": "Waiting for Import Review",
+      "description": "A downloaded file waits in import review for an admin to approve or discard it"
+    },
     "complete": {
       "label": "Complete",
       "description": "Download complete"

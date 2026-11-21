@@ -26,6 +26,7 @@
     --status-paused: oklch(0.852 0.199 91.936);
     --status-pending-import: oklch(0.673 0.182 276.935);
     --status-importing: oklch(0.673 0.182 276.935);
+    --status-pending-import-review: oklch(0.746 0.163 340);
     --status-syncing: oklch(0.7 0.17 240);
     --status-complete: oklch(0.792 0.209 151.711);
     --status-partial: oklch(0.828 0.189 84.429);

@@ -151,6 +151,7 @@
     },
     { "name": "--status-pending-import", "file": "status", "kind": "color", "on": "--surface-bg" },
     { "name": "--status-importing", "file": "status", "kind": "color", "on": "--surface-bg" },
+    { "name": "--status-pending-import-review", "file": "status", "kind": "color", "on": "--surface-bg" },
     { "name": "--status-syncing", "file": "status", "kind": "color", "on": "--surface-bg" },
     { "name": "--status-complete", "file": "status", "kind": "color", "on": "--surface-bg" },
     { "name": "--status-partial", "file": "status", "kind": "color", "on": "--surface-bg" },

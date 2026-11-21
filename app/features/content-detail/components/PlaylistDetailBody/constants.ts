@@ -1,4 +1,4 @@
-import { ACTIVE_STATUSES, RESOLVED_STATUSES, UNRESOLVED_STATUSES, type RequestStatus } from "@api/__generated__/types";
+import { ACTIVE_STATUSES, RESOLVED_STATUSES, RequestStatus, UNRESOLVED_STATUSES } from "@api/__generated__/types";
 
 import type { TracklistSortKey } from "./types";
 
@@ -12,6 +12,7 @@ export const PLAYLIST_SORT_KEYS: readonly TracklistSortKey[] = [PLAYLIST_SORT_KE
 
 export const STATUS_SORT_ORDER: readonly RequestStatus[] = [
   ...UNRESOLVED_STATUSES,
+  RequestStatus.enum.pending_import_review,
   ...ACTIVE_STATUSES,
   ...RESOLVED_STATUSES,
 ];

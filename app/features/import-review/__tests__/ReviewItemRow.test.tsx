@@ -27,7 +27,7 @@ describe("ReviewItemRow", () => {
     expect(screen.getByText("Fingerprint mismatch")).toBeInTheDocument();
     expect(
       screen.getByText(
-        "The audio fingerprints as Artist X - Song Y, which scores 32 out of 100 for similarity against the track you requested."
+        "The audio fingerprints as Artist X - Song Y. That artist's name scores 32 out of 100 for similarity against the artists of the track you requested."
       )
     ).toBeInTheDocument();
   });

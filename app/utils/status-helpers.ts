@@ -10,6 +10,10 @@ export function isProcessingStatus(status: RequestStatus): boolean {
   return (ACTIVE_STATUSES as readonly RequestStatus[]).includes(status);
 }
 
+export function isCancellableStatus(status: RequestStatus): boolean {
+  return isProcessingStatus(status) || status === RequestStatus.enum.pending_import_review;
+}
+
 export function isSpinningStatus(status: RequestStatus): boolean {
   return isProcessingStatus(status) && status !== RequestStatus.enum.queued;
 }

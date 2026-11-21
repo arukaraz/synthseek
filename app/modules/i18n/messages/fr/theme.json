@@ -94,6 +94,10 @@
       "hint": "Téléchargée et en attente de rangement"
     },
     "--status-importing": { "label": "Demande : importation", "hint": "En cours de rangement dans la bibliothèque" },
+    "--status-pending-import-review": {
+      "label": "Demande : en attente de révision des imports",
+      "hint": "Un fichier téléchargé qu'un administrateur doit approuver ou écarter"
+    },
     "--status-syncing": {
       "label": "Demande : synchronisation",
       "hint": "Une synchronisation de la bibliothèque en cours"
