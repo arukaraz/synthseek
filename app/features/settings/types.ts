@@ -42,7 +42,7 @@ export type SettingsPageGroup = "you" | "server" | "about";
 export type SettingsPageId =
   | "account"
   | "privacy"
-  | "appearance"
+  | "customization"
   | "playback"
   | "connections"
   | "notifications"
@@ -69,7 +69,7 @@ export interface SettingsPage {
 }
 
 export type SettingsTabbedPageId =
-  | "appearance"
+  | "customization"
   | "connections"
   | "download"
   | "library"

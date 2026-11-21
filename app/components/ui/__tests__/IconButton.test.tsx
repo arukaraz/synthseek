@@ -25,13 +25,13 @@ describe("IconButton", () => {
   it("renders with red variant", () => {
     render(<IconButton icon={Pause} aria-label="Pause" variant="red" data-testid="btn" />);
     const button = screen.getByTestId("btn");
-    expect(button).toHaveClass("border-red-500/30", "text-red-400");
+    expect(button).toHaveClass("border-destructive-tint/30", "text-destructive-vivid");
   });
 
   it("renders with green variant", () => {
     render(<IconButton icon={Play} aria-label="Play" variant="green" data-testid="btn" />);
     const button = screen.getByTestId("btn");
-    expect(button).toHaveClass("border-green-500/30", "text-green-400");
+    expect(button).toHaveClass("border-success-tint/30", "text-success-vivid");
   });
 
   it("renders with primary variant", () => {

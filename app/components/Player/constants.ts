@@ -207,7 +207,9 @@ export const TRANSPORT_METRICS = {
   },
 } as const;
 
-export const MIRRORED_ROOT_ATTRIBUTES = ["data-theme", "lang"] as const;
+export const MIRRORED_ROOT_ATTRIBUTES = ["data-theme", "data-theme-base", "lang"] as const;
+export const MINI_THEME_STYLE_ATTRIBUTE = "data-mini-theme";
+export const ROOT_FONT_BASE_PX = 16;
 
 export const PANEL_WIDTH_PX = 306;
 

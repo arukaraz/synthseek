@@ -1,7 +1,5 @@
-"use client";
+import { redirect } from "next/navigation";
 
-import { ThemeTab } from "@features/settings/sections/GeneralSection/ThemeTab";
-
-export default function AppearanceThemePage() {
-  return <ThemeTab />;
+export default function AppearanceThemeRedirect() {
+  redirect("/settings/customization/theme");
 }

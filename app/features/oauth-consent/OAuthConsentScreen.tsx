@@ -33,11 +33,11 @@ export function OAuthConsentScreen() {
         <LogoIcon className="h-12 w-auto sm:h-14" />
         <div className={consentCard()}>
           {!grant ? (
-            <p className="text-sm text-red-400">{t("oauthConsent.missing")}</p>
+            <p className="text-destructive-vivid text-sm">{t("oauthConsent.missing")}</p>
           ) : pending.isLoading ? (
             <p className="text-fg/60 text-sm">{t("oauthConsent.loading")}</p>
           ) : pending.error || !pending.data ? (
-            <p className="text-sm text-red-400">{t("oauthConsent.loadError")}</p>
+            <p className="text-destructive-vivid text-sm">{t("oauthConsent.loadError")}</p>
           ) : (
             <>
               <div className="mb-4 flex items-center gap-3">

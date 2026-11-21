@@ -440,5 +440,15 @@
     "historyCleared_one": "Removed {{count}} play from your history",
     "historyCleared_other": "Removed {{count}} plays from your history",
     "serverFailed": "Could not save the privacy settings"
+  },
+  "theme": {
+    "selectFailed": "Could not change the theme",
+    "saveFailed": "Could not save your theme",
+    "importCheckFailed": "Could not check that theme",
+    "fontUploadFailed": "Could not upload that font",
+    "fontUnsupported": "The font has to be a WOFF2, WOFF, TTF or OTF file",
+    "fontTooLarge": "That font does not fit: {{size}} of font space is left",
+    "fontUploaded": "{{name}} is ready to use",
+    "fontRemoveFailed": "Could not remove that font"
   }
 }

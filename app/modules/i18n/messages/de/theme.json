@@ -1,0 +1,204 @@
+{
+  "sections": {
+    "brand": "Marke",
+    "surfaces": "Flächen",
+    "text": "Text",
+    "content-types": "Inhaltstypen",
+    "status": "Status",
+    "widgets": "Widgets",
+    "typography": "Schrift",
+    "shape": "Form",
+    "elevation": "Schatten",
+    "services": "Dienste"
+  },
+  "tokens": {
+    "--color-primary-500": {
+      "label": "Primär",
+      "hint": "Buttons, Links, das aktive Element, der Anfang des Namens im Logo"
+    },
+    "--color-primary-400": { "label": "Primär, Textstufe", "hint": "Primär als Textfarbe" },
+    "--color-primary-600": { "label": "Primär, dunkle Stufe", "hint": "Verläufe und gedrückte Zustände" },
+    "--color-primary-700": { "label": "Primär, dunkelste Stufe", "hint": "Das dunkle Ende der Primärverläufe" },
+    "--color-secondary-500": { "label": "Sekundär", "hint": "Info, der zweite Markenton, der Anfang des Logo-Symbols" },
+    "--color-secondary-400": { "label": "Sekundär, Textstufe", "hint": "Sekundär als Textfarbe" },
+    "--color-secondary-600": { "label": "Sekundär, dunkle Stufe", "hint": "Verläufe und gedrückte Zustände" },
+    "--color-accent-500": { "label": "Akzent", "hint": "Hervorhebungen, Verlaufsenden, das Ende des Logo-Symbols" },
+    "--color-accent-400": { "label": "Akzent, Textstufe", "hint": "Akzent als Textfarbe" },
+    "--color-accent-600": { "label": "Akzent, dunkle Stufe", "hint": "Verläufe und gedrückte Zustände" },
+    "--ring": { "label": "Fokusring", "hint": "Der Umriss beim Tastaturfokus" },
+
+    "--surface-bg": { "label": "Seitenhintergrund", "hint": "Hinter allem" },
+    "--surface-bg-elevated": { "label": "Karten", "hint": "Karten und Panels" },
+    "--surface-bg-overlay": { "label": "Menüs und Popovers", "hint": "Alles, was schwebt" },
+    "--surface-bg-sunken": { "label": "Vertiefungen", "hint": "Eingabefelder und eingelassene Bereiche" },
+    "--muted": { "label": "Dezente Füllung", "hint": "Platzhalter, Leisten und ruhende Chips" },
+    "--border-default": { "label": "Rahmen", "hint": "Umrisse von Karten und Feldern" },
+    "--border-subtle": { "label": "Feine Rahmen", "hint": "Trennlinien innerhalb einer Karte" },
+    "--glass-bg": { "label": "Glas", "hint": "Die Füllung der schwebenden Leisten und des Players" },
+    "--glass-border": { "label": "Glasrand", "hint": "Der Umriss eines Glaspanels" },
+    "--veil": { "label": "Schleier über dem Cover", "hint": "Der Schatten hinter Text auf einem Cover" },
+    "--hairline": { "label": "Haarlinie", "hint": "Dünne helle Linien auf einer Fläche" },
+    "--backdrop-grid": { "label": "Hintergrundraster", "hint": "Das schwache Raster hinter der Seite" },
+
+    "--surface-fg": { "label": "Text", "hint": "Fließtext und Titel" },
+    "--surface-fg-muted": { "label": "Sekundärer Text", "hint": "Beschreibungen und Bildunterschriften" },
+    "--primary-foreground": { "label": "Text auf Primär", "hint": "Beschriftungen auf einer Primärfläche" },
+    "--destructive-foreground": { "label": "Text auf Gefahr", "hint": "Beschriftungen auf einer Gefahrfläche" },
+    "--on-cover": { "label": "Text über dem Cover", "hint": "Titel, die über einem Cover liegen" },
+
+    "--type-track": { "label": "Titel", "hint": "Badges und Beschriftungen für Titel" },
+    "--type-album": { "label": "Album", "hint": "Badges und Beschriftungen für Alben" },
+    "--type-artist": { "label": "Künstler", "hint": "Badges und Beschriftungen für Künstler" },
+    "--type-playlist": { "label": "Playlist", "hint": "Badges und Beschriftungen für Playlists" },
+
+    "--success-vivid": { "label": "Erfolg", "hint": "Erledigt, verbunden, in Ordnung" },
+    "--success-soft": { "label": "Erfolg, weiche Stufe", "hint": "Erfolg als dezenter Text" },
+    "--success-tint": { "label": "Erfolg, Tönungsstufe", "hint": "Erfolgsflächen und -Icons" },
+    "--success-strong": { "label": "Erfolg, starke Stufe", "hint": "Satte Erfolgsflächen und ihr Leuchten" },
+    "--warning-vivid": { "label": "Warnung", "hint": "Braucht Aufmerksamkeit" },
+    "--warning-soft": { "label": "Warnung, weiche Stufe", "hint": "Warnung als dezenter Text" },
+    "--warning-tint": { "label": "Warnung, Tönungsstufe", "hint": "Warnflächen und -Icons" },
+    "--warning-strong": { "label": "Warnung, starke Stufe", "hint": "Satte Warnflächen und ihr Leuchten" },
+    "--destructive-vivid": { "label": "Gefahr", "hint": "Löschen, fehlgeschlagen, Fehler" },
+    "--destructive-soft": { "label": "Gefahr, weiche Stufe", "hint": "Gefahr als dezenter Text" },
+    "--destructive-tint": { "label": "Gefahr, Tönungsstufe", "hint": "Gefahrflächen und -Icons" },
+    "--destructive-strong": { "label": "Gefahr, starke Stufe", "hint": "Satte Gefahrflächen und ihr Leuchten" },
+    "--destructive": { "label": "Gefahrfläche", "hint": "Die Füllung eines destruktiven Buttons" },
+    "--info-vivid": { "label": "Info", "hint": "Synchronisierung und neutrale Hinweise" },
+    "--info-soft": { "label": "Info, weiche Stufe", "hint": "Info als dezenter Text" },
+    "--info-tint": { "label": "Info, Tönungsstufe", "hint": "Infoflächen und -Icons" },
+    "--status-queued": { "label": "Anfrage: in Warteschlange", "hint": "Eine Anfrage, die auf ihren Platz wartet" },
+    "--status-pending-approval": {
+      "label": "Anfrage: wartet auf Freigabe",
+      "hint": "Eine Anfrage, die auf einen Administrator wartet"
+    },
+    "--status-searching": { "label": "Anfrage: Suche läuft", "hint": "Eine Quelle wird gesucht" },
+    "--status-pending-download": {
+      "label": "Anfrage: gefunden",
+      "hint": "Eine Quelle wurde gefunden, als Nächstes kommt der Download"
+    },
+    "--status-downloading": { "label": "Anfrage: wird heruntergeladen", "hint": "Ein laufender Download" },
+    "--status-in-progress": {
+      "label": "Anfrage: in Bearbeitung",
+      "hint": "Ein Album oder eine Playlist, die zum Teil läuft"
+    },
+    "--status-paused": { "label": "Anfrage: pausiert", "hint": "Angehalten, bis sie fortgesetzt wird" },
+    "--status-pending-import": {
+      "label": "Anfrage: bereit zum Import",
+      "hint": "Heruntergeladen und wartet aufs Einsortieren"
+    },
+    "--status-importing": { "label": "Anfrage: wird importiert", "hint": "Wird in die Bibliothek einsortiert" },
+    "--status-syncing": {
+      "label": "Anfrage: wird synchronisiert",
+      "hint": "Eine laufende Bibliothekssynchronisierung"
+    },
+    "--status-complete": { "label": "Anfrage: abgeschlossen", "hint": "In der Bibliothek" },
+    "--status-partial": { "label": "Anfrage: teilweise", "hint": "Ein Teil der Titel ist angekommen, ein Teil nicht" },
+    "--status-failed": { "label": "Anfrage: fehlgeschlagen", "hint": "Mit einem Fehler gestoppt" },
+    "--status-cancelled": { "label": "Anfrage: abgebrochen", "hint": "Von jemandem gestoppt" },
+    "--status-delegated": { "label": "Anfrage: delegiert", "hint": "An einen externen Bibliotheksmanager übergeben" },
+
+    "--mix-daily": { "label": "Widget-Akzent: Pink", "hint": "Jedes Widget mit Pink" },
+    "--mix-weekly": { "label": "Widget-Akzent: Violett", "hint": "Jedes Widget mit Violett" },
+    "--mix-explore": { "label": "Widget-Akzent: Cyan", "hint": "Jedes Widget mit Cyan" },
+    "--mix-cf": { "label": "Widget-Akzent: Grün", "hint": "Jedes Widget mit Grün" },
+    "--generated-cover-start": {
+      "label": "Erzeugtes Cover, helles Ende",
+      "hint": "Für einen Mix gezeichnete Cover; jedes wählt seinen eigenen Farbton"
+    },
+    "--generated-cover-end": {
+      "label": "Erzeugtes Cover, dunkles Ende",
+      "hint": "Das andere Ende eines erzeugten Covers"
+    },
+
+    "--font-sans": { "label": "Oberflächenschrift", "hint": "Ein Systemstapel oder eine Schrift, die du hochlädst" },
+    "--font-mono": { "label": "Festbreitenschrift", "hint": "Zahlen, Pfade, Zähler, Code" },
+    "--font-heading": { "label": "Überschriftenschrift", "hint": "Seiten- und Kartentitel" },
+    "--ui-scale": { "label": "Oberflächenskalierung", "hint": "Text und Abstände zusammen" },
+    "--text-9": { "label": "Textgröße: 9", "hint": "Die kleinsten Zähler" },
+    "--text-10": { "label": "Textgröße: 10", "hint": "Winzige Beschriftungen und Badges" },
+    "--text-11": { "label": "Textgröße: 11", "hint": "Kleine Bildunterschriften" },
+    "--text-xs": { "label": "Textgröße: sehr klein", "hint": "Bildunterschriften, Hinweise, Badges" },
+    "--text-13": { "label": "Textgröße: 13", "hint": "Dichte Listen" },
+    "--text-sm": { "label": "Textgröße: klein", "hint": "Sekundärer Text und Bedienelemente" },
+    "--text-15": { "label": "Textgröße: 15", "hint": "Bequeme Listen" },
+    "--text-base": { "label": "Textgröße: normal", "hint": "Fließtext" },
+    "--text-lg": { "label": "Textgröße: groß", "hint": "Hervorgehobener Text" },
+    "--text-xl": { "label": "Textgröße: sehr groß", "hint": "Kleine Titel" },
+    "--text-2xl": { "label": "Titelgröße", "hint": "Kartentitel" },
+    "--text-3xl": { "label": "Textgröße: 3XL", "hint": "Seitentitel" },
+    "--text-4xl": { "label": "Textgröße: 4XL", "hint": "Große Überschriften" },
+    "--text-5xl": { "label": "Textgröße: 5XL", "hint": "Große Kennzahlen" },
+    "--text-6xl": { "label": "Textgröße: 6XL", "hint": "Der größte Anzeigetext" },
+    "--tracking-tight": { "label": "Buchstabenabstand: eng", "hint": "Titel" },
+    "--tracking-normal": { "label": "Buchstabenabstand: normal", "hint": "Fließtext" },
+    "--tracking-wide": { "label": "Buchstabenabstand: weit", "hint": "Kleine hervorgehobene Beschriftungen" },
+    "--tracking-wider": { "label": "Buchstabenabstand: weiter", "hint": "Kurze Beschriftungen, die Luft brauchen" },
+    "--tracking-label": {
+      "label": "Buchstabenabstand: Beschriftung",
+      "hint": "Beschriftungen über einem Feld oder einer Gruppe"
+    },
+    "--tracking-widest": { "label": "Buchstabenabstand: am weitesten", "hint": "Kleine Versalien" },
+    "--tracking-caps": { "label": "Buchstabenabstand: Großbuchstaben", "hint": "Kurze Wörter in Großbuchstaben" },
+    "--tracking-caps-wide": {
+      "label": "Buchstabenabstand: weite Großbuchstaben",
+      "hint": "Abschnittsmarken in Großbuchstaben"
+    },
+
+    "--radius": { "label": "Eckenradius", "hint": "Karten, Buttons, Eingabefelder" },
+    "--radius-full": { "label": "Pillenradius", "hint": "Pillen, Chips und runde Buttons; 0 macht sie eckig" },
+    "--border-width": { "label": "Rahmenstärke", "hint": "Karten, Buttons, Menüs" },
+
+    "--shadow-color": { "label": "Schattenfarbe", "hint": "Die Tönung aller Schatten" },
+    "--shadow-strength": { "label": "Schattenstärke", "hint": "Karten, Menüs, Dialoge" },
+    "--glow": { "label": "Leuchten", "hint": "Der Schein um primäre Aktionen" },
+    "--neon-accent": { "label": "Leuchtakzent", "hint": "Der Akzentton leuchtender Ränder" },
+    "--glass-blur": { "label": "Glasunschärfe", "hint": "Die Player-Leiste und schwebende Leisten" },
+
+    "--brand-spotify": { "label": "Spotify", "hint": "Das Spotify-Symbol und seine Badges" },
+    "--brand-spotify-ink": { "label": "Spotify, Tinte", "hint": "Die dunklen Linien des Spotify-Symbols" },
+    "--brand-apple-music": { "label": "Apple Music", "hint": "Das Apple-Music-Symbol und seine Badges" },
+    "--brand-youtube": { "label": "YouTube", "hint": "Das YouTube-Symbol und seine Badges" },
+    "--brand-instagram": { "label": "Instagram", "hint": "Der Instagram-Link eines Künstlers" },
+    "--brand-lastfm": { "label": "Last.fm", "hint": "Das Last.fm-Symbol und seine Badges" },
+    "--brand-listenbrainz": { "label": "ListenBrainz", "hint": "Das ListenBrainz-Symbol und seine Badges" },
+    "--brand-navidrome": { "label": "Navidrome", "hint": "Das Navidrome-Symbol und seine Badges" },
+    "--brand-jellyfin": { "label": "Jellyfin", "hint": "Das Jellyfin-Symbol und seine Badges" },
+    "--brand-discord": { "label": "Discord", "hint": "Der Benachrichtigungskanal Discord" },
+    "--brand-ntfy": { "label": "ntfy", "hint": "Der Benachrichtigungskanal ntfy" },
+    "--brand-telegram": { "label": "Telegram", "hint": "Der Benachrichtigungskanal Telegram" },
+    "--brand-plex": { "label": "Plex", "hint": "Das Plex-Symbol und seine Badges" },
+    "--brand-website": { "label": "Website", "hint": "Der Link zur eigenen Seite eines Künstlers" }
+  },
+  "parts": {
+    "top-header": "Die Leiste oben",
+    "brand": "Das Logo und der Name",
+    "bottom-nav": "Die Leiste unten auf dem Smartphone",
+    "sidebar": "Eine Seitenspalte: Einstellungsbereiche, Bibliotheksfilter, die Anfragenliste",
+    "board": "Ein Board mit Widgets",
+    "widget": "Ein Widget auf einem Board",
+    "widget-title": "Der Titel eines Widgets",
+    "media-tile": "Ein Cover mit seiner Beschriftung",
+    "media-tile-title": "Die Beschriftung eines Covers",
+    "player-bar": "Der Player unten",
+    "button": "Jeder Button",
+    "card": "Jede Einstellungskarte",
+    "input": "Jedes Textfeld",
+    "dialog": "Jeder Dialog",
+    "badge": "Jedes Badge"
+  },
+  "snippets": {
+    "part": "Regel für einen Teil der App",
+    "tint": "Eine durchscheinende Tönung eines Tokens",
+    "glass": "Mattes Glaspanel",
+    "gradient": "Füllung mit dem Markenverlauf",
+    "gradientText": "Markenverlauf auf Text",
+    "hide": "Einen Teil der App ausblenden",
+    "accent": "Widgets mit einem Akzent",
+    "phone": "Nur auf Smartphones",
+    "desktop": "Nur auf breiten Bildschirmen",
+    "focus": "Fokusring für die Tastatur",
+    "fontFace": "Eine hochgeladene Schrift verwenden",
+    "motion": "Nur animieren, wenn Bewegung erwünscht ist"
+  }
+}

@@ -5,62 +5,63 @@
   h4,
   h5,
   h6 {
+    font-family: var(--font-heading);
     font-weight: 600;
     line-height: 1.2;
-    color: oklch(var(--foreground));
+    color: var(--surface-fg);
   }
 
   h1 {
-    font-size: 2.25rem;
-    letter-spacing: -0.025em;
+    font-size: var(--text-4xl);
+    letter-spacing: var(--tracking-tight);
   }
 
   h2 {
-    font-size: 1.875rem;
-    letter-spacing: -0.02em;
+    font-size: var(--text-3xl);
+    letter-spacing: var(--tracking-tight);
   }
 
   h3 {
-    font-size: 1.5rem;
-    letter-spacing: -0.015em;
+    font-size: var(--text-2xl);
+    letter-spacing: var(--tracking-tight);
   }
 
   h4 {
-    font-size: 1.25rem;
+    font-size: var(--text-xl);
   }
 
   h5 {
-    font-size: 1.125rem;
+    font-size: var(--text-lg);
   }
 
   h6 {
-    font-size: 1rem;
+    font-size: var(--text-base);
   }
 
   @media (min-width: 640px) {
     h1 {
-      font-size: 3rem;
+      font-size: var(--text-5xl);
     }
 
     h2 {
-      font-size: 2.25rem;
+      font-size: var(--text-4xl);
     }
 
     h3 {
-      font-size: 1.875rem;
+      font-size: var(--text-3xl);
     }
   }
 
   p {
     line-height: 1.6;
-    color: oklch(var(--foreground));
+    color: var(--surface-fg);
   }
 
   code {
     font-size: 0.875em;
     padding: 0.125rem 0.25rem;
-    border-radius: 0.25rem;
-    background-color: oklch(var(--muted));
+    border-radius: calc(var(--radius) * 0.5);
+    background-color: var(--muted);
   }
 
   pre code {
@@ -68,14 +69,14 @@
     background-color: transparent;
   }
   small {
-    font-size: 0.875rem;
-    color: oklch(var(--muted-foreground));
+    font-size: var(--text-sm);
+    color: var(--surface-fg-muted);
   }
 }
 
 @layer utilities {
   .text-muted {
-    color: oklch(var(--muted-foreground));
+    color: var(--surface-fg-muted);
   }
 
   .text-truncate {

@@ -197,7 +197,7 @@
     },
     "theme": {
       "title": "Tema",
-      "description": "Elige el tema que mejor se adapte a tu entorno. Solo en este navegador.",
+      "scope": "Para tu cuenta, en todos los dispositivos.",
       "groupLabel": "Tema de color"
     },
     "board": {
@@ -1674,9 +1674,9 @@
         "title": "Cuenta",
         "description": "Tu perfil, tu contraseña y tu cuota de descargas."
       },
-      "appearance": {
-        "title": "Apariencia e idioma",
-        "description": "El tema y el idioma que Synthseek usa contigo, y cómo se organiza tu tablero."
+      "customization": {
+        "title": "Personalización",
+        "description": "El tema que Synthseek lleva para ti y cómo se organiza tu tablero."
       },
       "playback": {
         "title": "Reproducción",
@@ -1729,8 +1729,8 @@
       }
     },
     "tabs": {
-      "appearance": {
-        "theme": "Tema e idioma",
+      "customization": {
+        "theme": "Tema",
         "board": "Tablero"
       },
       "download": {
@@ -1786,7 +1786,7 @@
       "keywords": {
         "playbackAccount": "normalización de volumen sonoridad ganancia autoplay reproducción automática pistas similares",
         "playbackBrowser": "ecualizador compresor crossfade fundido gapless transición conversión bitrate mp3",
-        "theme": "oscuro medianoche océano color",
+        "theme": "oscuro medianoche océano color personalizado css fuente fuentes radio sombra importar exportar",
         "language": "inglés español francés alemán",
         "members": "rol confiable cuota preset solicitud calidad formato",
         "board": "densidad tamaño de texto fondo plantillas organizar disposición widgets",

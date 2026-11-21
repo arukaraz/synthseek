@@ -43,7 +43,7 @@ export const cardCover = cva(
 );
 
 export const cardSelectBox = cva(
-  "absolute top-1.5 right-1.5 z-2 grid size-7 place-items-center rounded-md bg-black/55 backdrop-blur-sm transition-opacity",
+  "absolute top-1.5 right-1.5 z-2 grid size-7 place-items-center rounded-md bg-veil/55 backdrop-blur-sm transition-opacity",
   {
     variants: {
       shown: {
@@ -66,7 +66,7 @@ export const cardMosaic = cva("grid h-full w-full grid-cols-2 grid-rows-2");
 export const cardMosaicTile = cva("relative h-full w-full overflow-hidden");
 
 export const cardStatusBadge = cva(
-  "absolute top-1.5 left-1.5 z-2 inline-flex items-center gap-1 rounded-md bg-black/55 px-1.5 py-0.5 text-[11px] font-semibold tabular-nums text-white backdrop-blur-sm"
+  "absolute top-1.5 left-1.5 z-2 inline-flex items-center gap-1 rounded-md bg-veil/55 px-1.5 py-0.5 text-11 font-semibold tabular-nums text-overlay-fg backdrop-blur-sm"
 );
 
 export const cardStatusDot = cva("size-1.5 shrink-0 rounded-full");
@@ -75,7 +75,7 @@ export const cardCoverActions = cva(
   "pointer-events-none absolute inset-0 z-1 grid grid-flow-col place-content-center gap-2 transition-opacity focus-within:opacity-100 has-data-[state=open]:opacity-100 sm:opacity-0 sm:group-hover:opacity-100"
 );
 
-export const cardCoverScrim = cva("absolute inset-0 -z-1 bg-black/45");
+export const cardCoverScrim = cva("absolute inset-0 -z-1 bg-veil/45");
 
 export const cardCoverAction = cva(
   "focus-visible:ring-primary-400 bg-primary-500 text-primary-foreground pointer-events-auto grid size-10 place-items-center rounded-full backdrop-blur-sm transition-transform hover:scale-105 focus-visible:ring-2 focus-visible:outline-none disabled:opacity-60"
@@ -124,9 +124,9 @@ export const listRowArt = cva(
 
 export const listRowText = cva("flex min-w-0 flex-1 flex-col gap-0.5");
 
-export const listRowTitle = cva("text-fg truncate text-[15px] font-semibold");
+export const listRowTitle = cva("text-fg truncate text-15 font-semibold");
 
-export const listRowSubtitle = cva("text-fg/60 truncate text-[13px]");
+export const listRowSubtitle = cva("text-fg/60 truncate text-13");
 
 export const listRowCheck = cva("pointer-events-none shrink-0");
 
@@ -134,7 +134,7 @@ export const cardTitle = cva("text-fg truncate text-sm font-semibold");
 
 export const cardSubtitle = cva("text-fg/60 truncate text-xs");
 
-export const cardMeta = cva("text-fg/45 truncate text-[11px]");
+export const cardMeta = cva("text-fg/45 truncate text-11");
 
 export const cardMetaRow = cva("flex min-w-0 items-center justify-between gap-2");
 

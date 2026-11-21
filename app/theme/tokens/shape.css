@@ -1,0 +1,8 @@
+@layer base {
+  :root,
+  [data-theme] {
+    --radius: 0.5rem;
+    --radius-full: 9999px;
+    --border-width: 1px;
+  }
+}

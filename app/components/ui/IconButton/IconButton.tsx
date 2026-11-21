@@ -23,7 +23,12 @@ export function IconButton({
 
   if (!animated) {
     return (
-      <button ref={ref} className={buttonClasses} {...(props as React.ButtonHTMLAttributes<HTMLButtonElement>)}>
+      <button
+        ref={ref}
+        data-part="button"
+        className={buttonClasses}
+        {...(props as React.ButtonHTMLAttributes<HTMLButtonElement>)}
+      >
         <Icon className={iconSizes[size]} />
       </button>
     );
@@ -32,6 +37,7 @@ export function IconButton({
   return (
     <motion.button
       ref={ref}
+      data-part="button"
       className={buttonClasses}
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}

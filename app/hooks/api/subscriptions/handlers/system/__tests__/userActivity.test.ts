@@ -11,11 +11,21 @@ import { handleUserActivity } from "../userActivity";
 
 const invalidateFavorites = vi.fn();
 const invalidateConnections = vi.fn();
+const invalidateThemeState = vi.fn();
+const invalidateThemeFiles = vi.fn();
+const invalidateThemeHistory = vi.fn();
+const invalidateThemeFonts = vi.fn();
 
 const utils = {
   playback: {
     favoriteTrackIds: { invalidate: invalidateFavorites },
     scrobble: { connections: { invalidate: invalidateConnections } },
+  },
+  theme: {
+    state: { invalidate: invalidateThemeState },
+    files: { invalidate: invalidateThemeFiles },
+    history: { invalidate: invalidateThemeHistory },
+    fonts: { invalidate: invalidateThemeFonts },
   },
 };
 
@@ -100,5 +110,21 @@ describe("handleUserActivity", () => {
 
     expect(invalidateConnections).toHaveBeenCalledTimes(1);
     expect(invalidateFavorites).not.toHaveBeenCalled();
+    expect(invalidateThemeState).not.toHaveBeenCalled();
+  });
+
+  it("rereads the theme, its files, their history and its fonts when the theme changed", () => {
+    handleUserActivity(
+      { eventType: SubscriptionEventType.UserActivity, userId: "u1", subject: "theme" },
+      utils,
+      client
+    );
+
+    expect(invalidateThemeState).toHaveBeenCalledTimes(1);
+    expect(invalidateThemeFiles).toHaveBeenCalledTimes(1);
+    expect(invalidateThemeHistory).toHaveBeenCalledTimes(1);
+    expect(invalidateThemeFonts).toHaveBeenCalledTimes(1);
+    expect(invalidateFavorites).not.toHaveBeenCalled();
+    expect(invalidateConnections).not.toHaveBeenCalled();
   });
 });

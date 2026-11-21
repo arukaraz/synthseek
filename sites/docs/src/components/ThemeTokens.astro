@@ -1,0 +1,64 @@
+---
+import { TOKEN_GROUPS } from "../lib/theme-contract";
+---
+
+<ul class="not-prose my-5 flex list-none flex-wrap gap-x-4 gap-y-2 p-0">
+  {
+    TOKEN_GROUPS.map((group) => (
+      <li>
+        <a class="text-primary-400 font-mono text-[13px] no-underline hover:underline" href={`#${group.id}`}>
+          {group.label}
+        </a>
+      </li>
+    ))
+  }
+</ul>
+
+{
+  TOKEN_GROUPS.map((group) => (
+    <>
+      <h3 id={group.id}>{group.label}</h3>
+      <p>
+        Saved in <code>{group.path}</code>.
+      </p>
+      <div class="dx-table dx-tokens">
+        <table>
+          <thead>
+            <tr>
+              <th>Token</th>
+              <th>What it sets</th>
+              {group.columns.map((column) => (
+                <th>{column}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {group.rows.map((row) => (
+              <tr>
+                <td>
+                  <code>{row.name}</code>
+                </td>
+                <td>
+                  <strong>{row.label}</strong>
+                  {row.hint !== "" && <span>. {row.hint}</span>}
+                </td>
+                {row.values.map((value) => (
+                  <td>
+                    {row.kind === "color" && (
+                      <span
+                        class="border-fg/15 mr-2 inline-block size-3 rounded-sm border align-middle"
+                        style={`background:${value}`}
+                        aria-hidden="true"
+                      />
+                    )}
+                    <code>{value}</code>
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </>
+  ))
+}

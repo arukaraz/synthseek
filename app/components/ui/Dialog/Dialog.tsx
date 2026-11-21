@@ -52,6 +52,7 @@ export function DialogContent({
       <DialogOverlay className={overlayClassName} />
       <DialogPrimitive.Content
         ref={ref}
+        data-part="dialog"
         className={cn(dialogContent({ animation }), className)}
         onInteractOutside={keepOpenForToasts(onInteractOutside)}
         {...props}
@@ -78,6 +79,7 @@ export function DialogSurface({ className, children, ref, onInteractOutside, ...
     <DialogPortal>
       <DialogPrimitive.Content
         ref={ref}
+        data-part="dialog"
         className={className}
         onInteractOutside={keepOpenForToasts(onInteractOutside)}
         {...props}

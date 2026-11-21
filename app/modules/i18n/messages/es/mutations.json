@@ -440,5 +440,15 @@
     "historyCleared_one": "Se quitó {{count}} reproducción de tu historial",
     "historyCleared_other": "Se quitaron {{count}} reproducciones de tu historial",
     "serverFailed": "No se pudieron guardar los ajustes de privacidad"
+  },
+  "theme": {
+    "selectFailed": "No se pudo cambiar el tema",
+    "saveFailed": "No se pudo guardar tu tema",
+    "importCheckFailed": "No se pudo revisar ese tema",
+    "fontUploadFailed": "No se pudo subir esa fuente",
+    "fontUnsupported": "La fuente tiene que ser un archivo WOFF2, WOFF, TTF u OTF",
+    "fontTooLarge": "Esa fuente no cabe: quedan {{size}} de espacio para fuentes",
+    "fontUploaded": "{{name}} ya se puede usar",
+    "fontRemoveFailed": "No se pudo quitar esa fuente"
   }
 }

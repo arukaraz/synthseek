@@ -4,7 +4,7 @@ export const filterSortTriggerDefault = cva(
   "inline-flex h-9 items-center gap-2 rounded-lg border border-fg/10 bg-fg/5 px-3 text-sm text-fg/70 transition-colors hover:bg-fg/10 hover:text-fg"
 );
 
-export const filterSortCount = cva("text-fg/40 font-mono text-[10px]");
+export const filterSortCount = cva("text-fg/40 font-mono text-10");
 
 export const filterSortColumnsContent = cva("w-[calc(100vw-2rem)] max-w-xs sm:w-auto sm:max-w-none");
 

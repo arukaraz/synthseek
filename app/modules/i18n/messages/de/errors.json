@@ -522,5 +522,37 @@
   "BOARD_TEMPLATE_INVALID": {
     "title": "Diese Board-Vorlage kann nicht verwendet werden",
     "description": "Die Vorlage ist keine Synthseek-Board-Vorlage, die diese Version lesen kann, daher wurde nichts geändert. In der Vorschau steht, was nicht passt."
+  },
+  "THEME_NOT_FOUND": {
+    "title": "Noch kein eigenes Theme",
+    "description": "Dieses Konto hat kein eigenes Theme. Wähle Eigenes in den Einstellungen, um eines anzulegen."
+  },
+  "THEME_PATH_INVALID": {
+    "title": "Diese Theme-Datei kann nicht geschrieben werden",
+    "description": "Sie ist keine Datei, die ein Theme enthalten kann, oder der Server konnte sie nicht schreiben."
+  },
+  "THEME_HAS_ERRORS": {
+    "title": "Das Theme wurde nicht gespeichert",
+    "description": "{{path}} enthält einen Syntaxfehler. Behebe ihn und speichere erneut."
+  },
+  "THEME_TOO_LARGE": {
+    "title": "Das Theme ist zu groß",
+    "description": "Eine Datei oder das Theme insgesamt überschreitet die Größengrenze. Es wurde nichts gespeichert."
+  },
+  "THEME_VERSION_NOT_FOUND": {
+    "title": "Diese Version gibt es nicht mehr",
+    "description": "Sie ist nicht im Verlauf dieser Datei. Öffne den Verlauf erneut, um die aufbewahrten Versionen zu sehen."
+  },
+  "THEME_FONT_UNSUPPORTED": {
+    "title": "Diese Datei ist keine Schrift, die Synthseek annimmt",
+    "description": "Lade eine .woff2-, .woff-, .ttf- oder .otf-Datei hoch."
+  },
+  "THEME_FONT_TOO_LARGE": {
+    "title": "Kein Platz für diese Schrift",
+    "description": "Die Schriften eines Kontos teilen sich eine Größengrenze. Entferne eine Schrift, um Platz zu schaffen."
+  },
+  "THEME_IMPORT_INVALID": {
+    "title": "Dieses Theme kann nicht importiert werden",
+    "description": "Das Dokument ist kein Synthseek-Theme, das diese Version lesen kann, daher wurde nichts geändert."
   }
 }

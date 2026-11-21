@@ -11,7 +11,7 @@ export const searchClear = cva(
 );
 
 export const searchShortcut = cva(
-  "text-fg/40 border-fg/15 pointer-events-none absolute top-1/2 right-2 -translate-y-1/2 rounded border px-1.5 font-mono text-[10px]"
+  "text-fg/40 border-fg/15 pointer-events-none absolute top-1/2 right-2 -translate-y-1/2 rounded border px-1.5 font-mono text-10"
 );
 
 export const searchSummary = cva("text-fg/50 px-3 pt-1 pb-2 text-xs");
@@ -30,7 +30,7 @@ export const paletteContent = cva("flex flex-col gap-3 sm:max-w-xl");
 
 export const paletteList = cva("flex max-h-[55vh] flex-col gap-0.5 overflow-y-auto");
 
-export const paletteGroupLabel = cva("text-fg/50 px-3 pt-2 pb-1 text-[11px] font-semibold tracking-wider uppercase");
+export const paletteGroupLabel = cva("text-fg/50 px-3 pt-2 pb-1 text-11 font-semibold tracking-wider uppercase");
 
 export const paletteItem = cva(
   "flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left transition-colors focus-visible:outline-none",

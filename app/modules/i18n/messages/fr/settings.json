@@ -194,7 +194,7 @@
     },
     "theme": {
       "title": "Thème",
-      "description": "Choisissez le thème adapté à votre environnement. Uniquement dans ce navigateur.",
+      "scope": "Pour votre compte, sur tous les appareils.",
       "groupLabel": "Thème de couleur"
     },
     "board": {
@@ -1671,9 +1671,9 @@
         "title": "Compte",
         "description": "Votre profil, votre mot de passe et votre quota de téléchargements."
       },
-      "appearance": {
-        "title": "Apparence et langue",
-        "description": "Le thème et la langue que Synthseek utilise pour vous, et la disposition de votre tableau."
+      "customization": {
+        "title": "Personnalisation",
+        "description": "Le thème que Synthseek porte pour vous, et la disposition de votre tableau."
       },
       "playback": {
         "title": "Lecture",
@@ -1726,8 +1726,8 @@
       }
     },
     "tabs": {
-      "appearance": {
-        "theme": "Thème et langue",
+      "customization": {
+        "theme": "Thème",
         "board": "Tableau"
       },
       "download": {
@@ -1783,7 +1783,7 @@
       "keywords": {
         "playbackAccount": "normalisation du volume sonie gain lecture automatique pistes similaires",
         "playbackBrowser": "égaliseur compresseur crossfade fondu gapless transition conversion débit mp3",
-        "theme": "sombre minuit océan couleur",
+        "theme": "sombre minuit océan couleur personnalisé css police polices rayon ombre importer exporter",
         "language": "anglais espagnol français allemand",
         "members": "rôle confiance quota préréglage demande qualité format",
         "board": "densité taille du texte arrière-plan modèles organiser disposition widgets",

@@ -11,15 +11,15 @@ export function MasterTableHeader() {
   return (
     <thead>
       <tr>
-        <th className={cn(tableHead(), "w-[38px] pl-4")} />
+        <th className={cn(tableHead(), "w-9.5 pl-4")} />
         <th className={tableHead()}>{t("librarySource.table.columnName")}</th>
-        <th className={cn(tableHead(), "hidden w-[95px] sm:table-cell")}>{t("librarySource.table.columnType")}</th>
-        <th className={cn(tableHead(), "hidden w-[60px] text-right md:table-cell")}>
+        <th className={cn(tableHead(), "hidden w-23.75 sm:table-cell")}>{t("librarySource.table.columnType")}</th>
+        <th className={cn(tableHead(), "hidden w-15 text-right md:table-cell")}>
           {t("librarySource.table.columnTracks")}
         </th>
-        <th className={cn(tableHead(), "hidden w-[150px] lg:table-cell")}>{t("librarySource.table.columnImported")}</th>
-        <th className={cn(tableHead(), "hidden w-[100px] lg:table-cell")}>{t("librarySource.table.columnLastSync")}</th>
-        <th className={cn(tableHead(), "w-[96px] text-center")}>{t("librarySource.table.columnSync")}</th>
+        <th className={cn(tableHead(), "hidden w-37.5 lg:table-cell")}>{t("librarySource.table.columnImported")}</th>
+        <th className={cn(tableHead(), "hidden w-25 lg:table-cell")}>{t("librarySource.table.columnLastSync")}</th>
+        <th className={cn(tableHead(), "w-24 text-center")}>{t("librarySource.table.columnSync")}</th>
       </tr>
     </thead>
   );

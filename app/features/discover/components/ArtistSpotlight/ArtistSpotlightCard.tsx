@@ -46,7 +46,7 @@ export function ArtistSpotlightCard({ artist, latestAlbum, onClick, onPlay }: Ar
           </div>
         )}
 
-        <div className="absolute inset-0 bg-linear-to-t from-black via-black/70 to-transparent" />
+        <div className="from-veil via-veil/70 absolute inset-0 bg-linear-to-t to-transparent" />
 
         <div className="absolute top-2 left-2 z-10 sm:top-3 sm:left-3">
           <Badge className="type-badge type-badge-overlay type-badge-artist shadow-lg">
@@ -77,7 +77,7 @@ export function ArtistSpotlightCard({ artist, latestAlbum, onClick, onPlay }: Ar
               </div>
 
               <div className="min-w-0 flex-1">
-                <p className="text-overlay-fg-muted text-[10px] tracking-wide uppercase sm:text-xs">
+                <p className="text-overlay-fg-muted text-10 tracking-wide uppercase sm:text-xs">
                   {t("artistSpotlight.latestRelease")}
                 </p>
                 <div className="flex items-center gap-1.5">
@@ -85,7 +85,7 @@ export function ArtistSpotlightCard({ artist, latestAlbum, onClick, onPlay }: Ar
                   <p className="text-overlay-fg line-clamp-1 text-xs font-medium sm:text-sm">{latestAlbum.name}</p>
                 </div>
                 {trackCount > 0 && (
-                  <p className="text-overlay-fg-muted text-[10px] sm:text-xs">
+                  <p className="text-overlay-fg-muted text-10 sm:text-xs">
                     {t("artistSpotlight.songs", { count: trackCount })}
                   </p>
                 )}

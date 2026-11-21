@@ -18,8 +18,8 @@ export function Switch({ className, ref, ...props }: SwitchProps) {
     >
       <SwitchPrimitive.Thumb
         className={cn(
-          "pointer-events-none block h-5 w-5 rounded-full bg-white shadow-lg ring-0 transition-transform",
-          "data-[state=checked]:translate-x-[22px] data-[state=unchecked]:translate-x-0.5"
+          "bg-overlay-fg pointer-events-none block h-5 w-5 rounded-full shadow-lg ring-0 transition-transform",
+          "data-[state=checked]:translate-x-5.5 data-[state=unchecked]:translate-x-0.5"
         )}
       />
     </SwitchPrimitive.Root>

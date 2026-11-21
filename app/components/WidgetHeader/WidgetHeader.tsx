@@ -37,7 +37,7 @@ export function WidgetHeader({
         ) : null}
         <div className={widgetHeaderTitleStack()}>
           <div className={widgetHeaderTitleLine()}>
-            <Heading id={titleId} className={widgetHeaderTitle()}>
+            <Heading id={titleId} className={widgetHeaderTitle()} data-part="widget-title">
               {title}
             </Heading>
             {info ? <InfoTooltip title={title} description={info} /> : null}

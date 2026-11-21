@@ -144,7 +144,7 @@ export function LogViewerCard() {
       {isLoading ? (
         <span className="text-fg/60 text-sm">{t("logs.viewer.loading")}</span>
       ) : error ? (
-        <span className="text-sm text-red-400">{t("logs.viewer.loadError", { message: error.message })}</span>
+        <span className="text-destructive-vivid text-sm">{t("logs.viewer.loadError", { message: error.message })}</span>
       ) : displayed.length === 0 ? (
         <span className="text-fg/50 text-sm">{t("logs.viewer.empty")}</span>
       ) : (

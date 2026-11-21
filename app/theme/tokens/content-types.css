@@ -1,0 +1,9 @@
+@layer base {
+  :root,
+  [data-theme] {
+    --type-track: var(--color-accent-400);
+    --type-album: var(--color-primary-400);
+    --type-artist: var(--color-secondary-400);
+    --type-playlist: oklch(0.78 0.17 150);
+  }
+}

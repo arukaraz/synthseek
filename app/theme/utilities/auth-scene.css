@@ -8,8 +8,8 @@
       linear-gradient(to right, var(--auth-grid-line) 1px, transparent 1px),
       linear-gradient(to bottom, var(--auth-grid-line) 1px, transparent 1px);
     background-size: 40px 40px;
-    -webkit-mask-image: radial-gradient(ellipse 70% 60% at center, oklch(0 0 0) 30%, transparent 80%);
-    mask-image: radial-gradient(ellipse 70% 60% at center, oklch(0 0 0) 30%, transparent 80%);
+    -webkit-mask-image: radial-gradient(ellipse 70% 60% at center, black 30%, transparent 80%);
+    mask-image: radial-gradient(ellipse 70% 60% at center, black 30%, transparent 80%);
   }
 
   @media (min-width: 640px) {
@@ -20,9 +20,17 @@
 
   .auth-orb {
     background-image:
-      radial-gradient(circle at 35% 35%, oklch(var(--neon-secondary) / 0.6) 0%, transparent 55%),
-      radial-gradient(circle at 70% 60%, oklch(var(--neon-accent) / 0.5) 0%, transparent 55%),
-      radial-gradient(circle at 50% 50%, oklch(var(--neon-primary) / 0.8) 0%, transparent 60%);
+      radial-gradient(
+        circle at 35% 35%,
+        color-mix(in oklab, var(--color-secondary-500) 60%, transparent) 0%,
+        transparent 55%
+      ),
+      radial-gradient(circle at 70% 60%, color-mix(in oklab, var(--neon-accent) 50%, transparent) 0%, transparent 55%),
+      radial-gradient(
+        circle at 50% 50%,
+        color-mix(in oklab, var(--color-primary-500) 80%, transparent) 0%,
+        transparent 60%
+      );
     opacity: var(--auth-orb-opacity);
     filter: blur(80px);
     transform: translate(-50%, -50%);

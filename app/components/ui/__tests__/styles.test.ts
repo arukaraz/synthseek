@@ -63,7 +63,7 @@ describe("authPlexButton", () => {
       expect(result).not.toContain("border-plex-500/35");
       expect(result).not.toContain("hover:border-plex-500/55");
     }
-    expect(authPlexButton({ phase: "completed" })).toContain("border-[oklch(var(--neon-success)/0.55)]");
+    expect(authPlexButton({ phase: "completed" })).toContain("border-success-strong/55");
     expect(authPlexButton({ phase: "error" })).toContain("border-destructive/60");
   });
 });
@@ -79,7 +79,7 @@ describe("authPlexIcon", () => {
     for (const phase of ["completed", "error"] as const) {
       expect(authPlexIcon({ phase })).not.toContain("text-plex-400");
     }
-    expect(authPlexIcon({ phase: "completed" })).toContain("text-[oklch(var(--neon-success))]");
+    expect(authPlexIcon({ phase: "completed" })).toContain("text-success-strong");
     expect(authPlexIcon({ phase: "error" })).toContain("text-destructive");
   });
 });

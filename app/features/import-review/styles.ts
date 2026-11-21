@@ -23,19 +23,19 @@ export const itemTitle = cva("text-fg min-w-0 truncate text-sm font-medium");
 
 export const evidenceText = cva("text-fg/70 text-xs leading-relaxed");
 
-export const filenameText = cva("text-fg/50 truncate font-mono text-[11px]");
+export const filenameText = cva("text-fg/50 truncate font-mono text-11");
 
-export const metaRow = cva("text-fg/50 flex flex-wrap gap-x-3 gap-y-0.5 text-[11px]");
+export const metaRow = cva("text-fg/50 flex flex-wrap gap-x-3 gap-y-0.5 text-11");
 
 export const errorNotice = cva(
-  "border-destructive/25 bg-destructive/5 text-destructive-vivid flex flex-col gap-1 rounded-lg border px-2.5 py-1.5 text-[11px]"
+  "border-destructive/25 bg-destructive/5 text-destructive-vivid flex flex-col gap-1 rounded-lg border px-2.5 py-1.5 text-11"
 );
 
 export const actionsRow = cva("flex flex-wrap items-center justify-end gap-2");
 
 export const audioPlayer = cva("mt-1 h-9 w-full");
 
-export const reasonBadge = cva("inline-flex shrink-0 items-center rounded px-1.5 py-0.5 text-[10px] font-medium", {
+export const reasonBadge = cva("inline-flex shrink-0 items-center rounded px-1.5 py-0.5 text-10 font-medium", {
   variants: {
     tone: {
       neutral: "bg-fg/10 text-fg/60",
@@ -57,6 +57,6 @@ export const retentionLabel = cva("text-fg/60 text-xs");
 
 export const retentionInput = cva("h-8 w-20 text-right tabular-nums");
 
-export const retentionError = cva("text-destructive-vivid text-[11px]");
+export const retentionError = cva("text-destructive-vivid text-11");
 
 export const errorText = cva("text-destructive-vivid text-sm");

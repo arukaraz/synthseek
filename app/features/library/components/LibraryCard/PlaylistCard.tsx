@@ -46,6 +46,8 @@ export function PlaylistCard({ item, onOpen, onPlay, chrome = "overlay" }: Playl
 
   return (
     <li
+      data-part="media-tile"
+      data-type="playlist"
       className={cardRoot({ interactive: activates })}
       role={activates ? "button" : undefined}
       tabIndex={activates ? 0 : undefined}
@@ -93,7 +95,9 @@ export function PlaylistCard({ item, onOpen, onPlay, chrome = "overlay" }: Playl
 
       <div className={cardBodyRow()}>
         <div className={cardBody()}>
-          <p className={cardTitle()}>{item.name}</p>
+          <p className={cardTitle()} data-part="media-tile-title">
+            {item.name}
+          </p>
           <p className={cardSubtitle()}>{playlistSubtitle(item, origin, t)}</p>
           <p className={cardMetaRow()}>
             <span className={cardMeta()}>{t("page.counts.tracks", { count: item.total_tracks })}</span>

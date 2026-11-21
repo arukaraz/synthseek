@@ -23,7 +23,7 @@ export function MetadataSection() {
         </div>
       ) : error || !data ? (
         <div className={emptyPanel()}>
-          <span className="text-sm text-red-400">{t("common.loadFailed")}</span>
+          <span className="text-destructive-vivid text-sm">{t("common.loadFailed")}</span>
         </div>
       ) : (
         <div className={sectionGrid()}>

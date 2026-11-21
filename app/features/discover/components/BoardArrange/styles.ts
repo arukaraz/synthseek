@@ -28,7 +28,7 @@ export const arrangeGrid = cva(
 );
 
 export const arrangeNewRow = cva(
-  "border-fg/20 text-fg/50 relative flex h-[calc(var(--board-row)*var(--arrange-new-row)+var(--board-gap)*(var(--arrange-new-row)-1))] items-center justify-center rounded-lg border border-dashed font-mono text-[10px] tracking-[0.12em] uppercase"
+  "border-fg/20 text-fg/50 relative flex h-[calc(var(--board-row)*var(--arrange-new-row)+var(--board-gap)*(var(--arrange-new-row)-1))] items-center justify-center rounded-lg border border-dashed font-mono text-10 tracking-caps uppercase"
 );
 
 export const arrangeEmpty = cva("text-fg/60 py-12 text-center text-sm");
@@ -51,7 +51,7 @@ export const arrangeBar = cva(
 );
 
 export const arrangeName = cva(
-  "@max-arrange-bar:basis-[calc(100%-2.75rem)] text-fg/60 min-w-0 flex-1 truncate font-mono text-[10px] tracking-[0.08em] uppercase"
+  "@max-arrange-bar:basis-[calc(100%-2.75rem)] text-fg/60 min-w-0 flex-1 truncate font-mono text-10 tracking-label uppercase"
 );
 
 export const arrangeTools = cva(

@@ -1,0 +1,472 @@
+{
+  "version": 1,
+  "files": [
+    { "id": "brand", "path": "tokens/brand.css" },
+    { "id": "surfaces", "path": "tokens/surfaces.css" },
+    { "id": "text", "path": "tokens/text.css" },
+    { "id": "content-types", "path": "tokens/content-types.css" },
+    { "id": "status", "path": "tokens/status.css" },
+    { "id": "widgets", "path": "tokens/widgets.css" },
+    { "id": "typography", "path": "tokens/typography.css" },
+    { "id": "shape", "path": "tokens/shape.css" },
+    { "id": "elevation", "path": "tokens/elevation.css" },
+    { "id": "services", "path": "tokens/services.css" }
+  ],
+  "presets": [
+    { "id": "dark" },
+    { "id": "midnight", "path": "themes/midnight.css" },
+    { "id": "ocean", "path": "themes/ocean.css" }
+  ],
+  "tokens": [
+    { "name": "--color-primary-500", "file": "brand", "kind": "color", "essential": true },
+    {
+      "name": "--color-primary-400",
+      "file": "brand",
+      "kind": "color",
+      "follows": "--color-primary-500",
+      "on": "--surface-bg"
+    },
+    { "name": "--color-primary-600", "file": "brand", "kind": "color", "follows": "--color-primary-500" },
+    { "name": "--color-primary-700", "file": "brand", "kind": "color", "follows": "--color-primary-500" },
+    { "name": "--color-secondary-500", "file": "brand", "kind": "color", "essential": true },
+    {
+      "name": "--color-secondary-400",
+      "file": "brand",
+      "kind": "color",
+      "follows": "--color-secondary-500",
+      "on": "--surface-bg"
+    },
+    { "name": "--color-secondary-600", "file": "brand", "kind": "color", "follows": "--color-secondary-500" },
+    { "name": "--color-accent-500", "file": "brand", "kind": "color", "essential": true },
+    {
+      "name": "--color-accent-400",
+      "file": "brand",
+      "kind": "color",
+      "follows": "--color-accent-500",
+      "on": "--surface-bg"
+    },
+    { "name": "--color-accent-600", "file": "brand", "kind": "color", "follows": "--color-accent-500" },
+    { "name": "--ring", "file": "brand", "kind": "color", "on": "--surface-bg" },
+
+    { "name": "--surface-bg", "file": "surfaces", "kind": "color", "essential": true },
+    { "name": "--surface-bg-elevated", "file": "surfaces", "kind": "color" },
+    { "name": "--surface-bg-overlay", "file": "surfaces", "kind": "color" },
+    { "name": "--surface-bg-sunken", "file": "surfaces", "kind": "color" },
+    { "name": "--muted", "file": "surfaces", "kind": "color" },
+    { "name": "--border-default", "file": "surfaces", "kind": "color" },
+    { "name": "--border-subtle", "file": "surfaces", "kind": "color" },
+    { "name": "--glass-bg", "file": "surfaces", "kind": "color" },
+    { "name": "--glass-border", "file": "surfaces", "kind": "color" },
+    { "name": "--veil", "file": "surfaces", "kind": "color" },
+    { "name": "--hairline", "file": "surfaces", "kind": "color" },
+    { "name": "--backdrop-grid", "file": "surfaces", "kind": "color" },
+
+    { "name": "--surface-fg", "file": "text", "kind": "color", "essential": true, "on": "--surface-bg" },
+    { "name": "--surface-fg-muted", "file": "text", "kind": "color", "on": "--surface-bg" },
+    { "name": "--primary-foreground", "file": "text", "kind": "color", "on": "--color-primary-500" },
+    { "name": "--destructive-foreground", "file": "text", "kind": "color", "on": "--destructive" },
+    { "name": "--on-cover", "file": "text", "kind": "color", "on": "--veil" },
+
+    {
+      "name": "--type-track",
+      "file": "content-types",
+      "kind": "color",
+      "follows": "--color-accent-400",
+      "on": "--surface-bg"
+    },
+    {
+      "name": "--type-album",
+      "file": "content-types",
+      "kind": "color",
+      "follows": "--color-primary-400",
+      "on": "--surface-bg"
+    },
+    {
+      "name": "--type-artist",
+      "file": "content-types",
+      "kind": "color",
+      "follows": "--color-secondary-400",
+      "on": "--surface-bg"
+    },
+    { "name": "--type-playlist", "file": "content-types", "kind": "color", "on": "--surface-bg" },
+
+    { "name": "--success-vivid", "file": "status", "kind": "color", "essential": true, "on": "--surface-bg" },
+    { "name": "--success-soft", "file": "status", "kind": "color", "follows": "--success-vivid", "on": "--surface-bg" },
+    { "name": "--success-tint", "file": "status", "kind": "color", "follows": "--success-vivid" },
+    { "name": "--success-strong", "file": "status", "kind": "color", "follows": "--success-vivid" },
+    { "name": "--warning-vivid", "file": "status", "kind": "color", "essential": true, "on": "--surface-bg" },
+    { "name": "--warning-soft", "file": "status", "kind": "color", "follows": "--warning-vivid", "on": "--surface-bg" },
+    { "name": "--warning-tint", "file": "status", "kind": "color", "follows": "--warning-vivid" },
+    { "name": "--warning-strong", "file": "status", "kind": "color", "follows": "--warning-vivid" },
+    { "name": "--destructive-vivid", "file": "status", "kind": "color", "essential": true, "on": "--surface-bg" },
+    {
+      "name": "--destructive-soft",
+      "file": "status",
+      "kind": "color",
+      "follows": "--destructive-vivid",
+      "on": "--surface-bg"
+    },
+    { "name": "--destructive-tint", "file": "status", "kind": "color", "follows": "--destructive-vivid" },
+    { "name": "--destructive-strong", "file": "status", "kind": "color", "follows": "--destructive-vivid" },
+    { "name": "--destructive", "file": "status", "kind": "color", "follows": "--destructive-vivid" },
+    { "name": "--info-vivid", "file": "status", "kind": "color", "on": "--surface-bg" },
+    { "name": "--info-soft", "file": "status", "kind": "color", "follows": "--info-vivid", "on": "--surface-bg" },
+    { "name": "--info-tint", "file": "status", "kind": "color", "follows": "--info-vivid" },
+    { "name": "--status-queued", "file": "status", "kind": "color", "on": "--surface-bg" },
+    { "name": "--status-pending-approval", "file": "status", "kind": "color", "on": "--surface-bg" },
+    {
+      "name": "--status-searching",
+      "file": "status",
+      "kind": "color",
+      "follows": "--color-secondary-400",
+      "on": "--surface-bg"
+    },
+    {
+      "name": "--status-pending-download",
+      "file": "status",
+      "kind": "color",
+      "follows": "--color-primary-400",
+      "on": "--surface-bg"
+    },
+    {
+      "name": "--status-downloading",
+      "file": "status",
+      "kind": "color",
+      "follows": "--color-primary-400",
+      "on": "--surface-bg"
+    },
+    {
+      "name": "--status-in-progress",
+      "file": "status",
+      "kind": "color",
+      "follows": "--color-primary-400",
+      "on": "--surface-bg"
+    },
+    {
+      "name": "--status-paused",
+      "file": "status",
+      "kind": "color",
+      "follows": "--warning-vivid",
+      "on": "--surface-bg"
+    },
+    { "name": "--status-pending-import", "file": "status", "kind": "color", "on": "--surface-bg" },
+    { "name": "--status-importing", "file": "status", "kind": "color", "on": "--surface-bg" },
+    { "name": "--status-syncing", "file": "status", "kind": "color", "on": "--surface-bg" },
+    { "name": "--status-complete", "file": "status", "kind": "color", "on": "--surface-bg" },
+    { "name": "--status-partial", "file": "status", "kind": "color", "on": "--surface-bg" },
+    {
+      "name": "--status-failed",
+      "file": "status",
+      "kind": "color",
+      "follows": "--destructive-vivid",
+      "on": "--surface-bg"
+    },
+    { "name": "--status-cancelled", "file": "status", "kind": "color", "on": "--surface-bg" },
+    {
+      "name": "--status-delegated",
+      "file": "status",
+      "kind": "color",
+      "follows": "--color-secondary-400",
+      "on": "--surface-bg"
+    },
+
+    { "name": "--mix-daily", "file": "widgets", "kind": "color", "essential": true },
+    { "name": "--mix-weekly", "file": "widgets", "kind": "color", "essential": true },
+    { "name": "--mix-explore", "file": "widgets", "kind": "color", "essential": true },
+    { "name": "--mix-cf", "file": "widgets", "kind": "color", "essential": true },
+    { "name": "--generated-cover-start", "file": "widgets", "kind": "color" },
+    { "name": "--generated-cover-end", "file": "widgets", "kind": "color" },
+
+    { "name": "--font-sans", "file": "typography", "kind": "font", "essential": true },
+    { "name": "--font-mono", "file": "typography", "kind": "font" },
+    { "name": "--font-heading", "file": "typography", "kind": "font", "follows": "--font-sans" },
+    {
+      "name": "--ui-scale",
+      "file": "typography",
+      "kind": "number",
+      "essential": true,
+      "min": 0.9,
+      "max": 1.15,
+      "step": 0.01
+    },
+    {
+      "name": "--text-9",
+      "file": "typography",
+      "kind": "length",
+      "unit": "rem",
+      "min": 0.5,
+      "max": 0.75,
+      "step": 0.0125
+    },
+    {
+      "name": "--text-10",
+      "file": "typography",
+      "kind": "length",
+      "unit": "rem",
+      "min": 0.5,
+      "max": 0.875,
+      "step": 0.0125
+    },
+    {
+      "name": "--text-11",
+      "file": "typography",
+      "kind": "length",
+      "unit": "rem",
+      "min": 0.5625,
+      "max": 0.9375,
+      "step": 0.0125
+    },
+    {
+      "name": "--text-xs",
+      "file": "typography",
+      "kind": "length",
+      "unit": "rem",
+      "min": 0.625,
+      "max": 1,
+      "step": 0.0125
+    },
+    {
+      "name": "--text-13",
+      "file": "typography",
+      "kind": "length",
+      "unit": "rem",
+      "min": 0.6875,
+      "max": 1.0625,
+      "step": 0.0125
+    },
+    {
+      "name": "--text-sm",
+      "file": "typography",
+      "kind": "length",
+      "unit": "rem",
+      "min": 0.75,
+      "max": 1.125,
+      "step": 0.0125
+    },
+    {
+      "name": "--text-15",
+      "file": "typography",
+      "kind": "length",
+      "unit": "rem",
+      "min": 0.8125,
+      "max": 1.1875,
+      "step": 0.0125
+    },
+    {
+      "name": "--text-base",
+      "file": "typography",
+      "kind": "length",
+      "unit": "rem",
+      "min": 0.875,
+      "max": 1.25,
+      "step": 0.0125
+    },
+    {
+      "name": "--text-lg",
+      "file": "typography",
+      "kind": "length",
+      "unit": "rem",
+      "min": 0.9375,
+      "max": 1.5,
+      "step": 0.0125
+    },
+    {
+      "name": "--text-xl",
+      "file": "typography",
+      "kind": "length",
+      "unit": "rem",
+      "min": 1,
+      "max": 1.75,
+      "step": 0.0125
+    },
+    {
+      "name": "--text-2xl",
+      "file": "typography",
+      "kind": "length",
+      "unit": "rem",
+      "min": 1.25,
+      "max": 2,
+      "step": 0.025
+    },
+    {
+      "name": "--text-3xl",
+      "file": "typography",
+      "kind": "length",
+      "unit": "rem",
+      "min": 1.5,
+      "max": 2.5,
+      "step": 0.025
+    },
+    {
+      "name": "--text-4xl",
+      "file": "typography",
+      "kind": "length",
+      "unit": "rem",
+      "min": 1.75,
+      "max": 3,
+      "step": 0.025
+    },
+    {
+      "name": "--text-5xl",
+      "file": "typography",
+      "kind": "length",
+      "unit": "rem",
+      "min": 2.25,
+      "max": 4,
+      "step": 0.05
+    },
+    {
+      "name": "--text-6xl",
+      "file": "typography",
+      "kind": "length",
+      "unit": "rem",
+      "min": 2.75,
+      "max": 5,
+      "step": 0.05
+    },
+    {
+      "name": "--tracking-tight",
+      "file": "typography",
+      "kind": "length",
+      "unit": "em",
+      "min": -0.08,
+      "max": 0,
+      "step": 0.005
+    },
+    {
+      "name": "--tracking-normal",
+      "file": "typography",
+      "kind": "length",
+      "unit": "em",
+      "min": -0.03,
+      "max": 0.05,
+      "step": 0.005
+    },
+    {
+      "name": "--tracking-wide",
+      "file": "typography",
+      "kind": "length",
+      "unit": "em",
+      "min": 0,
+      "max": 0.1,
+      "step": 0.005
+    },
+    {
+      "name": "--tracking-wider",
+      "file": "typography",
+      "kind": "length",
+      "unit": "em",
+      "min": 0,
+      "max": 0.15,
+      "step": 0.005
+    },
+    {
+      "name": "--tracking-label",
+      "file": "typography",
+      "kind": "length",
+      "unit": "em",
+      "min": 0,
+      "max": 0.2,
+      "step": 0.005
+    },
+    {
+      "name": "--tracking-widest",
+      "file": "typography",
+      "kind": "length",
+      "unit": "em",
+      "min": 0,
+      "max": 0.25,
+      "step": 0.005
+    },
+    {
+      "name": "--tracking-caps",
+      "file": "typography",
+      "kind": "length",
+      "unit": "em",
+      "min": 0,
+      "max": 0.3,
+      "step": 0.005
+    },
+    {
+      "name": "--tracking-caps-wide",
+      "file": "typography",
+      "kind": "length",
+      "unit": "em",
+      "min": 0,
+      "max": 0.35,
+      "step": 0.005
+    },
+
+    {
+      "name": "--radius",
+      "file": "shape",
+      "kind": "length",
+      "unit": "rem",
+      "essential": true,
+      "min": 0,
+      "max": 1.125,
+      "step": 0.0625
+    },
+    { "name": "--radius-full", "file": "shape", "kind": "length", "unit": "px", "min": 0, "max": 9999, "step": 1 },
+    { "name": "--border-width", "file": "shape", "kind": "length", "unit": "px", "min": 0, "max": 2, "step": 0.5 },
+
+    { "name": "--shadow-color", "file": "elevation", "kind": "color" },
+    {
+      "name": "--shadow-strength",
+      "file": "elevation",
+      "kind": "number",
+      "essential": true,
+      "min": 0,
+      "max": 1.5,
+      "step": 0.05
+    },
+    { "name": "--glow", "file": "elevation", "kind": "number", "essential": true, "min": 0, "max": 1.5, "step": 0.05 },
+    { "name": "--neon-accent", "file": "elevation", "kind": "color", "follows": "--color-accent-500" },
+    {
+      "name": "--glass-blur",
+      "file": "elevation",
+      "kind": "length",
+      "unit": "px",
+      "essential": true,
+      "min": 0,
+      "max": 24,
+      "step": 1
+    },
+
+    { "name": "--brand-spotify", "file": "services", "kind": "color" },
+    { "name": "--brand-spotify-ink", "file": "services", "kind": "color" },
+    { "name": "--brand-apple-music", "file": "services", "kind": "color" },
+    { "name": "--brand-youtube", "file": "services", "kind": "color" },
+    { "name": "--brand-instagram", "file": "services", "kind": "color" },
+    { "name": "--brand-lastfm", "file": "services", "kind": "color" },
+    { "name": "--brand-listenbrainz", "file": "services", "kind": "color" },
+    { "name": "--brand-navidrome", "file": "services", "kind": "color" },
+    { "name": "--brand-jellyfin", "file": "services", "kind": "color" },
+    { "name": "--brand-discord", "file": "services", "kind": "color" },
+    { "name": "--brand-ntfy", "file": "services", "kind": "color" },
+    { "name": "--brand-telegram", "file": "services", "kind": "color" },
+    { "name": "--brand-plex", "file": "services", "kind": "color" },
+    { "name": "--brand-website", "file": "services", "kind": "color", "follows": "--color-secondary-400" }
+  ],
+  "parts": [
+    { "name": "top-header", "level": "region" },
+    { "name": "brand", "level": "region" },
+    { "name": "bottom-nav", "level": "region" },
+    { "name": "sidebar", "level": "region" },
+    { "name": "board", "level": "region" },
+    { "name": "widget", "level": "region" },
+    { "name": "widget-title", "level": "region" },
+    { "name": "media-tile", "level": "region" },
+    { "name": "media-tile-title", "level": "region" },
+    { "name": "player-bar", "level": "region" },
+    { "name": "button", "level": "generic" },
+    { "name": "card", "level": "generic" },
+    { "name": "input", "level": "generic" },
+    { "name": "dialog", "level": "generic" },
+    { "name": "badge", "level": "generic" }
+  ],
+  "attributes": [
+    { "name": "data-acc", "values": ["daily", "weekly", "explore", "cf"] },
+    { "name": "data-type", "values": ["track", "album", "artist", "playlist"] }
+  ]
+}

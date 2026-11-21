@@ -16,7 +16,9 @@ export const workshopSubtitle = cva("text-fg/60 text-xs");
 
 export const workshopScroll = cva("min-h-0 flex-1 overflow-y-auto px-4 pt-4 pb-6 sm:px-6");
 
-export const workshopLayout = cva("grid items-start gap-6 min-[980px]:grid-cols-[minmax(0,1fr)_minmax(300px,400px)]");
+export const workshopLayout = cva(
+  "grid items-start gap-6 min-[980px]:grid-cols-[minmax(0,1fr)_minmax(18.75rem,25rem)]"
+);
 
 export const workshopForm = cva("@container flex min-w-0 flex-col gap-5");
 
@@ -29,7 +31,7 @@ export const section = cva("border-fg/10 bg-fg/[0.02] flex flex-col gap-3 rounde
 export const sectionHead = cva("flex flex-wrap items-center gap-x-3 gap-y-2");
 
 export const sectionNumber = cva(
-  "bg-primary-500/15 text-primary-400 flex size-6 shrink-0 items-center justify-center rounded-full font-mono text-[11px] font-bold"
+  "bg-primary-500/15 text-primary-400 flex size-6 shrink-0 items-center justify-center rounded-full font-mono text-11 font-bold"
 );
 
 export const sectionTitle = cva("text-fg text-sm font-semibold");
@@ -42,7 +44,7 @@ export const kindLabel = cva("text-fg/60 text-xs");
 
 export const startFromRow = cva("flex min-w-0 items-center gap-3");
 
-export const startFromLabel = cva("text-fg/60 shrink-0 font-mono text-[10.5px] tracking-wider uppercase");
+export const startFromLabel = cva("text-fg/60 shrink-0 font-mono text-10 tracking-wider uppercase");
 
 export const startFromList = cva("flex w-max gap-2 whitespace-nowrap");
 
@@ -55,15 +57,15 @@ export const stepList = cva("border-fg/10 flex flex-col divide-y divide-fg/10 ov
 export const stepRow = cva("grid items-start gap-x-3 gap-y-1.5 px-3 py-2.5", {
   variants: {
     flush: {
-      true: "grid-cols-[minmax(0,1fr)_30px] @[28rem]:grid-cols-[92px_minmax(0,1fr)]",
-      false: "grid-cols-[minmax(0,1fr)_30px] @[28rem]:grid-cols-[92px_minmax(0,1fr)_30px]",
+      true: "grid-cols-[minmax(0,1fr)_1.875rem] @[28rem]:grid-cols-[5.75rem_minmax(0,1fr)]",
+      false: "grid-cols-[minmax(0,1fr)_1.875rem] @[28rem]:grid-cols-[5.75rem_minmax(0,1fr)_1.875rem]",
     },
   },
   defaultVariants: { flush: false },
 });
 
 export const stepLabel = cva(
-  "text-fg/60 col-start-1 row-start-1 flex items-center gap-1 pt-3 font-mono text-[10.5px] font-semibold tracking-wider uppercase"
+  "text-fg/60 col-start-1 row-start-1 flex items-center gap-1 pt-3 font-mono text-10 font-semibold tracking-wider uppercase"
 );
 
 export const stepControls = cva(
@@ -73,7 +75,7 @@ export const stepControls = cva(
 export const stepRemove = cva("col-start-2 row-start-1 justify-self-end @[28rem]:col-start-3");
 export const stepText = cva("text-fg/70 text-sm");
 
-export const addRow = cva("bg-fg/[0.03] flex flex-wrap gap-2 px-3 py-2.5 @[28rem]:pl-[calc(92px+1.5rem)]");
+export const addRow = cva("bg-fg/[0.03] flex flex-wrap gap-2 px-3 py-2.5 @[28rem]:pl-[calc(5.75rem+1.5rem)]");
 
 export const readback = cva("border-primary-400 bg-fg/[0.03] text-fg/80 rounded-r-lg border-l-2 px-3 py-2 text-sm");
 
@@ -119,7 +121,7 @@ export const compareField = cva(
   "border-fg/15 bg-fg/5 text-fg hover:border-primary-500/30 flex h-10 w-auto min-w-0 cursor-pointer items-center gap-2 rounded-lg border px-3 text-sm transition-colors has-[:disabled]:cursor-not-allowed has-[:disabled]:opacity-60"
 );
 
-export const viewGrid = cva("grid grid-cols-[repeat(auto-fill,minmax(112px,1fr))] gap-2");
+export const viewGrid = cva("grid grid-cols-[repeat(auto-fill,minmax(7rem,1fr))] gap-2");
 
 export const viewTile = cva(
   "focus-visible:ring-primary-400 flex min-w-0 flex-col items-stretch gap-1.5 rounded-xl border p-2 text-xs font-medium outline-none focus-visible:ring-2",
@@ -140,7 +142,7 @@ export const viewTile = cva(
 
 export const viewName = cva("min-w-0 text-center");
 
-export const viewSuggested = cva("text-success-vivid text-center font-mono text-[9.5px] tracking-[0.1em] uppercase");
+export const viewSuggested = cva("text-success-vivid text-center font-mono text-9 tracking-widest uppercase");
 
 export const viewToggle = cva("ml-auto");
 
@@ -153,7 +155,7 @@ export const fieldLabel = cva("text-fg/70 flex min-w-0 flex-col gap-1.5 text-xs"
 export const accentRow = cva("flex items-center gap-2");
 
 export const accentDot = cva(
-  "focus-visible:ring-primary-400 size-6 rounded-full bg-[var(--mix-acc)] outline-none ring-offset-2 focus-visible:ring-2",
+  "focus-visible:ring-primary-400 size-6 rounded-full bg-mix-acc outline-none ring-offset-2 focus-visible:ring-2",
   {
     variants: {
       selected: {
@@ -171,7 +173,7 @@ export const playlistChoice = cva("flex min-w-0 items-center gap-3");
 
 export const newsUrl = cva("flex w-full min-w-0 flex-col gap-1");
 
-export const newsUrlHint = cva("text-fg/60 text-[11px]");
+export const newsUrlHint = cva("text-fg/60 text-11");
 
 export const iconSearch = cva("w-full");
 
@@ -196,7 +198,7 @@ export const iconEmpty = cva("text-fg/60 text-xs");
 
 export const previewBar = cva("flex flex-wrap items-center justify-between gap-2");
 
-export const previewLabel = cva("text-fg/60 font-mono text-[10.5px] tracking-wider uppercase");
+export const previewLabel = cva("text-fg/60 font-mono text-10 tracking-wider uppercase");
 
 export const previewTools = cva("flex items-center gap-1.5");
 
@@ -211,10 +213,10 @@ export const previewStale = cva("transition-opacity", {
 
 export const previewBusy = cva("absolute inset-0 flex items-center justify-center");
 
-export const previewHint = cva("text-fg/50 text-[11px]");
+export const previewHint = cva("text-fg/50 text-11");
 
 export const previewJson = cva(
-  `border-fg/10 ${terminalSurface} text-fg/80 max-h-80 overflow-auto rounded-lg border p-3 font-mono text-[11px] break-words whitespace-pre-wrap`
+  `border-fg/10 ${terminalSurface} text-fg/80 max-h-80 overflow-auto rounded-lg border p-3 font-mono text-11 break-words whitespace-pre-wrap`
 );
 
 export const previewCopy = cva("self-start");

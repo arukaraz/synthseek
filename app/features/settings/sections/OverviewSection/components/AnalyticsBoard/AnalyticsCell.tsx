@@ -7,7 +7,7 @@ import type { AnalyticsCellProps } from "./types";
 export function AnalyticsCell({ device, size, height, children }: AnalyticsCellProps) {
   const span = { cols: BOARD_SIZE_COLS[device][size], rows: ANALYTICS_CELL_ROWS[device][height][size] };
   return (
-    <div className={analyticsCell()} style={cellVars(span)}>
+    <div data-part="widget" className={analyticsCell()} style={cellVars(span)}>
       {children}
     </div>
   );

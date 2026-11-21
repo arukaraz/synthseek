@@ -31,7 +31,7 @@ export const quarantineFilename = cva("text-fg font-mono text-xs break-all");
 
 export const quarantineMeta = cva("text-fg/55 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs");
 
-export const quarantineReasonBadge = cva("bg-fg/10 text-fg/70 rounded-full px-2 py-0.5 text-[11px] font-medium");
+export const quarantineReasonBadge = cva("bg-fg/10 text-fg/70 rounded-full px-2 py-0.5 text-11 font-medium");
 
 export const quarantineTracksToggle = cva(
   "text-fg/70 hover:text-fg focus-visible:ring-primary-500 inline-flex items-center gap-1 rounded outline-none focus-visible:ring-2"

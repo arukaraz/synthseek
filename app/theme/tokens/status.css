@@ -1,0 +1,36 @@
+@layer base {
+  :root,
+  [data-theme] {
+    --success-vivid: oklch(0.765 0.177 163.223);
+    --success-soft: oklch(0.845 0.143 164.978);
+    --success-tint: oklch(0.696 0.17 162.48);
+    --success-strong: oklch(0.55 0.178 145);
+    --warning-vivid: oklch(0.852 0.199 91.936);
+    --warning-soft: oklch(0.879 0.169 91.605);
+    --warning-tint: oklch(0.769 0.188 70.08);
+    --warning-strong: oklch(0.85 0.176 85);
+    --destructive-vivid: oklch(0.704 0.191 22.216);
+    --destructive-soft: oklch(0.808 0.114 19.571);
+    --destructive-tint: oklch(0.637 0.237 25.331);
+    --destructive-strong: oklch(0.55 0.225 27);
+    --destructive: oklch(0.4 0.2 25);
+    --info-vivid: oklch(0.746 0.16 232.661);
+    --info-soft: oklch(0.828 0.111 230.318);
+    --info-tint: oklch(0.685 0.169 237.323);
+    --status-queued: oklch(0.75 0.183 55.934);
+    --status-pending-approval: oklch(0.777 0.152 181.912);
+    --status-searching: var(--color-secondary-400);
+    --status-pending-download: var(--color-primary-400);
+    --status-downloading: var(--color-primary-400);
+    --status-in-progress: var(--color-primary-400);
+    --status-paused: oklch(0.852 0.199 91.936);
+    --status-pending-import: oklch(0.673 0.182 276.935);
+    --status-importing: oklch(0.673 0.182 276.935);
+    --status-syncing: oklch(0.7 0.17 240);
+    --status-complete: oklch(0.792 0.209 151.711);
+    --status-partial: oklch(0.828 0.189 84.429);
+    --status-failed: oklch(0.704 0.191 22.216);
+    --status-cancelled: oklch(0.7 0 0);
+    --status-delegated: var(--color-secondary-400);
+  }
+}

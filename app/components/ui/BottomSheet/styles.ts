@@ -1,7 +1,7 @@
 import { cva } from "class-variance-authority";
 
 export const bottomSheetContent = cva(
-  "flex flex-col gap-0 overflow-hidden p-0 pb-[env(safe-area-inset-bottom,0px)] max-sm:rounded-t-[20px] max-sm:border-b-0",
+  "flex flex-col gap-0 overflow-hidden p-0 pb-[env(safe-area-inset-bottom,0px)] max-sm:rounded-t-3xl max-sm:border-b-0",
   {
     variants: {
       size: {
@@ -30,7 +30,7 @@ export const bottomSheetHeaderText = cva("flex min-w-0 flex-1 flex-col gap-0.5")
 
 export const bottomSheetTitle = cva("text-fg truncate text-base leading-tight font-bold tracking-tight");
 
-export const bottomSheetSubtitle = cva("text-fg/60 line-clamp-2 text-[12.5px]");
+export const bottomSheetSubtitle = cva("text-fg/60 line-clamp-2 text-12");
 
 export const bottomSheetClose = cva(
   "text-fg/70 hover:bg-fg/10 hover:text-fg grid size-9 shrink-0 place-items-center rounded-full transition-colors"

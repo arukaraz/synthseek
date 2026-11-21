@@ -86,7 +86,7 @@ export const footerSummary = cva("flex min-w-0 flex-1 flex-col");
 
 export const footerSummaryTitle = cva("text-fg truncate text-xs font-semibold");
 
-export const footerSummaryNote = cva("text-fg/50 truncate text-[11px]");
+export const footerSummaryNote = cva("text-fg/50 truncate text-11");
 
 export const footerKeepRequesting = cva(
   "text-fg/70 hover:text-fg flex shrink-0 cursor-pointer items-center gap-1.5 text-xs whitespace-nowrap select-none"

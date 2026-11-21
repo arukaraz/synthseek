@@ -9,7 +9,7 @@ export const viewerToolbar = cva("flex flex-wrap items-center gap-3");
 export const levelChips = cva("flex flex-wrap items-center gap-1.5");
 
 export const logChip = cva(
-  "cursor-pointer rounded-md px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wider ring-1 transition-opacity",
+  "cursor-pointer rounded-md px-2 py-0.5 text-11 font-semibold uppercase tracking-wider ring-1 transition-opacity",
   {
     variants: {
       active: {
@@ -42,8 +42,8 @@ export const LOG_LEVEL_DEFAULT_CLASS = "text-fg/70";
 export const LOG_LEVEL_STYLES: Record<LogLevelName, string> = {
   DEBUG: "text-fg/50",
   INFO: "text-primary-400",
-  WARN: "text-amber-300",
-  ERROR: "text-red-400",
-  SUCCESS: "text-emerald-300",
-  ENGINE: "text-cyan-300",
+  WARN: "text-warning-soft",
+  ERROR: "text-destructive-vivid",
+  SUCCESS: "text-success-soft",
+  ENGINE: "text-secondary-400",
 };

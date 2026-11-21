@@ -18,7 +18,7 @@ export const blockList = cva("flex flex-col gap-0.5", {
 });
 
 export const blockValue = cva(
-  "inline-flex shrink-0 items-center rounded-full bg-fg/10 px-2 py-0.5 font-sans text-[10.5px] font-semibold whitespace-nowrap text-[var(--mix-acc)]"
+  "inline-flex shrink-0 items-center rounded-full bg-fg/10 px-2 py-0.5 font-sans text-10 font-semibold whitespace-nowrap text-mix-acc"
 );
 
 export const blockRailBody = cva("flex min-h-0 flex-1 flex-col [container-type:size]");
@@ -78,7 +78,7 @@ export const cardRequestAction = cva(
 );
 
 export const cardAction = cva(
-  "text-overlay-fg focus-visible:ring-primary-400 absolute right-2 bottom-2 z-10 flex size-9 items-center justify-center rounded-full border border-white/20 bg-black/55 opacity-0 backdrop-blur-sm transition outline-none group-hover/card:opacity-100 hover:bg-[var(--mix-acc)] focus-visible:opacity-100 focus-visible:ring-2 [@media(hover:none)]:opacity-100 [&_svg]:size-4 [&_svg]:fill-current"
+  "text-overlay-fg focus-visible:ring-primary-400 absolute right-2 bottom-2 z-10 flex size-9 items-center justify-center rounded-full border border-hairline/20 bg-veil/55 opacity-0 backdrop-blur-sm transition outline-none group-hover/card:opacity-100 hover:bg-mix-acc focus-visible:opacity-100 focus-visible:ring-2 [@media(hover:none)]:opacity-100 [&_svg]:size-4 [&_svg]:fill-current"
 );
 
 export const cardCopy = cva("flex min-w-0 flex-col", {
@@ -96,7 +96,7 @@ export const cardCopy = cva("flex min-w-0 flex-col", {
   defaultVariants: { surface: "bare", single: false },
 });
 
-export const cardTitle = cva("text-fg max-w-full truncate text-[13px] font-medium", {
+export const cardTitle = cva("text-fg max-w-full truncate text-13 font-medium", {
   variants: {
     interactive: {
       true: "hover:underline focus-visible:underline outline-none",
@@ -114,7 +114,7 @@ export const cardSubtitle = cva("text-fg/60 max-w-full truncate", {
   variants: {
     single: {
       true: "text-xs",
-      false: "text-[11.5px]",
+      false: "text-11",
     },
   },
   defaultVariants: { single: false },
@@ -131,7 +131,7 @@ export const spotlightTile = cva(
 );
 
 export const spotlightShade = cva(
-  "pointer-events-none absolute inset-0 bg-linear-to-t from-black via-black/60 to-transparent"
+  "pointer-events-none absolute inset-0 bg-linear-to-t from-veil via-veil/60 to-transparent"
 );
 
 export const spotlightCopy = cva("absolute inset-x-0 bottom-0 flex flex-col gap-0.5 p-3 pr-12");
@@ -153,7 +153,7 @@ export const tileCard = cva(
 );
 
 export const tileShade = cva(
-  "pointer-events-none absolute inset-0 bg-linear-to-t from-black/80 via-black/40 to-transparent"
+  "pointer-events-none absolute inset-0 bg-linear-to-t from-veil/80 via-veil/40 to-transparent"
 );
 
 export const tileCopy = cva("absolute inset-x-0 bottom-0 flex flex-col p-3 pr-12");
@@ -178,10 +178,10 @@ export const tileValue = cva("text-overlay-fg-muted truncate text-xs");
 export const heroCover = cva("absolute inset-0 overflow-hidden rounded-2xl [&_img]:object-cover");
 
 export const heroBadge = cva(
-  "text-fg relative flex items-center gap-2 p-5 font-mono text-xs tracking-[0.2em] uppercase sm:p-6 [&_svg]:size-3"
+  "text-fg relative flex items-center gap-2 p-5 font-mono text-xs tracking-caps-wide uppercase sm:p-6 [&_svg]:size-3"
 );
 
-export const cardFoot = cva("truncate text-[11px] font-semibold text-[var(--mix-acc)]");
+export const cardFoot = cva("truncate text-11 font-semibold text-mix-acc");
 
 export const statBody = cva("flex min-h-0 flex-1 items-end justify-between gap-4");
 
@@ -189,7 +189,7 @@ export const statValue = cva("text-fg text-4xl leading-none font-black tabular-n
 
 export const statLabel = cva("text-fg/60 truncate text-xs");
 
-export const statDelta = cva("truncate text-[11px] font-semibold text-[var(--mix-acc)]");
+export const statDelta = cva("truncate text-11 font-semibold text-mix-acc");
 
 export const statsRow = cva("grid min-h-0 flex-1 gap-4 [grid-template-columns:repeat(var(--stat-cols),minmax(0,1fr))]");
 
@@ -206,14 +206,14 @@ export const leaderLink = cva(
 );
 
 export const leaderAction = cva(
-  "text-overlay-fg inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-black/55 px-3 py-1 text-xs font-semibold backdrop-blur-sm hover:bg-[var(--mix-acc)] [&_svg]:size-3.5"
+  "text-overlay-fg inline-flex items-center gap-1.5 rounded-full border border-hairline/20 bg-veil/55 px-3 py-1 text-xs font-semibold backdrop-blur-sm hover:bg-mix-acc [&_svg]:size-3.5"
 );
 
 export const feedList = cva("flex flex-col divide-y divide-fg/10");
 
 export const feedItem = cva("flex min-w-0 flex-col gap-0.5 py-2 first:pt-0");
 
-export const feedTitle = cva("text-fg line-clamp-2 text-left text-[13px] font-semibold", {
+export const feedTitle = cva("text-fg line-clamp-2 text-left text-13 font-semibold", {
   variants: {
     interactive: {
       true: "hover:underline focus-visible:underline outline-none",
@@ -223,22 +223,22 @@ export const feedTitle = cva("text-fg line-clamp-2 text-left text-[13px] font-se
   defaultVariants: { interactive: false },
 });
 
-export const feedMeta = cva("text-fg/60 truncate text-[11.5px]");
+export const feedMeta = cva("text-fg/60 truncate text-11");
 
 export const calendarDate = cva(
-  "flex w-10 shrink-0 flex-col items-center rounded-lg bg-fg/10 py-1 leading-none text-[var(--mix-acc)]"
+  "flex w-10 shrink-0 flex-col items-center rounded-lg bg-fg/10 py-1 leading-none text-mix-acc"
 );
 
-export const calendarMonth = cva("text-[9.5px] font-bold uppercase tracking-wider");
+export const calendarMonth = cva("text-9 font-bold uppercase tracking-wider");
 
 export const calendarDay = cva("text-fg text-base font-bold tabular-nums");
 
 export const moveBadge = cva(
-  "inline-flex shrink-0 items-center gap-0.5 rounded-full px-2 py-0.5 text-[10.5px] font-semibold whitespace-nowrap [&_svg]:size-3",
+  "inline-flex shrink-0 items-center gap-0.5 rounded-full px-2 py-0.5 text-10 font-semibold whitespace-nowrap [&_svg]:size-3",
   {
     variants: {
       direction: {
-        up: "bg-fg/10 text-[var(--mix-acc)]",
+        up: "bg-fg/10 text-mix-acc",
         down: "bg-fg/5 text-fg/60",
         same: "bg-fg/5 text-fg/50",
         new: "bg-fg/10 text-fg",
@@ -253,11 +253,11 @@ export const followMoreTrigger = cva(
 );
 
 export const followToday = cva(
-  "text-fg/60 flex items-center gap-2 px-1.5 py-1 text-[11px] font-semibold uppercase before:bg-current/30 before:h-px before:flex-1 after:bg-current/30 after:h-px after:flex-1"
+  "text-fg/60 flex items-center gap-2 px-1.5 py-1 text-11 font-semibold uppercase before:bg-current/30 before:h-px before:flex-1 after:bg-current/30 after:h-px after:flex-1"
 );
 
 export const cardMore = cva(
-  "text-overlay-fg absolute end-1 top-1 z-10 flex items-center gap-1 rounded-full bg-black/50 p-0.5 [&_button]:text-overlay-fg [&_svg]:text-overlay-fg"
+  "text-overlay-fg absolute end-1 top-1 z-10 flex items-center gap-1 rounded-full bg-veil/50 p-0.5 [&_button]:text-overlay-fg [&_svg]:text-overlay-fg"
 );
 
 export const mosaicGrid = cva(
@@ -267,7 +267,7 @@ export const mosaicGrid = cva(
 export const mosaicTile = cva("bg-surface-sunken relative min-h-0 overflow-hidden rounded-lg [&_img]:object-cover");
 
 export const mosaicButton = cva(
-  "text-overlay-fg focus-visible:ring-primary-400 absolute inset-0 flex items-center justify-center rounded-lg opacity-0 outline-none transition hover:bg-black/45 hover:opacity-100 focus-visible:opacity-100 focus-visible:ring-2 focus-visible:ring-inset [@media(hover:none)]:opacity-100 [&_svg]:size-5 [&_svg]:fill-current"
+  "text-overlay-fg focus-visible:ring-primary-400 absolute inset-0 flex items-center justify-center rounded-lg opacity-0 outline-none transition hover:bg-veil/45 hover:opacity-100 focus-visible:opacity-100 focus-visible:ring-2 focus-visible:ring-inset [@media(hover:none)]:opacity-100 [&_svg]:size-5 [&_svg]:fill-current"
 );
 
 export function mosaicVars(columns: number, rows: number): CssVars {

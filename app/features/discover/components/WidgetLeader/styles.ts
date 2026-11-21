@@ -17,11 +17,11 @@ export const leader = cva("relative flex min-h-36 shrink-0 overflow-hidden round
 export const leaderCover = cva("absolute inset-0 [&_img]:object-cover");
 
 export const leaderShade = cva(
-  "pointer-events-none absolute inset-0 bg-linear-to-t from-black/90 via-black/45 to-black/10"
+  "pointer-events-none absolute inset-0 bg-linear-to-t from-veil/90 via-veil/45 to-veil/10"
 );
 
 export const leaderBadge = cva(
-  "text-overlay-fg absolute top-3 left-3 z-10 inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-black/55 px-2.5 py-1 font-mono text-[10px] font-bold tracking-wider uppercase backdrop-blur-sm [&_svg]:size-3"
+  "text-overlay-fg absolute top-3 left-3 z-10 inline-flex items-center gap-1.5 rounded-full border border-hairline/20 bg-veil/55 px-2.5 py-1 font-mono text-10 font-bold tracking-wider uppercase backdrop-blur-sm [&_svg]:size-3"
 );
 
 export const leaderBody = cva("relative z-10 mt-auto flex w-full min-w-0 flex-col items-start gap-1 p-4");

@@ -1,0 +1,182 @@
+---
+title: "Custom Themes"
+blurb: "Recolor and restyle Synthseek for your account, with a visual editor or your own CSS."
+group: "Reference"
+order: 12
+---
+
+import ThemeParts from "../../components/ThemeParts.astro";
+import ThemeTokens from "../../components/ThemeTokens.astro";
+
+## What a custom theme is
+
+Synthseek ships three themes: Synthseek, Midnight and Ocean. **Custom** is a fourth one that belongs to your account. It follows you to the devices you sign in on, and it does not change what other members see.
+
+Open **Settings**, then **Customization**, then **Theme**, and pick **Custom**. The first time, it starts as a copy of the theme you were using. The **Custom theme** card under the picker is its editor.
+
+A theme holds two kinds of things.
+
+| Kind     | What it is                                                         | Where you edit it                          |
+| -------- | ------------------------------------------------------------------ | ------------------------------------------ |
+| Tokens   | Named values: colors, text sizes, fonts, corner radius and shadows | **Visual**, or the files under `tokens/`   |
+| Free CSS | Your own rules for parts of the app                                | **CSS**, in `components/` and `custom.css` |
+
+## The visual editor
+
+**Visual** lists the tokens in sections. A section opens on its essentials, **Show all** lists the rest, and the search box looks across the sections.
+
+- A color opens your browser's color picker and keeps its opacity.
+- A size or a radius is a slider.
+- A font is a list of system fonts and the fonts you uploaded.
+- The dot at the end of a row puts that token back to the value of the preset.
+
+Some colors follow another one. The text step of the primary color follows the primary color, so changing the base moves it too. Set a follower by hand and it stops following. Its dot makes it follow again.
+
+A color that carries text shows its contrast against the surface behind it, and marks a low one.
+
+**Theme options**, the menu beside the mode switch, sets the preset the theme starts from and its scheme, and holds **Share**. The scheme tells the browser to draw its own controls, such as scrollbars and menus, dark or light.
+
+## The CSS editor
+
+**CSS** shows the files of your theme.
+
+| File               | What it holds                                                                                          |
+| ------------------ | ------------------------------------------------------------------------------------------------------ |
+| `theme.json`       | The name, the scheme and the preset the theme started from. Synthseek writes it.                       |
+| `tokens/*.css`     | One file per section of the visual editor. Synthseek reads the variables inside its `:root { }` block. |
+| `components/*.css` | Your rules. A theme starts with `navigation.css`, `board.css` and `player.css`, and you can add files. |
+| `custom.css`       | Your rules, loaded last.                                                                               |
+
+The editor suggests token names after `--` and inside `var(`, and part names inside `[data-part="`. **Insert** lists the tokens, the parts and a few ready-made snippets. A problem shows under the editor with its line.
+
+| Keys                      | What they do                           |
+| ------------------------- | -------------------------------------- |
+| Tab                       | Indents                                |
+| Esc, then Tab             | Moves out of the editor                |
+| Ctrl+Space                | Opens the suggestions                  |
+| Ctrl+Z, or Cmd+Z on a Mac | Undoes the last change, in either mode |
+
+### What your rules can target
+
+Target the parts listed under [Parts](#parts), and take values from the tokens, so a color you change later reaches your rules.
+
+```css
+[data-part="widget-title"] {
+  letter-spacing: 0.08em;
+  color: var(--color-secondary-400);
+}
+```
+
+Your rules apply while **Custom** is selected. Pick another theme and they stop.
+
+The class names you can see in the page are not meant for themes. They change between releases, and the editor warns about a rule that uses one.
+
+### What a theme cannot load
+
+A rule that would load something from another address is left out of your theme, and the editor marks it. That covers `@import`, and a `url()` that points anywhere else than these:
+
+- a font you uploaded, as `fonts/<file>`
+- an inline `data:` image or font
+- a `#fragment` of the page
+
+`@media`, `@supports`, `@container`, `@layer`, `@starting-style`, `@keyframes` and `@font-face` work. Other at-rules are marked and not applied.
+
+## Fonts
+
+**Visual**, then **Typography**, uploads a `.woff2`, `.woff`, `.ttf` or `.otf` file. It is kept with your theme and served by your own server.
+
+An uploaded font joins the font lists under its file name, and **Use** makes it the interface font. In CSS it has the same name: `Inter.woff2` is `font-family: "Inter"`.
+
+The name in the logo keeps its own font, whichever font tokens you set.
+
+## Saving, drafts and preview
+
+Your changes show as you make them, in this browser. **Save theme** stores them, and your other devices pick them up.
+
+An unsaved draft is kept in this browser. Leave the page and come back, and the editor says it restored it. **Discard** goes back to the saved theme.
+
+The eye button, **Preview in the app**, takes you into the app wearing the draft. The strip at the top brings you back to the editor.
+
+A syntax error in a file turns **Save theme** off until you fix it. The bar names the file.
+
+## History
+
+Each file keeps its last 8 versions. **History**, in the CSS editor, lists them with their time and where each came from: Settings, a file edited on the server, a preset, or an [assistant](/ai-assistants#theme).
+
+**Restore** loads a version into the editor. It is saved when you press **Save theme**.
+
+## Share a theme
+
+A theme travels as one JSON document, from **Theme options**, then **Share**.
+
+**Export** names the theme and offers **Copy JSON** and **Download .json**. Clear **Include my free CSS** to share the tokens alone.
+
+**Import** takes a pasted document or its file.
+
+1. Press **Check**. Nothing changes yet. You see how many tokens it sets, which files carry free CSS, and how many remote resources were removed.
+2. Tick **Tokens only** to leave your own free CSS as it is.
+3. Press **Apply to draft**. The theme loads as a draft over yours.
+4. Press **Save theme** to keep it, or **Discard** to go back to yours.
+
+Free CSS can restyle or hide parts of the interface. Import the tokens alone when you do not trust where a theme came from.
+
+Fonts do not travel in the document. The theme names the font, and whoever imports it uploads the file.
+
+A document written by a newer Synthseek is refused. Update your server, then import it again.
+
+## The folder on the server
+
+A custom theme is a folder of files. In the container it lives under `/data/theme`, in a folder named after the account. [Configuration](/configuration#environment-variables) names the variable that moves it.
+
+```text
+/data/theme/<username>/
+├── theme.json
+├── tokens/
+│   ├── brand.css
+│   └── ...
+├── components/
+│   ├── navigation.css
+│   ├── board.css
+│   └── player.css
+├── custom.css
+└── fonts/
+```
+
+Whoever has the volume can edit these files with their own tools. Synthseek picks the change up, and **History** records it as edited on the server. A file it cannot parse is left out until it is fixed, and the rest of the theme still applies.
+
+A character a folder name cannot hold is written as `%` and its code. Renaming an account renames its folder, and deleting an account deletes it.
+
+## Limits
+
+These hold for what you save in Settings, import, or change through an assistant.
+
+| What                                     | Limit  |
+| ---------------------------------------- | ------ |
+| One file                                 | 256 KB |
+| The files of one theme and their history | 2 MB   |
+| Files in `components/`                   | 40     |
+| The fonts of one account                 | 5 MB   |
+
+When the files and their history pass 2 MB, the oldest versions go first.
+
+A file changed on the server is not checked against these limits. One over 256 KB is left out of the theme. If the files alone pass 2 MB, or `components/` holds more than 40, Settings refuses to save until they are back under.
+
+## If a theme locks you out
+
+A rule can hide the controls you need to undo it. Add `?setTheme=default` to the address of your Synthseek, for example `https://music.example.com/?setTheme=default`.
+
+Your account goes back to the Synthseek theme, and your custom theme is kept. Open **Settings**, **Customization**, **Theme**, and choose **Edit my custom theme without applying it** to fix it.
+
+## Tokens
+
+These are the tokens a theme can set, with the value each one has in the built-in themes. A token your theme leaves out keeps the value of the preset it started from.
+
+<ThemeTokens />
+
+## Parts
+
+A part is an element your CSS can target by name.
+
+<ThemeParts />
+
+`data-acc` is the accent a widget was given, and `data-type` is what a cover shows. Either one narrows a rule: `[data-part="media-tile"][data-acc="weekly"]`.

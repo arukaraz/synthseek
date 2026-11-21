@@ -16,12 +16,12 @@ export const trackRowCheck = cva("pointer-events-none shrink-0");
 
 export const trackRowArt = cva("ring-fg/10 relative size-11 shrink-0 overflow-hidden rounded-md ring-1");
 
-export const trackRowPlay = cva("text-overlay-fg absolute inset-0 grid place-items-center bg-black/35");
+export const trackRowPlay = cva("text-overlay-fg absolute inset-0 grid place-items-center bg-veil/35");
 
 export const trackRowText = cva("flex min-w-0 flex-1 flex-col gap-0.5");
 
-export const trackRowTitle = cva("text-fg truncate text-[14.5px] font-semibold");
+export const trackRowTitle = cva("text-fg truncate text-14 font-semibold");
 
-export const trackRowSubtitle = cva("text-fg/60 truncate text-[12.5px]");
+export const trackRowSubtitle = cva("text-fg/60 truncate text-12");
 
-export const trackRowStatus = cva("text-[11.5px]");
+export const trackRowStatus = cva("text-11");

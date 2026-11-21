@@ -20,30 +20,30 @@ export const checkButton = cva(
 
 export const timeline = cva("relative mt-2 pl-9");
 export const timelineLine = cva(
-  "pointer-events-none absolute top-2 bottom-4 left-4 w-0.5 rounded bg-linear-to-b from-cyan-400/80 via-primary-500/50 to-fg/10"
+  "pointer-events-none absolute top-2 bottom-4 left-4 w-0.5 rounded bg-linear-to-b from-secondary-500/80 via-primary-500/50 to-fg/10"
 );
 export const entry = cva("relative mb-7 last:mb-3.5");
 
 export const node = cva("ring-background absolute grid place-items-center rounded-full ring-4", {
   variants: {
     variant: {
-      latest: "top-2 -left-7 size-[18px] bg-cyan-400 shadow-[0_0_18px_-2px_var(--color-cyan-400)]",
-      new: "top-2 -left-7 size-[18px] bg-cyan-400/90",
-      current: "bg-primary-500 top-2 -left-7 size-[18px]",
+      latest: "top-2 -left-7 size-4.5 bg-secondary-500 shadow-[0_0_18px_-2px_var(--color-secondary-500)]",
+      new: "top-2 -left-7 size-4.5 bg-secondary-500/90",
+      current: "bg-primary-500 top-2 -left-7 size-4.5",
       past: "bg-fg/35 top-3 -left-6 size-2.5",
     },
   },
   defaultVariants: { variant: "past" },
 });
-export const nodePing = cva("absolute inline-flex size-full animate-ping rounded-full bg-cyan-400/70");
+export const nodePing = cva("absolute inline-flex size-full animate-ping rounded-full bg-secondary-500/70");
 export const nodeCheck = cva("text-primary-foreground size-3");
 
 export const card = cva("rounded-2xl border", {
   variants: {
     variant: {
       latest:
-        "border-cyan-400/30 from-cyan-400/[0.06] to-primary-500/[0.04] bg-linear-to-b p-5 shadow-[0_0_32px_-12px_var(--color-cyan-400)] sm:p-6",
-      new: "border-cyan-400/20 bg-fg/[0.02] p-4 sm:p-5",
+        "border-secondary-500/30 from-secondary-500/[0.06] to-primary-500/[0.04] bg-linear-to-b p-5 shadow-[0_0_32px_-12px_var(--color-secondary-500)] sm:p-6",
+      new: "border-secondary-500/20 bg-fg/[0.02] p-4 sm:p-5",
       current: "border-fg/10 from-fg/[0.025] to-fg/[0.006] bg-linear-to-b p-4 sm:p-5",
       past: "border-fg/10 bg-fg/[0.013] p-3.5 sm:p-4",
     },
@@ -58,8 +58,8 @@ export const vRowPast = cva("flex flex-wrap items-center gap-2");
 export const version = cva("font-mono font-bold", {
   variants: {
     variant: {
-      latest: "text-cyan-300 text-base sm:text-lg",
-      new: "text-cyan-300 text-sm",
+      latest: "text-secondary-400 text-base sm:text-lg",
+      new: "text-secondary-400 text-sm",
       current: "text-fg text-sm sm:text-base",
       past: "text-fg/60 text-sm",
     },
@@ -67,16 +67,16 @@ export const version = cva("font-mono font-bold", {
   defaultVariants: { variant: "past" },
 });
 
-export const badge = cva("rounded px-1.5 py-0.5 font-mono text-[9.5px] font-bold tracking-[0.16em] uppercase", {
+export const badge = cva("rounded px-1.5 py-0.5 font-mono text-9 font-bold tracking-caps uppercase", {
   variants: {
     tone: {
-      new: "bg-cyan-400/20 text-cyan-100 ring-1 ring-cyan-400/40",
+      new: "bg-secondary-500/20 text-secondary-400 ring-1 ring-secondary-500/40",
       current: "bg-primary-500/18 text-primary-400 ring-primary-500/40 ring-1",
     },
   },
 });
 
-export const date = cva("text-fg/45 font-mono text-[11px]");
+export const date = cva("text-fg/45 font-mono text-11");
 
 export const headline = cva("font-bold tracking-tight", {
   variants: {
@@ -101,7 +101,7 @@ export const endNode = cva(
   "border-fg/40 bg-background absolute top-0 -left-6 size-2.5 rounded-full border border-dashed"
 );
 export const endLink = cva(
-  "text-primary-400 inline-flex items-center gap-1.5 pl-3.5 text-[13px] font-semibold hover:underline"
+  "text-primary-400 inline-flex items-center gap-1.5 pl-3.5 text-13 font-semibold hover:underline"
 );
 
 export const loadingState = cva("flex items-center justify-center py-10");

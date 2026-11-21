@@ -14,7 +14,7 @@ export const headerPlayer = cva(
 );
 
 export const chainStrip = cva(
-  "player-scroll-fade scrollbar-none border-fg-muted/15 bg-surface-sunken/30 flex h-[30px] items-center gap-2.5 overflow-x-auto px-5 whitespace-nowrap backdrop-blur-[18px]",
+  "player-scroll-fade scrollbar-none border-fg-muted/15 bg-surface-sunken/30 flex h-7.5 items-center gap-2.5 overflow-x-auto px-5 whitespace-nowrap backdrop-blur-lg",
   {
     variants: {
       placement: {
@@ -26,9 +26,9 @@ export const chainStrip = cva(
   }
 );
 
-export const chainLabel = cva("text-fg-muted font-mono text-[9px] tracking-[0.12em]");
+export const chainLabel = cva("text-fg-muted font-mono text-9 tracking-caps");
 
-export const chainValue = cva("font-mono text-[10.5px]", {
+export const chainValue = cva("font-mono text-10", {
   variants: {
     tone: {
       neutral: "text-fg",
@@ -44,7 +44,7 @@ export const chainValue = cva("font-mono text-[10.5px]", {
 export const chainSeparator = cva("text-fg-muted/60 size-2.5 shrink-0");
 
 export const chainButton = cva(
-  "focus-visible:ring-primary-500 cursor-pointer rounded-sm font-mono text-[10.5px] transition-colors focus-visible:ring-2 focus-visible:outline-none",
+  "focus-visible:ring-primary-500 cursor-pointer rounded-sm font-mono text-10 transition-colors focus-visible:ring-2 focus-visible:outline-none",
   {
     variants: {
       tone: {
@@ -59,7 +59,7 @@ export const chainButton = cva(
 export const bar = cva("flex h-[var(--player-bar-height)] flex-col justify-center @player:gap-1", {
   variants: {
     placement: {
-      dock: "bg-surface-overlay/95 border-primary-500/25 border-t px-2 backdrop-blur-[18px] @player:px-5",
+      dock: "bg-surface-overlay/95 border-primary-500/25 border-t px-2 backdrop-blur-lg @player:px-5",
       header: "bg-transparent",
     },
   },
@@ -90,9 +90,9 @@ export const barNameButton = cva(
   "focus-visible:ring-primary-500 flex min-w-0 items-center rounded-lg text-left focus-visible:ring-2 focus-visible:outline-none @player:cursor-default"
 );
 
-export const barTitle = cva("text-fg block min-w-0 truncate text-[13.5px] leading-tight font-semibold");
+export const barTitle = cva("text-fg block min-w-0 truncate text-13 leading-tight font-semibold");
 
-export const barDeviceLine = cva("flex items-center gap-1 truncate text-[11px] leading-tight", {
+export const barDeviceLine = cva("flex items-center gap-1 truncate text-11 leading-tight", {
   variants: {
     remote: {
       true: "text-secondary-400",
@@ -102,12 +102,12 @@ export const barDeviceLine = cva("flex items-center gap-1 truncate text-[11px] l
   defaultVariants: { remote: false },
 });
 
-export const barSubtitle = cva("text-fg-muted block min-w-0 truncate text-[11.5px] leading-tight");
+export const barSubtitle = cva("text-fg-muted block min-w-0 truncate text-11 leading-tight");
 
 export const barSubtitleRow = cva("flex min-w-0 items-center gap-1.5");
 
 export const barSourceChip = cva(
-  "bg-warning-vivid/15 text-warning-vivid inline-flex shrink-0 items-center rounded-full px-1.5 text-[10px] leading-4 font-semibold"
+  "bg-warning-vivid/15 text-warning-vivid inline-flex shrink-0 items-center rounded-full px-1.5 text-10 leading-4 font-semibold"
 );
 
 export const sourceList = cva("flex flex-col gap-1.5");
@@ -197,7 +197,7 @@ export const moreSheetBody = cva("max-h-[70dvh] px-2 pb-2");
 
 export const moreSheetList = cva("flex flex-col");
 
-export const moreSheetLabel = cva("text-fg-muted px-3 pt-3 pb-1 font-mono text-[10px] tracking-[0.14em] uppercase");
+export const moreSheetLabel = cva("text-fg-muted px-3 pt-3 pb-1 font-mono text-10 tracking-caps uppercase");
 
 export const moreSheetSeparator = cva("bg-fg/10 mx-3 my-1 h-px");
 
@@ -214,7 +214,7 @@ export const moreSheetCheck = cva("text-primary-400 size-4 shrink-0", {
   },
 });
 
-export const menuState = cva("ml-auto shrink-0 pl-3 text-[11px]", {
+export const menuState = cva("ml-auto shrink-0 pl-3 text-11", {
   variants: {
     tone: {
       muted: "text-fg-muted",
@@ -244,8 +244,8 @@ export const volumeGroup = cva("items-center gap-2", {
 export const clock = cva("text-fg-muted shrink-0 font-mono tabular-nums", {
   variants: {
     size: {
-      bar: "w-10 text-[11px]",
-      stage: "w-12 text-[12px]",
+      bar: "w-10 text-11",
+      stage: "w-12 text-12",
     },
     align: {
       left: "text-left",
@@ -305,8 +305,8 @@ export const cover = cva("relative grid shrink-0 place-items-center overflow-hid
       card: "size-11 rounded-md",
       bar: "size-10 rounded-md @player:size-12.5",
       masthead: "size-9 rounded-lg",
-      stage: "size-[min(60vw,24vh,268px)] rounded-xl @player:size-[min(60vw,32vh,268px)]",
-      fluid: "size-[min(100cqw,100cqh,268px)] rounded-xl",
+      stage: "size-[min(60vw,24vh,16.75rem)] rounded-xl @player:size-[min(60vw,32vh,16.75rem)]",
+      fluid: "size-[min(100cqw,100cqh,16.75rem)] rounded-xl",
       sideways: "size-16 rounded-lg",
     },
   },
@@ -329,13 +329,13 @@ export const coverArtwork = cva("size-full object-cover");
 export const coverInitials = cva("text-fg font-mono", {
   variants: {
     size: {
-      row: "text-[8px]",
-      card: "text-[10px]",
-      bar: "text-[10px]",
-      masthead: "text-[10px]",
-      stage: "text-[26px]",
-      fluid: "text-[26px]",
-      sideways: "text-[14px]",
+      row: "text-9",
+      card: "text-10",
+      bar: "text-10",
+      masthead: "text-10",
+      stage: "text-[1.625rem]",
+      fluid: "text-[1.625rem]",
+      sideways: "text-14",
     },
   },
   defaultVariants: { size: "bar" },
@@ -345,7 +345,7 @@ export const waveTrack = cva("relative min-w-0 flex-1 cursor-pointer touch-none"
   variants: {
     size: {
       bar: "h-9",
-      stage: "h-9 sm:h-[58px]",
+      stage: "h-9 sm:h-14.5",
     },
   },
   defaultVariants: { size: "bar" },
@@ -388,13 +388,13 @@ export const volumeRail = cva("bg-fg-muted/30 relative h-1 w-full rounded-full")
 
 export const volumeFill = cva("player-volume-fill bg-fg h-1 rounded-full");
 
-export const volumeHead = cva("player-volume-head bg-fg absolute -top-[3px] -ml-[5px] size-2.5 rounded-full");
+export const volumeHead = cva("player-volume-head bg-fg absolute -top-[3px] -ml-1.25 size-2.5 rounded-full");
 
 export const panelAnchor = cva("player-metrics pointer-events-auto fixed z-70", {
   variants: {
     width: {
       devices: "sm:w-[306px]",
-      settings: "sm:w-[400px]",
+      settings: "sm:w-100",
       room: "sm:w-[340px]",
       queue: "",
     },
@@ -407,20 +407,20 @@ export const panelAnchor = cva("player-metrics pointer-events-auto fixed z-70", 
       false:
         "player-panel-anchor inset-x-0 bottom-0 sm:inset-x-auto sm:right-[var(--player-dock-gap)] sm:bottom-[calc(var(--player-bar-height)+var(--player-dock-gap))]",
       column:
-        "player-panel-column inset-x-0 top-0 bottom-[calc(var(--player-dock-height)+var(--height-bottom-nav))] sm:inset-x-auto sm:right-[var(--player-dock-gap)] sm:bottom-[var(--player-dock-height)] sm:w-[380px]",
+        "player-panel-column inset-x-0 top-0 bottom-[calc(var(--player-dock-height)+var(--height-bottom-nav))] sm:inset-x-auto sm:right-[var(--player-dock-gap)] sm:bottom-[var(--player-dock-height)] sm:w-95",
     },
   },
   defaultVariants: { width: "devices", chain: false, anchored: false },
 });
 
 export const panelSurface = cva(
-  "bg-surface-overlay border-fg/10 flex flex-col overflow-hidden rounded-t-[18px] border pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:rounded-t-[14px] sm:pb-0",
+  "bg-surface-overlay border-fg/10 flex flex-col overflow-hidden rounded-t-2xl border pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:rounded-t-xl sm:pb-0",
   {
     variants: {
       edge: {
         bar: "border-b-0",
-        header: "sm:rounded-[14px] sm:rounded-t-none sm:border-t-0 sm:shadow-[0_24px_60px_rgba(0,0,0,0.45)]",
-        floating: "sm:rounded-[14px] sm:shadow-[0_24px_60px_rgba(0,0,0,0.45)]",
+        header: "sm:rounded-xl sm:rounded-t-none sm:border-t-0 sm:shadow-float",
+        floating: "sm:rounded-xl sm:shadow-float",
       },
       stretch: {
         true: "h-full",
@@ -433,7 +433,7 @@ export const panelSurface = cva(
 
 export const deviceList = cva("flex flex-col gap-2.5 p-3.5");
 
-export const deviceCaption = cva("text-fg-muted font-mono text-[10px] tracking-[0.14em]");
+export const deviceCaption = cva("text-fg-muted font-mono text-10 tracking-caps");
 
 export const deviceRow = cva(
   "flex w-full items-center gap-3 rounded-xl border px-3.5 py-3 text-left transition-colors",
@@ -452,7 +452,7 @@ export const deviceRow = cva(
   }
 );
 
-export const modeHint = cva("text-fg-muted shrink-0 font-mono text-[10px] tracking-[0.12em] uppercase");
+export const modeHint = cva("text-fg-muted shrink-0 font-mono text-10 tracking-caps uppercase");
 
 export const settingsPanel = cva(
   "scrollbar-none flex max-h-[min(78vh,calc(100vh-var(--player-dock-height)-1rem))] flex-col gap-3 overflow-y-auto px-3 pb-3"
@@ -461,7 +461,7 @@ export const settingsPanel = cva(
 export const settingsModalOverlay = cva("z-70");
 
 export const settingsModal = cva(
-  "player-metrics bg-surface-overlay border-fg/10 fixed inset-x-0 bottom-0 z-70 flex max-h-[85dvh] flex-col overflow-hidden rounded-t-[18px] border border-b-0 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-2xl focus:outline-none sm:inset-x-auto sm:top-1/2 sm:bottom-auto sm:left-1/2 sm:max-h-[min(85dvh,52rem)] sm:w-[min(26rem,calc(100vw-2rem))] sm:-translate-x-1/2 sm:-translate-y-1/2 sm:rounded-[14px] sm:border-b sm:pb-0"
+  "player-metrics bg-surface-overlay border-fg/10 fixed inset-x-0 bottom-0 z-70 flex max-h-[85dvh] flex-col overflow-hidden rounded-t-2xl border border-b-0 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-2xl focus:outline-none sm:inset-x-auto sm:top-1/2 sm:bottom-auto sm:left-1/2 sm:max-h-[min(85dvh,52rem)] sm:w-[min(26rem,calc(100vw-2rem))] sm:-translate-x-1/2 sm:-translate-y-1/2 sm:rounded-xl sm:border-b sm:pb-0"
 );
 
 export const settingsModalFrame = cva("flex min-h-0 flex-1 flex-col");
@@ -474,11 +474,11 @@ export const settingsSection = cva(
 
 export const settingsSectionHeader = cva("flex min-h-8 items-center justify-between gap-3");
 
-export const settingsSectionTitle = cva("text-fg font-mono text-[11px] tracking-[0.14em]");
+export const settingsSectionTitle = cva("text-fg font-mono text-11 tracking-caps");
 
 export const settingsSectionBody = cva("border-fg-muted/15 flex flex-col gap-3.5 border-t pt-3.5");
 
-export const settingsHint = cva("text-fg-muted text-[11px] leading-snug");
+export const settingsHint = cva("text-fg-muted text-11 leading-snug");
 
 export const settingsSlider = cva("flex items-center gap-3");
 
@@ -488,7 +488,7 @@ export const settingsSliderTrack = cva(
   "focus-visible:ring-primary-500 flex h-4 min-w-0 flex-1 cursor-pointer items-center rounded-md touch-none focus-visible:ring-2 focus-visible:outline-none aria-disabled:cursor-default aria-disabled:opacity-40"
 );
 
-export const settingsSliderValue = cva("text-fg w-16 shrink-0 text-right font-mono text-[11px] tabular-nums");
+export const settingsSliderValue = cva("text-fg w-16 shrink-0 text-right font-mono text-11 tabular-nums");
 
 export const settingsPresetRow = cva("flex items-center gap-2");
 
@@ -501,7 +501,7 @@ export const equalizerPresetTrigger = cva("gap-1.5");
 export const equalizerBands = cva("flex items-start gap-1");
 
 export const equalizerScale = cva(
-  "text-fg-muted flex h-[140px] shrink-0 flex-col justify-between pt-[18px] pr-1 text-right font-mono text-[9px] leading-none tabular-nums"
+  "text-fg-muted flex h-35 shrink-0 flex-col justify-between pt-4.5 pr-1 text-right font-mono text-9 leading-none tabular-nums"
 );
 
 export const equalizerBand = cva("flex min-w-0 flex-1 flex-col items-center gap-1.5", {
@@ -514,7 +514,7 @@ export const equalizerBand = cva("flex min-w-0 flex-1 flex-col items-center gap-
   defaultVariants: { disabled: false },
 });
 
-export const equalizerBandValue = cva("h-3 font-mono text-[10px] leading-none tabular-nums", {
+export const equalizerBandValue = cva("h-3 font-mono text-10 leading-none tabular-nums", {
   variants: {
     active: {
       true: "text-primary-400",
@@ -525,7 +525,7 @@ export const equalizerBandValue = cva("h-3 font-mono text-[10px] leading-none ta
 });
 
 export const equalizerBandTrack = cva(
-  "focus-visible:ring-primary-500 relative h-[122px] w-full cursor-pointer rounded-md touch-none focus-visible:ring-2 focus-visible:outline-none aria-disabled:cursor-default"
+  "focus-visible:ring-primary-500 relative h-30.5 w-full cursor-pointer rounded-md touch-none focus-visible:ring-2 focus-visible:outline-none aria-disabled:cursor-default"
 );
 
 export const equalizerBandRail = cva("bg-fg-muted/25 absolute inset-y-0 left-1/2 w-0.5 -translate-x-1/2 rounded-full");
@@ -540,19 +540,19 @@ export const equalizerBandHead = cva(
   "player-eq-head bg-fg absolute left-1/2 size-3 -translate-x-1/2 -translate-y-1/2 rounded-full shadow-sm"
 );
 
-export const equalizerBandLabel = cva("text-fg-muted font-mono text-[9px] tracking-[0.08em]");
+export const equalizerBandLabel = cva("text-fg-muted font-mono text-9 tracking-label");
 
-export const equalizerFootnote = cva("text-fg-muted flex flex-col gap-1 font-mono text-[10px] tracking-[0.06em]");
+export const equalizerFootnote = cva("text-fg-muted flex flex-col gap-1 font-mono text-10 tracking-wider");
 
 export const queueHeader = cva("flex shrink-0 items-center justify-between gap-3 px-3.5 pt-3 pb-1");
 
-export const queueTitle = cva("text-fg text-[15px] font-semibold");
+export const queueTitle = cva("text-fg text-15 font-semibold");
 
 export const queueHeaderActions = cva("flex items-center gap-1");
 
 export const abovePlayerPanels = cva("z-80");
 
-export const queueCaption = cva("text-fg-muted shrink-0 px-1 pt-2 pb-1 font-mono text-[10px] tracking-[0.14em]");
+export const queueCaption = cva("text-fg-muted shrink-0 px-1 pt-2 pb-1 font-mono text-10 tracking-caps");
 
 export const queueList = cva("scrollbar-none flex min-h-0 flex-1 flex-col overflow-y-auto px-2.5 pb-2");
 
@@ -578,7 +578,7 @@ export const queueRowText = cva(
 
 export const queueRowLines = cva("flex min-w-0 flex-1 flex-col");
 
-export const queueRowTitle = cva("min-w-0 truncate text-[13px] leading-tight font-semibold", {
+export const queueRowTitle = cva("min-w-0 truncate text-13 leading-tight font-semibold", {
   variants: {
     current: {
       true: "text-primary-400",
@@ -588,9 +588,9 @@ export const queueRowTitle = cva("min-w-0 truncate text-[13px] leading-tight fon
   defaultVariants: { current: false },
 });
 
-export const queueRowArtist = cva("text-fg-muted min-w-0 truncate text-[11px] leading-tight");
+export const queueRowArtist = cva("text-fg-muted min-w-0 truncate text-11 leading-tight");
 
-export const queueEmpty = cva("text-fg-muted px-1 py-3 text-[12px]");
+export const queueEmpty = cva("text-fg-muted px-1 py-3 text-12");
 
 export const miniRoot = cva("text-fg flex flex-col overflow-hidden", {
   variants: {
@@ -625,7 +625,7 @@ export const miniTextColumn = cva("flex min-w-0 flex-1 flex-col", {
 export const miniTitle = cva("text-fg truncate leading-tight font-semibold", {
   variants: {
     placement: {
-      window: "text-[13.5px]",
+      window: "text-13",
       stage: "text-xl",
     },
   },
@@ -635,8 +635,8 @@ export const miniTitle = cva("text-fg truncate leading-tight font-semibold", {
 export const miniArtist = cva("text-fg-muted truncate leading-tight", {
   variants: {
     placement: {
-      window: "text-[11.5px]",
-      stage: "text-[15px]",
+      window: "text-11",
+      stage: "text-15",
     },
   },
   defaultVariants: { placement: "window" },
@@ -687,7 +687,7 @@ export const miniExtras = cva("flex shrink-0 items-center justify-center gap-1 p
 export const miniFooter = cva("shrink-0 px-3.5 pt-2 pb-3");
 
 export const miniLibraryButton = cva(
-  "bg-primary-500 text-primary-foreground focus-visible:ring-primary-400 flex w-full cursor-pointer items-center justify-center gap-2 rounded-full py-2.5 text-[13px] font-semibold transition-transform hover:scale-[1.02] focus-visible:ring-2 focus-visible:outline-none"
+  "bg-primary-500 text-primary-foreground focus-visible:ring-primary-400 flex w-full cursor-pointer items-center justify-center gap-2 rounded-full py-2.5 text-13 font-semibold transition-transform hover:scale-[1.02] focus-visible:ring-2 focus-visible:outline-none"
 );
 
 export const deviceIcon = cva("size-4.5 shrink-0", {
@@ -700,13 +700,13 @@ export const deviceIcon = cva("size-4.5 shrink-0", {
   defaultVariants: { state: "idle" },
 });
 
-export const deviceName = cva("text-fg min-w-0 flex-1 truncate text-[13.5px] font-semibold");
+export const deviceName = cva("text-fg min-w-0 flex-1 truncate text-13 font-semibold");
 
 export const barDesktopExtras = cva("hidden shrink-0 items-center gap-2.5 @player:flex");
 
 export const stage = cva("@container pointer-events-auto fixed inset-0 z-60 flex flex-col overflow-hidden");
 
-export const stageBackdrop = cva("bg-surface/98 absolute inset-0 backdrop-blur-[26px]");
+export const stageBackdrop = cva("bg-surface/98 absolute inset-0 backdrop-blur-xl");
 
 export const stageTint = cva("absolute inset-0", {
   variants: {
@@ -737,19 +737,19 @@ export const stageMain = cva(
   }
 );
 
-export const stageMeta = cva("flex max-w-[430px] flex-col items-center gap-1.5 sm:gap-2.5 md:items-start");
+export const stageMeta = cva("flex max-w-107.5 flex-col items-center gap-1.5 sm:gap-2.5 md:items-start");
 
 export const stageTitle = cva(
-  "text-fg line-clamp-2 text-[26px] leading-tight font-bold tracking-[-0.02em] sm:line-clamp-none sm:text-[34px]"
+  "text-fg line-clamp-2 text-[1.625rem] leading-tight font-bold tracking-tight sm:line-clamp-none sm:text-[2.125rem]"
 );
 
-export const stageArtist = cva("text-fg text-[16px]");
+export const stageArtist = cva("text-fg text-16");
 
-export const stageAlbum = cva("text-fg-muted text-[14px]");
+export const stageAlbum = cva("text-fg-muted text-14");
 
 export const stageChips = cva("mt-1 flex flex-wrap items-center justify-center gap-2 md:justify-start");
 
-export const stageChip = cva("rounded-full border px-2.5 py-1 font-mono text-[11px] whitespace-nowrap", {
+export const stageChip = cva("rounded-full border px-2.5 py-1 font-mono text-11 whitespace-nowrap", {
   variants: {
     tone: {
       lossless: "border-secondary-500/40 text-secondary-400",
@@ -761,7 +761,7 @@ export const stageChip = cva("rounded-full border px-2.5 py-1 font-mono text-[11
   defaultVariants: { tone: "muted" },
 });
 
-export const stageDeviceLine = cva("text-secondary-400 mt-0.5 flex items-center gap-1.5 text-[12.5px]");
+export const stageDeviceLine = cva("text-secondary-400 mt-0.5 flex items-center gap-1.5 text-12");
 
 export const stageActions = cva("mt-1.5 flex items-center gap-4");
 
@@ -780,7 +780,7 @@ export const stageCoverSlot = cva("flex min-h-0 w-full flex-1 items-center justi
 export const stageDrawerFrame = cva("w-full overflow-hidden");
 
 export const stageController = cva(
-  "border-fg/10 bg-surface/40 from-primary-600/15 to-accent-600/15 shadow-glass @container flex flex-col rounded-[28px] border bg-linear-to-br p-3.5"
+  "border-fg/10 bg-surface/40 from-primary-600/15 to-accent-600/15 shadow-glass @container flex flex-col rounded-3xl border bg-linear-to-br p-3.5"
 );
 
 export const stagePad = cva("player-stage-ring grid");
@@ -838,7 +838,7 @@ export const stageTray = cva("border-fg-muted/15 flex items-center justify-betwe
 
 export const stageScrubRow = cva("flex items-center gap-3.5");
 
-export const stageTransport = cva("flex items-center justify-center gap-7 sm:gap-[30px]");
+export const stageTransport = cva("flex items-center justify-center gap-7 sm:gap-7.5");
 
 export const srOnly = cva("sr-only");
 
@@ -934,14 +934,14 @@ export const stageFace = cva("flex h-full min-h-0 w-full items-center justify-ce
 
 export const stageVolume = cva("flex justify-center");
 
-export const lyricsPane = cva("flex h-full min-h-0 w-full max-w-[900px] flex-col items-center gap-3 pb-3");
+export const lyricsPane = cva("flex h-full min-h-0 w-full max-w-225 flex-col items-center gap-3 pb-3");
 
 export const lyricsScroll = cva("player-lyrics-fade scrollbar-none min-h-0 w-full flex-1 overflow-y-auto px-2");
 
 export const lyricsBody = cva("flex flex-col items-center gap-2.5 py-[32vh] text-center sm:gap-3 sm:py-[42vh]");
 
 export const lyricsLine = cva(
-  "player-lyric-line focus-visible:ring-primary-500 w-full rounded-lg px-2 text-[25px] leading-tight font-bold tracking-[-0.01em] transition-all duration-500 ease-out focus-visible:ring-2 focus-visible:outline-none sm:text-[46px]",
+  "player-lyric-line focus-visible:ring-primary-500 w-full rounded-lg px-2 text-[1.5625rem] leading-tight font-bold tracking-tight transition-all duration-500 ease-out focus-visible:ring-2 focus-visible:outline-none sm:text-[2.875rem]",
   {
     variants: {
       state: {
@@ -951,8 +951,8 @@ export const lyricsLine = cva(
       },
       depth: {
         near: "",
-        mid: "blur-[1.5px]",
-        far: "blur-[3px] opacity-70",
+        mid: "blur-2xs",
+        far: "blur-2xs opacity-70",
       },
       seekable: {
         true: "cursor-pointer",
@@ -987,7 +987,7 @@ export const listeningAvatars = cva(
 export const listeningAvatar = cva("relative -ml-2.5 rounded-full shadow-lg first:ml-0");
 
 export const listeningMore = cva(
-  "bg-surface-overlay/80 text-fg absolute inset-0 grid place-items-center rounded-full text-[11px] font-semibold"
+  "bg-surface-overlay/80 text-fg absolute inset-0 grid place-items-center rounded-full text-11 font-semibold"
 );
 
 export const roomSurface = cva("max-h-[inherit]");
@@ -1002,15 +1002,15 @@ export const roomRow = cva("flex items-center gap-3 px-1 py-1");
 
 export const roomText = cva("flex min-w-0 flex-1 flex-col");
 
-export const roomName = cva("text-fg flex min-w-0 items-center gap-1.5 text-[13px] font-semibold");
+export const roomName = cva("text-fg flex min-w-0 items-center gap-1.5 text-13 font-semibold");
 
-export const roomTrack = cva("text-fg truncate text-[12px]");
+export const roomTrack = cva("text-fg truncate text-12");
 
-export const roomDetail = cva("text-fg-muted truncate text-[11px]");
+export const roomDetail = cva("text-fg-muted truncate text-11");
 
-export const roomAgo = cva("text-fg-muted shrink-0 text-[11px]");
+export const roomAgo = cva("text-fg-muted shrink-0 text-11");
 
-export const roomEmpty = cva("text-fg-muted px-1 py-3 text-[13px]");
+export const roomEmpty = cva("text-fg-muted px-1 py-3 text-13");
 
 export const roomLiveDot = cva("bg-accent-400 size-1.5 shrink-0 animate-pulse rounded-full");
 
@@ -1018,4 +1018,4 @@ export const listeningNotice = cva(
   "bg-surface-overlay border-fg/10 focus-visible:ring-primary-500 flex w-full items-center gap-3 rounded-xl border p-3 text-left shadow-2xl focus-visible:ring-2 focus-visible:outline-none"
 );
 
-export const listeningNoticeLead = cva("text-fg-muted truncate text-[11px]");
+export const listeningNoticeLead = cva("text-fg-muted truncate text-11");

@@ -2,6 +2,8 @@ import type { AppRouter, PublicUser } from "@api/__generated__/types";
 import type { inferRouterOutputs } from "@trpc/server";
 import type { ReactNode } from "react";
 
+import type { Locale } from "@locale/config";
+
 export interface ProfileCardProps {
   user: PublicUser;
 }
@@ -41,4 +43,10 @@ export interface ListeningServiceRowProps {
   connection: ListeningConnectionView;
   seenClients: string[];
   children?: ReactNode;
+}
+
+export interface LanguageSelectorProps {
+  value: Locale;
+  onSelect: (locale: Locale) => void;
+  ariaLabel: string;
 }

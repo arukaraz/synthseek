@@ -19,7 +19,7 @@ export const splitBar = cva("bg-destructive-vivid/60 flex h-1.5 shrink-0 overflo
 
 export const splitFill = cva("bg-success-vivid h-full [width:var(--share)]");
 
-export const axisRow = cva("text-fg/60 flex justify-between font-mono text-[10px]");
+export const axisRow = cva("text-fg/60 flex justify-between font-mono text-10");
 
 export const decadeChart = cva("flex min-h-0 flex-1 items-stretch gap-1.5");
 
@@ -27,7 +27,7 @@ export const decadeColumn = cva("flex min-w-0 flex-1 flex-col items-center gap-1
 
 export const decadeTrack = cva("flex min-h-0 w-full flex-1 flex-col items-center justify-end gap-1");
 
-export const decadeValue = cva("text-fg/70 text-[11px] tabular-nums");
+export const decadeValue = cva("text-fg/70 text-11 tabular-nums");
 
 export const decadeBar = cva("min-h-0.5 w-full rounded-t-md [height:var(--bar)]", {
   variants: {
@@ -39,7 +39,7 @@ export const decadeBar = cva("min-h-0.5 w-full rounded-t-md [height:var(--bar)]"
   defaultVariants: { peak: false },
 });
 
-export const decadeLabel = cva("text-fg/60 font-mono text-[10px] whitespace-nowrap");
+export const decadeLabel = cva("text-fg/60 font-mono text-10 whitespace-nowrap");
 
 export const qualityList = cva("flex flex-col gap-2.5");
 

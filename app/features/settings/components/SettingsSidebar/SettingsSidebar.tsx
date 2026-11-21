@@ -58,7 +58,7 @@ export function SettingsSidebar({ className, query, onQueryChange }: SettingsSid
   );
 
   return (
-    <nav aria-label={t("shell.sidebar.ariaLabel")} className={cn(sidebar(), className)}>
+    <nav aria-label={t("shell.sidebar.ariaLabel")} className={cn(sidebar(), className)} data-part="sidebar">
       <SettingsSearchBox
         value={query}
         onChange={onQueryChange}

@@ -5,10 +5,10 @@ export const stack = cva("flex min-w-0 flex-1 flex-col gap-2");
 export const line = cva("flex min-w-0 flex-wrap items-center gap-2 [&>button]:w-auto [&>button]:max-w-full");
 
 export const slotRow = cva(
-  "grid min-w-0 grid-cols-[18px_minmax(0,1fr)_minmax(0,1fr)] items-center gap-1.5 @[34rem]:grid-cols-[22px_minmax(0,1.1fr)_minmax(0,1fr)_minmax(0,1fr)_auto]"
+  "grid min-w-0 grid-cols-[1.125rem_minmax(0,1fr)_minmax(0,1fr)] items-center gap-1.5 @[34rem]:grid-cols-[1.375rem_minmax(0,1.1fr)_minmax(0,1fr)_minmax(0,1fr)_auto]"
 );
 
-export const slotNumber = cva("text-fg/50 text-right font-mono text-[11px]");
+export const slotNumber = cva("text-fg/50 text-right font-mono text-11");
 
 export const slotCell = cva("min-w-0 [&>button]:w-full", {
   variants: {
@@ -44,7 +44,7 @@ export const slotActions = cva(
   "col-span-2 col-start-2 flex justify-end gap-1 @[34rem]:col-span-1 @[34rem]:col-start-auto"
 );
 
-export const slotMessage = cva("text-warning-vivid col-span-full -mt-0.5 pl-6 text-[11.5px]");
+export const slotMessage = cva("text-warning-vivid col-span-full -mt-0.5 pl-6 text-11");
 
 export const hint = cva("text-fg/60 text-xs");
 

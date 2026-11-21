@@ -522,5 +522,37 @@
   "BOARD_TEMPLATE_INVALID": {
     "title": "No se puede usar esta plantilla de board",
     "description": "La plantilla no es una plantilla de board de Synthseek que esta versión pueda leer, así que no se cambió nada. Revisa la vista previa para ver qué falla."
+  },
+  "THEME_NOT_FOUND": {
+    "title": "Aún no hay tema personalizado",
+    "description": "Esta cuenta no tiene un tema personalizado. Elige Personalizado en Ajustes para crear uno."
+  },
+  "THEME_PATH_INVALID": {
+    "title": "Ese archivo del tema no se puede escribir",
+    "description": "No es un archivo que un tema pueda contener, o el servidor no pudo escribirlo."
+  },
+  "THEME_HAS_ERRORS": {
+    "title": "El tema no se guardó",
+    "description": "{{path}} tiene un error de sintaxis. Corrígelo y guarda de nuevo."
+  },
+  "THEME_TOO_LARGE": {
+    "title": "El tema es demasiado grande",
+    "description": "Un archivo, o el tema completo, supera el límite de tamaño. No se guardó nada."
+  },
+  "THEME_VERSION_NOT_FOUND": {
+    "title": "Esa versión ya no está",
+    "description": "No está en el historial de este archivo. Vuelve a abrir el historial para ver las versiones que conserva."
+  },
+  "THEME_FONT_UNSUPPORTED": {
+    "title": "Ese archivo no es una fuente que Synthseek acepte",
+    "description": "Sube un archivo .woff2, .woff, .ttf u .otf."
+  },
+  "THEME_FONT_TOO_LARGE": {
+    "title": "No hay espacio para esa fuente",
+    "description": "Las fuentes de una cuenta comparten un límite de tamaño. Quita una fuente para hacer espacio."
+  },
+  "THEME_IMPORT_INVALID": {
+    "title": "Este tema no se puede importar",
+    "description": "El documento no es un tema de Synthseek que esta versión pueda leer, así que no se cambió nada."
   }
 }

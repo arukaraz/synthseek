@@ -41,13 +41,13 @@ export function RequestDetailStats({ request, tracks, isResolving }: RequestDeta
         label={t("stats.completeLabel")}
         value={isResolving ? "-" : completeCount}
         sublabel={t("stats.completeSublabel")}
-        valueClassName="text-green-400"
+        valueClassName="text-success-vivid"
       />
       <RequestDetailStatsCard
         label={t("stats.failedLabel")}
         value={isResolving ? "-" : failedCount}
         sublabel={t("stats.failedSublabel")}
-        valueClassName="text-red-400"
+        valueClassName="text-destructive-vivid"
       />
       <RequestDetailStatsCard
         label={t("stats.activeLabel")}

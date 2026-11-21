@@ -3,7 +3,7 @@ import { cva } from "class-variance-authority";
 
 import type { BoardAppearance } from "@hooks/api/queries/board/types";
 
-import { BOARD_COLUMNS, BOARD_TEXT_SCALE, BOARD_TYPE_STEPS_REM } from "./constants";
+import { BOARD_COLUMNS, BOARD_TEXT_SCALE } from "./constants";
 import { boardMetricsOf } from "./helpers";
 import type { BoardDevice, BoardMetrics } from "./types";
 
@@ -22,9 +22,7 @@ export const boardGrid = cva(
 
 function typeScaleVars(scale: number): CssVars {
   if (scale === 1) return {};
-  return Object.fromEntries(
-    Object.entries(BOARD_TYPE_STEPS_REM).map(([step, rem]) => [`--text-${step}`, `${rem * scale}rem`])
-  );
+  return { "--text-scale": String(scale) };
 }
 
 export function boardGridStyle(device: BoardDevice, appearance?: BoardAppearance, templateRows?: string): CssVars {

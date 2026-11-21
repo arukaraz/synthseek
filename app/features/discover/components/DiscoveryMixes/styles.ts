@@ -9,7 +9,7 @@ export const mixCard = cva(
   {
     variants: {
       state: {
-        ready: "cursor-pointer hover:-translate-y-1 hover:border-[var(--mix-acc)]",
+        ready: "cursor-pointer hover:-translate-y-1 hover:border-mix-acc",
         empty: "pointer-events-none opacity-55",
       },
     },
@@ -19,25 +19,25 @@ export const mixCard = cva(
 
 export const mixPoster = cva("relative min-h-0 w-full flex-1 overflow-hidden");
 
-export const mixPosterTint = cva("pointer-events-none absolute inset-0 bg-[var(--mix-acc)] opacity-55 mix-blend-color");
+export const mixPosterTint = cva("pointer-events-none absolute inset-0 bg-mix-acc opacity-55 mix-blend-color");
 
 export const mixPosterShade = cva(
-  "pointer-events-none absolute inset-0 bg-linear-to-t from-black/75 via-transparent to-black/10"
+  "pointer-events-none absolute inset-0 bg-linear-to-t from-veil/75 via-transparent to-veil/10"
 );
 
 export const mixPosterTop = cva("absolute inset-x-3 top-3 flex min-w-0 items-center justify-between gap-2");
 
 export const mixChip = cva(
-  "text-overlay-fg flex size-7 shrink-0 items-center justify-center rounded-lg border border-white/20 bg-black/45 backdrop-blur-sm"
+  "text-overlay-fg flex size-7 shrink-0 items-center justify-center rounded-lg border border-hairline/20 bg-veil/45 backdrop-blur-sm"
 );
 
 export const mixFreshPill = cva(
-  "text-overlay-fg/90 min-w-0 truncate rounded-full border border-white/20 bg-black/50 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wide backdrop-blur-sm"
+  "text-overlay-fg/90 min-w-0 truncate rounded-full border border-hairline/20 bg-veil/50 px-2 py-0.5 font-mono text-10 uppercase tracking-wide backdrop-blur-sm"
 );
 
 export const mixInfo = cva("flex shrink-0 flex-col gap-1 bg-surface/60 p-3.5");
 
-export const mixTag = cva("text-[10px] font-semibold uppercase tracking-wider text-[var(--mix-acc)]");
+export const mixTag = cva("text-10 font-semibold uppercase tracking-wider text-mix-acc");
 
 export const mixTitle = cva("text-fg truncate text-sm font-semibold sm:text-base");
 
@@ -47,9 +47,9 @@ export const mixFoot = cva(
   "mt-2 flex min-w-0 flex-wrap items-center justify-between gap-x-3 gap-y-1 border-t border-fg/10 pt-2.5"
 );
 
-export const mixCount = cva("text-fg/50 truncate font-mono text-[11px] whitespace-nowrap");
+export const mixCount = cva("text-fg/50 truncate font-mono text-11 whitespace-nowrap");
 
-export const mixFootFresh = cva("text-fg/40 font-mono text-[10px] tracking-wide whitespace-nowrap uppercase");
+export const mixFootFresh = cva("text-fg/40 font-mono text-10 tracking-wide whitespace-nowrap uppercase");
 
 export const mosaicGrid = cva("grid size-full grid-cols-2 grid-rows-2");
 

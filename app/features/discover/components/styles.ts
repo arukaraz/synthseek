@@ -141,7 +141,7 @@ export const gridLayout = cva("grid gap-3", {
     cols: {
       2: "grid-cols-2",
       3: "grid-cols-3",
-      auto: "grid-flow-dense auto-rows-[100px] grid-cols-2",
+      auto: "grid-flow-dense auto-rows-[6.25rem] grid-cols-2",
     },
   },
   defaultVariants: {
@@ -175,8 +175,8 @@ export type CategoryCardProps = VariantProps<typeof categoryCard>;
 export const cardOverlay = cva("absolute inset-0", {
   variants: {
     gradient: {
-      dark: "bg-linear-to-t from-black/80 via-black/40 to-transparent",
-      light: "bg-linear-to-t from-black/60 to-transparent",
+      dark: "bg-linear-to-t from-veil/80 via-veil/40 to-transparent",
+      light: "bg-linear-to-t from-veil/60 to-transparent",
     },
   },
   defaultVariants: {
@@ -307,7 +307,7 @@ export const playIcon = cva("text-overlay-fg-primary shrink-0 fill-current h-3 w
 export type PlayIconProps = VariantProps<typeof playIcon>;
 
 export const widgetPill = cva(
-  "inline-flex shrink-0 items-center rounded-full px-2 py-0.5 font-sans text-[10.5px] font-semibold whitespace-nowrap",
+  "inline-flex shrink-0 items-center rounded-full px-2 py-0.5 font-sans text-10 font-semibold whitespace-nowrap",
   {
     variants: {
       tone: {
@@ -320,4 +320,4 @@ export const widgetPill = cva(
   }
 );
 
-export const widgetEyebrow = cva("text-fg/50 mt-1 font-mono text-[10px] tracking-[0.18em] uppercase");
+export const widgetEyebrow = cva("text-fg/50 mt-1 font-mono text-10 tracking-caps-wide uppercase");

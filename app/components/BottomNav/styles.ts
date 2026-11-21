@@ -7,7 +7,7 @@ export const bottomNavContainer = cva(
 export const bottomNavList = cva("flex items-stretch justify-around px-2 pt-1.5");
 
 export const bottomNavItem = cva(
-  "relative flex min-w-0 flex-1 flex-col items-center gap-1 rounded-md px-2 py-1.5 text-[11px] font-medium transition-colors [&_svg]:size-5 [&_svg]:shrink-0",
+  "relative flex min-w-0 flex-1 flex-col items-center gap-1 rounded-md px-2 py-1.5 text-11 font-medium transition-colors [&_svg]:size-5 [&_svg]:shrink-0",
   {
     variants: {
       active: {

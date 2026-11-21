@@ -230,7 +230,7 @@ export const heroBackButton = cva("shrink-0");
 export type HeroBackButtonProps = VariantProps<typeof heroBackButton>;
 
 export const priorityChip = cva(
-  "border-primary-500/30 bg-primary-500/10 text-primary-400 inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-medium"
+  "border-primary-500/30 bg-primary-500/10 text-primary-400 inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-10 font-medium"
 );
 
 export type PriorityChipProps = VariantProps<typeof priorityChip>;

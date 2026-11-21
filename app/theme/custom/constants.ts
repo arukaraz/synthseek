@@ -1,0 +1,10 @@
+export const THEME_SCOPE_SELECTOR = '[data-theme="custom"]';
+export const TOKENS_DIRECTORY = "tokens/";
+export const COMPONENTS_DIRECTORY = "components/";
+export const CUSTOM_FILE = "custom.css";
+export const THEME_FONTS_PATH = "/api/v1/theme/fonts";
+export const THEME_FONT_EXTENSIONS = ["woff2", "woff", "ttf", "otf"] as const;
+export const THEME_FONT_NAME_MAX_CHARS = 64;
+export const UNDO_GROUP_MS = 800;
+export const UNDO_MAX_STEPS = 100;
+export const CONTRAST_MINIMUM = 4.5;

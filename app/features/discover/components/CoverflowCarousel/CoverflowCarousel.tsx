@@ -90,7 +90,7 @@ export function CoverflowCarousel({
         <CoverflowSkeleton />
       ) : (
         <>
-          <div className="w0-full relative mx-auto h-[80vw] sm:h-70 lg:h-[550px]" style={{ perspective: "100vw" }}>
+          <div className="w0-full relative mx-auto h-[80vw] sm:h-70 lg:h-137.5" style={{ perspective: "100vw" }}>
             <div className="md:inherit hidden px-3 pt-15 sm:block">
               <h3 className="text-fg text-lg font-semibold">{t("coverflow.title")}</h3>
               <p className="text-fg/60 text-xs">{t("coverflow.subtitle")}</p>

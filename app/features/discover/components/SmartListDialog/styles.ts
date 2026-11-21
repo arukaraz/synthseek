@@ -24,7 +24,7 @@ export const rowTitle = cva("text-fg min-w-0 truncate text-sm");
 
 export const rowSub = cva("text-fg/60 min-w-0 truncate text-xs");
 
-export const rowTime = cva("text-fg/60 shrink-0 font-mono text-[11px] tabular-nums");
+export const rowTime = cva("text-fg/60 shrink-0 font-mono text-11 tabular-nums");
 
 export const rowActions = cva("flex shrink-0 items-center gap-0.5");
 
@@ -32,7 +32,7 @@ export const note = cva("border-primary-400 bg-fg/[0.03] text-fg/80 rounded-r-lg
 
 export const empty = cva("text-fg/60 py-3 text-sm");
 
-export const sectionLabel = cva("text-fg/60 pt-2 font-mono text-[10.5px] tracking-wider uppercase");
+export const sectionLabel = cva("text-fg/60 pt-2 font-mono text-10 tracking-wider uppercase");
 
 export const stars = cva("hidden items-center sm:flex");
 

@@ -7,7 +7,7 @@ export const chainLayout = cva(
 export const chainColumn = cva("flex min-w-0 flex-col gap-5");
 
 export const chainLabel = cva(
-  "text-fg/50 mb-2 flex items-center gap-1.5 px-1 text-[11px] font-semibold tracking-wider uppercase"
+  "text-fg/50 mb-2 flex items-center gap-1.5 px-1 text-11 font-semibold tracking-wider uppercase"
 );
 
 export const chainList = cva("flex flex-col gap-2", {

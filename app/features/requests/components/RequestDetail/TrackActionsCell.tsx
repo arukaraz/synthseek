@@ -58,19 +58,19 @@ export function TrackActionsCell({
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           {showApproval && (
-            <DropdownMenuItem onClick={onApprove} className="text-green-400 hover:text-green-300">
+            <DropdownMenuItem onClick={onApprove} className="text-success-vivid hover:text-success-soft">
               <Check className="size-4" />
               {t("approval.approveTrack")}
             </DropdownMenuItem>
           )}
           {showApproval && (
-            <DropdownMenuItem onClick={onReject} className="text-red-400 hover:text-red-300">
+            <DropdownMenuItem onClick={onReject} className="text-destructive-vivid hover:text-destructive-soft">
               <X className="size-4" />
               {t("approval.rejectTrack")}
             </DropdownMenuItem>
           )}
           {showRetry && (
-            <DropdownMenuItem onClick={onRetry} className="text-green-400 hover:text-green-300">
+            <DropdownMenuItem onClick={onRetry} className="text-success-vivid hover:text-success-soft">
               <RefreshCw className="size-4" />
               {t("tracks.retry")}
             </DropdownMenuItem>
@@ -100,7 +100,7 @@ export function TrackActionsCell({
             </DropdownMenuItem>
           )}
           {showCancel && (
-            <DropdownMenuItem onClick={onCancel} className="text-red-400 hover:text-red-300">
+            <DropdownMenuItem onClick={onCancel} className="text-destructive-vivid hover:text-destructive-soft">
               <X className="size-4" />
               {t("tracks.cancel")}
             </DropdownMenuItem>

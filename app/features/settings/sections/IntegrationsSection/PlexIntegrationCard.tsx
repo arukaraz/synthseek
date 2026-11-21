@@ -211,7 +211,7 @@ export function PlexIntegrationCard({ initial }: PlexIntegrationCardProps) {
         />
       </SettingsField>
       <div className="flex flex-col gap-1">
-        <span className="text-fg/45 text-[11px] font-semibold tracking-wider uppercase">{t("plex.previewHeader")}</span>
+        <span className="text-fg/45 text-11 font-semibold tracking-wider uppercase">{t("plex.previewHeader")}</span>
         <span className={formattingPreview()}>
           {previewName(
             namingForm.draft.plexPlaylistUsernameAffix,

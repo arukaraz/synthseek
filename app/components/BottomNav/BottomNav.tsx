@@ -13,7 +13,12 @@ export function BottomNav() {
   const navItems = usePrimaryNav();
 
   return (
-    <nav aria-label={t("header.mobileNav")} className={bottomNavContainer()} data-cy="bottom-nav">
+    <nav
+      aria-label={t("header.mobileNav")}
+      className={bottomNavContainer()}
+      data-cy="bottom-nav"
+      data-part="bottom-nav"
+    >
       <ul className={bottomNavList()}>
         {navItems.map((item) => {
           const Icon = item.icon;

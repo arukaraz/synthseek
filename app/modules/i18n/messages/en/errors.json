@@ -522,5 +522,37 @@
   "BOARD_TEMPLATE_INVALID": {
     "title": "This board template cannot be used",
     "description": "The template is not a Synthseek board template this version can read, so nothing was changed. Check the preview for what is wrong."
+  },
+  "THEME_NOT_FOUND": {
+    "title": "No custom theme yet",
+    "description": "This account has no custom theme. Choose Custom in Settings to create one."
+  },
+  "THEME_PATH_INVALID": {
+    "title": "That theme file cannot be written",
+    "description": "It is not a file a theme can hold, or the server could not write it."
+  },
+  "THEME_HAS_ERRORS": {
+    "title": "The theme was not saved",
+    "description": "{{path}} has a syntax error. Fix it and save again."
+  },
+  "THEME_TOO_LARGE": {
+    "title": "The theme is too large",
+    "description": "A file, or the theme as a whole, is over the size limit. Nothing was saved."
+  },
+  "THEME_VERSION_NOT_FOUND": {
+    "title": "That version is gone",
+    "description": "It is not in the history of this file. Reopen History to see the versions it keeps."
+  },
+  "THEME_FONT_UNSUPPORTED": {
+    "title": "That file is not a font Synthseek accepts",
+    "description": "Upload a .woff2, .woff, .ttf or .otf file."
+  },
+  "THEME_FONT_TOO_LARGE": {
+    "title": "Not enough room for that font",
+    "description": "The fonts of one account share a size limit. Remove a font to make room."
+  },
+  "THEME_IMPORT_INVALID": {
+    "title": "This theme cannot be imported",
+    "description": "The document is not a Synthseek theme this version can read, so nothing was changed."
   }
 }

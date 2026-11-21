@@ -45,7 +45,7 @@ export const brandIcon = cva("h-12 w-auto sm:h-9");
 export const brandWordmark = cva("hidden sm:block sm:text-2xl");
 
 export const omniPill = cva(
-  "relative mx-auto h-10 min-w-0 max-w-[820px] flex-1 items-center gap-1.5 rounded-[13px] border py-[3px] pr-2.5 pl-[3px] transition-[border-color,box-shadow,background-color]",
+  "relative mx-auto h-10 min-w-0 max-w-205 flex-1 items-center gap-1.5 rounded-xl border py-[3px] pr-2.5 pl-[3px] transition-[border-color,box-shadow,background-color]",
   {
     variants: {
       open: {
@@ -61,29 +61,26 @@ export const navChips = cva("hidden shrink-0 items-center gap-0.5 sm:flex");
 
 export const pillSeparator = cva("bg-fg/10 mx-1 hidden h-5 w-px shrink-0 sm:block");
 
-export const omniField = cva(
-  "text-fg/40 flex h-8 min-w-0 flex-1 items-center gap-2.5 pl-2 text-[13.5px] outline-none",
-  {
-    variants: {
-      open: {
-        true: "[&>svg:first-child]:text-primary-400",
-        false: "focus-visible:text-fg/70 cursor-text",
-      },
+export const omniField = cva("text-fg/40 flex h-8 min-w-0 flex-1 items-center gap-2.5 pl-2 text-13 outline-none", {
+  variants: {
+    open: {
+      true: "[&>svg:first-child]:text-primary-400",
+      false: "focus-visible:text-fg/70 cursor-text",
     },
-    defaultVariants: { open: false },
-  }
-);
+  },
+  defaultVariants: { open: false },
+});
 
-export const omniFieldIcon = cva("size-[15px] shrink-0");
+export const omniFieldIcon = cva("size-3.75 shrink-0");
 
 export const omniPlaceholder = cva("min-w-0 flex-1 truncate text-left");
 
 export const omniInput = cva(
-  "text-fg placeholder:text-fg/40 min-w-0 flex-1 bg-transparent text-[13.5px] outline-none [&::-webkit-search-cancel-button]:hidden"
+  "text-fg placeholder:text-fg/40 min-w-0 flex-1 bg-transparent text-13 outline-none [&::-webkit-search-cancel-button]:hidden"
 );
 
 export const kbd = cva(
-  "border-fg/15 text-fg/50 hidden shrink-0 items-center rounded-md border px-1.5 py-0.5 font-mono text-[10.5px] leading-none lg:inline-flex"
+  "border-fg/15 text-fg/50 hidden shrink-0 items-center rounded-md border px-1.5 py-0.5 font-mono text-10 leading-none lg:inline-flex"
 );
 
 export const clearButton = cva("text-fg/40 hover:bg-fg/10 hover:text-fg shrink-0 rounded p-1 transition-colors");
@@ -94,7 +91,7 @@ export const searchEmblem = cva(
   "focus-visible:ring-primary-400 flex h-11 shrink-0 items-end rounded-lg pb-2 outline-none focus-visible:ring-2 sm:hidden"
 );
 
-export const searchEmblemLogo = cva("h-[27px] w-[14px]");
+export const searchEmblemLogo = cva("h-6.75 w-3.5");
 
 export const searchEmblemLens = cva("text-fg -ml-0.5 size-3.5");
 
@@ -123,7 +120,7 @@ export const mastheadSlot = cva("flex min-w-0 flex-1 items-center self-stretch e
 export const rightCluster = cva("hidden shrink-0 items-center gap-2.5 sm:flex");
 
 export const headerTab = cva(
-  "flex h-8 items-center gap-2 rounded-[10px] px-3 text-[13px] font-medium whitespace-nowrap transition-colors [&_svg]:size-[15px] [&_svg]:shrink-0",
+  "flex h-8 items-center gap-2 rounded-xl px-3 text-13 font-medium whitespace-nowrap transition-colors [&_svg]:size-3.75 [&_svg]:shrink-0",
   {
     variants: {
       active: {
@@ -145,7 +142,7 @@ export const scopeGroup = cva("items-center", {
 });
 
 export const scopeChip = cva(
-  "focus-visible:ring-primary-400 inline-flex h-[30px] shrink-0 items-center gap-1.5 rounded-lg border px-2.5 text-[11.5px] font-medium whitespace-nowrap outline-none focus-visible:ring-2 [&_svg]:size-[13px]",
+  "focus-visible:ring-primary-400 inline-flex h-7.5 shrink-0 items-center gap-1.5 rounded-lg border px-2.5 text-11 font-medium whitespace-nowrap outline-none focus-visible:ring-2 [&_svg]:size-3.25",
   {
     variants: {
       active: {
@@ -176,7 +173,7 @@ export const dropdownPanel = cva(
   "bg-surface-overlay w-[var(--radix-popover-trigger-width)] max-w-none rounded-2xl p-2 text-sm text-fg shadow-2xl"
 );
 
-export const groupLabel = cva("text-fg/50 px-2.5 pt-2 pb-1 font-mono text-[10px] tracking-[0.14em] uppercase");
+export const groupLabel = cva("text-fg/50 px-2.5 pt-2 pb-1 font-mono text-10 tracking-caps uppercase");
 
 export const optionList = cva("flex flex-col");
 
@@ -203,14 +200,14 @@ export const optionVisual = cva(
 
 export const optionTextColumn = cva("flex min-w-0 flex-col");
 
-export const optionTitle = cva("text-fg truncate text-[13px]");
+export const optionTitle = cva("text-fg truncate text-13");
 
-export const optionSubtitle = cva("text-fg/50 truncate text-[11.5px]");
+export const optionSubtitle = cva("text-fg/50 truncate text-11");
 
-export const noMatches = cva("text-fg/60 px-2.5 py-2 text-[12.5px]");
+export const noMatches = cva("text-fg/60 px-2.5 py-2 text-12");
 
 export const dropdownFooter = cva(
-  "border-fg/10 text-fg/50 mt-1 hidden gap-3.5 border-t px-2.5 pt-2 pb-1 text-[11.5px] sm:flex"
+  "border-fg/10 text-fg/50 mt-1 hidden gap-3.5 border-t px-2.5 pt-2 pb-1 text-11 sm:flex"
 );
 
 export const footerHint = cva("inline-flex items-center gap-1");

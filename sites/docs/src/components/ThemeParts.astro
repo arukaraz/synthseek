@@ -1,0 +1,63 @@
+---
+import { THEME_ATTRIBUTES, THEME_PARTS } from "../lib/theme-contract";
+
+const LEVELS = [
+  { level: "region", title: "One place in the app" },
+  { level: "generic", title: "Every element of a kind" },
+] as const;
+---
+
+{
+  LEVELS.map(({ level, title }) => (
+    <div class="dx-table">
+      <table>
+        <thead>
+          <tr>
+            <th>{title}</th>
+            <th>What it is</th>
+          </tr>
+        </thead>
+        <tbody>
+          {THEME_PARTS.filter((part) => part.level === level).map((part) => (
+            <tr>
+              <td>
+                <code>{`[data-part="${part.name}"]`}</code>
+              </td>
+              <td>{part.description}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  ))
+}
+
+<div class="dx-table">
+  <table>
+    <thead>
+      <tr>
+        <th>Attribute</th>
+        <th>Values</th>
+      </tr>
+    </thead>
+    <tbody>
+      {
+        THEME_ATTRIBUTES.map((attribute) => (
+          <tr>
+            <td>
+              <code>{attribute.name}</code>
+            </td>
+            <td>
+              {attribute.values.map((value, index) => (
+                <>
+                  {index > 0 && ", "}
+                  <code>{value}</code>
+                </>
+              ))}
+            </td>
+          </tr>
+        ))
+      }
+    </tbody>
+  </table>
+</div>

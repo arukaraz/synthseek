@@ -77,7 +77,7 @@ describe("SettingsSidebar", () => {
 
     expect(screen.getByText(groups.you)).toBeInTheDocument();
     expect(linkFor(pages.account.title)).toHaveAttribute("href", "/settings/account");
-    expect(linkFor(pages.appearance.title)).toHaveAttribute("href", "/settings/appearance");
+    expect(linkFor(pages.customization.title)).toHaveAttribute("href", "/settings/customization");
     expect(linkFor(pages.playback.title)).toHaveAttribute("href", "/settings/playback");
     expect(linkFor(pages.connections.title)).toHaveAttribute("href", "/settings/connections");
     expect(linkFor(pages.notifications.title)).toHaveAttribute("href", "/settings/notifications");

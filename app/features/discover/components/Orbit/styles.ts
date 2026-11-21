@@ -22,8 +22,8 @@ export const orbitOpen = cva(
   "focus-visible:ring-primary-400 min-w-0 rounded-sm text-left outline-none after:absolute after:inset-0 after:rounded-xl after:content-[''] focus-visible:after:ring-2"
 );
 
-export const orbitTitle = cva("text-fg block truncate text-[13px] font-semibold");
+export const orbitTitle = cva("text-fg block truncate text-13 font-semibold");
 
-export const orbitArtist = cva("text-fg/60 truncate text-[11.5px]");
+export const orbitArtist = cva("text-fg/60 truncate text-11");
 
-export const orbitBecause = cva("text-fg/50 truncate text-[11px]");
+export const orbitBecause = cva("text-fg/50 truncate text-11");

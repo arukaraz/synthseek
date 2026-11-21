@@ -28,6 +28,8 @@ export function ArtistCard({ item, image, isResolving = false, onOpen, onPlay, c
 
   return (
     <li
+      data-part="media-tile"
+      data-type="artist"
       className={cardRoot({ interactive: activates })}
       role={activates ? "button" : undefined}
       tabIndex={activates ? 0 : undefined}
@@ -52,7 +54,9 @@ export function ArtistCard({ item, image, isResolving = false, onOpen, onPlay, c
       </div>
 
       <div className={cardBody()}>
-        <p className={cardTitle()}>{item.artist}</p>
+        <p className={cardTitle()} data-part="media-tile-title">
+          {item.artist}
+        </p>
         <p className={cardSubtitle()}>{subtitle}</p>
         <p className={cardMeta()}>{t("library:page.counts.tracks", { count: item.trackCount })}</p>
       </div>

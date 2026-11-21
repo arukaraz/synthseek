@@ -5,7 +5,7 @@ export const settingsLink = cva(
   {
     variants: {
       variant: {
-        gear: "text-fg/60 hover:text-fg hover:bg-fg/5 size-9 rounded-xl [&>svg]:size-[18px]",
+        gear: "text-fg/60 hover:text-fg hover:bg-fg/5 size-9 rounded-xl [&>svg]:size-4.5",
         avatar: "rounded-full",
       },
     },

@@ -43,7 +43,7 @@ describe("settingsPageAt", () => {
     expect(settingsPageAt("/settings/library/scan")).toBe(SETTINGS_PAGE_BY_ID.library);
     expect(settingsPageAt("/settings/maintenance/recycle-bin")).toBe(SETTINGS_PAGE_BY_ID.maintenance);
     expect(settingsPageAt("/settings/connections/apps")).toBe(SETTINGS_PAGE_BY_ID.connections);
-    expect(settingsPageAt("/settings/appearance/board")).toBe(SETTINGS_PAGE_BY_ID.appearance);
+    expect(settingsPageAt("/settings/customization/board")).toBe(SETTINGS_PAGE_BY_ID.customization);
   });
 
   it("does not let the old connected accounts route fall under the connections page", () => {

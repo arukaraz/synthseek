@@ -18,6 +18,7 @@ vi.mock("../components/AccountCard", () => ({ AccountCard: () => <div data-testi
 vi.mock("../components/EditProfileCard", () => ({ EditProfileCard: () => <div data-testid="edit-card" /> }));
 vi.mock("../components/ChangePasswordCard", () => ({ ChangePasswordCard: () => <div data-testid="password-card" /> }));
 vi.mock("../components/QuotaCard", () => ({ QuotaCard: () => <div data-testid="quota-card" /> }));
+vi.mock("../components/LanguageCard", () => ({ LanguageCard: () => <div data-testid="language-card" /> }));
 vi.mock("../components/MyRequestPresetCard", () => ({
   MyRequestPresetCard: () => <div data-testid="request-preset-card" />,
 }));
@@ -34,22 +35,29 @@ afterEach(() => {
 });
 
 describe("AccountSection", () => {
-  it("renders the page header and the account, quota, request preset, profile and password cards", () => {
+  it("renders the page header and the account, language, quota, request preset, profile and password cards", () => {
     render(<AccountSection />);
     expect(screen.getByRole("heading", { name: enSettings.shell.pages.account.title })).toBeInTheDocument();
     expect(screen.getByTestId("account-card")).toBeInTheDocument();
+    expect(screen.getByTestId("language-card")).toBeInTheDocument();
     expect(screen.getByTestId("quota-card")).toBeInTheDocument();
     expect(screen.getByTestId("request-preset-card")).toBeInTheDocument();
     expect(screen.getByTestId("edit-card")).toBeInTheDocument();
     expect(screen.getByTestId("password-card")).toBeInTheDocument();
   });
 
-  it("puts the profile editor right under the profile, then quota and request preset side by side in one row", () => {
+  it("puts the profile editor right under the profile, then the language, then quota and request preset side by side in one row", () => {
     render(<AccountSection />);
     const order = Array.from(document.querySelectorAll("[data-testid]")).map((node) =>
       node.getAttribute("data-testid")
     );
-    expect(order.slice(0, 4)).toEqual(["account-card", "edit-card", "quota-card", "request-preset-card"]);
+    expect(order.slice(0, 5)).toEqual([
+      "account-card",
+      "edit-card",
+      "language-card",
+      "quota-card",
+      "request-preset-card",
+    ]);
     const quotaRow = screen.getByTestId("quota-card").parentElement;
     expect(quotaRow).toBe(screen.getByTestId("request-preset-card").parentElement);
     expect(quotaRow?.className).toContain("lg:grid-cols-2");

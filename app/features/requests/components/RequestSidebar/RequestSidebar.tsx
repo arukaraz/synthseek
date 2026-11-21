@@ -30,7 +30,7 @@ export function RequestSidebar({
 
   if (items.length === 0) {
     return (
-      <div className={`${sidebarContainer()} ${className ?? ""}`}>
+      <div className={`${sidebarContainer()} ${className ?? ""}`} data-part="sidebar">
         <div className="flex flex-1 items-center justify-center p-4">
           <RequestsEmptyState searchQuery={searchQuery} emptySourceLabel={emptySourceLabel} filtered={filtered} />
         </div>
@@ -39,7 +39,7 @@ export function RequestSidebar({
   }
 
   return (
-    <div className={`${sidebarContainer()} ${className ?? ""}`} data-cy="requests-sidebar">
+    <div className={`${sidebarContainer()} ${className ?? ""}`} data-cy="requests-sidebar" data-part="sidebar">
       <ul ref={setScrollRoot} className={sidebarList()}>
         {visible.map((item) => (
           <li key={item.id} className={sidebarListItem()}>

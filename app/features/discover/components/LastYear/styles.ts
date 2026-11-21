@@ -6,6 +6,6 @@ export const weekStat = cva("flex min-w-0 flex-col-reverse");
 
 export const weekStatValue = cva("text-overlay-fg truncate text-lg leading-tight font-bold tabular-nums");
 
-export const weekStatLabel = cva("text-overlay-fg/70 truncate font-mono text-[10px] tracking-[0.14em] uppercase");
+export const weekStatLabel = cva("text-overlay-fg/70 truncate font-mono text-10 tracking-caps uppercase");
 
-export const weekTopPlays = cva("text-overlay-fg/80 font-mono text-[11px] tabular-nums");
+export const weekTopPlays = cva("text-overlay-fg/80 font-mono text-11 tabular-nums");

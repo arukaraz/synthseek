@@ -1,0 +1,10 @@
+@layer base {
+  :root,
+  [data-theme] {
+    --surface-fg: oklch(0.985 0.015 250);
+    --surface-fg-muted: oklch(0.7 0.03 250);
+    --primary-foreground: oklch(0.985 0.015 250);
+    --destructive-foreground: oklch(0.985 0.015 250);
+    --on-cover: oklch(0.985 0.015 250);
+  }
+}

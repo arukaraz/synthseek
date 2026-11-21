@@ -36,7 +36,7 @@ describe("MembersSection styles", () => {
   });
 
   it("maps the pill tone variants", () => {
-    expect(pill({ tone: "plex" })).toContain("text-amber-300");
+    expect(pill({ tone: "plex" })).toContain("text-warning-soft");
     expect(pill({ tone: "local" })).toContain("text-fg/60");
   });
 

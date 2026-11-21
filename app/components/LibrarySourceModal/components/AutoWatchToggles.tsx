@@ -67,7 +67,7 @@ export function AutoWatchToggles({ providerName, watch, value, onChange }: AutoW
             <PopoverContent
               side="bottom"
               align="start"
-              className="max-w-65 text-[11px] leading-relaxed"
+              className="text-11 max-w-65 leading-relaxed"
               onEscapeKeyDown={(e) => e.stopPropagation()}
             >
               {t("librarySource.autoWatch.help", { provider: providerName })}

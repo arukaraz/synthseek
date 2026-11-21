@@ -7,7 +7,7 @@ export const sidebar = cva(
 );
 
 export const sidebarFooter = cva(
-  "text-fg/60 bg-fg/5 ring-fg/10 mt-10.5 inline-flex w-fit items-center self-start rounded-full px-2.5 py-1 font-mono text-[11px] font-medium ring-1"
+  "text-fg/60 bg-fg/5 ring-fg/10 mt-10.5 inline-flex w-fit items-center self-start rounded-full px-2.5 py-1 font-mono text-11 font-medium ring-1"
 );
 
 export const sidebarBottom = cva("mt-auto flex flex-col gap-2 pt-4");
@@ -41,7 +41,7 @@ export const sidebarGroupButton = cva(
 
 export const sidebarGroupLabel = cva("flex-1 truncate text-left");
 
-export const sidebarGroupHeader = cva("text-fg/40 px-3 pt-3 pb-1 text-[11px] font-semibold uppercase tracking-wider");
+export const sidebarGroupHeader = cva("text-fg/40 px-3 pt-3 pb-1 text-11 font-semibold uppercase tracking-wider");
 
 export const settingsCard = cva("border-fg/10 bg-fg/[0.02] flex flex-col gap-4 rounded-2xl border p-4 sm:p-6");
 
@@ -59,15 +59,15 @@ export const cardDivider = cva("bg-fg/10 -mx-4 my-1 h-px sm:-mx-6");
 
 export const cardSectionHeader = cva("text-fg/70 text-sm font-semibold");
 
-export const fieldLabel = cva("text-fg/50 text-[11px] font-semibold uppercase tracking-wider");
+export const fieldLabel = cva("text-fg/50 text-11 font-semibold uppercase tracking-wider");
 
 export const fieldLabelRow = cva("flex items-center gap-1.5");
 
 export const fieldHelper = cva("text-fg/45 text-xs");
 
-export const fieldError = cva("text-red-400 text-xs");
+export const fieldError = cva("text-destructive-vivid text-xs");
 
-export const fieldWarning = cva("text-amber-400 text-xs");
+export const fieldWarning = cva("text-warning-vivid text-xs");
 
 export const fieldRow = cva("flex flex-col", {
   variants: {
@@ -86,14 +86,14 @@ export const emptyPanel = cva(
 );
 
 export const pill = cva(
-  "inline-flex shrink-0 items-center rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider",
+  "inline-flex shrink-0 items-center rounded-full px-2 py-0.5 text-10 font-semibold uppercase tracking-wider",
   {
     variants: {
       tone: {
-        experimental: "bg-amber-500/15 text-amber-300 ring-1 ring-amber-500/30",
+        experimental: "bg-warning-tint/15 text-warning-soft ring-1 ring-warning-tint/30",
         info: "bg-primary-500/15 text-primary-400 ring-1 ring-primary-500/30",
-        success: "bg-emerald-500/15 text-emerald-300 ring-1 ring-emerald-500/30",
-        danger: "bg-red-500/15 text-red-300 ring-1 ring-red-500/30",
+        success: "bg-success-tint/15 text-success-soft ring-1 ring-success-tint/30",
+        danger: "bg-destructive-tint/15 text-destructive-soft ring-1 ring-destructive-tint/30",
         muted: "bg-fg/10 text-fg/60 ring-fg/10 ring-1",
       },
     },
@@ -106,10 +106,10 @@ export const statusBadge = cva(
   {
     variants: {
       tone: {
-        success: "bg-emerald-500/10 text-emerald-300 ring-1 ring-emerald-500/30",
+        success: "bg-success-tint/10 text-success-soft ring-1 ring-success-tint/30",
         muted: "bg-fg/5 text-fg/60 ring-1 ring-fg/10",
-        warning: "bg-amber-500/10 text-amber-300 ring-1 ring-amber-500/30",
-        danger: "bg-red-500/10 text-red-300 ring-1 ring-red-500/30",
+        warning: "bg-warning-tint/10 text-warning-soft ring-1 ring-warning-tint/30",
+        danger: "bg-destructive-tint/10 text-destructive-soft ring-1 ring-destructive-tint/30",
       },
     },
     defaultVariants: { tone: "muted" },
@@ -121,10 +121,10 @@ export const statusSupportingText = cva("text-fg/55 text-xs sm:max-w-56");
 export const statusDot = cva("inline-block size-1.5 rounded-full", {
   variants: {
     tone: {
-      success: "bg-emerald-400",
+      success: "bg-success-vivid",
       muted: "bg-fg/40",
-      warning: "bg-amber-400",
-      danger: "bg-red-400",
+      warning: "bg-warning-vivid",
+      danger: "bg-destructive-vivid",
     },
   },
   defaultVariants: { tone: "muted" },
@@ -154,14 +154,14 @@ export const serverPickerButton = cva(
 
 export const serverPickerName = cva("text-fg truncate text-sm font-medium");
 
-export const serverPickerUri = cva("text-fg/45 truncate font-mono text-[11px]");
+export const serverPickerUri = cva("text-fg/45 truncate font-mono text-11");
 
 export const serverPickerLocationBadge = cva(
-  "shrink-0 rounded px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider",
+  "shrink-0 rounded px-1.5 py-0.5 text-10 font-semibold uppercase tracking-wider",
   {
     variants: {
       local: {
-        true: "bg-emerald-500/15 text-emerald-300 ring-1 ring-emerald-500/30",
+        true: "bg-success-tint/15 text-success-soft ring-1 ring-success-tint/30",
         false: "bg-fg/10 text-fg/55 ring-fg/10 ring-1",
       },
     },
@@ -195,10 +195,10 @@ export const integrationTab = cva(
 export const integrationTabUnderline = cva("absolute -bottom-px left-2 right-2 h-[2px] rounded-full bg-primary-500");
 
 export const integrationTabCount = cva(
-  "bg-fg/10 text-fg/70 rounded-full px-1.5 py-px text-[10px] font-semibold tabular-nums"
+  "bg-fg/10 text-fg/70 rounded-full px-1.5 py-px text-10 font-semibold tabular-nums"
 );
 
-export const listManagerCount = cva("text-fg/45 text-[11px] font-semibold uppercase tracking-wider");
+export const listManagerCount = cva("text-fg/45 text-11 font-semibold uppercase tracking-wider");
 
 export const listManagerAddRow = cva("flex items-center gap-2");
 
@@ -211,7 +211,7 @@ export const listManagerRow = cva(
 );
 
 export const listManagerRemove = cva(
-  "text-fg/40 hover:text-red-300 hover:bg-red-500/10 flex h-6 w-6 shrink-0 items-center justify-center rounded transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500/40"
+  "text-fg/40 hover:text-destructive-soft hover:bg-destructive-tint/10 flex h-6 w-6 shrink-0 items-center justify-center rounded transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-destructive-tint/40"
 );
 
 export const listManagerEmpty = cva("text-fg/40 px-3 py-4 text-center text-xs");
@@ -240,7 +240,7 @@ export const jobRight = cva("flex shrink-0 items-center gap-3");
 
 export const jobNextRun = cva("flex flex-col items-end gap-0.5 text-right");
 
-export const jobNextRunLabel = cva("text-fg/50 text-[11px] font-semibold uppercase tracking-wider");
+export const jobNextRunLabel = cva("text-fg/50 text-11 font-semibold uppercase tracking-wider");
 
 export const jobNextRunValue = cva("text-fg text-sm font-medium tabular-nums");
 
@@ -323,7 +323,7 @@ export const scanCopyRow = cva("flex items-center justify-between gap-3");
 
 export const copyRow = cva("flex items-stretch gap-2");
 
-export const dupComparing = cva("text-fg/55 flex items-center gap-2 pb-3 text-[12.5px]");
+export const dupComparing = cva("text-fg/55 flex items-center gap-2 pb-3 text-12");
 
 export const dupScroll = cva("flex flex-col gap-2");
 
@@ -343,7 +343,7 @@ export const dupTrackTitle = cva("text-fg truncate text-sm font-semibold");
 export const dupTrackMeta = cva("text-fg/55 truncate text-xs");
 
 export const dupListenPill = cva(
-  "text-warning-vivid bg-current/12 shrink-0 rounded-full px-2 py-0.5 text-[11px] font-semibold whitespace-nowrap"
+  "text-warning-vivid bg-current/12 shrink-0 rounded-full px-2 py-0.5 text-11 font-semibold whitespace-nowrap"
 );
 
 export const dupReclaim = cva("hidden shrink-0 text-sm font-bold tabular-nums sm:block");
@@ -358,10 +358,10 @@ export const dupClock = cva("text-fg/60 font-mono text-xs tabular-nums");
 
 export const dupClockNow = cva("text-fg font-semibold");
 
-export const dupOption = cva("text-fg/75 flex items-center gap-2 text-[12.5px] font-medium");
+export const dupOption = cva("text-fg/75 flex items-center gap-2 text-12 font-medium");
 
 export const dupRuler = cva(
-  "text-fg/55 border-fg/15 bg-fg/[0.07] focus-visible:ring-primary-500/50 relative ml-11 flex h-7 cursor-pointer items-center justify-between rounded-md border font-mono text-[10.5px] tabular-nums select-none focus-visible:ring-2 focus-visible:outline-none [&>span]:px-2"
+  "text-fg/55 border-fg/15 bg-fg/[0.07] focus-visible:ring-primary-500/50 relative ml-11 flex h-7 cursor-pointer items-center justify-between rounded-md border font-mono text-10 tabular-nums select-none focus-visible:ring-2 focus-visible:outline-none [&>span]:px-2"
 );
 
 export const dupLane = cva("flex items-start gap-2");
@@ -406,13 +406,13 @@ export const dupMetaRow = cva("flex items-center gap-2.5");
 export const dupMetaLine = cva("flex min-w-0 flex-1 items-center gap-2");
 
 export const dupFormat = cva(
-  "text-fg/75 bg-fg/10 shrink-0 rounded px-1.5 py-0.5 font-mono text-[10.5px] font-bold uppercase"
+  "text-fg/75 bg-fg/10 shrink-0 rounded px-1.5 py-0.5 font-mono text-10 font-bold uppercase"
 );
 
 export const dupStat = cva("text-fg shrink-0 text-xs font-semibold tabular-nums");
 
 export const dupStateBadge = cva(
-  "bg-current/15 shrink-0 rounded-full px-1.5 py-0.5 text-[10px] font-bold tracking-wider uppercase whitespace-nowrap",
+  "bg-current/15 shrink-0 rounded-full px-1.5 py-0.5 text-10 font-bold tracking-wider uppercase whitespace-nowrap",
   {
     variants: { tone: { success: "text-success-vivid", destructive: "text-destructive-vivid" } },
     defaultVariants: { tone: "success" },
@@ -420,12 +420,12 @@ export const dupStateBadge = cva(
 );
 
 export const dupPathBadge = cva(
-  "text-fg/70 bg-fg/10 shrink-0 truncate rounded-full px-1.5 py-0.5 text-[10px] font-semibold whitespace-nowrap"
+  "text-fg/70 bg-fg/10 shrink-0 truncate rounded-full px-1.5 py-0.5 text-10 font-semibold whitespace-nowrap"
 );
 
 export const dupAlbum = cva("text-fg/75 max-w-[40%] min-w-0 shrink truncate text-xs font-medium");
 
-export const dupFileName = cva("text-fg/50 border-fg/15 min-w-0 truncate border-l pl-2 font-mono text-[11.5px]");
+export const dupFileName = cva("text-fg/50 border-fg/15 min-w-0 truncate border-l pl-2 font-mono text-11");
 
 export const dupFooter = cva("flex justify-end");
 
@@ -435,9 +435,7 @@ export const dupRejectOption = cva("border-fg/10 flex flex-col gap-3 rounded-xl 
 
 export const dupRejectHeading = cva("text-fg text-sm font-semibold");
 
-export const dupRejectList = cva(
-  "text-fg/65 flex flex-1 list-disc flex-col gap-1.5 pl-4 text-[12.5px] leading-relaxed"
-);
+export const dupRejectList = cva("text-fg/65 flex flex-1 list-disc flex-col gap-1.5 pl-4 text-12 leading-relaxed");
 
 export const binToggle = cva(
   "text-fg/70 hover:text-fg flex items-center gap-1.5 text-sm font-semibold transition-colors"
@@ -445,11 +443,11 @@ export const binToggle = cva(
 
 export const binRow = cva("border-fg/10 bg-fg/[0.02] flex items-start gap-3 rounded-lg border px-3 py-2.5");
 
-export const binFileName = cva("text-fg/85 font-mono text-[12.5px] break-all");
+export const binFileName = cva("text-fg/85 font-mono text-12 break-all");
 
-export const binDir = cva("text-fg/45 font-mono text-[11px] break-all");
+export const binDir = cva("text-fg/45 font-mono text-11 break-all");
 
-export const binRowMeta = cva("text-fg/50 font-mono text-[11px] tabular-nums");
+export const binRowMeta = cva("text-fg/50 font-mono text-11 tabular-nums");
 
 export const binRestore = cva(
   "text-primary-400 hover:text-primary-500 mt-0.5 focus-visible:ring-primary-500/50 inline-flex shrink-0 items-center gap-1 rounded px-1.5 py-1 text-xs font-semibold transition-colors focus-visible:ring-2 focus-visible:outline-none disabled:opacity-50"

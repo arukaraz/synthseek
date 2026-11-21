@@ -55,7 +55,7 @@ export const searchInput = cva(
   "bg-surface/40 border-fg/15 focus:border-primary-400 text-fg h-8 w-full rounded-lg border px-2.5 text-xs outline-none"
 );
 
-export const sectionHeader = cva("text-fg/50 pt-1 text-[11px] font-medium tracking-wide uppercase");
+export const sectionHeader = cva("text-fg/50 pt-1 text-11 font-medium tracking-wide uppercase");
 
 export const trackRow = cva("hover:bg-fg/5 flex items-center gap-2.5 rounded-lg px-2 py-1.5");
 
@@ -69,11 +69,11 @@ export const trackTitle = cva("text-fg truncate text-sm");
 
 export const trackArtist = cva("text-fg/50 truncate text-xs");
 
-export const trackMeta = cva("text-fg/40 hidden shrink-0 text-[11px] tabular-nums sm:block");
+export const trackMeta = cva("text-fg/40 hidden shrink-0 text-11 tabular-nums sm:block");
 
 export const trackChips = cva("flex shrink-0 items-center gap-1");
 
-export const statusChip = cva("rounded px-1.5 py-0.5 text-[10px] font-medium", {
+export const statusChip = cva("rounded px-1.5 py-0.5 text-10 font-medium", {
   variants: {
     status: {
       matched: "bg-success-vivid/15 text-success-vivid",
@@ -83,7 +83,7 @@ export const statusChip = cva("rounded px-1.5 py-0.5 text-[10px] font-medium", {
   },
 });
 
-export const confidenceBadge = cva("rounded px-1.5 py-0.5 text-[10px]", {
+export const confidenceBadge = cva("rounded px-1.5 py-0.5 text-10", {
   variants: {
     kind: {
       exact: "bg-primary-500/10 text-primary-400",

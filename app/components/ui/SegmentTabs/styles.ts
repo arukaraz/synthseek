@@ -18,7 +18,7 @@ export const segmentTab = cva(
 );
 
 export const segmentTabCount = cva(
-  "bg-fg/10 text-fg/70 inline-flex h-5 min-w-[20px] items-center justify-center rounded-full px-1.5 text-[10px] font-semibold tabular-nums",
+  "bg-fg/10 text-fg/70 inline-flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-10 font-semibold tabular-nums",
   {
     variants: {
       active: {

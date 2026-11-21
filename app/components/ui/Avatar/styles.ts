@@ -26,4 +26,4 @@ export const avatarFallbackGradient = "from-primary-500 to-accent-500 bg-linear-
 
 export const avatarImage = "h-full w-full rounded-full object-cover";
 
-export const avatarInitial = "font-bold text-white";
+export const avatarInitial = "font-bold text-overlay-fg";

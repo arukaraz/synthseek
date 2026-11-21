@@ -38,7 +38,7 @@ export function LibraryFilterSidebar({
   const everyoneActive = everyoneScopeActive(filters);
 
   return (
-    <div className={sidebarShell()}>
+    <div className={sidebarShell()} data-part="sidebar">
       {showHeader ? (
         <div className={sidebarHeader()}>
           <p className={sidebarTitle()}>{t("page.filters.title")}</p>

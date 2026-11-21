@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
 
 export default function GeneralPage() {
-  redirect("/settings/appearance/theme");
+  redirect("/settings/customization/theme");
 }

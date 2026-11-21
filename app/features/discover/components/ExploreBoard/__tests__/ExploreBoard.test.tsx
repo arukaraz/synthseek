@@ -352,7 +352,7 @@ describe("ExploreBoard", () => {
 
     expect(screen.getByRole("link", { name: i18n.t("widgets:board.appearance.title") })).toHaveAttribute(
       "href",
-      "/settings/appearance/board"
+      "/settings/customization/board"
     );
     fireEvent.pointerDown(screen.getByRole("button", { name: i18n.t("discover:board.add.action") }), {
       button: 0,

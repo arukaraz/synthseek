@@ -9,7 +9,7 @@ export const closeButton = cva(
       },
       surface: {
         frosted:
-          "border border-fg/15 bg-black/40 text-overlay-fg/70 backdrop-blur-md hover:border-fg/25 hover:bg-black/55 hover:text-overlay-fg active:bg-black/70 active:text-overlay-fg",
+          "border border-fg/15 bg-veil/40 text-overlay-fg/70 backdrop-blur-md hover:border-fg/25 hover:bg-veil/55 hover:text-overlay-fg active:bg-veil/70 active:text-overlay-fg",
       },
       focus: {
         accent: "focus-visible:ring-2 focus-visible:ring-accent-500 focus-visible:ring-offset-2 ring-offset-background",
@@ -146,7 +146,7 @@ export type DropdownItemProps = VariantProps<typeof dropdownItem>;
 
 export const popoverLayer = "z-10001";
 
-export const terminalSurface = "bg-black/40";
+export const terminalSurface = "bg-veil/40";
 
 export const modalCenterContainer = cva("pointer-events-none fixed inset-0 flex items-center justify-center p-4", {
   variants: {
@@ -199,7 +199,7 @@ export type ResponsiveFallbackIconProps = VariantProps<typeof responsiveFallback
 export const authFieldLabel = cva("text-fg-muted text-xs font-semibold");
 
 export const authInputRow = cva(
-  "bg-fg/[0.04] flex h-11 items-center gap-2 rounded-[0.6875rem] border px-3 transition-colors focus-within:ring-4",
+  "bg-fg/[0.04] flex h-11 items-center gap-2 rounded-xl border px-3 transition-colors focus-within:ring-4",
   {
     variants: {
       invalid: {
@@ -222,17 +222,17 @@ export const authEyeToggle = cva(
 );
 
 export const authEmailButton = cva(
-  "border-fg/15 bg-fg/[0.04] text-fg hover:border-fg/25 focus-visible:ring-primary-500 flex h-11 w-full items-center justify-center rounded-[0.6875rem] border text-sm font-bold outline-none transition-colors hover:bg-fg/[0.08] focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-60"
+  "border-fg/15 bg-fg/[0.04] text-fg hover:border-fg/25 focus-visible:ring-primary-500 flex h-11 w-full items-center justify-center rounded-xl border text-sm font-bold outline-none transition-colors hover:bg-fg/[0.08] focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-60"
 );
 
 export const authPlexButton = cva(
-  "text-fg shadow-[0_0_28px_-8px_var(--color-plex-500),inset_0_1px_0_oklch(1_0_0/0.12)] focus-visible:ring-primary-500 flex h-[3.125rem] w-full items-center justify-center gap-2 rounded-[0.8125rem] border bg-plex-500/15 text-[0.9375rem] font-bold outline-none transition-all hover:-translate-y-px hover:bg-plex-500/25 focus-visible:ring-2 disabled:translate-y-0 disabled:cursor-not-allowed disabled:opacity-70",
+  "text-fg shadow-[0_0_28px_-8px_var(--brand-plex),inset_0_1px_0_color-mix(in_oklab,var(--hairline)_12%,transparent)] focus-visible:ring-primary-500 flex h-[3.125rem] w-full items-center justify-center gap-2 rounded-xl border bg-plex-500/15 text-15 font-bold outline-none transition-all hover:-translate-y-px hover:bg-plex-500/25 focus-visible:ring-2 disabled:translate-y-0 disabled:cursor-not-allowed disabled:opacity-70",
   {
     variants: {
       phase: {
         idle: "border-plex-500/35 hover:border-plex-500/55",
         pending: "border-plex-500/35 hover:border-plex-500/55",
-        completed: "border-[oklch(var(--neon-success)/0.55)]",
+        completed: "border-success-strong/55",
         error: "border-destructive/60",
       },
     },
@@ -245,7 +245,7 @@ export const authPlexIcon = cva("size-[1.125rem] shrink-0", {
     phase: {
       idle: "text-plex-400",
       pending: "text-plex-400",
-      completed: "text-[oklch(var(--neon-success))]",
+      completed: "text-success-strong",
       error: "text-destructive",
     },
   },
@@ -255,13 +255,13 @@ export const authPlexIcon = cva("size-[1.125rem] shrink-0", {
 export const authPlexWord = cva("text-plex-400 font-extrabold");
 
 export const authForwardButton = cva(
-  "focus-visible:ring-primary-500 flex h-11 w-full items-center justify-center gap-2 rounded-[0.6875rem] border text-sm font-bold outline-none transition-all focus-visible:ring-2 sm:w-auto sm:px-6",
+  "focus-visible:ring-primary-500 flex h-11 w-full items-center justify-center gap-2 rounded-xl border text-sm font-bold outline-none transition-all focus-visible:ring-2 sm:w-auto sm:px-6",
   {
     variants: {
       blocked: {
         true: "border-fg/20 bg-fg/[0.06] text-fg-muted cursor-not-allowed",
         false:
-          "border-primary-500/40 bg-primary-500/20 text-fg shadow-[0_0_28px_-8px_var(--color-primary-500),inset_0_1px_0_oklch(1_0_0/0.12)] hover:border-primary-500/60 hover:-translate-y-px hover:bg-primary-500/30",
+          "border-primary-500/40 bg-primary-500/20 text-fg shadow-[0_0_28px_-8px_var(--color-primary-500),inset_0_1px_0_color-mix(in_oklab,var(--hairline)_12%,transparent)] hover:border-primary-500/60 hover:-translate-y-px hover:bg-primary-500/30",
       },
     },
     defaultVariants: { blocked: false },
@@ -269,7 +269,7 @@ export const authForwardButton = cva(
 );
 
 export const authQuietButton = cva(
-  "border-fg/15 bg-fg/[0.04] text-fg hover:border-fg/25 focus-visible:ring-primary-500 flex h-11 w-full items-center justify-center rounded-[0.6875rem] border text-sm font-semibold outline-none transition-colors hover:bg-fg/[0.08] focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto sm:px-5"
+  "border-fg/15 bg-fg/[0.04] text-fg hover:border-fg/25 focus-visible:ring-primary-500 flex h-11 w-full items-center justify-center rounded-xl border text-sm font-semibold outline-none transition-colors hover:bg-fg/[0.08] focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto sm:px-5"
 );
 
 export const hiddenScrollbar = cva("[scrollbar-width:none] [&::-webkit-scrollbar]:hidden");

@@ -10,6 +10,7 @@ import { contentRoot, sectionGrid } from "../../styles";
 import { AccountCard } from "./components/AccountCard";
 import { ChangePasswordCard } from "./components/ChangePasswordCard";
 import { EditProfileCard } from "./components/EditProfileCard";
+import { LanguageCard } from "./components/LanguageCard";
 import { MyRequestPresetCard } from "./components/MyRequestPresetCard";
 import { QuotaCard } from "./components/QuotaCard";
 
@@ -25,6 +26,7 @@ export function AccountSection() {
       <SettingsPageHeader title={t(page.labelKey)} description={t(page.descriptionKey)} />
       <AccountCard user={currentUser} />
       <EditProfileCard user={currentUser} />
+      <LanguageCard />
       <div className={sectionGrid()}>
         <QuotaCard />
         <MyRequestPresetCard />

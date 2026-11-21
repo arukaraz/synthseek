@@ -105,5 +105,5 @@ export const splitLabel = cva("truncate", {
 });
 
 export const splitCount = cva(
-  "bg-warning-vivid/15 text-warning-vivid min-w-4.5 shrink-0 rounded px-1 text-center text-[11px] leading-[18px] font-bold tabular-nums"
+  "bg-warning-vivid/15 text-warning-vivid min-w-4.5 shrink-0 rounded px-1 text-center text-11 leading-4.5 font-bold tabular-nums"
 );

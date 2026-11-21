@@ -56,12 +56,12 @@ export const SETTINGS_PAGE_BY_ID = {
     descriptionKey: "shell.pages.privacy.description",
     icon: Shield,
   },
-  appearance: {
-    id: "appearance",
+  customization: {
+    id: "customization",
     group: "you",
-    href: "/settings/appearance",
-    labelKey: "shell.pages.appearance.title",
-    descriptionKey: "shell.pages.appearance.description",
+    href: "/settings/customization",
+    labelKey: "shell.pages.customization.title",
+    descriptionKey: "shell.pages.customization.description",
     icon: Palette,
   },
   playback: {
@@ -171,9 +171,9 @@ export const YOU_PAGES: readonly SettingsPage[] = SETTINGS_PAGES.filter((page) =
 export const SERVER_PAGES: readonly SettingsPage[] = SETTINGS_PAGES.filter((page) => page.group === "server");
 
 export const SETTINGS_TABS: Readonly<Record<SettingsTabbedPageId, readonly SettingsTab[]>> = {
-  appearance: [
-    { href: "/settings/appearance/theme", labelKey: "shell.tabs.appearance.theme", icon: Palette },
-    { href: "/settings/appearance/board", labelKey: "shell.tabs.appearance.board", icon: LayoutDashboard },
+  customization: [
+    { href: "/settings/customization/theme", labelKey: "shell.tabs.customization.theme", icon: Palette },
+    { href: "/settings/customization/board", labelKey: "shell.tabs.customization.board", icon: LayoutDashboard },
   ],
   connections: [
     { href: "/settings/connections/services", labelKey: "shell.tabs.connections.services", icon: Link2 },

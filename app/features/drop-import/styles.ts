@@ -35,7 +35,7 @@ export const progressWrap = cva("flex flex-col gap-2 py-2");
 
 export const progressLabel = cva("text-fg/60 text-center text-xs");
 
-export const sectionHeader = cva("text-fg/50 pt-1 text-[11px] font-medium tracking-wide uppercase");
+export const sectionHeader = cva("text-fg/50 pt-1 text-11 font-medium tracking-wide uppercase");
 
 export const errorText = cva("text-destructive-vivid text-xs");
 
@@ -61,7 +61,7 @@ export const batchRowTitle = cva("text-fg truncate text-sm");
 
 export const batchRowMeta = cva("text-fg/50 truncate text-xs");
 
-export const statusChip = cva("inline-flex shrink-0 items-center rounded px-1.5 py-0.5 text-[10px] font-medium", {
+export const statusChip = cva("inline-flex shrink-0 items-center rounded px-1.5 py-0.5 text-10 font-medium", {
   variants: {
     tone: {
       neutral: "bg-fg/10 text-fg/60",
@@ -131,4 +131,4 @@ export const trackTitle = cva("text-fg truncate text-sm");
 
 export const trackArtist = cva("text-fg/50 truncate text-xs");
 
-export const trackMeta = cva("text-fg/40 hidden shrink-0 text-[11px] tabular-nums sm:block");
+export const trackMeta = cva("text-fg/40 hidden shrink-0 text-11 tabular-nums sm:block");

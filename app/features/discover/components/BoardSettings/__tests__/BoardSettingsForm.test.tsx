@@ -37,7 +37,7 @@ const { size, templates, saveMock, appearanceMock, toastMock, nav } = vi.hoisted
 }));
 
 vi.mock("next/navigation", () => ({
-  usePathname: () => "/settings/appearance/board",
+  usePathname: () => "/settings/customization/board",
   useRouter: () => nav.router,
 }));
 vi.mock("sonner", () => ({ toast: toastMock }));
@@ -91,7 +91,7 @@ function renderForm({ lists = LISTS, device = "wide" }: { lists?: BoardLists; de
   const page = (board: BoardLists, look: BoardAppearance) => (
     <TooltipProvider>
       <SettingsSaveScope>
-        <a href="/settings/appearance/theme">Theme & language</a>
+        <a href="/settings/customization/theme">Theme</a>
         <BoardSettingsForm lists={board} device={device} appearance={look} custom={NO_CUSTOM} customStatus="ready" />
         <PageSaveBar />
       </SettingsSaveScope>
@@ -296,7 +296,7 @@ describe("BoardSettingsForm", () => {
     renderForm();
     fireEvent.click(within(tileNamed(/^Recent requests/)).getByRole("button", { name: "Large" }));
 
-    fireEvent.click(screen.getByRole("link", { name: "Theme & language" }));
+    fireEvent.click(screen.getByRole("link", { name: "Theme" }));
 
     expect(screen.getByRole("dialog", { name: enSettings.shell.leaveDialog.title })).toBeInTheDocument();
     expect(nav.router.push).not.toHaveBeenCalled();
@@ -306,7 +306,7 @@ describe("BoardSettingsForm", () => {
     saveMock.mockResolvedValueOnce(false);
     renderForm();
     fireEvent.click(within(tileNamed(/^Recent requests/)).getByRole("button", { name: "Large" }));
-    fireEvent.click(screen.getByRole("link", { name: "Theme & language" }));
+    fireEvent.click(screen.getByRole("link", { name: "Theme" }));
 
     fireEvent.click(screen.getByRole("button", { name: enSettings.shell.leaveDialog.save }));
 
@@ -324,11 +324,11 @@ describe("BoardSettingsForm", () => {
   it("leaves once the server has kept the board", async () => {
     renderForm();
     fireEvent.click(within(tileNamed(/^Recent requests/)).getByRole("button", { name: "Large" }));
-    fireEvent.click(screen.getByRole("link", { name: "Theme & language" }));
+    fireEvent.click(screen.getByRole("link", { name: "Theme" }));
 
     fireEvent.click(screen.getByRole("button", { name: enSettings.shell.leaveDialog.save }));
 
-    await waitFor(() => expect(nav.router.push).toHaveBeenCalledWith("/settings/appearance/theme"));
+    await waitFor(() => expect(nav.router.push).toHaveBeenCalledWith("/settings/customization/theme"));
   });
 
   it("turns every tile's background off on both layouts and saves them", () => {

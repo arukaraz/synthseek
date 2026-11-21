@@ -34,7 +34,7 @@ export const workshopCoverInitials = cva("text-fg/70 grid h-full w-full place-it
 
 export const workshopTitles = cva("flex min-w-0 flex-1 flex-col");
 
-export const workshopBadge = cva("text-accent-400 text-[11px] font-bold tracking-[0.08em] uppercase");
+export const workshopBadge = cva("text-accent-400 text-11 font-bold tracking-label uppercase");
 
 export const workshopName = cva("text-fg truncate text-xl font-bold tracking-tight");
 
@@ -57,9 +57,9 @@ export const workshopBody = cva("flex min-h-0 flex-1");
 export const workshopPane = cva("flex min-h-0 min-w-0 flex-col", {
   variants: {
     role: {
-      details: "border-fg/10 xl:w-[300px] xl:shrink-0 xl:border-r max-xl:flex-1",
+      details: "border-fg/10 xl:w-75 xl:shrink-0 xl:border-r max-xl:flex-1",
       tracks: "flex-1",
-      suggested: "border-fg/10 xl:w-[400px] xl:shrink-0 xl:border-l 2xl:w-[430px] max-xl:flex-1",
+      suggested: "border-fg/10 xl:w-100 xl:shrink-0 xl:border-l 2xl:w-107.5 max-xl:flex-1",
     },
   },
 });
@@ -113,10 +113,10 @@ export const detailsBody = cva("flex flex-col gap-4.5 p-4.5");
 
 export const field = cva("flex flex-col gap-1.5");
 
-export const fieldLabel = cva("text-fg/50 text-[11px] font-bold tracking-[0.08em] uppercase");
+export const fieldLabel = cva("text-fg/50 text-11 font-bold tracking-label uppercase");
 
 export const nameInput = cva(
-  "border-fg/10 bg-fg/5 text-fg focus:border-primary-500/60 focus:ring-primary-500/30 w-full rounded-[10px] border px-3 py-2 text-sm outline-none focus:ring-2"
+  "border-fg/10 bg-fg/5 text-fg focus:border-primary-500/60 focus:ring-primary-500/30 w-full rounded-xl border px-3 py-2 text-sm outline-none focus:ring-2"
 );
 
 export const nameText = cva("text-fg text-sm font-semibold break-words");
@@ -126,7 +126,7 @@ export const nameLockedHint = cva("text-fg/50 text-xs");
 export const visibilityGrid = cva("grid grid-cols-2 gap-1.5");
 
 export const visibilityOption = cva(
-  "focus-visible:ring-primary-400 flex flex-col items-start gap-0.5 rounded-[10px] border p-2.5 text-left text-sm outline-none focus-visible:ring-2 disabled:opacity-60",
+  "focus-visible:ring-primary-400 flex flex-col items-start gap-0.5 rounded-xl border p-2.5 text-left text-sm outline-none focus-visible:ring-2 disabled:opacity-60",
   {
     variants: {
       active: {
@@ -142,7 +142,7 @@ export const visibilityTitle = cva("text-fg font-semibold");
 
 export const visibilityHint = cva("text-fg/60 text-xs");
 
-export const facts = cva("grid grid-cols-[auto_1fr] items-center gap-x-4 gap-y-1.5 text-[13px]");
+export const facts = cva("grid grid-cols-[auto_1fr] items-center gap-x-4 gap-y-1.5 text-13");
 
 export const factTerm = cva("text-fg/50");
 
@@ -151,7 +151,7 @@ export const factValue = cva("text-fg/90 flex min-w-0 justify-end text-right");
 export const actionList = cva("border-fg/10 flex flex-col overflow-hidden rounded-lg border");
 
 export const actionRow = cva(
-  "border-fg/10 flex min-h-[42px] w-full items-center gap-2.5 px-3 text-left text-[13px] font-semibold not-first:border-t outline-none disabled:opacity-60",
+  "border-fg/10 flex min-h-10.5 w-full items-center gap-2.5 px-3 text-left text-13 font-semibold not-first:border-t outline-none disabled:opacity-60",
   {
     variants: {
       tone: {
@@ -196,11 +196,11 @@ export const importSummary = cva(
   "border-primary-500/40 bg-primary-500/10 mt-2 flex flex-col gap-1.5 rounded-lg border p-3"
 );
 
-export const importMissList = cva("text-fg/60 flex max-h-32 min-w-0 flex-col gap-0.5 overflow-y-auto text-[12px]");
+export const importMissList = cva("text-fg/60 flex max-h-32 min-w-0 flex-col gap-0.5 overflow-y-auto text-12");
 
 export const importMissItem = cva("truncate");
 
-export const importText = cva("text-[13px]", {
+export const importText = cva("text-13", {
   variants: {
     tone: {
       default: "text-fg font-semibold",
@@ -213,7 +213,7 @@ export const importText = cva("text-[13px]", {
 export const importActions = cva("mt-1 flex flex-wrap gap-2");
 
 export const importButton = cva(
-  "focus-visible:ring-primary-400 inline-flex h-8 items-center rounded-md border px-3 text-[13px] font-semibold outline-none focus-visible:ring-2 disabled:opacity-60",
+  "focus-visible:ring-primary-400 inline-flex h-8 items-center rounded-md border px-3 text-13 font-semibold outline-none focus-visible:ring-2 disabled:opacity-60",
   {
     variants: {
       tone: {

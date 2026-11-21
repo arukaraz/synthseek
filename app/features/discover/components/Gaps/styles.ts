@@ -24,6 +24,6 @@ export const gapArtist = cva(
   "text-fg truncate text-left text-sm font-semibold outline-none after:absolute after:inset-0 after:rounded-lg after:content-[''] focus-visible:after:ring-2 focus-visible:after:ring-primary-400"
 );
 
-export const gapCount = cva("text-fg/60 text-[11.5px]");
+export const gapCount = cva("text-fg/60 text-11");
 
 export const gapPercent = cva("text-primary-400 font-mono text-sm font-semibold tabular-nums");

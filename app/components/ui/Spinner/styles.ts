@@ -8,7 +8,7 @@ export const spinnerRing = cva(
         sm: "size-4 border-2",
         md: "size-6 border-2",
         lg: "size-10 border-2",
-        xl: "size-16 border-[3px]",
+        xl: "size-16 border-3",
         fill: "absolute inset-0 border-2",
       },
     },

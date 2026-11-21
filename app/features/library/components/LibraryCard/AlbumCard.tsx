@@ -63,6 +63,8 @@ export function AlbumCard({
 
   return (
     <li
+      data-part="media-tile"
+      data-type="album"
       className={cardRoot({ interactive: activates })}
       role={activates ? "button" : undefined}
       tabIndex={activates ? 0 : undefined}
@@ -128,7 +130,9 @@ export function AlbumCard({
 
       <div className={cardBodyRow()}>
         <div className={cardBody()}>
-          <p className={cardTitle()}>{item.name}</p>
+          <p className={cardTitle()} data-part="media-tile-title">
+            {item.name}
+          </p>
           <p className={cardSubtitle()}>{item.artist}</p>
           {meta ? <p className={cardMeta()}>{meta}</p> : null}
         </div>

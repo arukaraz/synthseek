@@ -84,7 +84,7 @@ export function QuarantineSection({ initial, sourceTrust }: QuarantineCardProps)
       {entries.isLoading ? (
         <span className="text-fg/60 text-sm">{t("quarantine.list.loading")}</span>
       ) : entries.isError ? (
-        <span className="text-sm text-red-400">{t("quarantine.list.loadError")}</span>
+        <span className="text-destructive-vivid text-sm">{t("quarantine.list.loadError")}</span>
       ) : !hasEntries ? (
         <EmptyState
           icon={ShieldCheck}

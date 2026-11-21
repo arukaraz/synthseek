@@ -8,7 +8,14 @@ import { I18nProvider } from "@modules/providers/I18nProvider";
 import { TRPCProvider } from "@modules/providers/TRPCProvider";
 import { fontVariables } from "@theme/fonts";
 import "@theme/index.css";
-import { AVAILABLE_THEMES, ThemeProvider } from "@theme/ThemeProvider";
+import {
+  parseThemeCookie,
+  THEME_ATTRIBUTE,
+  THEME_BASE_ATTRIBUTE,
+  THEME_COOKIE,
+  ThemeHead,
+  ThemeProvider,
+} from "@theme/ThemeProvider";
 import type { Metadata, Viewport } from "next";
 import { cookies } from "next/headers";
 
@@ -31,30 +38,32 @@ export default async function RootLayout({
   const cookieStore = await cookies();
   const cookieLocale = cookieStore.get(LANG_COOKIE)?.value;
   const locale = isLocale(cookieLocale) ? cookieLocale : DEFAULT_LOCALE;
+  const boot = parseThemeCookie(cookieStore.get(THEME_COOKIE)?.value);
+  const themeAttributes = {
+    [THEME_ATTRIBUTE]: boot.theme,
+    ...(boot.theme === "custom" ? { [THEME_BASE_ATTRIBUTE]: boot.base } : {}),
+  };
 
   return (
-    <html lang={locale} suppressHydrationWarning>
+    <html lang={locale} {...themeAttributes} suppressHydrationWarning>
+      <head>
+        <ThemeHead boot={boot} />
+      </head>
       <body className={`${fontVariables} antialiased`} suppressHydrationWarning>
-        <ThemeProvider
-          attribute="data-theme"
-          defaultTheme="dark"
-          enableSystem
-          themes={AVAILABLE_THEMES}
-          disableTransitionOnChange
-        >
-          <ClientSessionIdProvider>
-            <TRPCProvider>
-              <AuthProvider>
+        <ClientSessionIdProvider>
+          <TRPCProvider>
+            <AuthProvider>
+              <ThemeProvider boot={boot}>
                 <TooltipProvider delayDuration={150} skipDelayDuration={0}>
                   <I18nProvider locale={locale}>
                     <CountryProvider>{children}</CountryProvider>
                   </I18nProvider>
                 </TooltipProvider>
-              </AuthProvider>
-            </TRPCProvider>
-          </ClientSessionIdProvider>
-          <Toaster />
-        </ThemeProvider>
+                <Toaster />
+              </ThemeProvider>
+            </AuthProvider>
+          </TRPCProvider>
+        </ClientSessionIdProvider>
       </body>
     </html>
   );

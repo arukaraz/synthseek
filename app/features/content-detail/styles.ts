@@ -1,7 +1,7 @@
 import { cva } from "class-variance-authority";
 
 export const modalContainer = cva(
-  "bg-surface/95 !flex !flex-col !gap-0 !overflow-hidden !px-0 !pt-0 shadow-2xl sm:!top-0 sm:!pb-0 sm:!bottom-auto sm:!left-1/2 sm:!h-[100dvh] sm:!max-h-[100dvh] sm:!w-[min(1040px,100%)] sm:!max-w-none sm:!-translate-x-1/2 sm:!translate-y-0 sm:!rounded-none sm:!border-0"
+  "bg-surface/95 !flex !flex-col !gap-0 !overflow-hidden !px-0 !pt-0 shadow-2xl sm:!top-0 sm:!pb-0 sm:!bottom-auto sm:!left-1/2 sm:!h-[100dvh] sm:!max-h-[100dvh] sm:!w-[min(65rem,100%)] sm:!max-w-none sm:!-translate-x-1/2 sm:!translate-y-0 sm:!rounded-none sm:!border-0"
 );
 
 export const modalShell = cva(
@@ -46,7 +46,7 @@ export const miniInitials = cva("text-fg/70 grid h-full w-full place-items-cente
 
 export const miniName = cva("text-fg min-w-0 truncate text-base font-bold");
 
-export const modalGrid = cva("grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,1fr)_320px]");
+export const modalGrid = cva("grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,1fr)_20rem]");
 
 export const modalMain = cva("flex min-w-0 flex-col gap-8");
 
@@ -57,7 +57,7 @@ export const modalFullRow = cva("flex flex-col gap-8");
 export const backBar = cva("relative z-20 flex shrink-0 px-5 pt-5 sm:px-8 sm:pt-6");
 
 export const backButton = cva(
-  "border-fg/15 bg-black/40 text-overlay-fg hover:bg-black/55 flex items-center gap-2 self-start rounded-full border px-5 py-2.5 text-base font-semibold backdrop-blur-md transition-colors"
+  "border-fg/15 bg-veil/40 text-overlay-fg hover:bg-veil/55 flex items-center gap-2 self-start rounded-full border px-5 py-2.5 text-base font-semibold backdrop-blur-md transition-colors"
 );
 
 export const hero = cva(
@@ -263,11 +263,11 @@ export const cardCover = cva(
 export const cardImage = cva("h-full w-full object-cover transition-transform group-hover:scale-[1.03]");
 
 export const cardScrim = cva(
-  "pointer-events-none absolute inset-0 bg-linear-to-b from-black/60 via-black/15 to-transparent"
+  "pointer-events-none absolute inset-0 bg-linear-to-b from-veil/60 via-veil/15 to-transparent"
 );
 
 export const cardScrimBottom = cva(
-  "pointer-events-none absolute inset-0 bg-linear-to-t from-black/65 via-black/10 to-transparent"
+  "pointer-events-none absolute inset-0 bg-linear-to-t from-veil/65 via-veil/10 to-transparent"
 );
 
 export const cardInitials = cva("text-fg/70 flex h-full w-full items-center justify-center text-2xl font-bold");
@@ -282,24 +282,24 @@ export const cardRingWrap = cva("absolute top-1.5 right-1.5 grid size-7 place-it
 
 export const cardRing = cva("absolute inset-0");
 
-export const cardRingDisc = cva("absolute inset-[3px] grid place-items-center rounded-full bg-black/70");
+export const cardRingDisc = cva("absolute inset-[3px] grid place-items-center rounded-full bg-veil/70");
 
 export const cardRingCheck = cva("text-success relative z-10 size-3");
 
-export const cardRingCount = cva("relative z-10 text-[9px] font-semibold tabular-nums text-white");
+export const cardRingCount = cva("relative z-10 text-9 font-semibold tabular-nums text-overlay-fg");
 
 export const cardBody = cva("flex min-w-0 flex-col gap-0.5 px-0.5");
 
 export const cardCount = cva(
-  "absolute bottom-1.5 left-1.5 z-10 flex items-center gap-1.5 font-mono text-xs font-semibold tabular-nums text-white"
+  "absolute bottom-1.5 left-1.5 z-10 flex items-center gap-1.5 font-mono text-xs font-semibold tabular-nums text-overlay-fg"
 );
 
 export const cardCountDot = cva("size-2 shrink-0 rounded-full", {
   variants: {
     state: {
-      full: "bg-[var(--color-success)]",
-      partial: "bg-[var(--color-warning)]",
-      none: "bg-[var(--color-error)]",
+      full: "bg-success-strong",
+      partial: "bg-warning-strong",
+      none: "bg-destructive-strong",
     },
   },
   defaultVariants: { state: "none" },

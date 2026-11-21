@@ -37,7 +37,7 @@ describe("CoverflowSkeleton", () => {
 
     const centerCard = container.querySelector(".bg-fg\\/15");
     expect(centerCard).toBeInTheDocument();
-    expect(centerCard).toHaveClass("ring-2", "ring-white/10");
+    expect(centerCard).toHaveClass("ring-2", "ring-hairline/10");
   });
 
   it("has perspective container for 3D effect", () => {

@@ -25,8 +25,8 @@ const assistants: SettingsSearchEntry = {
 
 const theme: SettingsSearchEntry = {
   labelKey: "general.theme.title",
-  page: "appearance",
-  href: "/settings/appearance/theme",
+  page: "customization",
+  href: "/settings/customization/theme",
   anchor: "theme",
   keywordsKey: "shell.search.keywords.theme",
 };
@@ -73,7 +73,7 @@ describe("searchSettings", () => {
   });
 
   it("matches on the page label", () => {
-    const page = t("shell.pages.appearance.title").split(" ")[0];
+    const page = t("shell.pages.customization.title").split(" ")[0];
     expect(searchSettings(page, [endpoint, theme], t, true).map((result) => result.entry)).toEqual([theme]);
   });
 
@@ -115,7 +115,7 @@ describe("searchSettings", () => {
 
   it("names the place as the page alone otherwise", () => {
     const [result] = searchSettings("theme", [theme], t, true);
-    expect(result.place).toBe(t("shell.pages.appearance.title"));
+    expect(result.place).toBe(t("shell.pages.customization.title"));
   });
 });
 

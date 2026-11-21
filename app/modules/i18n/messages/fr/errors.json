@@ -522,5 +522,37 @@
   "BOARD_TEMPLATE_INVALID": {
     "title": "Impossible d'utiliser ce modèle de board",
     "description": "Ce modèle n'est pas un modèle de board Synthseek que cette version sait lire, rien n'a donc été modifié. Consultez l'aperçu pour voir ce qui ne va pas."
+  },
+  "THEME_NOT_FOUND": {
+    "title": "Pas encore de thème personnalisé",
+    "description": "Ce compte n'a pas de thème personnalisé. Choisissez Personnalisé dans les Réglages pour en créer un."
+  },
+  "THEME_PATH_INVALID": {
+    "title": "Ce fichier du thème ne peut pas être écrit",
+    "description": "Ce n'est pas un fichier qu'un thème peut contenir, ou le serveur n'a pas pu l'écrire."
+  },
+  "THEME_HAS_ERRORS": {
+    "title": "Le thème n'a pas été enregistré",
+    "description": "{{path}} contient une erreur de syntaxe. Corrigez-la et enregistrez de nouveau."
+  },
+  "THEME_TOO_LARGE": {
+    "title": "Le thème est trop volumineux",
+    "description": "Un fichier, ou le thème entier, dépasse la limite de taille. Rien n'a été enregistré."
+  },
+  "THEME_VERSION_NOT_FOUND": {
+    "title": "Cette version n'existe plus",
+    "description": "Elle n'est pas dans l'historique de ce fichier. Rouvrez l'historique pour voir les versions qu'il conserve."
+  },
+  "THEME_FONT_UNSUPPORTED": {
+    "title": "Ce fichier n'est pas une police acceptée par Synthseek",
+    "description": "Envoyez un fichier .woff2, .woff, .ttf ou .otf."
+  },
+  "THEME_FONT_TOO_LARGE": {
+    "title": "Pas assez de place pour cette police",
+    "description": "Les polices d'un compte partagent une limite de taille. Retirez une police pour faire de la place."
+  },
+  "THEME_IMPORT_INVALID": {
+    "title": "Ce thème ne peut pas être importé",
+    "description": "Ce document n'est pas un thème Synthseek que cette version sait lire, rien n'a donc été modifié."
   }
 }

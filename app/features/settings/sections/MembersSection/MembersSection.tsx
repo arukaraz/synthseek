@@ -149,7 +149,7 @@ export function MembersSection() {
           </div>
         ) : usersQuery.error ? (
           <div className={emptyPanel()}>
-            <span className="text-sm text-red-400">
+            <span className="text-destructive-vivid text-sm">
               {t("members.loadError", { message: usersQuery.error.message })}
             </span>
           </div>

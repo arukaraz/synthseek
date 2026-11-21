@@ -43,7 +43,7 @@ export function CategoryCard({ category, size = "small", className, onClick }: C
         </div>
       )}
 
-      <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/40 to-transparent" />
+      <div className="from-veil/80 via-veil/40 absolute inset-0 bg-linear-to-t to-transparent" />
 
       <div className="absolute right-0 bottom-0 left-0 z-10 p-3">
         <h3

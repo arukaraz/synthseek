@@ -1,7 +1,5 @@
-"use client";
+import { redirect } from "next/navigation";
 
-import { BoardTab } from "@features/settings/sections/GeneralSection/BoardTab";
-
-export default function AppearanceBoardPage() {
-  return <BoardTab />;
+export default function AppearanceBoardRedirect() {
+  redirect("/settings/customization/board");
 }

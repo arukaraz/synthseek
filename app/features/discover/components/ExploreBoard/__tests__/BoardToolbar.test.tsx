@@ -88,7 +88,7 @@ describe("BoardToolbar", () => {
 
     expect(screen.getByRole("link", { name: enWidgets.board.appearance.title })).toHaveAttribute(
       "href",
-      "/settings/appearance/board"
+      "/settings/customization/board"
     );
   });
 

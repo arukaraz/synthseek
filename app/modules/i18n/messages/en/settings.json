@@ -194,7 +194,7 @@
     },
     "theme": {
       "title": "Theme",
-      "description": "Pick the theme that matches your environment. Only in this browser.",
+      "scope": "For your account, on every device.",
       "groupLabel": "Color theme"
     },
     "board": {
@@ -1671,9 +1671,9 @@
         "title": "Account",
         "description": "Your profile, password and download quota."
       },
-      "appearance": {
-        "title": "Appearance & language",
-        "description": "The theme and the language Synthseek uses for you, and how your board is laid out."
+      "customization": {
+        "title": "Customization",
+        "description": "The theme Synthseek wears for you, and how your board is laid out."
       },
       "playback": {
         "title": "Playback",
@@ -1726,8 +1726,8 @@
       }
     },
     "tabs": {
-      "appearance": {
-        "theme": "Theme & language",
+      "customization": {
+        "theme": "Theme",
         "board": "Board"
       },
       "download": {
@@ -1783,7 +1783,7 @@
       "keywords": {
         "playbackAccount": "volume normalization loudness gain autoplay similar tracks",
         "playbackBrowser": "equalizer compressor crossfade gapless transition conversion bitrate mp3",
-        "theme": "dark midnight ocean color colour",
+        "theme": "dark midnight ocean color colour custom css font fonts radius shadow import export",
         "language": "english spanish french german",
         "members": "role trusted quota request preset quality format",
         "board": "density text size background templates arrange layout widgets",

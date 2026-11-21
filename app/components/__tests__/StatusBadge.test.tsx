@@ -97,19 +97,19 @@ describe("StatusBadge", () => {
   it("applies correct color class for queued status", () => {
     render(<StatusBadge status={RequestStatus.enum.queued} />);
     const badge = screen.getByTestId("status-badge");
-    expect(badge).toHaveClass("text-orange-400");
+    expect(badge).toHaveClass("text-status-queued");
   });
 
   it("applies correct color class for complete status", () => {
     render(<StatusBadge status={RequestStatus.enum.complete} />);
     const badge = screen.getByTestId("status-badge");
-    expect(badge).toHaveClass("text-green-400");
+    expect(badge).toHaveClass("text-status-complete");
   });
 
   it("applies correct color class for failed status", () => {
     render(<StatusBadge status={RequestStatus.enum.failed} />);
     const badge = screen.getByTestId("status-badge");
-    expect(badge).toHaveClass("text-red-400");
+    expect(badge).toHaveClass("text-status-failed");
   });
 
   it("renders icon when showIcon is true", () => {

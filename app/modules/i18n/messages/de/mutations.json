@@ -440,5 +440,15 @@
     "historyCleared_one": "{{count}} Wiedergabe aus deinem Verlauf entfernt",
     "historyCleared_other": "{{count}} Wiedergaben aus deinem Verlauf entfernt",
     "serverFailed": "Die Datenschutzeinstellungen konnten nicht gespeichert werden"
+  },
+  "theme": {
+    "selectFailed": "Das Design konnte nicht geändert werden",
+    "saveFailed": "Dein Design konnte nicht gespeichert werden",
+    "importCheckFailed": "Dieses Design konnte nicht geprüft werden",
+    "fontUploadFailed": "Diese Schrift konnte nicht hochgeladen werden",
+    "fontUnsupported": "Die Schrift muss eine WOFF2-, WOFF-, TTF- oder OTF-Datei sein",
+    "fontTooLarge": "Diese Schrift passt nicht: Für Schriften sind noch {{size}} frei",
+    "fontUploaded": "{{name}} ist einsatzbereit",
+    "fontRemoveFailed": "Diese Schrift konnte nicht entfernt werden"
   }
 }

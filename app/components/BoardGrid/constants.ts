@@ -21,16 +21,6 @@ export const BOARD_ROW_UNITS: Record<BoardRowHeight, number> = { short: 3, regul
 export const DEFAULT_BOARD_ROW_HEIGHT: BoardRowHeight = "regular";
 
 export const BOARD_TEXT_SCALE: Record<BoardTextScale, number> = { small: 0.92, default: 1, large: 1.08 };
-export const BOARD_TYPE_STEPS_REM = {
-  xs: 0.75,
-  sm: 0.875,
-  base: 1,
-  lg: 1.125,
-  xl: 1.25,
-  "2xl": 1.5,
-  "3xl": 1.875,
-  "4xl": 2.25,
-} as const;
 
 export const BOARD_SIZE_COLS: Record<BoardDevice, Record<BoardSize, number>> = {
   wide: { S: 3, M: 6, L: 9, XL: 12 },

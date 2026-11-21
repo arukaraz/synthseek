@@ -143,6 +143,19 @@
     min-width: 16rem;
   }
 
+  .dx-prose .dx-tokens tbody td,
+  .dx-prose .dx-tokens tbody td:last-child {
+    min-width: 0;
+  }
+
+  .dx-prose .dx-tokens tbody td:nth-child(2) {
+    min-width: 11rem;
+  }
+
+  .dx-prose .dx-tokens tbody td:nth-child(n + 3) code {
+    white-space: normal;
+  }
+
   .dx-prose blockquote {
     border-left: 2px solid color-mix(in oklch, var(--color-primary-500) 50%, transparent);
     padding-left: 14px;

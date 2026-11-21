@@ -9,6 +9,12 @@ interface TrpcUtils {
     favoriteTrackIds: { invalidate: () => unknown };
     scrobble: { connections: { invalidate: () => unknown } };
   };
+  theme: {
+    state: { invalidate: () => unknown };
+    files: { invalidate: () => unknown };
+    history: { invalidate: () => unknown };
+    fonts: { invalidate: () => unknown };
+  };
 }
 
 const FavoriteTrackIdsKeySchema = z.tuple([
@@ -45,6 +51,12 @@ const REDRAW: Record<UserActivitySubject, Redraw> = {
   },
   listeningServices: (_event, utils) => {
     void utils.playback.scrobble.connections.invalidate();
+  },
+  theme: (_event, utils) => {
+    void utils.theme.state.invalidate();
+    void utils.theme.files.invalidate();
+    void utils.theme.history.invalidate();
+    void utils.theme.fonts.invalidate();
   },
 };
 

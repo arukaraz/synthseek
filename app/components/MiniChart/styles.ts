@@ -15,7 +15,7 @@ export const sparkLine = cva("fill-none [stroke-linecap:round] [stroke-linejoin:
   variants: {
     tone: {
       primary: "stroke-primary-400",
-      accent: "stroke-[var(--mix-acc)]",
+      accent: "stroke-mix-acc",
     },
   },
   defaultVariants: { tone: "primary" },
@@ -25,7 +25,7 @@ export const sparkArea = cva("", {
   variants: {
     tone: {
       primary: "fill-primary-400/15",
-      accent: "fill-[color-mix(in_oklch,var(--mix-acc)_15%,transparent)]",
+      accent: "fill-mix-acc/15",
     },
   },
   defaultVariants: { tone: "primary" },
@@ -45,8 +45,8 @@ export const sparkBar = cva("", {
   compoundVariants: [
     { tone: "primary", last: true, className: "fill-primary-400" },
     { tone: "primary", last: false, className: "fill-primary-400/50" },
-    { tone: "accent", last: true, className: "fill-[var(--mix-acc)]" },
-    { tone: "accent", last: false, className: "fill-[color-mix(in_oklch,var(--mix-acc)_50%,transparent)]" },
+    { tone: "accent", last: true, className: "fill-mix-acc" },
+    { tone: "accent", last: false, className: "fill-mix-acc/50" },
   ],
   defaultVariants: { last: false, tone: "primary" },
 });
@@ -55,9 +55,9 @@ export const heatGrid = cva(
   "grid min-h-0 flex-1 grid-cols-[2.25rem_repeat(24,minmax(0,1fr))] grid-rows-[repeat(7,minmax(0,1fr))_auto] gap-0.5"
 );
 
-export const heatDay = cva("text-fg/60 self-center font-mono text-[10px]");
+export const heatDay = cva("text-fg/60 self-center font-mono text-10");
 
-export const heatCell = cva("rounded-[3px]", {
+export const heatCell = cva("rounded-sm", {
   variants: {
     empty: {
       true: "bg-fg/5",
@@ -70,12 +70,12 @@ export const heatCell = cva("rounded-[3px]", {
   },
   compoundVariants: [
     { empty: false, tone: "primary", className: "bg-primary-400" },
-    { empty: false, tone: "accent", className: "bg-[var(--mix-acc)]" },
+    { empty: false, tone: "accent", className: "bg-mix-acc" },
   ],
   defaultVariants: { empty: true, tone: "primary" },
 });
 
-export const heatHour = cva("text-fg/60 col-span-6 font-mono text-[10px]");
+export const heatHour = cva("text-fg/60 col-span-6 font-mono text-10");
 
 export function heatVars(level: number): CssVars {
   return { "--heat": String(level) };

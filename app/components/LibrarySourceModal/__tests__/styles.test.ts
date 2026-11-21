@@ -104,7 +104,7 @@ describe("layout shells", () => {
   it("modalRoot fills the viewport on mobile and centers as a sheet on desktop", () => {
     const result = modalRoot();
     expect(result).toContain("h-[100dvh]");
-    expect(result).toContain("sm:max-w-[1380px]");
+    expect(result).toContain("sm:max-w-345");
   });
 
   it("modalGrid uses a four-row template", () => {
@@ -217,7 +217,7 @@ describe("table primitives", () => {
 
   it("cover thumbnails fall back to gradients", () => {
     expect(coverThumb()).toContain("rounded");
-    expect(heartThumb()).toContain("text-rose-400");
+    expect(heartThumb()).toContain("text-accent-400");
     expect(coverPlaceholder()).toContain("bg-linear-to-br");
   });
 });
@@ -225,14 +225,14 @@ describe("table primitives", () => {
 describe("type and status tags", () => {
   it("typeTag colors each content type by tone", () => {
     expect(typeTag({ tone: "playlist" })).toContain("text-primary-400");
-    expect(typeTag({ tone: "album" })).toContain("text-cyan-300");
-    expect(typeTag({ tone: "liked" })).toContain("text-rose-300");
+    expect(typeTag({ tone: "album" })).toContain("text-secondary-400");
+    expect(typeTag({ tone: "liked" })).toContain("text-accent-400");
   });
 
   it("status pill and dot reflect imported vs disabled", () => {
-    expect(stPill({ tone: "imported" })).toContain("text-emerald-400");
+    expect(stPill({ tone: "imported" })).toContain("text-success-vivid");
     expect(stPill({ tone: "disabled" })).toContain("text-fg/50");
-    expect(stDot({ tone: "imported" })).toContain("bg-emerald-400");
+    expect(stDot({ tone: "imported" })).toContain("bg-success-vivid");
     expect(stDot({ tone: "disabled" })).toContain("bg-fg/40");
   });
 
@@ -264,7 +264,7 @@ describe("detail pane", () => {
     expect(detailCrumb()).toContain("uppercase");
     expect(detailCoverRow()).toContain("items-start");
     expect(detailCoverImg()).toContain("rounded-lg");
-    expect(detailHeartImg()).toContain("text-rose-300");
+    expect(detailHeartImg()).toContain("text-accent-400");
     expect(detailCoverPlaceholderLg()).toContain("bg-linear-to-br");
   });
 
@@ -347,7 +347,7 @@ describe("bottombar", () => {
     expect(autoImportTrigger({ active: false })).toContain("text-fg/60");
     expect(autoImportBadge({ active: true })).toContain("text-primary-400");
     expect(autoImportBadge({ active: false })).toContain("text-fg/50");
-    expect(autoImportPopover()).toContain("w-[280px]");
+    expect(autoImportPopover()).toContain("w-70");
     expect(autoImportTitle()).toContain("uppercase");
     expect(autoImportRow()).toContain("justify-between");
     expect(autoImportRowLabel()).toContain("flex-col");
@@ -417,9 +417,9 @@ describe("selection bulk bar", () => {
     expect(triToggleTrack({ state: "on" })).toContain("bg-primary-500");
     expect(triToggleTrack({ state: "off" })).toContain("bg-fg/15");
     expect(triToggleTrack({ state: "mixed" })).toContain("bg-fg/25");
-    expect(triToggleThumb({ state: "on" })).toContain("translate-x-[22px]");
+    expect(triToggleThumb({ state: "on" })).toContain("translate-x-5.5");
     expect(triToggleThumb({ state: "off" })).toContain("translate-x-0.5");
-    expect(triToggleThumb({ state: "mixed" })).toContain("translate-x-[11px]");
+    expect(triToggleThumb({ state: "mixed" })).toContain("translate-x-2.75");
     expect(triToggleThumbMark()).toContain("bg-fg/50");
   });
 });

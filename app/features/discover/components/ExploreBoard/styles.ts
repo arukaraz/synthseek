@@ -96,22 +96,20 @@ export const tileSlot = cva(
 
 export const tileSlotName = cva("text-primary-400 max-w-full truncate text-sm font-semibold");
 
-export const tileSlotSize = cva("text-primary-400/80 font-mono text-[11px] tracking-[0.14em] uppercase");
+export const tileSlotSize = cva("text-primary-400/80 font-mono text-11 tracking-caps uppercase");
 
 export const tileBar = cva(
   "border-fg/10 bg-surface/90 flex shrink-0 flex-wrap items-center gap-1 border-b p-1 backdrop-blur-md"
 );
 
-export const tileBarName = cva(
-  "text-fg/60 min-w-0 flex-1 truncate font-mono text-[10.5px] tracking-[0.08em] uppercase"
-);
+export const tileBarName = cva("text-fg/60 min-w-0 flex-1 truncate font-mono text-10 tracking-label uppercase");
 
 export const tileBarTools = cva("ml-auto flex min-w-0 flex-wrap items-center justify-end gap-0.5");
 
 export const sizeGroup = cva("bg-fg/5 flex items-center gap-0.5 rounded-lg p-0.5");
 
 export const sizeChip = cva(
-  "focus-visible:ring-primary-400 rounded-md px-1.5 font-mono text-[11px] font-semibold transition-colors outline-none focus-visible:ring-2",
+  "focus-visible:ring-primary-400 rounded-md px-1.5 font-mono text-11 font-semibold transition-colors outline-none focus-visible:ring-2",
   {
     variants: {
       active: {
@@ -120,7 +118,7 @@ export const sizeChip = cva(
         locked: "text-fg/25 inline-flex items-center justify-center",
       },
       dense: {
-        true: "h-5 min-w-5 px-1 text-[10px]",
+        true: "h-5 min-w-5 px-1 text-10",
         false: "h-7 min-w-7",
       },
     },
@@ -163,7 +161,7 @@ export const rowFrameHead = cva(
   "pointer-events-auto flex h-[var(--row-frame-head)] min-w-0 items-center justify-between gap-2 px-3"
 );
 
-export const rowFrameLabel = cva("text-fg/60 min-w-0 truncate font-mono text-[10.5px] tracking-[0.08em] uppercase");
+export const rowFrameLabel = cva("text-fg/60 min-w-0 truncate font-mono text-10 tracking-label uppercase");
 
 export function rowFrameVars(row: BoardRow): CssVars {
   return { "--row-frame": `${row.row + 1} / span ${row.rows}`, "--row-frame-head": BOARD_ROW_FRAME_HEAD };

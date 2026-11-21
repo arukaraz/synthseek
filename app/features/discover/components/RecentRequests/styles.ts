@@ -8,7 +8,7 @@ export const cardBase = cva(
   "hover:bg-fg/[0.03] grid grid-cols-[minmax(0,1fr)_auto_auto] items-center gap-3 rounded-lg px-2 py-1.5 transition-colors [grid-template-areas:'main_time_badge']"
 );
 
-export const cardTime = cva("text-fg/60 hidden self-center font-mono text-[10px] [grid-area:time] @sm:block");
+export const cardTime = cva("text-fg/60 hidden self-center font-mono text-10 [grid-area:time] @sm:block");
 
 export const cardBadge = cva("justify-self-end [grid-area:badge]");
 

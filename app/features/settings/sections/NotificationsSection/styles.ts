@@ -54,7 +54,7 @@ export const channelMarkGlyph = cva("shrink-0", {
   variants: {
     size: {
       sm: "size-3.5",
-      md: "size-[18px]",
+      md: "size-4.5",
     },
   },
   defaultVariants: { size: "md" },
@@ -75,7 +75,7 @@ export const matrixTable = cva("w-full border-collapse text-sm");
 export const matrixHead = cva("bg-surface sticky top-0 z-10 [&_tr]:border-fg/10 [&_tr]:border-b");
 
 export const matrixRowHead = cva(
-  "text-fg/50 py-2 pr-3 text-left text-[11px] font-semibold tracking-wider whitespace-nowrap uppercase"
+  "text-fg/50 py-2 pr-3 text-left text-11 font-semibold tracking-wider whitespace-nowrap uppercase"
 );
 
 export const matrixColumnHead = cva("w-32 px-2 py-2 text-center align-bottom");
@@ -83,7 +83,7 @@ export const matrixColumnHead = cva("w-32 px-2 py-2 text-center align-bottom");
 export const matrixColumnName = cva("text-fg inline-flex items-center gap-1.5 text-xs font-medium");
 
 export const matrixPresetTrigger = cva(
-  "text-fg/50 hover:text-fg mt-1 inline-flex items-center gap-0.5 text-[11px] font-medium transition-colors"
+  "text-fg/50 hover:text-fg mt-1 inline-flex items-center gap-0.5 text-11 font-medium transition-colors"
 );
 
 export const matrixKindRow = cva("", {
@@ -108,6 +108,6 @@ export const matrixCell = cva("py-2 text-center");
 
 export const matrixCellInner = cva("inline-flex items-center gap-2");
 
-export const matrixCellCount = cva("text-fg/45 w-9 text-left text-[11px] tabular-nums");
+export const matrixCellCount = cva("text-fg/45 w-9 text-left text-11 tabular-nums");
 
 export const matrixNote = cva("text-fg/50 text-xs");

@@ -37,7 +37,7 @@ export function RecycleBinSection() {
       {status.isLoading ? (
         <span className="text-fg/60 text-sm">{t("quality.recycleBin.status.loading")}</span>
       ) : status.isError ? (
-        <span className="text-sm text-red-400">{t("quality.recycleBin.status.loadError")}</span>
+        <span className="text-destructive-vivid text-sm">{t("quality.recycleBin.status.loadError")}</span>
       ) : status.data ? (
         <>
           <div className={quarantineListHeader()}>

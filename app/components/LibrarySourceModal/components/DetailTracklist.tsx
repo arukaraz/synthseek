@@ -25,7 +25,7 @@ export function DetailTracklist({ totalTracks, preview, externalUrl, hasMore }: 
       <h3 className={detailSectionTitle()}>
         {t("librarySource.tracklist.title")} <span className={detailSectionTitleLine()} />
         {totalTracks > 0 && preview.length > 0 && (
-          <span className="text-fg/40 text-[10px] tracking-normal normal-case">
+          <span className="text-fg/40 text-10 tracking-normal normal-case">
             {t("librarySource.tracklist.firstOf", { shown: preview.length, total: totalTracks })}
           </span>
         )}

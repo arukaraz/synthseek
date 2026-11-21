@@ -25,7 +25,7 @@ export function SettingsCard({
   const collapseAsTooltip = hasDescription && description!.length > DESCRIPTION_INLINE_LIMIT;
 
   return (
-    <section className={cn(settingsCard(), className)} data-anchor-target={anchor}>
+    <section className={cn(settingsCard(), className)} data-anchor-target={anchor} data-part="card">
       <header className={cardHeader()}>
         <div className={cardHeaderText()}>
           <h2 className={cardTitle()}>

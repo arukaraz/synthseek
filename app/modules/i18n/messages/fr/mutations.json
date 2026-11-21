@@ -440,5 +440,15 @@
     "historyCleared_one": "{{count}} lecture retirée de votre historique",
     "historyCleared_other": "{{count}} lectures retirées de votre historique",
     "serverFailed": "Impossible d'enregistrer les réglages de confidentialité"
+  },
+  "theme": {
+    "selectFailed": "Impossible de changer de thème",
+    "saveFailed": "Impossible d'enregistrer votre thème",
+    "importCheckFailed": "Impossible de vérifier ce thème",
+    "fontUploadFailed": "Impossible d'envoyer cette police",
+    "fontUnsupported": "La police doit être un fichier WOFF2, WOFF, TTF ou OTF",
+    "fontTooLarge": "Cette police ne tient pas : il reste {{size}} d'espace pour les polices",
+    "fontUploaded": "{{name}} est prête à l'emploi",
+    "fontRemoveFailed": "Impossible de retirer cette police"
   }
 }

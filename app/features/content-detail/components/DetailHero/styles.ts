@@ -1,7 +1,7 @@
 import { cva } from "class-variance-authority";
 
 export const heroBackdrop = cva(
-  "pointer-events-none absolute -top-10 -right-10 -bottom-16 -left-10 -z-10 overflow-hidden sm:-top-[60px] sm:-right-[60px] sm:-left-[60px]"
+  "pointer-events-none absolute -top-10 -right-10 -bottom-16 -left-10 -z-10 overflow-hidden sm:-top-15 sm:-right-15 sm:-left-15"
 );
 
 export const heroBackdropImage = cva(

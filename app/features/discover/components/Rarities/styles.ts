@@ -6,4 +6,4 @@ export const rarityAside = cva(
 
 export const rarityValue = cva("text-primary-400 text-xl leading-none font-semibold tabular-nums");
 
-export const rarityCaption = cva("text-fg/60 max-w-56 text-[11px] leading-snug sm:max-w-none sm:truncate");
+export const rarityCaption = cva("text-fg/60 max-w-56 text-11 leading-snug sm:max-w-none sm:truncate");

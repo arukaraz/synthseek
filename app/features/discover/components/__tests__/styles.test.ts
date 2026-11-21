@@ -159,8 +159,8 @@ describe("cardOverlay", () => {
   });
 
   it("applies gradient variants", () => {
-    expect(cardOverlay({ gradient: "dark" })).toContain("from-black/80");
-    expect(cardOverlay({ gradient: "light" })).toContain("from-black/60");
+    expect(cardOverlay({ gradient: "dark" })).toContain("from-veil/80");
+    expect(cardOverlay({ gradient: "light" })).toContain("from-veil/60");
   });
 });
 

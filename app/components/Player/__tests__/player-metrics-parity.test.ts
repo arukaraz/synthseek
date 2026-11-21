@@ -9,7 +9,7 @@ function themeFile(path: string): string {
 
 describe("the player bar's height threshold", () => {
   it("gives the bar its wide height at the same width the bar takes its wide layout", () => {
-    const container = /--container-player:\s*([\d.]+rem)/.exec(themeFile("tokens/primitives.css"))?.[1];
+    const container = /--container-player:\s*([\d.]+rem)/.exec(themeFile("index.css"))?.[1];
     const height = /@media \(min-width: ([\d.]+rem)\) \{\s*\.player-metrics \{\s*--player-bar-height:/.exec(
       themeFile("utilities/player.css")
     )?.[1];

@@ -7,6 +7,7 @@ import { PlayerDock } from "@components/PlayerDock";
 import { PreviewAnnouncer } from "@components/ui/PreviewButton";
 import { ProgressDock } from "@components/ui/ProgressDock";
 import { SystemStatusBanner } from "@components/SystemStatusBanner";
+import { ThemePreviewStrip } from "@components/ThemePreviewStrip";
 import { TopHeader } from "@components/TopHeader";
 import type { FilterType } from "@api/__generated__/types";
 import { ContentRequestFlow } from "@features/search/components/ContentRequestFlow";
@@ -44,7 +45,16 @@ export function MainLayoutContent({ children }: MainLayoutContentProps) {
     <div className="bg-surface h-dvh overflow-hidden">
       <ContentRequestFlow>
         <TopHeader onSearch={handleSearch} initialQuery={searchQuery} initialScope={searchScope} />
-        <ContentShell banner={<SystemStatusBanner />}>{children}</ContentShell>
+        <ContentShell
+          banner={
+            <>
+              <ThemePreviewStrip />
+              <SystemStatusBanner />
+            </>
+          }
+        >
+          {children}
+        </ContentShell>
       </ContentRequestFlow>
       <BottomNav />
       <ProgressDock />

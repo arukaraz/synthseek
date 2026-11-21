@@ -28,7 +28,7 @@ export const shelfViewSlash = cva("text-fg/25 text-xl leading-tight font-light")
 export const shelfViewLabel = cva("text-primary-400 truncate text-xl leading-tight font-bold tracking-tight");
 
 export const shelfCount = cva(
-  "text-fg/60 overflow-hidden text-[12.5px] tabular-nums transition-[max-height,opacity] duration-300 ease-out motion-reduce:transition-none",
+  "text-fg/60 overflow-hidden text-12 tabular-nums transition-[max-height,opacity] duration-300 ease-out motion-reduce:transition-none",
   {
     variants: { collapsed: { true: "max-h-0 opacity-0", false: "max-h-5 opacity-100" } },
     defaultVariants: { collapsed: false },
@@ -56,7 +56,7 @@ export const shelfIconButton = cva(
 export const shelfSearchRow = cva("flex items-center gap-2 pb-2");
 
 export const shelfSearchField = cva(
-  "border-fg/15 bg-fg/[0.04] text-fg/60 focus-within:border-primary-400/60 focus-within:ring-primary-500/20 flex h-10 min-w-0 flex-1 items-center gap-2 rounded-[10px] border px-3 text-sm focus-within:ring-3"
+  "border-fg/15 bg-fg/[0.04] text-fg/60 focus-within:border-primary-400/60 focus-within:ring-primary-500/20 flex h-10 min-w-0 flex-1 items-center gap-2 rounded-xl border px-3 text-sm focus-within:ring-3"
 );
 
 export const shelfSearchInput = cva(
@@ -72,7 +72,7 @@ export const shelfPillsScroll = cva(
 export const shelfTabs = cva("inline-flex gap-5");
 
 export const shelfTab = cva(
-  "relative inline-flex h-10 items-center gap-1.5 text-[14px] font-semibold whitespace-nowrap transition-colors after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 after:transition-colors",
+  "relative inline-flex h-10 items-center gap-1.5 text-14 font-semibold whitespace-nowrap transition-colors after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 after:transition-colors",
   {
     variants: {
       active: {
@@ -84,7 +84,7 @@ export const shelfTab = cva(
   }
 );
 
-export const shelfTabCount = cva("font-mono text-[11px] font-medium tabular-nums opacity-80");
+export const shelfTabCount = cva("font-mono text-11 font-medium tabular-nums opacity-80");
 
 export const shelfControlsRow = cva("flex items-center gap-2 pb-2");
 
@@ -111,7 +111,7 @@ export const shelfSelectToggle = cva("grid size-9 shrink-0 place-items-center bo
 });
 
 export const shelfChip = cva(
-  "inline-flex h-[34px] shrink-0 items-center gap-1.5 rounded-full border px-3 text-[13px] font-medium whitespace-nowrap transition-colors",
+  "inline-flex h-8.5 shrink-0 items-center gap-1.5 rounded-full border px-3 text-13 font-medium whitespace-nowrap transition-colors",
   {
     variants: {
       active: {
@@ -123,7 +123,7 @@ export const shelfChip = cva(
   }
 );
 
-export const shelfChipCount = cva("text-primary-400 font-mono text-[11px] tabular-nums");
+export const shelfChipCount = cva("text-primary-400 font-mono text-11 tabular-nums");
 
 export const shelfActiveRow = cva(
   "-mx-4 flex items-center gap-1.5 overflow-x-auto px-4 pb-2 whitespace-nowrap [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
@@ -133,16 +133,14 @@ export const shelfActiveChip = cva(
   "text-fg border-primary-400/45 bg-primary-500/15 inline-flex h-7 shrink-0 items-center gap-1.5 rounded-full border pr-1.5 pl-2.5 text-xs font-medium"
 );
 
-export const shelfActiveChipX = cva("bg-fg/15 grid size-[18px] place-items-center rounded-full");
+export const shelfActiveChipX = cva("bg-fg/15 grid size-4.5 place-items-center rounded-full");
 
 export const shelfActiveClear = cva("text-fg/60 shrink-0 px-1.5 text-xs underline underline-offset-[3px]");
 
-export const sheetGroupHeading = cva(
-  "text-fg/60 px-3.5 pt-3 pb-1.5 text-[11px] font-semibold tracking-[0.1em] uppercase"
-);
+export const sheetGroupHeading = cva("text-fg/60 px-3.5 pt-3 pb-1.5 text-11 font-semibold tracking-widest uppercase");
 
 export const sheetMenuItem = cva(
-  "hover:bg-fg/[0.06] flex min-h-12 w-full items-center gap-3 rounded-xl px-3 text-left text-[14.5px] font-medium transition-colors disabled:pointer-events-none disabled:opacity-40",
+  "hover:bg-fg/[0.06] flex min-h-12 w-full items-center gap-3 rounded-xl px-3 text-left text-14 font-medium transition-colors disabled:pointer-events-none disabled:opacity-40",
   {
     variants: {
       selected: { true: "bg-primary-500/15", false: "" },
@@ -161,7 +159,7 @@ export const sheetOrderRow = cva("px-3 pb-1.5");
 export const sheetOrderSegment = cva("border-fg/10 bg-fg/[0.06] flex gap-0.5 rounded-full border p-[3px]");
 
 export const sheetOrderButton = cva(
-  "inline-flex h-[30px] flex-1 items-center justify-center gap-1.5 rounded-full text-[13px] font-semibold transition-colors",
+  "inline-flex h-7.5 flex-1 items-center justify-center gap-1.5 rounded-full text-13 font-semibold transition-colors",
   {
     variants: {
       active: { true: "bg-primary-500 text-primary-foreground", false: "text-fg/60" },

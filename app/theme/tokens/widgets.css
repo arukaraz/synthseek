@@ -1,0 +1,11 @@
+@layer base {
+  :root,
+  [data-theme] {
+    --mix-daily: oklch(0.74 0.155 350);
+    --mix-weekly: oklch(0.74 0.155 292);
+    --mix-explore: oklch(0.78 0.13 205);
+    --mix-cf: oklch(0.8 0.16 150);
+    --generated-cover-start: oklch(0.62 0.18 285);
+    --generated-cover-end: oklch(0.42 0.16 285);
+  }
+}

@@ -14,7 +14,7 @@ export function WidgetCard({
   controls: { onSelect, coverAction },
 }: WidgetCardProps) {
   return (
-    <article data-acc={accent} className={card({ surface, single })}>
+    <article data-part="media-tile" data-acc={accent} className={card({ surface, single })}>
       <span className={cardCover({ surface, single })}>
         <CoverArt src={item.cover} seed={item.key} sizes={single ? "400px" : "200px"} />
         {coverAction ? <CoverActionButton action={coverAction} /> : null}
@@ -26,11 +26,18 @@ export function WidgetCard({
       </span>
       <span className={cardCopy({ surface, single })}>
         {onSelect ? (
-          <button type="button" className={cardTitle({ interactive: true, single })} onClick={onSelect}>
+          <button
+            type="button"
+            data-part="media-tile-title"
+            className={cardTitle({ interactive: true, single })}
+            onClick={onSelect}
+          >
             {item.title}
           </button>
         ) : (
-          <span className={cardTitle({ single })}>{item.title}</span>
+          <span data-part="media-tile-title" className={cardTitle({ single })}>
+            {item.title}
+          </span>
         )}
         {item.subtitle ? <span className={cardSubtitle({ single })}>{item.subtitle}</span> : null}
         {item.value ? <span className={cardFoot()}>{item.value}</span> : null}

@@ -41,6 +41,7 @@ Then run `/mcp` and complete the authorisation in your browser.
 - **"Recommend some new music based on what I have been listening to, and grab a few tracks."** It reads your listening history, suggests songs, and adds them.
 - **"What is stuck in my downloads?"** It reads the download queue, and can explain why something failed.
 - **"Shuffle my Daft Punk songs, and play this one next."** It plays them on your open player and edits its queue.
+- **"Make my theme warmer, with an orange primary."** It changes the colors of your [custom theme](/custom-themes).
 - **A weekly routine.** Have the assistant rebuild personal mixes each week from your recent listening, refreshing the same playlists rather than piling up duplicates, and downloading anything you do not have.
 
 ## The tools
@@ -89,24 +90,42 @@ Then run `/mcp` and complete the authorisation in your browser.
 | `replace_playlist_tracks`       | Set the complete track list, replacing what was there.                    |
 | `remove_tracks_from_playlist`   | Remove tracks.                                                            |
 | `delete_playlist`               | Delete a playlist.                                                        |
-| `update_playlist`               | Rename, or toggle keep-in-sync.                                           |
+| `update_playlist`               | Rename, toggle keep-in-sync, or make it shared or private.                |
+| `reorder_playlist_tracks`       | Set the order of a playlist's tracks.                                     |
+| `get_playlist_suggestions`      | Songs from the catalog that would fit a playlist.                         |
+| `export_playlist_m3u`           | Export a playlist as M3U, listing each file by its path on the server.    |
+| `import_playlist_m3u`           | Add the tracks of an M3U file that your library already has.              |
 | `sync_playlist_to_media_server` | Push one playlist, or all eligible ones, to Plex, Navidrome, or Jellyfin. |
 
 ### Library
 
-| Tool                  | What it does                                                  |
-| --------------------- | ------------------------------------------------------------- |
-| `get_library_summary` | Totals, top artists and genres, and queue size.               |
-| `search_library`      | Search what you already have.                                 |
-| `set_favorite`        | Mark songs, albums, or artists as favourites, or unmark them. |
-| `list_favorites`      | Your favourite songs, albums, and artists.                    |
+| Tool                   | What it does                                                                   |
+| ---------------------- | ------------------------------------------------------------------------------ |
+| `get_library_summary`  | Totals, top artists and genres, and queue size.                                |
+| `search_library`       | Search what you already have.                                                  |
+| `set_favorite`         | Mark songs, albums, or artists as favourites, or unmark them.                  |
+| `list_favorites`       | Your favourite songs, albums, and artists.                                     |
+| `get_library_insights` | One view of the library: recent albums, albums you are missing, anniversaries. |
+
+Administrators also get the library's growth, formats, decades and download figures from `get_library_insights`.
 
 ### Listening history
 
-| Tool                    | What it does                                                                                |
-| ----------------------- | ------------------------------------------------------------------------------------------- |
-| `get_listening_history` | What you played recently and your most played songs and artists, no Last.fm account needed. |
-| `get_lastfm_scrobbles`  | Your top tracks, recent tracks, or top artists from Last.fm, over any period.               |
+| Tool                     | What it does                                                                                |
+| ------------------------ | ------------------------------------------------------------------------------------------- |
+| `get_listening_history`  | What you played recently and your most played songs and artists, no Last.fm account needed. |
+| `get_listening_insights` | One view of your own listening: on repeat, forgotten favourites, this day last year.        |
+| `get_listening_now`      | What the other members are playing, as their privacy settings allow.                        |
+| `get_lastfm_scrobbles`   | Your top tracks, recent tracks, or top artists from Last.fm, over any period.               |
+
+### Followed artists
+
+| Tool                     | What it does                                                               |
+| ------------------------ | -------------------------------------------------------------------------- |
+| `list_followed_artists`  | The artists you follow, with their latest release.                         |
+| `set_artist_follow`      | Follow or unfollow an artist, and turn **Request new releases** on or off. |
+| `get_release_calendar`   | What the artists you follow released, or announced, between two dates.     |
+| `set_follow_preferences` | Which release types you follow: albums, EPs, singles.                      |
 
 ### Player
 
@@ -125,12 +144,37 @@ Then run `/mcp` and complete the authorisation in your browser.
 
 The player tools act on a Synthseek page open in a browser. With none open, `play` and `edit_play_queue` save the queue for the next player you open.
 
+### Board
+
+| Tool              | What it does                                        |
+| ----------------- | --------------------------------------------------- |
+| `get_board`       | Your board's layout and look, and your own widgets. |
+| `get_widget_data` | What one of your own widgets shows now.             |
+
+### Theme
+
+| Tool               | What it does                                                            |
+| ------------------ | ----------------------------------------------------------------------- |
+| `get_theme`        | The theme you use, your custom theme's files, and every token's value.  |
+| `select_theme`     | Choose a built-in theme or your custom one.                             |
+| `set_theme_tokens` | Set tokens of your custom theme.                                        |
+| `read_theme_file`  | One file of your custom theme, with its history, or an earlier version. |
+| `write_theme_file` | Replace one file of your custom theme.                                  |
+| `export_theme`     | Your custom theme as one document.                                      |
+| `import_theme`     | Load a theme document into your custom theme.                           |
+
+A write to your [custom theme](/custom-themes) goes through the same checks as a save from Settings, and is kept in the file's history. `set_theme_tokens` changes only the tokens it names: a color that follows one of them keeps its value until it is set too.
+
 ### Settings
 
-| Tool             | What it does                                                         |
-| ---------------- | -------------------------------------------------------------------- |
-| `get_settings`   | View the settings you are allowed to see. Secrets are always hidden. |
-| `update_setting` | Change a settings section you are allowed to manage.                 |
+| Tool                  | What it does                                                                    |
+| --------------------- | ------------------------------------------------------------------------------- |
+| `get_settings`        | View the settings you are allowed to see. Secrets are always hidden.            |
+| `update_setting`      | Change a settings section you are allowed to manage.                            |
+| `get_privacy`         | Your private session, where your plays go, and the server's privacy rules.      |
+| `set_private_session` | Start or end a private session, or set how long one lasts.                      |
+| `get_request_preset`  | Your request preset, the server's, and the one in effect for you.               |
+| `set_request_preset`  | Set or remove your own request preset. Administrators and trusted members only. |
 
 ### System and operations
 
@@ -146,7 +190,7 @@ Administrators only.
 | `get_system_health`        | Check Synthseek and its connected services.                         |
 | `get_maintenance_status`   | Everything that needs your attention, in one summary.               |
 | `review_imports`           | Look at downloads held back for a check, then keep or discard them. |
-| `check_for_updates`        | Whether a newer Synthseek version is out.                           |
+| `check_for_updates`        | Whether a newer Synthseek version is out, and what is new in yours. |
 | `list_log_files`           | The available log files.                                            |
 | `read_logs`                | Recent log entries, for troubleshooting.                            |
 

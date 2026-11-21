@@ -5,9 +5,9 @@
     gap: 0.625rem;
     width: 100%;
     padding: 0.625rem 0.75rem;
-    border-radius: 0.625rem;
-    border: 1px solid transparent;
-    font-size: 0.8125rem;
+    border-radius: calc(var(--radius) * 1.25);
+    border: var(--border-width, 1px) solid transparent;
+    font-size: var(--text-13);
     line-height: 1.25rem;
   }
 
@@ -24,8 +24,8 @@
   }
 
   .status-strip-neutral {
-    background-color: oklch(var(--muted-foreground) / 0.1);
-    border-color: oklch(var(--muted-foreground) / 0.28);
+    background-color: color-mix(in oklab, var(--surface-fg-muted) 10%, transparent);
+    border-color: color-mix(in oklab, var(--surface-fg-muted) 28%, transparent);
     color: var(--surface-fg-muted);
   }
 

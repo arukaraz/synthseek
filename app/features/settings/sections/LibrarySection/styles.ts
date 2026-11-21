@@ -18,7 +18,7 @@ export const infoTerm = cva("text-fg/90 text-xs font-semibold");
 
 export const infoText = cva("text-fg/70 text-xs leading-snug");
 
-export const infoExample = cva("text-fg/50 font-mono text-[11px] leading-snug break-words");
+export const infoExample = cva("text-fg/50 font-mono text-11 leading-snug break-words");
 
 export const infoNote = cva("text-fg/70 text-xs leading-snug");
 
@@ -35,7 +35,7 @@ export const previewTable = cva(
 );
 
 export const previewHead = cva(
-  "border-fg/10 bg-surface text-fg/50 sticky top-0 z-10 flex w-full min-w-0 items-center gap-2 border-b px-3 py-1.5 text-[11px] font-medium tracking-wide uppercase"
+  "border-fg/10 bg-surface text-fg/50 sticky top-0 z-10 flex w-full min-w-0 items-center gap-2 border-b px-3 py-1.5 text-11 font-medium tracking-wide uppercase"
 );
 
 export const previewRow = cva(
@@ -54,14 +54,14 @@ export const previewToCell = cva("flex w-0 min-w-0 flex-1 items-center gap-2");
 
 export const previewToPath = cva("text-fg/90 min-w-0 truncate");
 
-export const previewTagAlbum = cva("text-warning-vivid max-w-[45%] shrink-0 truncate text-[11px] font-medium");
+export const previewTagAlbum = cva("text-warning-vivid max-w-[45%] shrink-0 truncate text-11 font-medium");
 
 export const previewScopeNote = cva("text-fg/60 text-xs");
 
 export const tokenGroup = cva("flex flex-col gap-2.5");
 
 export const tokenGroupTitle = cva(
-  "text-fg/40 border-fg/10 border-b pb-1.5 text-[11px] font-semibold tracking-widest uppercase"
+  "text-fg/40 border-fg/10 border-b pb-1.5 text-11 font-semibold tracking-widest uppercase"
 );
 
 export const tokenGrid = cva("grid gap-1.5 sm:grid-cols-2");
@@ -96,7 +96,7 @@ export const sampleList = cva("border-fg/10 flex flex-col gap-1.5 rounded-md bor
 
 export const sampleRow = cva("flex flex-col gap-0.5");
 
-export const sampleLabel = cva("text-fg/50 text-[11px]");
+export const sampleLabel = cva("text-fg/50 text-11");
 
 export const samplePath = cva("text-fg/80 truncate font-mono text-xs");
 
@@ -111,7 +111,7 @@ export const statWord = cva("text-fg/60");
 export const listFrame = cva("border-fg/10 @container flex flex-col overflow-clip rounded-xl border");
 
 export const listHead = cva(
-  "border-fg/10 bg-surface text-fg/50 sticky top-0 z-10 hidden items-center gap-4 border-b px-4 py-2 text-[11px] font-semibold tracking-wider uppercase @3xl:grid",
+  "border-fg/10 bg-surface text-fg/50 sticky top-0 z-10 hidden items-center gap-4 border-b px-4 py-2 text-11 font-semibold tracking-wider uppercase @3xl:grid",
   {
     variants: {
       layout: {
@@ -164,7 +164,7 @@ export const rowActions = cva("flex items-center justify-end gap-3", {
 export const rowOrder = cva("flex items-center gap-1");
 
 export const accessBadge = cva(
-  "inline-flex w-fit shrink-0 items-center gap-1.5 rounded-full px-2 py-0.5 text-[11px] font-medium ring-1",
+  "inline-flex w-fit shrink-0 items-center gap-1.5 rounded-full px-2 py-0.5 text-11 font-medium ring-1",
   {
     variants: {
       tone: {
@@ -219,7 +219,7 @@ export const choiceName = cva("text-fg truncate text-sm font-medium");
 
 export const choiceSummary = cva("text-fg/50 truncate text-xs");
 
-export const choiceOwner = cva("text-fg/50 shrink-0 text-[11px]");
+export const choiceOwner = cva("text-fg/50 shrink-0 text-11");
 
 export const namingFooter = cva("flex flex-wrap items-center justify-between gap-2");
 

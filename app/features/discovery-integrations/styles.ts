@@ -45,7 +45,7 @@ export const schedulePickerContent = cva("flex w-72 flex-col gap-4 p-3");
 
 export const schedulePickerSection = cva("flex flex-col gap-2");
 
-export const schedulePickerSectionLabel = cva("text-fg/60 text-[11px] font-medium uppercase tracking-wide");
+export const schedulePickerSectionLabel = cva("text-fg/60 text-11 font-medium uppercase tracking-wide");
 
 export const scheduleDayChip = cva(
   "inline-flex h-9 cursor-pointer items-center justify-center rounded-md border text-xs font-medium transition-colors",
@@ -87,7 +87,7 @@ export const playlistChipsGrid = cva("grid grid-cols-4 gap-1.5");
 export const playlistRenameGroup = cva("flex flex-col gap-3");
 
 export const playlistChip = cva(
-  "inline-flex h-8 w-full cursor-pointer items-center justify-center truncate rounded-md border px-2 text-[11px] font-medium transition-colors",
+  "inline-flex h-8 w-full cursor-pointer items-center justify-center truncate rounded-md border px-2 text-11 font-medium transition-colors",
   {
     variants: {
       selected: {
@@ -123,7 +123,7 @@ export const replacePlaylistRow = cva(
 );
 
 export const scheduleHourChip = cva(
-  "inline-flex h-8 cursor-pointer items-center justify-center rounded-md border text-[11px] font-medium transition-colors",
+  "inline-flex h-8 cursor-pointer items-center justify-center rounded-md border text-11 font-medium transition-colors",
   {
     variants: {
       selected: {

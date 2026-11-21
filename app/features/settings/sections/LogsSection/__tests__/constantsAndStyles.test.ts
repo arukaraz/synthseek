@@ -60,7 +60,7 @@ describe("LogsSection styles", () => {
   });
 
   it("provides level color styles and a default", () => {
-    expect(LOG_LEVEL_STYLES.ERROR).toBe("text-red-400");
+    expect(LOG_LEVEL_STYLES.ERROR).toBe("text-destructive-vivid");
     expect(LOG_LEVEL_STYLES.INFO).toBe("text-primary-400");
     expect(LOG_LEVEL_DEFAULT_CLASS).toBe("text-fg/70");
   });

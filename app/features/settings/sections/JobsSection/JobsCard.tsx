@@ -17,7 +17,7 @@ export function JobsCard() {
       {isLoading ? (
         <span className="text-fg/60 text-sm">{t("jobs.card.loading")}</span>
       ) : error || !data ? (
-        <span className="text-sm text-red-400">
+        <span className="text-destructive-vivid text-sm">
           {t("jobs.card.loadError", { message: error?.message ?? t("jobs.card.unknownError") })}
         </span>
       ) : (

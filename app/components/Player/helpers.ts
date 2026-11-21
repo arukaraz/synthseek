@@ -38,9 +38,9 @@ const COLOR_TOKENS = [
   "var(--color-primary-400)",
   "var(--color-secondary-400)",
   "var(--color-accent-400)",
-  "var(--color-fg)",
-  "var(--color-surface-overlay)",
-  "var(--color-primary-foreground)",
+  "var(--surface-fg)",
+  "var(--surface-bg-overlay)",
+  "var(--primary-foreground)",
 ] as const;
 
 export function wavePhase(trackId: string): number {

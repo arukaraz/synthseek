@@ -44,7 +44,7 @@ export const CoverflowCard = memo(function CoverflowCard({
     <motion.div
       className={cn(
         "absolute top-1/2 left-1/2 overflow-hidden rounded-xl shadow-2xl sm:rounded-2xl",
-        "h-[80vw] w-[80vw] sm:h-70 sm:w-70 lg:h-[450px] lg:w-[450px]",
+        "h-[80vw] w-[80vw] sm:h-70 sm:w-70 lg:h-112.5 lg:w-112.5",
         isCenter ? "cursor-default" : "cursor-pointer"
       )}
       initial={false}
@@ -82,7 +82,7 @@ export const CoverflowCard = memo(function CoverflowCard({
           priority={priority}
         />
 
-        <div className="absolute inset-0 bg-linear-to-t from-black via-black/30 to-black/20" />
+        <div className="from-veil via-veil/30 to-veil/20 absolute inset-0 bg-linear-to-t" />
 
         {isCenter && (
           <div className={trendingBadgeContainer()}>
@@ -103,7 +103,7 @@ export const CoverflowCard = memo(function CoverflowCard({
           <p
             className={cn(
               "text-overlay-fg/70 line-clamp-1",
-              isCenter ? "text-xs sm:text-sm lg:text-base" : "text-[10px] sm:text-xs lg:text-sm"
+              isCenter ? "text-xs sm:text-sm lg:text-base" : "text-10 sm:text-xs lg:text-sm"
             )}
           >
             {artistName}

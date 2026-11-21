@@ -7,7 +7,7 @@ export const modalRoot = cva(
     "!flex w-full flex-col gap-0 overflow-hidden p-0 shadow-2xl !border-0",
     "h-[100dvh] !max-h-[100dvh] !rounded-none !top-0 !left-0 !translate-x-0",
     "sm:!top-[50%] sm:!left-[50%] sm:!translate-x-[-50%] sm:!translate-y-[-50%]",
-    "sm:h-modal-max sm:!max-h-[90vh] sm:max-w-[1380px] sm:!rounded-2xl",
+    "sm:h-modal-max sm:!max-h-[90vh] sm:max-w-345 sm:!rounded-2xl",
   ].join(" ")
 );
 
@@ -63,7 +63,7 @@ export const masterScroll = cva(
   }
 );
 
-export const detailPaneWrapper = cva("h-full min-h-0 w-full flex-col md:w-[380px] md:shrink-0", {
+export const detailPaneWrapper = cva("h-full min-h-0 w-full flex-col md:w-95 md:shrink-0", {
   variants: {
     hiddenOnMobile: {
       true: "hidden md:flex",
@@ -79,10 +79,10 @@ export const masterXScroll = cva("min-h-0 w-full min-w-0 max-w-full flex-1 overf
 export const masterEmpty = cva("flex flex-1 items-center justify-center p-12 text-sm text-fg/40");
 export const detailLoading = cva("flex h-full items-center justify-center p-12 text-sm text-fg/40");
 
-export const table = cva("w-full min-w-[680px] table-fixed border-collapse text-sm");
+export const table = cva("w-full min-w-170 table-fixed border-collapse text-sm");
 
 export const tableHead = cva(
-  "sticky top-0 z-10 bg-surface px-3 py-2 text-left text-[10px] font-semibold uppercase tracking-wider text-fg/40"
+  "sticky top-0 z-10 bg-surface px-3 py-2 text-left text-10 font-semibold uppercase tracking-wider text-fg/40"
 );
 
 export const tableRow = cva("cursor-pointer border-b border-fg/[0.04] transition-colors hover:bg-fg/[0.015]", {
@@ -102,27 +102,27 @@ export const tableCellMonoDim = cva("px-3 py-2 text-fg/40 font-mono text-xs");
 export const coverThumb = cva("size-7 shrink-0 overflow-hidden rounded bg-fg/10");
 
 export const heartThumb = cva(
-  "flex size-7 shrink-0 items-center justify-center rounded bg-linear-to-br from-rose-500/20 to-fuchsia-500/20 text-rose-400"
+  "flex size-7 shrink-0 items-center justify-center rounded bg-linear-to-br from-accent-500/20 to-accent-600/20 text-accent-400"
 );
 
 export const coverPlaceholder = cva(
-  "size-7 shrink-0 rounded bg-linear-to-br from-primary-700 to-cyan-500/40 bg-[length:8px_8px] [background-image:repeating-linear-gradient(135deg,rgba(255,255,255,0.05)_0_1px,transparent_1px_8px)]"
+  "size-7 shrink-0 rounded bg-linear-to-br from-primary-700 to-secondary-600/40 bg-[length:8px_8px] [background-image:repeating-linear-gradient(135deg,var(--backdrop-grid)_0_1px,transparent_1px_8px)]"
 );
 
-export const typeTag = cva("inline-flex items-center gap-1 rounded px-2 py-0.5 text-[11px] font-medium", {
+export const typeTag = cva("inline-flex items-center gap-1 rounded px-2 py-0.5 text-11 font-medium", {
   variants: {
     tone: {
       playlist: "bg-primary-500/15 text-primary-400",
-      album: "bg-cyan-500/15 text-cyan-300",
-      liked: "bg-rose-500/15 text-rose-300",
+      album: "bg-secondary-600/15 text-secondary-400",
+      liked: "bg-accent-500/15 text-accent-400",
     },
   },
 });
 
-export const stPill = cva("inline-flex items-center gap-1.5 rounded px-2 py-0.5 text-[11px] font-medium", {
+export const stPill = cva("inline-flex items-center gap-1.5 rounded px-2 py-0.5 text-11 font-medium", {
   variants: {
     tone: {
-      imported: "bg-emerald-500/10 text-emerald-400",
+      imported: "bg-success-tint/10 text-success-vivid",
       disabled: "bg-fg/5 text-fg/50",
     },
   },
@@ -130,12 +130,12 @@ export const stPill = cva("inline-flex items-center gap-1.5 rounded px-2 py-0.5 
 
 export const stDot = cva("size-1.5 rounded-full", {
   variants: {
-    tone: { imported: "bg-emerald-400", disabled: "bg-fg/40" },
+    tone: { imported: "bg-success-vivid", disabled: "bg-fg/40" },
   },
 });
 
 export const syncPill = cva(
-  "inline-flex items-center gap-1.5 rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider transition-colors",
+  "inline-flex items-center gap-1.5 rounded-full border px-2 py-0.5 text-10 font-semibold uppercase tracking-wider transition-colors",
   {
     variants: {
       on: {
@@ -153,7 +153,7 @@ export const syncDot = cva("size-1 rounded-full", {
 export const syncDash = cva("text-fg/30 font-mono text-xs select-none");
 
 export const checkBox = cva(
-  "inline-flex size-[18px] shrink-0 items-center justify-center rounded border transition-colors",
+  "inline-flex size-4.5 shrink-0 items-center justify-center rounded border transition-colors",
   {
     variants: {
       on: {
@@ -170,18 +170,18 @@ export const detailHero = cva(
   "relative border-b border-fg/[0.06] bg-[radial-gradient(400px_200px_at_100%_0%,color-mix(in_oklch,var(--color-primary-700)_12%,transparent),transparent_60%)] px-5 py-5"
 );
 
-export const detailCrumb = cva("mb-3 pl-10 mb-5 font-mono text-[10px] uppercase tracking-[0.1em] text-fg/40 md:pl-0");
+export const detailCrumb = cva("mb-3 pl-10 mb-5 font-mono text-10 uppercase tracking-widest text-fg/40 md:pl-0");
 
 export const detailCoverRow = cva("flex items-start gap-3.5");
 
 export const detailCoverImg = cva("size-20 shrink-0 overflow-hidden rounded-lg shadow-xl");
 
 export const detailHeartImg = cva(
-  "flex size-20 shrink-0 items-center justify-center rounded-lg bg-linear-to-br from-rose-500/35 to-fuchsia-500/25 text-rose-300 shadow-xl"
+  "flex size-20 shrink-0 items-center justify-center rounded-lg bg-linear-to-br from-accent-500/35 to-accent-600/25 text-accent-400 shadow-xl"
 );
 
 export const detailCoverPlaceholderLg = cva(
-  "size-20 shrink-0 rounded-lg bg-linear-to-br from-primary-700 to-cyan-500/40 bg-[length:8px_8px] shadow-xl [background-image:repeating-linear-gradient(135deg,rgba(255,255,255,0.05)_0_1px,transparent_1px_8px)]"
+  "size-20 shrink-0 rounded-lg bg-linear-to-br from-primary-700 to-secondary-600/40 bg-[length:8px_8px] shadow-xl [background-image:repeating-linear-gradient(135deg,var(--backdrop-grid)_0_1px,transparent_1px_8px)]"
 );
 
 export const detailH2 = cva("text-lg font-bold leading-tight tracking-tight text-fg");
@@ -208,7 +208,7 @@ export const detailAct = cva(
 export const detailSection = cva("border-b border-fg/[0.06] px-5 py-4");
 
 export const detailSectionTitle = cva(
-  "mb-3 flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.1em] text-fg/40"
+  "mb-3 flex items-center gap-2.5 text-10 font-semibold uppercase tracking-widest text-fg/40"
 );
 
 export const detailSectionTitleLine = cva("h-px flex-1 bg-fg/[0.06]");
@@ -218,23 +218,23 @@ export const cfgRow = cva(
 );
 
 export const cfgRowLabel = cva("font-medium text-fg");
-export const cfgRowDesc = cva("mt-0.5 text-[11px] leading-tight text-fg/40");
+export const cfgRowDesc = cva("mt-0.5 text-11 leading-tight text-fg/40");
 
-export const metaGrid = cva("grid grid-cols-[110px_1fr] gap-x-3.5 gap-y-1.5 text-xs");
+export const metaGrid = cva("grid grid-cols-[6.875rem_1fr] gap-x-3.5 gap-y-1.5 text-xs");
 export const metaKey = cva("text-fg/40");
 export const metaVal = cva("font-mono text-fg");
-export const metaValFull = cva("text-fg/40 ml-2 text-[10.5px]");
+export const metaValFull = cva("text-fg/40 ml-2 text-10");
 export const metaValText = cva("text-fg");
 
 export const trackList = cva("-mx-5 flex flex-col");
 export const trackRow = cva(
-  "grid grid-cols-[24px_1fr_50px] items-center gap-2.5 px-5 py-1.5 text-xs hover:bg-fg/[0.025]"
+  "grid grid-cols-[1.5rem_1fr_3.125rem] items-center gap-2.5 px-5 py-1.5 text-xs hover:bg-fg/[0.025]"
 );
-export const trackPos = cva("text-center font-mono text-[11px] text-fg/40");
+export const trackPos = cva("text-center font-mono text-11 text-fg/40");
 export const trackTitle = cva("truncate font-medium text-fg");
-export const trackArtist = cva("block truncate text-[11px] font-normal text-fg/50");
-export const trackDur = cva("text-right font-mono text-[11px] text-fg/40");
-export const trackMore = cva("cursor-pointer px-5 pt-2 text-[11px] text-primary-400 hover:text-fg");
+export const trackArtist = cva("block truncate text-11 font-normal text-fg/50");
+export const trackDur = cva("text-right font-mono text-11 text-fg/40");
+export const trackMore = cva("cursor-pointer px-5 pt-2 text-11 text-primary-400 hover:text-fg");
 
 export const detailEmpty = cva("flex h-full flex-col items-center justify-center gap-3.5 p-12 text-center");
 export const detailEmptyArt = cva("relative inline-flex size-24 items-center justify-center text-fg/40");
@@ -243,9 +243,9 @@ export const detailEmptyCard = cva(
   {
     variants: {
       pos: {
-        left: "-translate-x-[18px] translate-y-[6px] -rotate-[9deg] bg-fg/[0.015]",
+        left: "-translate-x-4.5 translate-y-1.5 -rotate-[9deg] bg-fg/[0.015]",
         center: "z-10 border-solid border-fg/20 bg-fg/[0.04]",
-        right: "translate-x-[18px] translate-y-[6px] rotate-[9deg] bg-fg/[0.015]",
+        right: "translate-x-4.5 translate-y-1.5 rotate-[9deg] bg-fg/[0.015]",
       },
     },
   }
@@ -255,11 +255,11 @@ export const detailEmptyCardLine = cva("h-[3px] rounded-sm bg-fg/10", {
   defaultVariants: { short: false },
 });
 export const detailEmptyTitle = cva("mt-1 text-base font-semibold tracking-tight text-fg");
-export const detailEmptyBody = cva("max-w-[280px] text-[12.5px] leading-relaxed text-fg/60");
+export const detailEmptyBody = cva("max-w-70 text-12 leading-relaxed text-fg/60");
 export const detailEmptyHints = cva("mt-2 flex flex-wrap justify-center gap-2.5");
-export const detailEmptyHint = cva("inline-flex items-center gap-1.5 text-[11px] text-fg/40");
+export const detailEmptyHint = cva("inline-flex items-center gap-1.5 text-11 text-fg/40");
 export const detailEmptyKbd = cva(
-  "rounded border border-fg/10 bg-fg/[0.04] px-1.5 py-0.5 font-mono text-[10px] text-fg/70"
+  "rounded border border-fg/10 bg-fg/[0.04] px-1.5 py-0.5 font-mono text-10 text-fg/70"
 );
 
 export const bbStat = cva("text-xs text-fg/60");
@@ -284,7 +284,7 @@ export const autoImportTriggerCue = cva(
   "bg-surface absolute -right-1.5 -bottom-1.5 inline-flex items-center justify-center rounded-full p-px"
 );
 
-export const autoImportBadge = cva("rounded px-1 font-mono text-[10px]", {
+export const autoImportBadge = cva("rounded px-1 font-mono text-10", {
   variants: {
     active: {
       true: "bg-primary-500/20 text-primary-400",
@@ -294,15 +294,15 @@ export const autoImportBadge = cva("rounded px-1 font-mono text-[10px]", {
   defaultVariants: { active: false },
 });
 
-export const autoImportPopover = cva("w-[280px] !max-w-[calc(100vw-2rem)] p-3");
+export const autoImportPopover = cva("w-70 !max-w-[calc(100vw-2rem)] p-3");
 export const autoImportTitle = cva(
-  "mb-2 flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wide text-fg/50"
+  "mb-2 flex items-center gap-1.5 text-11 font-semibold uppercase tracking-wide text-fg/50"
 );
 export const autoImportRow = cva(
   "flex items-center justify-between gap-3 rounded-md border border-transparent px-2 py-1.5 text-xs hover:bg-fg/[0.025]"
 );
 export const autoImportRowLabel = cva("flex flex-col text-fg");
-export const autoImportRowSub = cva("text-[10.5px] text-fg/45");
+export const autoImportRowSub = cva("text-10 text-fg/45");
 
 export const selectionBar = cva(
   "border-fg/10 bg-surface/95 sticky top-0 z-20 mb-2 flex w-full min-w-0 flex-wrap items-center gap-1.5 rounded-xl border px-3 py-2.5 sm:gap-2 sm:py-2"
@@ -316,7 +316,7 @@ export const selectionBarClear = cva(
   "text-fg/60 hover:bg-fg/5 hover:text-fg ml-auto inline-flex shrink-0 items-center gap-1.5 rounded px-2 py-1 text-xs transition-colors disabled:cursor-not-allowed disabled:opacity-50"
 );
 export const selectionBarToggles = cva("flex shrink-0 items-center gap-2 sm:gap-3");
-export const selectionBarSyncHint = cva("text-fg/40 hidden text-[10.5px] font-medium sm:inline");
+export const selectionBarSyncHint = cva("text-fg/40 hidden text-10 font-medium sm:inline");
 
 export const triToggle = cva("inline-flex items-center gap-2 text-xs font-medium select-none", {
   variants: {
@@ -340,13 +340,13 @@ export const triToggleTrack = cva(
   }
 );
 export const triToggleThumb = cva(
-  "pointer-events-none flex h-5 w-5 items-center justify-center rounded-full bg-white shadow-lg ring-0 transition-transform",
+  "pointer-events-none flex h-5 w-5 items-center justify-center rounded-full bg-overlay-fg shadow-lg ring-0 transition-transform",
   {
     variants: {
       state: {
-        on: "translate-x-[22px]",
+        on: "translate-x-5.5",
         off: "translate-x-0.5",
-        mixed: "translate-x-[11px]",
+        mixed: "translate-x-2.75",
       },
     },
     defaultVariants: { state: "off" },

@@ -1,0 +1,207 @@
+{
+  "sections": {
+    "brand": "Marca",
+    "surfaces": "Superficies",
+    "text": "Texto",
+    "content-types": "Tipos de contenido",
+    "status": "Estado",
+    "widgets": "Widgets",
+    "typography": "Tipografía",
+    "shape": "Forma",
+    "elevation": "Sombras",
+    "services": "Servicios"
+  },
+  "tokens": {
+    "--color-primary-500": {
+      "label": "Primario",
+      "hint": "Botones, enlaces, el elemento activo, el inicio del nombre en el logo"
+    },
+    "--color-primary-400": { "label": "Primario, tono de texto", "hint": "El primario usado como texto" },
+    "--color-primary-600": { "label": "Primario, tono profundo", "hint": "Degradados y estados pulsados" },
+    "--color-primary-700": {
+      "label": "Primario, tono más profundo",
+      "hint": "El extremo oscuro de los degradados primarios"
+    },
+    "--color-secondary-500": {
+      "label": "Secundario",
+      "hint": "Información, el segundo tono de la marca, el inicio de la marca del logo"
+    },
+    "--color-secondary-400": { "label": "Secundario, tono de texto", "hint": "El secundario usado como texto" },
+    "--color-secondary-600": { "label": "Secundario, tono profundo", "hint": "Degradados y estados pulsados" },
+    "--color-accent-500": {
+      "label": "Acento",
+      "hint": "Destacados, extremos de degradados, el final de la marca del logo"
+    },
+    "--color-accent-400": { "label": "Acento, tono de texto", "hint": "El acento usado como texto" },
+    "--color-accent-600": { "label": "Acento, tono profundo", "hint": "Degradados y estados pulsados" },
+    "--ring": { "label": "Anillo de foco", "hint": "El contorno del foco de teclado" },
+
+    "--surface-bg": { "label": "Fondo de la página", "hint": "Detrás de todo" },
+    "--surface-bg-elevated": { "label": "Tarjetas", "hint": "Tarjetas y paneles" },
+    "--surface-bg-overlay": { "label": "Menús y popovers", "hint": "Todo lo que flota" },
+    "--surface-bg-sunken": { "label": "Huecos", "hint": "Campos y zonas hundidas" },
+    "--muted": { "label": "Relleno suave", "hint": "Esqueletos, carriles de barras y chips en reposo" },
+    "--border-default": { "label": "Bordes", "hint": "Contornos de tarjetas y campos" },
+    "--border-subtle": { "label": "Bordes tenues", "hint": "Separadores dentro de una tarjeta" },
+    "--glass-bg": { "label": "Cristal", "hint": "El relleno de las barras flotantes y el reproductor" },
+    "--glass-border": { "label": "Borde de cristal", "hint": "El contorno de un panel de cristal" },
+    "--veil": { "label": "Velo sobre la portada", "hint": "La sombra detrás del texto sobre una portada" },
+    "--hairline": { "label": "Línea fina", "hint": "Líneas claras y finas sobre una superficie" },
+    "--backdrop-grid": { "label": "Cuadrícula de fondo", "hint": "La cuadrícula tenue detrás de la página" },
+
+    "--surface-fg": { "label": "Texto", "hint": "Texto del cuerpo y títulos" },
+    "--surface-fg-muted": { "label": "Texto secundario", "hint": "Descripciones y pies de texto" },
+    "--primary-foreground": { "label": "Texto sobre el primario", "hint": "Etiquetas sobre un relleno primario" },
+    "--destructive-foreground": { "label": "Texto sobre el peligro", "hint": "Etiquetas sobre un relleno de peligro" },
+    "--on-cover": { "label": "Texto sobre la portada", "hint": "Títulos puestos sobre una portada" },
+
+    "--type-track": { "label": "Canción", "hint": "Insignias y etiquetas de canciones" },
+    "--type-album": { "label": "Álbum", "hint": "Insignias y etiquetas de álbumes" },
+    "--type-artist": { "label": "Artista", "hint": "Insignias y etiquetas de artistas" },
+    "--type-playlist": { "label": "Playlist", "hint": "Insignias y etiquetas de playlists" },
+
+    "--success-vivid": { "label": "Éxito", "hint": "Hecho, conectado, en buen estado" },
+    "--success-soft": { "label": "Éxito, tono suave", "hint": "El éxito como texto discreto" },
+    "--success-tint": { "label": "Éxito, tono tintado", "hint": "Rellenos e iconos de éxito" },
+    "--success-strong": { "label": "Éxito, tono fuerte", "hint": "Rellenos sólidos de éxito y su brillo" },
+    "--warning-vivid": { "label": "Aviso", "hint": "Necesita atención" },
+    "--warning-soft": { "label": "Aviso, tono suave", "hint": "El aviso como texto discreto" },
+    "--warning-tint": { "label": "Aviso, tono tintado", "hint": "Rellenos e iconos de aviso" },
+    "--warning-strong": { "label": "Aviso, tono fuerte", "hint": "Rellenos sólidos de aviso y su brillo" },
+    "--destructive-vivid": { "label": "Peligro", "hint": "Borrar, fallido, error" },
+    "--destructive-soft": { "label": "Peligro, tono suave", "hint": "El peligro como texto discreto" },
+    "--destructive-tint": { "label": "Peligro, tono tintado", "hint": "Rellenos e iconos de peligro" },
+    "--destructive-strong": { "label": "Peligro, tono fuerte", "hint": "Rellenos sólidos de peligro y su brillo" },
+    "--destructive": { "label": "Relleno de peligro", "hint": "El relleno de un botón destructivo" },
+    "--info-vivid": { "label": "Información", "hint": "Sincronizando y avisos neutros" },
+    "--info-soft": { "label": "Información, tono suave", "hint": "La información como texto discreto" },
+    "--info-tint": { "label": "Información, tono tintado", "hint": "Rellenos e iconos de información" },
+    "--status-queued": { "label": "Solicitud: en cola", "hint": "Una solicitud esperando su turno" },
+    "--status-pending-approval": {
+      "label": "Solicitud: esperando aprobación",
+      "hint": "Una solicitud que espera a un administrador"
+    },
+    "--status-searching": { "label": "Solicitud: buscando", "hint": "Buscando una fuente" },
+    "--status-pending-download": {
+      "label": "Solicitud: encontrada",
+      "hint": "Se encontró una fuente y la descarga es lo siguiente"
+    },
+    "--status-downloading": { "label": "Solicitud: descargando", "hint": "Una descarga en curso" },
+    "--status-in-progress": { "label": "Solicitud: en curso", "hint": "Un álbum o una playlist a medias" },
+    "--status-paused": { "label": "Solicitud: en pausa", "hint": "Detenida hasta que se reanude" },
+    "--status-pending-import": {
+      "label": "Solicitud: lista para importar",
+      "hint": "Descargada y a la espera de archivarse"
+    },
+    "--status-importing": { "label": "Solicitud: importando", "hint": "Archivándose en la biblioteca" },
+    "--status-syncing": { "label": "Solicitud: sincronizando", "hint": "Una sincronización de la biblioteca en curso" },
+    "--status-complete": { "label": "Solicitud: completada", "hint": "Ya está en la biblioteca" },
+    "--status-partial": { "label": "Solicitud: parcial", "hint": "Llegaron algunas canciones y otras no" },
+    "--status-failed": { "label": "Solicitud: fallida", "hint": "Se detuvo con un error" },
+    "--status-cancelled": { "label": "Solicitud: cancelada", "hint": "La detuvo alguien" },
+    "--status-delegated": { "label": "Solicitud: delegada", "hint": "Entregada a un gestor de biblioteca externo" },
+
+    "--mix-daily": { "label": "Acento de widget: Rosa", "hint": "Todos los widgets en Rosa" },
+    "--mix-weekly": { "label": "Acento de widget: Violeta", "hint": "Todos los widgets en Violeta" },
+    "--mix-explore": { "label": "Acento de widget: Cian", "hint": "Todos los widgets en Cian" },
+    "--mix-cf": { "label": "Acento de widget: Verde", "hint": "Todos los widgets en Verde" },
+    "--generated-cover-start": {
+      "label": "Portada generada, extremo claro",
+      "hint": "Portadas dibujadas para una mezcla; cada una elige su tono"
+    },
+    "--generated-cover-end": {
+      "label": "Portada generada, extremo oscuro",
+      "hint": "El otro extremo de una portada generada"
+    },
+
+    "--font-sans": { "label": "Fuente de la interfaz", "hint": "Una pila del sistema, o una fuente que subas" },
+    "--font-mono": { "label": "Fuente monoespaciada", "hint": "Números, rutas, contadores, código" },
+    "--font-heading": { "label": "Fuente de los títulos", "hint": "Títulos de páginas y tarjetas" },
+    "--ui-scale": { "label": "Escala de la interfaz", "hint": "Texto y espaciado a la vez" },
+    "--text-9": { "label": "Tamaño de texto: 9", "hint": "Los contadores más pequeños" },
+    "--text-10": { "label": "Tamaño de texto: 10", "hint": "Etiquetas e insignias diminutas" },
+    "--text-11": { "label": "Tamaño de texto: 11", "hint": "Pies de texto pequeños" },
+    "--text-xs": { "label": "Tamaño de texto: extra pequeño", "hint": "Pies de texto, ayudas, insignias" },
+    "--text-13": { "label": "Tamaño de texto: 13", "hint": "Listas densas" },
+    "--text-sm": { "label": "Tamaño de texto: pequeño", "hint": "Texto secundario y controles" },
+    "--text-15": { "label": "Tamaño de texto: 15", "hint": "Listas cómodas" },
+    "--text-base": { "label": "Tamaño de texto: base", "hint": "Texto del cuerpo" },
+    "--text-lg": { "label": "Tamaño de texto: grande", "hint": "Texto destacado" },
+    "--text-xl": { "label": "Tamaño de texto: extra grande", "hint": "Títulos pequeños" },
+    "--text-2xl": { "label": "Tamaño de título", "hint": "Títulos de tarjetas" },
+    "--text-3xl": { "label": "Tamaño de texto: 3XL", "hint": "Títulos de página" },
+    "--text-4xl": { "label": "Tamaño de texto: 4XL", "hint": "Encabezados grandes" },
+    "--text-5xl": { "label": "Tamaño de texto: 5XL", "hint": "Cifras protagonistas" },
+    "--text-6xl": { "label": "Tamaño de texto: 6XL", "hint": "El texto de exhibición más grande" },
+    "--tracking-tight": { "label": "Espaciado de letras: estrecho", "hint": "Títulos" },
+    "--tracking-normal": { "label": "Espaciado de letras: normal", "hint": "Texto del cuerpo" },
+    "--tracking-wide": { "label": "Espaciado de letras: amplio", "hint": "Etiquetas pequeñas destacadas" },
+    "--tracking-wider": { "label": "Espaciado de letras: más amplio", "hint": "Etiquetas cortas que necesitan aire" },
+    "--tracking-label": { "label": "Espaciado de letras: etiqueta", "hint": "Etiquetas sobre un campo o un grupo" },
+    "--tracking-widest": { "label": "Espaciado de letras: el más amplio", "hint": "Versalitas pequeñas" },
+    "--tracking-caps": { "label": "Espaciado de letras: mayúsculas", "hint": "Palabras cortas en mayúsculas" },
+    "--tracking-caps-wide": {
+      "label": "Espaciado de letras: mayúsculas amplias",
+      "hint": "Marcadores de sección en mayúsculas"
+    },
+
+    "--radius": { "label": "Radio de las esquinas", "hint": "Tarjetas, botones, campos" },
+    "--radius-full": {
+      "label": "Radio de píldora",
+      "hint": "Píldoras, chips y botones redondos; 0 los deja cuadrados"
+    },
+    "--border-width": { "label": "Grosor del borde", "hint": "Tarjetas, botones, menús" },
+
+    "--shadow-color": { "label": "Color de la sombra", "hint": "El tinte de todas las sombras" },
+    "--shadow-strength": { "label": "Intensidad de la sombra", "hint": "Tarjetas, menús, diálogos" },
+    "--glow": { "label": "Resplandor", "hint": "El halo alrededor de las acciones primarias" },
+    "--neon-accent": { "label": "Acento del resplandor", "hint": "El tono de acento de los bordes luminosos" },
+    "--glass-blur": { "label": "Desenfoque del cristal", "hint": "La barra del reproductor y las barras flotantes" },
+
+    "--brand-spotify": { "label": "Spotify", "hint": "La marca de Spotify y sus insignias" },
+    "--brand-spotify-ink": { "label": "Spotify, tinta", "hint": "Las líneas oscuras de la marca de Spotify" },
+    "--brand-apple-music": { "label": "Apple Music", "hint": "La marca de Apple Music y sus insignias" },
+    "--brand-youtube": { "label": "YouTube", "hint": "La marca de YouTube y sus insignias" },
+    "--brand-instagram": { "label": "Instagram", "hint": "El enlace de Instagram de un artista" },
+    "--brand-lastfm": { "label": "Last.fm", "hint": "La marca de Last.fm y sus insignias" },
+    "--brand-listenbrainz": { "label": "ListenBrainz", "hint": "La marca de ListenBrainz y sus insignias" },
+    "--brand-navidrome": { "label": "Navidrome", "hint": "La marca de Navidrome y sus insignias" },
+    "--brand-jellyfin": { "label": "Jellyfin", "hint": "La marca de Jellyfin y sus insignias" },
+    "--brand-discord": { "label": "Discord", "hint": "El canal de notificaciones de Discord" },
+    "--brand-ntfy": { "label": "ntfy", "hint": "El canal de notificaciones de ntfy" },
+    "--brand-telegram": { "label": "Telegram", "hint": "El canal de notificaciones de Telegram" },
+    "--brand-plex": { "label": "Plex", "hint": "La marca de Plex y sus insignias" },
+    "--brand-website": { "label": "Sitio web", "hint": "El enlace al sitio propio de un artista" }
+  },
+  "parts": {
+    "top-header": "La barra de arriba",
+    "brand": "El logo y el nombre",
+    "bottom-nav": "La barra de abajo en el teléfono",
+    "sidebar": "Una columna lateral: secciones de ajustes, filtros de la biblioteca, la lista de solicitudes",
+    "board": "Un tablero de widgets",
+    "widget": "Un widget de un tablero",
+    "widget-title": "El título de un widget",
+    "media-tile": "Una portada con su pie",
+    "media-tile-title": "El pie de una portada",
+    "player-bar": "El reproductor de abajo",
+    "button": "Cualquier botón",
+    "card": "Cualquier tarjeta de ajustes",
+    "input": "Cualquier campo de texto",
+    "dialog": "Cualquier diálogo",
+    "badge": "Cualquier insignia"
+  },
+  "snippets": {
+    "part": "Regla para una parte de la app",
+    "tint": "Un tinte translúcido de un token",
+    "glass": "Panel de cristal esmerilado",
+    "gradient": "Relleno con el degradado de la marca",
+    "gradientText": "Degradado de la marca en el texto",
+    "hide": "Ocultar una parte de la app",
+    "accent": "Widgets de un mismo acento",
+    "phone": "Solo en teléfonos",
+    "desktop": "Solo en pantallas anchas",
+    "focus": "Anillo de foco del teclado",
+    "fontFace": "Usar una fuente que subiste",
+    "motion": "Animar solo cuando el movimiento es bienvenido"
+  }
+}

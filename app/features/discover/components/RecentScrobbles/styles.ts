@@ -7,7 +7,7 @@ export const rail = cva(
 );
 
 export const axisLine = cva(
-  "pointer-events-none absolute left-3 right-3 top-[36px] z-0 h-[2px] bg-linear-to-r from-primary-400 via-fg/15 to-fg/15"
+  "pointer-events-none absolute left-3 right-3 top-9 z-0 h-[2px] bg-linear-to-r from-primary-400 via-fg/15 to-fg/15"
 );
 
 export const node = cva(
@@ -15,18 +15,18 @@ export const node = cva(
 );
 
 export const nodeTime = cva(
-  "text-fg/45 pointer-events-none absolute -top-5 left-2 whitespace-nowrap font-mono text-[10px] leading-none"
+  "text-fg/45 pointer-events-none absolute -top-5 left-2 whitespace-nowrap font-mono text-10 leading-none"
 );
 
 export const nodeDot = cva(
-  "border-fg/25 bg-surface relative z-10 mb-3 mt-[3px] size-[11px] shrink-0 self-start rounded-full border-2"
+  "border-fg/25 bg-surface relative z-10 mb-3 mt-[3px] size-2.75 shrink-0 self-start rounded-full border-2"
 );
 
 export const nodeCover = cva("bg-surface-sunken relative aspect-square w-full overflow-hidden rounded-lg");
 
-export const nodeTitle = cva("text-fg mt-2 truncate text-[12.5px] font-medium");
+export const nodeTitle = cva("text-fg mt-2 truncate text-12 font-medium");
 
-export const nodeArtist = cva("text-fg/60 truncate text-[11.5px]");
+export const nodeArtist = cva("text-fg/60 truncate text-11");
 
 export const timelineScroller = cva("-mx-1");
 
@@ -36,23 +36,23 @@ export const timelineRow = cva(
   "group/row hover:bg-fg/[0.04] grid grid-cols-[3rem_1rem_2.25rem_minmax(0,1fr)] items-center gap-2.5 rounded-lg px-1.5 py-1.5 transition-colors"
 );
 
-export const timelineTime = cva("text-fg/45 truncate font-mono text-[10.5px]");
+export const timelineTime = cva("text-fg/45 truncate font-mono text-10");
 
 export const timelineNode = cva(
-  "before:bg-fg/10 relative grid w-4 place-items-center self-stretch before:absolute before:inset-y-0 before:left-[7px] before:w-[2px] group-first/row:before:top-1/2 group-last/row:before:bottom-1/2"
+  "before:bg-fg/10 relative grid w-4 place-items-center self-stretch before:absolute before:inset-y-0 before:left-1.75 before:w-[2px] group-first/row:before:top-1/2 group-last/row:before:bottom-1/2"
 );
 
 export const timelineDot = cva(
-  "border-fg/25 bg-surface group-first/row:border-primary-400 relative z-10 size-[11px] rounded-full border-2"
+  "border-fg/25 bg-surface group-first/row:border-primary-400 relative z-10 size-2.75 rounded-full border-2"
 );
 
 export const timelineCover = cva("bg-surface-sunken relative size-9 overflow-hidden rounded-md");
 
 export const timelineCopy = cva("flex min-w-0 flex-col");
 
-export const timelineTitle = cva("text-fg truncate text-[13px] font-medium");
+export const timelineTitle = cva("text-fg truncate text-13 font-medium");
 
-export const timelineArtist = cva("text-fg/60 truncate text-[11.5px]");
+export const timelineArtist = cva("text-fg/60 truncate text-11");
 
 export const skeletonRow = cva("bg-fg/5 h-12 w-full shrink-0 animate-pulse rounded-lg");
 

@@ -7,11 +7,11 @@ describe("cn", () => {
   });
 
   it("handles single class string", () => {
-    expect(cn("text-red-500")).toBe("text-red-500");
+    expect(cn("text-fg")).toBe("text-fg");
   });
 
   it("merges multiple class strings", () => {
-    expect(cn("text-red-500", "bg-blue-500")).toBe("text-red-500 bg-blue-500");
+    expect(cn("text-fg", "bg-surface")).toBe("text-fg bg-surface");
   });
 
   it("handles conditional classes with object syntax", () => {
@@ -43,7 +43,23 @@ describe("cn", () => {
   });
 
   it("preserves non-conflicting classes", () => {
-    expect(cn("text-red-500 p-2", "bg-blue-500 p-4")).toBe("text-red-500 bg-blue-500 p-4");
+    expect(cn("text-fg p-2", "bg-surface p-4")).toBe("text-fg bg-surface p-4");
+  });
+
+  it("keeps a numeric text step beside a text color, and lets a later step replace it", () => {
+    expect(cn("text-11", "text-fg-muted")).toBe("text-11 text-fg-muted");
+    expect(cn("text-11", "text-13")).toBe("text-13");
+    expect(cn("text-sm", "text-12")).toBe("text-12");
+  });
+
+  it("resolves a named tracking step against a default one", () => {
+    expect(cn("tracking-wide", "tracking-caps")).toBe("tracking-caps");
+    expect(cn("tracking-label", "tracking-caps-wide")).toBe("tracking-caps-wide");
+  });
+
+  it("keeps a named shadow beside a shadow color, and lets a later named shadow replace it", () => {
+    expect(cn("shadow-float", "shadow-veil/40")).toBe("shadow-float shadow-veil/40");
+    expect(cn("shadow-glass", "shadow-float")).toBe("shadow-float");
   });
 
   it("handles complex nested conditions", () => {
@@ -51,10 +67,10 @@ describe("cn", () => {
     const isDisabled = false;
     expect(
       cn("base", {
-        "bg-blue-500": isActive,
+        "bg-surface": isActive,
         "opacity-50": isDisabled,
       })
-    ).toBe("base bg-blue-500");
+    ).toBe("base bg-surface");
   });
 
   it("handles mixed inputs", () => {

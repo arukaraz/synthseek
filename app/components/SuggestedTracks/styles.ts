@@ -44,7 +44,7 @@ export const suggestedApply = cva("w-full");
 export const suggestedScroll = cva("min-h-0 flex-1 overflow-y-auto overscroll-contain px-2 pb-4");
 
 export const suggestedRow = cva(
-  "border-fg/5 hover:bg-fg/5 grid grid-cols-[30px_40px_minmax(0,1fr)_28px_92px] items-center gap-x-2 rounded-lg border-b px-2 py-1.5 last:border-b-0 @[420px]:grid-cols-[34px_40px_minmax(0,1fr)_30px_138px] @[420px]:gap-x-2.5"
+  "border-fg/5 hover:bg-fg/5 grid grid-cols-[1.875rem_2.5rem_minmax(0,1fr)_1.75rem_5.75rem] items-center gap-x-2 rounded-lg border-b px-2 py-1.5 last:border-b-0 @[420px]:grid-cols-[2.125rem_2.5rem_minmax(0,1fr)_1.875rem_8.625rem] @[420px]:gap-x-2.5"
 );
 
 export const suggestedListen = cva(
@@ -64,7 +64,7 @@ export const suggestedCover = cva("bg-fg/10 relative block size-10 overflow-hidd
 
 export const suggestedCoverImage = cva("h-full w-full object-cover");
 
-export const suggestedCoverInitials = cva("text-fg/60 grid h-full w-full place-items-center text-[11px] font-bold");
+export const suggestedCoverInitials = cva("text-fg/60 grid h-full w-full place-items-center text-11 font-bold");
 
 export const suggestedInfo = cva("flex min-w-0 flex-col");
 
@@ -107,7 +107,7 @@ export const suggestedSkeletonBlock = cva("bg-fg/10 block animate-pulse rounded-
       disc: "size-8 rounded-full",
       cover: "size-10",
       line: "h-3.5 flex-1",
-      pill: "h-7 w-[70px]",
+      pill: "h-7 w-17.5",
     },
   },
 });

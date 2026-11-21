@@ -5,7 +5,7 @@ export const modalRoot = cva(
     "!flex w-full flex-col gap-0 overflow-hidden p-0 shadow-2xl",
     "h-[100dvh] !max-h-[100dvh] !rounded-none !top-0 !left-0 !translate-x-0",
     "sm:!top-[50%] sm:!left-[50%] sm:!translate-x-[-50%] sm:!translate-y-[-50%]",
-    "sm:h-[min(90vh,880px)] sm:!max-h-[90vh] sm:max-w-5xl sm:!rounded-2xl",
+    "sm:h-[min(90vh,55rem)] sm:!max-h-[90vh] sm:max-w-5xl sm:!rounded-2xl",
   ].join(" ")
 );
 
@@ -105,9 +105,9 @@ export const fileRow = cva(
 
 export const fileMain = cva("flex min-w-0 flex-col gap-1 sm:gap-0.5");
 
-export const fileTitle = cva("text-fg line-clamp-2 text-sm font-medium sm:truncate sm:text-[13px]");
+export const fileTitle = cva("text-fg line-clamp-2 text-sm font-medium sm:truncate sm:text-13");
 
-export const filePath = cva("text-fg/50 truncate font-mono text-[11px]");
+export const filePath = cva("text-fg/50 truncate font-mono text-11");
 
 export const fileLengthMobile = cva("text-fg/50 text-xs tabular-nums sm:hidden");
 
@@ -196,10 +196,10 @@ export const mappingRow = cva(
 );
 
 export const mappingHead = cva(
-  "border-fg/10 text-fg/50 hidden grid-cols-[minmax(0,1fr)_3.25rem_minmax(0,18rem)_7.5rem] gap-3 border-b px-3 py-2 text-[11px] font-semibold tracking-wider uppercase sm:grid"
+  "border-fg/10 text-fg/50 hidden grid-cols-[minmax(0,1fr)_3.25rem_minmax(0,18rem)_7.5rem] gap-3 border-b px-3 py-2 text-11 font-semibold tracking-wider uppercase sm:grid"
 );
 
-export const mappingFile = cva("text-fg col-span-full truncate font-mono text-[11px] sm:col-span-1");
+export const mappingFile = cva("text-fg col-span-full truncate font-mono text-11 sm:col-span-1");
 
 export const mappingLength = cva("text-fg/50 hidden text-xs tabular-nums sm:block");
 

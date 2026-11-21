@@ -9,7 +9,7 @@ export const chartValue = cva("text-fg truncate text-2xl leading-none font-bold 
 
 export const chartCaption = cva("text-fg/60 truncate text-xs");
 
-export const chartAxis = cva("text-fg/60 flex justify-between gap-2 font-mono text-[10px] [&>*]:truncate");
+export const chartAxis = cva("text-fg/60 flex justify-between gap-2 font-mono text-10 [&>*]:truncate");
 
 export const barsChart = cva("flex min-h-0 flex-1 items-stretch gap-[2px]");
 
@@ -17,17 +17,17 @@ export const barColumn = cva("flex min-h-0 min-w-0 flex-1 flex-col justify-end g
 
 export const barTrack = cva("flex min-h-0 flex-1 flex-col justify-end");
 
-export const bar = cva("min-h-0.5 w-full rounded-t-[4px] [height:var(--bar)]", {
+export const bar = cva("min-h-0.5 w-full rounded-t-sm [height:var(--bar)]", {
   variants: {
     peak: {
-      true: "bg-[var(--mix-acc)]",
-      false: "bg-[color-mix(in_oklch,var(--mix-acc)_45%,transparent)]",
+      true: "bg-mix-acc",
+      false: "bg-mix-acc/45",
     },
   },
   defaultVariants: { peak: false },
 });
 
-export const barLabel = cva("text-fg/60 truncate text-center font-mono text-[10px]");
+export const barLabel = cva("text-fg/60 truncate text-center font-mono text-10");
 
 export const shareStrip = cva("flex h-3 w-full shrink-0 gap-[2px] overflow-hidden rounded-full");
 
@@ -56,14 +56,14 @@ export const legendLabel = cva("text-fg truncate");
 
 export const legendValue = cva("text-fg/70 tabular-nums");
 
-export const compareLegend = cva("text-fg/60 flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px]");
+export const compareLegend = cva("text-fg/60 flex flex-wrap items-center gap-x-4 gap-y-1 text-11");
 
 export const compareKey = cva("inline-flex items-center gap-1.5");
 
 export const compareSwatch = cva("size-2.5 rounded-full", {
   variants: {
     period: {
-      current: "bg-[var(--mix-acc)]",
+      current: "bg-mix-acc",
       previous: "bg-fg/25",
     },
   },
@@ -79,13 +79,13 @@ export const compareRow = cva(
 export const compareBars = cva("flex min-w-0 flex-col gap-[2px]");
 
 export const compareLine = cva(
-  "grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 [&>span:last-child]:text-right [&>span:last-child]:whitespace-nowrap [&>span:last-child]:text-[11px]"
+  "grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 [&>span:last-child]:text-right [&>span:last-child]:whitespace-nowrap [&>span:last-child]:text-11"
 );
 
-export const compareBar = cva("h-2 min-w-0.5 rounded-r-[4px] [width:var(--bar)]", {
+export const compareBar = cva("h-2 min-w-0.5 rounded-r-sm [width:var(--bar)]", {
   variants: {
     period: {
-      current: "bg-[var(--mix-acc)]",
+      current: "bg-mix-acc",
       previous: "bg-fg/25",
     },
   },
@@ -96,12 +96,12 @@ export const yearGrid = cva(
   "grid min-h-0 flex-1 grid-flow-col grid-rows-[repeat(7,minmax(0,1fr))] [grid-auto-columns:minmax(0,1fr)] gap-[2px]"
 );
 
-export const yearCell = cva("rounded-[2px]", {
+export const yearCell = cva("rounded-xs", {
   variants: {
     state: {
       blank: "invisible",
       empty: "bg-fg/5",
-      filled: "bg-[var(--mix-acc)] [opacity:var(--heat)]",
+      filled: "bg-mix-acc [opacity:var(--heat)]",
     },
   },
   defaultVariants: { state: "empty" },
@@ -113,7 +113,7 @@ export const weekdayRow = cva("grid grid-cols-[2.25rem_minmax(0,1fr)_auto] items
 
 export const weekdayTrack = cva("bg-fg/5 h-2 overflow-hidden rounded-full");
 
-export const weekdayFill = cva("block h-full rounded-full bg-[var(--mix-acc)] [width:var(--bar)]");
+export const weekdayFill = cva("block h-full rounded-full bg-mix-acc [width:var(--bar)]");
 
 export function barVars(share: number): CssVars {
   return { "--bar": `${share * 100}%` };

@@ -31,7 +31,7 @@ export const pill = cva(
   {
     variants: {
       tone: {
-        plex: "bg-amber-500/15 text-amber-300 ring-amber-500/30",
+        plex: "bg-warning-tint/15 text-warning-soft ring-warning-tint/30",
         local: "ring-fg/10 bg-fg/5 text-fg/60",
       },
     },

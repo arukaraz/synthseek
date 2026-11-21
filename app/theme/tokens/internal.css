@@ -1,0 +1,91 @@
+@layer base {
+  :root,
+  [data-theme] {
+    color-scheme: dark;
+
+    --success-pale: color-mix(in oklab, var(--success-soft) 53%, var(--surface-fg));
+    --success-faint: color-mix(in oklab, var(--success-soft) 22%, var(--surface-fg));
+    --warning-pale: color-mix(in oklab, var(--warning-soft) 53%, var(--surface-fg));
+    --warning-faint: color-mix(in oklab, var(--warning-soft) 22%, var(--surface-fg));
+    --destructive-pale: color-mix(in oklab, var(--destructive-soft) 53%, var(--surface-fg));
+    --destructive-faint: color-mix(in oklab, var(--destructive-soft) 22%, var(--surface-fg));
+    --info-pale: color-mix(in oklab, var(--info-soft) 53%, var(--surface-fg));
+    --info-faint: color-mix(in oklab, var(--info-soft) 22%, var(--surface-fg));
+
+    --mix-acc: var(--mix-weekly);
+
+    --shadow-ink-5: color-mix(in oklab, var(--shadow-color) calc(5% * var(--shadow-strength, 1)), transparent);
+    --shadow-ink-10: color-mix(in oklab, var(--shadow-color) calc(10% * var(--shadow-strength, 1)), transparent);
+    --shadow-ink-15: color-mix(in oklab, var(--shadow-color) calc(15% * var(--shadow-strength, 1)), transparent);
+    --shadow-ink-20: color-mix(in oklab, var(--shadow-color) calc(20% * var(--shadow-strength, 1)), transparent);
+    --shadow-ink-25: color-mix(in oklab, var(--shadow-color) calc(25% * var(--shadow-strength, 1)), transparent);
+    --shadow-ink-30: color-mix(in oklab, var(--shadow-color) calc(30% * var(--shadow-strength, 1)), transparent);
+    --shadow-ink-40: color-mix(in oklab, var(--shadow-color) calc(40% * var(--shadow-strength, 1)), transparent);
+    --shadow-ink-45: color-mix(in oklab, var(--shadow-color) calc(45% * var(--shadow-strength, 1)), transparent);
+    --shadow-ink-50: color-mix(in oklab, var(--shadow-color) calc(50% * var(--shadow-strength, 1)), transparent);
+
+    --scrollbar-thumb: color-mix(in oklab, var(--surface-fg-muted) 32%, transparent);
+    --scrollbar-thumb-hover: color-mix(in oklab, var(--surface-fg-muted) 48%, transparent);
+    --scrollbar-thumb-active: color-mix(in oklab, var(--surface-fg-muted) 64%, transparent);
+    --scrollbar-track: transparent;
+
+    --selection-bg: color-mix(in oklab, var(--color-primary-500) 30%, transparent);
+
+    --auth-stage-bg: oklch(0.05 0.03 280);
+    --auth-grid-line: oklch(1 0 0 / 0.025);
+    --auth-orb-opacity: 0.72;
+    --auth-card-bg: linear-gradient(to bottom, oklch(0.18 0.07 285 / 0.82), oklch(0.12 0.05 285 / 0.94));
+    --auth-card-bg-compact: linear-gradient(to bottom, oklch(0.15 0.06 285 / 0.97), oklch(0.1 0.04 285 / 0.99));
+    --auth-card-shadow:
+      0 50px 100px -30px oklch(0 0 0 / 0.85), inset 0 0 0 1px oklch(1 0 0 / 0.03),
+      0 0 80px -20px color-mix(in oklab, var(--color-primary-500) 45%, transparent);
+    --auth-ring-lead: color-mix(in oklab, var(--color-secondary-500) 85%, transparent);
+    --auth-ring-trail: color-mix(in oklab, var(--neon-accent) 55%, transparent);
+    --auth-ring-calm: color-mix(in oklab, var(--color-secondary-500) 55%, transparent);
+    --auth-ring-glow:
+      0 0 24px -6px color-mix(in oklab, var(--color-primary-500) 55%, transparent),
+      inset 0 0 18px -8px color-mix(in oklab, var(--color-secondary-500) 40%, transparent);
+  }
+
+  [data-acc="daily"] {
+    --mix-acc: var(--mix-daily);
+  }
+  [data-acc="weekly"] {
+    --mix-acc: var(--mix-weekly);
+  }
+  [data-acc="explore"] {
+    --mix-acc: var(--mix-explore);
+  }
+  [data-acc="cf"] {
+    --mix-acc: var(--mix-cf);
+  }
+
+  :root {
+    --height-hero: 200px;
+
+    --spacing-page-x: 1rem;
+    --spacing-page-y: 1.5rem;
+    --spacing-modal: 1rem;
+    --spacing-card: 1rem;
+  }
+
+  @media (min-width: 640px) {
+    :root {
+      --height-hero: 240px;
+      --spacing-page-x: 1.5rem;
+      --spacing-page-y: 2rem;
+      --spacing-modal: 1.5rem;
+      --spacing-card: 1.25rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    :root {
+      --height-hero: 320px;
+      --spacing-page-x: 2rem;
+      --spacing-page-y: 2rem;
+      --spacing-modal: 1.5rem;
+      --spacing-card: 1.5rem;
+    }
+  }
+}

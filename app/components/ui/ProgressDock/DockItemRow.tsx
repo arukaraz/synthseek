@@ -16,7 +16,7 @@ export function DockItemRow({ item, reduced, label, reasonLabel, skippedLabel }:
         {item.state === "pending" ? <Circle className="fill-fg/30 text-fg/30 size-2" /> : null}
         {item.state === "importing" ? (
           reduced ? (
-            <Circle className="fill-sync text-sync size-2" />
+            <Circle className="fill-status-syncing text-status-syncing size-2" />
           ) : (
             <Spinner size="sm" decorative />
           )

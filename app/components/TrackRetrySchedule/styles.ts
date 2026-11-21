@@ -1,6 +1,6 @@
 import { cva } from "class-variance-authority";
 
-export const scheduleRow = cva("text-fg-muted flex min-w-0 items-center gap-1.5 text-[11px]");
+export const scheduleRow = cva("text-fg-muted flex min-w-0 items-center gap-1.5 text-11");
 
 export const scheduleFact = cva("min-w-0 truncate whitespace-nowrap");
 

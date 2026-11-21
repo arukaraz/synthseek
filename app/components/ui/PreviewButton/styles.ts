@@ -9,7 +9,7 @@ export const previewButton = cva(
           "bg-surface-overlay/70 ring-overlay-fg/20 relative size-11 shrink-0 rounded-full shadow-lg ring-1 backdrop-blur-sm",
         row: "bg-fg/5 ring-fg/10 relative size-9 shrink-0 rounded-full ring-1",
         cover:
-          "absolute inset-0 size-full bg-black/65 opacity-0 hover:opacity-100 focus-visible:opacity-100 focus-visible:ring-inset data-[preview=error]:opacity-100 data-[preview=loading]:opacity-100 data-[preview=playing]:opacity-100 [@media(hover:none)]:opacity-100",
+          "absolute inset-0 size-full bg-veil/65 opacity-0 hover:opacity-100 focus-visible:opacity-100 focus-visible:ring-inset data-[preview=error]:opacity-100 data-[preview=loading]:opacity-100 data-[preview=playing]:opacity-100 [@media(hover:none)]:opacity-100",
       },
       state: {
         ready: "cursor-pointer",
@@ -30,8 +30,8 @@ export const previewButton = cva(
 export const previewGlyph = cva("", {
   variants: {
     tone: {
-      overlay: "size-[18px]",
-      row: "size-[15px]",
+      overlay: "size-4.5",
+      row: "size-3.75",
       cover: "size-4",
     },
   },

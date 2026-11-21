@@ -51,6 +51,13 @@ export const SETTINGS_SEARCH_ENTRIES: readonly SettingsSearchEntry[] = [
   { labelKey: "profile.edit.usernameLabel", page: "account", href: "/settings/account", anchor: "profile.username" },
   { labelKey: "profile.edit.emailLabel", page: "account", href: "/settings/account", anchor: "profile.email" },
   { labelKey: "profile.edit.avatarLabel", page: "account", href: "/settings/account", anchor: "profile.avatar" },
+  {
+    labelKey: "general.language.title",
+    page: "account",
+    href: "/settings/account",
+    anchor: "language",
+    keywordsKey: "shell.search.keywords.language",
+  },
   { labelKey: "profile.password.title", page: "account", href: "/settings/account", anchor: "password" },
   {
     labelKey: "profile.account.logout",
@@ -114,26 +121,18 @@ export const SETTINGS_SEARCH_ENTRIES: readonly SettingsSearchEntry[] = [
 
   {
     labelKey: "general.theme.title",
-    page: "appearance",
-    href: "/settings/appearance/theme",
+    page: "customization",
+    href: "/settings/customization/theme",
     anchor: "theme",
-    placeKey: "shell.tabs.appearance.theme",
+    placeKey: "shell.tabs.customization.theme",
     keywordsKey: "shell.search.keywords.theme",
   },
   {
-    labelKey: "general.language.title",
-    page: "appearance",
-    href: "/settings/appearance/theme",
-    anchor: "language",
-    placeKey: "shell.tabs.appearance.theme",
-    keywordsKey: "shell.search.keywords.language",
-  },
-  {
     labelKey: "general.board.title",
-    page: "appearance",
-    href: "/settings/appearance/board",
+    page: "customization",
+    href: "/settings/customization/board",
     anchor: "board",
-    placeKey: "shell.tabs.appearance.board",
+    placeKey: "shell.tabs.customization.board",
     keywordsKey: "shell.search.keywords.board",
   },
 

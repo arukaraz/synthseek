@@ -1,0 +1,33 @@
+@layer base {
+  :root,
+  [data-theme] {
+    --font-sans:
+      ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    --font-heading: var(--font-sans);
+    --ui-scale: 1;
+    --text-9: 0.5625rem;
+    --text-10: 0.625rem;
+    --text-11: 0.6875rem;
+    --text-xs: 0.75rem;
+    --text-13: 0.8125rem;
+    --text-sm: 0.875rem;
+    --text-15: 0.9375rem;
+    --text-base: 1rem;
+    --text-lg: 1.125rem;
+    --text-xl: 1.25rem;
+    --text-2xl: 1.5rem;
+    --text-3xl: 1.875rem;
+    --text-4xl: 2.25rem;
+    --text-5xl: 3rem;
+    --text-6xl: 3.75rem;
+    --tracking-tight: -0.025em;
+    --tracking-normal: 0em;
+    --tracking-wide: 0.025em;
+    --tracking-wider: 0.05em;
+    --tracking-label: 0.08em;
+    --tracking-widest: 0.1em;
+    --tracking-caps: 0.14em;
+    --tracking-caps-wide: 0.18em;
+  }
+}

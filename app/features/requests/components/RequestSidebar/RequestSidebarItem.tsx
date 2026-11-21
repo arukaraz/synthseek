@@ -35,7 +35,7 @@ export function RequestSidebarItem({ request, isSelected, onSelect }: RequestSid
     >
       <div className="flex items-center justify-between gap-2">
         <div className="flex min-w-0 items-center gap-2">
-          <span className="text-fg/40 truncate text-[10px] font-semibold tracking-wider">
+          <span className="text-fg/40 text-10 truncate font-semibold tracking-wider">
             <span className={`type-text-${request.contentType}`}>{typeLabel}</span> ·{" "}
             {request.requestedBy.username ?? t("requests:detail.aMember")}
           </span>

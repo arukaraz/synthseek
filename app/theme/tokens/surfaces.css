@@ -1,0 +1,17 @@
+@layer base {
+  :root,
+  [data-theme] {
+    --surface-bg: oklch(0.145 0.05 265);
+    --surface-bg-elevated: oklch(0.16 0.05 265);
+    --surface-bg-overlay: oklch(0.21 0.05 265);
+    --surface-bg-sunken: oklch(0.08 0.03 265);
+    --muted: oklch(0.25 0.04 260);
+    --border-default: oklch(0.25 0.04 260);
+    --border-subtle: oklch(0.2 0.03 260);
+    --glass-bg: oklch(0 0 0 / 0.4);
+    --glass-border: oklch(1 0 0 / 0.1);
+    --veil: oklch(0 0 0);
+    --hairline: oklch(1 0 0);
+    --backdrop-grid: oklch(1 0 0 / 0.05);
+  }
+}

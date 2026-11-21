@@ -5,20 +5,20 @@ export const storyFrame = cva(
 );
 
 export const storyBackdrop = cva(
-  "pointer-events-none absolute inset-0 grid grid-cols-3 gap-1 opacity-25 blur-[2px] @xl:grid-cols-5 [&_img]:object-cover"
+  "pointer-events-none absolute inset-0 grid grid-cols-3 gap-1 opacity-25 blur-2xs @xl:grid-cols-5 [&_img]:object-cover"
 );
 
 export const storyBackdropTile = cva("bg-surface-sunken relative min-h-0 overflow-hidden");
 
 export const storyTint = cva(
-  "pointer-events-none absolute inset-0 bg-linear-to-t from-surface via-surface/85 to-[var(--mix-acc)]/25"
+  "pointer-events-none absolute inset-0 bg-linear-to-t from-surface via-surface/85 to-mix-acc/25"
 );
 
 export const storyBody = cva("relative flex min-h-0 flex-1 items-end gap-4 p-1");
 
 export const storyCopy = cva("flex min-w-0 flex-1 flex-col gap-1.5");
 
-export const storyLabel = cva("truncate text-[11px] font-semibold tracking-wide text-[var(--mix-acc)] uppercase");
+export const storyLabel = cva("truncate text-11 font-semibold tracking-wide text-mix-acc uppercase");
 
 export const storyHeadline = cva("text-fg leading-tight font-black break-words", {
   variants: {
@@ -40,7 +40,7 @@ export const storyRow = cva("flex min-w-0 items-baseline justify-between gap-3 t
 
 export const storyRowLabel = cva("text-fg/80 truncate");
 
-export const storyRowValue = cva("shrink-0 font-semibold text-[var(--mix-acc)] tabular-nums");
+export const storyRowValue = cva("shrink-0 font-semibold text-mix-acc tabular-nums");
 
 export const storyCover = cva(
   "bg-surface-sunken relative aspect-square w-28 shrink-0 overflow-hidden rounded-xl shadow-lg @3xl:w-40 [&_img]:object-cover"
@@ -57,10 +57,10 @@ export const storyDots = cva("flex min-w-0 flex-1 items-center justify-center ga
 export const storyDot = cva("h-1.5 shrink-0 rounded-full transition-all duration-300", {
   variants: {
     active: {
-      true: "w-5 bg-[var(--mix-acc)]",
+      true: "w-5 bg-mix-acc",
       false: "bg-fg/25 hover:bg-fg/50 w-1.5",
     },
   },
 });
 
-export const storyCounter = cva("text-fg/60 text-[11px] tabular-nums");
+export const storyCounter = cva("text-fg/60 text-11 tabular-nums");

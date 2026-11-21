@@ -36,20 +36,18 @@ export const widgetRowMain = cva("flex min-w-0 flex-1 items-center gap-3 text-le
 export const widgetRowCover = cva("bg-surface-sunken relative size-10 shrink-0 overflow-hidden rounded-md");
 
 export const widgetRowCoverAction = cva(
-  "text-overlay-fg focus-visible:ring-primary-400 absolute inset-0 z-10 flex items-center justify-center bg-black/55 opacity-0 transition-opacity outline-none group-hover/row:opacity-100 focus-visible:opacity-100 focus-visible:ring-2 focus-visible:ring-inset [@media(hover:none)]:bg-black/35 [@media(hover:none)]:opacity-100 [&_svg]:size-4 [&_svg]:fill-current"
+  "text-overlay-fg focus-visible:ring-primary-400 absolute inset-0 z-10 flex items-center justify-center bg-veil/55 opacity-0 transition-opacity outline-none group-hover/row:opacity-100 focus-visible:opacity-100 focus-visible:ring-2 focus-visible:ring-inset [@media(hover:none)]:bg-veil/35 [@media(hover:none)]:opacity-100 [&_svg]:size-4 [&_svg]:fill-current"
 );
 
 export const widgetRowCopy = cva("flex min-w-0 flex-col");
 
-export const widgetRowTitle = cva("text-fg truncate text-[13px] font-medium");
+export const widgetRowTitle = cva("text-fg truncate text-13 font-medium");
 
-export const widgetRowSubtitle = cva("text-fg/60 truncate text-[11.5px]");
+export const widgetRowSubtitle = cva("text-fg/60 truncate text-11");
 
-export const widgetRowLead = cva("text-fg/40 w-5 shrink-0 text-right font-mono text-[12px]");
+export const widgetRowLead = cva("text-fg/40 w-5 shrink-0 text-right font-mono text-12");
 
-export const widgetRowTrailing = cva(
-  "text-fg/60 relative z-10 flex shrink-0 items-center gap-1.5 font-mono text-[11px]"
-);
+export const widgetRowTrailing = cva("text-fg/60 relative z-10 flex shrink-0 items-center gap-1.5 font-mono text-11");
 
 export const widgetRowButton = cva("h-8 shrink-0 px-3 font-sans text-xs");
 

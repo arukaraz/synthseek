@@ -9,12 +9,12 @@ export const clearButton = cva(
 );
 
 export const group = cva("flex flex-col gap-2");
-export const groupLabel = cva("text-fg/60 text-[11px] font-semibold tracking-wider uppercase");
+export const groupLabel = cva("text-fg/60 text-11 font-semibold tracking-wider uppercase");
 export const groupSearch = cva("mb-1");
 export const groupList = cva("flex flex-col gap-1");
 export const groupEmpty = cva("text-fg/40 px-1 py-1 text-xs");
 export const groupPending = cva("flex items-center justify-center py-3");
-export const groupMore = cva("text-fg/40 px-1 pt-1 text-[11px]");
+export const groupMore = cva("text-fg/40 px-1 pt-1 text-11");
 
 export const facetRow = cva(
   "group flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm transition-colors",
@@ -27,4 +27,4 @@ export const facetRow = cva(
 );
 
 export const facetLabel = cva("min-w-0 flex-1 truncate");
-export const facetCount = cva("text-fg/40 font-mono text-[11px] tabular-nums");
+export const facetCount = cva("text-fg/40 font-mono text-11 tabular-nums");

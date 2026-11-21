@@ -31,7 +31,7 @@ export type CardImagePlaceholderProps = VariantProps<typeof cardImagePlaceholder
 export const cardInfo = cva("absolute inset-x-0 bottom-0 p-3", {
   variants: {
     gradient: {
-      dark: "bg-linear-to-t from-black/90 via-black/60 to-transparent",
+      dark: "bg-linear-to-t from-veil/90 via-veil/60 to-transparent",
     },
   },
   defaultVariants: {

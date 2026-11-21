@@ -1,14 +1,14 @@
 import { cva } from "class-variance-authority";
 
 export const wizardCard = cva(
-  "auth-card relative z-10 mx-auto flex max-h-[calc(100dvh-3rem)] w-full max-w-lg flex-col rounded-3xl border border-fg/[0.09] sm:max-w-[34rem] sm:backdrop-blur-[18px]"
+  "auth-card relative z-10 mx-auto flex max-h-[calc(100dvh-3rem)] w-full max-w-lg flex-col rounded-3xl border border-fg/[0.09] sm:max-w-[34rem] sm:backdrop-blur-lg"
 );
 
 export const wizardHead = cva("flex flex-col gap-4 px-6 pt-6 sm:px-9 sm:pt-9");
 
 export const wizardBrand = cva("flex flex-col items-center gap-1.5");
 
-export const wizardEyebrow = cva("text-fg-muted text-[0.6875rem] font-bold uppercase tracking-[0.18em]");
+export const wizardEyebrow = cva("text-fg-muted text-11 font-bold uppercase tracking-caps-wide");
 
 export const stepProgress = cva("flex items-center gap-1.5");
 
@@ -71,7 +71,7 @@ export const fieldWarning = cva("text-plex-400 text-xs");
 export const slskdTestRow = cva("flex flex-wrap items-center gap-3");
 
 export const slskdTestButton = cva(
-  "border-fg/15 bg-fg/[0.04] text-fg hover:border-fg/25 focus-visible:ring-primary-500 inline-flex min-h-11 items-center justify-center gap-2 rounded-[0.6875rem] border px-4 text-sm font-semibold outline-none transition-colors hover:bg-fg/[0.08] focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50"
+  "border-fg/15 bg-fg/[0.04] text-fg hover:border-fg/25 focus-visible:ring-primary-500 inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border px-4 text-sm font-semibold outline-none transition-colors hover:bg-fg/[0.08] focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50"
 );
 
 export const doneCard = cva("flex items-center gap-3 rounded-2xl border p-4 transition-opacity", {
@@ -97,15 +97,15 @@ export const serverPickerCard = cva("border-fg/15 bg-fg/[0.04] flex flex-col gap
 export const serverPickerIntro = cva("text-fg-muted text-xs");
 
 export const wizardPickerButton = cva(
-  "border-fg/15 bg-fg/[0.03] hover:bg-fg/[0.07] hover:border-fg/25 focus-visible:ring-primary-500 flex min-h-11 items-center justify-between gap-3 rounded-[0.6875rem] border px-3 py-2 text-left transition-all hover:-translate-y-px focus-visible:outline-none focus-visible:ring-2"
+  "border-fg/15 bg-fg/[0.03] hover:bg-fg/[0.07] hover:border-fg/25 focus-visible:ring-primary-500 flex min-h-11 items-center justify-between gap-3 rounded-xl border px-3 py-2 text-left transition-all hover:-translate-y-px focus-visible:outline-none focus-visible:ring-2"
 );
 
 export const serverPickerName = cva("text-fg truncate text-sm font-medium");
 
-export const serverPickerUri = cva("text-fg-muted truncate font-mono text-[11px]");
+export const serverPickerUri = cva("text-fg-muted truncate font-mono text-11");
 
 export const serverPickerLocation = cva(
-  "text-fg-muted bg-fg/10 ring-fg/10 shrink-0 rounded px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider ring-1"
+  "text-fg-muted bg-fg/10 ring-fg/10 shrink-0 rounded px-1.5 py-0.5 text-10 font-semibold uppercase tracking-wider ring-1"
 );
 
 export const plexIntro = cva("text-fg-muted flex items-center gap-2 text-sm");

@@ -4,6 +4,7 @@ import type { BoardGridProps } from "./types";
 export function BoardGrid({ device, appearance, templateRows, children }: BoardGridProps) {
   return (
     <div
+      data-part="board"
       className={boardGrid({ framed: templateRows !== undefined })}
       style={boardGridStyle(device, appearance, templateRows)}
     >

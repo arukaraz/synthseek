@@ -68,7 +68,7 @@ export function OrphanedCompanions() {
           }
         />
       ) : orphans.isError ? (
-        <span className="text-sm text-red-400">{t("quality.orphanedCompanions.status.loadError")}</span>
+        <span className="text-destructive-vivid text-sm">{t("quality.orphanedCompanions.status.loadError")}</span>
       ) : !settled ? (
         <span className="text-fg/60 text-sm">{t("quality.orphanedCompanions.status.loading")}</span>
       ) : orphans.data ? (

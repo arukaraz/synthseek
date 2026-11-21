@@ -1,49 +1,6 @@
 import { describe, it, expect, afterEach, vi } from "vitest";
 
-import { isRovingKey, isThemeValue, nextRovingIndex, lastUsedTime, createdTime, publicEndpoint } from "../helpers";
-
-describe("isRovingKey", () => {
-  it("returns true for every roving navigation key", () => {
-    for (const key of ["ArrowRight", "ArrowDown", "ArrowLeft", "ArrowUp", "Home", "End"]) {
-      expect(isRovingKey(key)).toBe(true);
-    }
-  });
-
-  it("returns false for an unrelated key", () => {
-    expect(isRovingKey("Enter")).toBe(false);
-    expect(isRovingKey("a")).toBe(false);
-  });
-});
-
-describe("isThemeValue", () => {
-  it("accepts the configured theme values", () => {
-    expect(isThemeValue("dark")).toBe(true);
-    expect(isThemeValue("midnight")).toBe(true);
-    expect(isThemeValue("ocean")).toBe(true);
-  });
-
-  it("rejects unknown values and undefined", () => {
-    expect(isThemeValue("light")).toBe(false);
-    expect(isThemeValue(undefined)).toBe(false);
-  });
-});
-
-describe("nextRovingIndex", () => {
-  it("advances forward and wraps for next keys", () => {
-    expect(nextRovingIndex(0, 3, "ArrowRight")).toBe(1);
-    expect(nextRovingIndex(2, 3, "ArrowDown")).toBe(0);
-  });
-
-  it("moves backward and wraps for previous keys", () => {
-    expect(nextRovingIndex(2, 3, "ArrowLeft")).toBe(1);
-    expect(nextRovingIndex(0, 3, "ArrowUp")).toBe(2);
-  });
-
-  it("jumps to the first and last index for Home and End", () => {
-    expect(nextRovingIndex(2, 3, "Home")).toBe(0);
-    expect(nextRovingIndex(0, 3, "End")).toBe(2);
-  });
-});
+import { lastUsedTime, createdTime, publicEndpoint } from "../helpers";
 
 describe("lastUsedTime", () => {
   it("returns null when no date is provided", () => {

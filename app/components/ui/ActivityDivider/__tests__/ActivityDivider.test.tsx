@@ -43,7 +43,7 @@ describe("ActivityDivider", () => {
     const { container } = render(<ActivityDivider state="paused" />);
     const rail = container.querySelector(".activity-rail");
     expect(rail).toHaveClass("activity-rail-paused");
-    expect(rail).toHaveClass("[--activity-rail-color:var(--neon-warning)]");
+    expect(rail).toHaveClass("[--activity-rail-color:var(--warning-strong)]");
     expect(container.querySelector(".activity-rail-travel")).not.toBeInTheDocument();
     expect(container.querySelector(".activity-rail-static")).not.toBeInTheDocument();
   });

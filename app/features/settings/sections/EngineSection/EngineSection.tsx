@@ -28,7 +28,7 @@ export function EngineSection() {
   if (error || !data) {
     return (
       <div className={emptyPanel()}>
-        <span className="text-sm text-red-400">
+        <span className="text-destructive-vivid text-sm">
           {t("header.loadError", { message: error?.message ?? t("header.unknownError") })}
         </span>
       </div>

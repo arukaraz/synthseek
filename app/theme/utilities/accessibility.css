@@ -33,14 +33,14 @@
   }
 
   .focus-ring:focus-visible {
-    outline: 2px solid oklch(var(--neon-primary));
+    outline: 2px solid var(--color-primary-500);
     outline-offset: 2px;
   }
 
   .focus-ring-high-contrast:focus-visible {
-    outline: 3px solid oklch(var(--neon-primary));
+    outline: 3px solid var(--color-primary-500);
     outline-offset: 3px;
-    box-shadow: 0 0 0 6px oklch(var(--neon-primary) / 0.2);
+    box-shadow: 0 0 0 6px color-mix(in oklab, var(--color-primary-500) 20%, transparent);
   }
 }
 
@@ -71,8 +71,8 @@
 
 @media (prefers-contrast: high) {
   :root {
-    --border-default: oklch(0.5 0 0);
-    --border-subtle: oklch(0.4 0 0);
-    --glass-border: oklch(0.5 0 0 / 0.5);
+    --border-default: color-mix(in oklab, var(--surface-fg) 42%, var(--surface-bg));
+    --border-subtle: color-mix(in oklab, var(--surface-fg) 30%, var(--surface-bg));
+    --glass-border: color-mix(in oklab, var(--surface-fg) 21%, transparent);
   }
 }

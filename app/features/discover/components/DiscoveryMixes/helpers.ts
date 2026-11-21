@@ -107,5 +107,5 @@ export function tileGradient(seed: string): string {
   let h = 0;
   for (const ch of seed) h = (h * 31 + ch.charCodeAt(0)) % 360;
   const h2 = (h + 38) % 360;
-  return `linear-gradient(140deg, oklch(0.62 0.18 ${h}deg), oklch(0.42 0.16 ${h2}deg))`;
+  return `linear-gradient(140deg, oklch(from var(--generated-cover-start) l c ${h}deg), oklch(from var(--generated-cover-end) l c ${h2}deg))`;
 }

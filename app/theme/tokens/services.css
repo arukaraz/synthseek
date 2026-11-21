@@ -1,0 +1,19 @@
+@layer base {
+  :root,
+  [data-theme] {
+    --brand-spotify: oklch(0.74 0.2 145);
+    --brand-spotify-ink: oklch(0.219 0.04 160.58);
+    --brand-apple-music: oklch(0.66 0.22 12);
+    --brand-youtube: oklch(0.61 0.24 27);
+    --brand-instagram: oklch(0.6 0.24 5);
+    --brand-lastfm: oklch(0.62 0.21 27);
+    --brand-listenbrainz: oklch(0.72 0.15 50);
+    --brand-navidrome: oklch(0.66 0.15 245);
+    --brand-jellyfin: oklch(0.64 0.17 305);
+    --brand-discord: oklch(0.62 0.19 277);
+    --brand-ntfy: oklch(0.72 0.14 160);
+    --brand-telegram: oklch(0.7 0.13 230);
+    --brand-plex: oklch(0.754 0.155 77.3);
+    --brand-website: var(--color-secondary-400);
+  }
+}

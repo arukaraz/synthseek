@@ -3,10 +3,10 @@ import { cva } from "class-variance-authority";
 
 import type { PreviewFrame } from "./types";
 
-export const galleryDialog = cva("sm:h-[min(90vh,880px)]", {
+export const galleryDialog = cva("sm:h-[min(90vh,55rem)]", {
   variants: {
     workshop: {
-      true: "sm:max-w-[1280px]",
+      true: "sm:max-w-320",
       false: "sm:max-w-5xl",
     },
   },
@@ -41,7 +41,7 @@ export const bandTitle = cva("text-fg text-sm font-semibold");
 
 export const bandDescription = cva("text-fg/60 hidden truncate text-xs sm:block");
 
-export const bandCount = cva("text-fg/50 ml-auto shrink-0 font-mono text-[10.5px] tracking-wider uppercase");
+export const bandCount = cva("text-fg/50 ml-auto shrink-0 font-mono text-10 tracking-wider uppercase");
 
 export const galleryCard = cva(
   "bg-fg/[0.02] hover:border-primary-400/50 focus-within:border-primary-400/50 flex min-w-0 flex-col overflow-hidden rounded-2xl border transition-colors [contain-intrinsic-size:auto_320px] [content-visibility:auto]",
@@ -56,7 +56,7 @@ export const galleryCard = cva(
 );
 
 export const cardPreview = cva(
-  "bg-fg/[0.03] border-fg/10 relative grid h-[166px] place-items-center overflow-hidden border-b p-2"
+  "bg-fg/[0.03] border-fg/10 relative grid h-41.5 place-items-center overflow-hidden border-b p-2"
 );
 
 export const previewFit = cva(
@@ -68,7 +68,7 @@ export const previewStage = cva(
 );
 
 export const onBoardBadge = cva(
-  "bg-surface/90 border-success-vivid/40 text-success-vivid absolute top-2.5 right-2.5 z-[1] inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[11px] font-semibold"
+  "bg-surface/90 border-success-vivid/40 text-success-vivid absolute top-2.5 right-2.5 z-[1] inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-11 font-semibold"
 );
 
 export const cardBody = cva("flex min-w-0 flex-1 flex-col gap-1.5 px-3 py-2.5 [&>:nth-last-child(2)]:mb-2.5");
@@ -89,7 +89,7 @@ export const cardIcon = cva(
 
 export const cardTitle = cva("text-fg min-w-0 flex-1 text-sm leading-tight font-semibold text-balance break-words");
 
-export const cardCategory = cva("text-fg/60 shrink-0 text-[11px]");
+export const cardCategory = cva("text-fg/60 shrink-0 text-11");
 
 export const cardDescription = cva("text-fg/60 text-xs");
 
@@ -127,16 +127,16 @@ export const mineHead = cva("flex min-w-0 items-center gap-2");
 
 export const mineTitle = cva("text-fg min-w-0 flex-1 truncate text-sm font-semibold");
 
-export const mineAccent = cva("size-3 shrink-0 rounded-full bg-[var(--mix-acc)]");
+export const mineAccent = cva("size-3 shrink-0 rounded-full bg-mix-acc");
 
 export const mineDescription = cva("text-fg/70 text-xs");
 
 export const mineMeta = cva("text-fg/60 truncate text-xs");
 
-export const mineBasedOn = cva("text-fg/50 truncate text-[11px]");
+export const mineBasedOn = cva("text-fg/50 truncate text-11");
 
 export const minePlaylist = cva(
-  "text-success-vivid focus-visible:ring-primary-400 grid size-[30px] shrink-0 place-items-center rounded-lg outline-none focus-visible:ring-2"
+  "text-success-vivid focus-visible:ring-primary-400 grid size-7.5 shrink-0 place-items-center rounded-lg outline-none focus-visible:ring-2"
 );
 
 export const mineActions = cva(
@@ -154,7 +154,7 @@ export const newCard = cva(
 );
 
 export const newCardButton = cva(
-  "from-primary-600 to-accent-600 text-overlay-fg shadow-primary-600/40 focus-visible:ring-primary-400 my-auto flex size-16 items-center justify-center rounded-[18px] bg-linear-to-br shadow-lg transition-transform outline-none hover:scale-105 focus-visible:ring-2 motion-reduce:transition-none [&_svg]:size-8"
+  "from-primary-600 to-accent-600 text-overlay-fg shadow-primary-600/40 focus-visible:ring-primary-400 my-auto flex size-16 items-center justify-center rounded-2xl bg-linear-to-br shadow-lg transition-transform outline-none hover:scale-105 focus-visible:ring-2 motion-reduce:transition-none [&_svg]:size-8"
 );
 
 export const importBody = cva("flex flex-col gap-3 p-6 sm:max-w-xl");

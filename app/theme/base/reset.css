@@ -1,15 +1,16 @@
 @layer base {
   * {
-    border-color: oklch(var(--border));
+    border-color: var(--border-default);
   }
 
   html {
+    font-size: calc(100% * var(--ui-scale, 1));
     scroll-behavior: smooth;
   }
 
   body {
-    background-color: oklch(var(--background));
-    color: oklch(var(--foreground));
+    background-color: var(--surface-bg);
+    color: var(--surface-fg);
     font-feature-settings:
       "rlig" 1,
       "calt" 1;
@@ -21,12 +22,12 @@
 
   ::selection {
     background-color: var(--selection-bg);
-    color: white;
+    color: var(--on-cover);
   }
 
   ::-moz-selection {
     background-color: var(--selection-bg);
-    color: white;
+    color: var(--on-cover);
   }
 
   :focus {
@@ -34,7 +35,7 @@
   }
 
   :focus-visible {
-    outline: 2px solid oklch(var(--neon-primary));
+    outline: 2px solid var(--color-primary-500);
     outline-offset: 2px;
   }
 
@@ -55,7 +56,7 @@
   }
 
   ::placeholder {
-    color: oklch(var(--muted-foreground) / 0.7);
+    color: color-mix(in oklab, var(--surface-fg-muted) 70%, transparent);
   }
 
   @media (hover: hover) and (pointer: fine) {
@@ -79,7 +80,7 @@
 
     *::-webkit-scrollbar-thumb {
       background-color: var(--scrollbar-thumb);
-      border-radius: 9999px;
+      border-radius: var(--radius-full);
       border: 2px solid transparent;
       background-clip: padding-box;
       transition: background-color 0.15s ease;

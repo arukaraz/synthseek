@@ -55,7 +55,7 @@
   }
 
   .gradient-text-primary {
-    background: linear-gradient(to top right, oklch(var(--neon-primary)) 5%, oklch(var(--neon-secondary)));
+    background: linear-gradient(to top right, var(--color-primary-500) 5%, var(--color-secondary-500));
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -63,7 +63,7 @@
   }
 
   .gradient-text-secondary {
-    background: linear-gradient(to right, oklch(var(--neon-secondary)), oklch(var(--neon-primary)));
+    background: linear-gradient(to right, var(--color-secondary-500), var(--color-primary-500));
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -137,37 +137,37 @@
   @keyframes anchor-target-glow {
     0% {
       box-shadow:
-        0 0 0 0 oklch(var(--neon-accent) / 0),
-        0 0 0 0 oklch(var(--neon-accent) / 0),
-        0 0 0 0 oklch(var(--neon-accent) / 0);
+        0 0 0 0 color-mix(in oklab, var(--neon-accent) 0%, transparent),
+        0 0 0 0 color-mix(in oklab, var(--neon-accent) 0%, transparent),
+        0 0 0 0 color-mix(in oklab, var(--neon-accent) 0%, transparent);
       background-color: transparent;
     }
     10% {
       box-shadow:
-        0 0 0 1.5px oklch(var(--neon-accent) / 0.45),
-        0 0 22px 2px oklch(var(--neon-accent) / 0.32),
-        0 0 56px 8px oklch(var(--neon-accent) / 0.14);
-      background-color: oklch(var(--neon-accent) / 0.05);
+        0 0 0 1.5px color-mix(in oklab, var(--neon-accent) 45%, transparent),
+        0 0 22px 2px color-mix(in oklab, var(--neon-accent) 32%, transparent),
+        0 0 56px 8px color-mix(in oklab, var(--neon-accent) 14%, transparent);
+      background-color: color-mix(in oklab, var(--neon-accent) 5%, transparent);
     }
     38% {
       box-shadow:
-        0 0 0 1px oklch(var(--neon-accent) / 0.18),
-        0 0 14px 1px oklch(var(--neon-accent) / 0.12),
-        0 0 40px 4px oklch(var(--neon-accent) / 0.05);
-      background-color: oklch(var(--neon-accent) / 0.022);
+        0 0 0 1px color-mix(in oklab, var(--neon-accent) 18%, transparent),
+        0 0 14px 1px color-mix(in oklab, var(--neon-accent) 12%, transparent),
+        0 0 40px 4px color-mix(in oklab, var(--neon-accent) 5%, transparent);
+      background-color: color-mix(in oklab, var(--neon-accent) 2.2%, transparent);
     }
     62% {
       box-shadow:
-        0 0 0 1.5px oklch(var(--neon-accent) / 0.36),
-        0 0 20px 2px oklch(var(--neon-accent) / 0.24),
-        0 0 50px 6px oklch(var(--neon-accent) / 0.1);
-      background-color: oklch(var(--neon-accent) / 0.04);
+        0 0 0 1.5px color-mix(in oklab, var(--neon-accent) 36%, transparent),
+        0 0 20px 2px color-mix(in oklab, var(--neon-accent) 24%, transparent),
+        0 0 50px 6px color-mix(in oklab, var(--neon-accent) 10%, transparent);
+      background-color: color-mix(in oklab, var(--neon-accent) 4%, transparent);
     }
     100% {
       box-shadow:
-        0 0 0 0 oklch(var(--neon-accent) / 0),
-        0 0 0 0 oklch(var(--neon-accent) / 0),
-        0 0 0 0 oklch(var(--neon-accent) / 0);
+        0 0 0 0 color-mix(in oklab, var(--neon-accent) 0%, transparent),
+        0 0 0 0 color-mix(in oklab, var(--neon-accent) 0%, transparent),
+        0 0 0 0 color-mix(in oklab, var(--neon-accent) 0%, transparent);
       background-color: transparent;
     }
   }
@@ -183,7 +183,7 @@
     content: "";
     position: absolute;
     inset: -0.625rem -0.875rem;
-    border-radius: 0.75rem;
+    border-radius: calc(var(--radius) * 1.5);
     pointer-events: none;
     z-index: -1;
     animation: anchor-target-glow 5s cubic-bezier(0.22, 1, 0.36, 1);
@@ -192,8 +192,8 @@
   @media (prefers-reduced-motion: reduce) {
     [data-glow="true"]::before {
       animation: none;
-      box-shadow: 0 0 0 1.5px oklch(var(--neon-accent) / 0.45);
-      background-color: oklch(var(--neon-accent) / 0.04);
+      box-shadow: 0 0 0 1.5px color-mix(in oklab, var(--neon-accent) 45%, transparent);
+      background-color: color-mix(in oklab, var(--neon-accent) 4%, transparent);
     }
   }
 
@@ -256,7 +256,7 @@
     background-image: linear-gradient(
       to right,
       transparent,
-      oklch(var(--activity-rail-color) / var(--activity-rail-opacity, 0.7)),
+      color-mix(in oklab, var(--activity-rail-color) calc(var(--activity-rail-opacity, 0.7) * 100%), transparent),
       transparent
     );
     transition:
@@ -275,7 +275,7 @@
 
   .activity-rail-sync {
     animation: activity-rail-sync-pulse 1.1s ease-in-out infinite;
-    box-shadow: 0 0 14px -2px oklch(var(--activity-rail-color) / 0.55);
+    box-shadow: 0 0 14px -2px color-mix(in oklab, var(--activity-rail-color) 55%, transparent);
   }
 
   .activity-rail-paused {
@@ -286,7 +286,12 @@
     position: absolute;
     inset-block: 0;
     inline-size: 40%;
-    background-image: linear-gradient(to right, transparent, oklch(var(--activity-rail-color) / 0.95), transparent);
+    background-image: linear-gradient(
+      to right,
+      transparent,
+      color-mix(in oklab, var(--activity-rail-color) 95%, transparent),
+      transparent
+    );
     animation: activity-rail-travel 1s linear infinite;
   }
 
@@ -294,13 +299,13 @@
     position: absolute;
     inset-block: 0;
     inset-inline-start: 0;
-    background-color: oklch(var(--activity-rail-color));
+    background-color: var(--activity-rail-color);
   }
 
   .activity-paused-label {
     top: 0;
     line-height: 18px;
-    color: oklch(var(--neon-warning));
+    color: var(--warning-strong);
     background-color: var(--surface-bg);
   }
 
@@ -372,7 +377,7 @@
     display: inline-block;
     width: var(--loading-dot-size, 0.3rem);
     height: var(--loading-dot-size, 0.3rem);
-    border-radius: 9999px;
+    border-radius: var(--radius-full);
     background-color: currentColor;
     opacity: 0;
     animation: loading-dots-1 1.6s ease-in-out infinite;
@@ -414,7 +419,7 @@
     display: inline-block;
     width: 0.1875rem;
     height: 100%;
-    border-radius: 9999px;
+    border-radius: var(--radius-full);
     background-color: currentColor;
     transform-origin: bottom;
     animation: now-playing-bar 0.9s ease-in-out infinite;

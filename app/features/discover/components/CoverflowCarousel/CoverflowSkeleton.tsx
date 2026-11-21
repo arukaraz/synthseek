@@ -24,7 +24,7 @@ export function CoverflowSkeleton() {
             key={index}
             className={cn(
               "absolute top-1/2 left-1/2 aspect-square h-[70%] rounded-xl shadow-2xl sm:h-[85%] sm:rounded-2xl",
-              card.isCenter ? "bg-fg/15 ring-2 ring-white/10" : "bg-fg/10",
+              card.isCenter ? "bg-fg/15 ring-hairline/10 ring-2" : "bg-fg/10",
               card.hideOnMobile && "hidden sm:block"
             )}
             initial={{

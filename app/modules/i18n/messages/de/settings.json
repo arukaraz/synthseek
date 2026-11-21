@@ -194,7 +194,7 @@
     },
     "theme": {
       "title": "Design",
-      "description": "Wähle das Design, das zu deiner Umgebung passt. Nur in diesem Browser.",
+      "scope": "Für dein Konto, auf jedem Gerät.",
       "groupLabel": "Farbdesign"
     },
     "board": {
@@ -1671,9 +1671,9 @@
         "title": "Konto",
         "description": "Dein Profil, dein Passwort und dein Download-Kontingent."
       },
-      "appearance": {
-        "title": "Darstellung und Sprache",
-        "description": "Das Design und die Sprache, die Synthseek für dich verwendet, und wie dein Board aufgebaut ist."
+      "customization": {
+        "title": "Anpassung",
+        "description": "Das Design, das Synthseek für dich trägt, und wie dein Board aufgebaut ist."
       },
       "playback": {
         "title": "Wiedergabe",
@@ -1726,8 +1726,8 @@
       }
     },
     "tabs": {
-      "appearance": {
-        "theme": "Design und Sprache",
+      "customization": {
+        "theme": "Design",
         "board": "Board"
       },
       "download": {
@@ -1783,7 +1783,7 @@
       "keywords": {
         "playbackAccount": "lautstärke normalisierung lautheit gain autoplay ähnliche titel",
         "playbackBrowser": "equalizer kompressor crossfade gapless übergang konvertierung bitrate mp3",
-        "theme": "dunkel mitternacht ozean farbe",
+        "theme": "dunkel mitternacht ozean farbe eigenes css schrift schriftart radius schatten importieren exportieren",
         "language": "englisch spanisch französisch deutsch",
         "members": "rolle vertrauenswürdig kontingent anfrage voreinstellung qualität format",
         "board": "dichte textgröße hintergrund vorlagen anordnen anordnung widgets",

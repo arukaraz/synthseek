@@ -1,58 +1,183 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+@source not "../../sites";
+
+@theme {
+  --color-*: initial;
+}
+
 @theme inline {
   --color-surface: var(--surface-bg);
   --color-surface-elevated: var(--surface-bg-elevated);
   --color-surface-overlay: var(--surface-bg-overlay);
   --color-surface-sunken: var(--surface-bg-sunken);
+  --color-background: var(--surface-bg);
 
   --color-fg: var(--surface-fg);
   --color-fg-muted: var(--surface-fg-muted);
+  --color-foreground: var(--surface-fg);
 
-  --color-overlay-fg: var(--overlay-fg);
-  --color-overlay-fg-muted: var(--overlay-fg-muted);
-  --color-overlay-fg-primary: var(--overlay-fg-primary);
-  --color-overlay-fg-secondary: var(--overlay-fg-secondary);
-  --color-overlay-fg-accent: var(--overlay-fg-accent);
+  --color-overlay-fg: var(--on-cover);
+  --color-overlay-fg-muted: color-mix(in oklab, var(--on-cover) 70%, transparent);
+  --color-overlay-fg-primary: var(--color-primary-400);
+  --color-overlay-fg-accent: var(--color-accent-400);
+  --color-veil: var(--veil);
+  --color-hairline: var(--hairline);
 
   --color-glass: var(--glass-bg);
   --color-glass-border: var(--glass-border);
-
   --color-border: var(--border-default);
   --color-border-subtle: var(--border-subtle);
+  --color-ring: var(--ring);
 
   --color-primary: var(--color-primary-500);
-  --color-primary-foreground: oklch(var(--primary-foreground));
-  --color-secondary: oklch(var(--secondary));
-  --color-secondary-foreground: oklch(var(--secondary-foreground));
-  --color-destructive: oklch(var(--destructive));
-  --color-destructive-foreground: oklch(var(--destructive-foreground));
-  --color-destructive-vivid: var(--destructive-vivid);
-  --color-warning-vivid: var(--warning-vivid);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-400: var(--color-primary-400);
+  --color-primary-500: var(--color-primary-500);
+  --color-primary-600: var(--color-primary-600);
+  --color-primary-700: var(--color-primary-700);
+  --color-secondary-400: var(--color-secondary-400);
+  --color-secondary-500: var(--color-secondary-500);
+  --color-secondary-600: var(--color-secondary-600);
+  --color-accent-400: var(--color-accent-400);
+  --color-accent-500: var(--color-accent-500);
+  --color-accent-600: var(--color-accent-600);
+
+  --color-secondary: var(--muted);
+  --color-secondary-foreground: var(--surface-fg);
+  --color-accent: var(--muted);
+  --color-accent-foreground: var(--surface-fg);
+
   --color-success-vivid: var(--success-vivid);
-  --color-sync: oklch(var(--neon-sync));
-  --color-muted: oklch(var(--muted));
-  --color-muted-foreground: oklch(var(--muted-foreground));
-  --color-accent: oklch(var(--accent));
-  --color-accent-foreground: oklch(var(--accent-foreground));
-  --color-popover: oklch(var(--popover));
-  --color-popover-foreground: oklch(var(--popover-foreground));
-  --color-card: oklch(var(--card));
-  --color-card-foreground: oklch(var(--card-foreground));
-  --color-background: oklch(var(--background));
-  --color-foreground: oklch(var(--foreground));
-  --color-input: oklch(var(--input));
-  --color-ring: oklch(var(--ring));
+  --color-success-soft: var(--success-soft);
+  --color-success-tint: var(--success-tint);
+  --color-success-strong: var(--success-strong);
+  --color-success-pale: var(--success-pale);
+  --color-success-faint: var(--success-faint);
+  --color-warning-vivid: var(--warning-vivid);
+  --color-warning-soft: var(--warning-soft);
+  --color-warning-tint: var(--warning-tint);
+  --color-warning-strong: var(--warning-strong);
+  --color-warning-pale: var(--warning-pale);
+  --color-warning-faint: var(--warning-faint);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-destructive-vivid: var(--destructive-vivid);
+  --color-destructive-soft: var(--destructive-soft);
+  --color-destructive-tint: var(--destructive-tint);
+  --color-destructive-strong: var(--destructive-strong);
+  --color-destructive-pale: var(--destructive-pale);
+  --color-destructive-faint: var(--destructive-faint);
+  --color-info-vivid: var(--info-vivid);
+  --color-info-soft: var(--info-soft);
+  --color-info-tint: var(--info-tint);
+  --color-info-pale: var(--info-pale);
+  --color-info-faint: var(--info-faint);
+
+  --color-status-queued: var(--status-queued);
+  --color-status-pending-approval: var(--status-pending-approval);
+  --color-status-searching: var(--status-searching);
+  --color-status-pending-download: var(--status-pending-download);
+  --color-status-downloading: var(--status-downloading);
+  --color-status-in-progress: var(--status-in-progress);
+  --color-status-paused: var(--status-paused);
+  --color-status-pending-import: var(--status-pending-import);
+  --color-status-importing: var(--status-importing);
+  --color-status-syncing: var(--status-syncing);
+  --color-status-complete: var(--status-complete);
+  --color-status-partial: var(--status-partial);
+  --color-status-failed: var(--status-failed);
+  --color-status-cancelled: var(--status-cancelled);
+  --color-status-delegated: var(--status-delegated);
+
+  --color-mix-acc: var(--mix-acc);
+  --color-plex-400: var(--brand-plex);
+  --color-plex-500: var(--brand-plex);
+
+  --text-9: calc(var(--text-9) * var(--text-scale, 1));
+  --text-10: calc(var(--text-10) * var(--text-scale, 1));
+  --text-11: calc(var(--text-11) * var(--text-scale, 1));
+  --text-12: calc(var(--text-xs) * var(--text-scale, 1));
+  --text-xs: calc(var(--text-xs) * var(--text-scale, 1));
+  --text-13: calc(var(--text-13) * var(--text-scale, 1));
+  --text-14: calc(var(--text-sm) * var(--text-scale, 1));
+  --text-sm: calc(var(--text-sm) * var(--text-scale, 1));
+  --text-15: calc(var(--text-15) * var(--text-scale, 1));
+  --text-16: calc(var(--text-base) * var(--text-scale, 1));
+  --text-base: calc(var(--text-base) * var(--text-scale, 1));
+  --text-lg: calc(var(--text-lg) * var(--text-scale, 1));
+  --text-xl: calc(var(--text-xl) * var(--text-scale, 1));
+  --text-2xl: calc(var(--text-2xl) * var(--text-scale, 1));
+  --text-3xl: calc(var(--text-3xl) * var(--text-scale, 1));
+  --text-4xl: calc(var(--text-4xl) * var(--text-scale, 1));
+  --text-5xl: calc(var(--text-5xl) * var(--text-scale, 1));
+  --text-6xl: calc(var(--text-6xl) * var(--text-scale, 1));
+
+  --tracking-label: var(--tracking-label);
+  --tracking-caps: var(--tracking-caps);
+  --tracking-caps-wide: var(--tracking-caps-wide);
+
+  --radius: calc(var(--radius) * 0.5);
+  --radius-xs: calc(var(--radius) * 0.25);
+  --radius-sm: calc(var(--radius) * 0.5);
+  --radius-md: calc(var(--radius) * 0.75);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.5);
+  --radius-2xl: calc(var(--radius) * 2);
+  --radius-3xl: calc(var(--radius) * 3);
+  --radius-4xl: calc(var(--radius) * 4);
+  --radius-full: var(--radius-full);
+
+  --backdrop-blur: calc(var(--glass-blur) * 2 / 3);
+  --backdrop-blur-xs: calc(var(--glass-blur) / 3);
+  --backdrop-blur-sm: calc(var(--glass-blur) * 2 / 3);
+  --backdrop-blur-md: var(--glass-blur);
+  --backdrop-blur-lg: calc(var(--glass-blur) * 4 / 3);
+  --backdrop-blur-xl: calc(var(--glass-blur) * 2);
+  --backdrop-blur-2xl: calc(var(--glass-blur) * 10 / 3);
+  --backdrop-blur-3xl: calc(var(--glass-blur) * 16 / 3);
 }
 
-@import "./tokens/primitives.css";
-@import "./tokens/semantic.css";
-@import "./tokens/shadows.css";
-@import "./tokens/discovery-mixes.css";
+@theme {
+  --default-border-width: var(--border-width, 1px);
+  --blur-2xs: 2px;
 
-@import "./themes/light.css";
-@import "./themes/dark.css";
+  --height-header-wide: 3.25rem;
+  --height-screen-minus-header: calc(100dvh - var(--height-header-wide));
+  --height-bottom-nav: calc(4rem + env(safe-area-inset-bottom));
+  --height-player-bar: 4rem;
+  --height-player-bar-wide: 7.5rem;
+  --height-player-chain: 1.875rem;
+  --height-screen-minus-header-and-nav: calc(100dvh - 4rem - var(--height-bottom-nav));
+  --height-modal-max: 90vh;
+  --width-sidebar: 28rem;
+  --width-dropdown-min: 8rem;
+
+  --container-player: 58rem;
+  --container-player-wide: 80rem;
+  --container-arrange-bar: 13rem;
+  --width-player-compact: 34rem;
+
+  --transition-duration-glow: 3000ms;
+  --transition-duration-glow-slow: 8000ms;
+  --transition-duration-glow-slower: 10000ms;
+  --transition-duration-gradient: 15000ms;
+}
+
+@import "./tokens/brand.css";
+@import "./tokens/surfaces.css";
+@import "./tokens/text.css";
+@import "./tokens/content-types.css";
+@import "./tokens/status.css";
+@import "./tokens/widgets.css";
+@import "./tokens/typography.css";
+@import "./tokens/shape.css";
+@import "./tokens/elevation.css";
+@import "./tokens/services.css";
+@import "./tokens/internal.css";
+@import "./tokens/shadows.css";
+
 @import "./themes/midnight.css";
 @import "./themes/ocean.css";
 
@@ -76,5 +201,3 @@
 @custom-variant active (&:where([data-active="true"], [data-active="true"] *));
 @custom-variant selected (&:where([data-selected="true"], [data-selected="true"] *));
 @custom-variant expanded (&:where([data-expanded="true"], [data-expanded="true"] *));
-
-@custom-variant dark (&:where([data-theme="dark"], [data-theme="midnight"], [data-theme="ocean"]) *);

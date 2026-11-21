@@ -55,6 +55,7 @@ export function TopHeader({ onSearch, initialQuery, initialScope }: TopHeaderPro
   return (
     <motion.header
       data-cy="app-header"
+      data-part="top-header"
       className={headerContainer({ collapsed })}
       inert={collapsed}
       initial="hidden"

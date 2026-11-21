@@ -9,11 +9,11 @@ export const dockStack = cva(
 );
 
 export const dockCard = cva(
-  "pointer-events-auto border-fg/15 bg-surface/90 w-full overflow-hidden rounded-2xl border shadow-2xl backdrop-blur-xl sm:w-[320px]",
+  "pointer-events-auto border-fg/15 bg-surface/90 w-full overflow-hidden rounded-2xl border shadow-2xl backdrop-blur-xl sm:w-80",
   {
     variants: {
       status: {
-        running: "shadow-sync/15",
+        running: "shadow-status-syncing/15",
         complete: "shadow-success/15",
         partial: "shadow-warning/20",
         failed: "shadow-error/20",
@@ -39,17 +39,17 @@ export const dockRing = cva("dock-ring absolute inset-0", {
   defaultVariants: { status: "running" },
 });
 
-export const dockRingText = cva("text-fg relative z-10 text-[10px] font-semibold tabular-nums");
+export const dockRingText = cva("text-fg relative z-10 text-10 font-semibold tabular-nums");
 
 export const dockHeaderIndicator = cva("grid size-8 shrink-0 place-items-center");
 
 export const dockStatusIcon = cva("dock-status-glyph size-7", {
   variants: {
     status: {
-      running: "text-[var(--color-success)]",
-      complete: "text-[var(--color-success)]",
-      partial: "text-[var(--color-warning)]",
-      failed: "text-[var(--color-error)]",
+      running: "text-success-strong",
+      complete: "text-success-strong",
+      partial: "text-warning-strong",
+      failed: "text-destructive-strong",
     },
   },
   defaultVariants: { status: "complete" },
@@ -57,9 +57,9 @@ export const dockStatusIcon = cva("dock-status-glyph size-7", {
 
 export const dockTitleBlock = cva("min-w-0 flex-1");
 
-export const dockTitle = cva("text-fg truncate text-[13px] font-bold leading-tight");
+export const dockTitle = cva("text-fg truncate text-13 font-bold leading-tight");
 
-export const dockSubtitle = cva("text-fg-muted text-[11px] leading-tight", {
+export const dockSubtitle = cva("text-fg-muted text-11 leading-tight", {
   variants: {
     wrap: {
       true: "whitespace-normal",
@@ -69,7 +69,7 @@ export const dockSubtitle = cva("text-fg-muted text-[11px] leading-tight", {
   defaultVariants: { wrap: false },
 });
 
-export const dockSubtitleCount = cva("text-sync font-semibold tabular-nums");
+export const dockSubtitleCount = cva("text-status-syncing font-semibold tabular-nums");
 
 export const dockSubtitleCountFailed = cva("text-error font-semibold tabular-nums");
 
@@ -84,7 +84,7 @@ export const dockBody = cva("flex flex-col gap-0.5 overflow-y-auto px-2 pb-2");
 export const dockItemRow = cva("flex items-center gap-2 rounded-lg px-2 py-1.5", {
   variants: {
     importing: {
-      true: "bg-sync/10",
+      true: "bg-status-syncing/10",
       false: "",
     },
   },
@@ -97,7 +97,7 @@ export const dockItemNameBlock = cva("flex min-w-0 flex-1 flex-col");
 
 export const dockItemName = cva("text-fg/80 min-w-0 truncate text-xs");
 
-export const dockItemReason = cva("min-w-0 truncate text-[11px] leading-tight", {
+export const dockItemReason = cva("min-w-0 truncate text-11 leading-tight", {
   variants: {
     tone: {
       error: "text-error/80",
@@ -107,4 +107,4 @@ export const dockItemReason = cva("min-w-0 truncate text-[11px] leading-tight", 
   defaultVariants: { tone: "error" },
 });
 
-export const dockMobileMeta = cva("text-fg-muted truncate text-[11px]");
+export const dockMobileMeta = cva("text-fg-muted truncate text-11");

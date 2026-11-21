@@ -1,28 +1,45 @@
 @theme {
   --shadow-neon-primary:
-    0 0 20px oklch(0.6 0.28 285 / 0.3), 0 0 40px oklch(0.6 0.28 285 / 0.2), 0 0 60px oklch(0.6 0.28 285 / 0.1);
+    0 0 20px color-mix(in oklab, var(--color-primary-500) calc(30% * var(--glow, 1)), transparent),
+    0 0 40px color-mix(in oklab, var(--color-primary-500) calc(20% * var(--glow, 1)), transparent),
+    0 0 60px color-mix(in oklab, var(--color-primary-500) calc(10% * var(--glow, 1)), transparent);
 
   --shadow-neon-secondary:
-    0 0 20px oklch(0.8 0.16 195 / 0.3), 0 0 40px oklch(0.8 0.16 195 / 0.2), 0 0 60px oklch(0.8 0.16 195 / 0.1);
+    0 0 20px color-mix(in oklab, var(--color-secondary-500) calc(30% * var(--glow, 1)), transparent),
+    0 0 40px color-mix(in oklab, var(--color-secondary-500) calc(20% * var(--glow, 1)), transparent),
+    0 0 60px color-mix(in oklab, var(--color-secondary-500) calc(10% * var(--glow, 1)), transparent);
 
   --shadow-neon-accent:
-    0 0 20px oklch(0.7 0.32 328 / 0.3), 0 0 40px oklch(0.7 0.32 328 / 0.2), 0 0 60px oklch(0.7 0.32 328 / 0.1);
+    0 0 20px color-mix(in oklab, var(--color-accent-500) calc(30% * var(--glow, 1)), transparent),
+    0 0 40px color-mix(in oklab, var(--color-accent-500) calc(20% * var(--glow, 1)), transparent),
+    0 0 60px color-mix(in oklab, var(--color-accent-500) calc(10% * var(--glow, 1)), transparent);
 
-  --shadow-neon-success: 0 0 20px oklch(0.55 0.178 145 / 0.3), 0 0 40px oklch(0.55 0.178 145 / 0.2);
+  --shadow-neon-success:
+    0 0 20px color-mix(in oklab, var(--success-strong) calc(30% * var(--glow, 1)), transparent),
+    0 0 40px color-mix(in oklab, var(--success-strong) calc(20% * var(--glow, 1)), transparent);
 
-  --shadow-neon-warning: 0 0 20px oklch(0.85 0.176 85 / 0.3), 0 0 40px oklch(0.85 0.176 85 / 0.2);
+  --shadow-neon-warning:
+    0 0 20px color-mix(in oklab, var(--warning-strong) calc(30% * var(--glow, 1)), transparent),
+    0 0 40px color-mix(in oklab, var(--warning-strong) calc(20% * var(--glow, 1)), transparent);
 
-  --shadow-neon-error: 0 0 20px oklch(0.55 0.225 27 / 0.3), 0 0 40px oklch(0.55 0.225 27 / 0.2);
+  --shadow-neon-error:
+    0 0 20px color-mix(in oklab, var(--destructive-strong) calc(30% * var(--glow, 1)), transparent),
+    0 0 40px color-mix(in oklab, var(--destructive-strong) calc(20% * var(--glow, 1)), transparent);
 
-  --shadow-sm: 0 1px 2px oklch(0 0 0 / 0.1);
-  --shadow-md: 0 4px 6px oklch(0 0 0 / 0.15);
-  --shadow-lg: 0 10px 15px oklch(0 0 0 / 0.2);
-  --shadow-xl: 0 20px 25px oklch(0 0 0 / 0.25);
+  --shadow-inner: inset 0 2px 4px 0 var(--shadow-ink-5);
+  --shadow-sm: 0 1px 2px var(--shadow-ink-10);
+  --shadow-md: 0 4px 6px var(--shadow-ink-15);
+  --shadow-lg: 0 10px 15px var(--shadow-ink-20);
+  --shadow-xl: 0 20px 25px var(--shadow-ink-25);
+  --shadow-2xl: 0 25px 50px -12px var(--shadow-ink-25);
+  --shadow: 0 1px 3px 0 var(--shadow-ink-10), 0 1px 2px -1px var(--shadow-ink-10);
+  --drop-shadow-sm: 0 1px 2px var(--shadow-ink-15);
 
-  --shadow-glass: 0 8px 32px oklch(0 0 0 / 0.4), 0 2px 8px oklch(0 0 0 / 0.2);
+  --shadow-glass: 0 8px 32px var(--shadow-ink-40), 0 2px 8px var(--shadow-ink-20);
+  --shadow-float: 0 24px 60px var(--shadow-ink-45);
+  --shadow-well: inset 0 3px 12px var(--shadow-ink-40);
 
-  --shadow-well: inset 0 3px 12px oklch(0 0 0 / 0.4);
-
-  --shadow-menu-glow-base: oklch(0 0 0 / 0.45);
-  --shadow-menu-drop: oklch(0 0 0 / 0.5);
+  --shadow-menu-glow-base: var(--shadow-ink-45);
+  --shadow-menu-drop: var(--shadow-ink-50);
+  --shadow-dark: var(--shadow-ink-30);
 }

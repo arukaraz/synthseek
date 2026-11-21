@@ -47,7 +47,7 @@ export function PlayerBar({ view, actions, placement = "dock" }: PlayerBarProps)
   const phoneSideways = useMediaQuery(TOUCH_SHORT_LANDSCAPE_QUERY);
 
   return (
-    <div className={bar({ placement })}>
+    <div className={bar({ placement })} data-part="player-bar">
       <div className={barMobileProgress()} style={progressVars(progress)}>
         <div className={barMobileProgressFill()} />
       </div>

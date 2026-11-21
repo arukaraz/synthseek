@@ -118,12 +118,12 @@ describe("ConfirmationModal", () => {
   it("maps the danger variant confirm action to the error status token", () => {
     render(<ConfirmationModal {...baseProps} isOpen variant="danger" />);
     const confirm = screen.getByRole("button", { name: DEFAULT_CONFIRM_TEXT });
-    expect(confirm.className).toContain("oklch(var(--neon-error)");
+    expect(confirm.className).toContain("bg-destructive-strong/18");
   });
 
   it("maps the warning variant confirm action to the warning status token", () => {
     render(<ConfirmationModal {...baseProps} isOpen variant="warning" />);
     const confirm = screen.getByRole("button", { name: DEFAULT_CONFIRM_TEXT });
-    expect(confirm.className).toContain("oklch(var(--neon-warning)");
+    expect(confirm.className).toContain("bg-warning-strong/18");
   });
 });
