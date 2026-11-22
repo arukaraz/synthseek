@@ -172,6 +172,7 @@ export const detailStatsGrid = cva("grid grid-cols-2 gap-3 px-3 pb-4 sm:px-4", {
     columns: {
       4: "md:grid-cols-4",
       5: "md:grid-cols-5",
+      6: "md:grid-cols-6",
     },
   },
   defaultVariants: {

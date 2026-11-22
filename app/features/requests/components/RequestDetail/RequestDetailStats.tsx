@@ -1,6 +1,6 @@
 "use client";
 
-import { ACTIVE_STATUSES, ContentType, RequestStatus, UNRESOLVED_STATUSES } from "@api/__generated__/types";
+import { ACTIVE_STATUSES, ContentType, RequestStatus } from "@api/__generated__/types";
 import { useTranslation } from "react-i18next";
 import { RequestDetailStatsCard } from "./RequestDetailStatsCard";
 import { detailStatsGrid } from "./styles";
@@ -14,17 +14,18 @@ export function RequestDetailStats({ request, tracks, isResolving }: RequestDeta
   }
 
   const completeCount = tracks.filter((track) => track.status === RequestStatus.enum.complete).length;
-  const failedCount = tracks.filter((track) =>
-    (UNRESOLVED_STATUSES as readonly string[]).includes(track.status)
-  ).length;
+  const failedCount = tracks.filter((track) => track.status === RequestStatus.enum.failed).length;
+  const cancelledCount = tracks.filter((track) => track.status === RequestStatus.enum.cancelled).length;
   const activeCount = tracks.filter((track) => (ACTIVE_STATUSES as readonly string[]).includes(track.status)).length;
   const hasDuplicates = request.duplicateCount > 0;
+  const hasCancelled = !isResolving && cancelledCount > 0;
+  const columns = hasDuplicates && hasCancelled ? 6 : hasDuplicates || hasCancelled ? 5 : 4;
   const requestedTracks = request.requested_tracks > 0 ? request.requested_tracks : request.total_tracks;
   const missingTracks = Math.max(0, request.total_tracks - requestedTracks);
   const isPlaylist = request.contentType === ContentType.enum.playlist;
 
   return (
-    <div className={detailStatsGrid({ columns: hasDuplicates ? 5 : 4 })}>
+    <div className={detailStatsGrid({ columns })}>
       <RequestDetailStatsCard
         label={t("stats.tracksLabel")}
         value={`${request.completed_tracks}/${requestedTracks}`}
@@ -49,6 +50,14 @@ export function RequestDetailStats({ request, tracks, isResolving }: RequestDeta
         sublabel={t("stats.failedSublabel")}
         valueClassName="text-destructive-vivid"
       />
+      {hasCancelled && (
+        <RequestDetailStatsCard
+          label={t("stats.cancelledLabel")}
+          value={cancelledCount}
+          sublabel={t("stats.cancelledSublabel")}
+          valueClassName="text-status-cancelled"
+        />
+      )}
       <RequestDetailStatsCard
         label={t("stats.activeLabel")}
         value={isResolving ? "-" : activeCount}

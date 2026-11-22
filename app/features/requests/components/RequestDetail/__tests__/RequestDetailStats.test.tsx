@@ -74,19 +74,61 @@ describe("RequestDetailStats status branches", () => {
     expect(container).toBeEmptyDOMElement();
   });
 
-  it("counts complete, failed, and active tracks from the request", () => {
+  it("counts complete, failed, cancelled, and active tracks from the request", () => {
     renderStats({
       tracks: [
         makeTrack({ id: "c1", status: RequestStatus.enum.complete }),
         makeTrack({ id: "f1", status: RequestStatus.enum.failed }),
-        makeTrack({ id: "f2", status: RequestStatus.enum.cancelled }),
+        makeTrack({ id: "x1", status: RequestStatus.enum.cancelled }),
+        makeTrack({ id: "x2", status: RequestStatus.enum.cancelled }),
+        makeTrack({ id: "x3", status: RequestStatus.enum.cancelled }),
         makeTrack({ id: "a1", status: RequestStatus.enum.downloading }),
       ],
     });
 
     expect(screen.getByText("Complete").parentElement).toHaveTextContent("1");
-    expect(screen.getByText("Failed").parentElement).toHaveTextContent("2");
+    expect(screen.getByText("Failed").parentElement).toHaveTextContent("1");
+    expect(screen.getByText("Cancelled").parentElement).toHaveTextContent("3");
+    expect(screen.getByText("stopped")).toBeInTheDocument();
     expect(screen.getByText("Active").parentElement).toHaveTextContent("1");
+  });
+});
+
+describe("RequestDetailStats cancelled card", () => {
+  it("hides the Cancelled card when no track was cancelled", () => {
+    renderStats({
+      tracks: [makeTrack({ id: "f1", status: RequestStatus.enum.failed })],
+    });
+
+    expect(screen.queryByText("Cancelled")).not.toBeInTheDocument();
+    expect(screen.getByText("Failed").parentElement).toHaveTextContent("1");
+  });
+
+  it("hides the Cancelled card while the detail is resolving", () => {
+    const request = makeRequest({
+      tracks: [makeTrack({ id: "x1", status: RequestStatus.enum.cancelled })],
+    });
+
+    render(<RequestDetailStats request={request} tracks={request.tracks} isResolving={true} />);
+
+    expect(screen.queryByText("Cancelled")).not.toBeInTheDocument();
+  });
+
+  it("widens the grid to six columns when both optional cards show", () => {
+    const { container } = renderStats({
+      duplicateCount: 2,
+      tracks: [makeTrack({ id: "x1", status: RequestStatus.enum.cancelled })],
+    });
+
+    expect(container.firstElementChild).toHaveClass("md:grid-cols-6");
+  });
+
+  it("uses five columns when only the Cancelled card is added", () => {
+    const { container } = renderStats({
+      tracks: [makeTrack({ id: "x1", status: RequestStatus.enum.cancelled })],
+    });
+
+    expect(container.firstElementChild).toHaveClass("md:grid-cols-5");
   });
 });
 

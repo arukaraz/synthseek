@@ -234,7 +234,7 @@ export function RequestDetailHero({ request, tracks, onBack }: RequestDetailHero
                     ) : (
                       <RefreshCw className="mr-1.5 size-3.5" />
                     )}
-                    {t("detail.retryFailed", { count: actions.retryableTrackCount })}
+                    {t("detail.retryTracks", { count: actions.retryableTrackCount })}
                   </Button>
                 )}
 

@@ -67,7 +67,7 @@ describe("RequestDetailHeroMenu", () => {
 
     await user.click(screen.getByRole("button", { name: "More actions" }));
 
-    expect(screen.getByRole("menuitem", { name: "Retry 2 failed" })).toBeInTheDocument();
+    expect(screen.getByRole("menuitem", { name: "Retry 2 tracks" })).toBeInTheDocument();
     expect(screen.getByRole("menuitem", { name: "Remove Playlist" })).toBeInTheDocument();
     expect(screen.queryByRole("menuitem", { name: "Cancel downloads" })).not.toBeInTheDocument();
   });
@@ -90,7 +90,7 @@ describe("RequestDetailHeroMenu", () => {
     renderMenu({ canRetry: true, retry });
 
     await user.click(screen.getByRole("button", { name: "More actions" }));
-    await user.click(screen.getByRole("menuitem", { name: "Retry 2 failed" }));
+    await user.click(screen.getByRole("menuitem", { name: "Retry 2 tracks" }));
 
     expect(retry).toHaveBeenCalledOnce();
   });
