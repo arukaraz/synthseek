@@ -103,14 +103,14 @@ export function RequestDetailTracks({
       header: t("tracks.statusHeader"),
       sortable: true,
       cell: (track) => <TrackStatusCell track={track} />,
-      className: "hidden w-56 sm:table-cell",
+      className: "hidden w-56 @xl:table-cell",
     },
     {
       key: "source",
       header: t("tracks.sourceHeader"),
       sortable: true,
       cell: (track) => <TrackSourceCell track={track} />,
-      className: "hidden w-36 xl:table-cell",
+      className: "hidden w-36 @4xl:table-cell",
     },
     {
       key: "completed",
@@ -121,7 +121,7 @@ export function RequestDetailTracks({
           {track.completed_at ? formatRelativeTime(new Date(track.completed_at)) : "-"}
         </span>
       ),
-      className: "hidden w-28 lg:table-cell",
+      className: "hidden w-28 @3xl:table-cell",
     },
     {
       key: "actions",
@@ -147,7 +147,7 @@ export function RequestDetailTracks({
         const key = toTrackSortKey(field);
         if (key !== null) onSort(key);
       }}
-      containerClassName="mx-3 mb-3 sm:mx-4 sm:mb-4"
+      containerClassName="@container mx-3 mb-3 sm:mx-4 sm:mb-4"
       minWidth="320px"
       fixedLayout
       rowAttrs={(track) => ({ "data-status": track.status, "data-track-id": track.id })}

@@ -166,11 +166,11 @@ export const heroTypeRow = cva("flex items-center justify-between gap-2");
 
 export type HeroTypeRowProps = VariantProps<typeof heroTypeRow>;
 
-export const heroIdentityBlock = cva("order-2 flex items-end gap-3 sm:gap-4 md:order-none");
+export const heroIdentityBlock = cva("order-2 flex min-w-0 items-end gap-3 sm:gap-4 md:order-none md:flex-1");
 
 export type HeroIdentityBlockProps = VariantProps<typeof heroIdentityBlock>;
 
-export const heroControlsColumn = cva("hidden md:flex md:w-auto md:flex-col md:items-end md:gap-3");
+export const heroControlsColumn = cva("hidden md:flex md:w-auto md:shrink-0 md:flex-col md:items-end md:gap-3");
 
 export type HeroControlsColumnProps = VariantProps<typeof heroControlsColumn>;
 
@@ -326,7 +326,7 @@ export const explicitMark = cva(
 
 export const trackArtistLine = cva("text-fg/45 w-full truncate text-xs");
 
-export const trackInlineStatus = cva("w-full pt-0.5 sm:hidden");
+export const trackInlineStatus = cva("w-full pt-0.5 @xl:hidden");
 
 export const trackStatusStack = cva("flex min-w-0 flex-col gap-0.5");
 
@@ -334,7 +334,7 @@ export const retryLine = cva("text-fg/45 flex flex-wrap items-center gap-x-1.5 t
 
 export const retryLinePart = cva("inline-flex items-center gap-1 whitespace-nowrap");
 
-export const detailPanel = cva("flex flex-col gap-3 pl-0 sm:pl-10");
+export const detailPanel = cva("flex flex-col gap-3 pl-0 @xl:pl-10");
 
 export const detailHead = cva("flex flex-wrap items-start gap-3 rounded-xl border p-3", {
   variants: {
@@ -365,7 +365,7 @@ export const detailProgress = cva("bg-fg/10 h-1.5 w-full max-w-sm overflow-hidde
 
 export const detailProgressFill = cva("bg-status-downloading h-full rounded-full transition-[width]");
 
-export const detailGrid = cva("grid items-start gap-3 md:grid-cols-3");
+export const detailGrid = cva("grid items-start gap-3 @3xl:grid-cols-3");
 
 export const detailBox = cva("border-fg/10 bg-fg/[0.03] flex min-w-0 flex-col gap-2 rounded-xl border p-3");
 
