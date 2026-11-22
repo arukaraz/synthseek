@@ -4,11 +4,8 @@ import { EmptyState } from "@components/ui/EmptyState";
 import { useRequestDetail } from "@hooks/api";
 import { Inbox } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { KeptReleaseNotice } from "./KeptReleaseNotice";
+import { RequestDetailBody } from "./RequestDetailBody";
 import { RequestDetailHero } from "./RequestDetailHero";
-import { RequestReleaseProgress } from "./RequestReleaseProgress";
-import { RequestDetailStats } from "./RequestDetailStats";
-import { RequestDetailTracks } from "./RequestDetailTracks";
 import { detailContainer } from "./styles";
 import type { RequestDetailProps } from "./types";
 
@@ -39,10 +36,8 @@ export function RequestDetail({ request, onBack }: RequestDetailProps) {
   return (
     <div className={detailContainer()} data-cy="request-detail">
       <RequestDetailHero request={request} tracks={tracks} onBack={onBack} />
-      <RequestDetailStats request={request} tracks={tracks} isResolving={isResolvingTracks || tracksUnavailable} />
-      <RequestReleaseProgress tracks={tracks} />
-      <KeptReleaseNotice request={request} />
-      <RequestDetailTracks
+      <RequestDetailBody
+        key={request.id}
         request={request}
         tracks={tracks}
         isResolving={isResolvingTracks}

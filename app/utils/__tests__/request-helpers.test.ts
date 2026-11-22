@@ -4,6 +4,7 @@ import {
   notifyBulkTrackLimit,
   notifyBulkUpgradeOutcome,
   notifyRequestsRetried,
+  notifyTrackBatch,
   notifyTracksRetried,
   notifyUpgradeOutcome,
   type UpgradeTrackResult,
@@ -386,6 +387,65 @@ describe("notifyBulkTrackLimit", () => {
 
     expect(toastSpies.warning).toHaveBeenCalledWith(enMutations.requests.bulkTracksTooManyTitle, {
       description: enMutations.requests.bulkTracksTooManyDescription.replace("{{max}}", "500"),
+    });
+  });
+});
+
+describe("notifyTrackBatch", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it("names how many tracks were cancelled when every one applied", () => {
+    notifyTrackBatch({ requested: 2, applied: 2, skipped: [] }, "cancel");
+
+    expect(toastSpies.success).toHaveBeenCalledWith("Cancelled 2 tracks", { description: undefined });
+    expect(toastSpies.warning).not.toHaveBeenCalled();
+  });
+
+  it("lists the skips by reason under the count it moved to the front", () => {
+    notifyTrackBatch(
+      {
+        requested: 4,
+        applied: 1,
+        skipped: [
+          { id: "a", reason: "notApplicable" },
+          { id: "b", reason: "notApplicable" },
+          { id: "c", reason: "forbidden" },
+        ],
+      },
+      "prioritize"
+    );
+
+    expect(toastSpies.success).toHaveBeenCalledWith("Moved 1 track to the front of the queue", {
+      description: "3 skipped: 2 not in a state for this · 1 not allowed",
+    });
+  });
+
+  it("warns with the reasons when nothing applied", () => {
+    notifyTrackBatch(
+      {
+        requested: 2,
+        applied: 0,
+        skipped: [
+          { id: "a", reason: "notFound" },
+          { id: "b", reason: "actionError" },
+        ],
+      },
+      "cancel"
+    );
+
+    expect(toastSpies.warning).toHaveBeenCalledWith("No tracks could be cancelled", {
+      description: "1 not found · 1 failed",
+    });
+    expect(toastSpies.success).not.toHaveBeenCalled();
+  });
+
+  it("warns without a description when nothing applied and nothing was skipped", () => {
+    notifyTrackBatch({ requested: 0, applied: 0, skipped: [] }, "prioritize");
+
+    expect(toastSpies.warning).toHaveBeenCalledWith("No tracks could be moved to the front", {
+      description: undefined,
     });
   });
 });

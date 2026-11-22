@@ -4,6 +4,7 @@ import { act } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { toast } from "sonner";
 
+import { makeRequestsTrack } from "../../__tests__/factories";
 import { useRequestActions } from "../useRequestActions";
 
 function useRequestActionsFor(request: RequestWithTracks) {
@@ -129,12 +130,55 @@ describe("useRequestActions playlist actions", () => {
     vi.clearAllMocks();
   });
 
-  it("retries the playlist by id", () => {
-    const { result } = renderHook(() => useRequestActionsFor(makeRequest()));
+  it("retries the playlist's failed tracks only, as one playlist retry", () => {
+    const request = makeRequest({
+      tracks: [
+        makeRequestsTrack({ id: "failed-1", status: RequestStatus.enum.failed }),
+        makeRequestsTrack({ id: "cancelled-1", status: RequestStatus.enum.cancelled }),
+        makeRequestsTrack({ id: "done-1", status: RequestStatus.enum.complete }),
+      ],
+    });
+    const { result } = renderHook(() => useRequestActionsFor(request));
 
     act(() => result.current.retry());
 
-    expect(mutations.retryPlaylist).toHaveBeenCalledWith({ playlistId: "req-1" });
+    expect(mutations.retryPlaylist).toHaveBeenCalledOnce();
+    expect(mutations.retryPlaylist).toHaveBeenCalledWith({ playlistId: "req-1", only: "failed" });
+  });
+
+  it("requests the playlist's cancelled tracks again without touching the failed ones", () => {
+    const request = makeRequest({
+      tracks: [
+        makeRequestsTrack({ id: "failed-1", status: RequestStatus.enum.failed }),
+        makeRequestsTrack({ id: "cancelled-1", status: RequestStatus.enum.cancelled }),
+      ],
+    });
+    const { result } = renderHook(() => useRequestActionsFor(request));
+
+    act(() => result.current.requeueCancelled());
+
+    expect(mutations.retryPlaylist).toHaveBeenCalledWith({ playlistId: "req-1", only: "cancelled" });
+  });
+
+  it("retries a playlist with more failed tracks than a bulk call takes, in one call", () => {
+    const request = makeRequest({
+      tracks: ["a", "b", "c"].map((id) => makeRequestsTrack({ id, status: RequestStatus.enum.failed })),
+    });
+    const { result } = renderHook(() => useRequestActionsFor(request));
+
+    act(() => result.current.retry());
+
+    expect(mutations.retryPlaylist).toHaveBeenCalledOnce();
+    expect(mutations.retryPlaylist).toHaveBeenCalledWith({ playlistId: "req-1", only: "failed" });
+  });
+
+  it("sends nothing when there is no failed or cancelled track", () => {
+    const { result } = renderHook(() => useRequestActionsFor(makeRequest()));
+
+    act(() => result.current.retry());
+    act(() => result.current.requeueCancelled());
+
+    expect(mutations.retryPlaylist).not.toHaveBeenCalled();
     expect(mutations.retryAlbum).not.toHaveBeenCalled();
   });
 
@@ -254,12 +298,23 @@ describe("useRequestActions album actions", () => {
   const album = (overrides: Partial<RequestWithTracks> = {}) =>
     makeRequest({ contentType: ContentType.enum.album, ...overrides });
 
-  it("retries the album by id", () => {
-    const { result } = renderHook(() => useRequestActionsFor(album()));
+  it("retries the album's failed tracks and requests its cancelled ones again, each scoped", () => {
+    const { result } = renderHook(() =>
+      useRequestActionsFor(
+        album({
+          tracks: [
+            makeRequestsTrack({ id: "failed-1", status: RequestStatus.enum.failed }),
+            makeRequestsTrack({ id: "cancelled-1", status: RequestStatus.enum.cancelled }),
+          ],
+        })
+      )
+    );
 
     act(() => result.current.retry());
+    act(() => result.current.requeueCancelled());
 
-    expect(mutations.retryAlbum).toHaveBeenCalledWith({ albumId: "req-1" });
+    expect(mutations.retryAlbum).toHaveBeenNthCalledWith(1, { albumId: "req-1", only: "failed" });
+    expect(mutations.retryAlbum).toHaveBeenNthCalledWith(2, { albumId: "req-1", only: "cancelled" });
     expect(mutations.retryPlaylist).not.toHaveBeenCalled();
   });
 

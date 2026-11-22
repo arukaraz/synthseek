@@ -1,5 +1,5 @@
 import { RequestStatus, type ActiveRelease } from "@api/__generated__/types";
-import { render, screen, userEvent } from "@test/test-utils";
+import { render, screen } from "@test/test-utils";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { makeRequestsTrack } from "../../../__tests__/factories";
@@ -38,8 +38,6 @@ beforeEach(() => {
   releaseState.askedFor = [];
 });
 
-const SOURCE_INFO = "Where this track comes from";
-
 describe("TrackStatusCell, with the album its track is fetched with", () => {
   it("shows how far the album has got on the status line itself", () => {
     releaseState.current = release();
@@ -69,112 +67,32 @@ describe("TrackStatusCell, with the album its track is fetched with", () => {
     expect(screen.getByText("Importing")).toBeInTheDocument();
     expect(screen.queryByText("62%")).not.toBeInTheDocument();
   });
-
-  it("names the album's source in the details beside the status", async () => {
-    releaseState.current = release();
-
-    render(<TrackStatusCell track={makeRequestsTrack({ status: RequestStatus.enum.downloading })} />);
-    await userEvent.setup().click(screen.getByRole("button", { name: SOURCE_INFO }));
-
-    expect(await screen.findByText("via Torrent")).toBeInTheDocument();
-    expect(screen.getByText("Artist - Album")).toBeInTheDocument();
-  });
-
-  it("drops the album's percentage and details once the track failed", () => {
-    releaseState.current = release();
-
-    render(<TrackStatusCell track={makeRequestsTrack({ status: RequestStatus.enum.failed })} />);
-
-    expect(screen.queryByText("62%")).not.toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: SOURCE_INFO })).not.toBeInTheDocument();
-  });
 });
 
 describe("TrackStatusCell", () => {
-  it("renders a status indicator for the track status", () => {
-    const { container } = render(
-      <TrackStatusCell track={makeRequestsTrack({ status: RequestStatus.enum.downloading })} />
-    );
+  it("marks a prioritized queued track", () => {
+    render(<TrackStatusCell track={makeRequestsTrack({ status: RequestStatus.enum.queued, priority: 6 })} />);
 
-    expect(container.firstChild).not.toBeNull();
+    expect(screen.getByText("Prioritized")).toBeInTheDocument();
   });
 
-  it("keeps the status on one line, with the source and its licence behind the details button", async () => {
-    render(
-      <TrackStatusCell
-        track={makeRequestsTrack({
-          status: RequestStatus.enum.complete,
-          acquisition_source: "archive",
-          acquisition_ref: "DWK155/Poldoore_-_02_-_Paradise.mp3",
-          acquisition_license: "http://creativecommons.org/licenses/by-nc-nd/3.0/",
-        })}
-      />
-    );
+  it("marks nothing on a queued track without a priority", () => {
+    render(<TrackStatusCell track={makeRequestsTrack({ status: RequestStatus.enum.queued, priority: 0 })} />);
 
-    expect(screen.queryByText("via Internet Archive")).not.toBeInTheDocument();
-    await userEvent.setup().click(screen.getByRole("button", { name: SOURCE_INFO }));
-
-    expect(await screen.findByText("via Internet Archive")).toBeInTheDocument();
-    expect(screen.getByText("DWK155/Poldoore_-_02_-_Paradise.mp3")).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Licence" })).toHaveAttribute(
-      "href",
-      "http://creativecommons.org/licenses/by-nc-nd/3.0/"
-    );
+    expect(screen.queryByText("Prioritized")).not.toBeInTheDocument();
   });
 
-  it("offers no details for a completed track that predates the record", () => {
-    render(<TrackStatusCell track={makeRequestsTrack({ status: RequestStatus.enum.complete })} />);
-
-    expect(screen.queryByRole("button", { name: SOURCE_INFO })).not.toBeInTheDocument();
-  });
-
-  it("offers no details for a failed track, whatever source it last tried", () => {
-    render(
-      <TrackStatusCell
-        track={makeRequestsTrack({
-          status: RequestStatus.enum.failed,
-          acquisition_source: "slskd",
-          acquisition_ref: "x",
-        })}
-      />
-    );
-
-    expect(screen.queryByRole("button", { name: SOURCE_INFO })).not.toBeInTheDocument();
-  });
-
-  it("renders for a failed track carrying a failure reason", () => {
-    const { container } = render(
-      <TrackStatusCell track={makeRequestsTrack({ status: RequestStatus.enum.failed, failure_reason: "not_found" })} />
-    );
-
-    expect(container.firstChild).not.toBeNull();
-  });
-
-  it("shows no scheduled attempt on a failed watched track before the sweep schedules one", () => {
+  it("says a failed watched track waits for the sweep before one is scheduled", () => {
     render(
       <TrackStatusCell
         track={makeRequestsTrack({ status: RequestStatus.enum.failed, watch_enabled: true, next_retry_at: null })}
       />
     );
 
-    expect(screen.queryByText(/Next attempt/)).not.toBeInTheDocument();
+    expect(screen.getByText("waiting for the next sweep")).toBeInTheDocument();
   });
 
-  it("shows the scheduled attempt on a failed watched track with a scheduled retry", () => {
-    render(
-      <TrackStatusCell
-        track={makeRequestsTrack({
-          status: RequestStatus.enum.failed,
-          watch_enabled: true,
-          next_retry_at: inTwoHours(),
-        })}
-      />
-    );
-
-    expect(screen.getByRole("button", { name: /watching this track/i })).toBeInTheDocument();
-  });
-
-  it("keeps a failed track on one line, with the attempt count behind the schedule", async () => {
+  it("shows when a failed watched track tries again, with its attempt count", () => {
     render(
       <TrackStatusCell
         track={makeRequestsTrack({
@@ -186,12 +104,11 @@ describe("TrackStatusCell", () => {
       />
     );
 
-    expect(screen.queryByText("3 attempts")).not.toBeInTheDocument();
-    await userEvent.setup().click(screen.getByRole("button", { name: /watching this track/i }));
-    expect(await screen.findByText("3 attempts")).toBeInTheDocument();
+    expect(screen.getByText("next try in 2h")).toBeInTheDocument();
+    expect(screen.getByText("attempt 3")).toBeInTheDocument();
   });
 
-  it("still surfaces the attempt count on a failed track with watching disabled", () => {
+  it("says a failed unwatched track is not watched, and still counts its attempts", () => {
     render(
       <TrackStatusCell
         track={makeRequestsTrack({
@@ -203,11 +120,12 @@ describe("TrackStatusCell", () => {
       />
     );
 
-    expect(screen.queryByText(/Next attempt/)).not.toBeInTheDocument();
-    expect(screen.getByRole("img", { name: "2 attempts" })).toBeInTheDocument();
+    expect(screen.getByText("not watched")).toBeInTheDocument();
+    expect(screen.queryByText(/next try/)).not.toBeInTheDocument();
+    expect(screen.getByText("attempt 2")).toBeInTheDocument();
   });
 
-  it("shows no schedule on a non-failed watched track", () => {
+  it("shows no schedule on a track that has not failed", () => {
     render(
       <TrackStatusCell
         track={makeRequestsTrack({
@@ -219,7 +137,7 @@ describe("TrackStatusCell", () => {
       />
     );
 
-    expect(screen.queryByText(/Next attempt/)).not.toBeInTheDocument();
-    expect(screen.queryByText(/attempts so far/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/next try/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/attempt/)).not.toBeInTheDocument();
   });
 });

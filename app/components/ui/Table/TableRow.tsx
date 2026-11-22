@@ -17,7 +17,7 @@ export function TableRow<TData>({
 }: TableRowProps<TData>) {
   const handleClick = (e: React.MouseEvent) => {
     const target = e.target as HTMLElement;
-    if (target.closest("button") || target.closest('[role="checkbox"]')) return;
+    if (target.closest("button") || target.closest("a") || target.closest('[role="checkbox"]')) return;
     if (clickable && onClick) onClick();
   };
 

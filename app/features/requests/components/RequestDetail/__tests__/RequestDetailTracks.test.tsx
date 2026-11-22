@@ -1,453 +1,197 @@
-import { ContentType, RequestStatus } from "@api/__generated__/types";
-import { render, screen, userEvent } from "@test/test-utils";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { ContentType, RequestStatus, type TrackRequest } from "@api/__generated__/types";
+import { render, screen, userEvent, within } from "@test/test-utils";
+import type { ComponentProps } from "react";
+import { describe, expect, it, vi } from "vitest";
 
-import { makeRequestWithTracks, makeRequestsTrack, makeRequestsUser } from "../../../__tests__/factories";
+import { makeRequestWithTracks, makeRequestsTrack } from "../../../__tests__/factories";
 import { RequestDetailTracks } from "../RequestDetailTracks";
-
-const retryTrack = vi.fn();
-const cancelTrack = vi.fn();
-const prioritizeTrack = vi.fn();
-const setWatch = vi.fn();
-const upgradeRequest = vi.fn();
-const confirmMock = vi.fn();
-
-const authState = { canAct: true };
-
-vi.mock("@modules/providers/AuthProvider", () => ({
-  useAuthContext: () => ({ currentUser: { id: "user-1" } }),
-}));
-
-vi.mock("@utils/authorization", () => ({
-  isOwnerOrAdminFE: () => authState.canAct,
-}));
-
-vi.mock("@utils/confirm", () => ({
-  confirm: (...args: unknown[]) => confirmMock(...args),
-}));
+import type { TrackSort } from "../types";
 
 vi.mock("@hooks/api/queries/useActiveReleases", () => ({
   useTrackRelease: () => null,
 }));
 
-vi.mock("@hooks/api", () => ({
-  useRetryTrack: () => ({ mutate: retryTrack }),
-  useCancelTrack: () => ({ mutate: cancelTrack }),
-  usePrioritizeTrack: () => ({ mutate: prioritizeTrack }),
-  useSetWatch: () => ({ mutate: setWatch }),
-  useApproveTracks: () => ({ mutate: vi.fn(), isPending: false }),
-  useRejectTracks: () => ({ mutate: vi.fn(), isPending: false }),
-  useRequest: () => ({ mutate: upgradeRequest, isPending: false }),
-}));
+type Props = ComponentProps<typeof RequestDetailTracks>;
 
-describe("RequestDetailTracks", () => {
-  beforeEach(() => {
-    authState.canAct = true;
-    confirmMock.mockResolvedValue(true);
-  });
+function renderTracks(tracks: TrackRequest[], overrides: Partial<Props> = {}) {
+  const request = makeRequestWithTracks({ tracks });
+  const props: Props = {
+    request,
+    tracks,
+    visible: tracks,
+    sort: null,
+    onSort: vi.fn(),
+    selectedIds: new Set(),
+    onSelectionChange: vi.fn(),
+    expandedId: null,
+    onToggleExpanded: vi.fn(),
+    permissions: { canManage: true, isAdmin: false },
+    onAction: vi.fn(),
+    ...overrides,
+  };
+  render(<RequestDetailTracks {...props} />);
+  return props;
+}
 
-  afterEach(() => {
-    vi.clearAllMocks();
-  });
+const rowOf = (trackId: string) => {
+  const row = document.querySelector(`[data-track-id="${trackId}"]`);
+  if (!(row instanceof HTMLElement)) throw new Error(`no row for ${trackId}`);
+  return within(row);
+};
 
-  it("renders a row per track with title and artist", () => {
-    const request = makeRequestWithTracks({
-      tracks: [
-        makeRequestsTrack({ id: "t1", title: "First Song", credited_artist: "Artist A" }),
-        makeRequestsTrack({ id: "t2", title: "Second Song", credited_artist: "Artist B" }),
-      ],
-    });
+const album = (tracks: TrackRequest[]) => makeRequestWithTracks({ contentType: ContentType.enum.album, tracks });
 
-    render(
-      <RequestDetailTracks
-        request={request}
-        tracks={request.tracks}
-        isResolving={false}
-        hasFailed={false}
-        onRetryLoad={vi.fn()}
-      />
-    );
+describe("RequestDetailTracks rows", () => {
+  it("renders a row per visible track, with its title and artist", () => {
+    const tracks = [
+      makeRequestsTrack({ id: "t1", title: "First Song", credited_artist: "Artist A" }),
+      makeRequestsTrack({ id: "t2", title: "Second Song", credited_artist: "Artist B" }),
+    ];
+    renderTracks(tracks, { visible: [tracks[1]] });
 
-    expect(screen.getByText("First Song")).toBeInTheDocument();
     expect(screen.getByText("Second Song")).toBeInTheDocument();
-    expect(screen.getByText("Artist A")).toBeInTheDocument();
+    expect(screen.getByText("Artist B")).toBeInTheDocument();
+    expect(screen.queryByText("First Song")).not.toBeInTheDocument();
   });
 
-  it("shows the empty message when there are no tracks", () => {
-    render(
-      <RequestDetailTracks
-        request={makeRequestWithTracks({ tracks: [] })}
-        tracks={[]}
-        isResolving={false}
-        hasFailed={false}
-        onRetryLoad={vi.fn()}
-      />
-    );
+  it("says the request has no tracks when it has none", () => {
+    renderTracks([]);
 
     expect(screen.getByText("No tracks")).toBeInTheDocument();
   });
 
-  it("retries a failed track from the row actions", async () => {
-    const user = userEvent.setup();
-    const request = makeRequestWithTracks({
-      tracks: [makeRequestsTrack({ id: "t9", status: RequestStatus.enum.failed })],
-    });
+  it("says the filter matched nothing when the request has tracks but none are visible", () => {
+    renderTracks([makeRequestsTrack()], { visible: [] });
 
-    render(
-      <RequestDetailTracks
-        request={request}
-        tracks={request.tracks}
-        isResolving={false}
-        hasFailed={false}
-        onRetryLoad={vi.fn()}
-      />
-    );
-    await user.click(screen.getByRole("button", { name: "Track actions" }));
-    await user.click(screen.getByRole("menuitem", { name: "Retry track" }));
-
-    expect(retryTrack).toHaveBeenCalledWith({ trackId: "t9" });
+    expect(screen.getByText("No tracks match this filter")).toBeInTheDocument();
   });
 
-  it("cancels a queued track only after confirmation", async () => {
-    const user = userEvent.setup();
-    const request = makeRequestWithTracks({
-      tracks: [makeRequestsTrack({ id: "t3", status: RequestStatus.enum.queued })],
-    });
+  it("numbers a playlist by its position, even when sorted", () => {
+    const tracks = [
+      makeRequestsTrack({ id: "a", title: "Zulu", track_number: 9 }),
+      makeRequestsTrack({ id: "b", title: "Alpha", track_number: 4 }),
+    ];
+    renderTracks(tracks, { visible: [tracks[1], tracks[0]], sort: { key: "title", direction: "asc" } });
 
-    render(
-      <RequestDetailTracks
-        request={request}
-        tracks={request.tracks}
-        isResolving={false}
-        hasFailed={false}
-        onRetryLoad={vi.fn()}
-      />
-    );
-    await user.click(screen.getByRole("button", { name: "Track actions" }));
-    await user.click(screen.getByRole("menuitem", { name: "Cancel track" }));
-
-    expect(confirmMock).toHaveBeenCalledOnce();
-    expect(cancelTrack).toHaveBeenCalledWith({ trackId: "t3" });
+    expect(rowOf("a").getByText("1")).toBeInTheDocument();
+    expect(rowOf("b").getByText("2")).toBeInTheDocument();
   });
 
-  it("does not cancel when confirmation is declined", async () => {
-    confirmMock.mockResolvedValue(false);
-    const user = userEvent.setup();
-    const request = makeRequestWithTracks({
-      tracks: [makeRequestsTrack({ id: "t4", status: RequestStatus.enum.queued })],
-    });
+  it("numbers an album by its track number", () => {
+    const tracks = [makeRequestsTrack({ id: "a", track_number: 7 })];
+    renderTracks(tracks, { request: album(tracks) });
 
-    render(
-      <RequestDetailTracks
-        request={request}
-        tracks={request.tracks}
-        isResolving={false}
-        hasFailed={false}
-        onRetryLoad={vi.fn()}
-      />
-    );
-    await user.click(screen.getByRole("button", { name: "Track actions" }));
-    await user.click(screen.getByRole("menuitem", { name: "Cancel track" }));
-
-    expect(confirmMock).toHaveBeenCalledOnce();
-    expect(cancelTrack).not.toHaveBeenCalled();
-  });
-
-  it("stops the watch on a failed watched track from the row actions", async () => {
-    const user = userEvent.setup();
-    const request = makeRequestWithTracks({
-      tracks: [makeRequestsTrack({ id: "t5", status: RequestStatus.enum.failed, watch_enabled: true })],
-    });
-
-    render(
-      <RequestDetailTracks
-        request={request}
-        tracks={request.tracks}
-        isResolving={false}
-        hasFailed={false}
-        onRetryLoad={vi.fn()}
-      />
-    );
-    await user.click(screen.getByRole("button", { name: "Track actions" }));
-    await user.click(screen.getByRole("menuitem", { name: "Stop watching" }));
-
-    expect(setWatch).toHaveBeenCalledWith({ trackId: "t5", enabled: false });
-  });
-
-  it("resumes the watch on a failed unwatched track from the row actions", async () => {
-    const user = userEvent.setup();
-    const request = makeRequestWithTracks({
-      tracks: [makeRequestsTrack({ id: "t6", status: RequestStatus.enum.failed, watch_enabled: false })],
-    });
-
-    render(
-      <RequestDetailTracks
-        request={request}
-        tracks={request.tracks}
-        isResolving={false}
-        hasFailed={false}
-        onRetryLoad={vi.fn()}
-      />
-    );
-    await user.click(screen.getByRole("button", { name: "Track actions" }));
-    await user.click(screen.getByRole("menuitem", { name: "Resume watching, reset the schedule" }));
-
-    expect(setWatch).toHaveBeenCalledWith({ trackId: "t6", enabled: true });
-  });
-
-  it("retries a scheduled failed track only from the row actions, leaving the status column to the schedule", async () => {
-    const user = userEvent.setup();
-    const request = makeRequestWithTracks({
-      tracks: [
-        makeRequestsTrack({
-          id: "t10",
-          status: RequestStatus.enum.failed,
-          watch_enabled: true,
-          retry_count: 2,
-          next_retry_at: new Date(Date.now() + 2 * 60 * 60 * 1000 + 5 * 60 * 1000),
-        }),
-      ],
-    });
-
-    render(
-      <RequestDetailTracks
-        request={request}
-        tracks={request.tracks}
-        isResolving={false}
-        hasFailed={false}
-        onRetryLoad={vi.fn()}
-      />
-    );
-
-    expect(screen.getByRole("button", { name: /watching this track/i })).toBeInTheDocument();
-    expect(screen.queryByText(/2 attempts/)).not.toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: "Retry now" })).not.toBeInTheDocument();
-
-    await user.click(screen.getByRole("button", { name: "Track actions" }));
-    await user.click(screen.getByRole("menuitem", { name: "Retry track" }));
-
-    expect(retryTrack).toHaveBeenCalledWith({ trackId: "t10" });
-  });
-
-  it("keeps the schedule visible when the user cannot act", () => {
-    authState.canAct = false;
-    const request = makeRequestWithTracks({
-      tracks: [
-        makeRequestsTrack({
-          id: "t11",
-          status: RequestStatus.enum.failed,
-          watch_enabled: true,
-          next_retry_at: new Date(Date.now() + 2 * 60 * 60 * 1000 + 5 * 60 * 1000),
-        }),
-      ],
-    });
-
-    render(
-      <RequestDetailTracks
-        request={request}
-        tracks={request.tracks}
-        isResolving={false}
-        hasFailed={false}
-        onRetryLoad={vi.fn()}
-      />
-    );
-
-    expect(screen.getByRole("button", { name: /watching this track/i })).toBeInTheDocument();
-  });
-
-  it("prioritizes a queued track from the jump-the-queue action", async () => {
-    const user = userEvent.setup();
-    const request = makeRequestWithTracks({
-      tracks: [makeRequestsTrack({ id: "t7", status: RequestStatus.enum.queued, priority: 0 })],
-    });
-
-    render(
-      <RequestDetailTracks
-        request={request}
-        tracks={request.tracks}
-        isResolving={false}
-        hasFailed={false}
-        onRetryLoad={vi.fn()}
-      />
-    );
-    await user.click(screen.getByRole("button", { name: "Track actions" }));
-    await user.click(screen.getByRole("menuitem", { name: "Jump the queue" }));
-
-    expect(prioritizeTrack).toHaveBeenCalledWith({ trackId: "t7" });
-  });
-
-  it("dispatches an upgrade request with the track identity and its persisted config plus the upgrade flag", async () => {
-    const user = userEvent.setup();
-    const request = makeRequestWithTracks({
-      contentType: ContentType.enum.album,
-      external_id: "album-ext-1",
-      tracks: [
-        makeRequestsTrack({
-          id: "t8",
-          external_id: "track-ext-8",
-          status: RequestStatus.enum.complete,
-          isrc: "USRC17607839",
-          bitrate: 256,
-          format: "flac",
-          format_matching: "strict",
-          bitrate_matching: "flexible",
-        }),
-      ],
-    });
-
-    render(
-      <RequestDetailTracks
-        request={request}
-        tracks={request.tracks}
-        isResolving={false}
-        hasFailed={false}
-        onRetryLoad={vi.fn()}
-      />
-    );
-    await user.click(screen.getByRole("button", { name: "Track actions" }));
-    await user.click(screen.getByRole("menuitem", { name: "Search better quality" }));
-
-    expect(upgradeRequest).toHaveBeenCalledWith({
-      track: {
-        external_id: "track-ext-8",
-        credited_artist: "An Artist",
-        title: "A Song",
-        isrc: "USRC17607839",
-        track_number: 1,
-        disc_number: 1,
-        duration_ms: 180000,
-        explicit: false,
-      },
-      config: {
-        bitrate: { value: 256, matching: "flexible" },
-        format: { value: "flac", matching: "strict" },
-        upgrade: true,
-      },
-      album_external_id: "album-ext-1",
-    });
-  });
-
-  it("sends no album id when upgrading a track whose request is not an album, rather than a fabricated one", async () => {
-    const user = userEvent.setup();
-    const request = makeRequestWithTracks({
-      contentType: ContentType.enum.playlist,
-      external_id: "playlist-ext-1",
-      tracks: [makeRequestsTrack({ id: "t9", external_id: "track-ext-9", status: RequestStatus.enum.complete })],
-    });
-
-    render(
-      <RequestDetailTracks
-        request={request}
-        tracks={request.tracks}
-        isResolving={false}
-        hasFailed={false}
-        onRetryLoad={vi.fn()}
-      />
-    );
-    await user.click(screen.getByRole("button", { name: "Track actions" }));
-    await user.click(screen.getByRole("menuitem", { name: "Search better quality" }));
-
-    expect(upgradeRequest).toHaveBeenCalledWith(expect.objectContaining({ album_external_id: "" }));
-  });
-
-  it("hides the actions trigger when the user cannot act", () => {
-    authState.canAct = false;
-    const request = makeRequestWithTracks({
-      tracks: [makeRequestsTrack({ id: "t5", status: RequestStatus.enum.failed })],
-    });
-
-    render(
-      <RequestDetailTracks
-        request={request}
-        tracks={request.tracks}
-        isResolving={false}
-        hasFailed={false}
-        onRetryLoad={vi.fn()}
-      />
-    );
-
-    expect(screen.queryByRole("button", { name: "Track actions" })).not.toBeInTheDocument();
-  });
-
-  it("keeps the requester relationship intact for ownership checks", () => {
-    const request = makeRequestWithTracks({
-      requestedBy: makeRequestsUser({ id: "owner-7" }),
-      tracks: [makeRequestsTrack({ id: "t6" })],
-    });
-
-    render(
-      <RequestDetailTracks
-        request={request}
-        tracks={request.tracks}
-        isResolving={false}
-        hasFailed={false}
-        onRetryLoad={vi.fn()}
-      />
-    );
-
-    expect(screen.getByText("A Song")).toBeInTheDocument();
+    expect(rowOf("a").getByText("7")).toBeInTheDocument();
   });
 });
 
-describe("RequestDetailTracks loading and error branches", () => {
-  it("shows the loading state instead of an empty table while the detail is resolving", () => {
-    render(
-      <RequestDetailTracks
-        request={makeRequestWithTracks({ tracks: [] })}
-        tracks={[]}
-        isResolving={true}
-        hasFailed={false}
-        onRetryLoad={vi.fn()}
-      />
-    );
+describe("RequestDetailTracks discs", () => {
+  const discs = [
+    makeRequestsTrack({ id: "d1t1", disc_number: 1, track_number: 1 }),
+    makeRequestsTrack({ id: "d2t1", disc_number: 2, track_number: 1 }),
+  ];
 
-    expect(screen.getByText("Loading tracks...")).toBeInTheDocument();
-    expect(screen.queryByText("No tracks")).not.toBeInTheDocument();
+  it("heads each disc of a multi-disc album in its canonical order", () => {
+    renderTracks(discs, { request: album(discs) });
+
+    expect(screen.getByText("Disc 1")).toBeInTheDocument();
+    expect(screen.getByText("Disc 2")).toBeInTheDocument();
   });
 
-  it("shows an actionable failure instead of spinning forever when the detail could not load", () => {
-    render(
-      <RequestDetailTracks
-        request={makeRequestWithTracks({ tracks: [] })}
-        tracks={[]}
-        isResolving={false}
-        hasFailed={true}
-        onRetryLoad={vi.fn()}
-      />
-    );
+  it("drops the disc headers once sorted, carrying the disc in the number instead", () => {
+    const sort: TrackSort = { key: "title", direction: "asc" };
+    renderTracks(discs, { request: album(discs), sort });
 
-    expect(screen.getByText("Could not load these tracks.")).toBeInTheDocument();
-    expect(screen.queryByText("Loading tracks...")).not.toBeInTheDocument();
+    expect(screen.queryByText("Disc 1")).not.toBeInTheDocument();
+    expect(rowOf("d2t1").getByText("2.1")).toBeInTheDocument();
   });
 
-  it("retries the detail query when the failure branch's button is pressed", async () => {
-    const onRetryLoad = vi.fn();
-    render(
-      <RequestDetailTracks
-        request={makeRequestWithTracks({ tracks: [] })}
-        tracks={[]}
-        isResolving={false}
-        hasFailed={true}
-        onRetryLoad={onRetryLoad}
-      />
-    );
+  it("puts no disc header on a single-disc album", () => {
+    const tracks = [makeRequestsTrack({ id: "a", disc_number: 1 })];
+    renderTracks(tracks, { request: album(tracks) });
 
-    await userEvent.click(screen.getByRole("button", { name: "Try again" }));
+    expect(screen.queryByText("Disc 1")).not.toBeInTheDocument();
+  });
+});
 
-    expect(onRetryLoad).toHaveBeenCalledTimes(1);
+describe("RequestDetailTracks selection", () => {
+  const tracks = [makeRequestsTrack({ id: "a", title: "One" }), makeRequestsTrack({ id: "b", title: "Two" })];
+
+  it("offers no selection to someone who can neither manage nor approve", () => {
+    renderTracks(tracks, { permissions: { canManage: false, isAdmin: false } });
+
+    expect(screen.queryByRole("checkbox")).not.toBeInTheDocument();
   });
 
-  it("prefers the failure branch over the loading branch when both are set", () => {
-    render(
-      <RequestDetailTracks
-        request={makeRequestWithTracks({ tracks: [] })}
-        tracks={[]}
-        isResolving={true}
-        hasFailed={true}
-        onRetryLoad={vi.fn()}
-      />
-    );
+  it("adds a track to the selection when its box is ticked", async () => {
+    const props = renderTracks(tracks, { selectedIds: new Set(["a"]) });
 
-    expect(screen.getByText("Could not load these tracks.")).toBeInTheDocument();
+    await userEvent.click(screen.getByRole("checkbox", { name: "Select Two" }));
+
+    expect(props.onSelectionChange).toHaveBeenCalledWith(new Set(["a", "b"]));
+  });
+
+  it("selects every visible track from the header", async () => {
+    const props = renderTracks(tracks);
+
+    await userEvent.click(screen.getByRole("checkbox", { name: "Select every track shown" }));
+
+    expect(props.onSelectionChange).toHaveBeenCalledWith(new Set(["a", "b"]));
+  });
+
+  it("clears the selection from the header when every visible track is selected", async () => {
+    const props = renderTracks(tracks, { selectedIds: new Set(["a", "b"]) });
+
+    await userEvent.click(screen.getByRole("checkbox", { name: "Select every track shown" }));
+
+    expect(props.onSelectionChange).toHaveBeenCalledWith(new Set());
+  });
+});
+
+describe("RequestDetailTracks sorting and details", () => {
+  it("asks to sort by the column whose header was clicked", async () => {
+    const props = renderTracks([makeRequestsTrack()]);
+
+    await userEvent.click(screen.getByRole("button", { name: /Artist/ }));
+
+    expect(props.onSort).toHaveBeenCalledWith("artist");
+  });
+
+  it("opens a track's details from its row", async () => {
+    const props = renderTracks([makeRequestsTrack({ id: "a", title: "One" })]);
+
+    await userEvent.click(screen.getByRole("button", { name: "Show details of One" }));
+
+    expect(props.onToggleExpanded).toHaveBeenCalledWith("a");
+  });
+
+  it("shows the details of the expanded track only", () => {
+    const tracks = [makeRequestsTrack({ id: "a" }), makeRequestsTrack({ id: "b" })];
+    renderTracks(tracks, { expandedId: "b" });
+
+    expect(screen.getAllByRole("region", { name: "Requested" })).toHaveLength(1);
+  });
+
+  it("runs a row action against its own track", async () => {
+    const tracks = [
+      makeRequestsTrack({ id: "a", title: "One", status: RequestStatus.enum.complete }),
+      makeRequestsTrack({ id: "b", title: "Two", status: RequestStatus.enum.failed }),
+    ];
+    const props = renderTracks(tracks);
+
+    await userEvent.click(screen.getByRole("button", { name: "Actions for Two" }));
+    await userEvent.click(screen.getByRole("menuitem", { name: "Retry now" }));
+
+    expect(props.onAction).toHaveBeenCalledWith("retry", tracks[1]);
+  });
+
+  it("shows a non-manager the row actions locked", async () => {
+    renderTracks([makeRequestsTrack({ title: "One", status: RequestStatus.enum.failed })], {
+      permissions: { canManage: false, isAdmin: false },
+    });
+
+    await userEvent.click(screen.getByRole("button", { name: "Actions for One" }));
+
+    expect(screen.getByRole("menuitem", { name: /Retry now/ })).toHaveAttribute("aria-disabled", "true");
   });
 });

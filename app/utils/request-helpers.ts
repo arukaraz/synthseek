@@ -29,6 +29,29 @@ const RETRY_SKIP_REASON_KEYS: Record<RetrySkipReason, ParseKeys<"mutations">> = 
   retryError: "requests.retrySkipRetryError",
 };
 
+export type TrackBatchResult = RequestsOutputs["cancelTracks"];
+
+export type TrackBatchKind = "cancel" | "prioritize";
+
+type TrackBatchSkipReason = TrackBatchResult["skipped"][number]["reason"];
+
+const TRACK_BATCH_SKIP_REASON_KEYS: Record<TrackBatchSkipReason, ParseKeys<"mutations">> = {
+  notFound: "requests.retrySkipNotFound",
+  forbidden: "requests.retrySkipForbidden",
+  notApplicable: "requests.batchSkipNotApplicable",
+  actionError: "requests.batchSkipActionError",
+};
+
+const TRACK_BATCH_DONE_KEYS: Record<TrackBatchKind, ParseKeys<"mutations">> = {
+  cancel: "requests.tracksCancelled",
+  prioritize: "requests.tracksPrioritized",
+};
+
+const TRACK_BATCH_NONE_KEYS: Record<TrackBatchKind, ParseKeys<"mutations">> = {
+  cancel: "requests.tracksCancelAllSkipped",
+  prioritize: "requests.tracksPrioritizeAllSkipped",
+};
+
 export type UpgradeTrackResult = inferRouterOutputs<AppRouter>["requests"]["upgradeTracks"]["results"][number];
 
 type UpgradeSkipReason = Extract<UpgradeTrackResult, { outcome: "skipped" }>["reason"];
@@ -127,6 +150,25 @@ function notifyRetryStoppedByQuota(args: {
   toast.warning(args.retriedTitle, {
     description: detail(quota.description ?? quota.title),
     duration: quota.duration,
+  });
+}
+
+export function notifyTrackBatch({ applied, skipped }: TrackBatchResult, kind: TrackBatchKind) {
+  const skipSummary =
+    skipped.length > 0
+      ? summarizeSkipReasons(
+          skipped.map(({ reason }) => reason),
+          (reason, count) => i18n.t(`mutations:${TRACK_BATCH_SKIP_REASON_KEYS[reason]}`, { count })
+        )
+      : null;
+  if (applied === 0) {
+    toast.warning(i18n.t(`mutations:${TRACK_BATCH_NONE_KEYS[kind]}`), { description: skipSummary ?? undefined });
+    return;
+  }
+  toast.success(i18n.t(`mutations:${TRACK_BATCH_DONE_KEYS[kind]}`, { count: applied }), {
+    description: skipSummary
+      ? i18n.t("mutations:requests.tracksRetrySkipped", { count: skipped.length, reasons: skipSummary })
+      : undefined,
   });
 }
 

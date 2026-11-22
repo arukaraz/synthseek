@@ -5,11 +5,10 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { makeRequestListItem, makeRequestsTrack } from "../../../__tests__/factories";
 import { RequestDetail } from "../RequestDetail";
 
-const { detailQuery, heroSpy, tracksSpy, statsSpy, detailArgs } = vi.hoisted(() => ({
+const { detailQuery, heroSpy, bodySpy, detailArgs } = vi.hoisted(() => ({
   detailQuery: { data: undefined as unknown, isLoading: false, isError: false },
   heroSpy: vi.fn(),
-  tracksSpy: vi.fn(),
-  statsSpy: vi.fn(),
+  bodySpy: vi.fn(),
   detailArgs: vi.fn(),
 }));
 
@@ -27,33 +26,10 @@ vi.mock("../RequestDetailHero", () => ({
   },
 }));
 
-vi.mock("../RequestDetailStats", () => ({
-  RequestDetailStats: (props: { isResolving: boolean }) => {
-    statsSpy(props);
-    return <div>stats</div>;
-  },
-}));
-
-const releaseSpies = vi.hoisted(() => ({ progress: vi.fn(), kept: vi.fn() }));
-
-vi.mock("../RequestReleaseProgress", () => ({
-  RequestReleaseProgress: (props: { tracks: TrackRequest[] }) => {
-    releaseSpies.progress(props.tracks);
-    return <div>release progress</div>;
-  },
-}));
-
-vi.mock("../KeptReleaseNotice", () => ({
-  KeptReleaseNotice: (props: { request: { id: string } }) => {
-    releaseSpies.kept(props.request.id);
-    return <div>kept release</div>;
-  },
-}));
-
-vi.mock("../RequestDetailTracks", () => ({
-  RequestDetailTracks: (props: { tracks: TrackRequest[]; isResolving: boolean; hasFailed: boolean }) => {
-    tracksSpy(props);
-    return <div>tracks</div>;
+vi.mock("../RequestDetailBody", () => ({
+  RequestDetailBody: (props: { tracks: TrackRequest[]; isResolving: boolean; hasFailed: boolean }) => {
+    bodySpy(props);
+    return <div>body</div>;
   },
 }));
 
@@ -62,8 +38,7 @@ beforeEach(() => {
   detailQuery.isLoading = false;
   detailQuery.isError = false;
   heroSpy.mockReset();
-  tracksSpy.mockReset();
-  statsSpy.mockReset();
+  bodySpy.mockReset();
   detailArgs.mockReset();
 });
 
@@ -75,30 +50,17 @@ describe("RequestDetail", () => {
     expect(screen.queryByText("hero")).not.toBeInTheDocument();
   });
 
-  it("composes the hero, stats and tracks for a selected request", () => {
+  it("composes the hero and the body for a selected request", () => {
     const request = makeRequestListItem({ id: "req-1" });
     detailQuery.data = { ...request, tracks: [makeRequestsTrack({ id: "t1" })] };
 
     render(<RequestDetail request={request} onBack={vi.fn()} />);
 
     expect(screen.getByText("hero")).toBeInTheDocument();
-    expect(screen.getByText("stats")).toBeInTheDocument();
-    expect(screen.getByText("tracks")).toBeInTheDocument();
+    expect(screen.getByText("body")).toBeInTheDocument();
   });
 
-  it("hands the loaded tracks to the release progress and the request to what it keeps on disk", () => {
-    const request = makeRequestListItem({ id: "req-1" });
-    const track = makeRequestsTrack({ id: "t1" });
-    detailQuery.data = { ...request, tracks: [track] };
-
-    render(<RequestDetail request={request} onBack={vi.fn()} />);
-
-    expect(screen.getByText("release progress")).toBeInTheDocument();
-    expect(releaseSpies.progress).toHaveBeenLastCalledWith([track]);
-    expect(releaseSpies.kept).toHaveBeenLastCalledWith("req-1");
-  });
-
-  it("hands the loaded tracks to the hero, which derives the approve and prioritize actions from them", () => {
+  it("hands the loaded tracks to the hero and the body alike", () => {
     const request = makeRequestListItem({ id: "req-1" });
     const track = makeRequestsTrack({ id: "t1" });
     detailQuery.data = { ...request, tracks: [track] };
@@ -106,6 +68,9 @@ describe("RequestDetail", () => {
     render(<RequestDetail request={request} onBack={vi.fn()} />);
 
     expect(heroSpy).toHaveBeenCalledWith([track]);
+    expect(bodySpy).toHaveBeenCalledWith(
+      expect.objectContaining({ tracks: [track], isResolving: false, hasFailed: false })
+    );
   });
 
   it("renders the hero straight away while the tracks are still loading", () => {
@@ -114,7 +79,7 @@ describe("RequestDetail", () => {
     render(<RequestDetail request={makeRequestListItem({ id: "req-1" })} onBack={vi.fn()} />);
 
     expect(screen.getByText("hero")).toBeInTheDocument();
-    expect(tracksSpy).toHaveBeenCalledWith(expect.objectContaining({ isResolving: true, tracks: [] }));
+    expect(bodySpy).toHaveBeenCalledWith(expect.objectContaining({ isResolving: true, tracks: [] }));
   });
 
   it("never hands the previously selected request's tracks to a newly selected one", () => {
@@ -123,24 +88,7 @@ describe("RequestDetail", () => {
     render(<RequestDetail request={makeRequestListItem({ id: "current" })} onBack={vi.fn()} />);
 
     expect(heroSpy).toHaveBeenCalledWith([]);
-    expect(tracksSpy).toHaveBeenCalledWith(expect.objectContaining({ isResolving: true, tracks: [] }));
-  });
-
-  it("tells the stats not to render its track-derived counts while they are unknown", () => {
-    detailQuery.isLoading = true;
-
-    render(<RequestDetail request={makeRequestListItem({ id: "req-1" })} onBack={vi.fn()} />);
-
-    expect(statsSpy).toHaveBeenCalledWith(expect.objectContaining({ isResolving: true }));
-  });
-
-  it("lets the stats render their counts once the detail for THIS request has landed", () => {
-    const request = makeRequestListItem({ id: "req-1" });
-    detailQuery.data = { ...request, tracks: [makeRequestsTrack({ id: "t1" })] };
-
-    render(<RequestDetail request={request} onBack={vi.fn()} />);
-
-    expect(statsSpy).toHaveBeenCalledWith(expect.objectContaining({ isResolving: false }));
+    expect(bodySpy).toHaveBeenCalledWith(expect.objectContaining({ isResolving: true, tracks: [] }));
   });
 
   it("keeps showing a valid cached detail when a BACKGROUND refetch fails, instead of discarding it", () => {
@@ -151,7 +99,7 @@ describe("RequestDetail", () => {
 
     render(<RequestDetail request={request} onBack={vi.fn()} />);
 
-    expect(tracksSpy).toHaveBeenCalledWith(expect.objectContaining({ hasFailed: false, tracks: [track] }));
+    expect(bodySpy).toHaveBeenCalledWith(expect.objectContaining({ hasFailed: false, tracks: [track] }));
   });
 
   it("surfaces a failed detail query instead of spinning forever", () => {
@@ -160,8 +108,7 @@ describe("RequestDetail", () => {
     render(<RequestDetail request={makeRequestListItem({ id: "req-1" })} onBack={vi.fn()} />);
 
     expect(screen.getByText("hero")).toBeInTheDocument();
-    expect(tracksSpy).toHaveBeenCalledWith(expect.objectContaining({ hasFailed: true, isResolving: false }));
-    expect(statsSpy).toHaveBeenCalledWith(expect.objectContaining({ isResolving: true }));
+    expect(bodySpy).toHaveBeenCalledWith(expect.objectContaining({ hasFailed: true, isResolving: false }));
   });
 
   it("asks for the SELECTED container by its own id and content type", () => {
@@ -177,6 +124,6 @@ describe("RequestDetail", () => {
 
     render(<RequestDetail request={makeRequestListItem({ id: "req-1" })} onBack={vi.fn()} />);
 
-    expect(tracksSpy).toHaveBeenCalledWith(expect.objectContaining({ hasFailed: true, isResolving: false }));
+    expect(bodySpy).toHaveBeenCalledWith(expect.objectContaining({ hasFailed: true, isResolving: false }));
   });
 });

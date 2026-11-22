@@ -26,7 +26,10 @@ function makeActions(overrides: Partial<Actions> = {}): Actions {
     exportJspf: vi.fn().mockResolvedValue(undefined),
     canManage: true,
     canRetry: false,
-    retryableTrackCount: 2,
+    failedTrackCount: 2,
+    requeueCancelled: vi.fn(),
+    canRequeueCancelled: false,
+    cancelledTrackCount: 0,
     canRequestMissing: false,
     missingTrackCount: 0,
     canRemove: false,
@@ -129,7 +132,7 @@ describe("RequestDetailHero", () => {
     const user = userEvent.setup();
     renderHero({ canRetry: true });
 
-    await user.click(screen.getByRole("button", { name: "Retry 2 tracks" }));
+    await user.click(screen.getByRole("button", { name: "Retry 2 failed" }));
 
     expect(retry).toHaveBeenCalledOnce();
   });
@@ -137,7 +140,19 @@ describe("RequestDetailHero", () => {
   it("disables the retry button while a retry is in flight", () => {
     renderHero({ canRetry: true, isRetrying: true });
 
-    expect(screen.getByRole("button", { name: "Retry 2 tracks" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "Retry 2 failed" })).toBeDisabled();
+  });
+
+  it("tells someone who cannot manage the request why there is nothing to press", () => {
+    renderHero({ canManage: false });
+
+    expect(screen.getByText("Only the person who requested it or an admin can change it")).toBeInTheDocument();
+  });
+
+  it("shows no lock note to someone who can manage the request", () => {
+    renderHero({ canManage: true });
+
+    expect(screen.queryByText("Only the person who requested it or an admin can change it")).not.toBeInTheDocument();
   });
 
   it("renders the album label when the request is not a playlist", () => {

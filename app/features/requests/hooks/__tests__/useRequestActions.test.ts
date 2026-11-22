@@ -281,10 +281,11 @@ describe("useRequestActions pause and resume", () => {
     const { result } = renderHook(() => useRequestActionsFor(request));
 
     expect(result.current.canRetry).toBe(false);
-    expect(result.current.retryableTrackCount).toBe(0);
+    expect(result.current.failedTrackCount).toBe(0);
+    expect(result.current.canRequeueCancelled).toBe(false);
   });
 
-  it("offers retry for the tracks that did fail, and counts them", () => {
+  it("counts failed and cancelled tracks apart, offering a retry for one and a new request for the other", () => {
     currentUser = owner;
     const request = makePlaylist({
       status: RequestStatus.enum.partially_complete,
@@ -298,7 +299,19 @@ describe("useRequestActions pause and resume", () => {
     const { result } = renderHook(() => useRequestActionsFor(request));
 
     expect(result.current.canRetry).toBe(true);
-    expect(result.current.retryableTrackCount).toBe(2);
+    expect(result.current.failedTrackCount).toBe(1);
+    expect(result.current.canRequeueCancelled).toBe(true);
+    expect(result.current.cancelledTrackCount).toBe(1);
+  });
+
+  it("offers no new request for cancelled tracks to a user who cannot manage the request", () => {
+    currentUser = { ...owner, id: "someone-else" };
+    const request = makePlaylist({ tracks: [makeTrack({ status: RequestStatus.enum.cancelled })] });
+
+    const { result } = renderHook(() => useRequestActionsFor(request));
+
+    expect(result.current.canRequeueCancelled).toBe(false);
+    expect(result.current.cancelledTrackCount).toBe(1);
   });
 
   it("offers to request the rest only for an album that holds more than was asked for", () => {

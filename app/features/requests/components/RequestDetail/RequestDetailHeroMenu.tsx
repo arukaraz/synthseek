@@ -8,6 +8,7 @@ import {
   ChevronsUp,
   Download,
   Globe,
+  ListPlus,
   MoreVertical,
   Pause,
   Play,
@@ -18,6 +19,7 @@ import {
   Upload,
   X,
 } from "lucide-react";
+import { cn } from "@utils/cn";
 import { useTranslation } from "react-i18next";
 
 import { heroDeleteMenuItem, heroRetryMenuItem, heroSuccessMenuItem, heroWarningMenuItem } from "./styles";
@@ -69,7 +71,7 @@ export function RequestDetailHeroMenu({
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="min-w-44">
         {canApprove && (
-          <DropdownMenuItem onClick={approve} disabled={isApproving} className={heroSuccessMenuItem()}>
+          <DropdownMenuItem onClick={approve} disabled={isApproving} className={cn(heroSuccessMenuItem(), "md:hidden")}>
             <Check className="size-3.5" />
             {t("approval.approvePending", { count: pendingApprovalCount })}
           </DropdownMenuItem>
@@ -83,11 +85,17 @@ export function RequestDetailHeroMenu({
         {canRetry && (
           <DropdownMenuItem onClick={retry} disabled={isRetrying} className={heroRetryMenuItem()}>
             <RefreshCw className="size-3.5" />
-            {t("detail.retryTracks", { count: actions.retryableTrackCount })}
+            {t("detail.retryFailed", { count: actions.failedTrackCount })}
+          </DropdownMenuItem>
+        )}
+        {actions.canRequeueCancelled && (
+          <DropdownMenuItem onClick={actions.requeueCancelled} disabled={isRetrying} className="text-primary-400">
+            <ListPlus className="size-3.5" />
+            {t("detail.requeueCancelled", { count: actions.cancelledTrackCount })}
           </DropdownMenuItem>
         )}
         {canResume ? (
-          <DropdownMenuItem onClick={resume} className="text-primary-400">
+          <DropdownMenuItem onClick={resume} className="text-primary-400 md:hidden">
             <Play className="size-3.5" />
             {t("detail.resume")}
           </DropdownMenuItem>

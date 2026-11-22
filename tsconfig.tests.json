@@ -45,8 +45,6 @@
     "app/features/library/hooks/__tests__/useLibrarySelection.test.ts",
     "app/features/requests/components/RequestDetail/__tests__/RequestDetailHero.test.tsx",
     "app/features/requests/components/RequestDetail/__tests__/RequestDetailHeroMenu.test.tsx",
-    "app/features/requests/components/RequestDetail/__tests__/RequestDetailStats.test.tsx",
-    "app/features/requests/components/RequestDetail/__tests__/TrackActionsCell.test.tsx",
     "app/features/requests/components/Toolbar/SearchInput/__tests__/SearchInput.test.tsx",
     "app/features/requests/hooks/__tests__/useFilteredRequests.test.ts",
     "app/features/requests/hooks/__tests__/useRequestActions.actions.test.ts",

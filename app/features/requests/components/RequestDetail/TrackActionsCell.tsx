@@ -1,50 +1,18 @@
 "use client";
 
-import { RequestStatus } from "@api/__generated__/types";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@components/ui/DropdownMenu";
-import { isCancellableStatus, isRetryableStatus } from "@utils/status-helpers";
-import { Check, ChevronsUp, Eye, EyeOff, MoreVertical, RefreshCw, Sparkles, X } from "lucide-react";
+import { MoreVertical } from "lucide-react";
 import { useTranslation } from "react-i18next";
+
 import { mobileActionsButton } from "../styles";
+import { TRACK_ACTION_META } from "./consts";
+import { lockedReason, menuItemBody, trackActionTone } from "./styles";
 import type { TrackActionsCellProps } from "./types";
 
-export function TrackActionsCell({
-  track,
-  canAct,
-  canApprove,
-  onRetry,
-  onCancel,
-  onPrioritize,
-  onSetWatch,
-  onApprove,
-  onReject,
-  onUpgrade,
-}: TrackActionsCellProps) {
+export function TrackActionsCell({ track, actions, onAction }: TrackActionsCellProps) {
   const { t } = useTranslation("requests");
 
-  if (!canAct) {
-    return <span className="text-fg/20 block text-right text-xs">-</span>;
-  }
-
-  const isPendingApproval = track.status === RequestStatus.enum.pending_approval;
-  const showApproval = canApprove && isPendingApproval;
-  const showRetry = isRetryableStatus(track.status);
-  const showPrioritize = track.status === RequestStatus.enum.queued && track.priority === 0;
-  const showCancel = isCancellableStatus(track.status);
-  const isFailed = track.status === RequestStatus.enum.failed;
-  const showStopWatch = isFailed && track.watch_enabled;
-  const showResumeWatch = isFailed && !track.watch_enabled;
-  const showUpgrade = track.status === RequestStatus.enum.complete;
-
-  if (
-    !showApproval &&
-    !showRetry &&
-    !showPrioritize &&
-    !showCancel &&
-    !showStopWatch &&
-    !showResumeWatch &&
-    !showUpgrade
-  ) {
+  if (actions.length === 0) {
     return <span className="text-fg/20 block text-right text-xs">-</span>;
   }
 
@@ -52,59 +20,36 @@ export function TrackActionsCell({
     <div className="flex items-center justify-end">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <button className={mobileActionsButton()} aria-label={t("tracks.actionsMenu")}>
+          <button
+            type="button"
+            className={mobileActionsButton()}
+            aria-label={t("tracks.actionsFor", { title: track.title })}
+          >
             <MoreVertical className="size-4" />
           </button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          {showApproval && (
-            <DropdownMenuItem onClick={onApprove} className="text-success-vivid hover:text-success-soft">
-              <Check className="size-4" />
-              {t("approval.approveTrack")}
-            </DropdownMenuItem>
-          )}
-          {showApproval && (
-            <DropdownMenuItem onClick={onReject} className="text-destructive-vivid hover:text-destructive-soft">
-              <X className="size-4" />
-              {t("approval.rejectTrack")}
-            </DropdownMenuItem>
-          )}
-          {showRetry && (
-            <DropdownMenuItem onClick={onRetry} className="text-success-vivid hover:text-success-soft">
-              <RefreshCw className="size-4" />
-              {t("tracks.retry")}
-            </DropdownMenuItem>
-          )}
-          {showPrioritize && (
-            <DropdownMenuItem onClick={onPrioritize} title={t("tracks.jumpTheQueueTitle")} className="text-primary-400">
-              <ChevronsUp className="size-4" />
-              {t("tracks.jumpTheQueue")}
-            </DropdownMenuItem>
-          )}
-          {showUpgrade && (
-            <DropdownMenuItem onClick={onUpgrade}>
-              <Sparkles className="size-4" />
-              {t("tracks.upgrade")}
-            </DropdownMenuItem>
-          )}
-          {showStopWatch && (
-            <DropdownMenuItem onClick={() => onSetWatch(false)}>
-              <EyeOff className="size-4" />
-              {t("watch.stop")}
-            </DropdownMenuItem>
-          )}
-          {showResumeWatch && (
-            <DropdownMenuItem onClick={() => onSetWatch(true)} title={t("watch.resumeTitle")}>
-              <Eye className="size-4" />
-              {t("watch.resume")}
-            </DropdownMenuItem>
-          )}
-          {showCancel && (
-            <DropdownMenuItem onClick={onCancel} className="text-destructive-vivid hover:text-destructive-soft">
-              <X className="size-4" />
-              {t("tracks.cancel")}
-            </DropdownMenuItem>
-          )}
+        <DropdownMenuContent align="end" className="max-w-64">
+          {actions.map((action) => {
+            const meta = TRACK_ACTION_META[action.id];
+            const Icon = meta.icon;
+            const locked = action.lock !== null;
+            return (
+              <DropdownMenuItem
+                key={action.id}
+                disabled={locked}
+                onClick={() => onAction(action.id)}
+                className={locked ? undefined : trackActionTone({ tone: meta.tone })}
+              >
+                <Icon className="size-4" />
+                <span className={menuItemBody()}>
+                  {t(meta.labelKey)}
+                  {action.lock !== null ? (
+                    <span className={lockedReason()}>{t(`trackActions.lock.${action.lock}`)}</span>
+                  ) : null}
+                </span>
+              </DropdownMenuItem>
+            );
+          })}
         </DropdownMenuContent>
       </DropdownMenu>
     </div>

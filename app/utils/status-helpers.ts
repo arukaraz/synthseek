@@ -2,6 +2,7 @@ import {
   ACTIVE_STATUSES,
   DropImportBatchStatus,
   FailureReason,
+  ReimportableFailureReason,
   RequestStatus,
   UNRESOLVED_STATUSES,
 } from "@api/__generated__/types";
@@ -42,5 +43,5 @@ export function isReimportableFailure(
   reason: FailureReason | null | undefined,
   downloadedFile: string | null | undefined
 ): boolean {
-  return reason === FailureReason.enum.import_rejected && !!downloadedFile;
+  return ReimportableFailureReason.safeParse(reason).success && !!downloadedFile;
 }

@@ -107,6 +107,12 @@ export const tableCell = cva("text-fg/70 px-3 py-2 align-middle sm:px-4 sm:py-3"
 
 export type TableCellStyleProps = VariantProps<typeof tableCell>;
 
+export const tableGroupCell = cva(
+  "bg-fg/5 text-fg/50 px-3 py-1.5 text-10 font-semibold tracking-wider uppercase sm:px-4"
+);
+
+export const tableExpansionCell = cva("bg-fg/[0.03] px-3 pt-1 pb-3 sm:px-4");
+
 export const tableEmptyCell = cva("text-fg/50 px-4 py-12 text-center", {
   variants: {},
   defaultVariants: {},

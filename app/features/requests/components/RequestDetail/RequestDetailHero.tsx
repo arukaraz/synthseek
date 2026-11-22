@@ -7,7 +7,7 @@ import { useContentRequestFlow } from "@features/search/components/ContentReques
 import { artworkImage } from "@utils/artworkProxy";
 import { cn } from "@utils/cn";
 import { formatDateTime } from "@utils/formatters";
-import { ArrowLeft, ListPlus, Loader2, RefreshCw } from "lucide-react";
+import { ArrowLeft, Check, ListPlus, Loader2, Lock, Play, RefreshCw } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
@@ -27,12 +27,11 @@ import {
   heroControlsCluster,
   heroControlsColumn,
   heroControlsRow,
-  heroDesktopStatus,
   heroIdentityBlock,
   heroLastUpdated,
+  heroLockNote,
   heroMetaValue,
   heroMobileLastUpdated,
-  heroMobileStatus,
   heroMobileTopRow,
   heroMoreButtonDesktop,
   heroMoreButtonMobile,
@@ -70,6 +69,7 @@ export function RequestDetailHero({ request, tracks, onBack }: RequestDetailHero
   const showKebab =
     canApprove ||
     canRetry ||
+    actions.canRequeueCancelled ||
     canCancel ||
     canPause ||
     canResume ||
@@ -152,13 +152,7 @@ export function RequestDetailHero({ request, tracks, onBack }: RequestDetailHero
                   {typeLabel}
                 </p>
                 <div className="flex items-center gap-2">
-                  <StatusBadge
-                    status={request.status}
-                    size="lg"
-                    showIcon
-                    showLabel={false}
-                    className={heroMobileStatus()}
-                  />
+                  <StatusBadge status={request.status} size="md" showIcon />
                   {showKebab && (
                     <RequestDetailHeroMenu
                       actions={actions}
@@ -204,6 +198,12 @@ export function RequestDetailHero({ request, tracks, onBack }: RequestDetailHero
                     />
                   </p>
                 )}
+                {actions.canManage ? null : (
+                  <p className={heroLockNote()} data-cy="request-lock-note">
+                    <Lock aria-hidden />
+                    {t("detail.lockNote")}
+                  </p>
+                )}
               </div>
             </div>
           </div>
@@ -220,7 +220,24 @@ export function RequestDetailHero({ request, tracks, onBack }: RequestDetailHero
 
             <div className={heroControlsRow()}>
               <div className={heroControlsCluster()}>
-                <StatusBadge status={request.status} size="md" showIcon className={heroDesktopStatus()} />
+                {canResume && (
+                  <Button onClick={actions.resume} variant="outline" size="sm" className={heroRetryButton()}>
+                    <Play className="mr-1.5 size-3.5" />
+                    {t("detail.resume")}
+                  </Button>
+                )}
+                {canApprove && (
+                  <Button
+                    onClick={actions.approve}
+                    variant="outline"
+                    size="sm"
+                    disabled={actions.isApproving}
+                    className={heroRetryButton()}
+                  >
+                    <Check className="mr-1.5 size-3.5" />
+                    {t("approval.approvePending", { count: pendingApprovalCount })}
+                  </Button>
+                )}
                 {canRetry && (
                   <Button
                     onClick={retry}
@@ -234,7 +251,7 @@ export function RequestDetailHero({ request, tracks, onBack }: RequestDetailHero
                     ) : (
                       <RefreshCw className="mr-1.5 size-3.5" />
                     )}
-                    {t("detail.retryTracks", { count: actions.retryableTrackCount })}
+                    {t("detail.retryFailed", { count: actions.failedTrackCount })}
                   </Button>
                 )}
 

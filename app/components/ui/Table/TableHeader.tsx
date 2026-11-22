@@ -4,10 +4,10 @@ import { tableHeader, tableHeaderRow } from "./styles";
 import { TableHeaderCell } from "./TableHeaderCell";
 import type { TableHeaderProps } from "./types";
 
-export function TableHeader<TData>({ columns, sortState, onSort }: TableHeaderProps<TData>) {
+export function TableHeader<TData>({ columns, sortState, onSort, rowRef }: TableHeaderProps<TData>) {
   return (
     <thead className={tableHeader()}>
-      <tr className={tableHeaderRow()}>
+      <tr ref={rowRef} className={tableHeaderRow()}>
         {columns.map((column) => (
           <TableHeaderCell
             key={column.key}

@@ -65,6 +65,8 @@ export function makeRequestsTrack(overrides: Partial<TrackRequest> = {}): TrackR
     source: "deezer",
     failure_reason: null,
     downloaded_file: null,
+    library_path: null,
+    file_bitrate: null,
     retry_count: 0,
     next_retry_at: null,
     watch_enabled: true,

@@ -19,7 +19,10 @@ export function TableHeaderCell<TData>({ column, isActive, direction, onSort }: 
   }
 
   return (
-    <th className={cn(tableHead(), column.className)}>
+    <th
+      className={cn(tableHead(), column.className)}
+      aria-sort={isActive && direction ? (direction === "asc" ? "ascending" : "descending") : "none"}
+    >
       <button
         type="button"
         onClick={() => onSort(column.key)}

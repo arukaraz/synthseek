@@ -208,8 +208,10 @@ describe("isDropImportBatchInFlight", () => {
 });
 
 describe("isReimportableFailure", () => {
-  it("returns true only when reason is import_rejected and a downloaded file is present", () => {
+  it("returns true for every reason the server re-imports from a kept file", () => {
     expect(isReimportableFailure(FailureReason.enum.import_rejected, "track.mp3")).toBe(true);
+    expect(isReimportableFailure(FailureReason.enum.timeout, "track.mp3")).toBe(true);
+    expect(isReimportableFailure(FailureReason.enum.environment, "track.mp3")).toBe(true);
   });
 
   it("returns false when reason is import_rejected but no downloaded file", () => {

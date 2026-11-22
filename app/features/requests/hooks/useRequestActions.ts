@@ -5,6 +5,7 @@ import {
   RequestStatus,
   type MediaServerKey,
   type RequestListItem,
+  type RetryScope,
   type TrackRequest,
 } from "@api/__generated__/types";
 import {
@@ -31,14 +32,16 @@ import { isOwnerOrAdminFE } from "@utils/authorization";
 import { confirm } from "@utils/confirm";
 import { downloadText } from "@utils/download";
 import { librarySourceName } from "@utils/library-sources";
-import { isCancellableStatus, isProcessingStatus, isRetryableStatus } from "@utils/status-helpers";
+import { isCancellableStatus, isProcessingStatus } from "@utils/status-helpers";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
+import { idsOfStatus } from "../components/RequestDetail/helpers";
 import { exportFilename } from "../helpers";
 
 interface UseRequestActions {
   retry: () => void;
+  requeueCancelled: () => void;
   remove: () => Promise<void>;
   cancel: () => Promise<void>;
   pause: () => void;
@@ -54,7 +57,9 @@ interface UseRequestActions {
   pendingApprovalCount: number;
   isApproving: boolean;
   canRetry: boolean;
-  retryableTrackCount: number;
+  failedTrackCount: number;
+  canRequeueCancelled: boolean;
+  cancelledTrackCount: number;
   canRequestMissing: boolean;
   missingTrackCount: number;
   canRemove: boolean;
@@ -104,8 +109,10 @@ export function useRequestActions(request: RequestListItem, tracks: TrackRequest
     .map((track) => track.id);
   const canApprove = isAdmin && pendingApprovalTrackIds.length > 0;
 
-  const retryableTrackCount = tracks.filter((track) => isRetryableStatus(track.status)).length;
-  const canRetry = canManage && retryableTrackCount > 0;
+  const failedTrackIds = idsOfStatus(tracks, RequestStatus.enum.failed);
+  const cancelledTrackIds = idsOfStatus(tracks, RequestStatus.enum.cancelled);
+  const canRetry = canManage && failedTrackIds.length > 0;
+  const canRequeueCancelled = canManage && cancelledTrackIds.length > 0;
   const missingTrackCount = Math.max(0, request.total_tracks - request.requested_tracks);
   const canRequestMissing = canManage && !isPlaylist && missingTrackCount > 0;
   const canCancel = canManage && isCancellableStatus(request.status);
@@ -122,9 +129,17 @@ export function useRequestActions(request: RequestListItem, tracks: TrackRequest
 
   const isRetrying = isPlaylist ? retryPlaylist.isPending : retryAlbum.isPending;
 
+  const retryOnly = (only: RetryScope) => {
+    if (isPlaylist) retryPlaylist.mutate({ playlistId: request.id, only });
+    else retryAlbum.mutate({ albumId: request.id, only });
+  };
+
   const retry = () => {
-    if (isPlaylist) retryPlaylist.mutate({ playlistId: request.id });
-    else retryAlbum.mutate({ albumId: request.id });
+    if (failedTrackIds.length > 0) retryOnly(RequestStatus.enum.failed);
+  };
+
+  const requeueCancelled = () => {
+    if (cancelledTrackIds.length > 0) retryOnly(RequestStatus.enum.cancelled);
   };
 
   const prioritize = () => {
@@ -197,6 +212,7 @@ export function useRequestActions(request: RequestListItem, tracks: TrackRequest
 
   return {
     retry,
+    requeueCancelled,
     remove,
     cancel,
     pause,
@@ -212,7 +228,9 @@ export function useRequestActions(request: RequestListItem, tracks: TrackRequest
     pendingApprovalCount: pendingApprovalTrackIds.length,
     isApproving: approveTracks.isPending || rejectTracks.isPending,
     canRetry,
-    retryableTrackCount,
+    failedTrackCount: failedTrackIds.length,
+    canRequeueCancelled,
+    cancelledTrackCount: cancelledTrackIds.length,
     canRequestMissing,
     missingTrackCount,
     canRemove: canManage,

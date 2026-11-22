@@ -28,7 +28,10 @@ function makeActions(overrides: Partial<Actions> = {}): Actions {
     exportJspf: vi.fn().mockResolvedValue(undefined),
     canManage: true,
     canRetry: false,
-    retryableTrackCount: 2,
+    failedTrackCount: 2,
+    requeueCancelled: vi.fn(),
+    canRequeueCancelled: false,
+    cancelledTrackCount: 0,
     canRequestMissing: false,
     missingTrackCount: 0,
     canRemove: false,
@@ -67,7 +70,8 @@ describe("RequestDetailHeroMenu", () => {
 
     await user.click(screen.getByRole("button", { name: "More actions" }));
 
-    expect(screen.getByRole("menuitem", { name: "Retry 2 tracks" })).toBeInTheDocument();
+    expect(screen.getByRole("menuitem", { name: "Retry 2 failed" })).toBeInTheDocument();
+    expect(screen.queryByRole("menuitem", { name: /cancelled again/ })).not.toBeInTheDocument();
     expect(screen.getByRole("menuitem", { name: "Remove Playlist" })).toBeInTheDocument();
     expect(screen.queryByRole("menuitem", { name: "Cancel downloads" })).not.toBeInTheDocument();
   });
@@ -90,9 +94,22 @@ describe("RequestDetailHeroMenu", () => {
     renderMenu({ canRetry: true, retry });
 
     await user.click(screen.getByRole("button", { name: "More actions" }));
-    await user.click(screen.getByRole("menuitem", { name: "Retry 2 tracks" }));
+    await user.click(screen.getByRole("menuitem", { name: "Retry 2 failed" }));
 
     expect(retry).toHaveBeenCalledOnce();
+  });
+
+  it("requests the cancelled tracks again from their own item, apart from the retry", async () => {
+    const requeueCancelled = vi.fn();
+    const retry = vi.fn();
+    const user = userEvent.setup();
+    renderMenu({ canRequeueCancelled: true, cancelledTrackCount: 3, requeueCancelled, retry });
+
+    await user.click(screen.getByRole("button", { name: "More actions" }));
+    await user.click(screen.getByRole("menuitem", { name: "Request 3 cancelled again" }));
+
+    expect(requeueCancelled).toHaveBeenCalledOnce();
+    expect(retry).not.toHaveBeenCalled();
   });
 
   it("calls onExportFull when the max-compatibility export is selected", async () => {

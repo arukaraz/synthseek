@@ -1,198 +1,174 @@
 "use client";
 
-import { DataTable, type ColumnDef } from "@components/ui/Table";
 import { ContentType, type TrackRequest } from "@api/__generated__/types";
-import { confirm } from "@utils/confirm";
+import { Checkbox } from "@components/ui/Checkbox";
+import { DataTable, type ColumnDef } from "@components/ui/Table";
 import { formatRelativeTime } from "@utils/formatters";
-import { isOwnerOrAdminFE } from "@utils/authorization";
-import {
-  useApproveTracks,
-  useCancelTrack,
-  usePrioritizeTrack,
-  useRejectTracks,
-  useRequest,
-  useRetryTrack,
-  useSetWatch,
-} from "@hooks/api";
-import { useAuthContext } from "@modules/providers/AuthProvider";
-import { useCallback, useMemo, useState } from "react";
+import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { compareByStatus } from "../../helpers";
-import { PriorityCell } from "./PriorityCell";
-import { RejectApprovalDialog } from "./RejectApprovalDialog";
+
+import { canonicalPositions, hasMultipleDiscs, toTrackSortKey, trackActionsFor, trackNumberLabel } from "./helpers";
+import { sortHeaderGroup, trackNumber } from "./styles";
 import { TrackActionsCell } from "./TrackActionsCell";
+import { TrackDetailPanel } from "./TrackDetailPanel";
+import { TrackSortButton } from "./TrackSortButton";
 import { TrackSourceCell } from "./TrackSourceCell";
 import { TrackStatusCell } from "./TrackStatusCell";
 import { TrackTitleCell } from "./TrackTitleCell";
-import { Button } from "@components/ui/Button";
-import { SectionLoading } from "@components/ui/SectionLoading";
-import { tracksLoadFailed } from "./styles";
 import type { RequestDetailTracksProps } from "./types";
 
 export function RequestDetailTracks({
   request,
   tracks,
-  isResolving,
-  hasFailed,
-  onRetryLoad,
+  visible,
+  sort,
+  onSort,
+  selectedIds,
+  onSelectionChange,
+  expandedId,
+  onToggleExpanded,
+  permissions,
+  onAction,
 }: RequestDetailTracksProps) {
   const { t } = useTranslation("requests");
-  const { currentUser, isAdmin } = useAuthContext();
-  const retryTrack = useRetryTrack();
-  const cancelTrack = useCancelTrack();
-  const prioritizeTrack = usePrioritizeTrack();
-  const setWatch = useSetWatch();
-  const approveTracks = useApproveTracks();
-  const rejectTracks = useRejectTracks();
-  const upgradeRequest = useRequest();
-  const [rejectTrackId, setRejectTrackId] = useState<string | null>(null);
-  const canAct = isOwnerOrAdminFE({ id: request.requestedBy.id }, currentUser);
   const isAlbum = request.contentType === ContentType.enum.album;
-  const albumExternalId = request.external_id;
+  const multiDisc = isAlbum && hasMultipleDiscs(tracks);
+  const canonical = sort === null || sort.key === "number";
+  const showDiscHeaders = multiDisc && canonical;
+  const positions = useMemo(() => canonicalPositions(tracks), [tracks]);
+  const selectable = permissions.canManage;
+  const selectedVisible = visible.filter((track) => selectedIds.has(track.id)).length;
+  const allSelected = visible.length > 0 && selectedVisible === visible.length;
 
-  const handleUpgrade = useCallback(
-    (track: TrackRequest) => {
-      upgradeRequest.mutate({
-        track: {
-          external_id: track.external_id,
-          credited_artist: track.credited_artist,
-          title: track.title,
-          isrc: track.isrc,
-          track_number: track.track_number,
-          disc_number: track.disc_number,
-          duration_ms: track.duration_ms,
-          explicit: track.explicit,
-        },
-        config: {
-          bitrate: { value: track.bitrate, matching: track.bitrate_matching },
-          format: { value: track.format, matching: track.format_matching },
-          upgrade: true,
-        },
-        album_external_id: isAlbum ? albumExternalId : "",
-      });
+  const toggleOne = (id: string, checked: boolean) => {
+    const next = new Set(selectedIds);
+    if (checked) next.add(id);
+    else next.delete(id);
+    onSelectionChange(next);
+  };
+
+  const toggleAll = () => {
+    onSelectionChange(allSelected ? new Set() : new Set(visible.map((track) => track.id)));
+  };
+
+  const columns: ColumnDef<TrackRequest>[] = [
+    ...(selectable
+      ? [
+          {
+            key: "select",
+            header: () => (
+              <Checkbox
+                checked={allSelected ? true : selectedVisible > 0 ? "indeterminate" : false}
+                onCheckedChange={toggleAll}
+                aria-label={t("bulk.selectVisible")}
+              />
+            ),
+            cell: (track: TrackRequest) => (
+              <Checkbox
+                checked={selectedIds.has(track.id)}
+                onCheckedChange={(checked) => toggleOne(track.id, checked === true)}
+                aria-label={t("bulk.selectTrack", { title: track.title })}
+              />
+            ),
+            className: "w-10",
+          },
+        ]
+      : []),
+    {
+      key: "number",
+      header: "#",
+      sortable: true,
+      cell: (track) => (
+        <span className={trackNumber()}>
+          {trackNumberLabel(track, positions.get(track.id) ?? 0, isAlbum, multiDisc && !canonical)}
+        </span>
+      ),
+      className: "w-12 text-right",
     },
-    [upgradeRequest, isAlbum, albumExternalId]
-  );
-
-  const handleCancel = useCallback(
-    async (track: TrackRequest) => {
-      const confirmed = await confirm({
-        title: t("confirm.cancelTrackTitle"),
-        message: t("confirm.cancelTrackMessage", { title: track.title, artist: track.credited_artist }),
-        variant: "danger",
-        confirmText: t("confirm.cancelConfirm"),
-        cancelText: t("confirm.cancelKeep"),
-      });
-      if (confirmed) cancelTrack.mutate({ trackId: track.id });
+    {
+      key: "title",
+      header: () => (
+        <span className={sortHeaderGroup()}>
+          <TrackSortButton label={t("tracks.trackHeader")} sortKey="title" sort={sort} onSort={onSort} />
+          <span aria-hidden>·</span>
+          <TrackSortButton label={t("tracks.artistHeader")} sortKey="artist" sort={sort} onSort={onSort} />
+        </span>
+      ),
+      cell: (track) => (
+        <TrackTitleCell track={track} expanded={expandedId === track.id} onToggle={() => onToggleExpanded(track.id)} />
+      ),
     },
-    [cancelTrack, t]
-  );
-
-  const columns = useMemo<ColumnDef<TrackRequest>[]>(
-    () => [
-      {
-        key: "title",
-        header: t("tracks.trackHeader"),
-        cell: (track) => <TrackTitleCell track={track} />,
-      },
-      {
-        key: "artist",
-        header: t("tracks.artistHeader"),
-        cell: (track) => <span className="block truncate">{track.credited_artist}</span>,
-        className: "hidden xl:table-cell",
-      },
-      {
-        key: "status",
-        header: t("tracks.statusHeader"),
-        cell: (track) => <TrackStatusCell track={track} />,
-        className: "w-56",
-      },
-      {
-        key: "source",
-        header: t("tracks.sourceHeader"),
-        cell: (track) => <TrackSourceCell track={track} />,
-        className: "hidden w-36 xl:table-cell",
-      },
-      {
-        key: "completed",
-        header: t("tracks.completedHeader"),
-        cell: (track) => (
-          <span className="text-fg/40 text-xs">
-            {track.completed_at ? formatRelativeTime(new Date(track.completed_at)) : "-"}
-          </span>
-        ),
-        className: "hidden w-28 lg:table-cell",
-      },
-      {
-        key: "priority",
-        header: t("tracks.priorityHeader"),
-        cell: (track) => <PriorityCell track={track} />,
-        className: "hidden w-24 lg:table-cell",
-      },
-      {
-        key: "actions",
-        header: t("tracks.actionsHeader"),
-        cell: (track) => (
-          <TrackActionsCell
-            track={track}
-            canAct={canAct}
-            canApprove={isAdmin}
-            onRetry={() => retryTrack.mutate({ trackId: track.id })}
-            onCancel={() => handleCancel(track)}
-            onPrioritize={() => prioritizeTrack.mutate({ trackId: track.id })}
-            onSetWatch={(enabled) => setWatch.mutate({ trackId: track.id, enabled })}
-            onApprove={() => approveTracks.mutate({ trackIds: [track.id] })}
-            onReject={() => setRejectTrackId(track.id)}
-            onUpgrade={() => handleUpgrade(track)}
-          />
-        ),
-        className: "w-24 text-right",
-      },
-    ],
-    [canAct, isAdmin, retryTrack, prioritizeTrack, setWatch, approveTracks, handleCancel, handleUpgrade, t]
-  );
-
-  const sortedTracks = useMemo(() => [...tracks].sort((a, b) => compareByStatus(a.status, b.status)), [tracks]);
-
-  if (hasFailed) {
-    return (
-      <div className={tracksLoadFailed()}>
-        <p className="text-fg/60 text-sm">{t("tracks.loadFailed")}</p>
-        <Button variant="secondary" size="sm" onClick={onRetryLoad}>
-          {t("tracks.loadRetry")}
-        </Button>
-      </div>
-    );
-  }
-
-  if (isResolving) {
-    return <SectionLoading message={t("loading.tracks")} className="min-h-40" />;
-  }
+    {
+      key: "status",
+      header: t("tracks.statusHeader"),
+      sortable: true,
+      cell: (track) => <TrackStatusCell track={track} />,
+      className: "hidden w-56 sm:table-cell",
+    },
+    {
+      key: "source",
+      header: t("tracks.sourceHeader"),
+      sortable: true,
+      cell: (track) => <TrackSourceCell track={track} />,
+      className: "hidden w-36 xl:table-cell",
+    },
+    {
+      key: "completed",
+      header: t("tracks.completedHeader"),
+      sortable: true,
+      cell: (track) => (
+        <span className="text-fg/40 text-xs">
+          {track.completed_at ? formatRelativeTime(new Date(track.completed_at)) : "-"}
+        </span>
+      ),
+      className: "hidden w-28 lg:table-cell",
+    },
+    {
+      key: "actions",
+      header: <span className="sr-only">{t("tracks.actionsHeader")}</span>,
+      cell: (track) => (
+        <TrackActionsCell
+          track={track}
+          actions={trackActionsFor(track, permissions)}
+          onAction={(id) => onAction(id, track)}
+        />
+      ),
+      className: "w-12 text-right",
+    },
+  ];
 
   return (
-    <>
-      <DataTable
-        key={request.id}
-        data={sortedTracks}
-        columns={columns}
-        getRowId={(track) => track.id}
-        containerClassName="mx-3 mb-3 sm:mx-4 sm:mb-4"
-        minWidth="480px"
-        fixedLayout
-        rowAttrs={(track) => ({ "data-status": track.status })}
-        staggerDelay={0.01}
-        emptyMessage={t("tracks.empty")}
-      />
-      <RejectApprovalDialog
-        open={rejectTrackId !== null}
-        onOpenChange={(open) => {
-          if (!open) setRejectTrackId(null);
-        }}
-        count={1}
-        onConfirm={(reason) => {
-          if (rejectTrackId) rejectTracks.mutate({ trackIds: [rejectTrackId], reason });
-        }}
-      />
-    </>
+    <DataTable
+      data={visible}
+      columns={columns}
+      getRowId={(track) => track.id}
+      sortState={sort === null ? undefined : { field: sort.key, direction: sort.direction }}
+      onSort={(field) => {
+        const key = toTrackSortKey(field);
+        if (key !== null) onSort(key);
+      }}
+      containerClassName="mx-3 mb-3 sm:mx-4 sm:mb-4"
+      minWidth="320px"
+      fixedLayout
+      rowAttrs={(track) => ({ "data-status": track.status, "data-track-id": track.id })}
+      staggerDelay={0.01}
+      onRowClick={(track) => onToggleExpanded(track.id)}
+      emptyMessage={t(tracks.length === 0 ? "tracks.empty" : "tracks.emptyFiltered")}
+      renderGroupHeader={(track, index) =>
+        showDiscHeaders && (index === 0 || visible[index - 1]?.disc_number !== track.disc_number)
+          ? t("tracks.disc", { number: track.disc_number })
+          : null
+      }
+      renderExpansion={(track) =>
+        expandedId === track.id ? (
+          <TrackDetailPanel
+            track={track}
+            showPrivateDetails={permissions.canManage}
+            actions={trackActionsFor(track, permissions)}
+            onAction={(id) => onAction(id, track)}
+          />
+        ) : null
+      }
+    />
   );
 }
