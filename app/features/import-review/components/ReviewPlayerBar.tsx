@@ -2,11 +2,12 @@
 
 import { useTranslation } from "react-i18next";
 
-import { playerActions } from "@hooks/ui/player";
+import { PreviewAudition } from "@components/ui/PreviewButton";
 import { useDownloadSourceLabel } from "@hooks/ui/useDownloadSourceLabel";
 
-import { heldAudioUrl } from "../helpers";
-import { audioPlayer, playerBar, playerNow, playerSource } from "../styles";
+import { REVIEW_UNKNOWN_LENGTH } from "../constants";
+import { heldFileClip } from "../helpers";
+import { playerBar, playerNow, playerSource } from "../styles";
 import type { ReviewPlayerBarProps } from "../types";
 
 export function ReviewPlayerBar({ item }: ReviewPlayerBarProps) {
@@ -25,15 +26,7 @@ export function ReviewPlayerBar({ item }: ReviewPlayerBarProps) {
           {item.originalFilename}
         </span>
       </p>
-      <audio
-        key={item.id}
-        controls
-        autoPlay
-        className={audioPlayer()}
-        src={heldAudioUrl(item.id)}
-        onPlay={playerActions.pauseHere}
-        aria-label={t("review.actions.previewLabel", { name: trackLabel })}
-      />
+      <PreviewAudition clip={heldFileClip(item.id, trackLabel)} idleLabel={REVIEW_UNKNOWN_LENGTH} />
     </div>
   );
 }

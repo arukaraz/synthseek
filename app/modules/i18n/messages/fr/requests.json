@@ -387,9 +387,6 @@
       "unknown": "La dernière tentative a échoué pour une raison qui n'a pas été enregistrée."
     },
     "actions": {
-      "play": "Lire {{name}}",
-      "stop": "Arrêter la lecture de {{name}}",
-      "previewLabel": "Aperçu audio de {{name}}",
       "approve": "Valider",
       "discard": "Rejeter",
       "approveThisFile": "Approuver ce fichier",

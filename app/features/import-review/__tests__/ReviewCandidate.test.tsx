@@ -1,37 +1,47 @@
-import { render, screen, within } from "@testing-library/react";
+import { act, cleanup, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+
+import { FakeAudio } from "@test/mocks/audio.mock";
 
 const spies = vi.hoisted(() => ({
   approve: vi.fn(),
   discard: vi.fn(),
-  togglePlay: vi.fn(),
+  listen: vi.fn(),
 }));
 
 vi.mock("@hooks/api", () => ({
   useApproveHeldImport: () => ({ mutate: spies.approve, isPending: false }),
   useDiscardHeldImport: () => ({ mutate: spies.discard, isPending: false }),
 }));
+vi.mock("@hooks/ui/player", () => ({
+  playerActions: { pauseHere: vi.fn(), resumeHere: vi.fn() },
+  playerSnapshot: () => ({ playing: false, volume: 1, muted: false }),
+  subscribePlayer: () => () => undefined,
+}));
+
+import { catalogPreviewClip } from "@hooks/ui/trackPreview";
+import { resetTrackPreview, togglePreview } from "@hooks/ui/trackPreview/store";
 
 import { ReviewCandidate } from "../components/ReviewCandidate";
 import type { ImportReviewItem } from "../types";
 import { makeReviewItem } from "./factories";
 
-function renderCandidate(item: ImportReviewItem, options: { siblings?: number; isPlaying?: boolean } = {}) {
-  return render(
-    <ReviewCandidate
-      item={item}
-      index={0}
-      siblings={options.siblings ?? 0}
-      isPlaying={options.isPlaying ?? false}
-      onTogglePlay={spies.togglePlay}
-    />
-  );
+function renderCandidate(item: ImportReviewItem, options: { siblings?: number } = {}) {
+  return render(<ReviewCandidate item={item} index={0} siblings={options.siblings ?? 0} onListen={spies.listen} />);
 }
 
 describe("ReviewCandidate", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    FakeAudio.reset();
+    vi.stubGlobal("Audio", FakeAudio);
+  });
+
+  afterEach(() => {
+    cleanup();
+    resetTrackPreview();
+    vi.unstubAllGlobals();
   });
 
   it("compares the requested artist and title against what the fingerprint found, marking the words that differ", () => {
@@ -94,22 +104,35 @@ describe("ReviewCandidate", () => {
     expect(screen.queryByText("peer-one")).not.toBeInTheDocument();
   });
 
-  it("asks the shared player to play this file", async () => {
+  it("plays the held file and names it as the one to show in the player bar", async () => {
     const user = userEvent.setup();
     renderCandidate(makeReviewItem());
 
-    await user.click(screen.getByRole("button", { name: "Play Requested Song - Requested Artist" }));
+    await user.click(screen.getByRole("button", { name: "Play the file Requested Song - Requested Artist" }));
 
-    expect(spies.togglePlay).toHaveBeenCalledWith("held-1");
+    expect(spies.listen).toHaveBeenCalledWith("held-1");
+    expect(FakeAudio.only().src).toBe("/api/v1/review/held-1/audio");
   });
 
-  it("offers to stop when this file is the one playing", () => {
-    renderCandidate(makeReviewItem(), { isPlaying: true });
+  it("offers to stop the file once it sounds", async () => {
+    const user = userEvent.setup();
+    renderCandidate(makeReviewItem());
 
-    expect(screen.getByRole("button", { name: "Stop playing Requested Song - Requested Artist" })).toHaveAttribute(
-      "aria-pressed",
-      "true"
-    );
+    await user.click(screen.getByRole("button", { name: "Play the file Requested Song - Requested Artist" }));
+    act(() => FakeAudio.only().emit("playing"));
+
+    expect(screen.getByRole("button", { name: "Stop the file Requested Song - Requested Artist" })).toBeInTheDocument();
+  });
+
+  it("silences a catalog preview that was sounding, on the one audio element", async () => {
+    const user = userEvent.setup();
+    renderCandidate(makeReviewItem());
+    act(() => togglePreview(catalogPreviewClip("catalog-1", "Other Song")));
+
+    await user.click(screen.getByRole("button", { name: "Play the file Requested Song - Requested Artist" }));
+
+    expect(FakeAudio.made).toHaveLength(1);
+    expect(FakeAudio.only().src).toBe("/api/v1/review/held-1/audio");
   });
 
   it("approves without a confirmation step", async () => {

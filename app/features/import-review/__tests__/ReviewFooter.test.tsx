@@ -21,6 +21,7 @@ describe("ReviewFooter", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     spies.settings.data = { engine: { review: { retentionDays: 14 } } };
+    spies.settings.isError = false;
   });
 
   it("summarises the whole queue, not the rows on screen", () => {
@@ -109,6 +110,5 @@ describe("ReviewFooter", () => {
     render(<ReviewFooter totalCount={0} totalBytes={0} />);
 
     expect(screen.queryByLabelText("Keep for")).not.toBeInTheDocument();
-    spies.settings.isError = false;
   });
 });

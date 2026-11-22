@@ -9,7 +9,7 @@ import { filesCount, itemTitle, trackCard, trackCardArtist, trackCardHeader } fr
 import type { ReviewTrackCardProps } from "../types";
 import { ReviewCandidate } from "./ReviewCandidate";
 
-export function ReviewTrackCard({ group, playingId, onTogglePlay }: ReviewTrackCardProps) {
+export function ReviewTrackCard({ group, onListen }: ReviewTrackCardProps) {
   const { t } = useTranslation("requests");
   const { track, items, shown } = group;
   const siblings = items.length - 1;
@@ -38,8 +38,7 @@ export function ReviewTrackCard({ group, playingId, onTogglePlay }: ReviewTrackC
           item={item}
           index={items.indexOf(item)}
           siblings={siblings}
-          isPlaying={playingId === item.id}
-          onTogglePlay={onTogglePlay}
+          onListen={onListen}
         />
       ))}
     </article>

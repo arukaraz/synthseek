@@ -63,22 +63,19 @@ export interface ReviewReasonChipsProps {
 
 export interface ReviewRequestGroupProps {
   group: ReviewRequestGroup;
-  playingId: string | null;
-  onTogglePlay: (id: string) => void;
+  onListen: (id: string) => void;
 }
 
 export interface ReviewTrackCardProps {
   group: ReviewTrackGroup;
-  playingId: string | null;
-  onTogglePlay: (id: string) => void;
+  onListen: (id: string) => void;
 }
 
 export interface ReviewCandidateProps {
   item: ImportReviewItem;
   index: number;
   siblings: number;
-  isPlaying: boolean;
-  onTogglePlay: (id: string) => void;
+  onListen: (id: string) => void;
 }
 
 export interface ReviewCompareTableProps {

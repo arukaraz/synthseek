@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next";
 import { Button } from "@components/ui/Button";
 import { Input } from "@components/ui/Input";
 import { Notice } from "@components/ui/Notice";
+import { PreviewAudition } from "@components/ui/PreviewButton";
 import { Spinner } from "@components/ui/Spinner";
 import {
   useAssignUnidentified,
@@ -14,7 +15,7 @@ import {
   useResolveUnidentifiedLink,
 } from "@hooks/api/mutations/library/useUnidentifiedActions";
 import { useUnidentifiedSongCandidates } from "@hooks/api/queries/useUnidentifiedFiles";
-import { stopPreview } from "@hooks/ui/trackPreview";
+import { fileAuditionClip, stopPreview } from "@hooks/ui/trackPreview";
 
 import { lengthLabel } from "../helpers";
 import {
@@ -33,7 +34,6 @@ import {
   toolRow,
 } from "../styles";
 import type { MatchSongPanelProps, SongCandidate } from "../types";
-import { FileAudition } from "./FileAudition";
 import { LinkField } from "./LinkField";
 import { SongCandidateRow } from "./SongCandidateRow";
 import { StepHeader } from "./StepHeader";
@@ -69,7 +69,10 @@ export function MatchSongPanel({ group, file, onBack }: MatchSongPanelProps) {
       />
 
       <div className={panelTools()}>
-        <FileAudition file={file} />
+        <PreviewAudition
+          clip={fileAuditionClip(file.id, file.title, file.durationSeconds)}
+          idleLabel={lengthLabel(file.durationSeconds)}
+        />
         <form
           className={toolRow()}
           onSubmit={(event) => {

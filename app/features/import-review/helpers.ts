@@ -1,6 +1,7 @@
 import type { ParseKeys, TFunction } from "i18next";
 
 import { QuarantineReason } from "@api/__generated__/types";
+import type { PreviewClip } from "@hooks/ui/trackPreview";
 import { formatTrackDuration } from "@utils/formatters";
 import { foldText } from "@utils/search";
 
@@ -10,6 +11,7 @@ import {
   RETENTION_MIN_DAYS,
   REVIEW_AUDIO_PATH_PREFIX,
   REVIEW_AUDIO_PATH_SUFFIX,
+  REVIEW_CLIP_KEY_PREFIX,
   REVIEW_TRACK_ANCHOR_PREFIX,
 } from "./constants";
 import type {
@@ -118,6 +120,16 @@ export function durationDelta(observedMs: number, expectedMs: number): string {
 
 export function heldAudioUrl(heldImportId: string): string {
   return `${REVIEW_AUDIO_PATH_PREFIX}${encodeURIComponent(heldImportId)}${REVIEW_AUDIO_PATH_SUFFIX}`;
+}
+
+export function heldFileClip(heldImportId: string, title: string): PreviewClip {
+  return {
+    key: `${REVIEW_CLIP_KEY_PREFIX}${heldImportId}`,
+    subject: "file",
+    src: heldAudioUrl(heldImportId),
+    title,
+    fallbackSeconds: null,
+  };
 }
 
 export function parseRetentionDays(value: string): number | null {

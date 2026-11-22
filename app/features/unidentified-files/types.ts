@@ -125,10 +125,6 @@ export interface MatchSongPanelProps {
   onBack: () => void;
 }
 
-export interface FileAuditionProps {
-  file: UnidentifiedFile;
-}
-
 export interface SongCandidateRowProps {
   candidate: SongCandidate;
   fileDurationSeconds: number | null;

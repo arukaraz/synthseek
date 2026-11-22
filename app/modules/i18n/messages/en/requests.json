@@ -387,9 +387,6 @@
       "unknown": "The last attempt failed for a reason that was not recorded."
     },
     "actions": {
-      "play": "Play {{name}}",
-      "stop": "Stop playing {{name}}",
-      "previewLabel": "Audio preview of {{name}}",
       "approve": "Approve",
       "discard": "Discard",
       "approveThisFile": "Approve this file",

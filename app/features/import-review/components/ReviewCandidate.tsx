@@ -1,19 +1,20 @@
 "use client";
 
-import { Check, Pause, Play, Trash2 } from "lucide-react";
+import { Check, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { HeldImportStatus } from "@api/__generated__/types";
 import { Button } from "@components/ui/Button";
 import { ConfirmationModal } from "@components/ui/ConfirmationModal";
-import { IconButton } from "@components/ui/IconButton";
+import { PreviewButton } from "@components/ui/PreviewButton";
 import { useApproveHeldImport, useDiscardHeldImport } from "@hooks/api";
 import { enqueueReviewApproval } from "@hooks/api/subscriptions";
+import { useTrackPreview } from "@hooks/ui/trackPreview";
 import { useDownloadSourceLabel } from "@hooks/ui/useDownloadSourceLabel";
 import { formatBytes, formatRelativeTime } from "@utils/formatters";
 
-import { heldImportErrorKey } from "../helpers";
+import { heldFileClip, heldImportErrorKey } from "../helpers";
 import {
   actionsRow,
   approveNarrow,
@@ -31,7 +32,7 @@ import type { ReviewCandidateProps } from "../types";
 import { ReviewCompareTable } from "./ReviewCompareTable";
 import { ReviewReasonBadge } from "./ReviewReasonBadge";
 
-export function ReviewCandidate({ item, index, siblings, isPlaying, onTogglePlay }: ReviewCandidateProps) {
+export function ReviewCandidate({ item, index, siblings, onListen }: ReviewCandidateProps) {
   const { t } = useTranslation("requests");
   const sourceLabel = useDownloadSourceLabel();
   const approve = useApproveHeldImport();
@@ -39,6 +40,7 @@ export function ReviewCandidate({ item, index, siblings, isPlaying, onTogglePlay
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
 
   const trackLabel = t("review.trackDisplay", { title: item.track.title, artist: item.track.artist });
+  const audition = useTrackPreview(heldFileClip(item.id, trackLabel));
   const hasFailed = item.status === HeldImportStatus.enum.import_failed;
   const isBusy = item.status === HeldImportStatus.enum.importing || approve.isPending || discard.isPending;
 
@@ -55,17 +57,16 @@ export function ReviewCandidate({ item, index, siblings, isPlaying, onTogglePlay
     >
       <div className={candidateHeader()}>
         {hasFailed ? null : (
-          <IconButton
-            icon={isPlaying ? Pause : Play}
-            size="sm"
-            variant={isPlaying ? "primary" : "default"}
-            aria-label={
-              isPlaying
-                ? t("review.actions.stop", { name: trackLabel })
-                : t("review.actions.play", { name: trackLabel })
-            }
-            aria-pressed={isPlaying}
-            onClick={() => onTogglePlay(item.id)}
+          <PreviewButton
+            title={trackLabel}
+            subject="file"
+            status={audition.status}
+            clock={audition.clock}
+            available
+            onToggle={() => {
+              onListen(item.id);
+              audition.toggle();
+            }}
           />
         )}
         <span className={candidateMeta()}>

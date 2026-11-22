@@ -64,3 +64,9 @@ export const previewRingBar = cva("stroke-accent-400 [stroke-linecap:round]", {
 });
 
 export const previewTime = cva("tabular-nums");
+
+export const previewAudition = cva("bg-fg/5 flex items-center gap-3 rounded-lg px-3 py-2");
+
+export const previewAuditionSeek = cva("accent-primary-500 min-w-0 flex-1 disabled:opacity-40");
+
+export const previewAuditionTime = cva("text-fg/60 shrink-0 text-xs tabular-nums");

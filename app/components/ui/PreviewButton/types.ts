@@ -1,4 +1,4 @@
-import type { PreviewClock, PreviewStatus, PreviewSubject } from "@hooks/ui/trackPreview";
+import type { PreviewClip, PreviewClock, PreviewStatus, PreviewSubject } from "@hooks/ui/trackPreview";
 
 export type PreviewButtonTone = "overlay" | "row" | "cover";
 
@@ -24,4 +24,9 @@ export interface PreviewStateLabelProps {
 
 export interface PreviewTimeProps {
   clock: PreviewClock;
+}
+
+export interface PreviewAuditionProps {
+  clip: PreviewClip;
+  idleLabel: string;
 }

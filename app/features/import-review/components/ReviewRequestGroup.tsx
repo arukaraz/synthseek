@@ -11,7 +11,7 @@ import { requestGroup, requestGroupArt, requestGroupHeader, requestGroupName, re
 import type { ReviewRequestGroupProps } from "../types";
 import { ReviewTrackCard } from "./ReviewTrackCard";
 
-export function ReviewRequestGroup({ group, playingId, onTogglePlay }: ReviewRequestGroupProps) {
+export function ReviewRequestGroup({ group, onListen }: ReviewRequestGroupProps) {
   const { t } = useTranslation("requests");
   const { request, tracks } = group;
   const isPlaylist = request.contentType === ContentType.enum.playlist;
@@ -40,7 +40,7 @@ export function ReviewRequestGroup({ group, playingId, onTogglePlay }: ReviewReq
       </div>
 
       {tracks.map((track) => (
-        <ReviewTrackCard key={track.track.id} group={track} playingId={playingId} onTogglePlay={onTogglePlay} />
+        <ReviewTrackCard key={track.track.id} group={track} onListen={onListen} />
       ))}
     </li>
   );

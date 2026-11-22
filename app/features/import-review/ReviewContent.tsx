@@ -22,7 +22,7 @@ export function ReviewContent() {
   const review = useImportReview();
   const inFlight = useReviewApprovalsInFlight();
   const [filter, setFilter] = useState<ReasonFilter>("all");
-  const [playingId, setPlayingId] = useState<string | null>(null);
+  const [listeningId, setListeningId] = useState<string | null>(null);
 
   const held = review.data?.items ?? [];
   const items = held.filter((item) => !inFlight.has(item.id));
@@ -31,9 +31,7 @@ export function ReviewContent() {
   const counts = countReasons(items);
   const activeFilter = filter !== "all" && counts.some((entry) => entry.reason === filter) ? filter : "all";
   const groups = groupReviewItems(items, activeFilter);
-  const playing = items.find((item) => item.id === playingId) ?? null;
-
-  const togglePlay = (id: string) => setPlayingId((current) => (current === id ? null : id));
+  const listening = items.find((item) => item.id === listeningId) ?? null;
 
   return (
     <>
@@ -55,15 +53,14 @@ export function ReviewContent() {
               <ReviewRequestGroup
                 key={`${group.request.contentType}:${group.request.id}`}
                 group={group}
-                playingId={playingId}
-                onTogglePlay={togglePlay}
+                onListen={setListeningId}
               />
             ))}
           </ul>
         </>
       )}
 
-      {playing ? <ReviewPlayerBar item={playing} /> : null}
+      {listening ? <ReviewPlayerBar item={listening} /> : null}
 
       <ReviewFooter
         totalCount={(review.data?.totalCount ?? 0) - hidden.length}

@@ -387,9 +387,6 @@
       "unknown": "El último intento falló por un motivo que no se registró."
     },
     "actions": {
-      "play": "Reproducir {{name}}",
-      "stop": "Detener la reproducción de {{name}}",
-      "previewLabel": "Vista previa de audio de {{name}}",
       "approve": "Aprobar",
       "discard": "Descartar",
       "approveThisFile": "Aprobar este archivo",

@@ -16,7 +16,9 @@ export const contentScroll = cva("flex h-full min-h-0 min-w-0 flex-1 flex-col ov
 
 export const pageColumn = cva("flex min-w-0 flex-col");
 
-export const contentRoot = cva("mx-auto flex w-full max-w-3xl flex-col gap-5 p-4 sm:gap-6 sm:p-6 lg:max-w-6xl lg:p-10");
+export const columnFrame = cva("mx-auto w-full max-w-3xl px-4 sm:px-6 lg:max-w-6xl lg:px-10");
+
+export const contentRoot = cva([columnFrame(), "flex flex-col gap-5 py-4 sm:gap-6 sm:py-6 lg:py-10"]);
 
 export const sectionGrid = cva("grid grid-cols-1 items-stretch gap-5 sm:gap-6 lg:grid-cols-2");
 

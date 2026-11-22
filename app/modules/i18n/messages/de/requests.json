@@ -387,9 +387,6 @@
       "unknown": "Der letzte Versuch schlug aus einem nicht aufgezeichneten Grund fehl."
     },
     "actions": {
-      "play": "{{name}} abspielen",
-      "stop": "Wiedergabe von {{name}} stoppen",
-      "previewLabel": "Hörprobe von {{name}}",
       "approve": "Freigeben",
       "discard": "Verwerfen",
       "approveThisFile": "Diese Datei freigeben",

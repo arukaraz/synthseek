@@ -23,14 +23,12 @@ vi.mock("../components/ReviewCandidate", () => ({
   ReviewCandidate: ({
     item,
     siblings,
-    onTogglePlay,
+    onListen,
   }: {
     item: { id: string };
     siblings: number;
-    onTogglePlay: (id: string) => void;
-  }) => (
-    <button type="button" onClick={() => onTogglePlay(item.id)}>{`candidate ${item.id} siblings ${siblings}`}</button>
-  ),
+    onListen: (id: string) => void;
+  }) => <button type="button" onClick={() => onListen(item.id)}>{`candidate ${item.id} siblings ${siblings}`}</button>,
 }));
 
 vi.mock("../components/ReviewFooter", () => ({
@@ -120,21 +118,23 @@ describe("ImportReviewModal", () => {
     expect(screen.queryByText("Reggaeton")).not.toBeInTheDocument();
   });
 
-  it("plays one file at a time in a shared player bar", async () => {
+  it("shows the file listened to last in one shared player bar, with no audio element of its own", async () => {
     const user = userEvent.setup();
     spies.review.data = twoRequests();
     const { baseElement } = render(<ImportReviewModal open onOpenChange={vi.fn()} focusTrackId={null} />);
 
-    expect(baseElement.querySelector("audio")).toBeNull();
+    expect(screen.queryByRole("slider")).not.toBeInTheDocument();
     await user.click(screen.getByText("candidate held-3 siblings 0"));
-    expect(baseElement.querySelectorAll("audio")).toHaveLength(1);
-    expect(baseElement.querySelector("audio")).toHaveAttribute("src", "/api/v1/review/held-3/audio");
+    expect(screen.getAllByRole("slider")).toHaveLength(1);
+    expect(
+      screen.getByRole("slider", { name: "Position in the file Gasolina - Requested Artist" })
+    ).toBeInTheDocument();
 
     await user.click(screen.getByText("candidate held-1 siblings 1"));
-    expect(baseElement.querySelectorAll("audio")).toHaveLength(1);
-    expect(baseElement.querySelector("audio")).toHaveAttribute("src", "/api/v1/review/held-1/audio");
-
-    await user.click(screen.getByText("candidate held-1 siblings 1"));
+    expect(screen.getAllByRole("slider")).toHaveLength(1);
+    expect(
+      screen.getByRole("slider", { name: "Position in the file Beautiful - Requested Artist" })
+    ).toBeInTheDocument();
     expect(baseElement.querySelector("audio")).toBeNull();
   });
 

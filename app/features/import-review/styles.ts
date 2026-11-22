@@ -125,8 +125,6 @@ export const playerNow = cva("text-fg/80 truncate text-xs");
 
 export const playerSource = cva("text-fg/50");
 
-export const audioPlayer = cva("h-9 w-full");
-
 export const reasonBadge = cva("inline-flex shrink-0 items-center rounded px-1.5 py-0.5 text-10 font-medium", {
   variants: {
     tone: {
