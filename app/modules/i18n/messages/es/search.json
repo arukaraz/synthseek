@@ -274,6 +274,12 @@
       "peer": "Pares",
       "destination": "Destino"
     },
+    "presetEditor": {
+      "heading": "Igual que lo que seguiría",
+      "changes_one": "{{count}} cambio sobre lo que seguiría",
+      "changes_other": "{{count}} cambios sobre lo que seguiría",
+      "restoreRow": "Volver al valor que sigue"
+    },
     "preset": {
       "heading": "Tu preset",
       "changes_one": "{{count}} cambio sobre tu preset",

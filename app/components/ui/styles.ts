@@ -146,6 +146,9 @@ export type DropdownItemProps = VariantProps<typeof dropdownItem>;
 
 export const popoverLayer = "z-10001";
 
+export const menuFitsViewport =
+  "max-h-[calc(var(--radix-dropdown-menu-content-available-height)_-_env(safe-area-inset-bottom,0px))] overflow-x-hidden overflow-y-auto overscroll-contain";
+
 export const terminalSurface = "bg-surface-sunken";
 
 export const modalCenterContainer = cva("pointer-events-none fixed inset-0 flex items-center justify-center p-4", {

@@ -95,7 +95,7 @@
     },
     "--status-importing": { "label": "Solicitud: importando", "hint": "Archivándose en la biblioteca" },
     "--status-pending-import-review": {
-      "label": "Solicitud: en revisión de importaciones",
+      "label": "Solicitud: por revisar",
       "hint": "Un archivo descargado que espera que un administrador lo apruebe o lo descarte"
     },
     "--status-syncing": { "label": "Solicitud: sincronizando", "hint": "Una sincronización de la biblioteca en curso" },

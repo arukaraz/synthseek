@@ -50,6 +50,7 @@
   "statusFilter": {
     "all": "Todas",
     "pending_approval": "Esperando aprobación",
+    "review": "Por revisar",
     "active": "Activas",
     "done": "Completadas",
     "failed": "Fallidas",
@@ -100,6 +101,7 @@
     "lockNote": "Solo quien la pidió o un admin puede cambiarla",
     "requestMissing_one": "Pedir la canción que falta",
     "requestMissing_other": "Pedir las {{count}} canciones que faltan",
+    "openReviewFor": "Por revisar: abrir la revisión de importación de {{title}}",
     "jumpTheQueue": "Saltar la cola",
     "cancelDownloads": "Cancelar descargas",
     "pause": "Pausar",
@@ -132,10 +134,6 @@
       "failed": "Fallidas",
       "cancelled": "Canceladas"
     },
-    "done_one": "{{count}} completa",
-    "done_other": "{{count}} completas",
-    "doneAndActive_one": "{{done}} completa, {{active}} en curso",
-    "doneAndActive_other": "{{done}} completas, {{active}} en curso",
     "duplicates_one": "{{count}} duplicada ignorada",
     "duplicates_other": "{{count}} duplicadas ignoradas",
     "figureLabel": "{{done}} completas y {{active}} en curso de {{total}}",
@@ -333,6 +331,43 @@
       "age": "Antigüedad"
     },
     "trackDisplay": "{{title}} - {{artist}}",
+    "reasonFilter": {
+      "label": "Filtrar por motivo",
+      "all": "Todos"
+    },
+    "group": {
+      "tracks_one": "{{count}} canción",
+      "tracks_other": "{{count}} canciones"
+    },
+    "card": {
+      "files_one": "{{count}} archivo",
+      "files_other": "{{count}} archivos, elige uno"
+    },
+    "candidate": {
+      "index": "Archivo {{index}}",
+      "held": "retenido {{age}}"
+    },
+    "compare": {
+      "field": "Campo",
+      "verdict": "Coincide",
+      "requested": "Pedido",
+      "found": "Este archivo",
+      "differs": "no coincide",
+      "matches": "coincide",
+      "artist": "Artista",
+      "title": "Título",
+      "length": "Duración",
+      "tagMatch": "Etiquetas",
+      "tags": "Etiquetas",
+      "soundsLike": "Suena como",
+      "similarity": "Parecido",
+      "artistScore": "{{score}} / 100 de parecido del artista",
+      "atLeast": "{{value}} / 100 o más",
+      "outOf": "{{value}} / 100",
+      "unreadable": "ilegibles",
+      "newCopy": "una copia nueva",
+      "rejectedCopy": "{{path}}, que rechazaste"
+    },
     "evidence": {
       "fingerprintMismatch": "La huella acústica identifica {{artist}} - {{title}}. El nombre de ese artista tiene {{score}} sobre 100 de parecido con los artistas de la canción que pediste.",
       "tagMismatch": "Las etiquetas del archivo obtuvieron {{observed}} sobre 100 de confianza, por debajo de los {{expected}} que exige esta comprobación.",
@@ -356,11 +391,16 @@
       "stop": "Detener la reproducción de {{name}}",
       "previewLabel": "Vista previa de audio de {{name}}",
       "approve": "Aprobar",
-      "discard": "Descartar"
+      "discard": "Descartar",
+      "approveThisFile": "Aprobar este archivo",
+      "discardsOthers_one": "· descarta {{count}} otro",
+      "discardsOthers_other": "· descarta {{count}} otros"
     },
     "confirmDiscard": {
-      "title": "¿Descartar este archivo?",
+      "title": "¿Descartar el archivo de {{name}}?",
       "message": "Se borra la copia retenida y la fuente sigue bloqueada. La canción sigue fallida, así que la vigilancia la seguirá buscando en otro sitio.",
+      "messageSiblings_one": "Se borra la copia retenida y la fuente sigue bloqueada. Queda {{count}} archivo más de esta canción esperando una decisión.",
+      "messageSiblings_other": "Se borra la copia retenida y la fuente sigue bloqueada. Quedan {{count}} archivos más de esta canción esperando una decisión.",
       "confirm": "Descartar archivo"
     },
     "footer": {

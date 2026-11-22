@@ -30,6 +30,7 @@ export function RequestDetailHeroMenu({
   typeLabel,
   onExportFull,
   onRejectPending,
+  onRequestMissing,
   triggerClassName,
 }: RequestDetailHeroMenuProps) {
   const { t } = useTranslation("requests");
@@ -86,6 +87,12 @@ export function RequestDetailHeroMenu({
           <DropdownMenuItem onClick={retry} disabled={isRetrying} className={heroRetryMenuItem()}>
             <RefreshCw className="size-3.5" />
             {t("detail.retryFailed", { count: actions.failedTrackCount })}
+          </DropdownMenuItem>
+        )}
+        {actions.canRequestMissing && onRequestMissing && (
+          <DropdownMenuItem onClick={onRequestMissing} className="text-primary-400 md:hidden">
+            <ListPlus className="size-3.5" />
+            {t("detail.requestMissing", { count: actions.missingTrackCount })}
           </DropdownMenuItem>
         )}
         {actions.canRequeueCancelled && (

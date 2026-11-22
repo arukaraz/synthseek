@@ -95,7 +95,7 @@
     },
     "--status-importing": { "label": "Demande : importation", "hint": "En cours de rangement dans la bibliothèque" },
     "--status-pending-import-review": {
-      "label": "Demande : en attente de révision des imports",
+      "label": "Demande : à vérifier",
       "hint": "Un fichier téléchargé qu'un administrateur doit approuver ou écarter"
     },
     "--status-syncing": {

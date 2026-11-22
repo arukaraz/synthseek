@@ -33,7 +33,7 @@
       "description": "Procesando el archivo"
     },
     "pending_import_review": {
-      "label": "En revisión de importaciones",
+      "label": "Por revisar",
       "description": "Un archivo descargado espera en la revisión de importaciones a que un administrador lo apruebe o lo descarte"
     },
     "complete": {
@@ -54,7 +54,7 @@
     },
     "partially_complete": {
       "label": "Parcialmente completada",
-      "description": "Algunas canciones fallaron"
+      "description": "Algunas canciones fallaron o se cancelaron"
     },
     "cancelled": {
       "label": "Cancelada",

@@ -180,6 +180,11 @@ export interface ScrollEdges {
   end: boolean;
 }
 
+export interface ImportReviewLaunch {
+  open: boolean;
+  focusTrackId: string | null;
+}
+
 export interface ScrollEdgesState<T extends HTMLElement> extends ScrollEdges {
   ref: (node: T | null) => void;
   node: T | null;

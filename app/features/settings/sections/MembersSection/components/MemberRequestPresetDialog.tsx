@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Button } from "@components/ui/Button";
@@ -12,7 +12,11 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@components/ui/Dialog";
-import { offeredSources, summarizePreset } from "@features/search/components/ConfigRequestModal/helpers";
+import {
+  offeredSources,
+  selectionFromPreset,
+  summarizePreset,
+} from "@features/search/components/ConfigRequestModal/helpers";
 import {
   useDownloadSourcesAvailability,
   useMemberRequestPreset,
@@ -41,6 +45,12 @@ export function MemberRequestPresetDialog({ member, onClose }: MemberRequestPres
   const own = memberPreset.data;
   const server = mine.data?.server ?? null;
   const factory = mine.data?.factory;
+  const offered = useMemo(() => offeredSources(availability, true), [availability]);
+  const followed = server ?? factory;
+  const base = useMemo(
+    () => (followed === undefined ? null : selectionFromPreset(followed, offered)),
+    [followed, offered]
+  );
 
   useEffect(() => {
     if (member === null) setDraft(null);
@@ -48,8 +58,8 @@ export function MemberRequestPresetDialog({ member, onClose }: MemberRequestPres
 
   useEffect(() => {
     if (draft !== null || own === undefined || factory === undefined || isLoadingSources) return;
-    setDraft(presetDraft(own, server ?? factory, offeredSources(availability, true)));
-  }, [draft, own, server, factory, availability, isLoadingSources]);
+    setDraft(presetDraft(own, server ?? factory, offered));
+  }, [draft, own, server, factory, offered, isLoadingSources]);
 
   const unavailable = memberPreset.isError || mine.isError;
 
@@ -72,10 +82,12 @@ export function MemberRequestPresetDialog({ member, onClose }: MemberRequestPres
           <DialogTitle>{t("requestPreset.member.title", { username: member.username })}</DialogTitle>
           <DialogDescription>{t("requestPreset.member.description")}</DialogDescription>
         </DialogHeader>
-        {draft !== null && factory !== undefined ? (
+        {draft !== null && factory !== undefined && base !== null ? (
           <RequestPresetEditor
             value={draft}
             onChange={setDraft}
+            base={base}
+            offered={offered}
             followLabel={t("requestPreset.member.followLabel")}
             customLabel={t("requestPreset.member.customLabel")}
             followSummary={

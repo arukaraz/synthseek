@@ -126,6 +126,7 @@ export interface RequestDetailHeroMenuProps {
   typeLabel: string;
   onExportFull: () => void;
   onRejectPending: () => void;
+  onRequestMissing: (() => void) | null;
   triggerClassName: string;
 }
 

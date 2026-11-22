@@ -19,6 +19,7 @@ import type { RecipeRowProps } from "./types";
 export function RecipeRow({
   label,
   value,
+  restoreLabel,
   changed,
   locked,
   open,
@@ -61,7 +62,7 @@ export function RecipeRow({
           {changed ? (
             <button type="button" className={recipeRestore()} onClick={onRestore}>
               <RotateCcw className="size-3.5" aria-hidden />
-              {t("config.preset.restoreRow")}
+              {restoreLabel}
             </button>
           ) : null}
         </div>

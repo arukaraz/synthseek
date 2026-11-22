@@ -3,7 +3,7 @@
 import { useTranslation } from "react-i18next";
 
 import { SegmentedControl } from "@components/ui/SegmentedControl";
-import { RequestPresetFields } from "@features/search/components/ConfigRequestModal/RequestPresetFields";
+import { RequestRecipe } from "@features/search/components/ConfigRequestModal/RequestRecipe";
 
 import { presetEditorBody, presetFollowNote } from "./styles";
 import type { PresetChoice, RequestPresetEditorProps } from "./types";
@@ -11,6 +11,8 @@ import type { PresetChoice, RequestPresetEditorProps } from "./types";
 export function RequestPresetEditor({
   value,
   onChange,
+  base,
+  offered,
   followLabel,
   customLabel,
   followSummary,
@@ -33,7 +35,18 @@ export function RequestPresetEditor({
           {followSummary}
         </p>
       ) : (
-        <RequestPresetFields value={value.selection} onChange={(selection) => onChange({ ...value, selection })} />
+        <RequestRecipe
+          selection={value.selection}
+          base={base}
+          onChange={(selection) => onChange({ ...value, selection })}
+          locked={false}
+          origin={undefined}
+          offered={offered}
+          lidarrAvailable={false}
+          lidarrSlot={null}
+          destination={null}
+          copy="preset"
+        />
       )}
     </div>
   );

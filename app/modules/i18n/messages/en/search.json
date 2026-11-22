@@ -274,6 +274,12 @@
       "peer": "Peers",
       "destination": "Destination"
     },
+    "presetEditor": {
+      "heading": "Same as what it would follow",
+      "changes_one": "{{count}} change from what it would follow",
+      "changes_other": "{{count}} changes from what it would follow",
+      "restoreRow": "Back to the followed value"
+    },
     "preset": {
       "heading": "Your preset",
       "changes_one": "{{count}} change to your preset",

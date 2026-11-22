@@ -115,6 +115,7 @@ function makeRequest(overrides: Partial<RequestWithTracks> = {}): RequestWithTra
     contentType: ContentType.enum.playlist,
     plex_playlist_id: "plex-123",
     duplicateCount: 0,
+    trackCounts: { failed: 0, cancelled: 0, review: 0 },
     requestedBy: owner,
     ...overrides,
   };

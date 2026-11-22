@@ -50,6 +50,7 @@
   "statusFilter": {
     "all": "All",
     "pending_approval": "Waiting for Approval",
+    "review": "Needs review",
     "active": "Active",
     "done": "Done",
     "failed": "Failed",
@@ -100,6 +101,7 @@
     "lockNote": "Only the person who requested it or an admin can change it",
     "requestMissing_one": "Request the missing track",
     "requestMissing_other": "Request the {{count}} missing tracks",
+    "openReviewFor": "Needs review: open the import review for {{title}}",
     "jumpTheQueue": "Jump the queue",
     "cancelDownloads": "Cancel downloads",
     "pause": "Pause",
@@ -132,10 +134,6 @@
       "failed": "Failed",
       "cancelled": "Cancelled"
     },
-    "done_one": "{{count}} complete",
-    "done_other": "{{count}} complete",
-    "doneAndActive_one": "{{done}} complete, {{active}} in progress",
-    "doneAndActive_other": "{{done}} complete, {{active}} in progress",
     "duplicates_one": "{{count}} duplicate ignored",
     "duplicates_other": "{{count}} duplicates ignored",
     "figureLabel": "{{done}} complete and {{active}} in progress out of {{total}}",
@@ -333,6 +331,43 @@
       "age": "Held for"
     },
     "trackDisplay": "{{title}} - {{artist}}",
+    "reasonFilter": {
+      "label": "Filter by reason",
+      "all": "All"
+    },
+    "group": {
+      "tracks_one": "{{count}} track",
+      "tracks_other": "{{count}} tracks"
+    },
+    "card": {
+      "files_one": "{{count}} file",
+      "files_other": "{{count}} files, pick one"
+    },
+    "candidate": {
+      "index": "File {{index}}",
+      "held": "held {{age}}"
+    },
+    "compare": {
+      "field": "Field",
+      "verdict": "Matches",
+      "requested": "Requested",
+      "found": "This file",
+      "differs": "differs",
+      "matches": "matches",
+      "artist": "Artist",
+      "title": "Title",
+      "length": "Length",
+      "tagMatch": "Tag match",
+      "tags": "Tags",
+      "soundsLike": "Sounds like",
+      "similarity": "Similarity",
+      "artistScore": "{{score}} / 100 artist match",
+      "atLeast": "{{value}} / 100 or more",
+      "outOf": "{{value}} / 100",
+      "unreadable": "unreadable",
+      "newCopy": "a new copy",
+      "rejectedCopy": "{{path}}, which you rejected"
+    },
     "evidence": {
       "fingerprintMismatch": "The audio fingerprints as {{artist}} - {{title}}. That artist's name scores {{score}} out of 100 for similarity against the artists of the track you requested.",
       "tagMismatch": "The file tags scored {{observed}} out of 100 for confidence, below the {{expected}} this check requires.",
@@ -356,11 +391,16 @@
       "stop": "Stop playing {{name}}",
       "previewLabel": "Audio preview of {{name}}",
       "approve": "Approve",
-      "discard": "Discard"
+      "discard": "Discard",
+      "approveThisFile": "Approve this file",
+      "discardsOthers_one": "· discards {{count}} other",
+      "discardsOthers_other": "· discards {{count}} others"
     },
     "confirmDiscard": {
-      "title": "Discard this file?",
+      "title": "Discard the file for {{name}}?",
       "message": "The held copy is deleted and the source stays blocked. The track stays failed, so the watch keeps looking for it elsewhere.",
+      "messageSiblings_one": "The held copy is deleted and the source stays blocked. {{count}} other file for this track still waits for a decision.",
+      "messageSiblings_other": "The held copy is deleted and the source stays blocked. {{count}} other files for this track still wait for a decision.",
       "confirm": "Discard file"
     },
     "footer": {

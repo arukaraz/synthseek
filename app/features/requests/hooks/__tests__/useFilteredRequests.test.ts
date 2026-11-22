@@ -9,7 +9,7 @@ import {
 import { renderHook } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
-import { SortField, type SortConfig, type StatusFilter } from "../../types";
+import { SortField, STATUS_FILTERS, type SortConfig, type StatusFilter } from "../../types";
 import { useFilteredRequests } from "../useFilteredRequests";
 
 const ownerId = "user-1";
@@ -51,6 +51,7 @@ function makeRequest(overrides: Partial<RequestWithTracks> = {}): RequestWithTra
     contentType: ContentType.enum.album,
     plex_playlist_id: null,
     duplicateCount: 0,
+    trackCounts: { failed: 0, cancelled: 0, review: 0 },
     requestedBy: owner,
     ...overrides,
   };
@@ -219,9 +220,29 @@ describe("useFilteredRequests status filter", () => {
     makeRequest({ id: "downloading", status: RequestStatus.enum.downloading }),
     makeRequest({ id: "complete", status: RequestStatus.enum.complete }),
     makeRequest({ id: "delegated", status: RequestStatus.enum.delegated }),
-    makeRequest({ id: "partial", status: RequestStatus.enum.partially_complete }),
+    makeRequest({
+      id: "partial",
+      status: RequestStatus.enum.partially_complete,
+      trackCounts: { failed: 2, cancelled: 0, review: 0 },
+    }),
+    makeRequest({
+      id: "partialCancelled",
+      status: RequestStatus.enum.partially_complete,
+      trackCounts: { failed: 0, cancelled: 3, review: 0 },
+    }),
+    makeRequest({
+      id: "partialDelegated",
+      status: RequestStatus.enum.partially_complete,
+      trackCounts: { failed: 0, cancelled: 0, review: 0 },
+    }),
     makeRequest({ id: "failed", status: RequestStatus.enum.failed }),
     makeRequest({ id: "cancelled", status: RequestStatus.enum.cancelled }),
+    makeRequest({ id: "inReview", status: RequestStatus.enum.pending_import_review }),
+    makeRequest({
+      id: "downloadingWithReview",
+      status: RequestStatus.enum.downloading,
+      trackCounts: { failed: 0, cancelled: 0, review: 1 },
+    }),
   ];
   const nameAsc: SortConfig = { field: SortField.ALBUM, direction: "asc" };
   const idsFor = (filter: StatusFilter) =>
@@ -238,19 +259,30 @@ describe("useFilteredRequests status filter", () => {
   });
 
   it("keeps the queued and in-flight requests under active", () => {
-    expect(idsFor("active")).toEqual(["downloading", "queued"]);
+    expect(idsFor("active")).toEqual(["downloading", "downloadingWithReview", "queued"]);
   });
 
-  it("keeps complete and delegated requests under done", () => {
-    expect(idsFor("done")).toEqual(["complete", "delegated"]);
+  it("keeps complete and delegated requests, and a partial that lost nothing, under done", () => {
+    expect(idsFor("done")).toEqual(["complete", "delegated", "partialDelegated"]);
   });
 
-  it("keeps failed and partially complete requests under failed, without the cancelled ones", () => {
+  it("leaves no request reachable only through all", () => {
+    const filters = STATUS_FILTERS.filter((filter) => filter !== "all");
+    const reached = new Set(filters.flatMap((filter) => idsFor(filter)));
+
+    expect(byStatus.map((item) => item.id).filter((id) => !reached.has(id))).toEqual([]);
+  });
+
+  it("keeps failed requests and those with a failed track under failed, not those whose only loss was cancelled", () => {
     expect(idsFor("failed")).toEqual(["failed", "partial"]);
   });
 
-  it("keeps only the cancelled requests under cancelled", () => {
-    expect(idsFor("cancelled")).toEqual(["cancelled"]);
+  it("keeps cancelled requests and those with a cancelled track under cancelled", () => {
+    expect(idsFor("cancelled")).toEqual(["cancelled", "partialCancelled"]);
+  });
+
+  it("keeps requests waiting for review and those with a track that needs review under review", () => {
+    expect(idsFor("review")).toEqual(["downloadingWithReview", "inReview"]);
   });
 });
 

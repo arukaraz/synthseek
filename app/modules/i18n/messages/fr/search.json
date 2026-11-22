@@ -274,6 +274,12 @@
       "peer": "Pairs",
       "destination": "Destination"
     },
+    "presetEditor": {
+      "heading": "Identique à ce qu'il suivrait",
+      "changes_one": "{{count}} modification par rapport à ce qu'il suivrait",
+      "changes_other": "{{count}} modifications par rapport à ce qu'il suivrait",
+      "restoreRow": "Revenir à la valeur suivie"
+    },
     "preset": {
       "heading": "Votre préréglage",
       "changes_one": "{{count}} modification de votre préréglage",

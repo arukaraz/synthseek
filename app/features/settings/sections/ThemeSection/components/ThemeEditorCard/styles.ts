@@ -42,7 +42,7 @@ export const menuRowLabel = cva("text-fg/80 flex items-center gap-1.5 text-sm fo
 export const menuRowControl = cva("flex shrink-0 items-center gap-2");
 
 export const editorBar = cva(
-  "border-primary-500/50 bg-surface-overlay sticky bottom-2.5 z-20 flex flex-wrap items-center gap-2 rounded-xl border px-3 py-2 shadow-lg"
+  "border-primary-500/50 bg-surface-overlay flex flex-wrap items-center gap-2 rounded-xl border px-3 py-2 shadow-lg"
 );
 
 export const barSeparator = cva("bg-fg/15 h-5 w-px shrink-0 max-sm:hidden");

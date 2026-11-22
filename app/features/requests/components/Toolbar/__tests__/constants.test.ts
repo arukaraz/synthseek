@@ -10,10 +10,11 @@ describe("STATUS_FILTER_ICONS", () => {
     expect(STATUS_FILTER_ICONS.map((option) => option.value)).toEqual([...STATUS_FILTERS]);
   });
 
-  it("lists the pending approval group between all and active", () => {
+  it("lists the pending approval and review groups between all and active", () => {
     expect(STATUS_FILTER_ICONS.map((option) => option.value)).toEqual([
       "all",
       "pending_approval",
+      "review",
       "active",
       "done",
       "failed",
@@ -24,6 +25,13 @@ describe("STATUS_FILTER_ICONS", () => {
   it("draws the pending approval icon from the shared status config", () => {
     const config = REQUEST_STATUS_CONFIG[RequestStatus.enum.pending_approval];
     const option = STATUS_FILTER_ICONS.find((entry) => entry.value === "pending_approval");
+
+    expect(option?.icon).toBe(config.icon);
+  });
+
+  it("draws the review icon from the shared status config", () => {
+    const config = REQUEST_STATUS_CONFIG[RequestStatus.enum.pending_import_review];
+    const option = STATUS_FILTER_ICONS.find((entry) => entry.value === "review");
 
     expect(option?.icon).toBe(config.icon);
   });

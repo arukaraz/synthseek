@@ -53,13 +53,6 @@ export interface AcquisitionSelection {
   active: DownloadSourceKey[];
 }
 
-export interface AcquisitionOrderListProps {
-  label: string;
-  selection: AcquisitionSelection;
-  lidarrAvailable: boolean;
-  onChange: (selection: AcquisitionSelection) => void;
-}
-
 export type DownloadSourcesAvailability = RouterOutputs["settings"]["downloadSourcesAvailability"];
 
 export interface SourceRowLabels {
@@ -152,6 +145,15 @@ export interface RecipeDestination {
   refreshing: boolean;
 }
 
+export type RecipeCopyKind = "request" | "preset";
+
+export interface RecipeCopyKeys {
+  heading: ParseKeys<"search">;
+  changes: ParseKeys<"search">;
+  restoreAll: ParseKeys<"search">;
+  restoreRow: ParseKeys<"search">;
+}
+
 export interface RequestRecipeProps {
   selection: RequestSelection;
   base: RequestSelection;
@@ -162,11 +164,13 @@ export interface RequestRecipeProps {
   lidarrAvailable: boolean;
   lidarrSlot: ReactNode;
   destination: RecipeDestination | null;
+  copy: RecipeCopyKind;
 }
 
 export interface RecipeRowProps {
   label: string;
   value: string;
+  restoreLabel: string;
   changed: boolean;
   locked: boolean;
   open: boolean;
@@ -283,13 +287,6 @@ export interface RequestSelection {
   minUploadSpeed: number;
   availability: AvailabilityMode;
   acquisition: AcquisitionSelection;
-}
-
-export interface RequestPresetFieldsProps {
-  value: RequestSelection;
-  onChange: (value: RequestSelection) => void;
-  lidarrAvailable?: boolean;
-  lidarrSlot?: ReactNode;
 }
 
 export interface AvailabilityOption {

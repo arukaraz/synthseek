@@ -80,7 +80,7 @@
     "--status-pending-import": { "label": "Request: ready to import", "hint": "Downloaded and waiting to be filed" },
     "--status-importing": { "label": "Request: importing", "hint": "Being filed into the library" },
     "--status-pending-import-review": {
-      "label": "Request: awaiting import review",
+      "label": "Request: needs review",
       "hint": "A downloaded file waiting for an admin to approve or discard it"
     },
     "--status-syncing": { "label": "Request: syncing", "hint": "A library sync under way" },

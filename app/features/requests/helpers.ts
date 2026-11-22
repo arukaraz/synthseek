@@ -11,7 +11,7 @@ import { collectionFilename } from "@utils/filename";
 import {
   DOWNLOAD_ACTIVE_STATUSES,
   SOURCE_FILTERS,
-  STATUS_FILTER_MAP,
+  STATUS_FILTER_MATCH,
   STATUS_FILTERS,
   type SourceFilter,
   StatusFilter,
@@ -61,7 +61,20 @@ export function filterRequestsByStatus(
   statusFilter: StatusFilter
 ): RequestListItem[] {
   const all = items ?? [];
-  const allowed = STATUS_FILTER_MAP[statusFilter];
-  if (allowed === null) return all;
-  return all.filter((item) => (allowed as readonly string[]).includes(item.status));
+  if (statusFilter === "all") return all;
+  const { statuses, trackCount, losslessPartial } = STATUS_FILTER_MATCH[statusFilter];
+  return all.filter(
+    (item) =>
+      statuses.includes(item.status) ||
+      (trackCount !== null && item.trackCounts[trackCount] > 0) ||
+      (losslessPartial && isLosslessPartial(item))
+  );
+}
+
+function isLosslessPartial(item: RequestListItem): boolean {
+  return (
+    item.status === RequestStatus.enum.partially_complete &&
+    item.trackCounts.failed === 0 &&
+    item.trackCounts.cancelled === 0
+  );
 }

@@ -274,6 +274,12 @@
       "peer": "Peers",
       "destination": "Ziel"
     },
+    "presetEditor": {
+      "heading": "Wie das, dem es folgen würde",
+      "changes_one": "{{count}} Änderung gegenüber dem, dem es folgen würde",
+      "changes_other": "{{count}} Änderungen gegenüber dem, dem es folgen würde",
+      "restoreRow": "Zurück zum gefolgten Wert"
+    },
     "preset": {
       "heading": "Deine Voreinstellung",
       "changes_one": "{{count}} Änderung an deiner Voreinstellung",

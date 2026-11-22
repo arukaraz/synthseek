@@ -112,6 +112,7 @@ export function makeRequestListItem(overrides: Partial<RequestListItem> = {}): R
     plex_playlist_id: null,
     duplicateCount: 0,
     requested_tracks: 0,
+    trackCounts: { failed: 0, cancelled: 0, review: 0 },
     requestedBy: makeRequestsUser(),
     ...overrides,
   };

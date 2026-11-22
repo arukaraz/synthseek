@@ -1,7 +1,7 @@
 import { cva } from "class-variance-authority";
 
 export const pageSaveBar = cva(
-  "border-fg/10 bg-surface/80 sticky bottom-0 z-20 mt-auto flex items-center justify-end gap-3 border-t px-4 py-3 backdrop-blur sm:px-6"
+  "border-fg/10 bg-surface/80 flex items-center justify-end gap-3 border-t px-4 py-3 backdrop-blur sm:px-6"
 );
 
 export const pageSaveBarSummary = cva("text-fg/70 mr-auto flex min-w-0 flex-col text-sm sm:flex-row sm:gap-2");

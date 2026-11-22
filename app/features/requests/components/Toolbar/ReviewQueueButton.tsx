@@ -2,11 +2,12 @@
 
 import { motion } from "framer-motion";
 import { ClipboardCheck } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
 import { ImportReviewModal } from "@features/import-review";
 import { useImportReview } from "@hooks/api";
+import { closeImportReview, openImportReview, useImportReviewLauncher } from "@hooks/ui/useImportReviewLauncher";
 import { useAuthContext } from "@modules/providers/AuthProvider";
 
 import { hashRequestsReview } from "./helpers";
@@ -16,17 +17,19 @@ export function ReviewQueueButton() {
   const { t } = useTranslation("requests");
   const { isAdmin } = useAuthContext();
   const review = useImportReview({ enabled: isAdmin });
-  const [isOpen, setIsOpen] = useState(false);
+  const launch = useImportReviewLauncher();
 
   useEffect(() => {
     if (!isAdmin) return;
     const openFromHash = () => {
-      if (hashRequestsReview()) setIsOpen(true);
+      if (hashRequestsReview()) openImportReview();
     };
     openFromHash();
     window.addEventListener("hashchange", openFromHash);
     return () => window.removeEventListener("hashchange", openFromHash);
   }, [isAdmin]);
+
+  useEffect(() => closeImportReview, []);
 
   if (!isAdmin) return null;
 
@@ -34,8 +37,9 @@ export function ReviewQueueButton() {
   const pendingCount = review.data?.pendingCount ?? 0;
 
   const handleOpenChange = (open: boolean) => {
-    setIsOpen(open);
-    if (!open && hashRequestsReview()) {
+    if (open) return;
+    closeImportReview();
+    if (hashRequestsReview()) {
       window.history.replaceState(null, "", `${window.location.pathname}${window.location.search}`);
     }
   };
@@ -55,13 +59,13 @@ export function ReviewQueueButton() {
               ? t("review.triggerAriaHeld", { count: heldCount })
               : t("review.trigger")
         }
-        onClick={() => setIsOpen(true)}
+        onClick={() => openImportReview()}
       >
         <ClipboardCheck className="size-4" />
         {pendingCount > 0 ? <span className={reviewQueueBadge()}>{pendingCount}</span> : null}
       </motion.button>
 
-      <ImportReviewModal open={isOpen} onOpenChange={handleOpenChange} />
+      <ImportReviewModal open={launch.open} onOpenChange={handleOpenChange} focusTrackId={launch.focusTrackId} />
     </>
   );
 }

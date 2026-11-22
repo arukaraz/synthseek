@@ -50,6 +50,7 @@
   "statusFilter": {
     "all": "Alle",
     "pending_approval": "Wartet auf Freigabe",
+    "review": "Zu prüfen",
     "active": "Aktiv",
     "done": "Fertig",
     "failed": "Fehlgeschlagen",
@@ -100,6 +101,7 @@
     "lockNote": "Nur wer sie angefordert hat oder ein Admin kann sie ändern",
     "requestMissing_one": "Fehlenden Titel anfordern",
     "requestMissing_other": "Die {{count}} fehlenden Titel anfordern",
+    "openReviewFor": "Zu prüfen: Importprüfung für {{title}} öffnen",
     "jumpTheQueue": "Vordrängeln",
     "cancelDownloads": "Downloads abbrechen",
     "pause": "Pausieren",
@@ -132,10 +134,6 @@
       "failed": "Fehlgeschlagen",
       "cancelled": "Abgebrochen"
     },
-    "done_one": "{{count}} fertig",
-    "done_other": "{{count}} fertig",
-    "doneAndActive_one": "{{done}} fertig, {{active}} läuft",
-    "doneAndActive_other": "{{done}} fertig, {{active}} laufen",
     "duplicates_one": "{{count}} Duplikat ignoriert",
     "duplicates_other": "{{count}} Duplikate ignoriert",
     "figureLabel": "{{done}} fertig und {{active}} laufend von {{total}}",
@@ -333,6 +331,43 @@
       "age": "Alter"
     },
     "trackDisplay": "{{title}} - {{artist}}",
+    "reasonFilter": {
+      "label": "Nach Grund filtern",
+      "all": "Alle"
+    },
+    "group": {
+      "tracks_one": "{{count}} Titel",
+      "tracks_other": "{{count}} Titel"
+    },
+    "card": {
+      "files_one": "{{count}} Datei",
+      "files_other": "{{count}} Dateien, wähle eine"
+    },
+    "candidate": {
+      "index": "Datei {{index}}",
+      "held": "zurückgehalten {{age}}"
+    },
+    "compare": {
+      "field": "Feld",
+      "verdict": "Übereinstimmung",
+      "requested": "Angefordert",
+      "found": "Diese Datei",
+      "differs": "abweichend",
+      "matches": "gleich",
+      "artist": "Künstler",
+      "title": "Titel",
+      "length": "Dauer",
+      "tagMatch": "Tags",
+      "tags": "Tags",
+      "soundsLike": "Klingt wie",
+      "similarity": "Ähnlichkeit",
+      "artistScore": "{{score}} / 100 Künstlerähnlichkeit",
+      "atLeast": "{{value}} / 100 oder mehr",
+      "outOf": "{{value}} / 100",
+      "unreadable": "unlesbar",
+      "newCopy": "eine neue Kopie",
+      "rejectedCopy": "{{path}}, die du abgelehnt hast"
+    },
     "evidence": {
       "fingerprintMismatch": "Der Fingerabdruck erkennt {{artist}} - {{title}}. Der Name dieses Künstlers hat {{score}} von 100 Punkten Ähnlichkeit mit den Künstlern des angeforderten Titels.",
       "tagMismatch": "Die Datei-Tags erreichten {{observed}} von 100 Punkten Konfidenz und damit weniger als die von dieser Prüfung verlangten {{expected}}.",
@@ -356,11 +391,16 @@
       "stop": "Wiedergabe von {{name}} stoppen",
       "previewLabel": "Hörprobe von {{name}}",
       "approve": "Freigeben",
-      "discard": "Verwerfen"
+      "discard": "Verwerfen",
+      "approveThisFile": "Diese Datei freigeben",
+      "discardsOthers_one": "· verwirft {{count}} weitere",
+      "discardsOthers_other": "· verwirft {{count}} weitere"
     },
     "confirmDiscard": {
-      "title": "Diese Datei verwerfen?",
+      "title": "Die Datei für {{name}} verwerfen?",
       "message": "Die zurückgehaltene Kopie wird gelöscht und die Quelle bleibt gesperrt. Der Titel bleibt fehlgeschlagen, die Überwachung sucht also anderswo weiter.",
+      "messageSiblings_one": "Die zurückgehaltene Kopie wird gelöscht und die Quelle bleibt gesperrt. {{count}} weitere Datei für diesen Titel wartet noch auf eine Entscheidung.",
+      "messageSiblings_other": "Die zurückgehaltene Kopie wird gelöscht und die Quelle bleibt gesperrt. {{count}} weitere Dateien für diesen Titel warten noch auf eine Entscheidung.",
       "confirm": "Datei verwerfen"
     },
     "footer": {

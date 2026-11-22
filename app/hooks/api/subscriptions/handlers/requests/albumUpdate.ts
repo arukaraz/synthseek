@@ -6,11 +6,9 @@ type Utils = ReturnType<typeof trpc.useUtils>;
 
 export function handleAlbumUpdate(event: AlbumUpdatePayload, utils: Utils): void {
   const current = utils.requests.getAll.getData();
-  const exists = current?.some((item) => item.contentType === ContentType.enum.album && item.id === event.albumId);
-  if (!exists) {
-    invalidateRequestList(utils);
-    return;
-  }
+  const cached = current?.find((item) => item.contentType === ContentType.enum.album && item.id === event.albumId);
+  if (!cached || cached.status !== event.status) invalidateRequestList(utils);
+  if (!cached) return;
   utils.requests.getAll.setData(undefined, (old) => {
     if (!old) return old;
     return old.map((item) => {

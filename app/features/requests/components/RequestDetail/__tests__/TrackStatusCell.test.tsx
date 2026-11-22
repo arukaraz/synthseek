@@ -1,5 +1,5 @@
 import { RequestStatus, type ActiveRelease } from "@api/__generated__/types";
-import { render, screen } from "@test/test-utils";
+import { render, screen, userEvent } from "@test/test-utils";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { makeRequestsTrack } from "../../../__tests__/factories";
@@ -12,6 +12,16 @@ vi.mock("@hooks/api/queries/useActiveReleases", () => ({
     releaseState.askedFor.push(trackId);
     return releaseState.current;
   },
+}));
+
+const auth = vi.hoisted(() => ({ isAdmin: false, open: vi.fn() }));
+
+vi.mock("@modules/providers/AuthProvider", () => ({
+  useAuthContext: () => ({ isAdmin: auth.isAdmin, currentUser: { id: "user-1" } }),
+}));
+
+vi.mock("@hooks/ui/useImportReviewLauncher", () => ({
+  openImportReview: auth.open,
 }));
 
 const inTwoHours = () => new Date(Date.now() + 2 * 60 * 60 * 1000 + 5 * 60 * 1000);
@@ -139,5 +149,39 @@ describe("TrackStatusCell", () => {
 
     expect(screen.queryByText(/next try/)).not.toBeInTheDocument();
     expect(screen.queryByText(/attempt/)).not.toBeInTheDocument();
+  });
+});
+
+describe("TrackStatusCell, on a track that needs review", () => {
+  beforeEach(() => {
+    auth.isAdmin = true;
+    auth.open.mockClear();
+  });
+
+  it("opens the import review at this track for an admin", async () => {
+    const user = userEvent.setup();
+    render(
+      <TrackStatusCell
+        track={makeRequestsTrack({ id: "track-9", title: "Lily", status: RequestStatus.enum.pending_import_review })}
+      />
+    );
+
+    await user.click(screen.getByRole("button", { name: "Needs review: open the import review for Lily" }));
+
+    expect(auth.open).toHaveBeenCalledWith("track-9");
+  });
+
+  it("keeps the status as plain text for someone who cannot review", () => {
+    auth.isAdmin = false;
+    render(<TrackStatusCell track={makeRequestsTrack({ status: RequestStatus.enum.pending_import_review })} />);
+
+    expect(screen.getByText("Needs review")).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /open the import review/ })).not.toBeInTheDocument();
+  });
+
+  it("offers no review button on a track in any other status", () => {
+    render(<TrackStatusCell track={makeRequestsTrack({ status: RequestStatus.enum.failed })} />);
+
+    expect(screen.queryByRole("button", { name: /open the import review/ })).not.toBeInTheDocument();
   });
 });

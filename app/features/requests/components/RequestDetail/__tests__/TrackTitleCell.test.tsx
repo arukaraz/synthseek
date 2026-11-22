@@ -9,6 +9,10 @@ vi.mock("@hooks/api/queries/useActiveReleases", () => ({
   useTrackRelease: () => null,
 }));
 
+vi.mock("@modules/providers/AuthProvider", () => ({
+  useAuthContext: () => ({ isAdmin: false, currentUser: { id: "user-1" } }),
+}));
+
 function renderCell(overrides: Parameters<typeof makeRequestsTrack>[0] = {}, expanded = false) {
   const onToggle = vi.fn();
   render(<TrackTitleCell track={makeRequestsTrack(overrides)} expanded={expanded} onToggle={onToggle} />);

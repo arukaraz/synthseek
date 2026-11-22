@@ -1,6 +1,7 @@
 "use client";
 
 import { ShieldCheck } from "lucide-react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { EmptyState } from "@components/ui/EmptyState";
@@ -9,18 +10,30 @@ import { useImportReview } from "@hooks/api";
 import { useReviewApprovalsInFlight } from "@hooks/api/subscriptions";
 
 import { ReviewFooter } from "./components/ReviewFooter";
-import { ReviewItemRow } from "./components/ReviewItemRow";
+import { ReviewPlayerBar } from "./components/ReviewPlayerBar";
+import { ReviewReasonChips } from "./components/ReviewReasonChips";
+import { ReviewRequestGroup } from "./components/ReviewRequestGroup";
+import { countReasons, groupReviewItems } from "./helpers";
 import { errorText, itemList } from "./styles";
+import type { ReasonFilter } from "./types";
 
 export function ReviewContent() {
   const { t } = useTranslation("requests");
   const review = useImportReview();
   const inFlight = useReviewApprovalsInFlight();
+  const [filter, setFilter] = useState<ReasonFilter>("all");
+  const [playingId, setPlayingId] = useState<string | null>(null);
 
   const held = review.data?.items ?? [];
   const items = held.filter((item) => !inFlight.has(item.id));
   const hidden = held.filter((item) => inFlight.has(item.id));
   const hiddenBytes = hidden.reduce((total, item) => total + item.sizeBytes, 0);
+  const counts = countReasons(items);
+  const activeFilter = filter !== "all" && counts.some((entry) => entry.reason === filter) ? filter : "all";
+  const groups = groupReviewItems(items, activeFilter);
+  const playing = items.find((item) => item.id === playingId) ?? null;
+
+  const togglePlay = (id: string) => setPlayingId((current) => (current === id ? null : id));
 
   return (
     <>
@@ -33,12 +46,24 @@ export function ReviewContent() {
       ) : items.length === 0 ? (
         <EmptyState icon={ShieldCheck} title={t("review.empty.title")} description={t("review.empty.description")} />
       ) : (
-        <ul className={itemList()}>
-          {items.map((item) => (
-            <ReviewItemRow key={item.id} item={item} />
-          ))}
-        </ul>
+        <>
+          {counts.length > 1 ? (
+            <ReviewReasonChips counts={counts} total={items.length} active={activeFilter} onChange={setFilter} />
+          ) : null}
+          <ul className={itemList()} data-glow-scroller="">
+            {groups.map((group) => (
+              <ReviewRequestGroup
+                key={`${group.request.contentType}:${group.request.id}`}
+                group={group}
+                playingId={playingId}
+                onTogglePlay={togglePlay}
+              />
+            ))}
+          </ul>
+        </>
       )}
+
+      {playing ? <ReviewPlayerBar item={playing} /> : null}
 
       <ReviewFooter
         totalCount={(review.data?.totalCount ?? 0) - hidden.length}

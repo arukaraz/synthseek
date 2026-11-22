@@ -12,8 +12,6 @@ export const tileCount = cva("text-fg text-3xl font-semibold tabular-nums");
 
 export const tileCaption = cva("text-fg/60 text-xs");
 
-export const overviewColumn = cva("flex flex-col gap-5 sm:gap-6");
-
 export const listRow = cva("border-fg/10 flex items-center gap-3 border-b py-2.5 last:border-b-0");
 
 export const connectionButton = cva(

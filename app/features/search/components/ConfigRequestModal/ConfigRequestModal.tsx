@@ -306,6 +306,7 @@ export function ConfigRequestModal({
                 lidarrAvailable={lidarrOffered}
                 lidarrSlot={<LidarrInputs monitorMode="album" value={lidarrSelection} onChange={setLidarrSelection} />}
                 destination={destination}
+                copy="request"
               />
             ) : null}
           </>

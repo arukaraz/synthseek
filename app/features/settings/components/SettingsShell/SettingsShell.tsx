@@ -11,6 +11,7 @@ import { isAdminOnlySettingsPath } from "../../helpers";
 import { useSettingsShortcuts } from "../../hooks/useSettingsShortcuts";
 import { contentScroll, layoutRoot, pageColumn } from "../../styles";
 import { SettingsAccessDenied } from "../SettingsAccessDenied";
+import { bottomDock, SettingsBottomDockProvider } from "../SettingsBottomDock";
 import { PageSaveBar, SettingsSaveScope } from "../SettingsSaveScope";
 import { SEARCH_INPUT_ID, SettingsPalette } from "../SettingsSearch";
 import { SettingsSidebar } from "../SettingsSidebar";
@@ -21,6 +22,7 @@ export function SettingsShell({ children }: SettingsShellProps) {
   const { isAdmin, isLoading } = useAuthContext();
   const [query, setQuery] = useState("");
   const [paletteOpen, setPaletteOpen] = useState(false);
+  const [dock, setDock] = useState<HTMLDivElement | null>(null);
   const isRoot = pathname === SETTINGS_ROOT;
   const blocked = !isLoading && !isAdmin && isAdminOnlySettingsPath(pathname);
 
@@ -34,8 +36,13 @@ export function SettingsShell({ children }: SettingsShellProps) {
       <div className={layoutRoot()}>
         <SettingsSidebar className={cn(isRoot ? "flex" : "hidden md:flex")} query={query} onQueryChange={setQuery} />
         <main className={cn(contentScroll(), isRoot ? "hidden md:flex" : "flex")}>
-          <div className={pageColumn()}>{blocked ? <SettingsAccessDenied /> : children}</div>
-          <PageSaveBar />
+          <SettingsBottomDockProvider dock={dock}>
+            <div className={pageColumn()}>{blocked ? <SettingsAccessDenied /> : children}</div>
+          </SettingsBottomDockProvider>
+          <div className={bottomDock()}>
+            <div ref={setDock} />
+            <PageSaveBar />
+          </div>
         </main>
       </div>
       <SettingsPalette open={paletteOpen} onOpenChange={setPaletteOpen} />

@@ -11,6 +11,16 @@ vi.mock("@hooks/api/queries/useActiveReleases", () => ({
   useTrackRelease: () => null,
 }));
 
+const review = vi.hoisted(() => ({ open: vi.fn() }));
+
+vi.mock("@modules/providers/AuthProvider", () => ({
+  useAuthContext: () => ({ isAdmin: true, currentUser: { id: "user-1" } }),
+}));
+
+vi.mock("@hooks/ui/useImportReviewLauncher", () => ({
+  openImportReview: review.open,
+}));
+
 type Props = ComponentProps<typeof RequestDetailTracks>;
 
 function renderTracks(tracks: TrackRequest[], overrides: Partial<Props> = {}) {
@@ -163,6 +173,19 @@ describe("RequestDetailTracks sorting and details", () => {
     await userEvent.click(screen.getByRole("button", { name: "Show details of One" }));
 
     expect(props.onToggleExpanded).toHaveBeenCalledWith("a");
+  });
+
+  it("opens the import review from a track that needs review without toggling its row", async () => {
+    const props = renderTracks([
+      makeRequestsTrack({ id: "a", title: "One", status: RequestStatus.enum.pending_import_review }),
+    ]);
+    review.open.mockClear();
+
+    const [reviewButton] = screen.getAllByRole("button", { name: "Needs review: open the import review for One" });
+    await userEvent.click(reviewButton);
+
+    expect(review.open).toHaveBeenCalledWith("a");
+    expect(props.onToggleExpanded).not.toHaveBeenCalled();
   });
 
   it("shows the details of the expanded track only", () => {

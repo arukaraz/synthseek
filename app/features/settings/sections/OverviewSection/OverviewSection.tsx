@@ -11,7 +11,6 @@ import { ConnectionsCard } from "./components/ConnectionsCard";
 import { JobsGlanceCard } from "./components/JobsGlanceCard";
 import { OverviewProblems } from "./components/OverviewProblems";
 import { SetupChecklistCard } from "./components/SetupChecklistCard";
-import { overviewColumn } from "./styles";
 
 export function OverviewSection() {
   const { t } = useTranslation("settings");
@@ -22,14 +21,12 @@ export function OverviewSection() {
       <SettingsPageHeader title={t(page.labelKey)} description={t(page.descriptionKey)} />
       <OverviewProblems />
       <AttentionTiles />
+      <SetupChecklistCard />
+      <AnalyticsBoard />
       <div className={sectionGrid()}>
         <ConnectionsCard />
-        <div className={overviewColumn()}>
-          <SetupChecklistCard />
-          <JobsGlanceCard />
-        </div>
+        <JobsGlanceCard />
       </div>
-      <AnalyticsBoard />
     </div>
   );
 }

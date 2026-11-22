@@ -6,6 +6,15 @@ export const trackStatusLine = cva("flex min-w-0 items-center gap-1.5");
 
 export const trackStatusIndicator = cva("min-w-0");
 
+export const trackReviewButton = cva(
+  [
+    "inline-flex min-h-7 max-w-full min-w-0 cursor-pointer items-center gap-1 rounded-lg border px-2 py-0.5",
+    "border-status-pending-import-review/40 bg-status-pending-import-review/10 text-status-pending-import-review",
+    "decoration-status-pending-import-review/50 underline underline-offset-3",
+    "hover:bg-status-pending-import-review/20 focus-visible:ring-status-pending-import-review/60 transition-colors focus-visible:ring-2 focus-visible:outline-none",
+  ].join(" ")
+);
+
 export const trackStatusPercent = cva("text-fg/50 shrink-0 text-xs tabular-nums");
 
 export const trackSource = cva("flex min-w-0 items-center gap-1.5");
@@ -159,6 +168,8 @@ export const heroRetryMenuItem = cva("text-primary-400 md:hidden");
 export type HeroRetryMenuItemProps = VariantProps<typeof heroRetryMenuItem>;
 
 export const heroMetaValue = cva("text-primary-400");
+
+export const heroMetaLine = cva("text-fg/40 text-xs text-pretty break-words");
 
 export type HeroMetaValueProps = VariantProps<typeof heroMetaValue>;
 

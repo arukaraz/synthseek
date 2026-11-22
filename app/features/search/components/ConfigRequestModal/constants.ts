@@ -10,6 +10,8 @@ import type {
   MatchingOption,
   DownloadSourceKey,
   QualityModeOption,
+  RecipeCopyKeys,
+  RecipeCopyKind,
   RecipeRowKey,
   RequestPresetOrigin,
   SourceRowLabels,
@@ -22,6 +24,21 @@ export const RECIPE_ROW_LABEL_KEYS: Readonly<Record<RecipeRowKey, ParseKeys<"sea
   matching: "config.rows.matching",
   peer: "config.rows.peer",
   destination: "config.rows.destination",
+};
+
+export const RECIPE_COPY_KEYS: Readonly<Record<RecipeCopyKind, RecipeCopyKeys>> = {
+  request: {
+    heading: "config.preset.heading",
+    changes: "config.preset.changes",
+    restoreAll: "config.preset.restoreAll",
+    restoreRow: "config.preset.restoreRow",
+  },
+  preset: {
+    heading: "config.presetEditor.heading",
+    changes: "config.presetEditor.changes",
+    restoreAll: "config.preset.restoreAll",
+    restoreRow: "config.presetEditor.restoreRow",
+  },
 };
 
 export const PRESET_ORIGIN_KEYS: Readonly<Record<RequestPresetOrigin, ParseKeys<"search">>> = {

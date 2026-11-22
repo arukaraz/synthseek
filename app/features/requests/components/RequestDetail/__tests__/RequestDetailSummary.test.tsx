@@ -41,11 +41,11 @@ function renderSummary({
 }
 
 describe("RequestDetailSummary", () => {
-  it("states done and in-progress tracks over the total", () => {
+  it("states done and in-progress tracks over the total once, in the figure only", () => {
     renderSummary();
 
     expect(screen.getByLabelText("2 complete and 1 in progress out of 5")).toBeInTheDocument();
-    expect(screen.getByText("2 complete, 1 in progress")).toBeInTheDocument();
+    expect(screen.queryByText(/\d complete/)).not.toBeInTheDocument();
   });
 
   it("draws one bar segment per present group, cancelled apart from failed", () => {

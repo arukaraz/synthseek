@@ -89,7 +89,7 @@
     },
     "--status-importing": { "label": "Anfrage: wird importiert", "hint": "Wird in die Bibliothek einsortiert" },
     "--status-pending-import-review": {
-      "label": "Anfrage: wartet auf Import-Prüfung",
+      "label": "Anfrage: zu prüfen",
       "hint": "Eine heruntergeladene Datei, die ein Administrator freigeben oder verwerfen muss"
     },
     "--status-syncing": {

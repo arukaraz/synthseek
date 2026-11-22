@@ -20,15 +20,7 @@ import { STAGE_WIDE_QUERY } from "./constants";
 import { keepMenuOpen, labelled } from "./helpers";
 import { moreMenuGroups } from "./moreMenu";
 import { PlayerMoreSheet } from "./PlayerMoreSheet";
-import {
-  iconButton,
-  menuState,
-  moreBadge,
-  moreMenuContent,
-  moreMenuIcon,
-  moreTrigger,
-  moreTriggerIcon,
-} from "./styles";
+import { iconButton, menuState, moreBadge, moreMenuIcon, moreTrigger, moreTriggerIcon } from "./styles";
 import type { PlayerMoreMenuProps } from "./types";
 import { useMoreAttention } from "./useMoreAttention";
 
@@ -66,7 +58,7 @@ export function PlayerMoreMenu({ view, actions, layout = "narrow", compact = fal
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>{trigger}</DropdownMenuTrigger>
-      <DropdownMenuContent align="end" side="top" sideOffset={10} className={moreMenuContent()}>
+      <DropdownMenuContent align="end" side="top" sideOffset={10}>
         {groups.map((group, index) => (
           <Fragment key={group.key}>
             {index > 0 ? <DropdownMenuSeparator /> : null}

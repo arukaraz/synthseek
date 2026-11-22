@@ -9,9 +9,9 @@ export function LibraryScanSection() {
   return (
     <>
       <LibraryScanCard />
-      <AudioAnalysisCard />
       <CoverArtCard />
       <EditionsCard />
+      <AudioAnalysisCard />
     </>
   );
 }

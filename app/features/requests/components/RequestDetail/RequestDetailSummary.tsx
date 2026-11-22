@@ -53,7 +53,6 @@ export function RequestDetailSummary({
   const missing = Math.max(0, request.total_tracks - (request.requested_tracks || request.total_tracks));
   const isPlaylist = request.contentType === ContentType.enum.playlist;
   const meta = [
-    active > 0 ? t("summary.doneAndActive", { done, active, count: done }) : t("summary.done", { count: done }),
     missing > 0
       ? t(isPlaylist ? "stats.tracksOfPlaylist" : "stats.tracksOfAlbum", {
           requested: total,
@@ -71,7 +70,7 @@ export function RequestDetailSummary({
           {active > 0 ? <span className={summaryFigurePart({ tone: "active" })}>+{active}</span> : null}
           <span className={summaryFigurePart({ tone: "total" })}>/{total}</span>
         </span>
-        <span className={summaryMeta()}>{meta.join(" · ")}</span>
+        {meta.length > 0 ? <span className={summaryMeta()}>{meta.join(" · ")}</span> : null}
       </div>
 
       {isResolving ? null : (

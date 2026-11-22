@@ -4,7 +4,7 @@ import { RotateCcw } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { PRESET_ORIGIN_KEYS, RECIPE_ROW_LABEL_KEYS } from "./constants";
+import { PRESET_ORIGIN_KEYS, RECIPE_COPY_KEYS, RECIPE_ROW_LABEL_KEYS } from "./constants";
 import { DestinationField } from "./DestinationField";
 import { changedRecipeRows, describeRow, recipeRows, restoreRow } from "./helpers";
 import { MatchingEditor } from "./MatchingEditor";
@@ -25,8 +25,10 @@ export function RequestRecipe({
   lidarrAvailable,
   lidarrSlot,
   destination,
+  copy,
 }: RequestRecipeProps) {
   const { t } = useTranslation("search");
+  const copyKeys = RECIPE_COPY_KEYS[copy];
   const [openRow, setOpenRow] = useState<RecipeRowKey | null>(null);
   const rows = recipeRows(selection, destination !== null);
   const changed = locked ? [] : changedRecipeRows(selection, base, destination !== null, destination?.value ?? null);
@@ -72,12 +74,12 @@ export function RequestRecipe({
     <div className={sectionStack()}>
       <div className={recipeHead()}>
         <span className={recipeHeading()}>
-          {changed.length > 0 ? t("config.preset.changes", { count: changed.length }) : t("config.preset.heading")}
+          {changed.length > 0 ? t(copyKeys.changes, { count: changed.length }) : t(copyKeys.heading)}
         </span>
         {changed.length > 0 ? (
           <button type="button" className={recipeRestore()} onClick={restoreAll}>
             <RotateCcw className="size-3.5" aria-hidden />
-            {t("config.preset.restoreAll")}
+            {t(copyKeys.restoreAll)}
           </button>
         ) : (
           <span className={recipeHint()}>
@@ -91,6 +93,7 @@ export function RequestRecipe({
             key={key}
             label={t(RECIPE_ROW_LABEL_KEYS[key])}
             value={describeRow(key, selection, destination, t)}
+            restoreLabel={t(copyKeys.restoreRow)}
             changed={changed.includes(key)}
             locked={locked}
             open={openRow === key}

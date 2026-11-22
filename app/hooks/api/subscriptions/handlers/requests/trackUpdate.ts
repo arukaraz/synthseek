@@ -1,11 +1,19 @@
-import { RequestStatus, type TrackRequest, type TrackUpdatePayload } from "@api/__generated__/types";
+import {
+  COUNTED_TRACK_STATUSES,
+  RequestStatus,
+  type TrackRequest,
+  type TrackUpdatePayload,
+} from "@api/__generated__/types";
 import type { AppRouter } from "@api/__generated__/types";
 import type { QueryClient } from "@tanstack/react-query";
 import { getQueryKey } from "@trpc/react-query";
 import type { inferRouterOutputs } from "@trpc/server";
 import { trpc } from "@utils/trpc";
+import { invalidateRequestList } from "../../shared/requestListInvalidation";
 
 type Utils = ReturnType<typeof trpc.useUtils>;
+
+const COUNTED_STATUSES: readonly RequestStatus[] = Object.values(COUNTED_TRACK_STATUSES);
 
 type ContentDetailOutputs = inferRouterOutputs<AppRouter>["contentDetail"];
 type AlbumDetail = ContentDetailOutputs["albumDetail"];
@@ -102,6 +110,7 @@ function patchRequestDetailCaches(event: TrackUpdatePayload, queryClient: QueryC
 }
 
 export function handleTrackUpdate(event: TrackUpdatePayload, utils: Utils, queryClient: QueryClient): void {
+  if (COUNTED_STATUSES.includes(event.status)) invalidateRequestList(utils);
   patchRequestDetailCaches(event, queryClient);
   patchAlbumDetailCaches(event, queryClient);
   patchArtistTopTracksCaches(event, queryClient);

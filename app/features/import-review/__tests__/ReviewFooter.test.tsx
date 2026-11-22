@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const spies = vi.hoisted(() => ({
-  settings: { data: undefined as unknown },
+  settings: { data: undefined as unknown, isError: false },
   update: vi.fn(),
 }));
 
@@ -92,10 +92,23 @@ describe("ReviewFooter", () => {
     expect(screen.getByRole("button", { name: "Save" })).toBeEnabled();
   });
 
-  it("renders no retention control while the settings are still loading", () => {
+  it("keeps the retention control's place, disabled and without an error, while the settings are still loading", () => {
     spies.settings.data = undefined;
     render(<ReviewFooter totalCount={0} totalBytes={0} />);
 
+    const input = screen.getByLabelText("Keep for");
+    expect(input).toBeDisabled();
+    expect(input).toHaveValue(null);
+    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Save" })).not.toBeInTheDocument();
+  });
+
+  it("renders no retention control when the settings failed to load", () => {
+    spies.settings.data = undefined;
+    spies.settings.isError = true;
+    render(<ReviewFooter totalCount={0} totalBytes={0} />);
+
     expect(screen.queryByLabelText("Keep for")).not.toBeInTheDocument();
+    spies.settings.isError = false;
   });
 });

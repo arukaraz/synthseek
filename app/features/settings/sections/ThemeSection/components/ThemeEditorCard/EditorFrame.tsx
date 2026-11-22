@@ -5,6 +5,7 @@ import { useEffect, useId, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { SegmentedControl } from "@components/ui/SegmentedControl";
+import { DockedToBottom } from "@features/settings/components/SettingsBottomDock";
 import { settingsCard } from "@features/settings/styles";
 
 import { SharePanel } from "../SharePanel";
@@ -69,7 +70,9 @@ export function EditorFrame({ editor, safeEdit }: EditorFrameProps) {
           <EditorNotes editor={editor} safeEdit={safeEdit} />
           {editor.view.mode === "visual" ? <VisualMode editor={editor} /> : <LazyCssMode editor={editor} />}
         </div>
-        <EditorBar editor={editor} />
+        <DockedToBottom>
+          <EditorBar editor={editor} />
+        </DockedToBottom>
       </div>
     </section>
   );

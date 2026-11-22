@@ -30,6 +30,7 @@ import {
   heroIdentityBlock,
   heroLastUpdated,
   heroLockNote,
+  heroMetaLine,
   heroMetaValue,
   heroMobileLastUpdated,
   heroMobileTopRow,
@@ -67,7 +68,7 @@ export function RequestDetailHero({ request, tracks, onBack }: RequestDetailHero
 
   const [exportFullOpen, setExportFullOpen] = useState(false);
   const [rejectPendingOpen, setRejectPendingOpen] = useState(false);
-  const showKebab =
+  const hasMenuActions =
     canApprove ||
     canRetry ||
     actions.canRequeueCancelled ||
@@ -83,6 +84,8 @@ export function RequestDetailHero({ request, tracks, onBack }: RequestDetailHero
   const delegatedTo = formatDelegatedTo(request.delegated_to);
   const detailTarget = requestDetailTarget(request);
   const openDetail = detailTarget ? () => openForTarget(detailTarget) : null;
+  const requestMissing = actions.canRequestMissing ? openDetail : null;
+  const showMobileKebab = hasMenuActions || requestMissing !== null;
   const artwork = request.album_art ? (
     <Image
       {...artworkImage(request.album_art)}
@@ -154,12 +157,13 @@ export function RequestDetailHero({ request, tracks, onBack }: RequestDetailHero
                 </p>
                 <div className={heroTypeRowTrailing()}>
                   <StatusBadge status={request.status} size="md" showIcon />
-                  {showKebab && (
+                  {showMobileKebab && (
                     <RequestDetailHeroMenu
                       actions={actions}
                       typeLabel={typeLabel}
                       onExportFull={() => setExportFullOpen(true)}
                       onRejectPending={() => setRejectPendingOpen(true)}
+                      onRequestMissing={requestMissing}
                       triggerClassName={heroMoreButtonMobile()}
                     />
                   )}
@@ -178,7 +182,7 @@ export function RequestDetailHero({ request, tracks, onBack }: RequestDetailHero
                 <p className="text-fg/60 truncate text-sm">{request.credited_artist}</p>
               )}
               <div className="mt-2 space-y-0.5">
-                <p className="text-fg/40 truncate text-xs">
+                <p className={heroMetaLine()}>
                   <Trans
                     t={t}
                     i18nKey="detail.requestedBy"
@@ -190,7 +194,7 @@ export function RequestDetailHero({ request, tracks, onBack }: RequestDetailHero
                   />
                 </p>
                 {delegatedTo && (
-                  <p className="text-fg/40 truncate text-xs">
+                  <p className={heroMetaLine()}>
                     <Trans
                       t={t}
                       i18nKey="detail.delegatedTo"
@@ -257,19 +261,20 @@ export function RequestDetailHero({ request, tracks, onBack }: RequestDetailHero
                   </Button>
                 )}
 
-                {actions.canRequestMissing && openDetail && (
-                  <Button onClick={openDetail} variant="outline" size="sm" className={heroRetryButton()}>
+                {requestMissing && (
+                  <Button onClick={requestMissing} variant="outline" size="sm" className={heroRetryButton()}>
                     <ListPlus className="mr-1.5 size-3.5" />
                     {t("detail.requestMissing", { count: actions.missingTrackCount })}
                   </Button>
                 )}
 
-                {showKebab && (
+                {hasMenuActions && (
                   <RequestDetailHeroMenu
                     actions={actions}
                     typeLabel={typeLabel}
                     onExportFull={() => setExportFullOpen(true)}
                     onRejectPending={() => setRejectPendingOpen(true)}
+                    onRequestMissing={null}
                     triggerClassName={heroMoreButtonDesktop()}
                   />
                 )}

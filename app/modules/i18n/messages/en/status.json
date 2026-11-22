@@ -33,7 +33,7 @@
       "description": "Processing file"
     },
     "pending_import_review": {
-      "label": "Waiting for Import Review",
+      "label": "Needs review",
       "description": "A downloaded file waits in import review for an admin to approve or discard it"
     },
     "complete": {
@@ -54,7 +54,7 @@
     },
     "partially_complete": {
       "label": "Partially Complete",
-      "description": "Some tracks failed"
+      "description": "Some tracks failed or were cancelled"
     },
     "cancelled": {
       "label": "Cancelled",

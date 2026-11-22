@@ -50,6 +50,7 @@
   "statusFilter": {
     "all": "Toutes",
     "pending_approval": "En attente d'approbation",
+    "review": "À vérifier",
     "active": "Actives",
     "done": "Terminées",
     "failed": "En échec",
@@ -100,6 +101,7 @@
     "lockNote": "Seule la personne qui l'a demandée ou un admin peut la modifier",
     "requestMissing_one": "Demander la piste manquante",
     "requestMissing_other": "Demander les {{count}} pistes manquantes",
+    "openReviewFor": "À vérifier : ouvrir la vérification d'import de {{title}}",
     "jumpTheQueue": "Passer devant la file",
     "cancelDownloads": "Annuler les téléchargements",
     "pause": "Pause",
@@ -132,10 +134,6 @@
       "failed": "En échec",
       "cancelled": "Annulées"
     },
-    "done_one": "{{count}} terminée",
-    "done_other": "{{count}} terminées",
-    "doneAndActive_one": "{{done}} terminée, {{active}} en cours",
-    "doneAndActive_other": "{{done}} terminées, {{active}} en cours",
     "duplicates_one": "{{count}} doublon ignoré",
     "duplicates_other": "{{count}} doublons ignorés",
     "figureLabel": "{{done}} terminées et {{active}} en cours sur {{total}}",
@@ -333,6 +331,43 @@
       "age": "Ancienneté"
     },
     "trackDisplay": "{{title}} - {{artist}}",
+    "reasonFilter": {
+      "label": "Filtrer par motif",
+      "all": "Tous"
+    },
+    "group": {
+      "tracks_one": "{{count}} piste",
+      "tracks_other": "{{count}} pistes"
+    },
+    "card": {
+      "files_one": "{{count}} fichier",
+      "files_other": "{{count}} fichiers, choisissez-en un"
+    },
+    "candidate": {
+      "index": "Fichier {{index}}",
+      "held": "conservé {{age}}"
+    },
+    "compare": {
+      "field": "Champ",
+      "verdict": "Correspondance",
+      "requested": "Demandé",
+      "found": "Ce fichier",
+      "differs": "différent",
+      "matches": "identique",
+      "artist": "Artiste",
+      "title": "Titre",
+      "length": "Durée",
+      "tagMatch": "Tags",
+      "tags": "Tags",
+      "soundsLike": "Ressemble à",
+      "similarity": "Similarité",
+      "artistScore": "{{score}} / 100 de similarité d'artiste",
+      "atLeast": "{{value}} / 100 ou plus",
+      "outOf": "{{value}} / 100",
+      "unreadable": "illisibles",
+      "newCopy": "une nouvelle copie",
+      "rejectedCopy": "{{path}}, que vous avez rejeté"
+    },
     "evidence": {
       "fingerprintMismatch": "L'empreinte audio identifie {{artist}} - {{title}}. Le nom de cet artiste obtient {{score}} sur 100 de similarité avec les artistes de la piste demandée.",
       "tagMismatch": "Les tags du fichier ont obtenu {{observed}} sur 100 de confiance, en dessous des {{expected}} exigés par cette vérification.",
@@ -356,11 +391,16 @@
       "stop": "Arrêter la lecture de {{name}}",
       "previewLabel": "Aperçu audio de {{name}}",
       "approve": "Valider",
-      "discard": "Rejeter"
+      "discard": "Rejeter",
+      "approveThisFile": "Approuver ce fichier",
+      "discardsOthers_one": "· rejette {{count}} autre",
+      "discardsOthers_other": "· rejette {{count}} autres"
     },
     "confirmDiscard": {
-      "title": "Rejeter ce fichier ?",
+      "title": "Rejeter le fichier de {{name}} ?",
       "message": "La copie conservée est supprimée et la source reste bloquée. La piste reste en échec, la surveillance continuera donc à la chercher ailleurs.",
+      "messageSiblings_one": "La copie conservée est supprimée et la source reste bloquée. {{count}} autre fichier de cette piste attend encore une décision.",
+      "messageSiblings_other": "La copie conservée est supprimée et la source reste bloquée. {{count}} autres fichiers de cette piste attendent encore une décision.",
       "confirm": "Rejeter le fichier"
     },
     "footer": {

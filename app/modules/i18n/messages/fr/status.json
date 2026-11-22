@@ -33,7 +33,7 @@
       "description": "Traitement du fichier"
     },
     "pending_import_review": {
-      "label": "En attente de révision des imports",
+      "label": "À vérifier",
       "description": "Un fichier téléchargé attend dans la révision des imports qu'un administrateur l'approuve ou l'écarte"
     },
     "complete": {
@@ -54,7 +54,7 @@
     },
     "partially_complete": {
       "label": "Partiellement terminé",
-      "description": "Certaines pistes ont échoué"
+      "description": "Certaines pistes ont échoué ou ont été annulées"
     },
     "cancelled": {
       "label": "Annulé",

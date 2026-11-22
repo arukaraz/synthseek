@@ -23,7 +23,7 @@ export function ReviewFooter({ totalCount, totalBytes }: ReviewFooterProps) {
   const stored = settings.data?.engine.review;
   const value = draft ?? (stored === undefined ? "" : String(stored.retentionDays));
   const retentionDays = parseRetentionDays(value);
-  const isInvalid = retentionDays === null;
+  const isInvalid = stored !== undefined && retentionDays === null;
   const isDirty = stored !== undefined && retentionDays !== stored.retentionDays;
 
   const handleSave = () => {
@@ -37,7 +37,7 @@ export function ReviewFooter({ totalCount, totalBytes }: ReviewFooterProps) {
         {t("review.footer.summary", { count: totalCount, size: formatBytes(totalBytes) })}
       </span>
 
-      {stored ? (
+      {settings.isError ? null : (
         <div className={retentionWrap()}>
           <label className={retentionLabel()} htmlFor={RETENTION_INPUT_ID}>
             {t("review.footer.retention.label")}
@@ -50,7 +50,7 @@ export function ReviewFooter({ totalCount, totalBytes }: ReviewFooterProps) {
             min={RETENTION_MIN_DAYS}
             max={RETENTION_MAX_DAYS}
             value={value}
-            disabled={update.isPending}
+            disabled={stored === undefined || update.isPending}
             aria-invalid={isInvalid}
             aria-describedby={isInvalid ? RETENTION_ERROR_ID : undefined}
             onChange={(event) => setDraft(event.target.value)}
@@ -67,7 +67,7 @@ export function ReviewFooter({ totalCount, totalBytes }: ReviewFooterProps) {
             </Button>
           ) : null}
         </div>
-      ) : null}
+      )}
     </div>
   );
 }

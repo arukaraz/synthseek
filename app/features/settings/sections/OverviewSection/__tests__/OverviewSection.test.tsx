@@ -23,6 +23,6 @@ describe("OverviewSection", () => {
     const order = screen
       .getAllByTestId(/^(problems|tiles|connections|setup|jobs|analytics)$/)
       .map((node) => node.dataset.testid);
-    expect(order).toEqual(["problems", "tiles", "connections", "setup", "jobs", "analytics"]);
+    expect(order).toEqual(["problems", "tiles", "setup", "analytics", "connections", "jobs"]);
   });
 });

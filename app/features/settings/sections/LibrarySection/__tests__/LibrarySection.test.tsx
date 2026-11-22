@@ -54,10 +54,10 @@ describe("LibrarySection", () => {
 });
 
 describe("LibraryScanSection", () => {
-  it("shows the scan first, then audio analysis, cover art and album editions", () => {
+  it("shows the scan first, then cover art and album editions, and audio analysis last", () => {
     render(<LibraryScanSection />);
 
-    expect(sectionIds()).toEqual(["library-scan", "audio-analysis", "cover-art", "editions"]);
+    expect(sectionIds()).toEqual(["library-scan", "cover-art", "editions", "audio-analysis"]);
   });
 
   it("leaves the page heading to the library tabs", () => {

@@ -6,11 +6,14 @@ import type { StatusFilterIcon } from "./types";
 
 const PENDING_APPROVAL_CONFIG = REQUEST_STATUS_CONFIG[RequestStatus.enum.pending_approval];
 
+const IMPORT_REVIEW_CONFIG = REQUEST_STATUS_CONFIG[RequestStatus.enum.pending_import_review];
+
 export const REVIEW_QUEUE_HASH = "review";
 
 export const STATUS_FILTER_ICONS: StatusFilterIcon[] = [
   { value: "all", icon: Layers },
   { value: "pending_approval", icon: PENDING_APPROVAL_CONFIG.icon },
+  { value: "review", icon: IMPORT_REVIEW_CONFIG.icon },
   { value: "active", icon: Activity },
   { value: "done", icon: CheckCircle },
   { value: "failed", icon: XCircle },

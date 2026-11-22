@@ -95,6 +95,61 @@ describe("hash-target-glow", () => {
     expect(target.hasAttribute(GLOW_ATTR)).toBe(false);
   });
 
+  it("scrolls the marked scroller instead of the page and focuses without scrolling", () => {
+    const scroller = document.createElement("div");
+    scroller.setAttribute("data-glow-scroller", "");
+    Object.defineProperty(scroller, "clientHeight", { value: 400 });
+    scroller.scrollTo = vi.fn();
+    const target = document.createElement("article");
+    target.tabIndex = -1;
+    target.setAttribute("data-anchor-target", "review-track-t1");
+    Object.defineProperty(target, "offsetTop", { value: 600 });
+    Object.defineProperty(target, "offsetHeight", { value: 100 });
+    const focus = vi.spyOn(target, "focus");
+    scroller.appendChild(target);
+    document.body.appendChild(scroller);
+
+    triggerHashTargetGlow("review-track-t1");
+
+    expect(scroller.scrollTo).toHaveBeenCalledWith({ top: 450, behavior: "smooth" });
+    expect(target.scrollIntoView).not.toHaveBeenCalled();
+    expect(focus).toHaveBeenCalledWith({ preventScroll: true });
+    expect(target.hasAttribute(GLOW_ATTR)).toBe(true);
+  });
+
+  it("lines a target taller than its scroller up with the top instead of centering it", () => {
+    const scroller = document.createElement("div");
+    scroller.setAttribute("data-glow-scroller", "");
+    Object.defineProperty(scroller, "clientHeight", { value: 400 });
+    scroller.scrollTo = vi.fn();
+    const target = document.createElement("article");
+    target.setAttribute("data-anchor-target", "review-track-tall");
+    Object.defineProperty(target, "offsetTop", { value: 600 });
+    Object.defineProperty(target, "offsetHeight", { value: 700 });
+    scroller.appendChild(target);
+    document.body.appendChild(scroller);
+
+    triggerHashTargetGlow("review-track-tall");
+
+    expect(scroller.scrollTo).toHaveBeenCalledWith({ top: 600, behavior: "smooth" });
+  });
+
+  it("jumps without smooth scrolling when the viewer asks for reduced motion", () => {
+    const original = window.matchMedia;
+    window.matchMedia = vi.fn().mockReturnValue({ matches: true });
+    const scroller = document.createElement("div");
+    scroller.setAttribute("data-glow-scroller", "");
+    scroller.scrollTo = vi.fn();
+    const target = mountTarget("review-track-t2");
+    scroller.appendChild(target);
+    document.body.appendChild(scroller);
+
+    triggerHashTargetGlow("review-track-t2");
+
+    window.matchMedia = original;
+    expect(scroller.scrollTo).toHaveBeenCalledWith(expect.objectContaining({ behavior: "auto" }));
+  });
+
   it("reads the current location hash without the leading marker", () => {
     window.location.hash = "#ban-threshold";
 

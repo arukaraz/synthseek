@@ -1,4 +1,8 @@
-import type { RequestPreset, RequestSelection } from "@features/search/components/ConfigRequestModal/types";
+import type {
+  DownloadSourceKey,
+  RequestPreset,
+  RequestSelection,
+} from "@features/search/components/ConfigRequestModal/types";
 
 export type PresetChoice = "follow" | "custom";
 
@@ -10,6 +14,8 @@ export interface RequestPresetDraft {
 export interface RequestPresetEditorProps {
   value: RequestPresetDraft;
   onChange: (next: RequestPresetDraft) => void;
+  base: RequestSelection;
+  offered: DownloadSourceKey[];
   followLabel: string;
   customLabel: string;
   followSummary: string;

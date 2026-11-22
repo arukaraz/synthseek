@@ -2,7 +2,7 @@
 
 import { useMemo } from "react";
 
-import { offeredSources } from "@features/search/components/ConfigRequestModal/helpers";
+import { offeredSources, selectionFromPreset } from "@features/search/components/ConfigRequestModal/helpers";
 import { useDownloadSourcesAvailability } from "@hooks/api";
 
 import { useSettingsForm } from "../../hooks/useSettingsForm";
@@ -24,10 +24,12 @@ export function RequestPresetCard({
   onSave,
 }: RequestPresetCardProps) {
   const { data: availability, isPending: isLoadingSources } = useDownloadSourcesAvailability();
+  const offered = useMemo(() => offeredSources(availability, true), [availability]);
   const initial = useMemo(
-    () => (isLoadingSources ? undefined : presetDraft(own, seed, offeredSources(availability, true))),
-    [availability, isLoadingSources, own, seed]
+    () => (isLoadingSources ? undefined : presetDraft(own, seed, offered)),
+    [isLoadingSources, own, seed, offered]
   );
+  const base = useMemo(() => selectionFromPreset(seed, offered), [seed, offered]);
   const form = useSettingsForm(initial);
 
   return (
@@ -36,6 +38,8 @@ export function RequestPresetCard({
         <RequestPresetEditor
           value={form.draft}
           onChange={form.setAll}
+          base={base}
+          offered={offered}
           followLabel={followLabel}
           customLabel={customLabel}
           followSummary={followSummary}

@@ -11,6 +11,10 @@ export const REVIEW_AUDIO_PATH_PREFIX = "/api/v1/review/";
 
 export const REVIEW_AUDIO_PATH_SUFFIX = "/audio";
 
+export const REVIEW_TRACK_ANCHOR_PREFIX = "review-track-";
+
+export const METER_MID_SCORE = 50;
+
 export const RETENTION_INPUT_ID = "import-review-retention-days";
 
 export const RETENTION_ERROR_ID = "import-review-retention-days-error";

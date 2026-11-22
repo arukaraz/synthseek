@@ -8,6 +8,11 @@ import { handleTrackUpdate } from "../trackUpdate";
 
 const spies = vi.hoisted(() => ({
   setQueriesData: vi.fn(),
+  invalidateRequestList: vi.fn(),
+}));
+
+vi.mock("../../../shared/requestListInvalidation", () => ({
+  invalidateRequestList: spies.invalidateRequestList,
 }));
 
 vi.mock("@utils/trpc", () => ({
@@ -81,6 +86,7 @@ function runRequestDetailUpdater<T>(value: T): T {
 describe("handleTrackUpdate content-detail patches", () => {
   beforeEach(() => {
     spies.setQueriesData.mockReset();
+    spies.invalidateRequestList.mockReset();
   });
 
   it("patches the matching albumDetail track row by slskd_request_id", () => {
@@ -94,6 +100,25 @@ describe("handleTrackUpdate content-detail patches", () => {
 
     expect(next.tracks[0].status).toBe(RequestStatus.enum.complete);
     expect(next.tracks[1]).toBe(other);
+  });
+
+  it.each([RequestStatus.enum.failed, RequestStatus.enum.cancelled, RequestStatus.enum.pending_import_review])(
+    "refetches the request list when a track becomes %s, so the list's track counts follow",
+    (status) => {
+      handleTrackUpdate(makeEvent({ requestId: "req_1", status }), trpc.useUtils(), queryClient);
+
+      expect(spies.invalidateRequestList).toHaveBeenCalledTimes(1);
+    }
+  );
+
+  it("leaves the request list alone for a track that is only progressing", () => {
+    handleTrackUpdate(
+      makeEvent({ requestId: "req_1", status: RequestStatus.enum.downloading }),
+      trpc.useUtils(),
+      queryClient
+    );
+
+    expect(spies.invalidateRequestList).not.toHaveBeenCalled();
   });
 
   it("writes failureReason onto a failed albumDetail row", () => {
@@ -171,6 +196,7 @@ describe("handleTrackUpdate content-detail patches", () => {
 describe("handleTrackUpdate requests.getDetail cache patch", () => {
   beforeEach(() => {
     spies.setQueriesData.mockReset();
+    spies.invalidateRequestList.mockReset();
   });
 
   function makeDetail(id: string, trackRequestId: string, updatedAt: Date) {

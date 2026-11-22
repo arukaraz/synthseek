@@ -175,8 +175,6 @@ export const moreBadge = cva("ring-surface-overlay absolute top-1 right-1 size-2
   },
 });
 
-export const moreMenuContent = cva("max-h-(--radix-dropdown-menu-content-available-height) overflow-auto");
-
 export const moreTrigger = cva("relative", {
   variants: {
     layout: {

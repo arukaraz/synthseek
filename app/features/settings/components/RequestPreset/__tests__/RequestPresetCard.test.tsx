@@ -64,10 +64,27 @@ describe("RequestPresetCard", () => {
     const { user } = renderCard(null);
 
     await user.click(screen.getByRole("radio", { name: "My own" }));
-    await user.click(screen.getByRole("button", { name: /^FLAC/ }));
+    expect(screen.getByText("Same as what it would follow")).toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: /^Quality/ }));
+    await user.click(screen.getByRole("radio", { name: "FLAC" }));
     await user.click(screen.getByRole("button", { name: "Save changes" }));
 
     expect(onSave).toHaveBeenCalledWith({ ...SEED, format: { value: "flac", matching: "flexible" } });
+  });
+
+  it("edits the preset with the same recipe rows as a request, counting what differs from the followed preset", async () => {
+    const { user } = renderCard(null);
+
+    await user.click(screen.getByRole("radio", { name: "My own" }));
+    for (const row of ["Source", "Quality", "Peers"]) {
+      expect(screen.getByRole("button", { name: new RegExp(`^${row}`) })).toBeInTheDocument();
+    }
+    await user.click(screen.getByRole("button", { name: /^Quality/ }));
+    await user.click(screen.getByRole("radio", { name: "FLAC" }));
+
+    expect(screen.getByText("1 change from what it would follow")).toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: "Back to the followed value" }));
+    expect(screen.getByText("Same as what it would follow")).toBeInTheDocument();
   });
 
   it("clears the preset when the user goes back to following", async () => {

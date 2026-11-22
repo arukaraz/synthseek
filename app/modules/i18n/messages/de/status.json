@@ -33,7 +33,7 @@
       "description": "Datei wird verarbeitet"
     },
     "pending_import_review": {
-      "label": "Wartet auf Import-Prüfung",
+      "label": "Zu prüfen",
       "description": "Eine heruntergeladene Datei wartet in der Import-Prüfung, bis ein Administrator sie freigibt oder verwirft"
     },
     "complete": {
@@ -54,7 +54,7 @@
     },
     "partially_complete": {
       "label": "Teilweise abgeschlossen",
-      "description": "Einige Titel sind fehlgeschlagen"
+      "description": "Einige Titel sind fehlgeschlagen oder wurden abgebrochen"
     },
     "cancelled": {
       "label": "Abgebrochen",

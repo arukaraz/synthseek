@@ -115,7 +115,28 @@ describe("handlePlaylistUpdate", () => {
     expect(spies.setData).not.toHaveBeenCalled();
   });
 
-  it("does not invalidate for a known playlist; patches status and progress in place", () => {
+  it("does not invalidate a known playlist whose status held; patches its progress in place", () => {
+    const existing = makePlaylist({ id: "pl_existing", completed_tracks: 3, total_tracks: 10 });
+    spies.getData.mockReturnValue([existing]);
+    const utils = trpc.useUtils();
+
+    handlePlaylistUpdate(
+      {
+        eventType: SubscriptionEventType.PlaylistUpdate,
+        playlistId: "pl_existing",
+        status: RequestStatus.enum.in_progress,
+        completedTracks: 4,
+        totalTracks: 10,
+      },
+      utils
+    );
+
+    expect(spies.invalidate).not.toHaveBeenCalled();
+    const next = spies.setData.mock.calls[0][1]([existing]);
+    expect(next[0].completed_tracks).toBe(4);
+  });
+
+  it("refetches the list when a known playlist's status moved, so its track counts follow", () => {
     const existing = makePlaylist({ id: "pl_existing", completed_tracks: 3, total_tracks: 10 });
     spies.getData.mockReturnValue([existing]);
     const utils = trpc.useUtils();
@@ -130,7 +151,7 @@ describe("handlePlaylistUpdate", () => {
 
     handlePlaylistUpdate(event, utils);
 
-    expect(spies.invalidate).not.toHaveBeenCalled();
+    expect(spies.invalidate).toHaveBeenCalledTimes(1);
     expect(spies.setData).toHaveBeenCalledTimes(1);
 
     const updater = spies.setData.mock.calls[0][1];

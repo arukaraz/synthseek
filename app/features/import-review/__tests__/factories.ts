@@ -1,12 +1,13 @@
 import type { ImportReviewEvidence, ImportReviewItem } from "../types";
 
-interface ReviewItemOverrides extends Partial<Omit<ImportReviewItem, "evidence" | "track">> {
+interface ReviewItemOverrides extends Partial<Omit<ImportReviewItem, "evidence" | "track" | "request">> {
   evidence?: Partial<ImportReviewEvidence>;
   track?: Partial<ImportReviewItem["track"]>;
+  request?: Partial<ImportReviewItem["request"]>;
 }
 
 export function makeReviewItem(overrides: ReviewItemOverrides = {}): ImportReviewItem {
-  const { evidence, track, ...rest } = overrides;
+  const { evidence, track, request, ...rest } = overrides;
 
   return {
     id: "held-1",
@@ -39,6 +40,14 @@ export function makeReviewItem(overrides: ReviewItemOverrides = {}): ImportRevie
       retryCount: 0,
       nextRetryAt: null,
       ...track,
+    },
+    request: {
+      id: "album-1",
+      contentType: "album",
+      name: "Requested Album",
+      artist: "Requested Artist",
+      art: null,
+      ...request,
     },
   };
 }

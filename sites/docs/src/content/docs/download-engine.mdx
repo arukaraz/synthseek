@@ -15,24 +15,24 @@ The engine is source-agnostic. It owns the phases and their timing, and each dow
 
 A request moves through a fixed sequence. The status you see on the requests screen is the phase it is currently in. The code is what assistants and the logs use.
 
-| Status                    | What is happening                                                                     | Code                    |
-| ------------------------- | ------------------------------------------------------------------------------------- | ----------------------- |
-| Queued                    | Waiting its turn.                                                                     | `queued`                |
-| Waiting for Approval      | Held because a member's requests need administrator approval.                         | `pending_approval`      |
-| Searching                 | Querying the enabled download sources.                                                | `searching`             |
-| Pending Download          | A candidate was chosen, waiting for a download slot.                                  | `pending_download`      |
-| Downloading               | Transferring.                                                                         | `downloading`           |
-| Paused                    | You parked it. It stays here until you resume.                                        | `paused`                |
-| Pending Import            | Downloaded, waiting for an import slot.                                               | `pending_import`        |
-| Importing                 | Being verified, tagged, and filed.                                                    | `importing`             |
-| Waiting for Import Review | A downloaded file is in the review queue. Nothing else is tried while it waits there. | `pending_import_review` |
-| Syncing to media server   | The playlist it belongs to is being synced to a media server.                         | `syncing_plex`          |
-| Complete                  | In your library.                                                                      | `complete`              |
-| Partially Complete        | Some tracks in the group made it, some did not.                                       | `partially_complete`    |
-| Failed                    | Did not make it. Carries a reason.                                                    | `failed`                |
-| Cancelled                 | You stopped it.                                                                       | `cancelled`             |
-| Delegated                 | Handed to Lidarr, which now owns it.                                                  | `delegated`             |
-| In Progress               | A group with work still moving.                                                       | `in_progress`           |
+| Status                  | What is happening                                                                     | Code                    |
+| ----------------------- | ------------------------------------------------------------------------------------- | ----------------------- |
+| Queued                  | Waiting its turn.                                                                     | `queued`                |
+| Waiting for Approval    | Held because a member's requests need administrator approval.                         | `pending_approval`      |
+| Searching               | Querying the enabled download sources.                                                | `searching`             |
+| Pending Download        | A candidate was chosen, waiting for a download slot.                                  | `pending_download`      |
+| Downloading             | Transferring.                                                                         | `downloading`           |
+| Paused                  | You parked it. It stays here until you resume.                                        | `paused`                |
+| Pending Import          | Downloaded, waiting for an import slot.                                               | `pending_import`        |
+| Importing               | Being verified, tagged, and filed.                                                    | `importing`             |
+| Needs review            | A downloaded file is in the review queue. Nothing else is tried while it waits there. | `pending_import_review` |
+| Syncing to media server | The playlist it belongs to is being synced to a media server.                         | `syncing_plex`          |
+| Complete                | In your library.                                                                      | `complete`              |
+| Partially Complete      | Some tracks in the group made it, some did not.                                       | `partially_complete`    |
+| Failed                  | Did not make it. Carries a reason.                                                    | `failed`                |
+| Cancelled               | You stopped it.                                                                       | `cancelled`             |
+| Delegated               | Handed to Lidarr, which now owns it.                                                  | `delegated`             |
+| In Progress             | A group with work still moving.                                                       | `in_progress`           |
 
 ## Step 1, search
 
