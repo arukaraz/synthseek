@@ -9,7 +9,7 @@ import {
 import { renderHook } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
-import { SortField, type SortConfig } from "../../types";
+import { SortField, type SortConfig, type StatusFilter } from "../../types";
 import { useFilteredRequests } from "../useFilteredRequests";
 
 const ownerId = "user-1";
@@ -224,7 +224,7 @@ describe("useFilteredRequests status filter", () => {
     makeRequest({ id: "cancelled", status: RequestStatus.enum.cancelled }),
   ];
   const nameAsc: SortConfig = { field: SortField.ALBUM, direction: "asc" };
-  const idsFor = (filter: "all" | "pending_approval" | "active" | "done" | "failed") =>
+  const idsFor = (filter: StatusFilter) =>
     renderHook(() => useFilteredRequests(byStatus, filter, nameAsc, "", undefined))
       .result.current.map((item) => item.id)
       .sort();
@@ -245,8 +245,12 @@ describe("useFilteredRequests status filter", () => {
     expect(idsFor("done")).toEqual(["complete", "delegated"]);
   });
 
-  it("keeps failed, cancelled and partially complete requests under failed", () => {
-    expect(idsFor("failed")).toEqual(["cancelled", "failed", "partial"]);
+  it("keeps failed and partially complete requests under failed, without the cancelled ones", () => {
+    expect(idsFor("failed")).toEqual(["failed", "partial"]);
+  });
+
+  it("keeps only the cancelled requests under cancelled", () => {
+    expect(idsFor("cancelled")).toEqual(["cancelled"]);
   });
 });
 

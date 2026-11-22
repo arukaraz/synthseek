@@ -1,13 +1,7 @@
-import {
-  ACTIVE_STATUSES,
-  DownloadSourceKey,
-  RequestStatus,
-  UNRESOLVED_STATUSES,
-  type AppRouter,
-} from "@api/__generated__/types";
+import { ACTIVE_STATUSES, DownloadSourceKey, RequestStatus, type AppRouter } from "@api/__generated__/types";
 import type { inferRouterOutputs } from "@trpc/server";
 
-export type StatusFilter = "all" | "pending_approval" | "active" | "done" | "failed";
+export type StatusFilter = "all" | "pending_approval" | "active" | "done" | "failed" | "cancelled";
 export type SourceFilter = "all" | DownloadSourceKey;
 
 export enum SortField {
@@ -18,7 +12,14 @@ export enum SortField {
 }
 export type SortDirection = "asc" | "desc";
 
-export const STATUS_FILTERS: readonly StatusFilter[] = ["all", "pending_approval", "active", "done", "failed"];
+export const STATUS_FILTERS: readonly StatusFilter[] = [
+  "all",
+  "pending_approval",
+  "active",
+  "done",
+  "failed",
+  "cancelled",
+];
 export const SOURCE_FILTERS: readonly SourceFilter[] = ["all", ...DownloadSourceKey.options];
 const DEFAULT_SOURCE_FILTER: SourceFilter = "all";
 export const SORT_FIELD_VALUES: readonly SortField[] = Object.values(SortField);
@@ -43,7 +44,8 @@ export const STATUS_FILTER_MAP = {
   pending_approval: [RequestStatus.enum.pending_approval],
   active: [...ACTIVE_STATUSES, RequestStatus.enum.pending_import_review],
   done: [RequestStatus.enum.complete, RequestStatus.enum.delegated],
-  failed: [...UNRESOLVED_STATUSES, RequestStatus.enum.partially_complete],
+  failed: [RequestStatus.enum.failed, RequestStatus.enum.partially_complete],
+  cancelled: [RequestStatus.enum.cancelled],
 } as const;
 
 export const DOWNLOAD_ACTIVE_STATUSES: readonly RequestStatus[] = [

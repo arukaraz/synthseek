@@ -52,7 +52,8 @@
     "pending_approval": "Waiting for Approval",
     "active": "Active",
     "done": "Done",
-    "failed": "Failed"
+    "failed": "Failed",
+    "cancelled": "Cancelled"
   },
   "sort": {
     "recent": "Recent",

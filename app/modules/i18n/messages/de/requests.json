@@ -52,7 +52,8 @@
     "pending_approval": "Wartet auf Freigabe",
     "active": "Aktiv",
     "done": "Fertig",
-    "failed": "Fehlgeschlagen"
+    "failed": "Fehlgeschlagen",
+    "cancelled": "Abgebrochen"
   },
   "sort": {
     "recent": "Aktuell",

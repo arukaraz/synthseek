@@ -17,6 +17,7 @@ describe("STATUS_FILTER_ICONS", () => {
       "active",
       "done",
       "failed",
+      "cancelled",
     ]);
   });
 
