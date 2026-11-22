@@ -4,7 +4,6 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { makeRequestsTrack } from "../../../__tests__/factories";
 import { TrackDetailPanel } from "../TrackDetailPanel";
-import type { TrackAction } from "../types";
 
 const releaseState = vi.hoisted(() => ({ current: null as ActiveRelease | null }));
 const toastMock = vi.hoisted(() => ({ success: vi.fn(), error: vi.fn() }));
@@ -34,18 +33,9 @@ function release(overrides: Partial<ActiveRelease> = {}): ActiveRelease {
 
 function renderPanel(
   overrides: Parameters<typeof makeRequestsTrack>[0] = {},
-  { actions = [], showPrivateDetails = true }: { actions?: TrackAction[]; showPrivateDetails?: boolean } = {}
+  { showPrivateDetails = true }: { showPrivateDetails?: boolean } = {}
 ) {
-  const onAction = vi.fn();
-  render(
-    <TrackDetailPanel
-      track={makeRequestsTrack(overrides)}
-      showPrivateDetails={showPrivateDetails}
-      actions={actions}
-      onAction={onAction}
-    />
-  );
-  return { onAction };
+  render(<TrackDetailPanel track={makeRequestsTrack(overrides)} showPrivateDetails={showPrivateDetails} />);
 }
 
 const obtained = () => within(screen.getByRole("region", { name: "Obtained" }));
@@ -191,30 +181,5 @@ describe("TrackDetailPanel obtained box", () => {
     await userEvent.click(obtained().getByRole("button", { name: "Copy path" }));
 
     expect(toastMock.error).toHaveBeenCalledWith("Could not copy the path");
-  });
-});
-
-describe("TrackDetailPanel actions", () => {
-  it("runs the action that was clicked", async () => {
-    const { onAction } = renderPanel(
-      { status: RequestStatus.enum.failed },
-      {
-        actions: [
-          { id: "retry", lock: null },
-          { id: "cancel", lock: null },
-        ],
-      }
-    );
-
-    await userEvent.click(screen.getByRole("button", { name: "Retry now" }));
-
-    expect(onAction).toHaveBeenCalledWith("retry");
-  });
-
-  it("disables a locked action and says why", () => {
-    renderPanel({ status: RequestStatus.enum.failed }, { actions: [{ id: "retry", lock: "ownerOrAdmin" }] });
-
-    expect(screen.getByRole("button", { name: "Retry now" })).toBeDisabled();
-    expect(screen.getByText("Only the person who requested it or an admin can change it")).toBeInTheDocument();
   });
 });

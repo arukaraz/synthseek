@@ -39,6 +39,7 @@ import {
   heroTitle,
   heroTitleButton,
   heroTypeRow,
+  heroTypeRowTrailing,
 } from "./styles";
 import type { RequestDetailHeroProps } from "./types";
 
@@ -151,7 +152,7 @@ export function RequestDetailHero({ request, tracks, onBack }: RequestDetailHero
                 <p className={cn(`type-text-${request.contentType}`, "text-10 font-semibold tracking-wider uppercase")}>
                   {typeLabel}
                 </p>
-                <div className="flex items-center gap-2">
+                <div className={heroTypeRowTrailing()}>
                   <StatusBadge status={request.status} size="md" showIcon />
                   {showKebab && (
                     <RequestDetailHeroMenu
@@ -209,6 +210,7 @@ export function RequestDetailHero({ request, tracks, onBack }: RequestDetailHero
           </div>
 
           <div className={heroControlsColumn()}>
+            <StatusBadge status={request.status} size="md" showIcon />
             <p className={heroLastUpdated()}>
               <Trans
                 t={t}

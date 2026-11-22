@@ -166,6 +166,8 @@ export const heroTypeRow = cva("flex items-center justify-between gap-2");
 
 export type HeroTypeRowProps = VariantProps<typeof heroTypeRow>;
 
+export const heroTypeRowTrailing = cva("flex items-center gap-2 md:hidden");
+
 export const heroIdentityBlock = cva("order-2 flex min-w-0 items-end gap-3 sm:gap-4 md:order-none md:flex-1");
 
 export type HeroIdentityBlockProps = VariantProps<typeof heroIdentityBlock>;
@@ -365,7 +367,7 @@ export const detailProgress = cva("bg-fg/10 h-1.5 w-full max-w-sm overflow-hidde
 
 export const detailProgressFill = cva("bg-status-downloading h-full rounded-full transition-[width]");
 
-export const detailGrid = cva("grid items-start gap-3 @3xl:grid-cols-3");
+export const detailGrid = cva("grid items-stretch gap-3 @3xl:grid-cols-3");
 
 export const detailBox = cva("border-fg/10 bg-fg/[0.03] flex min-w-0 flex-col gap-2 rounded-xl border p-3");
 
@@ -410,8 +412,6 @@ export const detailPathCopy = cva(
 export const detailEmpty = cva("text-fg/45 text-xs");
 
 export const detailLink = cva("text-primary-400 hover:underline");
-
-export const detailActions = cva("flex flex-wrap justify-end gap-2");
 
 export const trackActionTone = cva("", {
   variants: {

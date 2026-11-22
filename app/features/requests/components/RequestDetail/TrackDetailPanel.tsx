@@ -9,7 +9,6 @@ import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
 import {
-  detailActions,
   detailBox,
   detailBoxTitle,
   detailChip,
@@ -24,21 +23,18 @@ import {
   detailPath,
   detailPathCopy,
   detailPathText,
-  lockedReason,
 } from "./styles";
 import { trackProvenance } from "./helpers";
-import { TrackActionButton } from "./TrackActionButton";
 import { TrackDetailHead } from "./TrackDetailHead";
 import type { TrackDetailPanelProps } from "./types";
 
-export function TrackDetailPanel({ track, showPrivateDetails, actions, onAction }: TrackDetailPanelProps) {
+export function TrackDetailPanel({ track, showPrivateDetails }: TrackDetailPanelProps) {
   const { t } = useTranslation("requests");
   const sourceLabel = useDownloadSourceLabel();
   const release = useTrackRelease(track.id);
   const provenance = trackProvenance(track, release);
   const filePath = showPrivateDetails ? (track.library_path ?? track.downloaded_file) : null;
   const peer = showPrivateDetails ? track.source_peer : null;
-  const lock = actions.find((action) => action.lock !== null)?.lock ?? null;
   const isFailed = track.status === RequestStatus.enum.failed;
 
   const copyPath = async () => {
@@ -180,15 +176,6 @@ export function TrackDetailPanel({ track, showPrivateDetails, actions, onAction 
           </dl>
         </section>
       </div>
-
-      {actions.length > 0 ? (
-        <div className={detailActions()}>
-          {actions.map((action) => (
-            <TrackActionButton key={action.id} action={action} onAction={onAction} />
-          ))}
-        </div>
-      ) : null}
-      {lock !== null ? <p className={lockedReason()}>{t(`trackActions.lock.${lock}`)}</p> : null}
     </div>
   );
 }

@@ -102,19 +102,12 @@ export interface TrackSortButtonProps {
 export interface TrackDetailPanelProps {
   track: TrackRequest;
   showPrivateDetails: boolean;
-  actions: TrackAction[];
-  onAction: (id: TrackActionId) => void;
 }
 
 export interface TrackDetailHeadProps {
   track: TrackRequest;
   release: ActiveRelease | null;
   showRawError: boolean;
-}
-
-export interface TrackActionButtonProps {
-  action: TrackAction;
-  onAction: (id: TrackActionId) => void;
 }
 
 export interface TrackRetryLineProps {

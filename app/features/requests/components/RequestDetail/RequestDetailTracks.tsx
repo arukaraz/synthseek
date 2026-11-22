@@ -160,14 +160,7 @@ export function RequestDetailTracks({
           : null
       }
       renderExpansion={(track) =>
-        expandedId === track.id ? (
-          <TrackDetailPanel
-            track={track}
-            showPrivateDetails={permissions.canManage}
-            actions={trackActionsFor(track, permissions)}
-            onAction={(id) => onAction(id, track)}
-          />
-        ) : null
+        expandedId === track.id ? <TrackDetailPanel track={track} showPrivateDetails={permissions.canManage} /> : null
       }
     />
   );
