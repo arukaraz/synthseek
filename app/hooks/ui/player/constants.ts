@@ -26,6 +26,27 @@ export const MAX_CONSECUTIVE_FAILURES = 3;
 
 export const SKIP_DELAY_MS = 1200;
 
+export const MEDIA_ERROR_NAMES: Readonly<Record<number, string>> = {
+  1: "aborted",
+  2: "network",
+  3: "decode",
+  4: "source not supported",
+};
+
+export const DIAGNOSTICS = {
+  FLUSH_DELAY_MS: 1500,
+  MAX_BATCH: 40,
+  MAX_BUFFERED: 200,
+  MAX_CAUSE_LENGTH: 300,
+  MAX_LABEL_LENGTH: 200,
+  MAX_COMMAND_LENGTH: 48,
+  MAX_SOURCE_LENGTH: 64,
+  MAX_TRACK_ID_LENGTH: 128,
+  MAX_POSITION_SECONDS: 24 * 60 * 60,
+  MAX_AGE_MS: 24 * 60 * 60 * 1000,
+  MAX_SEND_ATTEMPTS: 3,
+} as const;
+
 export const EARLY_SKIP_SECONDS = 30;
 
 export const VOLUME_STORAGE_KEY = "synthseek.player.volume";

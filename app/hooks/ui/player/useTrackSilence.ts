@@ -3,6 +3,7 @@
 import { useTrackSilenceFetcher } from "@hooks/api";
 import { useEffect } from "react";
 
+import { recordHelperFailure } from "./diagnostics";
 import { claimUnaskedSilence, rememberSilence } from "./silence";
 import { silenceCandidates, subscribe } from "./store";
 
@@ -15,7 +16,7 @@ export function useTrackSilence(): void {
       if (wanted.length === 0) return;
       fetchSilence({ trackIds: wanted })
         .then(rememberSilence)
-        .catch(() => undefined);
+        .catch((error: unknown) => recordHelperFailure("silence", error));
     });
   }, [fetchSilence]);
 }

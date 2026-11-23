@@ -18,12 +18,24 @@ import {
   STALL_TIMEOUT_MS,
 } from "./constants";
 import { followGraph, stopFollowingAudio } from "./energy";
+import { loadTimeoutCause, stallCause, thrownCause } from "./failure-cause";
 import { followKeepAlive, keepAlive, releaseKeepAlive } from "./keepalive";
 import { clipBuffer, leadFilled, positionOf, roundToSample } from "./pcm-schedule";
 import { openPcmSource } from "./pcm-source";
 import { pcmCanPlay } from "./pcm-support";
 import { fadeCurveValues } from "./transition";
-import type { AudioBus, EngineCallbacks, PcmBuffer, PcmSource, PcmVoiceKey, PrimePlan, SkipFade } from "./types";
+import type {
+  AudioBus,
+  EngineCallbacks,
+  PcmBuffer,
+  PcmSource,
+  PcmVoiceKey,
+  PlayerEngineName,
+  PrimePlan,
+  SkipFade,
+} from "./types";
+
+const ENGINE: PlayerEngineName = "pcm";
 
 interface Voice {
   key: PcmVoiceKey;
@@ -199,8 +211,9 @@ async function feed(voice: Voice, fromSeconds: number): Promise<void> {
         await sleep(PCM_FEED_TICK_MS);
       }
     }
-  } catch {
-    if (voice.iterator === iterator) failVoice(voice);
+  } catch (error) {
+    if (voice.iterator === iterator)
+      failVoice(voice, `${thrownCause(error)} after ${voice.scheduledUntil.toFixed(1)} s of audio`);
     return;
   }
   if (voice.iterator !== iterator) return;
@@ -218,13 +231,14 @@ function announce(voice: Voice): void {
   followGraph();
 }
 
-function failVoice(voice: Voice): void {
+function failVoice(voice: Voice, cause: string): void {
   if (voice === active) {
     clearTimeout(loadTimer);
-    callbacks?.onFailure("load");
+    callbacks?.onFailure("load", { engine: ENGINE, cause });
     return;
   }
   if (primed?.voice === voice) {
+    callbacks?.onUpcomingRefused("prime", { engine: ENGINE, cause });
     refusedPrimeUrl = primed.plan.url;
     discardPrimed();
   }
@@ -329,7 +343,7 @@ function startProgress(): void {
     if (!starved(active)) return;
     stopProgress();
     clearTimeout(loadTimer);
-    callbacks?.onFailure("stall");
+    callbacks?.onFailure("stall", { engine: ENGINE, cause: `${stallCause()}, nothing left scheduled` });
   }, PCM_PROGRESS_MS);
 }
 
@@ -341,8 +355,13 @@ function stopProgress(): void {
 function armLoadTimer(expected: number): void {
   clearTimeout(loadTimer);
   loadTimer = setTimeout(() => {
-    if (expected === generation) callbacks?.onFailure("load");
+    if (expected === generation) callbacks?.onFailure("load", { engine: ENGINE, cause: loadTimeoutCause() });
   }, LOAD_TIMEOUT_MS);
+}
+
+function openFailed(error: unknown): void {
+  clearTimeout(loadTimer);
+  callbacks?.onFailure("load", { engine: ENGINE, cause: `opening the stream: ${thrownCause(error)}` });
 }
 
 function beginPlaying(voice: Voice, fromSeconds: number): void {
@@ -417,12 +436,11 @@ export function loadAndPlay(url: string, volume: number, muted: boolean, startSe
       setTrackGain(voice.key, activeGain, true);
       beginPlaying(voice, startSeconds);
     })
-    .catch(() => {
+    .catch((error: unknown) => {
       if (current !== generation) return;
       armedLoad = null;
       resumeOnOpen = false;
-      clearTimeout(loadTimer);
-      callbacks?.onFailure("load");
+      openFailed(error);
     });
   return current;
 }
@@ -464,11 +482,8 @@ export function crossfadeTo(url: string, fade: SkipFade, volume: number, muted: 
       startVoice(voice, startSeconds, at);
       seamRun += 1;
     })
-    .catch(() => {
-      if (current === generation) {
-        clearTimeout(loadTimer);
-        callbacks?.onFailure("load");
-      }
+    .catch((error: unknown) => {
+      if (current === generation) openFailed(error);
     });
   return current;
 }
@@ -499,12 +514,11 @@ export function loadAt(url: string, seconds: number, volume: number, muted: bool
       }
       callbacks?.onLoadingChange(false);
     })
-    .catch(() => {
+    .catch((error: unknown) => {
       if (current !== generation) return;
       armedLoad = null;
       resumeOnOpen = false;
-      clearTimeout(loadTimer);
-      callbacks?.onFailure("load");
+      openFailed(error);
     });
 }
 
@@ -536,9 +550,11 @@ export function prime(plan: PrimePlan): void {
       primed = { plan: request.plan, voice };
       if (playing) beginPrimedFeed(active);
     })
-    .catch(() => {
+    .catch((error: unknown) => {
       if (opening === request) opening = null;
-      if (request.generation === generation) refusedPrimeUrl = request.plan.url;
+      if (request.generation !== generation) return;
+      refusedPrimeUrl = request.plan.url;
+      callbacks?.onUpcomingRefused("prime", { engine: ENGINE, cause: `opening the stream: ${thrownCause(error)}` });
     });
 }
 

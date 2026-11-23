@@ -3,7 +3,9 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { PlayerTrack } from "@components/Player";
 
 import { MAX_CONSECUTIVE_FAILURES, MODE_STORAGE_KEY, SKIP_DELAY_MS, VOLUME_STORAGE_KEY } from "../constants";
-import type { EngineCallbacks } from "../types";
+import type { EngineCallbacks, EngineFailureDetail, RecordedDiagnostic } from "../types";
+
+const failed: EngineFailureDetail = { engine: "element", cause: "media error 2 (network)" };
 
 const miniWindow = vi.hoisted(() => ({
   close: vi.fn(),
@@ -287,7 +289,7 @@ describe("player store engine callbacks", () => {
   it("forgets earlier failures as soon as a track plays", async () => {
     const store = await freshStore();
     store.actions.playQueue([track("a"), track("b")], 0);
-    engine.handlers?.onFailure("load");
+    engine.handlers?.onFailure("load", failed);
     expect(store.getSnapshot().consecutiveFailures).toBe(1);
 
     engine.handlers?.onPlayingChange(true);
@@ -475,7 +477,7 @@ describe("player store failures", () => {
     const store = await freshStore();
     store.actions.playQueue([track("a")], 0);
 
-    engine.handlers?.onFailure("autoplay");
+    engine.handlers?.onFailure("autoplay", failed);
 
     expect(store.getSnapshot().playing).toBe(false);
     expect(store.getSnapshot().loading).toBe(false);
@@ -488,7 +490,7 @@ describe("player store failures", () => {
     const store = await freshStore();
     store.actions.playQueue([track("a"), track("b")], 0);
 
-    engine.handlers?.onFailure("load");
+    engine.handlers?.onFailure("load", failed);
 
     expect(notices.announce).toHaveBeenCalledWith({ text: "skipping Title a", tone: "danger" });
     expect(store.getSnapshot().index).toBe(0);
@@ -509,7 +511,7 @@ describe("player store failures", () => {
     expect(engine.loadAndPlay.mock.calls.at(-1)?.[0]).toBe("/api/v1/library/tracks/a/stream?source=navidrome");
     engine.handlers?.onProgress(42, 200);
 
-    engine.handlers?.onFailure("stall");
+    engine.handlers?.onFailure("stall", failed);
 
     expect(notices.announce).toHaveBeenCalledWith({
       text: "trying Title a from jellyfin after navidrome",
@@ -524,7 +526,7 @@ describe("player store failures", () => {
     vi.advanceTimersByTime(SKIP_DELAY_MS);
     expect(store.getSnapshot()).toMatchObject({ index: 0, consecutiveFailures: 0 });
 
-    engine.handlers?.onFailure("load");
+    engine.handlers?.onFailure("load", failed);
 
     expect(notices.announce).toHaveBeenLastCalledWith({ text: "skipping Title a", tone: "danger" });
     vi.advanceTimersByTime(SKIP_DELAY_MS);
@@ -540,7 +542,7 @@ describe("player store failures", () => {
     store.actions.restoreSession([track("a", { sources })], "a", 30, null, [], null);
     engine.loadAndPlay.mockClear();
 
-    engine.handlers?.onFailure("load");
+    engine.handlers?.onFailure("load", failed);
 
     expect(engine.loadAt).toHaveBeenLastCalledWith(
       "/api/v1/library/tracks/a/stream?source=plex",
@@ -562,7 +564,7 @@ describe("player store failures", () => {
     store.actions.togglePlay();
     engine.loadAt.mockClear();
 
-    engine.handlers?.onFailure("load");
+    engine.handlers?.onFailure("load", failed);
 
     expect(engine.loadAndPlay).toHaveBeenLastCalledWith(
       "/api/v1/library/tracks/a/stream?source=jellyfin",
@@ -586,7 +588,7 @@ describe("player store failures", () => {
     engine.handlers?.onPlayingChange(false);
     engine.loadAndPlay.mockClear();
 
-    engine.handlers?.onFailure("stall");
+    engine.handlers?.onFailure("stall", failed);
 
     expect(engine.loadAt).toHaveBeenLastCalledWith(
       "/api/v1/library/tracks/a/stream?source=jellyfin",
@@ -608,7 +610,7 @@ describe("player store failures", () => {
     engine.handlers?.onEnded();
     engine.loadAndPlay.mockClear();
 
-    engine.handlers?.onFailure("stall");
+    engine.handlers?.onFailure("stall", failed);
 
     expect(engine.loadAndPlay).not.toHaveBeenCalled();
     expect(store.getSnapshot().playing).toBe(false);
@@ -618,11 +620,95 @@ describe("player store failures", () => {
     const store = await freshStore();
     store.actions.playQueue([track("a"), track("b"), track("c")], 0);
 
-    for (let attempt = 0; attempt < MAX_CONSECUTIVE_FAILURES; attempt += 1) engine.handlers?.onFailure("stall");
+    for (let attempt = 0; attempt < MAX_CONSECUTIVE_FAILURES; attempt += 1) engine.handlers?.onFailure("stall", failed);
 
     expect(store.getSnapshot().started).toBe(false);
     expect(engine.stop).toHaveBeenCalled();
     expect(notices.announce).toHaveBeenLastCalledWith({ text: "too many failures", tone: "danger" });
+  });
+});
+
+describe("player store diagnostics", () => {
+  async function recordingStore(): Promise<{ store: typeof import("../store"); recorded: RecordedDiagnostic[] }> {
+    const store = await freshStore();
+    const diagnostics = await import("../diagnostics");
+    const recorded: RecordedDiagnostic[] = [];
+    diagnostics.setDiagnosticsSink((event) => recorded.push(event));
+    return { store, recorded };
+  }
+
+  it("records a skipped failure with the track, position, engine, cause and count", async () => {
+    const { store, recorded } = await recordingStore();
+    store.actions.playQueue([track("a"), track("b")], 0);
+    engine.handlers?.onProgress(63, 200);
+
+    engine.handlers?.onFailure("load", failed);
+
+    expect(recorded).toEqual([
+      expect.objectContaining({
+        kind: "failure",
+        trackId: "a",
+        label: "Daft Punk - Title a",
+        positionSeconds: 63,
+        reason: "load",
+        outcome: "skipped",
+        engine: "element",
+        cause: "media error 2 (network)",
+        failures: 1,
+        maxFailures: MAX_CONSECUTIVE_FAILURES,
+      }),
+    ]);
+  });
+
+  it("records the stop when the failures run out", async () => {
+    const { store, recorded } = await recordingStore();
+    store.actions.playQueue([track("a"), track("b"), track("c")], 0);
+
+    for (let attempt = 0; attempt < MAX_CONSECUTIVE_FAILURES; attempt += 1) engine.handlers?.onFailure("stall", failed);
+
+    expect(recorded.at(-1)).toMatchObject({ outcome: "stopped", failures: MAX_CONSECUTIVE_FAILURES });
+  });
+
+  it("records a fallback with both sources, and a browser block", async () => {
+    const { store, recorded } = await recordingStore();
+    const sources = [
+      { key: "navidrome", format: "flac", bitrateKbps: 1000 },
+      { key: "jellyfin", format: "flac", bitrateKbps: 1000 },
+    ];
+    store.actions.playQueue([track("a", { sources })], 0);
+
+    engine.handlers?.onFailure("stall", failed);
+    engine.handlers?.onFailure("autoplay", failed);
+
+    expect(recorded).toEqual([
+      expect.objectContaining({ outcome: "fallback", failedSource: "navidrome", nextSource: "jellyfin" }),
+      expect.objectContaining({ reason: "autoplay", outcome: "blocked" }),
+    ]);
+  });
+
+  it("records going back only when the track changes, not when previous restarts it", async () => {
+    const { store, recorded } = await recordingStore();
+    store.actions.playQueue([track("a"), track("b")], 1);
+    engine.handlers?.onProgress(90, 200);
+
+    store.actions.previous();
+    expect(recorded).toEqual([]);
+
+    engine.handlers?.onProgress(1, 200);
+    store.actions.previous();
+    expect(recorded).toEqual([expect.objectContaining({ kind: "userSkip", direction: "previous", trackId: "b" })]);
+  });
+
+  it("records the listener skipping forward", async () => {
+    const { store, recorded } = await recordingStore();
+    store.actions.playQueue([track("a"), track("b")], 0);
+    engine.handlers?.onProgress(12, 200);
+
+    store.actions.next();
+
+    expect(recorded).toEqual([
+      expect.objectContaining({ kind: "userSkip", direction: "next", trackId: "a", positionSeconds: 12 }),
+    ]);
   });
 });
 
@@ -639,7 +725,7 @@ describe("player store transport", () => {
   it("loads the track again when play is pressed after the player gave up", async () => {
     const store = await freshStore();
     store.actions.playQueue([track("a")], 0);
-    for (let attempt = 0; attempt < MAX_CONSECUTIVE_FAILURES; attempt += 1) engine.handlers?.onFailure("load");
+    for (let attempt = 0; attempt < MAX_CONSECUTIVE_FAILURES; attempt += 1) engine.handlers?.onFailure("load", failed);
     expect(store.getSnapshot().started).toBe(false);
     engine.loadAndPlay.mockClear();
 
@@ -719,7 +805,7 @@ describe("player store transport", () => {
     vi.useFakeTimers();
     const store = await freshStore();
     store.actions.playQueue([track("a"), track("b")], 0);
-    engine.handlers?.onFailure("load");
+    engine.handlers?.onFailure("load", failed);
 
     store.actions.stop();
     vi.advanceTimersByTime(SKIP_DELAY_MS);

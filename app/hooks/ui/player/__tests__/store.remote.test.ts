@@ -3,7 +3,9 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { PlayerTrack } from "@components/Player";
 
 import { MIRROR_STALE_MS, MIRROR_TICK_MS } from "../constants";
-import type { EngineCallbacks, RemotePlayback } from "../types";
+import type { EngineCallbacks, EngineFailureDetail, RemotePlayback } from "../types";
+
+const failed: EngineFailureDetail = { engine: "element", cause: "media error 2 (network)" };
 
 vi.mock("@components/Player", async () => {
   const helpers = await vi.importActual<typeof import("@components/Player/helpers")>("@components/Player/helpers");
@@ -153,7 +155,7 @@ describe("player store remote handover", () => {
     store.actions.applyRemoteState(remotePlayback());
     engine.loadAndPlay.mockClear();
 
-    engine.handlers?.onFailure("stall");
+    engine.handlers?.onFailure("stall", failed);
 
     expect(engine.loadAndPlay).not.toHaveBeenCalled();
   });
@@ -169,7 +171,7 @@ describe("player store remote handover", () => {
     store.actions.pauseHere();
     engine.loadAndPlay.mockClear();
 
-    engine.handlers?.onFailure("stall");
+    engine.handlers?.onFailure("stall", failed);
 
     expect(engine.pause).toHaveBeenCalled();
     expect(engine.loadAndPlay).not.toHaveBeenCalled();

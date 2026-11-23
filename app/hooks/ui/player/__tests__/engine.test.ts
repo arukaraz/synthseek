@@ -56,6 +56,7 @@ describe("choosing the engine for the session", () => {
       onPlayingChange: vi.fn(),
       onLoadingChange: vi.fn(),
       onFailure: vi.fn(),
+      onUpcomingRefused: vi.fn(),
     };
 
     facade.connectEngine(heard);
@@ -110,6 +111,7 @@ describe("choosing the engine for the session", () => {
       onPlayingChange: vi.fn(),
       onLoadingChange: vi.fn(),
       onFailure: vi.fn(),
+      onUpcomingRefused: vi.fn(),
     };
     const plan = {
       url: "/stream/b",

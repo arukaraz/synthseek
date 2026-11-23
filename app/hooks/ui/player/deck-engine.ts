@@ -16,9 +16,12 @@ import {
   STALL_TIMEOUT_MS,
 } from "./constants";
 import { followAudio, stopFollowingAudio } from "./energy";
+import { elementErrorCause, elementStateOf, loadTimeoutCause, stallCause, thrownCause } from "./failure-cause";
 import { fadeCurveValues, handoffLeadSeconds } from "./transition";
-import type { EngineCallbacks, PrimePlan, SkipFade } from "./types";
+import type { EngineCallbacks, PlayerEngineName, PrimePlan, SkipFade } from "./types";
 import type { TransitionCurve } from "@components/Player";
+
+const ENGINE: PlayerEngineName = "element";
 
 const decks: HTMLAudioElement[] = [];
 let active = 0;
@@ -40,7 +43,10 @@ function clearTimers(): void {
 
 function armStall(): void {
   clearTimeout(stallTimer);
-  stallTimer = setTimeout(() => callbacks?.onFailure("stall"), STALL_TIMEOUT_MS);
+  stallTimer = setTimeout(
+    () => callbacks?.onFailure("stall", { engine: ENGINE, cause: `${stallCause()}; ${elementStateOf(activeDeck())}` }),
+    STALL_TIMEOUT_MS
+  );
 }
 
 function isActive(element: HTMLAudioElement): boolean {
@@ -120,15 +126,16 @@ function wire(created: HTMLAudioElement): void {
   created.addEventListener("error", () => {
     if (isActive(created)) {
       clearTimers();
-      callbacks?.onFailure("load");
+      callbacks?.onFailure("load", { engine: ENGINE, cause: elementErrorCause(created) });
       return;
     }
     if (arriving !== null && arriving.generation === generation) {
       arriving = null;
       clearTimers();
-      callbacks?.onFailure("load");
+      callbacks?.onFailure("load", { engine: ENGINE, cause: elementErrorCause(created) });
       return;
     }
+    if (primed !== null) callbacks?.onUpcomingRefused("prime", { engine: ENGINE, cause: elementErrorCause(created) });
     refusedPrimeUrl = primed?.url ?? refusedPrimeUrl;
     primed = null;
     stopWatching();
@@ -188,8 +195,12 @@ function performHandoff(): void {
   const blend = crossDecks(leaving, incoming, fade, plan.curve, plan.gainFactor);
   resumeGraph();
   if (plan.enterAtSeconds > 0) incoming.currentTime = plan.enterAtSeconds;
-  void incoming.play().catch(() => undefined);
+  const started = incoming.play();
   swapTo(incoming, blend);
+  const seam = generation;
+  void started.catch((error: unknown) => {
+    if (seam === generation) callbacks?.onUpcomingRefused("handoff", { engine: ENGINE, cause: thrownCause(error) });
+  });
   if (incoming.readyState < HTMLMediaElement.HAVE_FUTURE_DATA) callbacks?.onLoadingChange(true);
   armLoadTimer(generation);
   callbacks?.onHandoff(plan.url);
@@ -285,8 +296,16 @@ function seekOnceReady(node: HTMLAudioElement, expected: number, seconds: number
 
 function armLoadTimer(expected: number): void {
   loadTimer = setTimeout(() => {
-    if (expected === generation) callbacks?.onFailure("load");
+    if (expected !== generation) return;
+    const loading = arriving === null ? activeDeck() : standbyDeck();
+    callbacks?.onFailure("load", { engine: ENGINE, cause: `${loadTimeoutCause()}; ${elementStateOf(loading)}` });
   }, LOAD_TIMEOUT_MS);
+}
+
+function refusedPlay(expected: number): (error: unknown) => void {
+  return (error) => {
+    if (expected === generation) callbacks?.onFailure("autoplay", { engine: ENGINE, cause: thrownCause(error) });
+  };
 }
 
 export function canPlayMime(mimeType: string): boolean {
@@ -314,9 +333,7 @@ export function loadAndPlay(url: string, volume: number, muted: boolean, startSe
   seekOnceReady(node, current, startSeconds);
   callbacks?.onLoadingChange(true);
   armLoadTimer(current);
-  void node.play().catch(() => {
-    if (current === generation) callbacks?.onFailure("autoplay");
-  });
+  void node.play().catch(refusedPlay(current));
   return current;
 }
 
@@ -338,9 +355,7 @@ export function crossfadeTo(url: string, fade: SkipFade, volume: number, muted: 
   arriving = { fade, generation: current };
   callbacks?.onLoadingChange(true);
   armLoadTimer(current);
-  void node.play().catch(() => {
-    if (current === generation) callbacks?.onFailure("autoplay");
-  });
+  void node.play().catch(refusedPlay(current));
   return current;
 }
 
@@ -395,9 +410,7 @@ export function resume(): void {
   const current = generation;
   attachGraph(node);
   resumeGraph();
-  void node.play().catch(() => {
-    if (current === generation) callbacks?.onFailure("autoplay");
-  });
+  void node.play().catch(refusedPlay(current));
 }
 
 export function pause(): void {

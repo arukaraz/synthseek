@@ -173,7 +173,44 @@ export interface EngineCallbacks {
   onHandoff: (url: string) => void;
   onPlayingChange: (playing: boolean) => void;
   onLoadingChange: (loading: boolean) => void;
-  onFailure: (reason: "load" | "stall" | "autoplay") => void;
+  onFailure: (reason: PlayerFailureReason, detail: EngineFailureDetail) => void;
+  onUpcomingRefused: (stage: PlayerUpcomingStage, detail: EngineFailureDetail) => void;
+}
+
+type ReportDiagnosticsInput = inferRouterInputs<AppRouter>["playback"]["reportDiagnostics"];
+
+export type PlayerDiagnosticEvent = ReportDiagnosticsInput["events"][number];
+
+export type PlayerEngineName = Extract<PlayerDiagnosticEvent, { kind: "failure" }>["engine"];
+
+export type PlayerFailureReason = Extract<PlayerDiagnosticEvent, { kind: "failure" }>["reason"];
+
+export type PlayerUpcomingStage = Extract<PlayerDiagnosticEvent, { kind: "upcomingRefused" }>["stage"];
+
+export type PlayerDiagnosticHelper = Extract<PlayerDiagnosticEvent, { kind: "helperFailed" }>["helper"];
+
+export type RecordedDiagnostic = PlayerDiagnosticEvent extends infer Event
+  ? Event extends PlayerDiagnosticEvent
+    ? Omit<Event, "ageMs"> & { at: number }
+    : never
+  : never;
+
+export type DiagnosticsSink = (event: RecordedDiagnostic) => void;
+
+export type FailureOutcome = Extract<PlayerDiagnosticEvent, { kind: "failure" }>["outcome"];
+
+export type SkipDirection = Extract<PlayerDiagnosticEvent, { kind: "userSkip" }>["direction"];
+
+export interface EngineFailureDetail {
+  engine: PlayerEngineName;
+  cause: string;
+}
+
+export interface FailureAt {
+  track: PlayerTrack;
+  positionSeconds: number;
+  reason: PlayerFailureReason;
+  detail: EngineFailureDetail;
 }
 
 export interface PrimePlan {

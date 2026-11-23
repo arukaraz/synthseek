@@ -29,6 +29,7 @@ import {
   VOLUME_STORAGE_KEY,
 } from "./constants";
 import { announce } from "./announce";
+import { recordFailure, recordHandOverFailed, recordUpcoming, recordUserSkip } from "./diagnostics";
 import { setCompressor, setEqualizerGains, setEqualizerPreamp } from "./audio-graph";
 import { defaultCompressor, restorableCompressor, steppedCompressorValue } from "./compressor";
 import { defaultConversion, restorableConversion, streamConversionFor } from "./conversion";
@@ -98,11 +99,14 @@ import type {
   CompressorParam,
   CompressorSettings,
   ConversionSettings,
+  EngineFailureDetail,
   EqualizerCustomPreset,
   EqualizerSettings,
   LoudnessMode,
   LoudnessPreferences,
+  PlayerFailureReason,
   PlayerSessionState,
+  PlayerUpcomingStage,
   QueueAddOutcome,
   RemotePlayback,
   SessionSnapshot,
@@ -221,8 +225,15 @@ function ensureConnected(): void {
       if (state.started && state.halt !== "stopped") publishPlaybackState(playing);
     },
     onLoadingChange: (loading) => publish({ loading }),
-    onFailure: (reason) => handleFailure(reason),
+    onFailure: (reason, detail) => handleFailure(reason, detail),
+    onUpcomingRefused: (stage, detail) => recordUpcomingRefused(stage, detail),
   });
+}
+
+function recordUpcomingRefused(stage: PlayerUpcomingStage, detail: EngineFailureDetail): void {
+  const next = automaticNextIndex();
+  if (stage === "prime") recordUpcoming(next === null ? null : (state.queue[next] ?? null), 0, stage, detail);
+  else recordUpcoming(currentTrack(), state.positionSeconds, stage, detail);
 }
 
 function sourceFor(track: PlayerTrack): string | null {
@@ -472,11 +483,13 @@ function fadeTowards(index: number): number {
   return target === undefined ? 0 : skipFadeSeconds(target);
 }
 
-function handleFailure(reason: "load" | "stall" | "autoplay"): void {
+function handleFailure(reason: PlayerFailureReason, detail: EngineFailureDetail): void {
   const messages = lastMessages;
   const track = currentTrack();
   if (track === null) return;
+  const failureAt = { track, positionSeconds: state.positionSeconds, reason, detail };
   if (reason === "autoplay") {
+    recordFailure(failureAt, "blocked", state.consecutiveFailures, { failed: null, next: null });
     publish({ playing: false, loading: false });
     notify(messages.autoplayBlocked, "warning");
     return;
@@ -485,6 +498,7 @@ function handleFailure(reason: "load" | "stall" | "autoplay"): void {
   const fallback = fallbackSourceFor(track, state.sourceChoice, state.failedSources);
   const failing = playingSourceOf(track, state.sourceChoice);
   if (fallback !== null && failing !== null) {
+    recordFailure(failureAt, "fallback", state.consecutiveFailures, { failed: failing.key, next: fallback.key });
     clearTimeout(skipTimer);
     publish({
       sourceChoice: { trackId: track.id, source: fallback.key },
@@ -498,6 +512,8 @@ function handleFailure(reason: "load" | "stall" | "autoplay"): void {
   }
 
   const failures = state.consecutiveFailures + 1;
+  const outcome = failures >= MAX_CONSECUTIVE_FAILURES ? "stopped" : "skipped";
+  recordFailure(failureAt, outcome, failures, { failed: failing?.key ?? null, next: null });
   publish({ consecutiveFailures: failures, loading: false, playing: false });
   if (failures >= MAX_CONSECUTIVE_FAILURES) {
     stop();
@@ -848,6 +864,7 @@ export const actions = {
   },
   next(): void {
     reportEarlySkip();
+    recordUserSkip(currentTrack(), state.positionSeconds, "next");
     advance(false);
   },
   jumpTo(index: number): void {
@@ -894,6 +911,7 @@ export const actions = {
       seekWithin(0);
       return;
     }
+    recordUserSkip(currentTrack(), state.positionSeconds, "previous");
     playAt(previous, 0, fadeTowards(previous));
   },
   seekTo(seconds: number): void {
@@ -1074,6 +1092,7 @@ export const actions = {
     const index = state.queue.findIndex((track) => track.id === remote.track?.id);
     clearInterval(mirrorTimer);
     publish({ remote: null });
+    recordHandOverFailed(remote.track, remote.positionSeconds, remote.deviceName);
     notify(lastMessages.handOverFailed(remote.deviceName), "warning");
     if (index < 0) return;
     playAt(index, remote.positionSeconds);

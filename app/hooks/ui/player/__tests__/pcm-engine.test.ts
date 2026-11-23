@@ -155,8 +155,11 @@ function callbacks(): EngineCallbacks {
     onPlayingChange: vi.fn(),
     onLoadingChange: vi.fn(),
     onFailure: vi.fn(),
+    onUpcomingRefused: vi.fn(),
   };
 }
+
+const pcmDetail = expect.objectContaining({ engine: "pcm", cause: expect.any(String) });
 
 async function freshEngine(): Promise<{ engine: typeof import("../pcm-engine"); heard: EngineCallbacks }> {
   vi.resetModules();
@@ -315,14 +318,14 @@ describe("feeding one track into the graph", () => {
 
     engine.loadAndPlay(A, 1, false);
     await settle();
-    expect(heard.onFailure).toHaveBeenCalledWith("load");
+    expect(heard.onFailure).toHaveBeenCalledWith("load", pcmDetail);
 
     heard.onFailure = vi.fn();
     engine.connectEngine(heard);
     sources.specs.set(B, { duration: 0, trim: 0, chunk: 1, fail: false });
     engine.loadAndPlay(B, 1, false);
     await settle(LOAD_TIMEOUT_MS);
-    expect(heard.onFailure).toHaveBeenCalledWith("load");
+    expect(heard.onFailure).toHaveBeenCalledWith("load", pcmDetail);
   });
 
   it("reports a decoder that dies mid-track, and lets a finished buffer's node go", async () => {
@@ -333,7 +336,7 @@ describe("feeding one track into the graph", () => {
     await settle();
 
     expect(context.sources).toHaveLength(3);
-    expect(heard.onFailure).toHaveBeenCalledWith("load");
+    expect(heard.onFailure).toHaveBeenCalledWith("load", pcmDetail);
 
     context.sources[0]?.onended?.();
     engine.pause();
@@ -484,7 +487,7 @@ describe("pausing, resuming and seeking", () => {
     engine.resume();
     await settle(LOAD_TIMEOUT_MS);
 
-    expect(heard.onFailure).toHaveBeenCalledWith("load");
+    expect(heard.onFailure).toHaveBeenCalledWith("load", pcmDetail);
   });
 });
 
@@ -602,7 +605,7 @@ describe("a pause that lands while a track is still opening", () => {
     engine.resume();
     await settle(LOAD_TIMEOUT_MS / 2);
 
-    expect(heard.onFailure).toHaveBeenCalledWith("load");
+    expect(heard.onFailure).toHaveBeenCalledWith("load", pcmDetail);
   });
 });
 
@@ -964,7 +967,7 @@ describe("a stream that stops delivering while it plays", () => {
     context.currentTime = silentFrom + stallSeconds;
     await settle(PCM_PROGRESS_MS * 4);
     expect(heard.onFailure).toHaveBeenCalledTimes(1);
-    expect(heard.onFailure).toHaveBeenCalledWith("stall");
+    expect(heard.onFailure).toHaveBeenCalledWith("stall", pcmDetail);
   });
 
   it("reports a stream that never delivered its first frame once, not once as stalled and again as unloaded", async () => {
@@ -978,7 +981,7 @@ describe("a stream that stops delivering while it plays", () => {
     await settle(LOAD_TIMEOUT_MS);
 
     expect(heard.onFailure).toHaveBeenCalledTimes(1);
-    expect(heard.onFailure).toHaveBeenCalledWith("stall");
+    expect(heard.onFailure).toHaveBeenCalledWith("stall", pcmDetail);
   });
 
   it("never calls a paused track stalled, however long it waits", async () => {

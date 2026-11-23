@@ -48,6 +48,7 @@ export {
   usePublishPlaybackState,
   useRadioTracksFetcher,
   useRecordPlay,
+  useReportPlayerDiagnostics,
   useSavePlaybackPosition,
   useSavePlaybackSession,
   useSendPlayerCommand,

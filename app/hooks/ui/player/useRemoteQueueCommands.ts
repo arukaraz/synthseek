@@ -5,6 +5,7 @@ import { usePlayableTracksFetcher } from "@hooks/api";
 import { useEffect } from "react";
 
 import { setQueueCommandHandler } from "./commands";
+import { recordDroppedCommand } from "./diagnostics";
 import { playerTrackFrom } from "./helpers";
 import { actions } from "./store";
 
@@ -35,7 +36,7 @@ export function useRemoteQueueCommands(): void {
               if (command.placement === "next") actions.playNext(tracks);
               else actions.addToQueue(tracks);
             })
-            .catch(() => undefined);
+            .catch((error: unknown) => recordDroppedCommand(command.command, error));
           return;
         case "queuePlay":
           void tracksFor(command.trackIds)
@@ -44,7 +45,7 @@ export function useRemoteQueueCommands(): void {
               if (command.shuffle) actions.playShuffled(tracks);
               else actions.playQueue(tracks, Math.min(command.startIndex, tracks.length - 1));
             })
-            .catch(() => undefined);
+            .catch((error: unknown) => recordDroppedCommand(command.command, error));
           return;
       }
     });

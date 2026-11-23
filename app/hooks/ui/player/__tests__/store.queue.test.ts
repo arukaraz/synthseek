@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { MAX_QUEUE_TRACKS } from "../constants";
+import type { EngineCallbacks } from "../types";
 import type { PlayerTrack } from "@components/Player";
 
 vi.mock("@components/Player", () => ({
@@ -15,12 +16,12 @@ vi.mock("@utils/artworkProxy", () => ({ artworkProxySrc: (value: string) => valu
 
 vi.mock("../announce", () => ({ announce: vi.fn() }));
 
-const engine = vi.hoisted(() => ({ handlers: null as { onFailure?: (reason: string) => void } | null }));
+const engine = vi.hoisted(() => ({ handlers: null as Pick<EngineCallbacks, "onFailure"> | null }));
 
 vi.mock("../engine", () => ({
   applyVolume: vi.fn(),
   canPlayMime: () => true,
-  connectEngine: vi.fn((h: { onFailure?: (reason: string) => void }) => {
+  connectEngine: vi.fn((h: Pick<EngineCallbacks, "onFailure">) => {
     engine.handlers = h;
   }),
   loadAndPlay: vi.fn(),
@@ -279,7 +280,8 @@ describe("player store addToQueue", () => {
   it("does not rewind to the first track when the player merely gave up on three failures", async () => {
     const store = await freshStore();
     store.actions.playQueue([track("a"), track("b"), track("c")], 2);
-    for (let attempt = 0; attempt < 3; attempt += 1) engine.handlers?.onFailure?.("load");
+    for (let attempt = 0; attempt < 3; attempt += 1)
+      engine.handlers?.onFailure("load", { engine: "element", cause: "media error 2 (network)" });
 
     expect(store.getSnapshot().started).toBe(false);
     expect(store.getSnapshot().index).toBe(2);

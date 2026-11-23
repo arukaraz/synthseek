@@ -24,6 +24,8 @@ class FakeAudio extends EventTarget {
   ended = false;
   paused = true;
   readyState = 4;
+  networkState = 1;
+  error: { code: number; message: string } | null = null;
   playable = "probably";
   playRejection: Error | null = null;
   readonly load = vi.fn();
@@ -58,8 +60,11 @@ function callbacks(): EngineCallbacks {
     onPlayingChange: vi.fn(),
     onLoadingChange: vi.fn(),
     onFailure: vi.fn(),
+    onUpcomingRefused: vi.fn(),
   };
 }
+
+const elementDetail = expect.objectContaining({ engine: "element", cause: expect.any(String) });
 
 async function freshEngine(): Promise<{ engine: typeof import("../deck-engine"); heard: EngineCallbacks }> {
   vi.resetModules();
@@ -139,7 +144,7 @@ describe("engine playback", () => {
     engine.loadAndPlay("/stream/a", 1, false);
     vi.advanceTimersByTime(LOAD_TIMEOUT_MS);
 
-    expect(heard.onFailure).toHaveBeenCalledWith("load");
+    expect(heard.onFailure).toHaveBeenCalledWith("load", elementDetail);
   });
 
   it("drops the timer of a stream that was replaced before it timed out", async () => {
@@ -158,7 +163,7 @@ describe("engine playback", () => {
     const { engine, heard } = await freshEngine();
 
     engine.loadAndPlay("/stream/a", 1, false);
-    await vi.waitFor(() => expect(heard.onFailure).toHaveBeenCalledWith("autoplay"));
+    await vi.waitFor(() => expect(heard.onFailure).toHaveBeenCalledWith("autoplay", elementDetail));
   });
 
   it("stays silent about a refusal that belongs to a stream already replaced", async () => {
@@ -167,7 +172,7 @@ describe("engine playback", () => {
 
     engine.loadAndPlay("/stream/a", 1, false);
     engine.loadAndPlay("/stream/b", 1, false);
-    await vi.waitFor(() => expect(heard.onFailure).toHaveBeenCalledWith("autoplay"));
+    await vi.waitFor(() => expect(heard.onFailure).toHaveBeenCalledWith("autoplay", elementDetail));
 
     expect(heard.onFailure).toHaveBeenCalledTimes(1);
   });
@@ -217,7 +222,7 @@ describe("engine playback", () => {
     const { engine, heard } = await freshEngine();
 
     engine.resume();
-    await vi.waitFor(() => expect(heard.onFailure).toHaveBeenCalledWith("autoplay"));
+    await vi.waitFor(() => expect(heard.onFailure).toHaveBeenCalledWith("autoplay", elementDetail));
   });
 
   it("pauses the element", async () => {
@@ -363,7 +368,7 @@ describe("engine element events", () => {
     expect(heard.onLoadingChange).toHaveBeenCalledWith(true);
 
     vi.advanceTimersByTime(STALL_TIMEOUT_MS);
-    expect(heard.onFailure).toHaveBeenCalledWith("stall");
+    expect(heard.onFailure).toHaveBeenCalledWith("stall", elementDetail);
   });
 
   it("reports a stall the browser announced itself", async () => {
@@ -374,7 +379,7 @@ describe("engine element events", () => {
     node.dispatchEvent(new Event("stalled"));
     vi.advanceTimersByTime(STALL_TIMEOUT_MS);
 
-    expect(heard.onFailure).toHaveBeenCalledWith("stall");
+    expect(heard.onFailure).toHaveBeenCalledWith("stall", elementDetail);
   });
 
   it("calls off the stall watch as soon as the stream moves again", async () => {
@@ -395,7 +400,36 @@ describe("engine element events", () => {
 
     node.dispatchEvent(new Event("error"));
 
-    expect(heard.onFailure).toHaveBeenCalledWith("load");
+    expect(heard.onFailure).toHaveBeenCalledWith("load", elementDetail);
+  });
+
+  it("names the media error and the element's state in the cause it reports", async () => {
+    const { engine, heard } = await freshEngine();
+    engine.canPlayMime("audio/mpeg");
+    node.error = { code: 3, message: "PIPELINE_ERROR_DECODE" };
+    node.networkState = 2;
+    node.readyState = 1;
+
+    node.dispatchEvent(new Event("error"));
+
+    expect(heard.onFailure).toHaveBeenCalledWith("load", {
+      engine: "element",
+      cause: "media error 3 (decode): PIPELINE_ERROR_DECODE; network state 2, ready state 1",
+    });
+  });
+
+  it("names how long a stalled stream stayed quiet", async () => {
+    vi.useFakeTimers();
+    const { engine, heard } = await freshEngine();
+    engine.canPlayMime("audio/mpeg");
+
+    node.dispatchEvent(new Event("stalled"));
+    vi.advanceTimersByTime(STALL_TIMEOUT_MS);
+
+    expect(heard.onFailure).toHaveBeenCalledWith(
+      "stall",
+      expect.objectContaining({ cause: expect.stringContaining(`no progress for ${STALL_TIMEOUT_MS / 1000} s`) })
+    );
   });
 });
 
@@ -452,6 +486,7 @@ describe("the deck that waits with the next track", () => {
     standby().dispatchEvent(new Event("error"));
 
     expect(heard.onFailure).not.toHaveBeenCalled();
+    expect(heard.onUpcomingRefused).toHaveBeenCalledWith("prime", elementDetail);
     expect(engine.primedUrl()).toBeNull();
   });
 
@@ -576,7 +611,7 @@ describe("the deck that waits with the next track", () => {
 
     vi.advanceTimersByTime(LOAD_TIMEOUT_MS);
 
-    expect(heard.onFailure).toHaveBeenCalledWith("load");
+    expect(heard.onFailure).toHaveBeenCalledWith("load", elementDetail);
   });
 
   it("says it is loading when the deck that took over has nothing buffered yet", async () => {
@@ -778,7 +813,7 @@ describe("blending two decks through the audio graph", () => {
 
     standby().dispatchEvent(new Event("error"));
 
-    expect(heard.onFailure).toHaveBeenCalledWith("load");
+    expect(heard.onFailure).toHaveBeenCalledWith("load", elementDetail);
   });
 
   it("keeps the leaving deck sounding through the blend and releases it once the blend is over", async () => {

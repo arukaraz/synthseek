@@ -4,6 +4,7 @@ import { useRadioTracksFetcher } from "@hooks/api";
 import { useEffect, useRef } from "react";
 
 import { AUTOPLAY_BATCH } from "./constants";
+import { recordHelperFailure } from "./diagnostics";
 import { autoplayDue, autoplaySeeds, autoplaySignature, playerTrackFrom } from "./helpers";
 import { actions, getSnapshot, subscribe } from "./store";
 
@@ -31,8 +32,9 @@ export function useAutoplayFill(): void {
           const tracks = result.items.map(playerTrackFrom);
           if (tracks.length === 0 || actions.appendAutoplay(tracks).added === 0) refused.current = signature;
         })
-        .catch(() => {
+        .catch((error: unknown) => {
           refused.current = signature;
+          recordHelperFailure("autoplayFill", error);
         })
         .finally(() => {
           pending.current = false;
