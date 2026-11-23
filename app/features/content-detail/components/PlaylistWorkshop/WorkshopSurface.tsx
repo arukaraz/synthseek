@@ -6,6 +6,7 @@ import { setChromeCollapsed } from "@hooks/ui/useChromeCollapsed";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
+import { ESCAPE_REVERTS_SELECTOR } from "./constants";
 import { workshopSurface } from "./styles";
 import type { WorkshopSurfaceProps } from "./types";
 
@@ -30,6 +31,11 @@ export function WorkshopSurface({ open, name, onExit, children }: WorkshopSurfac
         className={workshopSurface({ dock: bottomDock, chain: dock === "chain" })}
         aria-describedby="playlist-workshop-description"
         onInteractOutside={(event) => event.preventDefault()}
+        onEscapeKeyDown={(event) => {
+          if (event.target instanceof Element && event.target.closest(ESCAPE_REVERTS_SELECTOR) !== null) {
+            event.preventDefault();
+          }
+        }}
         onOpenAutoFocus={(event) => event.preventDefault()}
         data-cy="playlist-workshop"
       >

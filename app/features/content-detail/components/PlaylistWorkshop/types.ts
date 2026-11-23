@@ -37,6 +37,7 @@ export interface PlaylistNameDraft {
   change: (value: string) => void;
   finish: () => Promise<void>;
   commit: () => Promise<void>;
+  revert: (name: string) => Promise<void>;
 }
 
 export interface PlaylistWorkshopProps {

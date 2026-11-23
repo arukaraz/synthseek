@@ -60,6 +60,7 @@ export function problemCopyParams(problem: SystemProblem): SystemProblemCopyPara
         pgid: ownerIdOrDefault(problem.pgid),
       };
     case "catalog_unreachable":
+    case "lastfm_key_needs_pro":
       return {};
     case "config_value_ignored":
       return { name: problem.name };

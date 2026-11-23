@@ -2832,6 +2832,11 @@
           "effect": "Search and new requests fail until it answers again. Your library and playback keep working.",
           "fix": "Check that this server can reach the internet. Synthseek checks again every minute."
         },
+        "lastfm_key_needs_pro": {
+          "title": "Last.fm stopped accepting your API key",
+          "effect": "Since December 1, Last.fm only accepts API keys from accounts with Last.fm Pro. Until it accepts yours again, what Synthseek reads from Last.fm comes back empty, and listens for Last.fm wait for up to two weeks.",
+          "fix": "Subscribe to Last.fm Pro on the account that owns the key, or remove the key under Settings > Metadata. This notice clears the next time Last.fm accepts the key."
+        },
         "config_value_ignored": {
           "title": "A setting was ignored",
           "effect": "{{name}} holds an invalid value, so Synthseek started without it.",

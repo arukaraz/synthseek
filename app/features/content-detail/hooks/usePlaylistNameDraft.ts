@@ -71,6 +71,15 @@ export function usePlaylistNameDraft(name: string, save: SaveName): PlaylistName
     return commit();
   }, [commit]);
 
+  const revert = useCallback(
+    (previous: string): Promise<void> => {
+      draftRef.current = previous;
+      setDraft(previous);
+      return commit();
+    },
+    [commit]
+  );
+
   useEffect(
     () => () => {
       if (timerRef.current !== null) void commit();
@@ -80,5 +89,5 @@ export function usePlaylistNameDraft(name: string, save: SaveName): PlaylistName
 
   const typed = draft.trim();
 
-  return { draft, shown: typed.length > 0 ? typed : name, change, finish, commit };
+  return { draft, shown: typed.length > 0 ? typed : name, change, finish, commit, revert };
 }

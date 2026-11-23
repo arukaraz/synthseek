@@ -2832,6 +2832,11 @@
           "effect": "Suche und neue Anfragen schlagen fehl, bis er wieder antwortet. Deine Bibliothek und die Wiedergabe funktionieren weiter.",
           "fix": "Prüfe, ob dieser Server das Internet erreicht. Synthseek prüft jede Minute erneut."
         },
+        "lastfm_key_needs_pro": {
+          "title": "Last.fm akzeptiert deinen API-Schlüssel nicht mehr",
+          "effect": "Seit dem 1. Dezember akzeptiert Last.fm nur noch API-Schlüssel von Konten mit Last.fm Pro. Bis deiner wieder akzeptiert wird, kommt alles, was Synthseek von Last.fm liest, leer zurück, und Scrobbles für Last.fm warten bis zu zwei Wochen.",
+          "fix": "Schließe Last.fm Pro für das Konto ab, dem der Schlüssel gehört, oder entferne den Schlüssel unter Einstellungen > Metadaten. Dieser Hinweis verschwindet, sobald Last.fm den Schlüssel wieder akzeptiert."
+        },
         "config_value_ignored": {
           "title": "Eine Einstellung wurde ignoriert",
           "effect": "{{name}} enthält einen ungültigen Wert, daher ist Synthseek ohne ihn gestartet.",

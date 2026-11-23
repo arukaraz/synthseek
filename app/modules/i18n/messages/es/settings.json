@@ -2835,6 +2835,11 @@
           "effect": "La búsqueda y las peticiones nuevas fallan hasta que vuelva a responder. Tu biblioteca y la reproducción siguen funcionando.",
           "fix": "Comprueba que este servidor tenga acceso a internet. Synthseek lo vuelve a comprobar cada minuto."
         },
+        "lastfm_key_needs_pro": {
+          "title": "Last.fm dejó de aceptar tu clave de API",
+          "effect": "A partir del 1 de diciembre, Last.fm solo acepta claves de API de cuentas con Last.fm Pro. Hasta que vuelva a aceptar la tuya, lo que Synthseek lee de Last.fm llega vacío, y las escuchas para Last.fm esperan hasta dos semanas.",
+          "fix": "Suscribe a Last.fm Pro la cuenta dueña de la clave, o quita la clave en Ajustes > Metadatos. Este aviso desaparece la próxima vez que Last.fm acepte la clave."
+        },
         "config_value_ignored": {
           "title": "Se ha ignorado un ajuste",
           "effect": "{{name}} tiene un valor no válido, así que Synthseek arrancó sin él.",

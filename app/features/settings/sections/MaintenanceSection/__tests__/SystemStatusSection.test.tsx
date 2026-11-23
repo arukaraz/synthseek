@@ -27,6 +27,7 @@ const EVERY_KIND: SystemProblem[] = [
   { kind: "library_inaccessible", label: "Music", path: "/data/music", puid: "99", pgid: "100" },
   { kind: "library_read_only", label: "Archive", path: "/data/music-ro", puid: "1001", pgid: "" },
   { kind: "catalog_unreachable" },
+  { kind: "lastfm_key_needs_pro" },
   { kind: "config_value_ignored", name: "ADMIN_MIGRATION_PASSWORD" },
 ];
 
@@ -109,6 +110,14 @@ describe("SystemStatusSection", () => {
 
     expect(screen.getByText(copyOf("catalog_unreachable", "effect"))).toBeInTheDocument();
     expect(screen.getByText(copyOf("catalog_unreachable", "fix"))).toBeInTheDocument();
+  });
+
+  it("tells a refused Last.fm key that it now needs Pro and where to remove it", () => {
+    renderWith({ data: { checkedAt: CHECKED_AT, problems: [{ kind: "lastfm_key_needs_pro" }] } });
+
+    expect(screen.getByRole("heading", { name: "Last.fm stopped accepting your API key" })).toBeInTheDocument();
+    expect(screen.getByText(/^Since December 1, Last\.fm only accepts API keys/)).toBeInTheDocument();
+    expect(screen.getByText(/Settings > Metadata/)).toBeInTheDocument();
   });
 
   it("names the ignored setting", () => {

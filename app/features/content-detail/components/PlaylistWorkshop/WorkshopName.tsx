@@ -1,6 +1,6 @@
 "use client";
 
-import { useId } from "react";
+import { useId, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { field, fieldLabel, nameInput, nameLockedHint, nameText } from "./styles";
@@ -10,6 +10,8 @@ export function WorkshopName({ canRename, nameDraft, maxChars }: WorkshopNamePro
   const { t } = useTranslation("contentDetail");
   const { t: tLibrary } = useTranslation("library");
   const nameId = useId();
+  const [nameAtFocus, setNameAtFocus] = useState<string | null>(null);
+  const reverts = nameAtFocus !== null && nameDraft.draft !== nameAtFocus;
   const label = t("workshop.details.name");
   const lockedHint = tLibrary("playlists.syncedReadonly");
 
@@ -36,10 +38,16 @@ export function WorkshopName({ canRename, nameDraft, maxChars }: WorkshopNamePro
         className={nameInput()}
         value={nameDraft.draft}
         maxLength={maxChars}
+        data-escape-reverts={reverts ? "" : undefined}
         onChange={(event) => nameDraft.change(event.target.value)}
-        onBlur={() => void nameDraft.finish()}
+        onFocus={() => setNameAtFocus(nameDraft.draft)}
+        onBlur={() => {
+          setNameAtFocus(null);
+          void nameDraft.finish();
+        }}
         onKeyDown={(event) => {
           if (event.key === "Enter") event.currentTarget.blur();
+          if (event.key === "Escape" && reverts && nameAtFocus !== null) void nameDraft.revert(nameAtFocus);
         }}
       />
     </section>
