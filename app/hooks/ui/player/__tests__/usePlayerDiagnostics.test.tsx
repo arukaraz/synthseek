@@ -5,24 +5,29 @@ import { DIAGNOSTICS } from "../constants";
 import type { PlayerDiagnosticEvent } from "../types";
 
 interface SendCallbacks {
-  onSuccess: () => void;
+  onSuccess: (result: { logged: number; dropped: number }) => void;
   onError: () => void;
 }
 
 interface Sent {
   input: { deviceId: string; events: PlayerDiagnosticEvent[] };
-  callbacks: SendCallbacks;
+  callbacks: SendCallbacks | undefined;
 }
 
 const api = vi.hoisted(() => ({ sent: [] as Sent[] }));
 
 vi.mock("@hooks/api", () => ({
   useReportPlayerDiagnostics: () => ({
-    mutate: (input: Sent["input"], callbacks: SendCallbacks) => {
+    mutate: (input: Sent["input"], callbacks?: SendCallbacks) => {
       api.sent.push({ input, callbacks });
     },
   }),
 }));
+
+function accept(sent: Sent | undefined, dropped = 0): void {
+  const events = sent?.input.events.length ?? 0;
+  sent?.callbacks?.onSuccess({ logged: events - dropped, dropped });
+}
 
 vi.mock("../device", () => ({ currentDeviceId: () => "dev-1" }));
 
@@ -74,7 +79,7 @@ describe("usePlayerDiagnostics", () => {
 
     expect(api.sent).toHaveLength(1);
     expect(api.sent[0]?.input.events).toHaveLength(DIAGNOSTICS.MAX_BATCH);
-    api.sent[0]?.callbacks.onSuccess();
+    accept(api.sent[0]);
     vi.advanceTimersByTime(DIAGNOSTICS.FLUSH_DELAY_MS);
     expect(api.sent[1]?.input.events).toHaveLength(5);
   });
@@ -86,7 +91,7 @@ describe("usePlayerDiagnostics", () => {
     for (let attempt = 1; attempt <= DIAGNOSTICS.MAX_SEND_ATTEMPTS; attempt += 1) {
       vi.advanceTimersByTime(DIAGNOSTICS.FLUSH_DELAY_MS);
       expect(api.sent).toHaveLength(attempt);
-      api.sent[attempt - 1]?.callbacks.onError();
+      api.sent[attempt - 1]?.callbacks?.onError();
     }
     vi.advanceTimersByTime(DIAGNOSTICS.FLUSH_DELAY_MS * 2);
 
@@ -100,6 +105,33 @@ describe("usePlayerDiagnostics", () => {
     window.dispatchEvent(new Event("pagehide"));
 
     expect(api.sent).toHaveLength(1);
+  });
+
+  it("sends what queued during a send when the page is hidden, without waiting for that send", () => {
+    renderHook(() => usePlayerDiagnostics());
+    skip(DIAGNOSTICS.MAX_BATCH);
+    expect(api.sent).toHaveLength(1);
+    skip(DIAGNOSTICS.MAX_BATCH + 3);
+
+    window.dispatchEvent(new Event("pagehide"));
+
+    expect(api.sent.map((sent) => sent.input.events.length)).toEqual([DIAGNOSTICS.MAX_BATCH, DIAGNOSTICS.MAX_BATCH, 3]);
+  });
+
+  it("keeps what the server refused past its cap and sends it once the window has passed", () => {
+    renderHook(() => usePlayerDiagnostics());
+    skip(DIAGNOSTICS.MAX_BATCH);
+    accept(api.sent[0], 5);
+
+    skip(1);
+    vi.advanceTimersByTime(DIAGNOSTICS.CAP_WINDOW_MS - 1);
+    expect(api.sent).toHaveLength(1);
+    window.dispatchEvent(new Event("pagehide"));
+    expect(api.sent).toHaveLength(1);
+
+    vi.advanceTimersByTime(1);
+    expect(api.sent).toHaveLength(2);
+    expect(api.sent[1]?.input.events.map((event) => event.positionSeconds)).toEqual([35, 36, 37, 38, 39, 0]);
   });
 
   it("hands what is still queued back to the buffer when it unmounts during a send", () => {

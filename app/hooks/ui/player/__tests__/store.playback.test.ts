@@ -2,7 +2,13 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import type { PlayerTrack } from "@components/Player";
 
-import { MAX_CONSECUTIVE_FAILURES, MODE_STORAGE_KEY, SKIP_DELAY_MS, VOLUME_STORAGE_KEY } from "../constants";
+import {
+  FAILURES_FORGIVEN_AFTER_SECONDS,
+  MAX_CONSECUTIVE_FAILURES,
+  MODE_STORAGE_KEY,
+  SKIP_DELAY_MS,
+  VOLUME_STORAGE_KEY,
+} from "../constants";
 import type { EngineCallbacks, EngineFailureDetail, RecordedDiagnostic } from "../types";
 
 const failed: EngineFailureDetail = { engine: "element", cause: "media error 2 (network)" };
@@ -286,15 +292,47 @@ describe("player store engine callbacks", () => {
     expect(store.getSnapshot().armed).toBe(true);
   });
 
-  it("forgets earlier failures as soon as a track plays", async () => {
+  it("forgets earlier failures once a track has sounded for a while, not when it starts", async () => {
+    vi.useFakeTimers();
     const store = await freshStore();
     store.actions.playQueue([track("a"), track("b")], 0);
     engine.handlers?.onFailure("load", failed);
-    expect(store.getSnapshot().consecutiveFailures).toBe(1);
+    vi.advanceTimersByTime(SKIP_DELAY_MS);
 
     engine.handlers?.onPlayingChange(true);
+    engine.handlers?.onProgress(FAILURES_FORGIVEN_AFTER_SECONDS - 1, 200);
+    expect(store.getSnapshot().consecutiveFailures).toBe(1);
+
+    engine.handlers?.onProgress(FAILURES_FORGIVEN_AFTER_SECONDS, 200);
+    expect(store.getSnapshot().consecutiveFailures).toBe(0);
+  });
+
+  it("forgets earlier failures when a track plays to its end", async () => {
+    vi.useFakeTimers();
+    const store = await freshStore();
+    store.actions.playQueue([track("a"), track("b"), track("c")], 0);
+    engine.handlers?.onFailure("load", failed);
+    vi.advanceTimersByTime(SKIP_DELAY_MS);
+
+    engine.handlers?.onEnded();
 
     expect(store.getSnapshot().consecutiveFailures).toBe(0);
+  });
+
+  it("stops after tracks that each sound for a moment and then fail", async () => {
+    vi.useFakeTimers();
+    const store = await freshStore();
+    store.actions.playQueue([track("a"), track("b"), track("c"), track("d")], 0);
+
+    for (let failure = 1; failure <= MAX_CONSECUTIVE_FAILURES; failure += 1) {
+      engine.handlers?.onPlayingChange(true);
+      engine.handlers?.onProgress(1, 200);
+      engine.handlers?.onFailure("stall", failed);
+      vi.advanceTimersByTime(SKIP_DELAY_MS);
+    }
+
+    expect(store.getSnapshot().consecutiveFailures).toBe(MAX_CONSECUTIVE_FAILURES);
+    expect(notices.announce).toHaveBeenCalledWith({ text: "too many failures", tone: "danger" });
   });
 
   it("mirrors the loading flag the engine reports", async () => {

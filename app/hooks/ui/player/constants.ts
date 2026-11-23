@@ -24,6 +24,8 @@ export const STALL_TIMEOUT_MS = 15000;
 
 export const MAX_CONSECUTIVE_FAILURES = 3;
 
+export const FAILURES_FORGIVEN_AFTER_SECONDS = 10;
+
 export const SKIP_DELAY_MS = 1200;
 
 export const MEDIA_ERROR_NAMES: Readonly<Record<number, string>> = {
@@ -45,6 +47,7 @@ export const DIAGNOSTICS = {
   MAX_POSITION_SECONDS: 24 * 60 * 60,
   MAX_AGE_MS: 24 * 60 * 60 * 1000,
   MAX_SEND_ATTEMPTS: 3,
+  CAP_WINDOW_MS: 60_000,
 } as const;
 
 export const EARLY_SKIP_SECONDS = 30;

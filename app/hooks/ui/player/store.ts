@@ -19,6 +19,7 @@ import {
   EQUALIZER_PRESETS,
   EQUALIZER_PRESETS_STORAGE_KEY,
   EQUALIZER_STORAGE_KEY,
+  FAILURES_FORGIVEN_AFTER_SECONDS,
   MAX_CONSECUTIVE_FAILURES,
   MIRROR_STALE_MS,
   MIRROR_TICK_MS,
@@ -159,6 +160,7 @@ export const EMPTY_STATE: PlayerSessionState = state;
 
 let mirrorTimer: ReturnType<typeof setInterval> | undefined;
 let skipTimer: ReturnType<typeof setTimeout> | undefined;
+let soundingSince: { trackId: string; positionSeconds: number } | null = null;
 let connected = false;
 let playRequested = true;
 let loudness: LoudnessPreferences = { enabled: true, preAmpDb: 0 };
@@ -213,15 +215,20 @@ function ensureConnected(): void {
       publish({ positionSeconds: elapsed, durationSeconds: total });
       publishPosition(total, elapsed, state.playing);
       maintainPrime(elapsed, total);
+      forgiveFailuresOnceSounding(elapsed);
     },
-    onEnded: () => advance(true),
+    onEnded: () => {
+      soundingSince = null;
+      if (state.consecutiveFailures > 0) publish({ consecutiveFailures: 0 });
+      advance(true);
+    },
     onHandoff: (url) => adoptHandoff(url),
     onPlayingChange: (playing) => {
-      publish({
-        playing,
-        armed: state.armed || playing,
-        consecutiveFailures: playing ? 0 : state.consecutiveFailures,
-      });
+      const track = currentTrack();
+      if (playing && track !== null && soundingSince?.trackId !== track.id) {
+        soundingSince = { trackId: track.id, positionSeconds: state.positionSeconds };
+      }
+      publish({ playing, armed: state.armed || playing });
       if (state.started && state.halt !== "stopped") publishPlaybackState(playing);
     },
     onLoadingChange: (loading) => publish({ loading }),
@@ -483,7 +490,15 @@ function fadeTowards(index: number): number {
   return target === undefined ? 0 : skipFadeSeconds(target);
 }
 
+function forgiveFailuresOnceSounding(positionSeconds: number): void {
+  if (state.consecutiveFailures === 0 || soundingSince === null) return;
+  if (soundingSince.trackId !== currentTrack()?.id) return;
+  if (positionSeconds - soundingSince.positionSeconds < FAILURES_FORGIVEN_AFTER_SECONDS) return;
+  publish({ consecutiveFailures: 0 });
+}
+
 function handleFailure(reason: PlayerFailureReason, detail: EngineFailureDetail): void {
+  soundingSince = null;
   const messages = lastMessages;
   const track = currentTrack();
   if (track === null) return;
