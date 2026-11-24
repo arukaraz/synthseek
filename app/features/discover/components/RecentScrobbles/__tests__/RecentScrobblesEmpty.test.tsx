@@ -1,41 +1,50 @@
 import { describe, expect, it } from "vitest";
 
-import enDiscover from "@modules/i18n/messages/en/discover.json";
 import { render, screen } from "@test/test-utils";
 
-import { LASTFM_SETTINGS_HREF as SETTINGS_HREF } from "../../constants";
+import { PROVIDER_SETTINGS_HREFS } from "../../constants";
 import { RecentScrobblesEmpty } from "../RecentScrobblesEmpty";
 
 describe("RecentScrobblesEmpty", () => {
   it("renders the error reason without a call to action", () => {
-    render(<RecentScrobblesEmpty reason="error" info="Your latest scrobbles" />);
+    render(<RecentScrobblesEmpty reason="error" info="Your latest scrobbles" provider="lastfm" />);
 
-    expect(screen.getByText(enDiscover.recentScrobbles.empty.error)).toBeInTheDocument();
+    expect(screen.getByText("Couldn't load Last.fm data.")).toBeInTheDocument();
     expect(screen.queryByRole("link")).not.toBeInTheDocument();
   });
 
-  it("renders the disabled reason with an open-settings link", () => {
-    render(<RecentScrobblesEmpty reason="disabled" info="Your latest scrobbles" />);
+  it("says the server has no Last.fm set up, without a call to action, when the provider is inactive", () => {
+    render(<RecentScrobblesEmpty reason="inactive" info="Your latest scrobbles" provider="lastfm" />);
 
-    expect(screen.getByText(enDiscover.recentScrobbles.empty.disabled)).toBeInTheDocument();
-    const link = screen.getByRole("link", { name: enDiscover.recentScrobbles.empty.ctaOpenSettings });
-    expect(link).toHaveAttribute("href", SETTINGS_HREF);
+    expect(screen.getByText("Last.fm is not set up on this server.")).toBeInTheDocument();
+    expect(screen.queryByRole("link")).not.toBeInTheDocument();
   });
 
-  it("renders the no-username reason with a configure link", () => {
-    render(<RecentScrobblesEmpty reason="no-username" info="Your latest scrobbles" />);
+  it("asks an unlinked member for the username with a configure link", () => {
+    render(<RecentScrobblesEmpty reason="unlinked" info="Your latest scrobbles" provider="lastfm" />);
 
-    expect(screen.getByText(enDiscover.recentScrobbles.empty.noUsername)).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: enDiscover.recentScrobbles.empty.ctaConfigure })).toHaveAttribute(
+    expect(screen.getByText("Add your Last.fm username to see your recent plays here.")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Configure Last.fm" })).toHaveAttribute(
       "href",
-      SETTINGS_HREF
+      PROVIDER_SETTINGS_HREFS.lastfm
+    );
+  });
+
+  it("titles the ListenBrainz widget Recent Listens and links to the ListenBrainz settings", () => {
+    render(<RecentScrobblesEmpty reason="unlinked" info="Your latest listens" provider="listenbrainz" />);
+
+    expect(screen.getByRole("heading", { name: "Recent Listens" })).toBeInTheDocument();
+    expect(screen.getByText("Add your ListenBrainz username to see your recent plays here.")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Configure ListenBrainz" })).toHaveAttribute(
+      "href",
+      PROVIDER_SETTINGS_HREFS.listenbrainz
     );
   });
 
   it("renders the no-data reason without a call to action", () => {
-    render(<RecentScrobblesEmpty reason="no-data" info="Your latest scrobbles" />);
+    render(<RecentScrobblesEmpty reason="no-data" info="Your latest scrobbles" provider="lastfm" />);
 
-    expect(screen.getByText(enDiscover.recentScrobbles.empty.noData)).toBeInTheDocument();
+    expect(screen.getByText("Nothing played yet, your timeline will appear here.")).toBeInTheDocument();
     expect(screen.queryByRole("link")).not.toBeInTheDocument();
   });
 });

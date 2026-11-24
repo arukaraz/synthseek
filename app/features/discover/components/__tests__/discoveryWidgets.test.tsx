@@ -21,6 +21,7 @@ const mocks = vi.hoisted(() => ({
   openForResult: vi.fn(),
   requestResult: vi.fn(),
   role: "admin",
+  active: ["listenbrainz", "lastfm"] as string[] | undefined,
 }));
 
 vi.mock("@modules/providers/AuthProvider", () => ({
@@ -29,9 +30,14 @@ vi.mock("@modules/providers/AuthProvider", () => ({
 
 vi.mock("@hooks/api/queries/analytics/useOrbitAlbums", () => ({ useOrbitAlbums: () => mocks.orbit() }));
 vi.mock("@hooks/api/queries/analytics/useCharts", () => ({
-  useCharts: () => mocks.charts(),
+  useCharts: (provider: string) => mocks.charts(provider),
 }));
-vi.mock("@hooks/api/queries/analytics/useLovedNotHere", () => ({ useLovedNotHere: () => mocks.loved() }));
+vi.mock("@hooks/api/queries/analytics/useLovedNotHere", () => ({
+  useLovedNotHere: (provider: string) => mocks.loved(provider),
+}));
+vi.mock("@hooks/api/queries/widgets/useActiveIntegrations", () => ({
+  useActiveIntegrations: () => mocks.active,
+}));
 vi.mock("@hooks/api/queries/analytics/useRarities", () => ({ useRarities: () => mocks.rarities() }));
 vi.mock("@hooks/api/queries/analytics/useRecentPlays", () => ({
   useRecentPlays: (enabled: boolean) => mocks.recentPlays(enabled),
@@ -77,6 +83,7 @@ function catalogTrack(id: string) {
 afterEach(() => {
   vi.clearAllMocks();
   mocks.role = "admin";
+  mocks.active = ["listenbrainz", "lastfm"];
 });
 
 describe("Orbit", () => {
@@ -179,7 +186,8 @@ describe("Charts", () => {
     );
     renderWithProviders(<Charts size="M" info="x" />);
 
-    expect(screen.getByText(enDiscover.charts.subtitle)).toBeInTheDocument();
+    expect(mocks.charts).toHaveBeenCalledWith("lastfm");
+    expect(screen.getByText("Top tracks worldwide · Last.fm")).toBeInTheDocument();
     const leader = screen.getByRole("article");
     expect(leader).toHaveTextContent(enDiscover.charts.leaderBadge);
     fireEvent.click(within(leader).getByRole("button", { name: "Play Joga" }));
@@ -222,9 +230,59 @@ describe("Charts", () => {
     renderWithProviders(<Charts size="L" info="x" />);
     expect(screen.getByRole("list")).toHaveClass("grid-cols-2");
   });
+
+  it("reads the ListenBrainz chart and names it when the tile is the ListenBrainz one", () => {
+    mocks.charts.mockReturnValue(ready([{ title: "Joga", artist: "Bjork", libraryTrackId: "lib1", track: null }]));
+    renderWithProviders(<Charts size="M" info="x" provider="listenbrainz" />);
+
+    expect(mocks.charts).toHaveBeenCalledWith("listenbrainz");
+    expect(screen.getByText("Top tracks worldwide · ListenBrainz")).toBeInTheDocument();
+  });
+
+  it("says Last.fm is not set up rather than that the chart is empty", () => {
+    mocks.active = ["listenbrainz"];
+    mocks.charts.mockReturnValue(ready([]));
+    renderWithProviders(<Charts size="M" info="x" />);
+
+    expect(screen.getByText("Last.fm is not set up on this server.")).toBeInTheDocument();
+    expect(screen.queryByText(enDiscover.charts.empty)).not.toBeInTheDocument();
+  });
+
+  it("calls an empty chart empty while the provider is active or not yet known", () => {
+    mocks.charts.mockReturnValue(ready([]));
+    const { unmount } = renderWithProviders(<Charts size="M" info="x" />);
+    expect(screen.getByText(enDiscover.charts.empty)).toBeInTheDocument();
+    unmount();
+
+    mocks.active = undefined;
+    renderWithProviders(<Charts size="M" info="x" />);
+    expect(screen.getByText(enDiscover.charts.empty)).toBeInTheDocument();
+  });
 });
 
 describe("LovedNotHere", () => {
+  it("says Last.fm is not set up when the server holds no working key", () => {
+    mocks.loved.mockReturnValue(ready({ status: "inactive" }));
+    renderWithProviders(<LovedNotHere size="M" info="x" />);
+
+    expect(mocks.loved).toHaveBeenCalledWith("lastfm");
+    expect(screen.getByText("Last.fm is not set up on this server.")).toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: /Settings/ })).not.toBeInTheDocument();
+  });
+
+  it("reads ListenBrainz, titles the tile for it and points to its settings when unlinked", () => {
+    mocks.loved.mockReturnValue(ready({ status: "unlinked" }));
+    renderWithProviders(<LovedNotHere size="M" info="x" provider="listenbrainz" />);
+
+    expect(mocks.loved).toHaveBeenCalledWith("listenbrainz");
+    expect(screen.getByRole("heading", { name: "Loved on ListenBrainz, not here" })).toBeInTheDocument();
+    expect(screen.getByText("Add your ListenBrainz username to see these.")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /Settings/ })).toHaveAttribute(
+      "href",
+      "/settings/connections/services#listenbrainz.feeds"
+    );
+  });
+
   it("points to settings when no Last.fm account is linked", () => {
     mocks.loved.mockReturnValue(ready({ status: "unlinked" }));
     renderWithProviders(<LovedNotHere size="M" info="x" />);

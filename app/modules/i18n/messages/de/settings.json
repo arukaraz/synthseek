@@ -501,7 +501,7 @@
       },
       "lastfmKey": {
         "label": "Last.fm-API-Schlüssel",
-        "helper": "Ähnliche Künstler, Charts und Scrobble-Verlauf. Die Last.fm-Verbindung jedes Mitglieds nutzt ihn."
+        "helper": "Hörerzahlen, Albumbeschreibungen und die Last.fm-Widgets des Boards. Die Last.fm-Verbindung jedes Mitglieds nutzt ihn."
       },
       "lastfmSecret": {
         "label": "Last.fm Shared Secret",

@@ -5,37 +5,48 @@ import { useTranslation } from "react-i18next";
 
 import { FadeScroll } from "@components/FadeScroll";
 import { RequestSplitButton } from "@components/RequestSplitButton";
+import { SOURCE_NAMES } from "@components/SourceBadge";
 import { WidgetFrame } from "@components/WidgetFrame";
 import { useContentRequestFlow } from "@features/search/components/ContentRequestFlow";
 import type { LovedTrack } from "@hooks/api/queries/analytics/types";
 import { useLovedNotHere } from "@hooks/api/queries/analytics/useLovedNotHere";
 
-import { COMPACT_ROW_LIMIT, LASTFM_SETTINGS_HREF } from "../constants";
+import { COMPACT_ROW_LIMIT, LOVED_TITLE_KEYS, PROVIDER_SETTINGS_HREFS } from "../constants";
 import type { BoardWidgetProps } from "../ExploreBoard/types";
 import { listColumns } from "../helpers";
 import { widgetList } from "../WidgetRow/styles";
 import { WidgetRow } from "../WidgetRow/WidgetRow";
 
-export function LovedNotHere({ size, info }: BoardWidgetProps) {
+export function LovedNotHere({ size, info, provider = "lastfm" }: BoardWidgetProps) {
   const { t } = useTranslation("discover");
-  const { data, isLoading, isError } = useLovedNotHere();
+  const { data, isLoading, isError } = useLovedNotHere(provider);
   const { openForResult, requestResult } = useContentRequestFlow();
+  const name = SOURCE_NAMES[provider];
   const compact = size === "S";
   const unlinked = data?.status === "unlinked";
+  const inactive = data?.status === "inactive";
   const tracks: LovedTrack[] = data?.status === "ready" ? data.tracks : [];
   const shown = compact ? tracks.slice(0, COMPACT_ROW_LIMIT) : tracks;
 
   return (
     <WidgetFrame
       icon={Heart}
-      title={t("loved.title")}
-      subtitle={t("loved.subtitle")}
+      title={t(LOVED_TITLE_KEYS[provider])}
+      subtitle={t("loved.subtitle", { provider: name })}
       info={info}
-      titleId="loved-heading"
+      titleId={`loved-heading-${provider}`}
       loading={isLoading}
-      action={unlinked ? { label: t("loved.link"), href: LASTFM_SETTINGS_HREF } : undefined}
+      action={unlinked ? { label: t("loved.link"), href: PROVIDER_SETTINGS_HREFS[provider] } : undefined}
       note={
-        isError ? t("board.loadError") : unlinked ? t("loved.unlinked") : tracks.length === 0 ? t("loved.empty") : null
+        isError
+          ? t("board.loadError")
+          : inactive
+            ? t("board.providerInactive", { provider: name })
+            : unlinked
+              ? t("loved.unlinked", { provider: name })
+              : tracks.length === 0
+                ? t("loved.empty")
+                : null
       }
     >
       <FadeScroll>

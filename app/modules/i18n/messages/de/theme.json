@@ -172,6 +172,10 @@
     "--brand-ntfy": { "label": "ntfy", "hint": "Der Benachrichtigungskanal ntfy" },
     "--brand-telegram": { "label": "Telegram", "hint": "Der Benachrichtigungskanal Telegram" },
     "--brand-plex": { "label": "Plex", "hint": "Das Plex-Symbol und seine Badges" },
+    "--brand-catalog": { "label": "Katalog", "hint": "Das Badge des Musikkatalogs" },
+    "--brand-wikipedia": { "label": "Wikipedia", "hint": "Das Wikipedia-Badge unter einer Biografie" },
+    "--brand-lidarr": { "label": "Lidarr", "hint": "Das Lidarr-Badge" },
+    "--brand-bandsintown": { "label": "Bandsintown", "hint": "Das Bandsintown-Badge" },
     "--brand-website": { "label": "Website", "hint": "Der Link zur eigenen Seite eines Künstlers" }
   },
   "parts": {

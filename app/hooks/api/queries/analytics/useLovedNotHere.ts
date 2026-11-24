@@ -1,5 +1,7 @@
 import { trpc } from "@utils/trpc";
 
-export function useLovedNotHere() {
-  return trpc.analytics.discover.loved.useQuery(undefined, { trpc: { context: { skipBatch: true } } });
+import type { ListeningProvider } from "./types";
+
+export function useLovedNotHere(provider: ListeningProvider) {
+  return trpc.analytics.discover.loved.useQuery({ provider }, { trpc: { context: { skipBatch: true } } });
 }

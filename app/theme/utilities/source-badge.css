@@ -1,0 +1,41 @@
+@layer utilities {
+  .source-dot {
+    background: var(--source-color, var(--surface-fg-muted));
+  }
+
+  .source-dot[data-source="lastfm"] {
+    --source-color: var(--brand-lastfm);
+  }
+
+  .source-dot[data-source="listenbrainz"] {
+    --source-color: var(--brand-listenbrainz);
+  }
+
+  .source-dot[data-source="catalog"] {
+    --source-color: var(--brand-catalog);
+  }
+
+  .source-dot[data-source="wikipedia"] {
+    --source-color: var(--brand-wikipedia);
+  }
+
+  .source-dot[data-source="plex"] {
+    --source-color: var(--brand-plex);
+  }
+
+  .source-dot[data-source="jellyfin"] {
+    --source-color: var(--brand-jellyfin);
+  }
+
+  .source-dot[data-source="navidrome"] {
+    --source-color: var(--brand-navidrome);
+  }
+
+  .source-dot[data-source="lidarr"] {
+    --source-color: var(--brand-lidarr);
+  }
+
+  .source-dot[data-source="bandsintown"] {
+    --source-color: var(--brand-bandsintown);
+  }
+}

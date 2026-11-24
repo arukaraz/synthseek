@@ -4,12 +4,13 @@ import { CONTENT_DETAIL_GC_TIME } from "./constants";
 
 interface UseArtistSimilarArgs {
   artistName: string;
+  catalogArtistId: string;
   enabled?: boolean;
 }
 
-export function useArtistSimilar({ artistName, enabled = true }: UseArtistSimilarArgs) {
+export function useArtistSimilar({ artistName, catalogArtistId, enabled = true }: UseArtistSimilarArgs) {
   return trpc.contentDetail.artistSimilar.useQuery(
-    { artistName },
+    { artistName, catalogArtistId: catalogArtistId || undefined },
     {
       enabled: enabled && !!artistName,
       staleTime: 60 * 60 * 1000,

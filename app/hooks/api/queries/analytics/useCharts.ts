@@ -1,5 +1,7 @@
 import { trpc } from "@utils/trpc";
 
-export function useCharts() {
-  return trpc.analytics.discover.charts.useQuery(undefined, { trpc: { context: { skipBatch: true } } });
+import type { ListeningProvider } from "./types";
+
+export function useCharts(provider: ListeningProvider) {
+  return trpc.analytics.discover.charts.useQuery({ provider }, { trpc: { context: { skipBatch: true } } });
 }

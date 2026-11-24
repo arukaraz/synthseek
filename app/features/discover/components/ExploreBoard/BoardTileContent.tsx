@@ -15,6 +15,6 @@ export function BoardTileContent({ item, size, custom, customStatus, info }: Boa
   if (item.kind === "custom") {
     return <CustomWidget widget={custom.get(item.widgetId) ?? null} status={customStatus} size={size} />;
   }
-  const { component: Widget, descriptionKey } = BOARD_WIDGETS[item.widget];
-  return <Widget size={size} info={info ? t(descriptionKey) : ""} />;
+  const { component: Widget, descriptionKey, provider } = BOARD_WIDGETS[item.widget];
+  return <Widget size={size} info={info ? t(descriptionKey) : ""} provider={provider} />;
 }

@@ -1,18 +1,13 @@
-import type { LastfmScrobble } from "@features/discovery-integrations/types";
-import type { BoardSize } from "@hooks/api/queries/board/types";
+import type { ListenedTrack, ListeningProvider } from "@hooks/api/queries/analytics/types";
 
-export type EmptyReason = "error" | "disabled" | "no-username" | "no-data";
+export type EmptyReason = "error" | "inactive" | "unlinked" | "no-data";
 
 export type ScrobbleLayout = "timeline" | "rail";
-
-export interface RecentScrobblesProps {
-  size: BoardSize;
-  info: string;
-}
 
 export interface RecentScrobblesEmptyProps {
   reason: EmptyReason;
   info: string;
+  provider: ListeningProvider;
 }
 
 export interface RecentScrobblesSkeletonProps {
@@ -20,13 +15,13 @@ export interface RecentScrobblesSkeletonProps {
 }
 
 export interface RecentScrobblesRailProps {
-  scrobbles: LastfmScrobble[];
+  scrobbles: ListenedTrack[];
 }
 
 export interface RecentScrobblesTimelineProps {
-  scrobbles: LastfmScrobble[];
+  scrobbles: ListenedTrack[];
 }
 
 export interface RecentScrobbleNodeProps {
-  scrobble: LastfmScrobble;
+  scrobble: ListenedTrack;
 }

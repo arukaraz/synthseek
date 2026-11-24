@@ -11,7 +11,7 @@ export function WidgetPreview({ widget }: WidgetPreviewProps) {
 
   return (
     <ScaledPreview frame={previewFrame(widget)}>
-      <Widget size={definition.defaultSize} info="" />
+      <Widget size={definition.defaultSize} info="" provider={definition.provider} />
     </ScaledPreview>
   );
 }

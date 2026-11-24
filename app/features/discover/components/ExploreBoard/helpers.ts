@@ -9,6 +9,7 @@ import {
   type BoardDevice,
   type BoardSpan,
 } from "@components/BoardGrid";
+import { SOURCE_NAMES } from "@components/SourceBadge";
 import type {
   BoardItem,
   BoardLayout,
@@ -24,6 +25,7 @@ import {
   BOARD_ROW_FRAME_HEAD,
   BOARD_SCHEMA_VERSION,
   BOARD_SIZE_ORDER,
+  BOARD_WIDGET_ORDER,
   BOARD_WIDGETS,
   CUSTOM_BLOCK_LOCKS,
   CUSTOM_BLOCK_ROW_HEIGHTS,
@@ -122,8 +124,15 @@ export function customStatusOf(query: { isLoading: boolean; isError: boolean }):
   return query.isError ? "error" : "ready";
 }
 
+export function boardWidgetName(widget: BoardWidgetKey): string {
+  const { titleKey, provider } = BOARD_WIDGETS[widget];
+  const title = i18n.t(`discover:${titleKey}`);
+  const shared = BOARD_WIDGET_ORDER.some((other) => other !== widget && BOARD_WIDGETS[other].titleKey === titleKey);
+  return shared && provider ? `${title} (${SOURCE_NAMES[provider]})` : title;
+}
+
 export function tileNameOf(item: BoardItem, custom: BoardCustomWidgets, status: CustomWidgetsStatus): string {
-  if (item.kind === "builtin") return i18n.t(`discover:${BOARD_WIDGETS[item.widget].titleKey}`);
+  if (item.kind === "builtin") return boardWidgetName(item.widget);
   if (item.kind === "spacer") return i18n.t("discover:board.spacer.name");
   const widget = custom.get(item.widgetId);
   if (widget) return widget.meta.name;

@@ -458,6 +458,7 @@
       },
       "catalog": {
         "related": "Artistes associés (catalogue)",
+        "radio": "Titres de la radio de l'artiste (catalogue)",
         "artistAlbums": "Albums des artistes (catalogue)",
         "trending": "Titres en tendance (catalogue)"
       },

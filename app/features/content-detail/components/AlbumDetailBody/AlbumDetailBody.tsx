@@ -26,7 +26,7 @@ function AlbumDetailBodyComponent({ target, onClose, onNavigate, showInLibraryPi
   const { play, shuffle, radio, enqueue } = useDetailPlayback(onClose);
 
   const artistName = album?.artist ?? target.artistName;
-  const { data: albumStats } = useAlbumStats({ artistName, albumName: target.name, mbid: null });
+  const { data: albumStats } = useAlbumStats({ artistName, albumName: target.name, catalogAlbumId: target.id });
   const { data: albumCredits } = useAlbumCredits({ catalogAlbumId: target.id, barcode: null });
   const artistExternalId = album?.artistExternalId ?? null;
   const genres = useMemo(() => album?.genres ?? EMPTY_GENRES, [album?.genres]);
@@ -66,8 +66,16 @@ function AlbumDetailBodyComponent({ target, onClose, onNavigate, showInLibraryPi
   );
 
   const statsSlot = useMemo(
-    () => <AlbumStatsWidget artistName={artistName} albumName={target.name} trackCount={trackCount} slot="stats" />,
-    [artistName, target.name, trackCount]
+    () => (
+      <AlbumStatsWidget
+        catalogAlbumId={target.id}
+        artistName={artistName}
+        albumName={target.name}
+        trackCount={trackCount}
+        slot="stats"
+      />
+    ),
+    [target.id, artistName, target.name, trackCount]
   );
 
   return (
@@ -100,7 +108,13 @@ function AlbumDetailBodyComponent({ target, onClose, onNavigate, showInLibraryPi
           </div>
 
           <div className={modalSide()}>
-            <AlbumStatsWidget artistName={artistName} albumName={target.name} trackCount={trackCount} slot="about" />
+            <AlbumStatsWidget
+              catalogAlbumId={target.id}
+              artistName={artistName}
+              albumName={target.name}
+              trackCount={trackCount}
+              slot="about"
+            />
             <AlbumCreditsWidget
               catalogAlbumId={target.id}
               releaseDate={album?.releaseDate ?? null}

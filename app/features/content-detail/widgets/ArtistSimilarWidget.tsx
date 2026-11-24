@@ -13,10 +13,10 @@ import { artistTarget, failedToLoad } from "../helpers";
 import { railNav } from "../styles";
 import type { ArtistSimilarWidgetProps } from "../types";
 
-function ArtistSimilarWidgetComponent({ artistName, onSelectArtist }: ArtistSimilarWidgetProps) {
+function ArtistSimilarWidgetComponent({ catalogArtistId, artistName, onSelectArtist }: ArtistSimilarWidgetProps) {
   const { t } = useTranslation("contentDetail");
   const trackRef = useRef<HTMLDivElement | null>(null);
-  const query = useArtistSimilar({ artistName });
+  const query = useArtistSimilar({ artistName, catalogArtistId });
   const { data, isLoading } = query;
 
   const artists = data ?? [];

@@ -36,6 +36,7 @@ import {
   spanOf,
   tileHasBackground,
   tileNameOf,
+  boardWidgetName,
   toggleBackground,
   uniqueTileId,
   widgetsOnBoard,
@@ -527,6 +528,18 @@ describe("custom tiles", () => {
 
     expect(appendCustomWidget([], figure)[0]).toMatchObject({ kind: "custom", widgetId: "w_stat", height: "short" });
     expect(appendCustomWidget([], list)[0]?.height).toBeUndefined();
+  });
+
+  it("names a builtin tile by its title, adding the provider only where two widgets share one", () => {
+    expect(boardWidgetName("scrobbles")).toBe("Recent Scrobbles");
+    expect(boardWidgetName("listenbrainzListens")).toBe("Recent Listens");
+    expect(boardWidgetName("charts")).toBe("Charts (Last.fm)");
+    expect(boardWidgetName("listenbrainzCharts")).toBe("Charts (ListenBrainz)");
+    expect(boardWidgetName("topTracks")).toBe("Top Tracks (Last.fm)");
+    expect(boardWidgetName("listenbrainzTopArtists")).toBe("Top Artists (ListenBrainz)");
+    expect(tileNameOf({ kind: "builtin", id: "c", widget: "listenbrainzCharts", size: "M" }, NO_CUSTOM, "ready")).toBe(
+      "Charts (ListenBrainz)"
+    );
   });
 
   it("names a custom tile after its widget, or as deleted when the widget is gone", () => {

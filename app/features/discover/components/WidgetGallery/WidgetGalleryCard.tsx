@@ -3,10 +3,12 @@
 import { Check, SlidersHorizontal } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
+import { SourceBadge } from "@components/SourceBadge";
 import { Button } from "@components/ui/Button";
 
 import { BOARD_CATEGORY_KEYS } from "../ExploreBoard/constants";
 import { ClampedText } from "./ClampedText";
+import { integrationLabel } from "./helpers";
 import { LayoutMenu } from "./LayoutMenu";
 import {
   cardAction,
@@ -16,6 +18,7 @@ import {
   cardDescription,
   cardHead,
   cardIcon,
+  cardMeta,
   cardPreview,
   cardTitle,
   galleryCard,
@@ -27,8 +30,9 @@ import { WidgetPreview } from "./WidgetPreview";
 export function WidgetGalleryCard({ entry, placed, free, onAdd, onRemove, onCustomize }: WidgetGalleryCardProps) {
   const { t } = useTranslation(["discover", "widgets"]);
   const Icon = entry.definition.icon;
-  const name = entry.title;
+  const name = entry.name;
   const onBoard = placed.length > 0;
+  const { integration } = entry.definition;
 
   return (
     <article className={galleryCard({ onBoard })}>
@@ -46,8 +50,11 @@ export function WidgetGalleryCard({ entry, placed, free, onAdd, onRemove, onCust
           <span className={cardIcon()}>
             <Icon className="size-4" />
           </span>
-          <h4 className={cardTitle()}>{name}</h4>
+          <h4 className={cardTitle()}>{entry.title}</h4>
+        </div>
+        <div className={cardMeta()}>
           <span className={cardCategory()}>{t(BOARD_CATEGORY_KEYS[entry.definition.category].title)}</span>
+          {integration ? <SourceBadge source={integration} label={integrationLabel(integration)} /> : null}
         </div>
         <ClampedText text={entry.description} className={cardDescription()} />
         <div className={cardActions()}>

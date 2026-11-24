@@ -4,6 +4,7 @@ import type { ComponentType, PointerEvent as ReactPointerEvent, RefObject } from
 
 import type { BoardDevice } from "@components/BoardGrid";
 import type { BoardWriteMode } from "@hooks/api/mutations/board/types";
+import type { ListeningProvider } from "@hooks/api/queries/analytics/types";
 import type {
   BoardAppearance,
   BoardItem,
@@ -13,7 +14,7 @@ import type {
   BoardTemplateApplied,
   BoardWidgetKey,
 } from "@hooks/api/queries/board/types";
-import type { WidgetDocument } from "@hooks/api/queries/widgets/types";
+import type { FeedIntegration, WidgetDocument } from "@hooks/api/queries/widgets/types";
 
 export type BoardCategory = "now" | "history" | "discover" | "library";
 
@@ -24,6 +25,7 @@ export type CustomWidgetsStatus = "loading" | "error" | "ready";
 export interface BoardWidgetProps {
   size: BoardSize;
   info: string;
+  provider?: ListeningProvider;
 }
 
 export interface BoardWidgetDefinition {
@@ -34,6 +36,8 @@ export interface BoardWidgetDefinition {
   descriptionKey: ParseKeys<"discover">;
   defaultSize: BoardSize;
   lockedTo?: BoardSize;
+  provider?: ListeningProvider;
+  integration?: FeedIntegration;
 }
 
 export interface PlacedTile {

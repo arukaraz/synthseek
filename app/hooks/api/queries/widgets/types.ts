@@ -9,6 +9,7 @@ export type WidgetAction = WidgetDocument["view"]["action"];
 export type WidgetAccent = WidgetDocument["meta"]["accent"];
 export type WidgetIcon = WidgetDocument["meta"]["icon"];
 export type WidgetCatalog = WidgetOutputs["catalog"];
+export type FeedIntegration = WidgetCatalog["feeds"]["activeIntegrations"][number];
 export type WidgetGrammar = WidgetOutputs["grammar"];
 export type WidgetQuery = WidgetDocument["query"];
 export type RecipeQuery = Extract<WidgetQuery, { type: "recipe" }>;

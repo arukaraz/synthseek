@@ -12,6 +12,7 @@ import {
   Library,
   ListPlus,
   type LucideIcon,
+  MicVocal,
   Monitor,
   MonitorPlay,
   Orbit as OrbitIcon,
@@ -59,6 +60,7 @@ import { RecentRequests } from "../RecentRequests/RecentRequests";
 import { RecentScrobbles } from "../RecentScrobbles/RecentScrobbles";
 import { ServerPlaylists } from "../ServerPlaylists/ServerPlaylists";
 import { Stations } from "../Stations/Stations";
+import { TopArtists } from "../TopArtists/TopArtists";
 import { TopTracks } from "../TopTracks/TopTracks";
 import { TrendingHero } from "../TrendingHero/TrendingHero";
 import type { BoardCategory, BoardWidgetDefinition } from "./types";
@@ -118,13 +120,19 @@ export const BOARD_WIDGET_ORDER: readonly BoardWidgetKey[] = [
   "forgottenFavorites",
   "lastYear",
   "topTracks",
+  "listenbrainzTopTracks",
+  "lastfmTopArtists",
+  "listenbrainzTopArtists",
   "scrobbles",
+  "listenbrainzListens",
   "rarities",
   "mixes",
   "artistsNext",
   "orbit",
   "charts",
+  "listenbrainzCharts",
   "loved",
+  "listenbrainzLoved",
   "genres",
   "newInLibrary",
   "leaderboard",
@@ -151,6 +159,38 @@ export const BOARD_WIDGETS: Record<BoardWidgetKey, BoardWidgetDefinition> = {
     titleKey: "topTracks.title",
     descriptionKey: "board.widgets.topTracks",
     defaultSize: "M",
+    provider: "lastfm",
+    integration: "lastfm",
+  },
+  listenbrainzTopTracks: {
+    component: TopTracks,
+    category: "history",
+    icon: Trophy,
+    titleKey: "topTracks.title",
+    descriptionKey: "board.widgets.listenbrainzTopTracks",
+    defaultSize: "M",
+    provider: "listenbrainz",
+    integration: "listenbrainz",
+  },
+  lastfmTopArtists: {
+    component: TopArtists,
+    category: "history",
+    icon: MicVocal,
+    titleKey: "topArtists.title",
+    descriptionKey: "board.widgets.lastfmTopArtists",
+    defaultSize: "M",
+    provider: "lastfm",
+    integration: "lastfm",
+  },
+  listenbrainzTopArtists: {
+    component: TopArtists,
+    category: "history",
+    icon: MicVocal,
+    titleKey: "topArtists.title",
+    descriptionKey: "board.widgets.listenbrainzTopArtists",
+    defaultSize: "M",
+    provider: "listenbrainz",
+    integration: "listenbrainz",
   },
   scrobbles: {
     component: RecentScrobbles,
@@ -159,6 +199,18 @@ export const BOARD_WIDGETS: Record<BoardWidgetKey, BoardWidgetDefinition> = {
     titleKey: "recentScrobbles.title",
     descriptionKey: "board.widgets.scrobbles",
     defaultSize: "XL",
+    provider: "lastfm",
+    integration: "lastfm",
+  },
+  listenbrainzListens: {
+    component: RecentScrobbles,
+    category: "history",
+    icon: Activity,
+    titleKey: "recentScrobbles.listensTitle",
+    descriptionKey: "board.widgets.listenbrainzListens",
+    defaultSize: "XL",
+    provider: "listenbrainz",
+    integration: "listenbrainz",
   },
   mixes: {
     component: DiscoveryMixes,
@@ -167,6 +219,7 @@ export const BOARD_WIDGETS: Record<BoardWidgetKey, BoardWidgetDefinition> = {
     titleKey: "mixes.title",
     descriptionKey: "board.widgets.mixes",
     defaultSize: "XL",
+    integration: "listenbrainz",
   },
   artistsNext: {
     component: ArtistSpotlight,
@@ -267,6 +320,7 @@ export const BOARD_WIDGETS: Record<BoardWidgetKey, BoardWidgetDefinition> = {
     titleKey: "rarities.title",
     descriptionKey: "board.widgets.rarities",
     defaultSize: "M",
+    integration: "listenbrainz",
   },
   orbit: {
     component: Orbit,
@@ -283,6 +337,18 @@ export const BOARD_WIDGETS: Record<BoardWidgetKey, BoardWidgetDefinition> = {
     titleKey: "charts.title",
     descriptionKey: "board.widgets.charts",
     defaultSize: "M",
+    provider: "lastfm",
+    integration: "lastfm",
+  },
+  listenbrainzCharts: {
+    component: Charts,
+    category: "discover",
+    icon: Flame,
+    titleKey: "charts.title",
+    descriptionKey: "board.widgets.listenbrainzCharts",
+    defaultSize: "M",
+    provider: "listenbrainz",
+    integration: "listenbrainz",
   },
   loved: {
     component: LovedNotHere,
@@ -291,6 +357,18 @@ export const BOARD_WIDGETS: Record<BoardWidgetKey, BoardWidgetDefinition> = {
     titleKey: "loved.title",
     descriptionKey: "board.widgets.loved",
     defaultSize: "M",
+    provider: "lastfm",
+    integration: "lastfm",
+  },
+  listenbrainzLoved: {
+    component: LovedNotHere,
+    category: "discover",
+    icon: Heart,
+    titleKey: "loved.listenbrainzTitle",
+    descriptionKey: "board.widgets.listenbrainzLoved",
+    defaultSize: "M",
+    provider: "listenbrainz",
+    integration: "listenbrainz",
   },
   newInLibrary: {
     component: NewInLibrary,
@@ -339,6 +417,7 @@ export const BOARD_WIDGETS: Record<BoardWidgetKey, BoardWidgetDefinition> = {
     titleKey: "serverPlaylists.title",
     descriptionKey: "board.widgets.serverPlaylists",
     defaultSize: "M",
+    integration: "mediaServer",
   },
 };
 

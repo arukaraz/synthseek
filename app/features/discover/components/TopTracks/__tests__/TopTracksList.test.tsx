@@ -19,9 +19,9 @@ describe("TopTracksList", () => {
     render(
       <TopTracksList
         tracks={[
-          createTopTrack({ catalogTrackId: "a", title: "A" }),
-          createTopTrack({ catalogTrackId: "b", title: "B" }),
-          createTopTrack({ catalogTrackId: "c", title: "C" }),
+          createTopTrack({ id: "a", title: "A" }),
+          createTopTrack({ id: "b", title: "B" }),
+          createTopTrack({ id: "c", title: "C" }),
         ]}
         startRank={2}
         columns="one"
@@ -33,11 +33,7 @@ describe("TopTracksList", () => {
 
   it("assigns ranks counting up from startRank by list position", () => {
     render(
-      <TopTracksList
-        tracks={[createTopTrack({ catalogTrackId: "a" }), createTopTrack({ catalogTrackId: "b" })]}
-        startRank={2}
-        columns="one"
-      />
+      <TopTracksList tracks={[createTopTrack({ id: "a" }), createTopTrack({ id: "b" })]} startRank={2} columns="one" />
     );
 
     const ranks = screen.getAllByTestId("row").map((row) => row.getAttribute("data-rank"));
@@ -45,7 +41,7 @@ describe("TopTracksList", () => {
   });
 
   it("lays the rows in two columns when asked to", () => {
-    const tracks = [createTopTrack({ catalogTrackId: "a" }), createTopTrack({ catalogTrackId: "b" })];
+    const tracks = [createTopTrack({ id: "a" }), createTopTrack({ id: "b" })];
     const { rerender } = render(<TopTracksList tracks={tracks} startRank={2} columns="one" />);
     expect(screen.getAllByTestId("row")[0].parentElement).not.toHaveClass("grid-cols-2");
 

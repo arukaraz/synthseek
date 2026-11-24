@@ -81,23 +81,30 @@
   },
   "topTracks": {
     "title": "Meilleures pistes",
-    "subtitle": "Les plus écoutées · de tous les temps · Last.fm",
+    "subtitle": "Les plus écoutées · de tous les temps · {{provider}}",
     "heroBadge": "N°1 la plus écoutée",
     "plays": "{{count}} écoutes",
     "empty": {
-      "error": "Impossible de charger les données Last.fm.",
-      "disabled": "Activez Last.fm pour voir vos pistes les plus écoutées ici.",
-      "noUsername": "Ajoutez votre nom d'utilisateur Last.fm pour commencer à synchroniser vos meilleures pistes.",
-      "noData": "Aucune piste populaire pour l'instant, scrobblez de la musique pour les voir classées.",
-      "ctaOpenSettings": "Ouvrir les réglages",
-      "ctaConfigure": "Configurer Last.fm"
+      "error": "Impossible de charger les données {{provider}}.",
+      "noUsername": "Ajoutez votre nom d'utilisateur {{provider}} pour voir vos meilleures pistes ici.",
+      "noData": "Aucune piste populaire pour l'instant, écoutez de la musique pour les voir classées.",
+      "ctaConfigure": "Configurer {{provider}}"
     }
+  },
+  "topArtists": {
+    "title": "Meilleurs artistes",
+    "subtitle": "Les plus écoutés · de tous les temps · {{provider}}",
+    "empty": "Aucun artiste populaire pour l'instant, écoutez de la musique pour les voir classés.",
+    "unlinked": "Ajoutez votre nom d'utilisateur {{provider}} pour les voir.",
+    "link": "Paramètres",
+    "plays_one": "{{formatted}} écoute",
+    "plays_other": "{{formatted}} écoutes"
   },
   "recentScrobbles": {
     "title": "Scrobbles récents",
-    "subtitle": "Last.fm",
+    "listensTitle": "Écoutes récentes",
     "seeMore": "Voir plus",
-    "seeMoreAriaLabel": "Ouvrir le profil Last.fm",
+    "seeMoreAriaLabel": "Ouvrir le profil {{provider}}",
     "scrollLeftAriaLabel": "Défiler à gauche",
     "scrollRightAriaLabel": "Défiler à droite",
     "ageJustNow": "à l'instant",
@@ -105,12 +112,10 @@
     "ageHours": "il y a {{count}} h",
     "ageDays": "il y a {{count}} j",
     "empty": {
-      "error": "Impossible de charger les données Last.fm.",
-      "disabled": "Activez Last.fm pour voir vos scrobbles récents ici.",
-      "noUsername": "Ajoutez votre nom d'utilisateur Last.fm pour commencer à synchroniser les scrobbles.",
-      "noData": "Aucun scrobble pour l'instant, votre historique apparaîtra ici.",
-      "ctaOpenSettings": "Ouvrir les réglages",
-      "ctaConfigure": "Configurer Last.fm"
+      "error": "Impossible de charger les données {{provider}}.",
+      "noUsername": "Ajoutez votre nom d'utilisateur {{provider}} pour voir vos écoutes récentes ici.",
+      "noData": "Aucune écoute pour l'instant, votre historique apparaîtra ici.",
+      "ctaConfigure": "Configurer {{provider}}"
     }
   },
   "recentRequests": {
@@ -185,6 +190,7 @@
   "board": {
     "regionLabel": "Tableau Découvrir",
     "loadError": "Impossible de charger pour le moment.",
+    "providerInactive": "{{provider}} n'est pas configuré sur ce serveur.",
     "customize": "Personnaliser",
     "done": "Terminé",
     "addWidget": "Ajouter un widget",
@@ -256,6 +262,7 @@
       "add": "Ajouter",
       "remove": "Retirer",
       "onBoard": "Dans le tableau",
+      "mediaServer": "Serveur multimédia",
       "addNamed": "Ajouter {{name}}",
       "categoryCount": "{{onBoard}} sur {{total}} dans le tableau",
       "empty": "Aucun widget ne correspond à « {{query}} ».",
@@ -291,7 +298,7 @@
       },
       "history": {
         "title": "Depuis votre historique",
-        "description": "Construit à partir de vos écoutes et de Last.fm"
+        "description": "Construit à partir de vos écoutes, de Last.fm et de ListenBrainz"
       },
       "discover": {
         "title": "Découvrir",
@@ -319,7 +326,13 @@
       "stations": "Des radios construites à partir de vos artistes préférés, de vos favoris et des titres jamais écoutés.",
       "continueListening": "Votre file d'attente là où vous l'avez laissée, et vos dernières écoutes depuis toutes vos apps.",
       "rarities": "Les titres que vous écoutez et que peu de gens écoutent, d'après les comptes de ListenBrainz.",
-      "orbit": "Des albums que vous n'avez pas, choisis à partir de titres proches de ceux que vous écoutez le plus.",
+      "orbit": "Des albums que vous n'avez pas, choisis dans la radio du catalogue des artistes que vous écoutez le plus.",
+      "listenbrainzTopTracks": "Vos titres les plus écoutés sur ListenBrainz, de tous les temps.",
+      "lastfmTopArtists": "Vos artistes les plus scrobblés sur Last.fm, de tous les temps. Ouvrez-en un pour voir sa page.",
+      "listenbrainzTopArtists": "Vos artistes les plus écoutés sur ListenBrainz, de tous les temps. Ouvrez-en un pour voir sa page.",
+      "listenbrainzListens": "Vos dernières écoutes ListenBrainz à mesure qu'elles arrivent, les plus récentes d'abord.",
+      "listenbrainzCharts": "Les titres les plus écoutés cette semaine dans le monde sur ListenBrainz. Lisez ceux que vous avez et demandez les autres.",
+      "listenbrainzLoved": "Les titres que vous avez aimés sur ListenBrainz et qui ne sont pas encore dans votre bibliothèque.",
       "charts": "Les titres les plus écoutés cette semaine dans le monde sur Last.fm. Lisez ceux que vous avez et demandez les autres.",
       "loved": "Les titres que vous avez aimés sur Last.fm et qui ne sont pas encore dans votre bibliothèque.",
       "newInLibrary": "Les albums arrivés ces 7 derniers jours, et si vous les avez écoutés.",
@@ -444,7 +457,7 @@
   },
   "charts": {
     "title": "Classements",
-    "subtitle": "Meilleurs titres dans le monde",
+    "subtitle": "Meilleurs titres dans le monde · {{provider}}",
     "empty": "Aucun classement pour le moment.",
     "play": "Lire",
     "request": "Demander",
@@ -452,8 +465,9 @@
   },
   "loved": {
     "title": "Aimés sur Last.fm, absents ici",
-    "subtitle": "Titres aimés sur Last.fm",
-    "unlinked": "Ajoutez votre nom d'utilisateur Last.fm pour les voir.",
+    "listenbrainzTitle": "Aimés sur ListenBrainz, absents ici",
+    "subtitle": "Titres aimés sur {{provider}}",
+    "unlinked": "Ajoutez votre nom d'utilisateur {{provider}} pour les voir.",
     "link": "Paramètres",
     "empty": "Tout ce que vous avez aimé est déjà ici.",
     "request": "Demander"

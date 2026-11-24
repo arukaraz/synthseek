@@ -1,39 +1,34 @@
-import type { LastfmTopTrack } from "@features/discovery-integrations/types";
-import type { BoardSize } from "@hooks/api/queries/board/types";
+import type { ListenedTrack, ListeningProvider } from "@hooks/api/queries/analytics/types";
 
 import type { WidgetListColumns } from "../WidgetRow/types";
-
-export interface TopTracksProps {
-  size: BoardSize;
-  info: string;
-}
 
 export type TopTrackLook = "hero" | "leader";
 
 export interface TopTracksSplit {
-  hero: LastfmTopTrack | null;
-  rest: LastfmTopTrack[];
+  hero: ListenedTrack | null;
+  rest: ListenedTrack[];
   startRank: number;
 }
 
-export type EmptyReason = "error" | "disabled" | "no-username" | "no-data";
+export type EmptyReason = "error" | "inactive" | "unlinked" | "no-data";
 
 export interface TopTracksEmptyProps {
   reason: EmptyReason;
   info: string;
+  provider: ListeningProvider;
 }
 
 export interface TopTrackHeroProps {
-  track: LastfmTopTrack;
+  track: ListenedTrack;
 }
 
 export interface TopTracksListProps {
-  tracks: LastfmTopTrack[];
+  tracks: ListenedTrack[];
   startRank: number;
   columns: WidgetListColumns;
 }
 
 export interface TopTrackRowProps {
-  track: LastfmTopTrack;
+  track: ListenedTrack;
   rank: number;
 }

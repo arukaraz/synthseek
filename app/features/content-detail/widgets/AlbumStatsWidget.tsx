@@ -1,18 +1,19 @@
 "use client";
 
-import { useAlbumStats } from "@hooks/api/queries/content-detail";
+import { useAlbumDetail, useAlbumStats } from "@hooks/api/queries/content-detail";
 import { memo } from "react";
 import { useTranslation } from "react-i18next";
 
 import { AboutBio } from "../components/AboutBio";
 import { DetailSection } from "../components/DetailSection";
-import { StatRow } from "../components/StatRow";
+import { figureGroupsOf, SourceFigures } from "../components/SourceFigures";
 import { statSkeleton } from "../styles";
-import type { AlbumStatsWidgetProps, StatItem } from "../types";
+import type { AlbumStatsWidgetProps } from "../types";
 
-function AlbumStatsWidgetComponent({ artistName, albumName, trackCount, slot }: AlbumStatsWidgetProps) {
+function AlbumStatsWidgetComponent({ catalogAlbumId, artistName, albumName, trackCount, slot }: AlbumStatsWidgetProps) {
   const { t } = useTranslation("contentDetail");
-  const { data, isLoading } = useAlbumStats({ artistName, albumName, mbid: null });
+  const { data, isLoading } = useAlbumStats({ artistName, albumName, catalogAlbumId });
+  const { data: album } = useAlbumDetail({ catalogAlbumId, enabled: slot === "stats" });
 
   if (slot === "about") {
     return (
@@ -22,18 +23,20 @@ function AlbumStatsWidgetComponent({ artistName, albumName, trackCount, slot }: 
     );
   }
 
-  const stats: StatItem[] = [
-    { label: t("stats.listeners"), value: data?.listeners ?? null },
-    { label: t("stats.scrobbles"), value: data?.scrobbles ?? null },
-    { label: t("stats.lbListens"), value: data?.lbListens ?? null },
-    { label: t("stats.tracks"), value: trackCount },
-  ];
-
   if (isLoading) {
     return <div className={statSkeleton()} />;
   }
 
-  return <StatRow stats={stats} />;
+  return (
+    <SourceFigures
+      groups={figureGroupsOf({
+        lastfm: data?.lastfm,
+        listenbrainz: data?.listenbrainz,
+        catalogFans: album?.catalogFans,
+      })}
+      plain={{ label: t("stats.tracks"), value: trackCount }}
+    />
+  );
 }
 
 export const AlbumStatsWidget = memo(AlbumStatsWidgetComponent);

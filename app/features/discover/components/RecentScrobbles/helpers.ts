@@ -1,10 +1,20 @@
 import type { ParseKeys } from "i18next";
 
 import i18n from "@locale";
+import type { ListeningProvider } from "@hooks/api/queries/analytics/types";
 import type { BoardSize } from "@hooks/api/queries/board/types";
 
 import { isWideSize } from "../helpers";
 import type { EmptyReason, ScrobbleLayout } from "./types";
+
+const TITLE_KEYS: Record<ListeningProvider, ParseKeys<"discover">> = {
+  lastfm: "recentScrobbles.title",
+  listenbrainz: "recentScrobbles.listensTitle",
+};
+
+export function scrobblesTitleKey(provider: ListeningProvider): ParseKeys<"discover"> {
+  return TITLE_KEYS[provider];
+}
 
 export function scrobbleLayoutFor(size: BoardSize): ScrobbleLayout {
   return isWideSize(size) ? "rail" : "timeline";
@@ -12,8 +22,8 @@ export function scrobbleLayoutFor(size: BoardSize): ScrobbleLayout {
 
 const EMPTY_TEXT_KEYS: Record<EmptyReason, ParseKeys<"discover">> = {
   error: "recentScrobbles.empty.error",
-  disabled: "recentScrobbles.empty.disabled",
-  "no-username": "recentScrobbles.empty.noUsername",
+  inactive: "board.providerInactive",
+  unlinked: "recentScrobbles.empty.noUsername",
   "no-data": "recentScrobbles.empty.noData",
 };
 

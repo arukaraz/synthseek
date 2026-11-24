@@ -4,11 +4,13 @@ import { motion } from "framer-motion";
 import { Trophy } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
+import { SOURCE_NAMES } from "@components/SourceBadge";
 import { glassPanelCard } from "@components/ui/styles";
 import { WidgetHeader } from "@components/WidgetHeader";
-import { useLastfmFeeds } from "@hooks/api/queries/discovery/useLastfmFeeds";
+import { useListenedTracks } from "@hooks/api/queries/analytics/useListenedTracks";
 import { fadeIn } from "@utils/animations";
 
+import type { BoardWidgetProps } from "../ExploreBoard/types";
 import { listColumns } from "../helpers";
 import { leaderFrame, leaderLayout } from "../WidgetLeader/styles";
 import { topTrackLookOf, topTracksSplit } from "./helpers";
@@ -18,22 +20,19 @@ import { TopTracksEmpty } from "./TopTracksEmpty";
 import { TopTracksList } from "./TopTracksList";
 import { TopTracksSkeleton } from "./TopTracksSkeleton";
 import { body, bodyFrame } from "./styles";
-import type { TopTracksProps } from "./types";
 
-export function TopTracks({ size, info }: TopTracksProps) {
+export function TopTracks({ size, info, provider = "lastfm" }: BoardWidgetProps) {
   const { t } = useTranslation("discover");
-  const { lfmConfig, topTracks, isLoading, isError } = useLastfmFeeds();
+  const { data, isLoading, isError } = useListenedTracks(provider);
 
   if (isLoading) return <TopTracksSkeleton />;
-  if (isError) return <TopTracksEmpty reason="error" info={info} />;
-  if (!lfmConfig || !lfmConfig.enabled) return <TopTracksEmpty reason="disabled" info={info} />;
-  if (!lfmConfig.username) return <TopTracksEmpty reason="no-username" info={info} />;
-  if (!topTracks || topTracks.status !== "ready" || topTracks.tracks.length === 0) {
-    return <TopTracksEmpty reason="no-data" info={info} />;
-  }
+  if (isError || !data) return <TopTracksEmpty reason="error" info={info} provider={provider} />;
+  if (data.status !== "ready") return <TopTracksEmpty reason={data.status} info={info} provider={provider} />;
+  if (data.topTracks.length === 0) return <TopTracksEmpty reason="no-data" info={info} provider={provider} />;
 
-  const { hero, rest, startRank } = topTracksSplit(topTracks.tracks, size);
+  const { hero, rest, startRank } = topTracksSplit(data.topTracks, size);
   const look = topTrackLookOf(size);
+  const headingId = `top-tracks-heading-${provider}`;
 
   return (
     <motion.section
@@ -41,13 +40,13 @@ export function TopTracks({ size, info }: TopTracksProps) {
       initial="hidden"
       animate="visible"
       className={glassPanelCard({ height: "auto" })}
-      aria-labelledby="top-tracks-heading"
+      aria-labelledby={headingId}
     >
       <WidgetHeader
         icon={Trophy}
         title={t("topTracks.title")}
-        subtitle={t("topTracks.subtitle")}
-        titleId="top-tracks-heading"
+        subtitle={t("topTracks.subtitle", { provider: SOURCE_NAMES[provider] })}
+        titleId={headingId}
         info={info}
       />
       <div className={look === "leader" ? leaderFrame() : bodyFrame()}>

@@ -178,7 +178,11 @@ describe("what the album page shows", () => {
 
     renderBody();
 
-    expect(api.statsArgs).toHaveBeenCalledWith(expect.objectContaining({ artistName: "Daft Punk (FR)" }));
+    expect(api.statsArgs).toHaveBeenCalledWith({
+      artistName: "Daft Punk (FR)",
+      albumName: "Discovery",
+      catalogAlbumId: "album-1",
+    });
   });
 
   it("gathers the sources that could not be reached across every fetch", () => {

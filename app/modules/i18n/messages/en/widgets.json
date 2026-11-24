@@ -458,6 +458,7 @@
       },
       "catalog": {
         "related": "Related artists (catalog)",
+        "radio": "Artist radio tracks (catalog)",
         "artistAlbums": "Albums by artists (catalog)",
         "trending": "Trending tracks (catalog)"
       },

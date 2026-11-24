@@ -91,6 +91,8 @@ export const cardTitle = cva("text-fg min-w-0 flex-1 text-sm leading-tight font-
 
 export const cardCategory = cva("text-fg/60 shrink-0 text-11");
 
+export const cardMeta = cva("flex min-w-0 flex-wrap items-center gap-2");
+
 export const cardDescription = cva("text-fg/60 text-xs");
 
 export const clampedBlock = cva("flex min-w-0 flex-col items-start gap-0.5");

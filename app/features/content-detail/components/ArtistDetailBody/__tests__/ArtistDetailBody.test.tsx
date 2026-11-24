@@ -137,7 +137,11 @@ describe("what the artist page shows", () => {
 
     renderBody();
 
-    expect(api.statsArgs).toHaveBeenCalledWith({ artistName: "Daft Punk", mbid: "mbid-1" });
+    expect(api.statsArgs).toHaveBeenCalledWith({
+      artistName: "Daft Punk",
+      mbid: "mbid-1",
+      catalogArtistId: "artist-1",
+    });
   });
 
   it("shows the genres the figures came back with", () => {

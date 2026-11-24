@@ -343,6 +343,12 @@ export const bioClamped = cva("line-clamp-6");
 
 export const bioToggle = cva("text-accent-400 hover:text-accent-500 mt-1.5 text-xs font-semibold");
 
+export const bioSource = cva("mt-3 flex");
+
+export const bioSourceLink = cva(
+  "focus-visible:ring-primary-400 rounded-full opacity-90 transition-opacity outline-none hover:opacity-100 focus-visible:ring-2"
+);
+
 export const railWrap = cva("group/rail relative min-w-0");
 
 export const railTrack = cva("scrollbar-hide flex gap-4 overflow-x-auto scroll-smooth pb-2");

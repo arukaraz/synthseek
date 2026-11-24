@@ -6,10 +6,12 @@ import type { WidgetProblem } from "@hooks/api/queries/widgets/types";
 import { BOARD_MAX_ITEMS, BOARD_WIDGETS } from "../../ExploreBoard/constants";
 import { DEFAULT_GALLERY_FILTERS, PREVIEW_BOX } from "../constants";
 import {
+  availableEntries,
   bulkAddRoomOf,
   bulkPlacementOf,
   countInCategory,
   galleryGroups,
+  integrationLabel,
   matchesQuery,
   previewFrame,
   problemText,
@@ -17,7 +19,7 @@ import {
 import type { GalleryEntry, GalleryFilters } from "../types";
 
 function entry(widget: BoardWidgetKey, title: string, description = ""): GalleryEntry {
-  return { widget, definition: BOARD_WIDGETS[widget], title, description };
+  return { widget, definition: BOARD_WIDGETS[widget], name: title, title, description };
 }
 
 const ENTRIES: GalleryEntry[] = [
@@ -27,6 +29,61 @@ const ENTRIES: GalleryEntry[] = [
   entry("mixes", "Discover mixes", "ListenBrainz playlists"),
   entry("requests", "Recent requests", "What you asked for"),
 ];
+
+describe("availableEntries", () => {
+  const NOT_PLACED = new Map<BoardWidgetKey, string>();
+  const shown = (active: Parameters<typeof availableEntries>[1], onBoard = NOT_PLACED) =>
+    availableEntries(ENTRIES, active, onBoard).map((item) => item.widget);
+
+  it("hides a widget whose third party is not set up, and leaves the ones that need none", () => {
+    expect(shown(["listenbrainz"])).toEqual(["trending", "mixes", "requests"]);
+    expect(shown(["lastfm"])).toEqual(["trending", "topTracks", "scrobbles", "requests"]);
+  });
+
+  it("shows every widget once all their third parties are active", () => {
+    expect(shown(["listenbrainz", "lastfm"])).toEqual(["trending", "topTracks", "scrobbles", "mixes", "requests"]);
+  });
+
+  it("keeps a placed widget in the gallery so it can still be removed there", () => {
+    expect(shown(["listenbrainz"], new Map<BoardWidgetKey, string>([["scrobbles", "s1"]]))).toEqual([
+      "trending",
+      "scrobbles",
+      "mixes",
+      "requests",
+    ]);
+  });
+
+  it("offers no third-party widget until the server has said which are active", () => {
+    expect(shown(undefined)).toEqual(["trending", "requests"]);
+  });
+});
+
+describe("integrationLabel", () => {
+  it("names a third party by its own name and the media server by what it is", () => {
+    expect(integrationLabel("lastfm")).toBe("Last.fm");
+    expect(integrationLabel("listenbrainz")).toBe("ListenBrainz");
+    expect(integrationLabel("mediaServer")).toBe("Media server");
+  });
+});
+
+describe("matchesQuery over the name", () => {
+  it("finds a twin by the provider its name carries", () => {
+    const twin = { ...entry("listenbrainzCharts", "Charts", "Top tracks worldwide"), name: "Charts (ListenBrainz)" };
+
+    expect(matchesQuery(twin, "listenbrainz")).toBe(true);
+    expect(matchesQuery(entry("charts", "Charts", "Top tracks worldwide"), "listenbrainz")).toBe(false);
+  });
+
+  it("sorts twins that share a title by the provider their name carries", () => {
+    const twins = [
+      { ...entry("listenbrainzCharts", "Charts"), name: "Charts (ListenBrainz)" },
+      { ...entry("charts", "Charts"), name: "Charts (Last.fm)" },
+    ];
+    const sorted = galleryGroups(twins, { ...DEFAULT_GALLERY_FILTERS, sort: "name" }, new Map());
+
+    expect(sorted[0]?.entries.map((item) => item.widget)).toEqual(["charts", "listenbrainzCharts"]);
+  });
+});
 
 describe("bulkPlacementOf", () => {
   const onList = (placed: Record<BoardList, readonly BoardWidgetKey[]>) => (list: BoardList, widget: BoardWidgetKey) =>

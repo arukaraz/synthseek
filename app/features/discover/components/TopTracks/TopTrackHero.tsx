@@ -26,7 +26,7 @@ import type { TopTrackHeroProps } from "./types";
 export function TopTrackHero({ track }: TopTrackHeroProps) {
   const { t } = useTranslation("discover");
   const cover = track.albumImage;
-  const fallbackBg = tileGradient(track.catalogTrackId);
+  const fallbackBg = tileGradient(track.id);
 
   return (
     <div className={hero()}>

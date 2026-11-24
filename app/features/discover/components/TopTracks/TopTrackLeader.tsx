@@ -13,11 +13,7 @@ export function TopTrackLeader({ track }: TopTrackHeroProps) {
   const { t } = useTranslation("discover");
 
   return (
-    <WidgetLeader
-      cover={track.albumImage}
-      seed={track.catalogTrackId}
-      badge={{ icon: Crown, label: t("topTracks.heroBadge") }}
-    >
+    <WidgetLeader cover={track.albumImage} seed={track.id} badge={{ icon: Crown, label: t("topTracks.heroBadge") }}>
       <span className={leaderRank()}>1</span>
       <h3 className={leaderTitle()}>{track.title}</h3>
       <p className={leaderSubtitle()}>{track.artist}</p>

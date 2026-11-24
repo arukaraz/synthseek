@@ -501,7 +501,7 @@
       },
       "lastfmKey": {
         "label": "Last.fm API key",
-        "helper": "Similar artists, charts and scrobble history. Every member's Last.fm connection uses it."
+        "helper": "Listener counts, album descriptions and the Last.fm board widgets. Every member's Last.fm connection uses it."
       },
       "lastfmSecret": {
         "label": "Last.fm shared secret",

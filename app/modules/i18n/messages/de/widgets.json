@@ -458,6 +458,7 @@
       },
       "catalog": {
         "related": "Verwandte Künstler (Katalog)",
+        "radio": "Titel aus dem Künstlerradio (Katalog)",
         "artistAlbums": "Alben von Künstlern (Katalog)",
         "trending": "Titel im Trend (Katalog)"
       },

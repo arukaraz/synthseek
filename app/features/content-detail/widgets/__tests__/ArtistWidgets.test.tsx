@@ -27,6 +27,7 @@ const api = vi.hoisted(() => ({
   discographyArgs: vi.fn(),
   similar: undefined as SimilarArtist[] | undefined,
   similarLoading: false,
+  similarArgs: vi.fn(),
 }));
 
 vi.mock("@hooks/api/queries/content-detail", () => ({
@@ -34,7 +35,10 @@ vi.mock("@hooks/api/queries/content-detail", () => ({
     api.discographyArgs(args);
     return { data: api.discography, isLoading: api.discographyLoading };
   },
-  useArtistSimilar: () => ({ data: api.similar, isLoading: api.similarLoading }),
+  useArtistSimilar: (args: unknown) => {
+    api.similarArgs(args);
+    return { data: api.similar, isLoading: api.similarLoading };
+  },
 }));
 
 import { ArtistDiscographyWidget } from "../ArtistDiscographyWidget";
@@ -220,9 +224,15 @@ describe("the artist's other albums, shown on an album page", () => {
 describe("the similar artists", () => {
   function renderSimilar() {
     const onSelectArtist = vi.fn();
-    render(<ArtistSimilarWidget artistName="Daft Punk" onSelectArtist={onSelectArtist} />);
+    render(<ArtistSimilarWidget artistName="Daft Punk" catalogArtistId="artist-1" onSelectArtist={onSelectArtist} />);
     return { onSelectArtist, user: userEvent.setup() };
   }
+
+  it("asks the catalog by the artist's own id, so a shared name cannot answer for it", () => {
+    renderSimilar();
+
+    expect(api.similarArgs).toHaveBeenCalledWith({ artistName: "Daft Punk", catalogArtistId: "artist-1" });
+  });
 
   it("says there are none rather than showing an empty rail", () => {
     api.similar = [];

@@ -447,6 +447,10 @@
     { "name": "--brand-ntfy", "file": "services", "kind": "color" },
     { "name": "--brand-telegram", "file": "services", "kind": "color" },
     { "name": "--brand-plex", "file": "services", "kind": "color" },
+    { "name": "--brand-catalog", "file": "services", "kind": "color" },
+    { "name": "--brand-wikipedia", "file": "services", "kind": "color" },
+    { "name": "--brand-lidarr", "file": "services", "kind": "color" },
+    { "name": "--brand-bandsintown", "file": "services", "kind": "color" },
     { "name": "--brand-website", "file": "services", "kind": "color", "follows": "--color-secondary-400" }
   ],
   "parts": [

@@ -92,10 +92,11 @@ Around it sit enrichment providers, each contributing something the catalog does
 | MusicBrainz       | Canonical identifiers, used for tagging and for recognising the album a scanned file is on. |
 | Cover Art Archive | Album artwork when the catalog has none.                                                    |
 | fanart.tv         | Artist images.                                                                              |
-| Last.fm           | Biographies, similar artists, charts, and your scrobbles.                                   |
-| ListenBrainz      | Recording metadata, recommendations, and generated mixes.                                   |
+| Last.fm           | Listener counts, album descriptions, charts, and your scrobbles.                            |
+| ListenBrainz      | Recording metadata, recommendations, generated mixes, charts, and your listens.             |
 | Discogs           | Additional detail on release pages.                                                         |
 | Wikidata          | Factual artist details.                                                                     |
+| Wikipedia         | Artist biographies.                                                                         |
 | Songlink          | Resolving links from other platforms into requestable tracks.                               |
 
 Enrichment never blocks anything. If a provider is unavailable, the page renders without it and tells you which source is degraded and for how long. A provider that fails repeatedly is stopped being called for a while, then probed once to see whether it has recovered.
@@ -116,7 +117,7 @@ The Spotify connection needs a client ID and a public base URL, because the OAut
 
 ListenBrainz provides four kinds of mix: collaborative filtering recommendations, weekly exploration, weekly jams, and daily jams. Choose which you want, name them, and decide whether Synthseek should request their tracks automatically. A mix can update a single playlist in place rather than creating a new one each refresh.
 
-Last.fm provides your recent scrobbles and top tracks, and powers similar-artist recommendations across the application.
+Both fill board widgets with your recent plays, your top tracks and artists, a chart, and the tracks you loved there that your library lacks. The Last.fm ones need the server's Last.fm API key.
 
 ## Listening services
 

@@ -10,17 +10,19 @@ import { Input } from "@components/ui/Input";
 import { SectionLoading } from "@components/ui/SectionLoading";
 import { SegmentTabs } from "@components/ui/SegmentTabs";
 import type { BoardList, BoardWidgetKey } from "@hooks/api/queries/board/types";
+import { useActiveIntegrations } from "@hooks/api/queries/widgets/useActiveIntegrations";
 import { useMyWidgets } from "@hooks/api/queries/widgets/useMyWidgets";
 
 import { NEW_WIDGET_DRAFT } from "../../constants";
 import { BOARD_LIST_KEYS, BOARD_MAX_ITEMS, BOARD_WIDGET_ORDER, BOARD_WIDGETS } from "../ExploreBoard/constants";
-import { widgetsOnBoard } from "../ExploreBoard/helpers";
+import { boardWidgetName, widgetsOnBoard } from "../ExploreBoard/helpers";
 import { NeverIncludeCard } from "../NeverInclude/NeverIncludeCard";
 import { BulkLayoutMenu } from "../WidgetGallery/BulkLayoutMenu";
 import { CategoryBand } from "../WidgetGallery/CategoryBand";
 import { GALLERY_MODES } from "../WidgetGallery/constants";
 import { GalleryFilterMenu } from "../WidgetGallery/GalleryFilterMenu";
 import {
+  availableEntries,
   bulkAddRoomOf,
   bulkPlacementOf,
   categoryCounts,
@@ -49,15 +51,26 @@ export function WidgetsSection({ draft, gallery, filters, onFiltersChange, onImp
   const myWidgets = useMyWidgets();
   const lists = draft.draft;
 
+  const active = useActiveIntegrations();
+  const onBoard = useMemo(() => widgetsOnBoard([...lists.items, ...lists.mobile]), [lists]);
   const entries = useMemo(
     () =>
-      BOARD_WIDGET_ORDER.map((widget) => {
-        const definition = BOARD_WIDGETS[widget];
-        return { widget, definition, title: t(definition.titleKey), description: t(definition.descriptionKey) };
-      }),
-    [t]
+      availableEntries(
+        BOARD_WIDGET_ORDER.map((widget) => {
+          const definition = BOARD_WIDGETS[widget];
+          return {
+            widget,
+            definition,
+            name: boardWidgetName(widget),
+            title: t(definition.titleKey),
+            description: t(definition.descriptionKey),
+          };
+        }),
+        active,
+        onBoard
+      ),
+    [t, active, onBoard]
   );
-  const onBoard = useMemo(() => widgetsOnBoard([...lists.items, ...lists.mobile]), [lists]);
   const onList = useMemo(() => ({ items: widgetsOnBoard(lists.items), mobile: widgetsOnBoard(lists.mobile) }), [lists]);
   const groups = galleryGroups(entries, filters, onBoard);
   const counts = useMemo(() => categoryCounts(entries), [entries]);

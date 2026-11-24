@@ -14,6 +14,10 @@
     --brand-ntfy: oklch(0.72 0.14 160);
     --brand-telegram: oklch(0.7 0.13 230);
     --brand-plex: oklch(0.754 0.155 77.3);
+    --brand-catalog: oklch(0.76 0.14 300);
+    --brand-wikipedia: oklch(0.86 0.015 275);
+    --brand-lidarr: oklch(0.81 0.15 155);
+    --brand-bandsintown: oklch(0.83 0.11 190);
     --brand-website: var(--color-secondary-400);
   }
 }

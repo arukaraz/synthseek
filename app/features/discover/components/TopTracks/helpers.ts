@@ -1,6 +1,6 @@
 import type { ParseKeys } from "i18next";
 
-import type { LastfmTopTrack } from "@features/discovery-integrations/types";
+import type { ListenedTrack } from "@hooks/api/queries/analytics/types";
 import type { BoardSize } from "@hooks/api/queries/board/types";
 
 import { COMPACT_ROW_LIMIT } from "../constants";
@@ -11,7 +11,7 @@ export function topTrackLookOf(size: BoardSize): TopTrackLook {
   return size === "M" ? "leader" : "hero";
 }
 
-export function topTracksSplit(tracks: readonly LastfmTopTrack[], size: BoardSize): TopTracksSplit {
+export function topTracksSplit(tracks: readonly ListenedTrack[], size: BoardSize): TopTracksSplit {
   if (size === "S") return { hero: null, rest: tracks.slice(0, COMPACT_ROW_LIMIT), startRank: 1 };
   return {
     hero: tracks[0] ?? null,
@@ -28,8 +28,8 @@ export function formatPlaycount(n: number): string {
 
 const EMPTY_TEXT_KEYS: Record<EmptyReason, ParseKeys<"discover">> = {
   error: "topTracks.empty.error",
-  disabled: "topTracks.empty.disabled",
-  "no-username": "topTracks.empty.noUsername",
+  inactive: "board.providerInactive",
+  unlinked: "topTracks.empty.noUsername",
   "no-data": "topTracks.empty.noData",
 };
 

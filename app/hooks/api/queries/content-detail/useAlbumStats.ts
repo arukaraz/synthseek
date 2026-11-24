@@ -7,15 +7,15 @@ import { CONTENT_DETAIL_GC_TIME } from "./constants";
 interface UseAlbumStatsArgs {
   artistName: string;
   albumName: string;
-  mbid: string | null;
+  catalogAlbumId: string;
   enabled?: boolean;
 }
 
-export function useAlbumStats({ artistName, albumName, mbid, enabled = true }: UseAlbumStatsArgs) {
+export function useAlbumStats({ artistName, albumName, catalogAlbumId, enabled = true }: UseAlbumStatsArgs) {
   return trpc.contentDetail.albumStats.useQuery(
-    { artistName, albumName, mbid: mbid ?? undefined },
+    { artistName, albumName, catalogAlbumId },
     {
-      enabled: enabled && !!artistName && !!albumName,
+      enabled: enabled && !!artistName && !!albumName && !!catalogAlbumId,
       staleTime: 60 * 60 * 1000,
       gcTime: CONTENT_DETAIL_GC_TIME,
       placeholderData: keepPreviousData,

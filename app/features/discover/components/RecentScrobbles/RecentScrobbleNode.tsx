@@ -13,7 +13,7 @@ export function RecentScrobbleNode({ scrobble }: RecentScrobbleNodeProps) {
       <span className={nodeTime()}>{age}</span>
       <span className={nodeDot()} aria-hidden />
       <div className={nodeCover()}>
-        <CoverArt src={scrobble.albumImage} seed={scrobble.catalogTrackId} sizes="120px" />
+        <CoverArt src={scrobble.albumImage} seed={scrobble.id} sizes="120px" />
       </div>
       <p className={nodeTitle()}>{scrobble.title}</p>
       <p className={nodeArtist()}>{scrobble.artist}</p>

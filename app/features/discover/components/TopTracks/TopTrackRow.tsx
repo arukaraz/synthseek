@@ -11,7 +11,7 @@ import type { TopTrackRowProps } from "./types";
 
 export function TopTrackRow({ track, rank }: TopTrackRowProps) {
   const cover = track.albumImage;
-  const fallbackBg = tileGradient(track.catalogTrackId);
+  const fallbackBg = tileGradient(track.id);
 
   return (
     <div className={item()}>

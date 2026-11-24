@@ -4,8 +4,10 @@ import { Flame } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { FadeScroll } from "@components/FadeScroll";
+import { SOURCE_NAMES } from "@components/SourceBadge";
 import { WidgetFrame } from "@components/WidgetFrame";
 import { useCharts } from "@hooks/api/queries/analytics/useCharts";
+import { useActiveIntegrations } from "@hooks/api/queries/widgets/useActiveIntegrations";
 
 import type { BoardWidgetProps } from "../ExploreBoard/types";
 import { listColumns } from "../helpers";
@@ -17,20 +19,31 @@ import { ChartsLeader } from "./ChartsLeader";
 import { chartKey } from "./helpers";
 import { chartRank } from "./styles";
 
-export function Charts({ size, info }: BoardWidgetProps) {
+export function Charts({ size, info, provider = "lastfm" }: BoardWidgetProps) {
   const { t } = useTranslation("discover");
-  const { data, isLoading, isError } = useCharts();
+  const { data, isLoading, isError } = useCharts(provider);
+  const active = useActiveIntegrations();
+  const name = SOURCE_NAMES[provider];
+  const inactive = active !== undefined && !active.includes(provider);
   const [leaderEntry, ...rest] = data ?? [];
 
   return (
     <WidgetFrame
       icon={Flame}
       title={t("charts.title")}
-      subtitle={t("charts.subtitle")}
+      subtitle={t("charts.subtitle", { provider: name })}
       info={info}
-      titleId="charts-heading"
+      titleId={`charts-heading-${provider}`}
       loading={isLoading}
-      note={isError ? t("board.loadError") : leaderEntry === undefined ? t("charts.empty") : null}
+      note={
+        isError
+          ? t("board.loadError")
+          : inactive
+            ? t("board.providerInactive", { provider: name })
+            : leaderEntry === undefined
+              ? t("charts.empty")
+              : null
+      }
     >
       <div className={leaderFrame()}>
         <div className={leaderLayout()}>

@@ -81,23 +81,30 @@
   },
   "topTracks": {
     "title": "Top-Titel",
-    "subtitle": "Meistgespielt · aller Zeiten · Last.fm",
+    "subtitle": "Meistgespielt · aller Zeiten · {{provider}}",
     "heroBadge": "Nr. 1 meistgespielt",
     "plays": "{{count}} Wiedergaben",
     "empty": {
-      "error": "Last.fm-Daten konnten nicht geladen werden.",
-      "disabled": "Aktiviere Last.fm, um hier deine meistgespielten Titel zu sehen.",
-      "noUsername": "Füge deinen Last.fm-Benutzernamen hinzu, um die Top-Titel zu synchronisieren.",
-      "noData": "Noch keine Top-Titel, scrobble etwas Musik, um sie nach Rang zu sehen.",
-      "ctaOpenSettings": "Einstellungen öffnen",
-      "ctaConfigure": "Last.fm konfigurieren"
+      "error": "{{provider}}-Daten konnten nicht geladen werden.",
+      "noUsername": "Füge deinen {{provider}}-Benutzernamen hinzu, um hier deine Top-Titel zu sehen.",
+      "noData": "Noch keine Top-Titel, höre etwas Musik, um sie nach Rang zu sehen.",
+      "ctaConfigure": "{{provider}} konfigurieren"
     }
+  },
+  "topArtists": {
+    "title": "Top-Künstler",
+    "subtitle": "Meistgespielt · aller Zeiten · {{provider}}",
+    "empty": "Noch keine Top-Künstler, höre etwas Musik, um sie nach Rang zu sehen.",
+    "unlinked": "Füge deinen {{provider}}-Benutzernamen hinzu, um sie zu sehen.",
+    "link": "Einstellungen",
+    "plays_one": "{{formatted}} Wiedergabe",
+    "plays_other": "{{formatted}} Wiedergaben"
   },
   "recentScrobbles": {
     "title": "Letzte Scrobbles",
-    "subtitle": "Last.fm",
+    "listensTitle": "Zuletzt gehört",
     "seeMore": "Mehr ansehen",
-    "seeMoreAriaLabel": "Last.fm-Profil öffnen",
+    "seeMoreAriaLabel": "{{provider}}-Profil öffnen",
     "scrollLeftAriaLabel": "Nach links scrollen",
     "scrollRightAriaLabel": "Nach rechts scrollen",
     "ageJustNow": "gerade eben",
@@ -105,12 +112,10 @@
     "ageHours": "vor {{count}} Std",
     "ageDays": "vor {{count}} T",
     "empty": {
-      "error": "Last.fm-Daten konnten nicht geladen werden.",
-      "disabled": "Aktiviere Last.fm, um hier deine letzten Scrobbles zu sehen.",
-      "noUsername": "Füge deinen Last.fm-Benutzernamen hinzu, um Scrobbles zu synchronisieren.",
-      "noData": "Noch keine Scrobbles, deine Chronik erscheint hier.",
-      "ctaOpenSettings": "Einstellungen öffnen",
-      "ctaConfigure": "Last.fm konfigurieren"
+      "error": "{{provider}}-Daten konnten nicht geladen werden.",
+      "noUsername": "Füge deinen {{provider}}-Benutzernamen hinzu, um hier deine zuletzt gehörten Titel zu sehen.",
+      "noData": "Noch nichts gehört, deine Chronik erscheint hier.",
+      "ctaConfigure": "{{provider}} konfigurieren"
     }
   },
   "recentRequests": {
@@ -185,6 +190,7 @@
   "board": {
     "regionLabel": "Entdecken-Board",
     "loadError": "Konnte gerade nicht geladen werden.",
+    "providerInactive": "{{provider}} ist auf diesem Server nicht eingerichtet.",
     "customize": "Anpassen",
     "done": "Fertig",
     "addWidget": "Widget hinzufügen",
@@ -256,6 +262,7 @@
       "add": "Hinzufügen",
       "remove": "Entfernen",
       "onBoard": "Auf dem Board",
+      "mediaServer": "Medienserver",
       "addNamed": "{{name}} hinzufügen",
       "categoryCount": "{{onBoard}} von {{total}} auf dem Board",
       "empty": "Kein Widget passt zu „{{query}}“.",
@@ -291,7 +298,7 @@
       },
       "history": {
         "title": "Aus deinem Verlauf",
-        "description": "Aus deinen eigenen Wiedergaben und Last.fm"
+        "description": "Aus deinen eigenen Wiedergaben, Last.fm und ListenBrainz"
       },
       "discover": {
         "title": "Entdecken",
@@ -319,7 +326,13 @@
       "stations": "Radiosender auf Basis deiner Top-Künstler, deiner Favoriten und der Titel, die du nie gehört hast.",
       "continueListening": "Deine Warteschlange dort, wo du aufgehört hast, und deine letzten Wiedergaben aus allen Apps.",
       "rarities": "Titel, die du hörst und die nur wenige hören, nach den Zahlen von ListenBrainz.",
-      "orbit": "Alben, die du nicht besitzt, ausgewählt aus Titeln, die deinen meistgehörten ähneln.",
+      "orbit": "Alben, die du nicht besitzt, ausgewählt aus dem Katalogradio der Künstler, die du am meisten hörst.",
+      "listenbrainzTopTracks": "Deine meistgespielten Titel auf ListenBrainz, aller Zeiten.",
+      "lastfmTopArtists": "Deine meistgescrobbelten Künstler auf Last.fm, aller Zeiten. Öffne einen, um seine Seite zu sehen.",
+      "listenbrainzTopArtists": "Deine meistgespielten Künstler auf ListenBrainz, aller Zeiten. Öffne einen, um seine Seite zu sehen.",
+      "listenbrainzListens": "Deine neuesten ListenBrainz-Wiedergaben, sobald sie eintreffen, die neuesten zuerst.",
+      "listenbrainzCharts": "Die meistgehörten Titel dieser Woche weltweit auf ListenBrainz. Spiel ab, was du hast, und fordere den Rest an.",
+      "listenbrainzLoved": "Titel, die du auf ListenBrainz geliebt hast und die noch nicht in deiner Bibliothek sind.",
       "charts": "Die meistgehörten Titel dieser Woche weltweit auf Last.fm. Spiel ab, was du hast, und fordere den Rest an.",
       "loved": "Titel, die du auf Last.fm geliebt hast und die noch nicht in deiner Bibliothek sind.",
       "newInLibrary": "Alben, die in den letzten 7 Tagen angekommen sind, und ob du sie gehört hast.",
@@ -444,7 +457,7 @@
   },
   "charts": {
     "title": "Charts",
-    "subtitle": "Top-Titel weltweit",
+    "subtitle": "Top-Titel weltweit · {{provider}}",
     "empty": "Gerade keine Charts.",
     "play": "Abspielen",
     "request": "Anfordern",
@@ -452,8 +465,9 @@
   },
   "loved": {
     "title": "Auf Last.fm geliebt, hier nicht",
-    "subtitle": "Geliebte Titel auf Last.fm",
-    "unlinked": "Füge deinen Last.fm-Benutzernamen hinzu, um sie zu sehen.",
+    "listenbrainzTitle": "Auf ListenBrainz geliebt, hier nicht",
+    "subtitle": "Geliebte Titel auf {{provider}}",
+    "unlinked": "Füge deinen {{provider}}-Benutzernamen hinzu, um sie zu sehen.",
     "link": "Einstellungen",
     "empty": "Alles, was du geliebt hast, ist schon hier.",
     "request": "Anfordern"

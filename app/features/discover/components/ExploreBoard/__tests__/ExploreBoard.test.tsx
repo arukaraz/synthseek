@@ -66,6 +66,10 @@ vi.mock("../../DiscoveryMixes/DiscoveryMixes", () => ({ DiscoveryMixes: stub("mi
 vi.mock("../../ArtistSpotlight/ArtistSpotlight", () => ({ ArtistSpotlight: stub("artistsNext") }));
 vi.mock("../../CategoriesGrid/CategoriesGrid", () => ({ CategoriesGrid: stub("genres") }));
 vi.mock("../../TopTracks/TopTracks", () => ({ TopTracks: stub("topTracks") }));
+vi.mock("../../TopArtists/TopArtists", () => ({ TopArtists: stub("topArtists") }));
+vi.mock("@hooks/api/queries/widgets/useActiveIntegrations", () => ({
+  useActiveIntegrations: () => ["listenbrainz", "lastfm", "mediaServer"],
+}));
 vi.mock("../../RecentScrobbles/RecentScrobbles", () => ({ RecentScrobbles: stub("scrobbles") }));
 vi.mock("../../RecentRequests/RecentRequests", () => ({ RecentRequests: stub("requests") }));
 vi.mock("../../HistoryMixes/OnRepeat", () => ({ OnRepeat: stub("onRepeat") }));

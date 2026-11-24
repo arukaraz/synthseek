@@ -39,10 +39,7 @@ describe("RecentScrobblesRail", () => {
   it("renders a node per scrobble", () => {
     renderWithProviders(
       <RecentScrobblesRail
-        scrobbles={[
-          createScrobble({ catalogTrackId: "a", title: "A" }),
-          createScrobble({ catalogTrackId: "b", title: "B" }),
-        ]}
+        scrobbles={[createScrobble({ id: "a", title: "A" }), createScrobble({ id: "b", title: "B" })]}
       />
     );
 

@@ -4,38 +4,37 @@ import { motion } from "framer-motion";
 import { Activity } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
+import { SOURCE_NAMES } from "@components/SourceBadge";
 import { glassPanelCard } from "@components/ui/styles";
 import { WidgetHeader } from "@components/WidgetHeader";
-import { useLastfmFeeds } from "@hooks/api/queries/discovery/useLastfmFeeds";
+import { useListenedTracks } from "@hooks/api/queries/analytics/useListenedTracks";
 import { fadeIn } from "@utils/animations";
 
-import { LASTFM_USER_URL_BASE } from "./constants";
-import { scrobbleLayoutFor } from "./helpers";
+import { PROVIDER_PROFILE_URLS } from "../constants";
+import type { BoardWidgetProps } from "../ExploreBoard/types";
+import { scrobbleLayoutFor, scrobblesTitleKey } from "./helpers";
 import { RecentScrobblesEmpty } from "./RecentScrobblesEmpty";
 import { RecentScrobblesRail } from "./RecentScrobblesRail";
 import { RecentScrobblesSkeleton } from "./RecentScrobblesSkeleton";
 import { RecentScrobblesTimeline } from "./RecentScrobblesTimeline";
-import type { RecentScrobblesProps } from "./types";
 
-export function RecentScrobbles({ size, info }: RecentScrobblesProps) {
+export function RecentScrobbles({ size, info, provider = "lastfm" }: BoardWidgetProps) {
   const { t } = useTranslation("discover");
-  const { lfmConfig, recentScrobbles, isLoading, isError } = useLastfmFeeds();
+  const { data, isLoading, isError } = useListenedTracks(provider);
   const layout = scrobbleLayoutFor(size);
 
   if (isLoading) return <RecentScrobblesSkeleton layout={layout} />;
-  if (isError) return <RecentScrobblesEmpty reason="error" info={info} />;
-  if (!lfmConfig || !lfmConfig.enabled) return <RecentScrobblesEmpty reason="disabled" info={info} />;
-  if (!lfmConfig.username) return <RecentScrobblesEmpty reason="no-username" info={info} />;
-  if (!recentScrobbles || recentScrobbles.status !== "ready") {
-    return <RecentScrobblesEmpty reason="no-data" info={info} />;
-  }
+  if (isError || !data) return <RecentScrobblesEmpty reason="error" info={info} provider={provider} />;
+  if (data.status !== "ready") return <RecentScrobblesEmpty reason={data.status} info={info} provider={provider} />;
 
-  const scrobbles = recentScrobbles.scrobbles.filter((s) => s.playedAt != null);
+  const scrobbles = data.recentTracks.filter((s) => s.playedAt != null);
   if (scrobbles.length === 0) {
-    return <RecentScrobblesEmpty reason="no-data" info={info} />;
+    return <RecentScrobblesEmpty reason="no-data" info={info} provider={provider} />;
   }
 
-  const seeMoreHref = `${LASTFM_USER_URL_BASE}/${encodeURIComponent(lfmConfig.username)}`;
+  const name = SOURCE_NAMES[provider];
+  const seeMoreHref = `${PROVIDER_PROFILE_URLS[provider]}/${encodeURIComponent(data.username)}`;
+  const headingId = `recent-scrobbles-heading-${provider}`;
 
   return (
     <motion.section
@@ -43,17 +42,17 @@ export function RecentScrobbles({ size, info }: RecentScrobblesProps) {
       initial="hidden"
       animate="visible"
       className={glassPanelCard({ height: "auto" })}
-      aria-labelledby="recent-scrobbles-heading"
+      aria-labelledby={headingId}
     >
       <WidgetHeader
         icon={Activity}
-        title={t("recentScrobbles.title")}
-        subtitle={t("recentScrobbles.subtitle")}
-        titleId="recent-scrobbles-heading"
+        title={t(scrobblesTitleKey(provider))}
+        subtitle={name}
+        titleId={headingId}
         info={info}
         action={{
           label: t("recentScrobbles.seeMore"),
-          ariaLabel: t("recentScrobbles.seeMoreAriaLabel"),
+          ariaLabel: t("recentScrobbles.seeMoreAriaLabel", { provider: name }),
           href: seeMoreHref,
           external: true,
         }}

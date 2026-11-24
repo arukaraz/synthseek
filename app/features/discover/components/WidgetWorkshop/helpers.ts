@@ -399,11 +399,19 @@ export function feedSourceOf(catalog: WidgetCatalog, source: FeedSource): Catalo
   return catalog.feeds.sources.find((entry) => entry.key === source);
 }
 
+export function feedSourceChoices(catalog: WidgetCatalog, chosen: FeedSource): CatalogFeedSource[] {
+  const active = catalog.feeds.activeIntegrations;
+  return catalog.feeds.sources.filter(
+    (entry) => entry.key === chosen || entry.integration === null || active.includes(entry.integration)
+  );
+}
+
 export function feedSeedOf(feed: FeedQuery): FeedSeed | null {
   switch (feed.source) {
     case "lastfm.similarArtists":
     case "lastfm.similarTracks":
     case "catalog.related":
+    case "catalog.radio":
     case "catalog.artistAlbums":
     case "events.upcoming":
       return feed.params.seed;
@@ -440,6 +448,7 @@ export function feedServerOf(feed: FeedQuery): MediaServer | null {
     case "lastfm.similarArtists":
     case "lastfm.similarTracks":
     case "catalog.related":
+    case "catalog.radio":
     case "catalog.artistAlbums":
     case "events.upcoming":
     case "listenbrainz.recommendations":
@@ -463,6 +472,7 @@ function feedWithSource(base: FeedBase, source: FeedSource, defaults: FeedDefaul
     case "lastfm.similarArtists":
     case "lastfm.similarTracks":
     case "catalog.related":
+    case "catalog.radio":
     case "catalog.artistAlbums":
       return { ...base, source, params: { seed } };
     case "listenbrainz.recommendations":
@@ -527,6 +537,7 @@ export function withSeed(feed: FeedQuery, seed: FeedSeed): FeedQuery {
     case "lastfm.similarArtists":
     case "lastfm.similarTracks":
     case "catalog.related":
+    case "catalog.radio":
     case "catalog.artistAlbums":
       return { ...feed, params: { seed } };
     case "events.upcoming":
@@ -565,6 +576,7 @@ export function withServer(feed: FeedQuery, server: MediaServer): FeedQuery {
     case "lastfm.similarArtists":
     case "lastfm.similarTracks":
     case "catalog.related":
+    case "catalog.radio":
     case "catalog.artistAlbums":
     case "events.upcoming":
     case "listenbrainz.recommendations":

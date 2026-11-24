@@ -26,6 +26,7 @@ export interface GalleryFilters {
 export interface GalleryEntry {
   widget: BoardWidgetKey;
   definition: BoardWidgetDefinition;
+  name: string;
   title: string;
   description: string;
 }

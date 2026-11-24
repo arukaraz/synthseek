@@ -19,8 +19,8 @@ describe("RecentScrobblesTimeline", () => {
     render(
       <RecentScrobblesTimeline
         scrobbles={[
-          createScrobble({ catalogTrackId: "a", title: "Windowlicker" }),
-          createScrobble({ catalogTrackId: "b", title: "Avril 14th" }),
+          createScrobble({ id: "a", title: "Windowlicker" }),
+          createScrobble({ id: "b", title: "Avril 14th" }),
         ]}
       />
     );
@@ -46,8 +46,8 @@ describe("RecentScrobblesTimeline", () => {
     const { container } = render(
       <RecentScrobblesTimeline
         scrobbles={[
-          createScrobble({ catalogTrackId: "a", albumImage: "https://img/cover.jpg" }),
-          createScrobble({ catalogTrackId: "b", albumImage: null }),
+          createScrobble({ id: "a", albumImage: "https://img/cover.jpg" }),
+          createScrobble({ id: "b", albumImage: null }),
         ]}
       />
     );

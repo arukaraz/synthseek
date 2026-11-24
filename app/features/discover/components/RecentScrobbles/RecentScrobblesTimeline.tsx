@@ -25,13 +25,13 @@ export function RecentScrobblesTimeline({ scrobbles }: RecentScrobblesTimelinePr
     <FadeScroll className={timelineScroller()}>
       <ol className={timeline()}>
         {scrobbles.map((scrobble) => (
-          <li key={scrobble.catalogTrackId} className={timelineRow()}>
+          <li key={scrobble.id} className={timelineRow()}>
             <span className={timelineTime()}>{describeScrobbleAge(scrobble.playedAt, nowMs)}</span>
             <span className={timelineNode()} aria-hidden>
               <span className={timelineDot()} />
             </span>
             <span className={timelineCover()}>
-              <CoverArt src={scrobble.albumImage} seed={scrobble.catalogTrackId} sizes="36px" />
+              <CoverArt src={scrobble.albumImage} seed={scrobble.id} sizes="36px" />
             </span>
             <span className={timelineCopy()}>
               <span className={timelineTitle()}>{scrobble.title}</span>

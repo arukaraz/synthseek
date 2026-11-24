@@ -324,6 +324,7 @@ export function createWidgetCatalog(): WidgetCatalog {
       curated: ["pitchforkBestNewAlbums", "nprMusic"],
       servers: ["plex", "navidrome", "jellyfin"],
       defaultServer: "jellyfin",
+      activeIntegrations: ["listenbrainz", "plex", "navidrome", "jellyfin", "mediaServer", "lastfm", "lidarr"],
       limits: {
         freshReleaseDaysMax: 90,
         eventsDaysMax: 180,

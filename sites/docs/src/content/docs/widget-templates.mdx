@@ -276,6 +276,7 @@ A feed starts from an outside source. You then narrow it with [rules](#rules) an
 | `lastfm.charts`                | Tracks    | `country`, a two-letter code, or `null` for the worldwide chart | Last.fm                    |
 | `lastfm.lovedTracks`           | Tracks    | None                                                            | Your Last.fm username      |
 | `catalog.related`              | Artists   | `seed`                                                          | Nothing                    |
+| `catalog.radio`                | Tracks    | `seed`                                                          | Nothing                    |
 | `catalog.artistAlbums`         | Albums    | `seed`                                                          | Nothing                    |
 | `catalog.trending`             | Tracks    | None                                                            | Nothing                    |
 | `listenbrainz.recommendations` | Tracks    | None                                                            | Your ListenBrainz username |
@@ -487,33 +488,39 @@ A widget inside `widgets` is a [widget template](#a-widget-template) with one mo
 
 Tiles fill the board in order, each one beside the last while it fits. On a phone `S` is half the width, and `M`, `L` and `XL` take all of it. Without `mobile`, the phone layout is the `items` tiles at `M`, Mix card tiles at `S`, leaving out spacers with no background.
 
-| Built-in `widget`    | Title                           |
-| -------------------- | ------------------------------- |
-| `trending`           | Trending now                    |
-| `continueListening`  | Continue listening              |
-| `jumpBackIn`         | Jump back in                    |
-| `stations`           | Stations for you                |
-| `onRepeat`           | On repeat                       |
-| `rewind`             | Repeat rewind                   |
-| `deepCuts`           | Deep cuts                       |
-| `forgottenFavorites` | Forgotten favorites             |
-| `lastYear`           | This time last year             |
-| `topTracks`          | Top Tracks                      |
-| `scrobbles`          | Recent Scrobbles                |
-| `requests`           | Recent requests                 |
-| `mixes`              | Discover Mixes                  |
-| `artistsNext`        | Artists you might want next     |
-| `orbit`              | Expand your orbit               |
-| `rarities`           | Your rarities                   |
-| `charts`             | Charts                          |
-| `genres`             | Genres                          |
-| `loved`              | Loved on Last.fm, not here      |
-| `newInLibrary`       | New in your library             |
-| `leaderboard`        | Your library                    |
-| `gaps`               | Complete the discography        |
-| `anniversaries`      | Anniversaries                   |
-| `landed`             | Landed this week                |
-| `serverPlaylists`    | Your playlists on media servers |
+| Built-in `widget`        | Name                            |
+| ------------------------ | ------------------------------- |
+| `trending`               | Trending now                    |
+| `continueListening`      | Continue listening              |
+| `jumpBackIn`             | Jump back in                    |
+| `stations`               | Stations for you                |
+| `onRepeat`               | On repeat                       |
+| `rewind`                 | Repeat rewind                   |
+| `deepCuts`               | Deep cuts                       |
+| `forgottenFavorites`     | Forgotten favorites             |
+| `lastYear`               | This time last year             |
+| `topTracks`              | Top Tracks (Last.fm)            |
+| `listenbrainzTopTracks`  | Top Tracks (ListenBrainz)       |
+| `lastfmTopArtists`       | Top Artists (Last.fm)           |
+| `listenbrainzTopArtists` | Top Artists (ListenBrainz)      |
+| `scrobbles`              | Recent Scrobbles                |
+| `listenbrainzListens`    | Recent Listens                  |
+| `requests`               | Recent requests                 |
+| `mixes`                  | Discover Mixes                  |
+| `artistsNext`            | Artists you might want next     |
+| `orbit`                  | Expand your orbit               |
+| `rarities`               | Your rarities                   |
+| `charts`                 | Charts (Last.fm)                |
+| `listenbrainzCharts`     | Charts (ListenBrainz)           |
+| `genres`                 | Genres                          |
+| `loved`                  | Loved on Last.fm, not here      |
+| `listenbrainzLoved`      | Loved on ListenBrainz, not here |
+| `newInLibrary`           | New in your library             |
+| `leaderboard`            | Your library                    |
+| `gaps`                   | Complete the discography        |
+| `anniversaries`          | Anniversaries                   |
+| `landed`                 | Landed this week                |
+| `serverPlaylists`        | Your playlists on media servers |
 
 ## Bringing a template to another server
 

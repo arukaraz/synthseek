@@ -11,7 +11,7 @@ export function TopTracksList({ tracks, startRank, columns }: TopTracksListProps
     <FadeScroll>
       <div className={list({ columns })}>
         {tracks.map((track, index) => (
-          <TopTrackRow key={track.catalogTrackId} track={track} rank={startRank + index} />
+          <TopTrackRow key={track.id} track={track} rank={startRank + index} />
         ))}
       </div>
     </FadeScroll>

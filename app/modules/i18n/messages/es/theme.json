@@ -175,6 +175,10 @@
     "--brand-ntfy": { "label": "ntfy", "hint": "El canal de notificaciones de ntfy" },
     "--brand-telegram": { "label": "Telegram", "hint": "El canal de notificaciones de Telegram" },
     "--brand-plex": { "label": "Plex", "hint": "La marca de Plex y sus insignias" },
+    "--brand-catalog": { "label": "Catálogo", "hint": "La insignia del catálogo de música" },
+    "--brand-wikipedia": { "label": "Wikipedia", "hint": "La insignia de Wikipedia bajo una biografía" },
+    "--brand-lidarr": { "label": "Lidarr", "hint": "La insignia de Lidarr" },
+    "--brand-bandsintown": { "label": "Bandsintown", "hint": "La insignia de Bandsintown" },
     "--brand-website": { "label": "Sitio web", "hint": "El enlace al sitio propio de un artista" }
   },
   "parts": {

@@ -504,7 +504,7 @@
       },
       "lastfmKey": {
         "label": "Clave de API de Last.fm",
-        "helper": "Artistas similares, listas de éxitos e historial de escuchas. La conexión de Last.fm de cada miembro la usa."
+        "helper": "Cifras de oyentes, descripciones de álbum y los widgets de Last.fm del tablero. La conexión de Last.fm de cada miembro la usa."
       },
       "lastfmSecret": {
         "label": "Secreto compartido de Last.fm",

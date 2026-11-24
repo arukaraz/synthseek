@@ -1,32 +1,35 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-import type { LastfmTopTracksFeed, LfmConfig } from "@features/discovery-integrations/types";
-import enDiscover from "@modules/i18n/messages/en/discover.json";
+import type { ListenedTrack, ListeningProvider } from "@hooks/api/queries/analytics/types";
 import { renderWithProviders, screen } from "@test/test-utils";
 
 import { TopTracks } from "../TopTracks";
 import type { TopTrackHeroProps, TopTracksListProps } from "../types";
 import { createTopTrack } from "./fixtures";
 
-interface FeedsResult {
-  lfmConfig: LfmConfig | undefined;
-  topTracks: LastfmTopTracksFeed | null;
+type ListenedTracks =
+  | { status: "inactive" }
+  | { status: "unlinked" }
+  | { status: "ready"; username: string; topTracks: ListenedTrack[]; recentTracks: ListenedTrack[] };
+
+interface ListenedQuery {
+  data: ListenedTracks | undefined;
   isLoading: boolean;
   isError: boolean;
 }
 
-const useLastfmFeedsMock = vi.fn<() => FeedsResult>();
+const useListenedTracksMock = vi.fn<(provider: ListeningProvider) => ListenedQuery>();
 
-vi.mock("@hooks/api/queries/discovery/useLastfmFeeds", () => ({
-  useLastfmFeeds: () => useLastfmFeedsMock(),
+vi.mock("@hooks/api/queries/analytics/useListenedTracks", () => ({
+  useListenedTracks: (provider: ListeningProvider) => useListenedTracksMock(provider),
 }));
 
 vi.mock("../TopTrackHero", () => ({
-  TopTrackHero: ({ track }: TopTrackHeroProps) => <div data-testid="hero" data-id={track.catalogTrackId} />,
+  TopTrackHero: ({ track }: TopTrackHeroProps) => <div data-testid="hero" data-id={track.id} />,
 }));
 
 vi.mock("../TopTrackLeader", () => ({
-  TopTrackLeader: ({ track }: TopTrackHeroProps) => <div data-testid="leader" data-id={track.catalogTrackId} />,
+  TopTrackLeader: ({ track }: TopTrackHeroProps) => <div data-testid="leader" data-id={track.id} />,
 }));
 
 vi.mock("../TopTracksList", () => ({
@@ -35,32 +38,26 @@ vi.mock("../TopTracksList", () => ({
   ),
 }));
 
-function buildConfig(overrides: Partial<LfmConfig> = {}): LfmConfig {
-  return {
-    enabled: true,
-    username: "aphex",
-    ...overrides,
-  } as LfmConfig;
+function answered(data: ListenedTracks): ListenedQuery {
+  return { data, isLoading: false, isError: false };
 }
 
-function buildResult(overrides: Partial<FeedsResult> = {}): FeedsResult {
-  return {
-    lfmConfig: buildConfig(),
-    topTracks: { status: "ready", tracks: [createTopTrack()], generatedAt: "2026-05-29T07:00:00.000Z" },
-    isLoading: false,
-    isError: false,
-    ...overrides,
-  };
+function ready(topTracks: ListenedTrack[] = [createTopTrack()]): ListenedQuery {
+  return answered({ status: "ready", username: "aphex", topTracks, recentTracks: [] });
+}
+
+function twelve(): ListenedTrack[] {
+  return Array.from({ length: 12 }, (_, i) => createTopTrack({ id: `t-${i}` }));
 }
 
 describe("TopTracks", () => {
   afterEach(() => {
     vi.clearAllMocks();
-    useLastfmFeedsMock.mockReset();
+    useListenedTracksMock.mockReset();
   });
 
   it("renders the skeleton while loading", () => {
-    useLastfmFeedsMock.mockReturnValue(buildResult({ isLoading: true }));
+    useListenedTracksMock.mockReturnValue({ data: undefined, isLoading: true, isError: false });
 
     const { container } = renderWithProviders(<TopTracks size="M" info="Your top tracks" />);
 
@@ -69,76 +66,61 @@ describe("TopTracks", () => {
   });
 
   it("renders the error empty state when the query errors", () => {
-    useLastfmFeedsMock.mockReturnValue(buildResult({ isError: true }));
+    useListenedTracksMock.mockReturnValue({ data: undefined, isLoading: false, isError: true });
 
     renderWithProviders(<TopTracks size="M" info="Your top tracks" />);
 
-    expect(screen.getByText(enDiscover.topTracks.empty.error)).toBeInTheDocument();
+    expect(screen.getByText("Couldn't load Last.fm data.")).toBeInTheDocument();
   });
 
-  it("renders the disabled empty state when Last.fm is off", () => {
-    useLastfmFeedsMock.mockReturnValue(buildResult({ lfmConfig: buildConfig({ enabled: false }) }));
+  it("says the server has no Last.fm set up, with nothing to configure, when the provider is inactive", () => {
+    useListenedTracksMock.mockReturnValue(answered({ status: "inactive" }));
 
     renderWithProviders(<TopTracks size="M" info="Your top tracks" />);
 
-    expect(screen.getByText(enDiscover.topTracks.empty.disabled)).toBeInTheDocument();
+    expect(screen.getByText("Last.fm is not set up on this server.")).toBeInTheDocument();
+    expect(screen.queryByRole("link")).not.toBeInTheDocument();
+    expect(screen.queryByText("No top tracks yet, play some music to see them ranked.")).not.toBeInTheDocument();
   });
 
-  it("renders the disabled empty state when the config is missing", () => {
-    useLastfmFeedsMock.mockReturnValue(buildResult({ lfmConfig: undefined }));
+  it("asks for the username, with a link to configure it, when the member has not linked the provider", () => {
+    useListenedTracksMock.mockReturnValue(answered({ status: "unlinked" }));
 
     renderWithProviders(<TopTracks size="M" info="Your top tracks" />);
 
-    expect(screen.getByText(enDiscover.topTracks.empty.disabled)).toBeInTheDocument();
+    expect(screen.getByText("Add your Last.fm username to see your top tracks here.")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Configure Last.fm" })).toBeInTheDocument();
   });
 
-  it("renders the no-username empty state when the username is empty", () => {
-    useLastfmFeedsMock.mockReturnValue(buildResult({ lfmConfig: buildConfig({ username: "" }) }));
+  it("renders the no-data empty state when the provider has no top tracks", () => {
+    useListenedTracksMock.mockReturnValue(ready([]));
 
     renderWithProviders(<TopTracks size="M" info="Your top tracks" />);
 
-    expect(screen.getByText(enDiscover.topTracks.empty.noUsername)).toBeInTheDocument();
+    expect(screen.getByText("No top tracks yet, play some music to see them ranked.")).toBeInTheDocument();
   });
 
-  it("renders the no-data empty state when the feed is not ready", () => {
-    useLastfmFeedsMock.mockReturnValue(buildResult({ topTracks: { status: "empty", tracks: [] } }));
+  it("reads Last.fm unless the tile names another provider", () => {
+    useListenedTracksMock.mockReturnValue(ready());
 
     renderWithProviders(<TopTracks size="M" info="Your top tracks" />);
 
-    expect(screen.getByText(enDiscover.topTracks.empty.noData)).toBeInTheDocument();
+    expect(useListenedTracksMock).toHaveBeenCalledWith("lastfm");
+    expect(screen.getByText("Most played · all time · Last.fm")).toBeInTheDocument();
   });
 
-  it("renders the no-data empty state when the feed is absent", () => {
-    useLastfmFeedsMock.mockReturnValue(buildResult({ topTracks: null }));
+  it("reads ListenBrainz and names it when the tile is the ListenBrainz one", () => {
+    useListenedTracksMock.mockReturnValue(ready());
 
-    renderWithProviders(<TopTracks size="M" info="Your top tracks" />);
+    renderWithProviders(<TopTracks size="M" info="Your top tracks" provider="listenbrainz" />);
 
-    expect(screen.getByText(enDiscover.topTracks.empty.noData)).toBeInTheDocument();
-  });
-
-  it("renders the no-data empty state when the ready feed has no tracks", () => {
-    useLastfmFeedsMock.mockReturnValue(
-      buildResult({ topTracks: { status: "ready", tracks: [], generatedAt: "2026-05-29T07:00:00.000Z" } })
-    );
-
-    renderWithProviders(<TopTracks size="M" info="Your top tracks" />);
-
-    expect(screen.getByText(enDiscover.topTracks.empty.noData)).toBeInTheDocument();
+    expect(useListenedTracksMock).toHaveBeenCalledWith("listenbrainz");
+    expect(screen.getByText("Most played · all time · ListenBrainz")).toBeInTheDocument();
   });
 
   it("renders the hero from the top track and the list from the remainder starting at rank two", () => {
-    useLastfmFeedsMock.mockReturnValue(
-      buildResult({
-        topTracks: {
-          status: "ready",
-          generatedAt: "2026-05-29T07:00:00.000Z",
-          tracks: [
-            createTopTrack({ catalogTrackId: "hero" }),
-            createTopTrack({ catalogTrackId: "r1" }),
-            createTopTrack({ catalogTrackId: "r2" }),
-          ],
-        },
-      })
+    useListenedTracksMock.mockReturnValue(
+      ready([createTopTrack({ id: "hero" }), createTopTrack({ id: "r1" }), createTopTrack({ id: "r2" })])
     );
 
     renderWithProviders(<TopTracks size="L" info="Your top tracks" />);
@@ -147,19 +129,11 @@ describe("TopTracks", () => {
     expect(screen.queryByTestId("leader")).not.toBeInTheDocument();
     expect(screen.getByTestId("list")).toHaveAttribute("data-count", "2");
     expect(screen.getByTestId("list")).toHaveAttribute("data-start", "2");
-    expect(screen.getByRole("heading", { name: enDiscover.topTracks.title })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Top Tracks" })).toBeInTheDocument();
   });
 
   it("shows the top track as a leader, the way Charts does, in a half-row tile", () => {
-    useLastfmFeedsMock.mockReturnValue(
-      buildResult({
-        topTracks: {
-          status: "ready",
-          generatedAt: "2026-05-29T07:00:00.000Z",
-          tracks: [createTopTrack({ catalogTrackId: "hero" }), createTopTrack({ catalogTrackId: "r1" })],
-        },
-      })
-    );
+    useListenedTracksMock.mockReturnValue(ready([createTopTrack({ id: "hero" }), createTopTrack({ id: "r1" })]));
 
     renderWithProviders(<TopTracks size="M" info="Your top tracks" />);
 
@@ -169,10 +143,7 @@ describe("TopTracks", () => {
   });
 
   it("caps the list at eight rows past the hero", () => {
-    const tracks = Array.from({ length: 12 }, (_, i) => createTopTrack({ catalogTrackId: `t-${i}` }));
-    useLastfmFeedsMock.mockReturnValue(
-      buildResult({ topTracks: { status: "ready", tracks, generatedAt: "2026-05-29T07:00:00.000Z" } })
-    );
+    useListenedTracksMock.mockReturnValue(ready(twelve()));
 
     renderWithProviders(<TopTracks size="M" info="Your top tracks" />);
 
@@ -181,10 +152,7 @@ describe("TopTracks", () => {
   });
 
   it("drops the hero in a quarter tile and lists the top four from rank one", () => {
-    const tracks = Array.from({ length: 12 }, (_, i) => createTopTrack({ catalogTrackId: `t-${i}` }));
-    useLastfmFeedsMock.mockReturnValue(
-      buildResult({ topTracks: { status: "ready", tracks, generatedAt: "2026-05-29T07:00:00.000Z" } })
-    );
+    useListenedTracksMock.mockReturnValue(ready(twelve()));
 
     renderWithProviders(<TopTracks size="S" info="Your top tracks" />);
 
@@ -194,10 +162,7 @@ describe("TopTracks", () => {
   });
 
   it("keeps the hero across a full row and splits the eight rows in two columns", () => {
-    const tracks = Array.from({ length: 12 }, (_, i) => createTopTrack({ catalogTrackId: `t-${i}` }));
-    useLastfmFeedsMock.mockReturnValue(
-      buildResult({ topTracks: { status: "ready", tracks, generatedAt: "2026-05-29T07:00:00.000Z" } })
-    );
+    useListenedTracksMock.mockReturnValue(ready(twelve()));
 
     renderWithProviders(<TopTracks size="L" info="Your top tracks" />);
 

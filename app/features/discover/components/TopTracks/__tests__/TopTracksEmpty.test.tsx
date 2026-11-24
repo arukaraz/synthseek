@@ -3,7 +3,7 @@ import { describe, expect, it, vi } from "vitest";
 import { render, screen } from "@test/test-utils";
 
 import { TopTracksEmpty } from "../TopTracksEmpty";
-import { LASTFM_SETTINGS_HREF as SETTINGS_HREF } from "../../constants";
+import { PROVIDER_SETTINGS_HREFS } from "../../constants";
 
 vi.mock("next/link", () => ({
   default: ({ children, href }: { children: React.ReactNode; href: string }) => <a href={href}>{children}</a>,
@@ -11,35 +11,49 @@ vi.mock("next/link", () => ({
 
 describe("TopTracksEmpty", () => {
   it("renders the error copy without a call to action", () => {
-    render(<TopTracksEmpty reason="error" info="Your top tracks" />);
+    render(<TopTracksEmpty reason="error" info="Your top tracks" provider="lastfm" />);
 
     expect(screen.getByText("Couldn't load Last.fm data.")).toBeInTheDocument();
     expect(screen.queryByRole("link")).not.toBeInTheDocument();
   });
 
-  it("renders the disabled copy with an open-settings link to the lastfm anchor", () => {
-    render(<TopTracksEmpty reason="disabled" info="Your top tracks" />);
+  it("says the server has no Last.fm set up, without a call to action, when the provider is inactive", () => {
+    render(<TopTracksEmpty reason="inactive" info="Your top tracks" provider="lastfm" />);
 
-    expect(screen.getByText("Enable Last.fm to see your most played tracks here.")).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Open settings" })).toHaveAttribute("href", SETTINGS_HREF);
+    expect(screen.getByText("Last.fm is not set up on this server.")).toBeInTheDocument();
+    expect(screen.queryByRole("link")).not.toBeInTheDocument();
   });
 
-  it("renders the no-username copy with a configure link", () => {
-    render(<TopTracksEmpty reason="no-username" info="Your top tracks" />);
+  it("asks an unlinked member for the username with a configure link to the Last.fm settings", () => {
+    render(<TopTracksEmpty reason="unlinked" info="Your top tracks" provider="lastfm" />);
 
-    expect(screen.getByText("Add your Last.fm username to start syncing top tracks.")).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Configure Last.fm" })).toBeInTheDocument();
+    expect(screen.getByText("Add your Last.fm username to see your top tracks here.")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Configure Last.fm" })).toHaveAttribute(
+      "href",
+      PROVIDER_SETTINGS_HREFS.lastfm
+    );
+  });
+
+  it("names ListenBrainz and links to its settings when the widget is the ListenBrainz one", () => {
+    render(<TopTracksEmpty reason="unlinked" info="Your top tracks" provider="listenbrainz" />);
+
+    expect(screen.getByText("Add your ListenBrainz username to see your top tracks here.")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Configure ListenBrainz" })).toHaveAttribute(
+      "href",
+      PROVIDER_SETTINGS_HREFS.listenbrainz
+    );
+    expect(screen.getByText("Most played · all time · ListenBrainz")).toBeInTheDocument();
   });
 
   it("renders the no-data copy without a call to action", () => {
-    render(<TopTracksEmpty reason="no-data" info="Your top tracks" />);
+    render(<TopTracksEmpty reason="no-data" info="Your top tracks" provider="lastfm" />);
 
-    expect(screen.getByText("No top tracks yet, scrobble some music to see them ranked.")).toBeInTheDocument();
+    expect(screen.getByText("No top tracks yet, play some music to see them ranked.")).toBeInTheDocument();
     expect(screen.queryByRole("link")).not.toBeInTheDocument();
   });
 
   it("always renders the widget header so the panel reads as Top Tracks", () => {
-    render(<TopTracksEmpty reason="error" info="Your top tracks" />);
+    render(<TopTracksEmpty reason="error" info="Your top tracks" provider="lastfm" />);
 
     expect(screen.getByRole("heading", { name: "Top Tracks" })).toBeInTheDocument();
   });

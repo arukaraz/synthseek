@@ -19,6 +19,15 @@ export type OrbitAlbum = AnalyticsOutputs["discover"]["orbit"][number];
 export type ChartEntry = AnalyticsOutputs["discover"]["charts"][number];
 export type Rarity = AnalyticsOutputs["discover"]["rarities"]["items"][number];
 export type LovedTrack = Extract<AnalyticsOutputs["discover"]["loved"], { status: "ready" }>["tracks"][number];
+export type ListeningProvider = inferRouterInputs<AppRouter>["analytics"]["discover"]["charts"]["provider"];
+export type ProviderArtist = Extract<
+  AnalyticsOutputs["discover"]["topArtists"],
+  { status: "ready" }
+>["artists"][number];
+export type ListenedTrack = Extract<
+  AnalyticsOutputs["discover"]["listenedTracks"],
+  { status: "ready" }
+>["topTracks"][number];
 
 export type ListeningMix = ListeningOutputs["onRepeat"];
 export type UnfinishedAlbum = ListeningOutputs["jumpBackIn"][number];

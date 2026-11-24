@@ -81,23 +81,30 @@
   },
   "topTracks": {
     "title": "Top Tracks",
-    "subtitle": "Most played · all time · Last.fm",
+    "subtitle": "Most played · all time · {{provider}}",
     "heroBadge": "#1 most played",
     "plays": "{{count}} plays",
     "empty": {
-      "error": "Couldn't load Last.fm data.",
-      "disabled": "Enable Last.fm to see your most played tracks here.",
-      "noUsername": "Add your Last.fm username to start syncing top tracks.",
-      "noData": "No top tracks yet, scrobble some music to see them ranked.",
-      "ctaOpenSettings": "Open settings",
-      "ctaConfigure": "Configure Last.fm"
+      "error": "Couldn't load {{provider}} data.",
+      "noUsername": "Add your {{provider}} username to see your top tracks here.",
+      "noData": "No top tracks yet, play some music to see them ranked.",
+      "ctaConfigure": "Configure {{provider}}"
     }
+  },
+  "topArtists": {
+    "title": "Top Artists",
+    "subtitle": "Most played · all time · {{provider}}",
+    "empty": "No top artists yet, play some music to see them ranked.",
+    "unlinked": "Add your {{provider}} username to see these.",
+    "link": "Settings",
+    "plays_one": "{{formatted}} play",
+    "plays_other": "{{formatted}} plays"
   },
   "recentScrobbles": {
     "title": "Recent Scrobbles",
-    "subtitle": "Last.fm",
+    "listensTitle": "Recent Listens",
     "seeMore": "See more",
-    "seeMoreAriaLabel": "Open Last.fm profile",
+    "seeMoreAriaLabel": "Open {{provider}} profile",
     "scrollLeftAriaLabel": "Scroll left",
     "scrollRightAriaLabel": "Scroll right",
     "ageJustNow": "just now",
@@ -105,12 +112,10 @@
     "ageHours": "{{count}}h ago",
     "ageDays": "{{count}}d ago",
     "empty": {
-      "error": "Couldn't load Last.fm data.",
-      "disabled": "Enable Last.fm to see your recent scrobbles here.",
-      "noUsername": "Add your Last.fm username to start syncing scrobbles.",
-      "noData": "No scrobbles yet, your timeline will appear here.",
-      "ctaOpenSettings": "Open settings",
-      "ctaConfigure": "Configure Last.fm"
+      "error": "Couldn't load {{provider}} data.",
+      "noUsername": "Add your {{provider}} username to see your recent plays here.",
+      "noData": "Nothing played yet, your timeline will appear here.",
+      "ctaConfigure": "Configure {{provider}}"
     }
   },
   "recentRequests": {
@@ -185,6 +190,7 @@
   "board": {
     "regionLabel": "Explore board",
     "loadError": "Couldn't load this right now.",
+    "providerInactive": "{{provider}} is not set up on this server.",
     "customize": "Customize",
     "done": "Done",
     "addWidget": "Add widget",
@@ -256,6 +262,7 @@
       "add": "Add",
       "remove": "Remove",
       "onBoard": "On board",
+      "mediaServer": "Media server",
       "addNamed": "Add {{name}}",
       "categoryCount": "{{onBoard}} of {{total}} on board",
       "empty": "No widget matches “{{query}}”.",
@@ -291,7 +298,7 @@
       },
       "history": {
         "title": "From your history",
-        "description": "Built from your own plays and Last.fm"
+        "description": "Built from your own plays, Last.fm and ListenBrainz"
       },
       "discover": {
         "title": "Discover",
@@ -319,9 +326,15 @@
       "stations": "Radio stations seeded from your top artists, your favorites and the tracks you have never played.",
       "continueListening": "Your play queue where you left it, and your latest plays from every app.",
       "rarities": "Tracks you play that few people listen to, from ListenBrainz listen counts.",
-      "orbit": "Albums you do not own, picked from tracks similar to the ones you play most.",
+      "orbit": "Albums you do not own, picked from the catalog radio of the artists you play most.",
       "charts": "This week's top tracks worldwide on Last.fm. Play the ones you have and request the rest.",
       "loved": "Tracks you loved on Last.fm that are not in your library yet.",
+      "listenbrainzTopTracks": "Your most played tracks on ListenBrainz, all time.",
+      "lastfmTopArtists": "Your most scrobbled artists on Last.fm, all time. Open one to see its page.",
+      "listenbrainzTopArtists": "Your most played artists on ListenBrainz, all time. Open one to see its page.",
+      "listenbrainzListens": "Your latest ListenBrainz listens as they arrive, newest first.",
+      "listenbrainzCharts": "This week's top tracks worldwide on ListenBrainz. Play the ones you have and request the rest.",
+      "listenbrainzLoved": "Tracks you loved on ListenBrainz that are not in your library yet.",
       "newInLibrary": "Albums that landed in the last 7 days, and whether you played them.",
       "gaps": "Releases missing from the artists you own most, compared with the catalog.",
       "anniversaries": "Albums in your library released around this date in past years.",
@@ -444,7 +457,7 @@
   },
   "charts": {
     "title": "Charts",
-    "subtitle": "Top tracks worldwide",
+    "subtitle": "Top tracks worldwide · {{provider}}",
     "empty": "No chart right now.",
     "play": "Play",
     "request": "Request",
@@ -452,8 +465,9 @@
   },
   "loved": {
     "title": "Loved on Last.fm, not here",
-    "subtitle": "Last.fm loved tracks",
-    "unlinked": "Add your Last.fm username to see these.",
+    "listenbrainzTitle": "Loved on ListenBrainz, not here",
+    "subtitle": "{{provider}} loved tracks",
+    "unlinked": "Add your {{provider}} username to see these.",
     "link": "Settings",
     "empty": "Everything you loved is already here.",
     "request": "Request"

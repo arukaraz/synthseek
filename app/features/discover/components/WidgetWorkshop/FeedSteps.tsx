@@ -18,6 +18,7 @@ import {
   feedOrderIsFixed,
   feedSeedOf,
   feedServerOf,
+  feedSourceChoices,
   feedSourceOf,
   ruleListOf,
   seedFor,
@@ -53,7 +54,7 @@ export function FeedSteps({ workshop, feed, context }: FeedStepsProps) {
           <SelectMenu
             ariaLabel={t("steps.source")}
             value={feed.source}
-            options={catalog.feeds.sources.map((entry) => ({
+            options={feedSourceChoices(catalog, feed.source).map((entry) => ({
               value: entry.key,
               label: t(`feeds.sources.${entry.key}`),
               description: entry.integration ? t(`feeds.needs.${entry.integration}`) : undefined,

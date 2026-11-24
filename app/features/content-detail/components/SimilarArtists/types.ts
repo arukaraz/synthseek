@@ -3,7 +3,6 @@ import type { RefObject } from "react";
 export interface SimilarArtistEntry {
   catalogArtistId: string | null;
   name: string;
-  match: number;
   image: string | null;
 }
 

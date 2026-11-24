@@ -1,62 +1,56 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-import type { LfmConfig } from "@features/discovery-integrations/types";
+import type { ListenedTrack, ListeningProvider } from "@hooks/api/queries/analytics/types";
 import { renderWithProviders, screen } from "@test/test-utils";
 
 import { RecentScrobbles } from "../RecentScrobbles";
 import { createScrobble } from "./fixtures";
 
-interface FeedsResult {
-  lfmConfig: LfmConfig | undefined;
-  recentScrobbles: { status: string; scrobbles: ReturnType<typeof createScrobble>[] } | null;
+type ListenedTracks =
+  | { status: "inactive" }
+  | { status: "unlinked" }
+  | { status: "ready"; username: string; topTracks: ListenedTrack[]; recentTracks: ListenedTrack[] };
+
+interface ListenedQuery {
+  data: ListenedTracks | undefined;
   isLoading: boolean;
   isError: boolean;
 }
 
-const useLastfmFeedsMock = vi.fn<() => FeedsResult>();
+const useListenedTracksMock = vi.fn<(provider: ListeningProvider) => ListenedQuery>();
 
-vi.mock("@hooks/api/queries/discovery/useLastfmFeeds", () => ({
-  useLastfmFeeds: () => useLastfmFeedsMock(),
+vi.mock("@hooks/api/queries/analytics/useListenedTracks", () => ({
+  useListenedTracks: (provider: ListeningProvider) => useListenedTracksMock(provider),
 }));
 
 vi.mock("../RecentScrobblesRail", () => ({
-  RecentScrobblesRail: ({ scrobbles }: { scrobbles: ReturnType<typeof createScrobble>[] }) => (
+  RecentScrobblesRail: ({ scrobbles }: { scrobbles: ListenedTrack[] }) => (
     <div data-testid="rail" data-count={scrobbles.length} />
   ),
 }));
 
 vi.mock("../RecentScrobblesTimeline", () => ({
-  RecentScrobblesTimeline: ({ scrobbles }: { scrobbles: ReturnType<typeof createScrobble>[] }) => (
+  RecentScrobblesTimeline: ({ scrobbles }: { scrobbles: ListenedTrack[] }) => (
     <div data-testid="timeline" data-count={scrobbles.length} />
   ),
 }));
 
-function buildConfig(overrides: Partial<LfmConfig> = {}): LfmConfig {
-  return {
-    enabled: true,
-    username: "aphex",
-    ...overrides,
-  } as LfmConfig;
+function answered(data: ListenedTracks): ListenedQuery {
+  return { data, isLoading: false, isError: false };
 }
 
-function buildResult(overrides: Partial<FeedsResult> = {}): FeedsResult {
-  return {
-    lfmConfig: buildConfig(),
-    recentScrobbles: { status: "ready", scrobbles: [createScrobble()] },
-    isLoading: false,
-    isError: false,
-    ...overrides,
-  };
+function ready(recentTracks: ListenedTrack[] = [createScrobble()], username = "aphex"): ListenedQuery {
+  return answered({ status: "ready", username, topTracks: [], recentTracks });
 }
 
 describe("RecentScrobbles", () => {
   afterEach(() => {
     vi.clearAllMocks();
-    useLastfmFeedsMock.mockReset();
+    useListenedTracksMock.mockReset();
   });
 
   it("renders the skeleton while loading", () => {
-    useLastfmFeedsMock.mockReturnValue(buildResult({ isLoading: true }));
+    useListenedTracksMock.mockReturnValue({ data: undefined, isLoading: true, isError: false });
 
     const { container } = renderWithProviders(<RecentScrobbles size="L" info="Your latest scrobbles" />);
 
@@ -65,76 +59,56 @@ describe("RecentScrobbles", () => {
   });
 
   it("renders the error empty state when the query errors", () => {
-    useLastfmFeedsMock.mockReturnValue(buildResult({ isError: true }));
+    useListenedTracksMock.mockReturnValue({ data: undefined, isLoading: false, isError: true });
 
     renderWithProviders(<RecentScrobbles size="L" info="Your latest scrobbles" />);
 
     expect(screen.getByText("Couldn't load Last.fm data.")).toBeInTheDocument();
   });
 
-  it("renders the disabled empty state when Last.fm is off", () => {
-    useLastfmFeedsMock.mockReturnValue(buildResult({ lfmConfig: buildConfig({ enabled: false }) }));
+  it("says the server has no Last.fm set up, with nothing to configure, when the provider is inactive", () => {
+    useListenedTracksMock.mockReturnValue(answered({ status: "inactive" }));
 
     renderWithProviders(<RecentScrobbles size="L" info="Your latest scrobbles" />);
 
-    expect(screen.getByText("Enable Last.fm to see your recent scrobbles here.")).toBeInTheDocument();
+    expect(screen.getByText("Last.fm is not set up on this server.")).toBeInTheDocument();
+    expect(screen.queryByRole("link")).not.toBeInTheDocument();
+    expect(screen.queryByText("Nothing played yet, your timeline will appear here.")).not.toBeInTheDocument();
   });
 
-  it("renders the disabled empty state when the config is missing", () => {
-    useLastfmFeedsMock.mockReturnValue(buildResult({ lfmConfig: undefined }));
+  it("asks for the username, with a link to configure it, when the member has not linked the provider", () => {
+    useListenedTracksMock.mockReturnValue(answered({ status: "unlinked" }));
 
     renderWithProviders(<RecentScrobbles size="L" info="Your latest scrobbles" />);
 
-    expect(screen.getByText("Enable Last.fm to see your recent scrobbles here.")).toBeInTheDocument();
+    expect(screen.getByText("Add your Last.fm username to see your recent plays here.")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Configure Last.fm" })).toBeInTheDocument();
   });
 
-  it("renders the no-username empty state when the username is empty", () => {
-    useLastfmFeedsMock.mockReturnValue(buildResult({ lfmConfig: buildConfig({ username: "" }) }));
+  it("renders the no-data empty state when the provider has no recent plays", () => {
+    useListenedTracksMock.mockReturnValue(ready([]));
 
     renderWithProviders(<RecentScrobbles size="L" info="Your latest scrobbles" />);
 
-    expect(screen.getByText("Add your Last.fm username to start syncing scrobbles.")).toBeInTheDocument();
-  });
-
-  it("renders the no-data empty state when the feed is not ready", () => {
-    useLastfmFeedsMock.mockReturnValue(buildResult({ recentScrobbles: { status: "empty", scrobbles: [] } }));
-
-    renderWithProviders(<RecentScrobbles size="L" info="Your latest scrobbles" />);
-
-    expect(screen.getByText("No scrobbles yet, your timeline will appear here.")).toBeInTheDocument();
-  });
-
-  it("renders the no-data empty state when the feed is absent", () => {
-    useLastfmFeedsMock.mockReturnValue(buildResult({ recentScrobbles: null }));
-
-    renderWithProviders(<RecentScrobbles size="L" info="Your latest scrobbles" />);
-
-    expect(screen.getByText("No scrobbles yet, your timeline will appear here.")).toBeInTheDocument();
+    expect(screen.getByText("Nothing played yet, your timeline will appear here.")).toBeInTheDocument();
   });
 
   it("renders the no-data empty state when every scrobble lacks a playedAt", () => {
-    useLastfmFeedsMock.mockReturnValue(
-      buildResult({ recentScrobbles: { status: "ready", scrobbles: [createScrobble({ playedAt: null })] } })
-    );
+    useListenedTracksMock.mockReturnValue(ready([createScrobble({ playedAt: null })]));
 
     renderWithProviders(<RecentScrobbles size="L" info="Your latest scrobbles" />);
 
-    expect(screen.getByText("No scrobbles yet, your timeline will appear here.")).toBeInTheDocument();
+    expect(screen.getByText("Nothing played yet, your timeline will appear here.")).toBeInTheDocument();
   });
 
   it("renders the rail with played scrobbles and a See more link to the profile", () => {
-    useLastfmFeedsMock.mockReturnValue(
-      buildResult({
-        lfmConfig: buildConfig({ username: "aphex twin" }),
-        recentScrobbles: {
-          status: "ready",
-          scrobbles: [createScrobble({ catalogTrackId: "a" }), createScrobble({ catalogTrackId: "b", playedAt: null })],
-        },
-      })
+    useListenedTracksMock.mockReturnValue(
+      ready([createScrobble({ id: "a" }), createScrobble({ id: "b", playedAt: null })], "aphex twin")
     );
 
     renderWithProviders(<RecentScrobbles size="L" info="Your latest scrobbles" />);
 
+    expect(useListenedTracksMock).toHaveBeenCalledWith("lastfm");
     expect(screen.getByTestId("rail")).toHaveAttribute("data-count", "1");
     expect(screen.getByText("Recent Scrobbles")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Open Last.fm profile" })).toHaveAttribute(
@@ -144,8 +118,21 @@ describe("RecentScrobbles", () => {
     expect(screen.queryByTestId("timeline")).not.toBeInTheDocument();
   });
 
+  it("reads ListenBrainz, titles the tile Recent Listens and links to the ListenBrainz profile", () => {
+    useListenedTracksMock.mockReturnValue(ready([createScrobble()], "aphex twin"));
+
+    renderWithProviders(<RecentScrobbles size="L" info="Your latest listens" provider="listenbrainz" />);
+
+    expect(useListenedTracksMock).toHaveBeenCalledWith("listenbrainz");
+    expect(screen.getByRole("heading", { name: "Recent Listens" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Open ListenBrainz profile" })).toHaveAttribute(
+      "href",
+      "https://listenbrainz.org/user/aphex%20twin"
+    );
+  });
+
   it("renders the vertical timeline instead of the rail at size M", () => {
-    useLastfmFeedsMock.mockReturnValue(buildResult());
+    useListenedTracksMock.mockReturnValue(ready());
 
     renderWithProviders(<RecentScrobbles size="M" info="Your latest scrobbles" />);
 
@@ -154,7 +141,7 @@ describe("RecentScrobbles", () => {
   });
 
   it("shows the widget description in an info tooltip trigger", () => {
-    useLastfmFeedsMock.mockReturnValue(buildResult());
+    useListenedTracksMock.mockReturnValue(ready());
 
     renderWithProviders(<RecentScrobbles size="L" info="Your latest scrobbles" />);
 

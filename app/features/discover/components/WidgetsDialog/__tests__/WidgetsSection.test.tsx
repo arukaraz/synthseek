@@ -30,6 +30,7 @@ vi.mock("../../DiscoveryMixes/DiscoveryMixes", () => ({ DiscoveryMixes: stub("mi
 vi.mock("../../ArtistSpotlight/ArtistSpotlight", () => ({ ArtistSpotlight: stub("artistsNext") }));
 vi.mock("../../CategoriesGrid/CategoriesGrid", () => ({ CategoriesGrid: stub("genres") }));
 vi.mock("../../TopTracks/TopTracks", () => ({ TopTracks: stub("topTracks") }));
+vi.mock("../../TopArtists/TopArtists", () => ({ TopArtists: stub("topArtists") }));
 vi.mock("../../RecentScrobbles/RecentScrobbles", () => ({ RecentScrobbles: stub("scrobbles") }));
 vi.mock("../../RecentRequests/RecentRequests", () => ({ RecentRequests: stub("requests") }));
 vi.mock("../../HistoryMixes/OnRepeat", () => ({ OnRepeat: stub("onRepeat") }));
@@ -51,17 +52,22 @@ vi.mock("../../Landed/Landed", () => ({ Landed: stub("landed") }));
 vi.mock("../../ServerPlaylists/ServerPlaylists", () => ({ ServerPlaylists: stub("serverPlaylists") }));
 vi.mock("../../LibraryLeaderboard", () => ({ LibraryLeaderboard: stub("leaderboard") }));
 
-const { saveWidget, savePlaylist, removeWidget, myWidgets } = vi.hoisted(() => ({
+const { saveWidget, savePlaylist, removeWidget, myWidgets, integrations } = vi.hoisted(() => ({
   saveWidget: vi.fn(),
   savePlaylist: vi.fn(),
   removeWidget: vi.fn(),
   myWidgets: { data: new Array<WidgetDocument>() },
+  integrations: { off: new Array<string>() },
 }));
 
 vi.mock("@hooks/api/queries/widgets/useMyWidgets", () => ({ useMyWidgets: () => myWidgets }));
 vi.mock("@modules/providers/CountryProvider", () => ({ useCountry: () => ({ country: "MX" }) }));
 vi.mock("@hooks/api/queries/widgets/useWidgetCatalog", () => ({
-  useWidgetCatalog: () => ({ data: createWidgetCatalog() }),
+  useWidgetCatalog: () => {
+    const catalog = createWidgetCatalog();
+    const activeIntegrations = catalog.feeds.activeIntegrations.filter((key) => !integrations.off.includes(key));
+    return { data: { ...catalog, feeds: { ...catalog.feeds, activeIntegrations } } };
+  },
 }));
 vi.mock("@hooks/api/queries/widgets/useWidgetGrammar", () => ({
   useWidgetGrammar: () => ({ data: createWidgetGrammar() }),
@@ -183,6 +189,7 @@ async function pickBulk(group: "addTo" | "removeFrom", layout: string) {
 
 afterEach(() => {
   myWidgets.data = [];
+  integrations.off = [];
   vi.clearAllMocks();
 });
 
@@ -190,18 +197,50 @@ describe("WidgetsDialog gallery", () => {
   it("lists every widget in the suggested order with a scaled live preview at the default size", () => {
     renderGallery();
 
-    expect(cardTitles()).toHaveLength(25);
+    expect(cardTitles()).toHaveLength(31);
     expect(cardTitles().slice(0, 3)).toEqual(["Trending now", "Continue listening", "Jump back in"]);
     expect(screen.queryByRole("heading", { level: 3 })).not.toBeInTheDocument();
     expect(document.querySelector("[data-preview='mixes']")).toHaveAttribute("data-size", "XL");
   });
 
-  it("searches titles and descriptions, and says when nothing matches", () => {
+  it("hides the widgets of a third party that is not set up, except one already on the board", () => {
+    integrations.off = ["lastfm"];
+    renderGallery();
+
+    expect(cardTitles()).toHaveLength(27);
+    expect(cardTitles()).toContain("Recent Scrobbles");
+    expect(cardTitles()).not.toContain("Loved on Last.fm, not here");
+    expect(cardTitles().filter((title) => title === "Charts")).toHaveLength(1);
+    expect(screen.getByRole("button", { name: "Add Charts (ListenBrainz)" })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Add Charts (Last.fm)" })).not.toBeInTheDocument();
+  });
+
+  it("badges a card with the third party its widget depends on, and leaves the rest without one", () => {
+    renderGallery();
+    const badgeOf = (button: string) =>
+      screen.getByRole("button", { name: button }).closest("article")?.querySelector("[data-source-badge]");
+
+    expect(badgeOf("Add Charts (Last.fm)")).toHaveTextContent("Last.fm");
+    expect(badgeOf("Add Charts (ListenBrainz)")).toHaveTextContent("ListenBrainz");
+    expect(badgeOf("Add Your playlists on media servers")).toHaveTextContent("Media server");
+    expect(badgeOf("Add Trending now")).toBeNull();
+    expect(badgeOf("Add Expand your orbit")).toBeNull();
+  });
+
+  it("searches names and descriptions, and says when nothing matches", () => {
     renderGallery();
     const search = screen.getByRole("searchbox", { name: i18n.t("discover:board.gallery.search") });
 
     fireEvent.change(search, { target: { value: "listenbrainz" } });
-    expect(cardTitles()).toEqual(["Your rarities", "Discover Mixes"]);
+    expect(cardTitles()).toEqual([
+      "Top Tracks",
+      "Top Artists",
+      "Recent Listens",
+      "Your rarities",
+      "Discover Mixes",
+      "Charts",
+      "Loved on ListenBrainz, not here",
+    ]);
 
     fireEvent.change(search, { target: { value: "zzz" } });
     expect(screen.getByText(i18n.t("discover:board.gallery.empty", { query: "zzz" }))).toBeInTheDocument();
@@ -233,7 +272,7 @@ describe("WidgetsDialog gallery", () => {
 
     const [[saved]] = handlers.onSave.mock.calls;
     expect(saved.lists?.items).toEqual(ON_BOARD);
-    expect(saved.lists?.mobile.filter((item) => item.kind === "builtin")).toHaveLength(25);
+    expect(saved.lists?.mobile.filter((item) => item.kind === "builtin")).toHaveLength(31);
     expect(saved.lists?.mobile.slice(0, 2)).toEqual(ON_BOARD);
   });
 
@@ -442,12 +481,12 @@ describe("WidgetsDialog gallery", () => {
     expect(saveWidget.mock.calls[0]?.[0]).not.toHaveProperty("id");
 
     fireEvent.click(screen.getByRole("button", { name: "Back" }));
-    expect(cardTitles()).toHaveLength(25);
+    expect(cardTitles()).toHaveLength(31);
   });
 
   it("customizes the charts on the detected country, which the factory widget leaves unset", () => {
     renderGallery();
-    fireEvent.click(screen.getByRole("button", { name: "Customize Charts" }));
+    fireEvent.click(screen.getByRole("button", { name: "Customize Charts (Last.fm)" }));
     fireEvent.click(screen.getByRole("button", { name: "Save to My widgets" }));
     expect(saveWidget).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -476,7 +515,7 @@ describe("WidgetsDialog gallery", () => {
   it("stays on the gallery when the widget the board asked for is gone", () => {
     renderGallery(ON_BOARD, { kind: "custom", widgetId: "w_gone" });
 
-    expect(cardTitles()).toHaveLength(25);
+    expect(cardTitles()).toHaveLength(31);
   });
 
   it("puts the filter first, the search after it and the tabs last", () => {
@@ -503,15 +542,15 @@ describe("WidgetsDialog gallery", () => {
 
   it("shows the category and the description on the card, with Add before Customize and no info icon", () => {
     renderGallery();
-    const card = screen.getByRole("heading", { level: 4, name: "Charts" }).closest("article");
+    const card = screen.getByRole("button", { name: "Add Charts (Last.fm)" }).closest("article");
     if (!card) throw new Error("card missing");
 
     expect(within(card).getByText("Discover")).toBeInTheDocument();
     expect(within(card).getByText(i18n.t("discover:board.widgets.charts"))).toBeInTheDocument();
     expect(within(card).queryByRole("button", { name: /about|info/i })).not.toBeInTheDocument();
     const [first, second] = within(card).getAllByRole("button");
-    expect(first).toHaveAccessibleName("Add Charts");
-    expect(second).toHaveAccessibleName("Customize Charts");
+    expect(first).toHaveAccessibleName("Add Charts (Last.fm)");
+    expect(second).toHaveAccessibleName("Customize Charts (Last.fm)");
   });
 
   it("draws a preview, the description and the smart playlist icon on my widget's card", () => {

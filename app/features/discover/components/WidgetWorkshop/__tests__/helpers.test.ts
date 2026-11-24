@@ -10,7 +10,9 @@ import {
   dailyYearOf,
   feedOrderIsFixed,
   feedReadbackOf,
+  feedSeedOf,
   feedServerOf,
+  feedSourceChoices,
   fittingBlocksOf,
   matchingIcons,
   previewableDraft,
@@ -26,6 +28,7 @@ import {
   withLockedSize,
   withMeasure,
   serverChoicesOf,
+  withSeed,
   withServer,
   withSource,
   withSubject,
@@ -207,6 +210,38 @@ describe("withSource and feedReadbackOf", () => {
     expect(fresh.pick.by).toBe("rank");
     const back = withSource(fresh, "lastfm.similarArtists", catalog, "US");
     expect(back.params).toEqual({ seed: { kind: "myTopArtists", n: 10, days: 90 } });
+  });
+
+  it("seeds the catalog radio like the other artist-seeded sources, and reads it back by name", () => {
+    const radio = withSource(FEED, "catalog.radio", catalog, "US");
+
+    expect(radio).toMatchObject({
+      source: "catalog.radio",
+      params: { seed: { kind: "myTopArtists", n: 10, days: 90 } },
+    });
+    expect(feedSeedOf(radio)).toEqual({ kind: "myTopArtists", n: 10, days: 90 });
+    expect(withSeed(radio, { kind: "favorites" }).params).toEqual({ seed: { kind: "favorites" } });
+    expect(feedServerOf(radio)).toBeNull();
+    expect(withServer(radio, "plex")).toBe(radio);
+    expect(feedReadbackOf(radio)).toContain("Artist radio tracks (catalog)");
+  });
+
+  it("offers only the sources whose third party is active, plus the one already chosen", () => {
+    const keys = (active: typeof catalog.feeds.activeIntegrations, chosen: FeedQuery["source"]) =>
+      feedSourceChoices({ ...catalog, feeds: { ...catalog.feeds, activeIntegrations: active } }, chosen).map(
+        (entry) => entry.key
+      );
+
+    expect(keys([], "feed.rss")).toEqual(["listenbrainz.freshReleases", "feed.rss"]);
+    expect(keys(["lastfm"], "feed.rss")).toEqual(["lastfm.similarArtists", "listenbrainz.freshReleases", "feed.rss"]);
+    expect(keys([], "lidarr.calendar")).toEqual(["listenbrainz.freshReleases", "feed.rss", "lidarr.calendar"]);
+    expect(keys(catalog.feeds.activeIntegrations, "feed.rss")).toEqual([
+      "lastfm.similarArtists",
+      "listenbrainz.freshReleases",
+      "feed.rss",
+      "mediaServer.playlists",
+      "lidarr.calendar",
+    ]);
   });
 
   it("calls the preview out of date while a change waits on the debounce or its fetch, and never for a query that cannot run", () => {

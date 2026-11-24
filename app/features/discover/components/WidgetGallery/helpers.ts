@@ -8,8 +8,10 @@ import {
   DEFAULT_BOARD_ROW_HEIGHT,
   type BoardSpan,
 } from "@components/BoardGrid";
+import { SOURCE_NAMES } from "@components/SourceBadge";
 import type { BoardItem, BoardList, BoardSize, BoardWidgetKey } from "@hooks/api/queries/board/types";
 import type {
+  FeedIntegration,
   WidgetBlock,
   WidgetDocument,
   WidgetDraft,
@@ -45,7 +47,7 @@ import type {
 export function matchesQuery(entry: GalleryEntry, query: string): boolean {
   const needle = query.trim().toLocaleLowerCase();
   if (!needle) return true;
-  return [entry.title, entry.description].some((text) => text.toLocaleLowerCase().includes(needle));
+  return [entry.name, entry.description].some((text) => text.toLocaleLowerCase().includes(needle));
 }
 
 function compareEntries(sort: GallerySort, onBoard: ReadonlyMap<BoardWidgetKey, string>) {
@@ -56,7 +58,7 @@ function compareEntries(sort: GallerySort, onBoard: ReadonlyMap<BoardWidgetKey, 
       case "suggested":
         return curated(left) - curated(right);
       case "name":
-        return left.title.localeCompare(right.title, i18n.language);
+        return left.name.localeCompare(right.name, i18n.language);
       case "category":
         return category(left) - category(right) || curated(left) - curated(right);
       case "onBoardFirst":
@@ -92,6 +94,22 @@ export function galleryGroups(
       return { category, entries: inCategory, onBoard: countOnBoard(inCategory) };
     })
     .filter((group) => group.entries.length > 0);
+}
+
+export function availableEntries(
+  entries: readonly GalleryEntry[],
+  active: readonly FeedIntegration[] | undefined,
+  onBoard: ReadonlyMap<BoardWidgetKey, string>
+): GalleryEntry[] {
+  return entries.filter((entry) => {
+    const { integration } = entry.definition;
+    if (integration === undefined || onBoard.has(entry.widget)) return true;
+    return active !== undefined && active.includes(integration);
+  });
+}
+
+export function integrationLabel(integration: FeedIntegration): string {
+  return integration === "mediaServer" ? i18n.t("discover:board.gallery.mediaServer") : SOURCE_NAMES[integration];
 }
 
 export function countInCategory(entries: readonly GalleryEntry[], category: BoardCategory): number {

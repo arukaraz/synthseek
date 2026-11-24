@@ -81,23 +81,30 @@
   },
   "topTracks": {
     "title": "Canciones más escuchadas",
-    "subtitle": "Más reproducidas · de todos los tiempos · Last.fm",
+    "subtitle": "Más reproducidas · de todos los tiempos · {{provider}}",
     "heroBadge": "N.º 1 más reproducida",
     "plays": "{{count}} reproducciones",
     "empty": {
-      "error": "No se pudieron cargar los datos de Last.fm.",
-      "disabled": "Activa Last.fm para ver aquí tus canciones más escuchadas.",
-      "noUsername": "Añade tu nombre de usuario de Last.fm para empezar a sincronizar tus canciones más escuchadas.",
+      "error": "No se pudieron cargar los datos de {{provider}}.",
+      "noUsername": "Añade tu nombre de usuario de {{provider}} para ver aquí tus canciones más escuchadas.",
       "noData": "Aún no hay canciones más escuchadas, escucha algo de música para verlas clasificadas.",
-      "ctaOpenSettings": "Abrir ajustes",
-      "ctaConfigure": "Configurar Last.fm"
+      "ctaConfigure": "Configurar {{provider}}"
     }
+  },
+  "topArtists": {
+    "title": "Artistas más escuchados",
+    "subtitle": "Más reproducidos · de todos los tiempos · {{provider}}",
+    "empty": "Aún no hay artistas más escuchados, escucha algo de música para verlos clasificados.",
+    "unlinked": "Añade tu usuario de {{provider}} para verlos.",
+    "link": "Ajustes",
+    "plays_one": "{{formatted}} reproducción",
+    "plays_other": "{{formatted}} reproducciones"
   },
   "recentScrobbles": {
     "title": "Scrobbles recientes",
-    "subtitle": "Last.fm",
+    "listensTitle": "Escuchas recientes",
     "seeMore": "Ver más",
-    "seeMoreAriaLabel": "Abrir perfil de Last.fm",
+    "seeMoreAriaLabel": "Abrir perfil de {{provider}}",
     "scrollLeftAriaLabel": "Desplazar a la izquierda",
     "scrollRightAriaLabel": "Desplazar a la derecha",
     "ageJustNow": "ahora mismo",
@@ -105,12 +112,10 @@
     "ageHours": "hace {{count}}h",
     "ageDays": "hace {{count}}d",
     "empty": {
-      "error": "No se pudieron cargar los datos de Last.fm.",
-      "disabled": "Activa Last.fm para ver aquí tus scrobbles recientes.",
-      "noUsername": "Añade tu nombre de usuario de Last.fm para empezar a sincronizar tus scrobbles.",
-      "noData": "Aún no hay scrobbles, tu cronología aparecerá aquí.",
-      "ctaOpenSettings": "Abrir ajustes",
-      "ctaConfigure": "Configurar Last.fm"
+      "error": "No se pudieron cargar los datos de {{provider}}.",
+      "noUsername": "Añade tu nombre de usuario de {{provider}} para ver aquí tus escuchas recientes.",
+      "noData": "Aún no hay escuchas, tu cronología aparecerá aquí.",
+      "ctaConfigure": "Configurar {{provider}}"
     }
   },
   "recentRequests": {
@@ -185,6 +190,7 @@
   "board": {
     "regionLabel": "Tablero de Explorar",
     "loadError": "No se pudo cargar ahora mismo.",
+    "providerInactive": "{{provider}} no está configurado en este servidor.",
     "customize": "Personalizar",
     "done": "Listo",
     "addWidget": "Añadir widget",
@@ -256,6 +262,7 @@
       "add": "Añadir",
       "remove": "Quitar",
       "onBoard": "En el tablero",
+      "mediaServer": "Servidor de medios",
       "addNamed": "Añadir {{name}}",
       "categoryCount": "{{onBoard}} de {{total}} en el tablero",
       "empty": "Ningún widget coincide con «{{query}}».",
@@ -291,7 +298,7 @@
       },
       "history": {
         "title": "De tu historial",
-        "description": "Hecho con tus propias escuchas y Last.fm"
+        "description": "Hecho con tus propias escuchas, Last.fm y ListenBrainz"
       },
       "discover": {
         "title": "Descubrir",
@@ -319,7 +326,13 @@
       "stations": "Radios creadas a partir de tus artistas más escuchados, tus favoritas y las canciones que nunca has escuchado.",
       "continueListening": "Tu cola de reproducción donde la dejaste, y lo último que escuchaste desde cualquier app.",
       "rarities": "Canciones que escuchas y que poca gente escucha, según los conteos de ListenBrainz.",
-      "orbit": "Álbumes que no tienes, elegidos a partir de canciones parecidas a las que más escuchas.",
+      "orbit": "Álbumes que no tienes, elegidos de la radio del catálogo de los artistas que más escuchas.",
+      "listenbrainzTopTracks": "Tus canciones más escuchadas en ListenBrainz, de siempre.",
+      "lastfmTopArtists": "Tus artistas con más scrobbles en Last.fm, de siempre. Abre uno para ver su ficha.",
+      "listenbrainzTopArtists": "Tus artistas más escuchados en ListenBrainz, de siempre. Abre uno para ver su ficha.",
+      "listenbrainzListens": "Tus últimas escuchas de ListenBrainz según llegan, la más reciente primero.",
+      "listenbrainzCharts": "Las canciones más escuchadas esta semana en todo el mundo en ListenBrainz. Reproduce las que tienes y solicita el resto.",
+      "listenbrainzLoved": "Canciones que marcaste como favoritas en ListenBrainz y que aún no están en tu biblioteca.",
       "charts": "Las canciones más escuchadas esta semana en todo el mundo en Last.fm. Reproduce las que tienes y solicita el resto.",
       "loved": "Canciones que marcaste como favoritas en Last.fm y que aún no están en tu biblioteca.",
       "newInLibrary": "Álbumes que llegaron en los últimos 7 días, y si ya los escuchaste.",
@@ -444,7 +457,7 @@
   },
   "charts": {
     "title": "Listas",
-    "subtitle": "Lo más escuchado en el mundo",
+    "subtitle": "Lo más escuchado en el mundo · {{provider}}",
     "empty": "No hay lista ahora mismo.",
     "play": "Reproducir",
     "request": "Solicitar",
@@ -452,8 +465,9 @@
   },
   "loved": {
     "title": "Favoritas en Last.fm que no tienes",
-    "subtitle": "Favoritas de Last.fm",
-    "unlinked": "Añade tu usuario de Last.fm para verlas.",
+    "listenbrainzTitle": "Favoritas en ListenBrainz que no tienes",
+    "subtitle": "Favoritas de {{provider}}",
+    "unlinked": "Añade tu usuario de {{provider}} para verlas.",
     "link": "Ajustes",
     "empty": "Todo lo que marcaste como favorito ya está aquí.",
     "request": "Solicitar"

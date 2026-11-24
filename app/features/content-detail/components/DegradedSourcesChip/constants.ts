@@ -7,4 +7,5 @@ export const DEGRADED_PROVIDER_LABEL_KEYS = {
   songlink: "degraded.providers.songlink",
   fanart: "degraded.providers.fanart",
   coverartarchive: "degraded.providers.coverartarchive",
+  wikipedia: "degraded.providers.wikipedia",
 } as const;

@@ -32,7 +32,7 @@ export function RecentScrobblesRail({ scrobbles }: RecentScrobblesRailProps) {
       <span className={axisLine()} aria-hidden />
       <div ref={edges.ref} className={rail()}>
         {scrobbles.map((s) => (
-          <RecentScrobbleNode key={s.catalogTrackId} scrobble={s} />
+          <RecentScrobbleNode key={s.id} scrobble={s} />
         ))}
       </div>
       <ScrollEdge

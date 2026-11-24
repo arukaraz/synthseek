@@ -141,12 +141,18 @@
   },
   "bio": {
     "more": "Voir plus",
-    "less": "Voir moins"
+    "less": "Voir moins",
+    "readOn": "Lire sur {{source}}"
   },
   "stats": {
     "listeners": "Auditeurs",
-    "scrobbles": "Scrobbles",
-    "lbListens": "Écoutes ListenBrainz",
+    "plays": "Écoutes",
+    "fans": "Fans",
+    "fansUnit": "fans",
+    "bySource": {
+      "listeners": "Auditeurs par source",
+      "plays": "Écoutes par source"
+    },
     "inLibrary": "Dans la bibliothèque",
     "tracks": "Pistes"
   },
@@ -207,7 +213,8 @@
       "discogs": "Discogs",
       "songlink": "Songlink",
       "fanart": "fanart.tv",
-      "coverartarchive": "Cover Art Archive"
+      "coverartarchive": "Cover Art Archive",
+      "wikipedia": "Wikipedia"
     },
     "unavailableFor": "{{provider}} · hors service depuis {{duration}}"
   }

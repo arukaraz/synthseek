@@ -24,7 +24,11 @@ import type { ArtistDetailBodyProps } from "./types";
 
 function ArtistDetailBodyComponent({ target, onClose, onNavigate }: ArtistDetailBodyProps) {
   const { data: identity } = useArtistIdentity({ catalogArtistId: target.id, artistName: target.artistName });
-  const { data: stats } = useArtistStats({ artistName: target.artistName, mbid: identity?.mbid ?? null });
+  const { data: stats } = useArtistStats({
+    artistName: target.artistName,
+    mbid: identity?.mbid ?? null,
+    catalogArtistId: target.id,
+  });
   const { data: lidarr } = useLidarrAvailable();
   const { data: playable } = useHasPlayableTracks({ kind: "artist", artist: target.name });
   const { requestArtist } = useContentDetailActions();
@@ -96,7 +100,7 @@ function ArtistDetailBodyComponent({ target, onClose, onNavigate }: ArtistDetail
             artistName={target.artistName}
             onSelectAlbum={onNavigate}
           />
-          <ArtistSimilarWidget artistName={target.artistName} onSelectArtist={onNavigate} />
+          <ArtistSimilarWidget catalogArtistId={target.id} artistName={target.artistName} onSelectArtist={onNavigate} />
         </div>
       </div>
     </div>

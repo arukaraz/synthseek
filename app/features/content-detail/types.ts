@@ -68,6 +68,7 @@ export interface ArtistTopTracksWidgetProps {
 }
 
 export interface ArtistSimilarWidgetProps {
+  catalogArtistId: string;
   artistName: string;
   onSelectArtist: (target: DetailTarget) => void;
 }
@@ -83,6 +84,7 @@ export interface AlbumDetailWidgetProps {
 }
 
 export interface AlbumStatsWidgetProps {
+  catalogAlbumId: string;
   artistName: string;
   albumName: string;
   trackCount: number | null;

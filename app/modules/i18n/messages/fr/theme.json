@@ -184,6 +184,10 @@
     "--brand-ntfy": { "label": "ntfy", "hint": "Le canal de notification ntfy" },
     "--brand-telegram": { "label": "Telegram", "hint": "Le canal de notification Telegram" },
     "--brand-plex": { "label": "Plex", "hint": "Le symbole Plex et ses badges" },
+    "--brand-catalog": { "label": "Catalogue", "hint": "Le badge du catalogue musical" },
+    "--brand-wikipedia": { "label": "Wikipedia", "hint": "Le badge Wikipedia sous une biographie" },
+    "--brand-lidarr": { "label": "Lidarr", "hint": "Le badge Lidarr" },
+    "--brand-bandsintown": { "label": "Bandsintown", "hint": "Le badge Bandsintown" },
     "--brand-website": { "label": "Site web", "hint": "Le lien vers le site propre d'un artiste" }
   },
   "parts": {
