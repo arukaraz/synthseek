@@ -2837,8 +2837,8 @@
         },
         "lastfm_key_needs_pro": {
           "title": "Last.fm dejó de aceptar tu clave de API",
-          "effect": "A partir del 1 de diciembre, Last.fm solo acepta claves de API de cuentas con Last.fm Pro. Hasta que vuelva a aceptar la tuya, lo que Synthseek lee de Last.fm llega vacío, y las escuchas para Last.fm esperan hasta dos semanas.",
-          "fix": "Suscribe a Last.fm Pro la cuenta dueña de la clave, o quita la clave en Ajustes > Metadatos. Este aviso desaparece la próxima vez que Last.fm acepte la clave."
+          "effect": "Last.fm aceptaba esta clave y ahora la rechaza. Desde el 1 de diciembre solo acepta claves de API de cuentas con Last.fm Pro, así que probablemente sea eso; una clave también puede estar suspendida. Hasta que Last.fm vuelva a aceptarla, lo que Synthseek lee de Last.fm llega vacío, y las escuchas para Last.fm esperan hasta dos semanas.",
+          "fix": "Si la cuenta dueña de la clave no tiene Last.fm Pro, suscríbela o quita la clave en Ajustes > Metadatos. Si ya tiene Pro, revisa la clave en tu cuenta de API de Last.fm. Este aviso desaparece la próxima vez que Last.fm acepte la clave."
         },
         "config_value_ignored": {
           "title": "Se ha ignorado un ajuste",

@@ -2834,8 +2834,8 @@
         },
         "lastfm_key_needs_pro": {
           "title": "Last.fm stopped accepting your API key",
-          "effect": "Since December 1, Last.fm only accepts API keys from accounts with Last.fm Pro. Until it accepts yours again, what Synthseek reads from Last.fm comes back empty, and listens for Last.fm wait for up to two weeks.",
-          "fix": "Subscribe to Last.fm Pro on the account that owns the key, or remove the key under Settings > Metadata. This notice clears the next time Last.fm accepts the key."
+          "effect": "Last.fm accepted this key before and now refuses it. Since December 1 it only accepts API keys from accounts with Last.fm Pro, so that is probably why; a key can also be suspended. Until Last.fm accepts it again, what Synthseek reads from Last.fm comes back empty, and listens for Last.fm wait for up to two weeks.",
+          "fix": "If the account that owns the key has no Last.fm Pro, subscribe it or remove the key under Settings > Metadata. If it already has Pro, check the key in your Last.fm API account. This notice clears the next time Last.fm accepts the key."
         },
         "config_value_ignored": {
           "title": "A setting was ignored",

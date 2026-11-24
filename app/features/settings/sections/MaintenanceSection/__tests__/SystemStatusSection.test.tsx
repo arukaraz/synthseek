@@ -112,11 +112,11 @@ describe("SystemStatusSection", () => {
     expect(screen.getByText(copyOf("catalog_unreachable", "fix"))).toBeInTheDocument();
   });
 
-  it("tells a refused Last.fm key that it now needs Pro and where to remove it", () => {
+  it("tells a refused Last.fm key that Pro is the probable cause and where to remove it", () => {
     renderWith({ data: { checkedAt: CHECKED_AT, problems: [{ kind: "lastfm_key_needs_pro" }] } });
 
     expect(screen.getByRole("heading", { name: "Last.fm stopped accepting your API key" })).toBeInTheDocument();
-    expect(screen.getByText(/^Since December 1, Last\.fm only accepts API keys/)).toBeInTheDocument();
+    expect(screen.getByText(/Last\.fm Pro, so that is probably why; a key can also be suspended/)).toBeInTheDocument();
     expect(screen.getByText(/Settings > Metadata/)).toBeInTheDocument();
   });
 

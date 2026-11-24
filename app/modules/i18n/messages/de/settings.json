@@ -2834,8 +2834,8 @@
         },
         "lastfm_key_needs_pro": {
           "title": "Last.fm akzeptiert deinen API-Schlüssel nicht mehr",
-          "effect": "Seit dem 1. Dezember akzeptiert Last.fm nur noch API-Schlüssel von Konten mit Last.fm Pro. Bis deiner wieder akzeptiert wird, kommt alles, was Synthseek von Last.fm liest, leer zurück, und Scrobbles für Last.fm warten bis zu zwei Wochen.",
-          "fix": "Schließe Last.fm Pro für das Konto ab, dem der Schlüssel gehört, oder entferne den Schlüssel unter Einstellungen > Metadaten. Dieser Hinweis verschwindet, sobald Last.fm den Schlüssel wieder akzeptiert."
+          "effect": "Last.fm hat diesen Schlüssel bisher akzeptiert und lehnt ihn jetzt ab. Seit dem 1. Dezember akzeptiert Last.fm nur noch API-Schlüssel von Konten mit Last.fm Pro, daran liegt es wahrscheinlich; ein Schlüssel kann auch gesperrt sein. Bis Last.fm ihn wieder akzeptiert, kommt alles, was Synthseek von Last.fm liest, leer zurück, und Scrobbles für Last.fm warten bis zu zwei Wochen.",
+          "fix": "Wenn das Konto, dem der Schlüssel gehört, kein Last.fm Pro hat, schließe es dafür ab oder entferne den Schlüssel unter Einstellungen > Metadaten. Wenn es Pro schon hat, prüfe den Schlüssel in deinem Last.fm-API-Konto. Dieser Hinweis verschwindet, sobald Last.fm den Schlüssel wieder akzeptiert."
         },
         "config_value_ignored": {
           "title": "Eine Einstellung wurde ignoriert",

@@ -2834,8 +2834,8 @@
         },
         "lastfm_key_needs_pro": {
           "title": "Last.fm n'accepte plus votre clé d'API",
-          "effect": "Depuis le 1er décembre, Last.fm n'accepte que les clés d'API des comptes Last.fm Pro. Tant qu'il n'accepte pas de nouveau la vôtre, ce que Synthseek lit sur Last.fm revient vide, et les écoutes pour Last.fm attendent jusqu'à deux semaines.",
-          "fix": "Abonnez à Last.fm Pro le compte propriétaire de la clé, ou retirez la clé dans Réglages > Métadonnées. Cet avis disparaît dès que Last.fm accepte de nouveau la clé."
+          "effect": "Last.fm acceptait cette clé et la refuse maintenant. Depuis le 1er décembre, il n'accepte que les clés d'API des comptes Last.fm Pro, c'est donc probablement la raison ; une clé peut aussi être suspendue. Tant que Last.fm ne l'accepte pas de nouveau, ce que Synthseek lit sur Last.fm revient vide, et les écoutes pour Last.fm attendent jusqu'à deux semaines.",
+          "fix": "Si le compte propriétaire de la clé n'a pas Last.fm Pro, abonnez-le ou retirez la clé dans Réglages > Métadonnées. S'il a déjà Pro, vérifiez la clé dans votre compte d'API Last.fm. Cet avis disparaît dès que Last.fm accepte de nouveau la clé."
         },
         "config_value_ignored": {
           "title": "Un réglage a été ignoré",
