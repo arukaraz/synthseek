@@ -17,6 +17,33 @@
       "byCategory": "Category",
       "onBoardFirst": "On board first",
       "nothing": "Nothing matches these filters."
+    },
+    "sources": {
+      "label": "Source",
+      "all": "All sources",
+      "synthseek": "Synthseek",
+      "inactive": "Inactive",
+      "unknown": "Unknown",
+      "retry": "Retry",
+      "needs": "Needs {{source}}",
+      "reasons": {
+        "lastfmNotSetUp": {
+          "why": "Last.fm is not set up.",
+          "who": "An admin adds the API key in Settings › Metadata."
+        },
+        "lastfmRefused": {
+          "why": "Last.fm refuses this server's API key. From December 1 it only accepts keys from accounts with Last.fm Pro; a key can also be mistyped or suspended.",
+          "who": "An admin checks the key in Settings › Metadata."
+        },
+        "noMediaServer": {
+          "why": "No media server is connected.",
+          "who": "An admin connects Plex, Jellyfin or Navidrome in Settings › Library › Sources."
+        },
+        "unknown": {
+          "why": "Synthseek could not check which sources are set up.",
+          "who": "Try again in a moment."
+        }
+      }
     }
   },
   "mine": {
@@ -325,6 +352,7 @@
       "inCurrentTimeSlot": "Played around this time",
       "releaseType": "Release type",
       "listeners": "Last.fm listeners",
+      "listens": "ListenBrainz listens",
       "artistInLibrary": "Artist in my library",
       "user": "Whose listening"
     },
@@ -400,6 +428,8 @@
       "releaseType_isNot": "release type is not {{value}}",
       "listeners_lt": "fewer than {{value}} Last.fm listeners",
       "listeners_gte": "at least {{value}} Last.fm listeners",
+      "listens_lt": "fewer than {{value}} ListenBrainz listens",
+      "listens_gte": "at least {{value}} ListenBrainz listens",
       "artistInLibrary_true": "artist is in my library",
       "artistInLibrary_false": "artist is not in my library",
       "user_is": "played by {{value}}",
@@ -454,7 +484,10 @@
         "similarArtists": "Similar artists (Last.fm)",
         "similarTracks": "Similar tracks (Last.fm)",
         "charts": "Top tracks by country (Last.fm)",
-        "lovedTracks": "My loved tracks (Last.fm)"
+        "lovedTracks": "My loved tracks (Last.fm)",
+        "topTracks": "My top tracks (Last.fm)",
+        "topArtists": "My top artists (Last.fm)",
+        "recentTracks": "My latest scrobbles (Last.fm)"
       },
       "catalog": {
         "related": "Related artists (catalog)",
@@ -465,7 +498,12 @@
       "listenbrainz": {
         "recommendations": "Recommendations (ListenBrainz)",
         "freshReleases": "Fresh releases (ListenBrainz)",
-        "playlists": "Playlists made for you (ListenBrainz)"
+        "playlists": "Playlists made for you (ListenBrainz)",
+        "topTracks": "My top tracks (ListenBrainz)",
+        "topArtists": "My top artists (ListenBrainz)",
+        "charts": "Top tracks of every listener (ListenBrainz)",
+        "listens": "My latest listens (ListenBrainz)",
+        "lovedTracks": "My loved tracks (ListenBrainz)"
       },
       "feed": {
         "rss": "A news feed (RSS or Atom)",
@@ -491,11 +529,32 @@
     "server": "Media server",
     "comingWithin": "Releasing in the next",
     "followWithin": "within",
-    "followWindow": "Which releases",
-    "followWindows": {
+    "releaseWindow": "Which releases",
+    "releaseWindows": {
       "upcoming": "Upcoming",
       "recent": "Recent",
       "both": "Both"
+    },
+    "period": "Period",
+    "periods": {
+      "overall": "All time",
+      "7day": "Last 7 days",
+      "1month": "Last 30 days",
+      "3month": "Last 3 months",
+      "6month": "Last 6 months",
+      "12month": "Last 12 months"
+    },
+    "range": "Range",
+    "ranges": {
+      "all_time": "All time",
+      "this_week": "This week",
+      "this_month": "This month",
+      "this_year": "This year",
+      "week": "Last week",
+      "month": "Last month",
+      "quarter": "Last quarter",
+      "half_yearly": "Last half year",
+      "year": "Last year"
     },
     "curatedLabel": "News source",
     "curated": {
@@ -534,7 +593,6 @@
       "followed": "Artists I follow"
     },
     "overDays": "over the last",
-    "releasedInLast": "Released in the last",
     "items": "items",
     "pickBy": {
       "rank": "Source order",
@@ -812,7 +870,15 @@
     "serverPlaylists": "Server playlists",
     "stations": "Stations",
     "genres": "Genres",
-    "continueListening": "Continue listening"
+    "continueListening": "Continue listening",
+    "lastfmTopTracks": "Top tracks (Last.fm)",
+    "lastfmScrobbles": "Scrobbles (Last.fm)",
+    "lastfmTopArtists": "Top artists (Last.fm)",
+    "listenbrainzTopTracks": "Top tracks (ListenBrainz)",
+    "listenbrainzTopArtists": "Top artists (ListenBrainz)",
+    "listenbrainzListens": "Listens (ListenBrainz)",
+    "listenbrainzCharts": "Charts (ListenBrainz)",
+    "listenbrainzLoved": "Loved (ListenBrainz)"
   },
   "neverInclude": {
     "title": "Never include",

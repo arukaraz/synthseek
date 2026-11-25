@@ -262,7 +262,6 @@
       "add": "Añadir",
       "remove": "Quitar",
       "onBoard": "En el tablero",
-      "mediaServer": "Servidor de medios",
       "addNamed": "Añadir {{name}}",
       "categoryCount": "{{onBoard}} de {{total}} en el tablero",
       "empty": "Ningún widget coincide con «{{query}}».",
@@ -555,6 +554,7 @@
     }
   },
   "customWidget": {
+    "warming": "Cargando. Ten paciencia, esto puede tardar un rato.",
     "set": {
       "length_one": "{{count}} pista · {{length}}",
       "length_other": "{{count}} pistas · {{length}}",

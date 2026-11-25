@@ -52,21 +52,37 @@ vi.mock("../../Landed/Landed", () => ({ Landed: stub("landed") }));
 vi.mock("../../ServerPlaylists/ServerPlaylists", () => ({ ServerPlaylists: stub("serverPlaylists") }));
 vi.mock("../../LibraryLeaderboard", () => ({ LibraryLeaderboard: stub("leaderboard") }));
 
-const { saveWidget, savePlaylist, removeWidget, myWidgets, integrations } = vi.hoisted(() => ({
+const { saveWidget, savePlaylist, removeWidget, myWidgets, integrations, refetchCatalog } = vi.hoisted(() => ({
   saveWidget: vi.fn(),
   savePlaylist: vi.fn(),
   removeWidget: vi.fn(),
+  refetchCatalog: vi.fn(),
   myWidgets: { data: new Array<WidgetDocument>() },
-  integrations: { off: new Array<string>() },
+  integrations: {
+    off: new Array<string>(),
+    lastfmRefused: false,
+    servers: null as null | Array<"plex" | "jellyfin" | "navidrome">,
+    failed: false,
+  },
 }));
 
 vi.mock("@hooks/api/queries/widgets/useMyWidgets", () => ({ useMyWidgets: () => myWidgets }));
 vi.mock("@modules/providers/CountryProvider", () => ({ useCountry: () => ({ country: "MX" }) }));
 vi.mock("@hooks/api/queries/widgets/useWidgetCatalog", () => ({
   useWidgetCatalog: () => {
+    if (integrations.failed) return { data: undefined, isError: true, refetch: refetchCatalog };
     const catalog = createWidgetCatalog();
-    const activeIntegrations = catalog.feeds.activeIntegrations.filter((key) => !integrations.off.includes(key));
-    return { data: { ...catalog, feeds: { ...catalog.feeds, activeIntegrations } } };
+    const servers = integrations.servers ?? catalog.feeds.servers;
+    const off = [
+      ...integrations.off,
+      ...(servers.length === 0 ? ["mediaServer", "plex", "jellyfin", "navidrome"] : []),
+    ];
+    const activeIntegrations = catalog.feeds.activeIntegrations.filter((key) => !off.includes(key));
+    const lastfmState = off.includes("lastfm") ? (integrations.lastfmRefused ? "refused" : "notSetUp") : "active";
+    return {
+      data: { ...catalog, feeds: { ...catalog.feeds, activeIntegrations, servers, lastfmState } },
+      refetch: refetchCatalog,
+    };
   },
 }));
 vi.mock("@hooks/api/queries/widgets/useWidgetGrammar", () => ({
@@ -75,6 +91,19 @@ vi.mock("@hooks/api/queries/widgets/useWidgetGrammar", () => ({
 vi.mock("@hooks/api/queries/widgets/useWidgetPresets", () => ({
   useWidgetPresets: () => ({
     data: [
+      createWidgetPreset({
+        key: "listenbrainzTopTracks",
+        builtin: "listenbrainzTopTracks",
+        draft: {
+          ...createWidgetPreset().draft,
+          query: {
+            type: "feed",
+            source: "listenbrainz.topTracks",
+            params: { range: "this_week" },
+            pick: { by: "rank", order: "asc", limit: 10, random: null },
+          },
+        },
+      }),
       createWidgetPreset({
         key: "charts",
         builtin: "charts",
@@ -190,8 +219,25 @@ async function pickBulk(group: "addTo" | "removeFrom", layout: string) {
 afterEach(() => {
   myWidgets.data = [];
   integrations.off = [];
+  integrations.lastfmRefused = false;
+  integrations.servers = null;
+  integrations.failed = false;
   vi.clearAllMocks();
 });
+
+async function openSource(user: ReturnType<typeof userEvent.setup>) {
+  await user.click(screen.getByRole("button", { name: "Filter and sort" }));
+  return within(await screen.findByRole("group", { name: "Source" }));
+}
+
+function cardOf(title: string): HTMLElement {
+  const heading = within(screen.getByRole("dialog"))
+    .getAllByRole("heading", { level: 4 })
+    .find((item) => item.textContent === title);
+  const card = heading?.closest("article");
+  if (!(card instanceof HTMLElement)) throw new Error(`card ${title} missing`);
+  return card;
+}
 
 describe("WidgetsDialog gallery", () => {
   it("lists every widget in the suggested order with a scaled live preview at the default size", () => {
@@ -222,9 +268,159 @@ describe("WidgetsDialog gallery", () => {
 
     expect(badgeOf("Add Charts (Last.fm)")).toHaveTextContent("Last.fm");
     expect(badgeOf("Add Charts (ListenBrainz)")).toHaveTextContent("ListenBrainz");
-    expect(badgeOf("Add Your playlists on media servers")).toHaveTextContent("Media server");
     expect(badgeOf("Add Trending now")).toBeNull();
     expect(badgeOf("Add Expand your orbit")).toBeNull();
+  });
+
+  it("badges a media-server widget with each server connected, and with none when no server is", () => {
+    integrations.servers = ["jellyfin", "plex"];
+    renderGallery([{ kind: "builtin", id: "p1", widget: "serverPlaylists", size: "M" }]);
+    const badges = () =>
+      [...cardOf("Your playlists on media servers").querySelectorAll("[data-source-badge]")].map(
+        (badge) => badge.textContent
+      );
+
+    expect(badges()).toEqual(["Jellyfin", "Plex"]);
+  });
+
+  it("draws no server badge on a placed media-server widget while no server is connected", () => {
+    integrations.servers = [];
+    renderGallery([{ kind: "builtin", id: "p1", widget: "serverPlaylists", size: "M" }]);
+
+    expect(cardOf("Your playlists on media servers").querySelector("[data-source-badge]")).toBeNull();
+  });
+
+  it("writes on the preview the period a listening widget reads, and nothing on one without", () => {
+    renderGallery();
+    const cardFor = (button: string) => {
+      const card = screen.getByRole("button", { name: button }).closest("article");
+      if (!(card instanceof HTMLElement)) throw new Error(`card ${button} missing`);
+      return within(card);
+    };
+
+    expect(cardFor("Add Top Tracks (ListenBrainz)").getByText("This week")).toBeInTheDocument();
+    expect(cardFor("Add Charts (Last.fm)").queryByText("This week")).not.toBeInTheDocument();
+  });
+
+  it("adds a Source column between Category and Board, with a count per active source", async () => {
+    const user = userEvent.setup();
+    integrations.servers = ["jellyfin"];
+    renderGallery();
+    const source = await openSource(user);
+    const groups = within(screen.getByRole("menu"))
+      .getAllByRole("group")
+      .map((group) => group.getAttribute("aria-label"))
+      .filter((label) => label !== null);
+
+    expect(groups.indexOf("Source")).toBe(groups.indexOf("Category") + 1);
+    expect(groups.indexOf("Board")).toBe(groups.indexOf("Source") + 1);
+    const rows = source.getAllByRole("menuitemradio").map((row) => row.textContent);
+    expect(rows).toEqual(["All sources31", "Synthseek18", "Last.fm5", "ListenBrainz7", "Jellyfin1"]);
+  });
+
+  it("filters by a source, names it in the trigger, and counts the categories within it", async () => {
+    const user = userEvent.setup();
+    renderGallery();
+    const source = await openSource(user);
+    await user.click(source.getByRole("menuitemradio", { name: "ListenBrainz" }));
+
+    expect(cardTitles()).toEqual([
+      "Top Tracks",
+      "Top Artists",
+      "Recent Listens",
+      "Your rarities",
+      "Discover Mixes",
+      "Charts",
+      "Loved on ListenBrainz, not here",
+    ]);
+    expect(screen.getByRole("button", { name: "Filter and sort" })).toHaveTextContent("All · ListenBrainz · Suggested");
+    await user.click(screen.getByRole("button", { name: "Filter and sort" }));
+    const category = within(await screen.findByRole("group", { name: "Category" }));
+    expect(category.getByRole("menuitemradio", { name: /^All/ })).toHaveTextContent("7");
+    expect(category.getByRole("menuitemradio", { name: /^Discover/ })).toHaveTextContent("3");
+  });
+
+  it("marks an inactive source with a dashed pill and its state, and explains it only there", async () => {
+    const user = userEvent.setup();
+    integrations.off = ["lastfm"];
+    integrations.lastfmRefused = true;
+    renderGallery();
+    const source = await openSource(user);
+    const lastfm = source.getByRole("menuitemradio", { name: "Last.fm" });
+
+    expect(lastfm).toHaveTextContent("Inactive");
+    expect(lastfm.querySelector("[data-source-badge]")).toHaveAttribute("data-inactive", "true");
+    expect(source.getByRole("menuitemradio", { name: "ListenBrainz" }).querySelector("[data-inactive]")).toBeNull();
+    await user.hover(lastfm);
+    expect(await screen.findByRole("tooltip")).toHaveTextContent(
+      i18n.t("widgets:gallery.sources.reasons.lastfmRefused.why")
+    );
+  });
+
+  it("shows why an inactive source is off and its widgets dimmed, with nothing to add in bulk", async () => {
+    const user = userEvent.setup();
+    integrations.off = ["lastfm"];
+    renderGallery();
+    const source = await openSource(user);
+    await user.click(source.getByRole("menuitemradio", { name: "Last.fm" }));
+
+    expect(screen.getByRole("status")).toHaveTextContent(i18n.t("widgets:gallery.sources.reasons.lastfmNotSetUp.why"));
+    expect(screen.getByRole("status")).toHaveTextContent(i18n.t("widgets:gallery.sources.reasons.lastfmNotSetUp.who"));
+    const loved = cardOf("Loved on Last.fm, not here");
+    expect(loved).toHaveAttribute("data-ghost", "true");
+    expect(within(loved).getByText("Needs Last.fm")).toBeInTheDocument();
+    expect(within(loved).queryByRole("button")).not.toBeInTheDocument();
+    expect(cardOf("Recent Scrobbles")).not.toHaveAttribute("data-ghost");
+    expect(screen.getByRole("button", { name: i18n.t("discover:board.gallery.bulk.label") })).toHaveAttribute(
+      "aria-disabled",
+      "true"
+    );
+  });
+
+  it("folds the servers into one inactive row and names them all when none is connected", async () => {
+    const user = userEvent.setup();
+    integrations.servers = [];
+    renderGallery();
+    const source = await openSource(user);
+    const row = source.getByRole("menuitemradio", { name: "Plex, Jellyfin, or Navidrome" });
+
+    expect([...row.querySelectorAll("[data-inactive]")].map((pill) => pill.textContent)).toEqual([
+      "Plex",
+      "Jellyfin",
+      "Navidrome",
+    ]);
+    await user.click(row);
+    expect(screen.getByRole("status")).toHaveTextContent(i18n.t("widgets:gallery.sources.reasons.noMediaServer.why"));
+    expect(
+      within(cardOf("Your playlists on media servers")).getByText("Needs Plex, Jellyfin, or Navidrome")
+    ).toBeInTheDocument();
+  });
+
+  it("calls every source unknown when the server did not answer, and retries from the menu", async () => {
+    const user = userEvent.setup();
+    integrations.failed = true;
+    renderGallery();
+    const source = await openSource(user);
+
+    expect(source.getByRole("menuitemradio", { name: "ListenBrainz" })).toHaveTextContent("Unknown");
+    await user.click(source.getByRole("button", { name: i18n.t("widgets:gallery.sources.retry") }));
+    expect(refetchCatalog).toHaveBeenCalledTimes(1);
+  });
+
+  it("claims no missing requirement for a source it could not check", async () => {
+    const user = userEvent.setup();
+    integrations.failed = true;
+    renderGallery();
+    const source = await openSource(user);
+    await user.click(source.getByRole("menuitemradio", { name: "ListenBrainz" }));
+
+    expect(screen.getByRole("status")).toHaveTextContent(i18n.t("widgets:gallery.sources.reasons.unknown.why"));
+    const ghosts = [...screen.getByRole("dialog").querySelectorAll<HTMLElement>("[data-ghost='true']")];
+    expect(ghosts.length).toBeGreaterThan(0);
+    for (const ghost of ghosts) {
+      expect(within(ghost).queryByText(/^Needs /)).not.toBeInTheDocument();
+      expect(within(ghost).queryByRole("button")).not.toBeInTheDocument();
+    }
   });
 
   it("searches names and descriptions, and says when nothing matches", () => {
@@ -735,6 +931,36 @@ describe("WidgetsDialog gallery", () => {
     fireEvent.blur(address);
     expect(screen.getByRole("textbox", { name: "Feed address" })).toHaveValue("https://feeds.test/rss");
     expect(screen.getByRole("radio", { name: /Headlines/ })).toHaveAttribute("aria-checked", "true");
+  });
+
+  it("picks the period of a Last.fm listening feed and the window of fresh releases, reading both back", async () => {
+    const user = userEvent.setup();
+    renderGallery();
+    openMine();
+    fireEvent.click(screen.getByRole("button", { name: "New widget" }));
+    fireEvent.click(screen.getByRole("tab", { name: "Feed" }));
+    await user.click(screen.getByRole("button", { name: "Source" }));
+    await user.click(await screen.findByRole("menuitemradio", { name: /My top tracks \(Last\.fm\)/ }));
+
+    await user.click(screen.getByRole("button", { name: "Period" }));
+    const periods = (await screen.findAllByRole("menuitemradio")).map((item) => item.textContent);
+    expect(periods).toEqual([
+      "All time",
+      "Last 7 days",
+      "Last 30 days",
+      "Last 3 months",
+      "Last 6 months",
+      "Last 12 months",
+    ]);
+    await user.click(screen.getByRole("menuitemradio", { name: "Last 3 months" }));
+    expect(screen.getByRole("button", { name: "Period" })).toHaveTextContent("Last 3 months");
+
+    await user.click(screen.getByRole("button", { name: "Source" }));
+    await user.click(await screen.findByRole("menuitemradio", { name: /Fresh releases/ }));
+    const window = screen.getByRole("radiogroup", { name: "Which releases" });
+    expect(within(window).getByRole("radio", { name: "Recent" })).toHaveAttribute("aria-checked", "true");
+    await user.click(within(window).getByRole("radio", { name: "Upcoming" }));
+    expect(within(window).getByRole("radio", { name: "Upcoming" })).toHaveAttribute("aria-checked", "true");
   });
 
   it("switches to a feed and back without losing the recipe", () => {

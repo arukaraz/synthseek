@@ -262,7 +262,6 @@
       "add": "Add",
       "remove": "Remove",
       "onBoard": "On board",
-      "mediaServer": "Media server",
       "addNamed": "Add {{name}}",
       "categoryCount": "{{onBoard}} of {{total}} on board",
       "empty": "No widget matches “{{query}}”.",
@@ -555,6 +554,7 @@
     }
   },
   "customWidget": {
+    "warming": "Loading. Be patient, this might take a while.",
     "set": {
       "length_one": "{{count}} track · {{length}}",
       "length_other": "{{count}} tracks · {{length}}",

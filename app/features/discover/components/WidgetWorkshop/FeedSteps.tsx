@@ -93,15 +93,52 @@ export function FeedSteps({ workshop, feed, context }: FeedStepsProps) {
         ) : null}
         {feed.source === "listenbrainz.freshReleases" ? (
           <StepRow label={t("steps.params")}>
-            <span className={stepText()}>{t("feeds.releasedInLast")}</span>
+            <SegmentedControl
+              ariaLabel={t("feeds.releaseWindow")}
+              value={feed.params.window}
+              options={catalog.feeds.limits.releaseWindows.map((window) => ({
+                value: window,
+                label: t(`feeds.releaseWindows.${window}`),
+              }))}
+              onChange={(window) => workshop.setQuery({ ...feed, params: { ...feed.params, window } })}
+            />
+            <span className={stepText()}>{t("feeds.followWithin")}</span>
             <NumberField
               label={t("time.days")}
               value={feed.params.days}
               min={NUMBER_BOUNDS.daysMin}
               max={catalog.feeds.limits.freshReleaseDaysMax}
-              onChange={(days) => workshop.setQuery({ ...feed, params: { days } })}
+              onChange={(days) => workshop.setQuery({ ...feed, params: { ...feed.params, days } })}
             />
             <span className={stepText()}>{t("time.days")}</span>
+          </StepRow>
+        ) : null}
+        {feed.source === "lastfm.topTracks" || feed.source === "lastfm.topArtists" ? (
+          <StepRow label={t("steps.params")}>
+            <SelectMenu
+              ariaLabel={t("feeds.period")}
+              value={feed.params.period}
+              options={catalog.feeds.lastfmPeriods.map((period) => ({
+                value: period,
+                label: t(`feeds.periods.${period}`),
+              }))}
+              onChange={(period) => workshop.setQuery({ ...feed, params: { period } })}
+            />
+          </StepRow>
+        ) : null}
+        {feed.source === "listenbrainz.topTracks" ||
+        feed.source === "listenbrainz.topArtists" ||
+        feed.source === "listenbrainz.charts" ? (
+          <StepRow label={t("steps.params")}>
+            <SelectMenu
+              ariaLabel={t("feeds.range")}
+              value={feed.params.range}
+              options={catalog.feeds.listenbrainzRanges.map((range) => ({
+                value: range,
+                label: t(`feeds.ranges.${range}`),
+              }))}
+              onChange={(range) => workshop.setQuery({ ...feed, params: { range } })}
+            />
           </StepRow>
         ) : null}
         {feed.source === "listenbrainz.playlists" ? (
@@ -186,11 +223,11 @@ export function FeedSteps({ workshop, feed, context }: FeedStepsProps) {
         {feed.source === "follows.releases" ? (
           <StepRow label={t("steps.params")}>
             <SegmentedControl
-              ariaLabel={t("feeds.followWindow")}
+              ariaLabel={t("feeds.releaseWindow")}
               value={feed.params.window}
-              options={catalog.feeds.limits.followReleaseWindows.map((window) => ({
+              options={catalog.feeds.limits.releaseWindows.map((window) => ({
                 value: window,
-                label: t(`feeds.followWindows.${window}`),
+                label: t(`feeds.releaseWindows.${window}`),
               }))}
               onChange={(window) => workshop.setQuery({ ...feed, params: { ...feed.params, window } })}
             />

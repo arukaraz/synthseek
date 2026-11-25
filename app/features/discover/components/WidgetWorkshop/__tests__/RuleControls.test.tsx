@@ -27,6 +27,7 @@ describe("RuleControls", () => {
     [{ field: "bitrate", op: "lt", value: 192 }, "below", "kbps"],
     [{ field: "ownedShare", op: "gte", value: 0.5 }, "at least", "%"],
     [{ field: "listeners", op: "lt", value: 1000 }, "below", ""],
+    [{ field: "listens", op: "gte", value: 1000 }, "at least", ""],
     [{ field: "releaseType", op: "isNot", value: "ep" }, "is not", ""],
     [{ field: "mood", op: "is", value: "calm" }, "is", ""],
     [{ field: "user", op: "with", value: "household" }, "played by me and", ""],
@@ -98,6 +99,12 @@ describe("RuleControls", () => {
     const { onChange } = renderRule({ field: "listeners", op: "gte", value: 100 });
     fireEvent.change(screen.getByRole("spinbutton", { name: "Value" }), { target: { value: "500" } });
     expect(onChange).toHaveBeenCalledWith({ field: "listeners", op: "gte", value: 500 });
+  });
+
+  it("hands up a typed number for a track's ListenBrainz listens", () => {
+    const { onChange } = renderRule({ field: "listens", op: "lt", value: 100 });
+    fireEvent.change(screen.getByRole("spinbutton", { name: "Value" }), { target: { value: "800" } });
+    expect(onChange).toHaveBeenCalledWith({ field: "listens", op: "lt", value: 800 });
   });
 
   it("draws nothing for the time slot rule, which has no value to set", () => {

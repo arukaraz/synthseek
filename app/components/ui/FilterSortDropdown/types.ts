@@ -7,6 +7,9 @@ export interface FilterSortFilterOption<F extends string> {
   icon?: LucideIcon;
   iconClassName?: string;
   count?: number;
+  content?: ReactNode;
+  status?: string;
+  tooltip?: ReactNode;
 }
 
 export interface FilterSortOptionItemProps {
@@ -26,6 +29,7 @@ export interface FilterSortFilterGroup {
   value: string;
   onChange: (v: string) => void;
   options: ReadonlyArray<FilterSortFilterOption<string>>;
+  footer?: ReactNode;
 }
 
 export interface FilterSortSortOption<S extends string> {

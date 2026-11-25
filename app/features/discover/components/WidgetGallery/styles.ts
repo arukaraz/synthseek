@@ -51,7 +51,12 @@ export const galleryCard = cva(
         true: "border-success-vivid/40",
         false: "border-fg/10",
       },
+      ghost: {
+        true: "opacity-55 hover:border-fg/10",
+        false: "",
+      },
     },
+    defaultVariants: { ghost: false },
   }
 );
 
@@ -91,7 +96,38 @@ export const cardTitle = cva("text-fg min-w-0 flex-1 text-sm leading-tight font-
 
 export const cardCategory = cva("text-fg/60 shrink-0 text-11");
 
-export const cardMeta = cva("flex min-w-0 flex-wrap items-center gap-2");
+export const cardMeta = cva("flex min-w-0 flex-wrap items-center justify-between gap-2");
+
+export const sourcePills = cva("inline-flex min-w-0 flex-wrap items-center gap-1");
+
+export const periodBadge = cva(
+  "bg-surface/90 border-fg/15 text-fg/80 absolute bottom-2.5 left-2.5 z-[1] rounded-full border px-2 py-0.5 text-11 font-semibold"
+);
+
+export const cardNeeds = cva("text-fg/55 text-xs font-medium");
+
+export const sourceCallout = cva(
+  "col-span-full flex flex-wrap items-center gap-x-3 gap-y-2 rounded-xl border px-3 py-2.5 sm:flex-nowrap",
+  {
+    variants: {
+      unknown: {
+        true: "border-fg/15 bg-fg/[0.03]",
+        false: "border-warning-vivid/30 bg-warning-vivid/10",
+      },
+    },
+    defaultVariants: { unknown: false },
+  }
+);
+
+export const sourceCalloutText = cva("flex min-w-0 flex-1 flex-col gap-0.5");
+
+export const sourceReasonWhy = cva("text-fg text-xs font-semibold");
+
+export const sourceReasonWho = cva("text-fg/70 text-xs");
+
+export const sourceTooltip = cva("flex flex-col gap-0.5");
+
+export const sourceStatusRetry = cva("w-full");
 
 export const cardDescription = cva("text-fg/60 text-xs");
 

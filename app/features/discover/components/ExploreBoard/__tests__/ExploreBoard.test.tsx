@@ -48,7 +48,12 @@ vi.mock("@hooks/api/mutations/board/useUndoBoardTemplate", () => ({
 vi.mock("../../NeverInclude/NeverIncludeCard", () => ({
   NeverIncludeCard: () => <section data-testid="never-include" />,
 }));
-vi.mock("@hooks/api/queries/widgets/useWidgetCatalog", () => ({ useWidgetCatalog: () => ({ data: undefined }) }));
+vi.mock("@hooks/api/queries/widgets/useWidgetCatalog", async () => {
+  const { createWidgetCatalog } = await import("@test/factories");
+  const catalog = createWidgetCatalog();
+  const feeds = { ...catalog.feeds, activeIntegrations: ["listenbrainz", "lastfm", "mediaServer"] };
+  return { useWidgetCatalog: () => ({ data: { ...catalog, feeds } }) };
+});
 vi.mock("@hooks/api/queries/widgets/useWidgetGrammar", () => ({ useWidgetGrammar: () => ({ data: undefined }) }));
 vi.mock("@hooks/api/queries/widgets/useWidgetPresets", () => ({ useWidgetPresets: () => ({ data: [] }) }));
 vi.mock("@hooks/api/queries/widgets/useWidgetHousehold", () => ({ useWidgetHousehold: () => ({ data: [] }) }));

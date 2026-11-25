@@ -12,6 +12,7 @@ import {
   playlistLibraryTarget,
   trackRequestItem,
 } from "@features/content-detail";
+import { isWarming } from "@hooks/api/queries/widgets/helpers";
 import type {
   FeedNeed,
   FeedWidgetResult,
@@ -749,6 +750,7 @@ export function customWidgetNote({
 }: CustomWidgetNoteInput): string | SettingsLinkNoteProps | null {
   if (isError) return i18n.t("discover:board.loadError");
   if (result?.type === "feed" && result.needs !== null) return feedNeedNote(result.needs);
+  if (isWarming(result)) return i18n.t("discover:customWidget.warming");
   if (result?.type === "feed" && result.dataset === "items" && result.failure !== null) {
     return i18n.t(`discover:customWidget.news.${result.failure}`);
   }

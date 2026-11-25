@@ -1,13 +1,43 @@
 import type { ReactNode } from "react";
 
+import type { NamedSource } from "@components/SourceBadge";
 import type { BoardList, BoardLists, BoardWidgetKey } from "@hooks/api/queries/board/types";
-import type { WidgetDocument, WidgetDraft } from "@hooks/api/queries/widgets/types";
+import type { WidgetCatalog, WidgetDocument, WidgetDraft } from "@hooks/api/queries/widgets/types";
 
 import type { BoardCategory, BoardWidgetDefinition } from "../ExploreBoard/types";
 
 export type GalleryMode = "widgets" | "mine";
 
 export type GalleryCategoryFilter = "all" | BoardCategory;
+
+export type GalleryServer = WidgetCatalog["feeds"]["servers"][number];
+
+export type GallerySource = "lastfm" | "listenbrainz" | "mediaServer" | GalleryServer;
+
+export type GallerySourceFilter = "all" | "synthseek" | GallerySource;
+
+export type SourceStatus = "active" | "inactive" | "unknown";
+
+export type SourceReasonKey = "lastfmNotSetUp" | "lastfmRefused" | "noMediaServer" | "unknown";
+
+export interface GallerySourceRow {
+  source: GallerySource;
+  status: SourceStatus;
+  pills: readonly SourcePill[];
+  label: string;
+  count: number;
+  reason: SourceReasonKey | null;
+}
+
+export interface SourcePill {
+  source: NamedSource;
+  label: string;
+}
+
+export interface GallerySources {
+  rows: readonly GallerySourceRow[];
+  retry: () => void;
+}
 
 export type GalleryBoardFilter = "all" | "on" | "off";
 
@@ -18,6 +48,7 @@ export type SortDirection = "asc" | "desc";
 export interface GalleryFilters {
   query: string;
   category: GalleryCategoryFilter;
+  source: GallerySourceFilter;
   board: GalleryBoardFilter;
   sort: GallerySort;
   direction: SortDirection;
@@ -94,9 +125,27 @@ export interface WidgetGalleryCardProps {
   entry: GalleryEntry;
   placed: readonly BoardList[];
   free: readonly BoardList[];
+  pills: readonly SourcePill[];
+  period: string | null;
+  ghost: boolean;
+  needs: string | null;
   onAdd: (widget: BoardWidgetKey, lists: readonly BoardList[]) => void;
   onRemove: (widget: BoardWidgetKey, lists: readonly BoardList[]) => void;
   onCustomize?: () => void;
+}
+
+export interface SourcePillsProps {
+  pills: readonly SourcePill[];
+  inactive?: boolean;
+}
+
+export interface SourceCalloutProps {
+  row: GallerySourceRow;
+  onRetry: () => void;
+}
+
+export interface SourceReasonProps {
+  reason: SourceReasonKey;
 }
 
 export interface WidgetPreviewProps {
@@ -121,6 +170,8 @@ export interface CategoryBandProps {
 export interface GalleryFilterMenuProps {
   filters: GalleryFilters;
   counts: ReadonlyMap<GalleryCategoryFilter, number>;
+  sources: GallerySources;
+  totals: { all: number; synthseek: number };
   onChange: (filters: GalleryFilters) => void;
 }
 

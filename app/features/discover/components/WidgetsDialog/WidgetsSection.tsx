@@ -10,8 +10,9 @@ import { Input } from "@components/ui/Input";
 import { SectionLoading } from "@components/ui/SectionLoading";
 import { SegmentTabs } from "@components/ui/SegmentTabs";
 import type { BoardList, BoardWidgetKey } from "@hooks/api/queries/board/types";
-import { useActiveIntegrations } from "@hooks/api/queries/widgets/useActiveIntegrations";
 import { useMyWidgets } from "@hooks/api/queries/widgets/useMyWidgets";
+import { useWidgetCatalog } from "@hooks/api/queries/widgets/useWidgetCatalog";
+import { useWidgetPresets } from "@hooks/api/queries/widgets/useWidgetPresets";
 
 import { NEW_WIDGET_DRAFT } from "../../constants";
 import { BOARD_LIST_KEYS, BOARD_MAX_ITEMS, BOARD_WIDGET_ORDER, BOARD_WIDGETS } from "../ExploreBoard/constants";
@@ -25,12 +26,20 @@ import {
   availableEntries,
   bulkAddRoomOf,
   bulkPlacementOf,
+  cardPillsOf,
   categoryCounts,
   draftOf,
   galleryGroups,
+  gallerySourceRows,
   layoutPlacementOf,
+  matchesQuery,
+  pickedSourceRow,
+  presetFor,
+  presetPeriodOf,
+  sourceMatches,
 } from "../WidgetGallery/helpers";
 import { MyWidgetsPanel } from "../WidgetGallery/MyWidgetsPanel";
+import { SourceCallout } from "../WidgetGallery/SourceCallout";
 import {
   galleryEmpty,
   galleryFilters,
@@ -42,6 +51,7 @@ import {
   searchField,
   searchIcon,
 } from "../WidgetGallery/styles";
+import type { GalleryEntry } from "../WidgetGallery/types";
 import { WidgetGalleryCard } from "../WidgetGallery/WidgetGalleryCard";
 import { neverIncludeSlot } from "./styles";
 import type { WidgetsSectionProps } from "./types";
@@ -51,30 +61,63 @@ export function WidgetsSection({ draft, gallery, filters, onFiltersChange, onImp
   const myWidgets = useMyWidgets();
   const lists = draft.draft;
 
-  const active = useActiveIntegrations();
+  const catalog = useWidgetCatalog();
+  const presets = useWidgetPresets();
+  const active = catalog.data?.feeds.activeIntegrations;
+  const servers = catalog.data?.feeds.servers ?? [];
   const onBoard = useMemo(() => widgetsOnBoard([...lists.items, ...lists.mobile]), [lists]);
-  const entries = useMemo(
+  const allEntries = useMemo(
     () =>
-      availableEntries(
-        BOARD_WIDGET_ORDER.map((widget) => {
-          const definition = BOARD_WIDGETS[widget];
-          return {
-            widget,
-            definition,
-            name: boardWidgetName(widget),
-            title: t(definition.titleKey),
-            description: t(definition.descriptionKey),
-          };
-        }),
-        active,
-        onBoard
-      ),
-    [t, active, onBoard]
+      BOARD_WIDGET_ORDER.map((widget) => {
+        const definition = BOARD_WIDGETS[widget];
+        return {
+          widget,
+          definition,
+          name: boardWidgetName(widget),
+          title: t(definition.titleKey),
+          description: t(definition.descriptionKey),
+        };
+      }),
+    [t]
+  );
+  const entries = useMemo(() => availableEntries(allEntries, active, onBoard), [allEntries, active, onBoard]);
+  const sourceRows = useMemo(() => gallerySourceRows(catalog.data, allEntries), [catalog.data, allEntries]);
+  const picked = pickedSourceRow(sourceRows, filters.source);
+  const inactivePick = picked !== null && picked.status !== "active" ? picked : null;
+  const sourced = useMemo(
+    () => entries.filter((entry) => sourceMatches(filters.source, entry)),
+    [entries, filters.source]
   );
   const onList = useMemo(() => ({ items: widgetsOnBoard(lists.items), mobile: widgetsOnBoard(lists.mobile) }), [lists]);
-  const groups = galleryGroups(entries, filters, onBoard);
-  const counts = useMemo(() => categoryCounts(entries), [entries]);
+  const groups = inactivePick ? [] : galleryGroups(sourced, filters, onBoard);
+  const counts = useMemo(() => categoryCounts(sourced), [sourced]);
+  const totals = {
+    all: entries.length,
+    synthseek: entries.filter((entry) => entry.definition.integration === undefined).length,
+  };
+  const ghosts = inactivePick
+    ? allEntries.filter((entry) => sourceMatches(filters.source, entry) && matchesQuery(entry, filters.query))
+    : [];
   const shown = groups.flatMap((group) => group.entries.map((entry) => entry.widget));
+  const retry = () => void catalog.refetch();
+  const cardOf = (entry: GalleryEntry, ghost: boolean, needs: string | null) => {
+    const placement = layoutPlacementOf((list) => onList[list].has(entry.widget));
+    return (
+      <WidgetGalleryCard
+        key={entry.widget}
+        entry={entry}
+        placed={placement.placed}
+        free={placement.free}
+        pills={cardPillsOf(entry.definition.integration, servers)}
+        period={presetPeriodOf(presetFor(presets.data, entry.widget))}
+        ghost={ghost}
+        needs={needs}
+        onAdd={draft.addWidget}
+        onRemove={draft.removeWidget}
+        onCustomize={gallery.canCustomize(entry.widget) ? () => gallery.customize(entry.widget) : undefined}
+      />
+    );
+  };
   const isOnList = (list: BoardList, widget: BoardWidgetKey) => onList[list].has(widget);
   const bulk = bulkPlacementOf(shown, isOnList);
   const addShown = (targets: readonly BoardList[]) => {
@@ -90,7 +133,13 @@ export function WidgetsSection({ draft, gallery, filters, onFiltersChange, onImp
       <div className={galleryToolbar()}>
         {gallery.mode === "widgets" ? (
           <div className={galleryFilters()}>
-            <GalleryFilterMenu filters={filters} counts={counts} onChange={onFiltersChange} />
+            <GalleryFilterMenu
+              filters={filters}
+              counts={counts}
+              sources={{ rows: sourceRows, retry }}
+              totals={totals}
+              onChange={onFiltersChange}
+            />
             <label className={gallerySearch()}>
               <Search className={searchIcon()} aria-hidden />
               <Input
@@ -148,6 +197,19 @@ export function WidgetsSection({ draft, gallery, filters, onFiltersChange, onImp
           ) : (
             <SectionLoading />
           )
+        ) : inactivePick ? (
+          <div className={galleryGrid()}>
+            <SourceCallout row={inactivePick} onRetry={retry} />
+            {ghosts.map((entry) => {
+              const ghost = !entries.includes(entry);
+              const known = ghost && inactivePick.status !== "unknown";
+              return cardOf(
+                entry,
+                ghost,
+                known ? t("widgets:gallery.sources.needs", { source: inactivePick.label }) : null
+              );
+            })}
+          </div>
         ) : groups.length === 0 ? (
           <p className={galleryEmpty()}>
             {filters.query.trim()
@@ -161,22 +223,7 @@ export function WidgetsSection({ draft, gallery, filters, onFiltersChange, onImp
                 {group.category ? (
                   <CategoryBand category={group.category} onBoard={group.onBoard} total={group.entries.length} />
                 ) : null}
-                {group.entries.map((entry) => {
-                  const placement = layoutPlacementOf((list) => onList[list].has(entry.widget));
-                  return (
-                    <WidgetGalleryCard
-                      key={entry.widget}
-                      entry={entry}
-                      placed={placement.placed}
-                      free={placement.free}
-                      onAdd={draft.addWidget}
-                      onRemove={draft.removeWidget}
-                      onCustomize={
-                        gallery.canCustomize(entry.widget) ? () => gallery.customize(entry.widget) : undefined
-                      }
-                    />
-                  );
-                })}
+                {group.entries.map((entry) => cardOf(entry, false, null))}
               </Fragment>
             ))}
           </div>

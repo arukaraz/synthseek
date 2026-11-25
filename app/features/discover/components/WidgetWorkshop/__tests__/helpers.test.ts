@@ -192,6 +192,8 @@ describe("readbackOf and ruleText", () => {
   it("puts the number before the unit for day rules and spells out a share", () => {
     expect(ruleText({ field: "notPlayedInLast", op: "days", value: 180 })).toBe("not played in the last 180 days");
     expect(ruleText({ field: "ownedShare", op: "lt", value: 0.5 })).toBe("owned share below 50%");
+    expect(ruleText({ field: "listens", op: "lt", value: 10_000 })).toBe("fewer than 10K ListenBrainz listens");
+    expect(ruleText({ field: "listeners", op: "gte", value: 10_000 })).toBe("at least 10K Last.fm listeners");
     expect(ruleText({ field: "decade", op: "is", value: 1990 })).toBe("from the 1990s");
   });
 });
@@ -205,11 +207,25 @@ describe("withSource and feedReadbackOf", () => {
 
   it("swaps the source, keeping the rules and the order it accepts", () => {
     const fresh = withSource(FEED, "listenbrainz.freshReleases", catalog, "US");
-    expect(fresh).toMatchObject({ source: "listenbrainz.freshReleases", params: { days: 30 } });
+    expect(fresh).toMatchObject({ source: "listenbrainz.freshReleases", params: { days: 30, window: "recent" } });
     expect(fresh.rules).toBeUndefined();
     expect(fresh.pick.by).toBe("rank");
     const back = withSource(fresh, "lastfm.similarArtists", catalog, "US");
     expect(back.params).toEqual({ seed: { kind: "myTopArtists", n: 10, days: 90 } });
+  });
+
+  it("opens a listening source on all time, Last.fm by period and ListenBrainz by range, and the rest bare", () => {
+    expect(withSource(FEED, "lastfm.topArtists", catalog, "US").params).toEqual({ period: "overall" });
+    expect(withSource(FEED, "lastfm.topTracks", catalog, "US").params).toEqual({ period: "overall" });
+    expect(withSource(FEED, "listenbrainz.topTracks", catalog, "US").params).toEqual({ range: "all_time" });
+    expect(withSource(FEED, "listenbrainz.charts", catalog, "US").params).toEqual({ range: "all_time" });
+    expect(withSource(FEED, "listenbrainz.listens", catalog, "US").params).toEqual({});
+    expect(withSource(FEED, "lastfm.recentTracks", catalog, "US").params).toEqual({});
+    const loved = withSource(FEED, "listenbrainz.lovedTracks", catalog, "US");
+    expect(loved.params).toEqual({});
+    expect(feedSeedOf(loved)).toBeNull();
+    expect(feedServerOf(loved)).toBeNull();
+    expect(feedReadbackOf(loved)).toContain("My loved tracks (ListenBrainz)");
   });
 
   it("seeds the catalog radio like the other artist-seeded sources, and reads it back by name", () => {
@@ -233,11 +249,17 @@ describe("withSource and feedReadbackOf", () => {
       );
 
     expect(keys([], "feed.rss")).toEqual(["listenbrainz.freshReleases", "feed.rss"]);
-    expect(keys(["lastfm"], "feed.rss")).toEqual(["lastfm.similarArtists", "listenbrainz.freshReleases", "feed.rss"]);
+    expect(keys(["lastfm"], "feed.rss")).toEqual([
+      "lastfm.similarArtists",
+      "listenbrainz.freshReleases",
+      "lastfm.topTracks",
+      "feed.rss",
+    ]);
     expect(keys([], "lidarr.calendar")).toEqual(["listenbrainz.freshReleases", "feed.rss", "lidarr.calendar"]);
     expect(keys(catalog.feeds.activeIntegrations, "feed.rss")).toEqual([
       "lastfm.similarArtists",
       "listenbrainz.freshReleases",
+      "lastfm.topTracks",
       "feed.rss",
       "mediaServer.playlists",
       "lidarr.calendar",

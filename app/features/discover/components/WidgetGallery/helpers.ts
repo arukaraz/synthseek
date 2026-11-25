@@ -13,11 +13,13 @@ import type { BoardItem, BoardList, BoardSize, BoardWidgetKey } from "@hooks/api
 import type {
   FeedIntegration,
   WidgetBlock,
+  WidgetCatalog,
   WidgetDocument,
   WidgetDraft,
   WidgetPreset,
   WidgetProblem,
 } from "@hooks/api/queries/widgets/types";
+import { playbackServerName } from "@utils/playback-servers";
 
 import {
   BOARD_CATEGORY_ORDER,
@@ -29,7 +31,7 @@ import {
 } from "../ExploreBoard/constants";
 import { spanOf } from "../ExploreBoard/helpers";
 import type { BoardCategory } from "../ExploreBoard/types";
-import { BYTES_PER_KB, GALLERY_BOARD_FILTERS, PREVIEW_BOARD_WIDTH, PREVIEW_BOX } from "./constants";
+import { BYTES_PER_KB, GALLERY_BOARD_FILTERS, GALLERY_SERVERS, PREVIEW_BOARD_WIDTH, PREVIEW_BOX } from "./constants";
 import type {
   BulkAddRoom,
   BulkPlacement,
@@ -38,10 +40,17 @@ import type {
   GalleryEntry,
   GalleryFilters,
   GalleryGroup,
+  GalleryServer,
   GallerySort,
+  GallerySource,
+  GallerySourceFilter,
+  GallerySourceRow,
   LayoutPlacement,
   PreviewBox,
   PreviewFrame,
+  SourcePill,
+  SourceReasonKey,
+  SourceStatus,
 } from "./types";
 
 export function matchesQuery(entry: GalleryEntry, query: string): boolean {
@@ -108,8 +117,130 @@ export function availableEntries(
   });
 }
 
-export function integrationLabel(integration: FeedIntegration): string {
-  return integration === "mediaServer" ? i18n.t("discover:board.gallery.mediaServer") : SOURCE_NAMES[integration];
+export function sourceMatches(filter: GallerySourceFilter, entry: GalleryEntry): boolean {
+  const { integration } = entry.definition;
+  switch (filter) {
+    case "all":
+      return true;
+    case "synthseek":
+      return integration === undefined;
+    case "lastfm":
+    case "listenbrainz":
+      return integration === filter;
+    case "mediaServer":
+    case "plex":
+    case "jellyfin":
+    case "navidrome":
+      return integration === "mediaServer";
+  }
+}
+
+function serverPill(server: GalleryServer): SourcePill {
+  return { source: server, label: playbackServerName(server) };
+}
+
+function anyServerLabel(): string {
+  const names = GALLERY_SERVERS.map(playbackServerName);
+  return new Intl.ListFormat(i18n.language, { type: "disjunction" }).format(names);
+}
+
+const LASTFM_PILL: SourcePill = { source: "lastfm", label: SOURCE_NAMES.lastfm };
+const LISTENBRAINZ_PILL: SourcePill = { source: "listenbrainz", label: SOURCE_NAMES.listenbrainz };
+
+export function gallerySourceRows(
+  catalog: WidgetCatalog | undefined,
+  entries: readonly GalleryEntry[]
+): GallerySourceRow[] {
+  const countOf = (integration: FeedIntegration) =>
+    entries.filter((entry) => entry.definition.integration === integration).length;
+  const row = (
+    source: GallerySource,
+    pills: readonly SourcePill[],
+    count: number,
+    status: SourceStatus,
+    reason: SourceReasonKey | null
+  ): GallerySourceRow => ({
+    source,
+    pills,
+    label: source === "mediaServer" ? anyServerLabel() : pills.map((pill) => pill.label).join(", "),
+    count,
+    status,
+    reason,
+  });
+  const anyServerPills = GALLERY_SERVERS.map(serverPill);
+  if (!catalog) {
+    return [
+      row("lastfm", [LASTFM_PILL], countOf("lastfm"), "unknown", "unknown"),
+      row("listenbrainz", [LISTENBRAINZ_PILL], countOf("listenbrainz"), "unknown", "unknown"),
+      row("mediaServer", anyServerPills, countOf("mediaServer"), "unknown", "unknown"),
+    ];
+  }
+  const { lastfmState, servers } = catalog.feeds;
+  const lastfmReason: SourceReasonKey | null =
+    lastfmState === "active" ? null : lastfmState === "refused" ? "lastfmRefused" : "lastfmNotSetUp";
+  const serverRows =
+    servers.length > 0
+      ? servers.map((server) => row(server, [serverPill(server)], countOf("mediaServer"), "active", null))
+      : [row("mediaServer", anyServerPills, countOf("mediaServer"), "inactive", "noMediaServer")];
+  return [
+    row("lastfm", [LASTFM_PILL], countOf("lastfm"), lastfmReason ? "inactive" : "active", lastfmReason),
+    row("listenbrainz", [LISTENBRAINZ_PILL], countOf("listenbrainz"), "active", null),
+    ...serverRows,
+  ];
+}
+
+export function pickedSourceRow(
+  rows: readonly GallerySourceRow[],
+  filter: GallerySourceFilter
+): GallerySourceRow | null {
+  return rows.find((row) => row.source === filter) ?? null;
+}
+
+export function sourceFilterOf(rows: readonly GallerySourceRow[], value: string): GallerySourceFilter | null {
+  if (value === "all" || value === "synthseek") return value;
+  return rows.find((row) => row.source === value)?.source ?? null;
+}
+
+export function sourceFilterLabel(rows: readonly GallerySourceRow[], filter: GallerySourceFilter): string | null {
+  if (filter === "all") return null;
+  if (filter === "synthseek") return i18n.t("widgets:gallery.sources.synthseek");
+  return pickedSourceRow(rows, filter)?.label ?? null;
+}
+
+export function cardPillsOf(integration: FeedIntegration | undefined, servers: readonly GalleryServer[]): SourcePill[] {
+  switch (integration) {
+    case undefined:
+      return [];
+    case "lastfm":
+      return [LASTFM_PILL];
+    case "listenbrainz":
+      return [LISTENBRAINZ_PILL];
+    case "mediaServer":
+      return servers.map(serverPill);
+    case "plex":
+    case "jellyfin":
+    case "navidrome":
+      return [serverPill(integration)];
+    case "bandsintown":
+    case "lidarr":
+      return [{ source: integration, label: SOURCE_NAMES[integration] }];
+  }
+}
+
+export function presetPeriodOf(preset: WidgetPreset | undefined): string | null {
+  const query = preset?.draft.query;
+  if (query?.type !== "feed") return null;
+  switch (query.source) {
+    case "lastfm.topTracks":
+    case "lastfm.topArtists":
+      return i18n.t(`widgets:feeds.periods.${query.params.period}`);
+    case "listenbrainz.topTracks":
+    case "listenbrainz.topArtists":
+    case "listenbrainz.charts":
+      return i18n.t(`widgets:feeds.ranges.${query.params.range}`);
+    default:
+      return null;
+  }
 }
 
 export function countInCategory(entries: readonly GalleryEntry[], category: BoardCategory): number {

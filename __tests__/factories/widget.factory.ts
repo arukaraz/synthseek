@@ -278,9 +278,18 @@ export function createWidgetCatalog(): WidgetCatalog {
           dataset: "albums",
           shape: "ranked",
           integration: null,
-          params: ["days"],
+          params: ["days", "window"],
           rules: ["releaseType", "artistInLibrary"],
           pickBy: ["rank", "releaseDate"],
+        },
+        {
+          key: "lastfm.topTracks",
+          dataset: "tracks",
+          shape: "ranked",
+          integration: "lastfm",
+          params: ["period"],
+          rules: ["plays", "notPlayedInLast", "listeners", "artistInLibrary"],
+          pickBy: ["rank", "name", "plays", "lastPlayed", "listeners"],
         },
         {
           key: "events.upcoming",
@@ -325,12 +334,25 @@ export function createWidgetCatalog(): WidgetCatalog {
       servers: ["plex", "navidrome", "jellyfin"],
       defaultServer: "jellyfin",
       activeIntegrations: ["listenbrainz", "plex", "navidrome", "jellyfin", "mediaServer", "lastfm", "lidarr"],
+      lastfmState: "active",
+      lastfmPeriods: ["overall", "7day", "1month", "3month", "6month", "12month"],
+      listenbrainzRanges: [
+        "all_time",
+        "this_week",
+        "this_month",
+        "this_year",
+        "week",
+        "month",
+        "quarter",
+        "half_yearly",
+        "year",
+      ],
       limits: {
         freshReleaseDaysMax: 90,
         eventsDaysMax: 180,
         lidarrCalendarDaysMax: 90,
         followReleasesDaysMax: 90,
-        followReleaseWindows: ["upcoming", "recent", "both"],
+        releaseWindows: ["upcoming", "recent", "both"],
       },
     },
     recap: {
@@ -364,6 +386,7 @@ export function createFeedAlbumResult(rows: FeedAlbumRow[], needs: FeedWidgetRes
     shape: "ranked",
     total: rows.length,
     dataset: "albums",
+    warming: false,
     rows,
   };
 }
@@ -416,6 +439,7 @@ export function createFeedTrackResult(rows: FeedTrackRow[]): FeedWidgetResult {
     shape: "ranked",
     total: rows.length,
     dataset: "tracks",
+    warming: false,
     rows,
   };
 }
@@ -441,6 +465,7 @@ export function createFeedArtistResult(rows: FeedArtistRow[]): FeedWidgetResult 
     shape: "ranked",
     total: rows.length,
     dataset: "artists",
+    warming: false,
     rows,
   };
 }

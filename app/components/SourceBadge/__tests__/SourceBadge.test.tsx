@@ -17,6 +17,22 @@ describe("SourceBadge", () => {
     expect(dot).toHaveClass("source-dot");
   });
 
+  it("draws a source that is not working as a dashed, dimmed pill, and only that one", () => {
+    render(
+      <>
+        <SourceBadge source="lastfm" label="Last.fm" inactive />
+        <SourceBadge source="plex" label="Plex" />
+      </>
+    );
+
+    const inactive = screen.getByText("Last.fm");
+    expect(inactive).toHaveAttribute("data-inactive", "true");
+    expect(inactive).toHaveClass("border-dashed");
+    const active = screen.getByText("Plex");
+    expect(active).not.toHaveAttribute("data-inactive");
+    expect(active).not.toHaveClass("border-dashed");
+  });
+
   it("takes the catalog's label from its caller, which knows what the catalog is", () => {
     render(<SourceBadge source="catalog" label="Deezer" />);
 

@@ -137,6 +137,10 @@ describe("BOARD_WIDGETS", () => {
     const covered = tiles.reduce((sum, tile) => sum + tile.cols * tile.rows, 0);
     expect(covered).toBe(bottom * 12);
   });
+
+  it("starts the default board without any widget that needs Last.fm", () => {
+    expect(DEFAULT_BOARD.filter((item) => BOARD_WIDGETS[item.widget].integration === "lastfm")).toEqual([]);
+  });
 });
 
 describe("boardKeyAction", () => {

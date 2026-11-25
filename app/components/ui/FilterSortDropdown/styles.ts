@@ -6,6 +6,12 @@ export const filterSortTriggerDefault = cva(
 
 export const filterSortCount = cva("text-fg/40 font-mono text-10");
 
+export const filterSortLabel = cva("flex min-w-0 flex-1 items-center gap-1");
+
+export const filterSortStatus = cva("text-fg/50 ml-2 shrink-0 text-10 font-semibold tracking-wider uppercase");
+
+export const filterSortFooter = cva("px-2 pt-1 pb-2");
+
 export const filterSortColumnsContent = cva("w-[calc(100vw-2rem)] max-w-xs sm:w-auto sm:max-w-none");
 
 export const filterSortColumns = cva("grid grid-cols-1 sm:auto-cols-[minmax(11rem,1fr)] sm:grid-flow-col");

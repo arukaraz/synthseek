@@ -28,6 +28,9 @@ import {
   DEFAULT_DAYS,
   DEFAULT_FEED_SEED,
   DEFAULT_FRESH_RELEASE_DAYS,
+  DEFAULT_FRESH_RELEASE_WINDOW,
+  DEFAULT_LASTFM_PERIOD,
+  DEFAULT_LISTENBRAINZ_RANGE,
   DEFAULT_CURATED_FEED,
   DEFAULT_EVENTS_DAYS,
   DEFAULT_FEED_SHAPE,
@@ -342,6 +345,8 @@ export function ruleText(
       });
     case "listeners":
       return i18n.t(`widgets:rules.text.listeners_${rule.op}`, { value: compactCount(rule.value) });
+    case "listens":
+      return i18n.t(`widgets:rules.text.listens_${rule.op}`, { value: compactCount(rule.value) });
   }
 }
 
@@ -421,6 +426,14 @@ export function feedSeedOf(feed: FeedQuery): FeedSeed | null {
     case "catalog.trending":
     case "lastfm.charts":
     case "lastfm.lovedTracks":
+    case "lastfm.topTracks":
+    case "lastfm.topArtists":
+    case "lastfm.recentTracks":
+    case "listenbrainz.topTracks":
+    case "listenbrainz.topArtists":
+    case "listenbrainz.charts":
+    case "listenbrainz.listens":
+    case "listenbrainz.lovedTracks":
     case "feed.rss":
     case "feed.curated":
     case "mediaServer.recentlyAdded":
@@ -457,6 +470,14 @@ export function feedServerOf(feed: FeedQuery): MediaServer | null {
     case "catalog.trending":
     case "lastfm.charts":
     case "lastfm.lovedTracks":
+    case "lastfm.topTracks":
+    case "lastfm.topArtists":
+    case "lastfm.recentTracks":
+    case "listenbrainz.topTracks":
+    case "listenbrainz.topArtists":
+    case "listenbrainz.charts":
+    case "listenbrainz.listens":
+    case "listenbrainz.lovedTracks":
     case "feed.rss":
     case "feed.curated":
     case "lidarr.calendar":
@@ -478,9 +499,23 @@ function feedWithSource(base: FeedBase, source: FeedSource, defaults: FeedDefaul
     case "listenbrainz.recommendations":
     case "catalog.trending":
     case "lastfm.lovedTracks":
+    case "lastfm.recentTracks":
+    case "listenbrainz.listens":
+    case "listenbrainz.lovedTracks":
       return { ...base, source, params: {} };
+    case "lastfm.topTracks":
+    case "lastfm.topArtists":
+      return { ...base, source, params: { period: DEFAULT_LASTFM_PERIOD } };
+    case "listenbrainz.topTracks":
+    case "listenbrainz.topArtists":
+    case "listenbrainz.charts":
+      return { ...base, source, params: { range: DEFAULT_LISTENBRAINZ_RANGE } };
     case "listenbrainz.freshReleases":
-      return { ...base, source, params: { days: DEFAULT_FRESH_RELEASE_DAYS } };
+      return {
+        ...base,
+        source,
+        params: { days: DEFAULT_FRESH_RELEASE_DAYS, window: DEFAULT_FRESH_RELEASE_WINDOW },
+      };
     case "listenbrainz.playlists":
       return { ...base, source, params: { playlist: DEFAULT_LISTENBRAINZ_PLAYLIST } };
     case "lastfm.charts":
@@ -548,6 +583,14 @@ export function withSeed(feed: FeedQuery, seed: FeedSeed): FeedQuery {
     case "catalog.trending":
     case "lastfm.charts":
     case "lastfm.lovedTracks":
+    case "lastfm.topTracks":
+    case "lastfm.topArtists":
+    case "lastfm.recentTracks":
+    case "listenbrainz.topTracks":
+    case "listenbrainz.topArtists":
+    case "listenbrainz.charts":
+    case "listenbrainz.listens":
+    case "listenbrainz.lovedTracks":
     case "feed.rss":
     case "feed.curated":
     case "mediaServer.recentlyAdded":
@@ -585,6 +628,14 @@ export function withServer(feed: FeedQuery, server: MediaServer): FeedQuery {
     case "catalog.trending":
     case "lastfm.charts":
     case "lastfm.lovedTracks":
+    case "lastfm.topTracks":
+    case "lastfm.topArtists":
+    case "lastfm.recentTracks":
+    case "listenbrainz.topTracks":
+    case "listenbrainz.topArtists":
+    case "listenbrainz.charts":
+    case "listenbrainz.listens":
+    case "listenbrainz.lovedTracks":
     case "feed.rss":
     case "feed.curated":
     case "lidarr.calendar":

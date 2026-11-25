@@ -3,13 +3,12 @@
 import { Check, SlidersHorizontal } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
-import { SourceBadge } from "@components/SourceBadge";
 import { Button } from "@components/ui/Button";
 
 import { BOARD_CATEGORY_KEYS } from "../ExploreBoard/constants";
 import { ClampedText } from "./ClampedText";
-import { integrationLabel } from "./helpers";
 import { LayoutMenu } from "./LayoutMenu";
+import { SourcePills } from "./SourcePills";
 import {
   cardAction,
   cardActions,
@@ -19,23 +18,35 @@ import {
   cardHead,
   cardIcon,
   cardMeta,
+  cardNeeds,
   cardPreview,
   cardTitle,
   galleryCard,
   onBoardBadge,
+  periodBadge,
 } from "./styles";
 import type { WidgetGalleryCardProps } from "./types";
 import { WidgetPreview } from "./WidgetPreview";
 
-export function WidgetGalleryCard({ entry, placed, free, onAdd, onRemove, onCustomize }: WidgetGalleryCardProps) {
+export function WidgetGalleryCard({
+  entry,
+  placed,
+  free,
+  pills,
+  period,
+  ghost,
+  needs,
+  onAdd,
+  onRemove,
+  onCustomize,
+}: WidgetGalleryCardProps) {
   const { t } = useTranslation(["discover", "widgets"]);
   const Icon = entry.definition.icon;
   const name = entry.name;
-  const onBoard = placed.length > 0;
-  const { integration } = entry.definition;
+  const onBoard = placed.length > 0 && !ghost;
 
   return (
-    <article className={galleryCard({ onBoard })}>
+    <article className={galleryCard({ onBoard, ghost })} data-ghost={ghost || undefined}>
       <div className={cardPreview()}>
         <WidgetPreview widget={entry.widget} />
         {onBoard ? (
@@ -44,6 +55,7 @@ export function WidgetGalleryCard({ entry, placed, free, onAdd, onRemove, onCust
             {t("board.gallery.onBoard")}
           </span>
         ) : null}
+        {period ? <span className={periodBadge()}>{period}</span> : null}
       </div>
       <div className={cardBody()}>
         <div className={cardHead()}>
@@ -54,40 +66,48 @@ export function WidgetGalleryCard({ entry, placed, free, onAdd, onRemove, onCust
         </div>
         <div className={cardMeta()}>
           <span className={cardCategory()}>{t(BOARD_CATEGORY_KEYS[entry.definition.category].title)}</span>
-          {integration ? <SourceBadge source={integration} label={integrationLabel(integration)} /> : null}
+          {pills.length > 0 ? <SourcePills pills={pills} inactive={ghost} /> : null}
         </div>
         <ClampedText text={entry.description} className={cardDescription()} />
         <div className={cardActions()}>
-          {free.length > 0 ? (
-            <LayoutMenu
-              lists={free}
-              tone="add"
-              label={t("board.gallery.add")}
-              ariaLabel={t("board.gallery.addNamed", { name })}
-              onPick={(lists) => onAdd(entry.widget, lists)}
-            />
-          ) : null}
-          {onBoard ? (
-            <LayoutMenu
-              lists={placed}
-              tone="remove"
-              label={t("board.gallery.remove")}
-              ariaLabel={t("board.tile.remove", { name })}
-              onPick={(lists) => onRemove(entry.widget, lists)}
-            />
-          ) : null}
-          {onCustomize ? (
-            <Button
-              variant="ghost"
-              size="sm"
-              className={cardAction()}
-              aria-label={t("widgets:customize.actionNamed", { name })}
-              onClick={onCustomize}
-            >
-              <SlidersHorizontal />
-              {t("widgets:customize.action")}
-            </Button>
-          ) : null}
+          {ghost ? (
+            needs !== null ? (
+              <span className={cardNeeds()}>{needs}</span>
+            ) : null
+          ) : (
+            <>
+              {free.length > 0 ? (
+                <LayoutMenu
+                  lists={free}
+                  tone="add"
+                  label={t("board.gallery.add")}
+                  ariaLabel={t("board.gallery.addNamed", { name })}
+                  onPick={(lists) => onAdd(entry.widget, lists)}
+                />
+              ) : null}
+              {onBoard ? (
+                <LayoutMenu
+                  lists={placed}
+                  tone="remove"
+                  label={t("board.gallery.remove")}
+                  ariaLabel={t("board.tile.remove", { name })}
+                  onPick={(lists) => onRemove(entry.widget, lists)}
+                />
+              ) : null}
+              {onCustomize ? (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className={cardAction()}
+                  aria-label={t("widgets:customize.actionNamed", { name })}
+                  onClick={onCustomize}
+                >
+                  <SlidersHorizontal />
+                  {t("widgets:customize.action")}
+                </Button>
+              ) : null}
+            </>
+          )}
         </div>
       </div>
     </article>

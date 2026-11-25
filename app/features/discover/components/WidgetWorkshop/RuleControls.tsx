@@ -385,6 +385,7 @@ export function RuleControls({ rule, limits, people, playlists = [], onChange }:
         </>
       );
     case "listeners":
+    case "listens":
       return (
         <>
           <SelectMenu

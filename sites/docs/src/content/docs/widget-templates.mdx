@@ -242,6 +242,7 @@ The first subjects column is for recipes. The second is for feeds, by [what the 
 | `inCurrentTimeSlot` | `is`                  | `true`                                | Tracks                  | None                    |
 | `releaseType`       | `is`, `isNot`         | `album`, `ep`, `single` or `other`    | None                    | Albums                  |
 | `listeners`         | `lt`, `gte`           | A count of Last.fm listeners          | None                    | Tracks, albums, artists |
+| `listens`           | `lt`, `gte`           | A count of ListenBrainz listens       | Tracks                  | None                    |
 | `artistInLibrary`   | `is`                  | `true` or `false`                     | None                    | Tracks, albums          |
 | `user`              | `is`, `isNot`, `with` | `me`, `household` or a member's id    | Tracks, albums, artists | None                    |
 
@@ -275,13 +276,21 @@ A feed starts from an outside source. You then narrow it with [rules](#rules) an
 | `lastfm.similarTracks`         | Tracks    | `seed`                                                          | Last.fm                    |
 | `lastfm.charts`                | Tracks    | `country`, a two-letter code, or `null` for the worldwide chart | Last.fm                    |
 | `lastfm.lovedTracks`           | Tracks    | None                                                            | Your Last.fm username      |
+| `lastfm.topTracks`             | Tracks    | `period`                                                        | Your Last.fm username      |
+| `lastfm.topArtists`            | Artists   | `period`                                                        | Your Last.fm username      |
+| `lastfm.recentTracks`          | Tracks    | None                                                            | Your Last.fm username      |
 | `catalog.related`              | Artists   | `seed`                                                          | Nothing                    |
 | `catalog.radio`                | Tracks    | `seed`                                                          | Nothing                    |
 | `catalog.artistAlbums`         | Albums    | `seed`                                                          | Nothing                    |
 | `catalog.trending`             | Tracks    | None                                                            | Nothing                    |
 | `listenbrainz.recommendations` | Tracks    | None                                                            | Your ListenBrainz username |
 | `listenbrainz.playlists`       | Tracks    | `playlist`                                                      | Your ListenBrainz username |
-| `listenbrainz.freshReleases`   | Albums    | `days`, 1 to 90                                                 | Nothing                    |
+| `listenbrainz.topTracks`       | Tracks    | `range`                                                         | Your ListenBrainz username |
+| `listenbrainz.topArtists`      | Artists   | `range`                                                         | Your ListenBrainz username |
+| `listenbrainz.listens`         | Tracks    | None                                                            | Your ListenBrainz username |
+| `listenbrainz.lovedTracks`     | Tracks    | None                                                            | Your ListenBrainz username |
+| `listenbrainz.charts`          | Tracks    | `range`                                                         | Nothing                    |
+| `listenbrainz.freshReleases`   | Albums    | `days`, 1 to 90, and `window`, `recent` when left out           | Nothing                    |
 | `feed.rss`                     | Headlines | `url`, an RSS or Atom address                                   | Nothing                    |
 | `feed.curated`                 | Headlines | `feed`                                                          | Nothing                    |
 | `events.upcoming`              | Shows     | `seed`, `country` or `null`, `days` 1 to 180                    | A Bandsintown app ID       |
@@ -293,12 +302,14 @@ A feed starts from an outside source. You then narrow it with [rules](#rules) an
 | `lidarr.wanted`                | Albums    | None                                                            | Lidarr, admin or trusted   |
 | `follows.releases`             | Albums    | `window`, `days` 1 to 90                                        | Artists you follow         |
 
-| Option     | Values                                               |
-| ---------- | ---------------------------------------------------- |
-| `playlist` | `weekly-jams`, `weekly-exploration` or `daily-jams`. |
-| `feed`     | `pitchforkBestNewAlbums` or `nprMusic`.              |
-| `server`   | `plex`, `navidrome` or `jellyfin`.                   |
-| `window`   | `upcoming`, `recent` or `both`.                      |
+| Option     | Values                                                                                                   |
+| ---------- | -------------------------------------------------------------------------------------------------------- |
+| `playlist` | `weekly-jams`, `weekly-exploration` or `daily-jams`.                                                     |
+| `feed`     | `pitchforkBestNewAlbums` or `nprMusic`.                                                                  |
+| `server`   | `plex`, `navidrome` or `jellyfin`.                                                                       |
+| `window`   | `upcoming`, `recent` or `both`.                                                                          |
+| `period`   | `overall`, `7day`, `1month`, `3month`, `6month` or `12month`.                                            |
+| `range`    | `all_time`, `this_week`, `this_month`, `this_year`, `week`, `month`, `quarter`, `half_yearly` or `year`. |
 
 A `seed` tells a source where to start.
 

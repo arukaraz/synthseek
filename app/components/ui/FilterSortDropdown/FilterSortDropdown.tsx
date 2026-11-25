@@ -18,7 +18,13 @@ import { useTranslation } from "react-i18next";
 import { FilterSortOptionItem } from "./FilterSortOptionItem";
 import { FilterSortOrder } from "./FilterSortOrder";
 import { filterColumnsOf, selectedValue } from "./helpers";
-import { filterSortColumn, filterSortColumns, filterSortColumnsContent, filterSortTriggerDefault } from "./styles";
+import {
+  filterSortColumn,
+  filterSortColumns,
+  filterSortColumnsContent,
+  filterSortFooter,
+  filterSortTriggerDefault,
+} from "./styles";
 import type { FilterSortDropdownProps } from "./types";
 
 export function FilterSortDropdown<F extends string, S extends string = string>({
@@ -79,6 +85,7 @@ export function FilterSortDropdown<F extends string, S extends string = string>(
                         <FilterSortOptionItem key={option.value} option={option} />
                       ))}
                     </DropdownMenuRadioGroup>
+                    {group.footer ? <div className={filterSortFooter()}>{group.footer}</div> : null}
                   </DropdownMenuGroup>
                 );
               }

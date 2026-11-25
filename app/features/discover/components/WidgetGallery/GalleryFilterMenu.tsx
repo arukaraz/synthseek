@@ -1,16 +1,20 @@
 "use client";
 
-import { LayoutGrid, SlidersHorizontal } from "lucide-react";
+import { LayoutGrid, Music, Plug, RotateCw, SlidersHorizontal } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
+import { Button } from "@components/ui/Button";
 import { FilterSortDropdown } from "@components/ui/FilterSortDropdown";
 
 import { BOARD_CATEGORY_KEYS, BOARD_CATEGORY_ORDER } from "../ExploreBoard/constants";
 import { GALLERY_BOARD_FILTERS, GALLERY_CATEGORY_ICONS, GALLERY_SORTS } from "./constants";
-import { isBoardFilter } from "./helpers";
+import { isBoardFilter, sourceFilterOf, sourceFilterLabel } from "./helpers";
+import { SourcePills } from "./SourcePills";
+import { SourceReason } from "./SourceReason";
+import { sourceStatusRetry, sourceTooltip } from "./styles";
 import type { GalleryCategoryFilter, GalleryFilterMenuProps, GallerySort } from "./types";
 
-export function GalleryFilterMenu({ filters, counts, onChange }: GalleryFilterMenuProps) {
+export function GalleryFilterMenu({ filters, counts, sources, totals, onChange }: GalleryFilterMenuProps) {
   const { t } = useTranslation(["widgets", "discover"]);
   const sortLabels: Record<GallerySort, string> = {
     suggested: t("widgets:gallery.filter.suggested"),
@@ -29,11 +33,13 @@ export function GalleryFilterMenu({ filters, counts, onChange }: GalleryFilterMe
       : t(BOARD_CATEGORY_KEYS[filters.category].title, { ns: "discover" });
   const triggerLabel = [
     categoryLabel,
+    sourceFilterLabel(sources.rows, filters.source),
     filters.board === "all" ? null : boardLabels[filters.board],
     sortLabels[filters.sort],
   ]
     .filter((part) => part !== null)
     .join(" · ");
+  const unknown = sources.rows.some((row) => row.status === "unknown");
 
   return (
     <FilterSortDropdown<GalleryCategoryFilter, GallerySort>
@@ -54,6 +60,46 @@ export function GalleryFilterMenu({ filters, counts, onChange }: GalleryFilterMe
         ],
       }}
       filterGroups={[
+        {
+          id: "source",
+          label: t("widgets:gallery.sources.label"),
+          icon: Plug,
+          value: filters.source,
+          onChange: (value) => {
+            const source = sourceFilterOf(sources.rows, value);
+            if (source !== null) onChange({ ...filters, source });
+          },
+          options: [
+            { value: "all", label: t("widgets:gallery.sources.all"), count: totals.all },
+            { value: "synthseek", label: t("widgets:gallery.sources.synthseek"), icon: Music, count: totals.synthseek },
+            ...sources.rows.map((row) => {
+              const active = row.status === "active";
+              return {
+                value: row.source,
+                label: row.label,
+                content: <SourcePills pills={row.pills} inactive={!active} />,
+                count: active ? row.count : undefined,
+                status: active
+                  ? undefined
+                  : t(
+                      row.status === "unknown" ? "widgets:gallery.sources.unknown" : "widgets:gallery.sources.inactive"
+                    ),
+                tooltip:
+                  row.reason === null ? undefined : (
+                    <span className={sourceTooltip()}>
+                      <SourceReason reason={row.reason} />
+                    </span>
+                  ),
+              };
+            }),
+          ],
+          footer: unknown ? (
+            <Button variant="ghost" size="sm" className={sourceStatusRetry()} onClick={sources.retry}>
+              <RotateCw />
+              {t("widgets:gallery.sources.retry")}
+            </Button>
+          ) : undefined,
+        },
         {
           id: "board",
           label: t("widgets:gallery.filter.board"),

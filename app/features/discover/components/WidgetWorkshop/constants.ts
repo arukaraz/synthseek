@@ -6,11 +6,13 @@ import type {
   CuratedFeed,
   FeedSeed,
   FeedSeedKind,
-  FollowWindow,
+  LastfmPeriod,
   ListenBrainzPlaylist,
+  ListenBrainzRange,
   MediaServer,
   NamedPeriod,
   RecipeGroupBy,
+  ReleaseWindow,
   RuleField,
   SmartRefresh,
   TimeMode,
@@ -52,6 +54,12 @@ export const DEFAULT_FEED_SEED: FeedSeed = { kind: "myTopArtists", n: 10, days: 
 
 export const DEFAULT_FRESH_RELEASE_DAYS = 30;
 
+export const DEFAULT_FRESH_RELEASE_WINDOW: ReleaseWindow = "recent";
+
+export const DEFAULT_LASTFM_PERIOD: LastfmPeriod = "overall";
+
+export const DEFAULT_LISTENBRAINZ_RANGE: ListenBrainzRange = "all_time";
+
 export const DEFAULT_LISTENBRAINZ_PLAYLIST: ListenBrainzPlaylist = "weekly-jams";
 
 export const DEFAULT_CURATED_FEED: CuratedFeed = "pitchforkBestNewAlbums";
@@ -62,7 +70,7 @@ export const DEFAULT_LIDARR_CALENDAR_DAYS = 30;
 
 export const DEFAULT_FOLLOW_RELEASE_DAYS = 30;
 
-export const DEFAULT_FOLLOW_WINDOW: FollowWindow = "both";
+export const DEFAULT_FOLLOW_WINDOW: ReleaseWindow = "both";
 
 export const DEFAULT_MEDIA_SERVER: MediaServer = "plex";
 
@@ -120,6 +128,7 @@ export const DEFAULT_RULES: Record<RuleField, WidgetRule> = {
   inCurrentTimeSlot: { field: "inCurrentTimeSlot", op: "is", value: true },
   releaseType: { field: "releaseType", op: "isNot", value: "single" },
   listeners: { field: "listeners", op: "lt", value: 50_000 },
+  listens: { field: "listens", op: "lt", value: 10_000 },
   artistInLibrary: { field: "artistInLibrary", op: "is", value: true },
   user: { field: "user", op: "isNot", value: "me" },
   genreName: { field: "genreName", op: "is", value: UNSET_RULE_VALUE },

@@ -2,7 +2,9 @@ import { Compass, History, Library, Radio } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
 import type { BoardCategory } from "../ExploreBoard/types";
-import type { GalleryBoardFilter, GalleryFilters, GalleryMode, GallerySort } from "./types";
+import type { GalleryBoardFilter, GalleryFilters, GalleryMode, GalleryServer, GallerySort } from "./types";
+
+export const GALLERY_SERVERS: readonly GalleryServer[] = ["plex", "jellyfin", "navidrome"];
 
 export const PREVIEW_BOX = { width: 300, height: 150 } as const;
 
@@ -24,6 +26,7 @@ export const GALLERY_BOARD_FILTERS: readonly GalleryBoardFilter[] = ["all", "on"
 export const DEFAULT_GALLERY_FILTERS: GalleryFilters = {
   query: "",
   category: "all",
+  source: "all",
   board: "all",
   sort: "suggested",
   direction: "asc",

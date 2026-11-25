@@ -17,6 +17,33 @@
       "byCategory": "Kategorie",
       "onBoardFirst": "Board zuerst",
       "nothing": "Nichts passt zu diesen Filtern."
+    },
+    "sources": {
+      "label": "Quelle",
+      "all": "Alle Quellen",
+      "synthseek": "Synthseek",
+      "inactive": "Inaktiv",
+      "unknown": "Unbekannt",
+      "retry": "Erneut versuchen",
+      "needs": "Benötigt {{source}}",
+      "reasons": {
+        "lastfmNotSetUp": {
+          "why": "Last.fm ist nicht eingerichtet.",
+          "who": "Ein Admin trägt den API-Schlüssel unter Einstellungen › Metadaten ein."
+        },
+        "lastfmRefused": {
+          "why": "Last.fm lehnt den API-Schlüssel dieses Servers ab. Ab dem 1. Dezember nimmt es nur noch Schlüssel von Konten mit Last.fm Pro an; ein Schlüssel kann auch falsch eingegeben oder gesperrt sein.",
+          "who": "Ein Admin prüft den Schlüssel unter Einstellungen › Metadaten."
+        },
+        "noMediaServer": {
+          "why": "Kein Medienserver ist verbunden.",
+          "who": "Ein Admin verbindet Plex, Jellyfin oder Navidrome unter Einstellungen › Bibliothek › Quellen."
+        },
+        "unknown": {
+          "why": "Synthseek konnte nicht prüfen, welche Quellen eingerichtet sind.",
+          "who": "Versuche es gleich noch einmal."
+        }
+      }
     }
   },
   "mine": {
@@ -325,6 +352,7 @@
       "inCurrentTimeSlot": "Um diese Zeit gehört",
       "releaseType": "Veröffentlichungstyp",
       "listeners": "Last.fm-Hörer",
+      "listens": "ListenBrainz-Wiedergaben",
       "artistInLibrary": "Künstler in meiner Bibliothek",
       "user": "Wessen Hören"
     },
@@ -400,6 +428,8 @@
       "releaseType_isNot": "Veröffentlichungstyp ist nicht {{value}}",
       "listeners_lt": "weniger als {{value}} Last.fm-Hörer",
       "listeners_gte": "mindestens {{value}} Last.fm-Hörer",
+      "listens_lt": "weniger als {{value}} ListenBrainz-Wiedergaben",
+      "listens_gte": "mindestens {{value}} ListenBrainz-Wiedergaben",
       "artistInLibrary_true": "Künstler ist in meiner Bibliothek",
       "artistInLibrary_false": "Künstler ist nicht in meiner Bibliothek",
       "user_is": "gehört von {{value}}",
@@ -454,7 +484,10 @@
         "similarArtists": "Ähnliche Künstler (Last.fm)",
         "similarTracks": "Ähnliche Titel (Last.fm)",
         "charts": "Meistgehörte Titel nach Land (Last.fm)",
-        "lovedTracks": "Meine geliebten Titel (Last.fm)"
+        "lovedTracks": "Meine geliebten Titel (Last.fm)",
+        "topTracks": "Meine meistgehörten Titel (Last.fm)",
+        "topArtists": "Meine meistgehörten Künstler (Last.fm)",
+        "recentTracks": "Meine letzten Scrobbles (Last.fm)"
       },
       "catalog": {
         "related": "Verwandte Künstler (Katalog)",
@@ -465,7 +498,12 @@
       "listenbrainz": {
         "recommendations": "Empfehlungen (ListenBrainz)",
         "freshReleases": "Neue Veröffentlichungen (ListenBrainz)",
-        "playlists": "Für dich erstellte Playlists (ListenBrainz)"
+        "playlists": "Für dich erstellte Playlists (ListenBrainz)",
+        "topTracks": "Meine meistgehörten Titel (ListenBrainz)",
+        "topArtists": "Meine meistgehörten Künstler (ListenBrainz)",
+        "charts": "Meistgehörte Titel aller Hörer (ListenBrainz)",
+        "listens": "Meine letzten Hörvorgänge (ListenBrainz)",
+        "lovedTracks": "Meine geliebten Titel (ListenBrainz)"
       },
       "feed": {
         "rss": "Ein News-Feed (RSS oder Atom)",
@@ -491,11 +529,32 @@
     "server": "Medienserver",
     "comingWithin": "Erscheinen in den nächsten",
     "followWithin": "innerhalb von",
-    "followWindow": "Welche Veröffentlichungen",
-    "followWindows": {
+    "releaseWindow": "Welche Veröffentlichungen",
+    "releaseWindows": {
       "upcoming": "Bevorstehend",
       "recent": "Kürzlich",
       "both": "Beides"
+    },
+    "period": "Zeitraum",
+    "periods": {
+      "overall": "Gesamte Zeit",
+      "7day": "Letzte 7 Tage",
+      "1month": "Letzte 30 Tage",
+      "3month": "Letzte 3 Monate",
+      "6month": "Letzte 6 Monate",
+      "12month": "Letzte 12 Monate"
+    },
+    "range": "Zeitraum",
+    "ranges": {
+      "all_time": "Gesamte Zeit",
+      "this_week": "Diese Woche",
+      "this_month": "Diesen Monat",
+      "this_year": "Dieses Jahr",
+      "week": "Letzte Woche",
+      "month": "Letzter Monat",
+      "quarter": "Letztes Quartal",
+      "half_yearly": "Letztes Halbjahr",
+      "year": "Letztes Jahr"
     },
     "curatedLabel": "Nachrichtenquelle",
     "curated": {
@@ -534,7 +593,6 @@
       "followed": "Künstler, denen ich folge"
     },
     "overDays": "der letzten",
-    "releasedInLast": "Veröffentlicht in den letzten",
     "items": "Einträge",
     "pickBy": {
       "rank": "Reihenfolge der Quelle",
@@ -812,7 +870,15 @@
     "serverPlaylists": "Server-Playlists",
     "stations": "Sender",
     "genres": "Genres",
-    "continueListening": "Weiterhören"
+    "continueListening": "Weiterhören",
+    "lastfmTopTracks": "Meistgehörte Titel (Last.fm)",
+    "lastfmScrobbles": "Scrobbles (Last.fm)",
+    "lastfmTopArtists": "Meistgehörte Künstler (Last.fm)",
+    "listenbrainzTopTracks": "Meistgehörte Titel (ListenBrainz)",
+    "listenbrainzTopArtists": "Meistgehörte Künstler (ListenBrainz)",
+    "listenbrainzListens": "Hörvorgänge (ListenBrainz)",
+    "listenbrainzCharts": "Charts (ListenBrainz)",
+    "listenbrainzLoved": "Geliebt (ListenBrainz)"
   },
   "neverInclude": {
     "title": "Nie aufnehmen",

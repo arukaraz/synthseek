@@ -240,6 +240,16 @@ describe("customWidgetNote", () => {
     expect(customWidgetNote({ result, isError: false, empty: true })).toBe("Nothing matches this widget right now.");
     expect(customWidgetNote({ result, isError: false, empty: false })).toBeNull();
   });
+
+  it("asks for patience while the server is still reading the tags, and drops it once they are in", () => {
+    const rows = [createFeedArtistRow()];
+    const warming = { ...createFeedArtistResult(rows), warming: true };
+
+    expect(customWidgetNote({ result: warming, isError: false, empty: false })).toBe(
+      "Loading. Be patient, this might take a while."
+    );
+    expect(customWidgetNote({ result: createFeedArtistResult(rows), isError: false, empty: false })).toBeNull();
+  });
 });
 
 describe("moveOf and moveText", () => {

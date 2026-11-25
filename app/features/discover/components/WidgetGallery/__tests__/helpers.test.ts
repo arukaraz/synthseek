@@ -1,7 +1,8 @@
 import { describe, expect, it } from "vitest";
 
 import type { BoardItem, BoardList, BoardWidgetKey } from "@hooks/api/queries/board/types";
-import type { WidgetProblem } from "@hooks/api/queries/widgets/types";
+import type { WidgetCatalog, WidgetPreset, WidgetProblem } from "@hooks/api/queries/widgets/types";
+import { createWidgetCatalog, createWidgetPreset } from "@test/factories";
 
 import { BOARD_MAX_ITEMS, BOARD_WIDGETS } from "../../ExploreBoard/constants";
 import { DEFAULT_GALLERY_FILTERS, PREVIEW_BOX } from "../constants";
@@ -9,14 +10,19 @@ import {
   availableEntries,
   bulkAddRoomOf,
   bulkPlacementOf,
+  cardPillsOf,
   countInCategory,
   galleryGroups,
-  integrationLabel,
+  gallerySourceRows,
   matchesQuery,
+  presetPeriodOf,
   previewFrame,
   problemText,
+  sourceFilterLabel,
+  sourceFilterOf,
+  sourceMatches,
 } from "../helpers";
-import type { GalleryEntry, GalleryFilters } from "../types";
+import type { GalleryEntry, GalleryFilters, GallerySourceFilter } from "../types";
 
 function entry(widget: BoardWidgetKey, title: string, description = ""): GalleryEntry {
   return { widget, definition: BOARD_WIDGETS[widget], name: title, title, description };
@@ -58,11 +64,95 @@ describe("availableEntries", () => {
   });
 });
 
-describe("integrationLabel", () => {
-  it("names a third party by its own name and the media server by what it is", () => {
-    expect(integrationLabel("lastfm")).toBe("Last.fm");
-    expect(integrationLabel("listenbrainz")).toBe("ListenBrainz");
-    expect(integrationLabel("mediaServer")).toBe("Media server");
+describe("gallery sources", () => {
+  const SOURCED: GalleryEntry[] = [...ENTRIES, entry("serverPlaylists", "Your playlists", "On media servers")];
+  const catalogWith = (feeds: Partial<WidgetCatalog["feeds"]>): WidgetCatalog => {
+    const catalog = createWidgetCatalog();
+    return { ...catalog, feeds: { ...catalog.feeds, ...feeds } };
+  };
+  const summary = (catalog: WidgetCatalog | undefined) =>
+    gallerySourceRows(catalog, SOURCED).map((row) => [row.source, row.status, row.reason, row.count]);
+
+  it("lists Last.fm, ListenBrainz and each connected server, counting the widgets each feeds", () => {
+    expect(summary(catalogWith({ lastfmState: "active", servers: ["jellyfin", "plex"] }))).toEqual([
+      ["lastfm", "active", null, 2],
+      ["listenbrainz", "active", null, 1],
+      ["jellyfin", "active", null, 1],
+      ["plex", "active", null, 1],
+    ]);
+  });
+
+  it("says why Last.fm is off, telling a refused key from one never set, and keeps ListenBrainz on", () => {
+    expect(summary(catalogWith({ lastfmState: "refused" })).slice(0, 2)).toEqual([
+      ["lastfm", "inactive", "lastfmRefused", 2],
+      ["listenbrainz", "active", null, 1],
+    ]);
+    expect(summary(catalogWith({ lastfmState: "notSetUp" }))[0]).toEqual(["lastfm", "inactive", "lastfmNotSetUp", 2]);
+  });
+
+  it("folds the servers into one inactive row with the three of them when none is connected", () => {
+    const rows = gallerySourceRows(catalogWith({ servers: [] }), SOURCED);
+    const media = rows.filter((row) => row.source === "mediaServer");
+
+    expect(rows.map((row) => row.source)).toEqual(["lastfm", "listenbrainz", "mediaServer"]);
+    expect(media.map((row) => [row.status, row.reason])).toEqual([["inactive", "noMediaServer"]]);
+    expect(media[0].pills.map((pill) => pill.source)).toEqual(["plex", "jellyfin", "navidrome"]);
+    expect(media[0].label).toBe("Plex, Jellyfin, or Navidrome");
+  });
+
+  it("calls every source unknown, with the reason to try again, while the server has not answered", () => {
+    expect(summary(undefined)).toEqual([
+      ["lastfm", "unknown", "unknown", 2],
+      ["listenbrainz", "unknown", "unknown", 1],
+      ["mediaServer", "unknown", "unknown", 1],
+    ]);
+  });
+
+  it("matches a widget to its own source, a server to every media-server widget, and Synthseek to the rest", () => {
+    const picked = (filter: GallerySourceFilter) =>
+      SOURCED.filter((item) => sourceMatches(filter, item)).map((item) => item.widget);
+
+    expect(picked("all")).toHaveLength(SOURCED.length);
+    expect(picked("synthseek")).toEqual(["trending", "requests"]);
+    expect(picked("lastfm")).toEqual(["topTracks", "scrobbles"]);
+    expect(picked("listenbrainz")).toEqual(["mixes"]);
+    expect(picked("plex")).toEqual(["serverPlaylists"]);
+    expect(picked("mediaServer")).toEqual(["serverPlaylists"]);
+  });
+
+  it("accepts only a source the menu lists, and names it in the trigger", () => {
+    const rows = gallerySourceRows(catalogWith({ servers: ["plex"] }), SOURCED);
+
+    expect(sourceFilterOf(rows, "plex")).toBe("plex");
+    expect(sourceFilterOf(rows, "jellyfin")).toBeNull();
+    expect(sourceFilterOf(rows, "synthseek")).toBe("synthseek");
+    expect(sourceFilterLabel(rows, "all")).toBeNull();
+    expect(sourceFilterLabel(rows, "lastfm")).toBe("Last.fm");
+    expect(sourceFilterLabel(rows, "synthseek")).toBe("Synthseek");
+  });
+
+  it("marks a card with its source, or with every connected server for a media-server widget", () => {
+    expect(cardPillsOf(undefined, ["plex"])).toEqual([]);
+    expect(cardPillsOf("lastfm", []).map((pill) => pill.label)).toEqual(["Last.fm"]);
+    expect(cardPillsOf("mediaServer", ["plex", "jellyfin"]).map((pill) => pill.label)).toEqual(["Plex", "Jellyfin"]);
+    expect(cardPillsOf("mediaServer", [])).toEqual([]);
+  });
+
+  it("labels a preset with the period or range it reads, and nothing for one without", () => {
+    const feedPreset = (query: Extract<WidgetPreset["draft"]["query"], { type: "feed" }>) =>
+      createWidgetPreset({ draft: { ...createWidgetPreset().draft, query } });
+    const pick = { by: "rank", order: "asc", limit: 10, random: null } as const;
+
+    expect(
+      presetPeriodOf(feedPreset({ type: "feed", source: "lastfm.topTracks", params: { period: "7day" }, pick }))
+    ).toBe("Last 7 days");
+    expect(
+      presetPeriodOf(feedPreset({ type: "feed", source: "listenbrainz.charts", params: { range: "week" }, pick }))
+    ).toBe("Last week");
+    expect(
+      presetPeriodOf(feedPreset({ type: "feed", source: "lastfm.charts", params: { country: null }, pick }))
+    ).toBeNull();
+    expect(presetPeriodOf(undefined)).toBeNull();
   });
 });
 

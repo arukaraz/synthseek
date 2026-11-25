@@ -262,7 +262,6 @@
       "add": "Ajouter",
       "remove": "Retirer",
       "onBoard": "Dans le tableau",
-      "mediaServer": "Serveur multimédia",
       "addNamed": "Ajouter {{name}}",
       "categoryCount": "{{onBoard}} sur {{total}} dans le tableau",
       "empty": "Aucun widget ne correspond à « {{query}} ».",
@@ -555,6 +554,7 @@
     }
   },
   "customWidget": {
+    "warming": "Chargement. Patience, cela peut prendre un moment.",
     "set": {
       "length_one": "{{count}} titre · {{length}}",
       "length_other": "{{count}} titres · {{length}}",

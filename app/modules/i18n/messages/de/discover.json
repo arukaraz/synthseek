@@ -262,7 +262,6 @@
       "add": "Hinzufügen",
       "remove": "Entfernen",
       "onBoard": "Auf dem Board",
-      "mediaServer": "Medienserver",
       "addNamed": "{{name}} hinzufügen",
       "categoryCount": "{{onBoard}} von {{total}} auf dem Board",
       "empty": "Kein Widget passt zu „{{query}}“.",
@@ -555,6 +554,7 @@
     }
   },
   "customWidget": {
+    "warming": "Wird geladen. Etwas Geduld, das kann eine Weile dauern.",
     "set": {
       "length_one": "{{count}} Titel · {{length}}",
       "length_other": "{{count}} Titel · {{length}}",

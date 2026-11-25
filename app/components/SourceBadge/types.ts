@@ -15,4 +15,5 @@ export type NamedSource = Exclude<BadgeSource, "catalog" | "mediaServer">;
 export interface SourceBadgeProps {
   source: BadgeSource;
   label: string;
+  inactive?: boolean;
 }
