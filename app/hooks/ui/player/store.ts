@@ -1023,7 +1023,7 @@ export const actions = {
     publish({ ...NO_PANEL_OPEN, modesOpen: !state.modesOpen });
   },
   toggleQueue(): void {
-    publish({ ...NO_PANEL_OPEN, queueOpen: !state.queueOpen });
+    publish({ ...NO_PANEL_OPEN, queueOpen: !state.queueOpen, lyricsOpen: state.queueOpen && state.lyricsOpen });
   },
   toggleRoom(): void {
     publish({ ...NO_PANEL_OPEN, roomOpen: !state.roomOpen });
@@ -1041,16 +1041,21 @@ export const actions = {
     publish({ mode, modesOpen: false });
   },
   toggleFullscreen(): void {
-    publish({ fullscreen: !state.fullscreen, modesOpen: false, lyricsOpen: false });
+    publish({
+      fullscreen: !state.fullscreen,
+      modesOpen: false,
+      lyricsOpen: false,
+      queueOpen: state.fullscreen ? false : state.queueOpen,
+    });
   },
   openStage(): void {
     publish({ fullscreen: true, modesOpen: false, lyricsOpen: false });
   },
   openLyrics(): void {
-    publish({ fullscreen: true, lyricsOpen: true, devicesOpen: false, modesOpen: false });
+    publish({ fullscreen: true, lyricsOpen: true, queueOpen: false, devicesOpen: false, modesOpen: false });
   },
   toggleLyrics(): void {
-    publish({ lyricsOpen: !state.lyricsOpen, devicesOpen: false });
+    publish({ lyricsOpen: !state.lyricsOpen, queueOpen: state.lyricsOpen && state.queueOpen, devicesOpen: false });
   },
   applyRemoteState(remote: RemotePlayback): void {
     if (remote.playing) {

@@ -227,7 +227,9 @@
   "stage": {
     "label": "Full screen session",
     "serverChip": "server: {{value}}",
-    "equalizerChip": "EQ: {{value}}"
+    "equalizerChip": "EQ: {{value}}",
+    "chipsShow": "Show file, server and EQ",
+    "chipsHide": "Hide file, server and EQ"
   },
   "notice": {
     "skipping": "\"{{title}}\" failed, skipping to the next one",
@@ -242,7 +244,9 @@
   "lyrics": {
     "empty": "No lyrics found for this track",
     "loading": "Looking for the lyrics",
-    "untimed": "These lyrics have no timings, so they do not follow the song"
+    "untimed": "These lyrics have no timings, so they do not follow the song",
+    "autoScroll": "Auto-scroll",
+    "backToLine": "Back to the current line"
   },
   "scrobble": {
     "off": "Scrobbling off",

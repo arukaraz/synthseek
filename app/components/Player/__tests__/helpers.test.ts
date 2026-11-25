@@ -33,6 +33,11 @@ describe("stageLayout", () => {
     expect(stageLayout(true, false)).toBe("wide");
     expect(stageLayout(false, false)).toBe("compact");
   });
+
+  it("uses the immersive layout on a desktop, unless the screen is short and sideways", () => {
+    expect(stageLayout(true, false, true)).toBe("immersive");
+    expect(stageLayout(true, true, true)).toBe("landscape");
+  });
 });
 
 describe("effectivePlayerMode", () => {

@@ -6,7 +6,7 @@ import "@test/mocks/next.mock";
 import { createPlayerActions, createPlayerDevice, createPlayerTrack, createPlayerView } from "@test/factories";
 import enPlayer from "@modules/i18n/messages/en/player.json";
 
-import { PLAYER_HEADER_SLOT_ID, PLAYER_MASTHEAD_SLOT_ID } from "../constants";
+import { PLAYER_HEADER_SLOT_ID, PLAYER_MASTHEAD_SLOT_ID, STAGE_IMMERSIVE_QUERY } from "../constants";
 import { Player } from "../Player";
 import type { PlayerView } from "../types";
 
@@ -19,6 +19,7 @@ class FakeResizeObserver {
 let wideScreen = true;
 let shortScreen = false;
 let touchScreen = false;
+let desktopScreen = false;
 
 function stubMatchMedia(): void {
   Object.defineProperty(window, "matchMedia", {
@@ -31,7 +32,9 @@ function stubMatchMedia(): void {
           ? shortScreen && touchScreen
           : query.includes("max-height")
             ? shortScreen
-            : wideScreen,
+            : query === STAGE_IMMERSIVE_QUERY
+              ? desktopScreen
+              : wideScreen,
       media: query,
       onchange: null,
       addListener: vi.fn(),
@@ -54,6 +57,7 @@ beforeEach(() => {
   wideScreen = true;
   shortScreen = false;
   touchScreen = false;
+  desktopScreen = false;
   vi.stubGlobal("ResizeObserver", FakeResizeObserver);
   stubMatchMedia();
 });
@@ -221,16 +225,31 @@ describe("the player dock", () => {
     expect(actions.stop).toHaveBeenCalledTimes(1);
   });
 
-  it("places stop right before previous, after shuffle", () => {
+  it("wears stop as a badge on the play button at the centre of the docked bar, previous and next on either side", () => {
     renderPlayer();
 
-    const order = [
-      ...(screen.getAllByRole("button", { name: enPlayer.controls.stop })[0]?.parentElement?.children ?? []),
-    ].map((button) => button.getAttribute("aria-label"));
-    const stop = order.indexOf(enPlayer.controls.stop);
+    const group = screen.getAllByRole("button", { name: enPlayer.controls.stop })[0]?.parentElement;
+    if (group === null || group === undefined) throw new Error("no stop button");
+    const cluster = [...group.children].map((button) => button.getAttribute("aria-label"));
+    const row = [...(group.parentElement?.children ?? [])];
+    const centre = row.indexOf(group);
 
-    expect(order[stop - 1]).toBe(enPlayer.controls.shuffle);
-    expect(order[stop + 1]).toBe(enPlayer.controls.previous);
+    expect(cluster).toEqual([enPlayer.controls.play, enPlayer.controls.stop]);
+    expect(row[centre - 1]?.lastElementChild?.getAttribute("aria-label")).toBe(enPlayer.controls.previous);
+    expect(row[centre + 1]?.firstElementChild?.getAttribute("aria-label")).toBe(enPlayer.controls.next);
+  });
+
+  it("keeps stop apart from play in the compact player in the header", () => {
+    const slot = document.createElement("div");
+    slot.id = PLAYER_HEADER_SLOT_ID;
+    document.body.appendChild(slot);
+    renderPlayer({ mode: "compact" });
+
+    const stops = screen.getAllByRole("button", { name: enPlayer.controls.stop });
+    for (const stop of stops) {
+      expect(stop.parentElement?.querySelector(`[aria-label="${enPlayer.controls.play}"]`)).toBeNull();
+    }
+    slot.remove();
   });
 
   it("offers no second stop while the player is already stopped", () => {

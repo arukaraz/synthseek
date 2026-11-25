@@ -1,23 +1,32 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useSyncExternalStore } from "react";
+
+const listeners = new Set<() => void>();
+
+function subscribe(listener: () => void): () => void {
+  listeners.add(listener);
+  window.addEventListener("storage", listener);
+  return () => {
+    listeners.delete(listener);
+    window.removeEventListener("storage", listener);
+  };
+}
 
 export function useLocalStorage(
   key: string,
   defaultValue: string,
   isValid: (raw: string) => boolean
 ): [string, (value: string) => void] {
-  const [value, setValue] = useState(defaultValue);
-
-  useEffect(() => {
+  const read = useCallback(() => {
     const raw = window.localStorage.getItem(key);
-    if (raw !== null && isValid(raw)) {
-      setValue(raw);
-    }
-  }, [key, isValid]);
+    return raw !== null && isValid(raw) ? raw : defaultValue;
+  }, [key, defaultValue, isValid]);
+
+  const value = useSyncExternalStore(subscribe, read, () => defaultValue);
 
   const set = useCallback(
     (next: string) => {
-      setValue(next);
       window.localStorage.setItem(key, next);
+      listeners.forEach((listener) => listener());
     },
     [key]
   );

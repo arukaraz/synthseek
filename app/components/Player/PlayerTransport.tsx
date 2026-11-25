@@ -5,14 +5,17 @@ import { Repeat, Repeat1, Shuffle, SkipBack, SkipForward, Square } from "lucide-
 import { useTranslation } from "react-i18next";
 
 import { PlayGlyph } from "./PlayGlyph";
+import { PlayStopBadge } from "./PlayStopBadge";
 import { TRANSPORT_METRICS } from "./constants";
 import { labelled } from "./helpers";
 import { iconButton, playButton, transportSide } from "./styles";
 import type { PlayerTransportProps } from "./types";
 
-export function PlayerTransport({ view, actions, size }: PlayerTransportProps) {
+export function PlayerTransport({ view, actions, size, joined = false }: PlayerTransportProps) {
   const { t } = useTranslation("player");
   const metrics = TRANSPORT_METRICS[size];
+  const badgeSize = size === "bar" ? "bar" : size === "stage" ? "stage" : null;
+  const pill = joined ? badgeSize : null;
 
   return (
     <>
@@ -26,15 +29,17 @@ export function PlayerTransport({ view, actions, size }: PlayerTransportProps) {
         >
           <Shuffle className={metrics.mark} />
         </button>
-        <button
-          type="button"
-          className={cn(iconButton({ size: metrics.side }), metrics.folds)}
-          onClick={actions.stop}
-          disabled={view.stopped}
-          {...labelled(t("controls.stop"))}
-        >
-          <Square className={cn(metrics.mark, "fill-current")} />
-        </button>
+        {pill === null ? (
+          <button
+            type="button"
+            className={cn(iconButton({ size: metrics.side }), metrics.folds)}
+            onClick={actions.stop}
+            disabled={view.stopped}
+            {...labelled(t("controls.stop"))}
+          >
+            <Square className={cn(metrics.mark, "fill-current")} />
+          </button>
+        ) : null}
         <button
           type="button"
           className={cn(iconButton({ size: metrics.skip }), metrics.folds)}
@@ -44,14 +49,25 @@ export function PlayerTransport({ view, actions, size }: PlayerTransportProps) {
           <SkipBack className={cn(metrics.arrow, "fill-current")} />
         </button>
       </div>
-      <button
-        type="button"
-        className={playButton({ size: metrics.play })}
-        onClick={actions.togglePlay}
-        {...labelled(view.playing ? t("controls.pause") : t("controls.play"))}
-      >
-        <PlayGlyph view={view} spin={metrics.arrow} face={metrics.face} />
-      </button>
+      {pill === null ? (
+        <button
+          type="button"
+          className={playButton({ size: metrics.play })}
+          onClick={actions.togglePlay}
+          {...labelled(view.playing ? t("controls.pause") : t("controls.play"))}
+        >
+          <PlayGlyph view={view} spin={metrics.arrow} face={metrics.face} />
+        </button>
+      ) : (
+        <PlayStopBadge
+          view={view}
+          actions={actions}
+          size={pill}
+          arrow={metrics.arrow}
+          face={metrics.face}
+          folds={metrics.folds}
+        />
+      )}
       <div className={transportSide({ layout: metrics.sides, at: "end" })}>
         <button
           type="button"

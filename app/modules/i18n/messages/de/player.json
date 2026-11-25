@@ -227,7 +227,9 @@
   "stage": {
     "label": "Vollbild-Sitzung",
     "serverChip": "Server: {{value}}",
-    "equalizerChip": "EQ: {{value}}"
+    "equalizerChip": "EQ: {{value}}",
+    "chipsShow": "Datei, Server und EQ anzeigen",
+    "chipsHide": "Datei, Server und EQ ausblenden"
   },
   "notice": {
     "skipping": "„{{title}}“ ist fehlgeschlagen, es geht weiter zum nächsten Titel",
@@ -242,7 +244,9 @@
   "lyrics": {
     "empty": "Für diesen Titel gibt es keinen Songtext",
     "loading": "Songtext wird gesucht",
-    "untimed": "Dieser Songtext hat keine Zeitmarken und folgt dem Lied daher nicht"
+    "untimed": "Dieser Songtext hat keine Zeitmarken und folgt dem Lied daher nicht",
+    "autoScroll": "Automatisch scrollen",
+    "backToLine": "Zurück zur aktuellen Zeile"
   },
   "scrobble": {
     "off": "Scrobbeln aus",

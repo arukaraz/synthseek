@@ -48,25 +48,44 @@ function trackEntries(view: PlayerView, actions: PlayerActions, t: TFunction<"pl
       keepOpen: false,
       onSelect: actions.openLyrics,
     },
-    {
-      kind: "action",
-      key: "radio",
-      icon: RadioTower,
-      label: t("menu.startRadio"),
-      disabled: !view.activeDevice.local,
-      keepOpen: false,
-      onSelect: actions.startRadio,
-    },
-    {
-      kind: "action",
-      key: "upgrade",
-      icon: Sparkles,
-      label: t("menu.upgrade"),
-      disabled: view.upgrading,
-      keepOpen: false,
-      onSelect: actions.searchBetterQuality,
-    },
+    radioEntry(view, actions, t),
+    upgradeEntry(view, actions, t),
   ];
+}
+
+function radioEntry(view: PlayerView, actions: PlayerActions, t: TFunction<"player">): MoreMenuEntry {
+  return {
+    kind: "action",
+    key: "radio",
+    icon: RadioTower,
+    label: t("menu.startRadio"),
+    disabled: !view.activeDevice.local,
+    keepOpen: false,
+    onSelect: actions.startRadio,
+  };
+}
+
+function upgradeEntry(view: PlayerView, actions: PlayerActions, t: TFunction<"player">): MoreMenuEntry {
+  return {
+    kind: "action",
+    key: "upgrade",
+    icon: Sparkles,
+    label: t("menu.upgrade"),
+    disabled: view.upgrading,
+    keepOpen: false,
+    onSelect: actions.searchBetterQuality,
+  };
+}
+
+function settingsEntry(actions: PlayerActions, t: TFunction<"player">): MoreMenuEntry {
+  return {
+    kind: "action",
+    key: "settings",
+    icon: Settings2,
+    label: t("controls.settings"),
+    keepOpen: false,
+    onSelect: actions.toggleSettings,
+  };
 }
 
 function soundEntries(
@@ -75,19 +94,7 @@ function soundEntries(
   t: TFunction<"player">,
   docked: boolean
 ): MoreMenuEntry[] {
-  const settings: MoreMenuEntry[] =
-    view.mode === "mini"
-      ? []
-      : [
-          {
-            kind: "action",
-            key: "settings",
-            icon: Settings2,
-            label: t("controls.settings"),
-            keepOpen: false,
-            onSelect: actions.toggleSettings,
-          },
-        ];
+  const settings: MoreMenuEntry[] = view.mode === "mini" ? [] : [settingsEntry(actions, t)];
   const chain: MoreMenuEntry[] = docked
     ? [
         {
@@ -165,12 +172,7 @@ function listeningEntry(view: PlayerView, actions: PlayerActions, t: TFunction<"
   };
 }
 
-function sessionEntries(
-  view: PlayerView,
-  actions: PlayerActions,
-  t: TFunction<"player">,
-  docked: boolean
-): MoreMenuEntry[] {
+function scrobblingEntry(view: PlayerView, actions: PlayerActions, t: TFunction<"player">): MoreMenuEntry {
   const scrobbleState = {
     text:
       view.scrobbleLock === null
@@ -178,7 +180,7 @@ function sessionEntries(
         : t(`menu.scrobblingLocked.${view.scrobbleLock}`),
     tone: view.scrobble,
   };
-  const scrobbling: MoreMenuEntry = view.scrobbleActionable
+  return view.scrobbleActionable
     ? {
         kind: "toggle",
         key: "scrobbling",
@@ -198,6 +200,15 @@ function sessionEntries(
         keepOpen: false,
         onSelect: actions.toggleScrobbling,
       };
+}
+
+function sessionEntries(
+  view: PlayerView,
+  actions: PlayerActions,
+  t: TFunction<"player">,
+  docked: boolean
+): MoreMenuEntry[] {
+  const scrobbling = scrobblingEntry(view, actions, t);
   const privateSession = privateSessionEntry(view, actions, t);
   const listening = listeningEntry(view, actions, t);
   return docked
@@ -212,6 +223,21 @@ export function moreMenuGroups(
   docked: boolean,
   layout: MoreMenuLayout = "narrow"
 ): MoreMenuGroup[] {
+  if (layout === "stage") {
+    return [
+      { key: "track", label: null, entries: [radioEntry(view, actions, t), upgradeEntry(view, actions, t)] },
+      {
+        key: "session",
+        label: null,
+        entries: [privateSessionEntry(view, actions, t), scrobblingEntry(view, actions, t)],
+      },
+      {
+        key: "sound",
+        label: null,
+        entries: [settingsEntry(actions, t), devicesEntry(view, actions, t), listeningEntry(view, actions, t)],
+      },
+    ];
+  }
   if (layout === "wide") {
     return [
       {

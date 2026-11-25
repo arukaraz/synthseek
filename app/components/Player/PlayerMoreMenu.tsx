@@ -58,7 +58,7 @@ export function PlayerMoreMenu({ view, actions, layout = "narrow", compact = fal
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>{trigger}</DropdownMenuTrigger>
-      <DropdownMenuContent align="end" side="top" sideOffset={10}>
+      <DropdownMenuContent align="end" side={layout === "stage" ? "bottom" : "top"} sideOffset={10}>
         {groups.map((group, index) => (
           <Fragment key={group.key}>
             {index > 0 ? <DropdownMenuSeparator /> : null}

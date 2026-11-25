@@ -180,6 +180,7 @@ export const moreTrigger = cva("relative", {
     layout: {
       narrow: "@player:hidden",
       wide: "hidden @player:grid",
+      stage: "",
     },
   },
   defaultVariants: { layout: "narrow" },
@@ -291,6 +292,21 @@ export const playButton = cva(
   }
 );
 
+export const playCluster = cva("relative grid shrink-0 place-items-center");
+
+export const stopBadge = cva(
+  "bg-primary-500 text-primary-foreground hover:bg-primary-400 ring-surface focus-visible:outline-primary-400 absolute grid place-items-center rounded-full ring-[3px] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 disabled:opacity-50 disabled:hover:bg-primary-500",
+  {
+    variants: {
+      size: {
+        bar: "-right-1.5 -bottom-1.5 size-5",
+        stage: "-right-1 -bottom-1 size-6.5",
+      },
+    },
+    defaultVariants: { size: "bar" },
+  }
+);
+
 export const cover = cva("relative grid shrink-0 place-items-center overflow-hidden border", {
   variants: {
     tone: {
@@ -306,10 +322,15 @@ export const cover = cva("relative grid shrink-0 place-items-center overflow-hid
       stage: "size-[min(60vw,24vh,16.75rem)] rounded-xl @player:size-[min(60vw,32vh,16.75rem)]",
       fluid: "size-[min(100cqw,100cqh,16.75rem)] rounded-xl",
       sideways: "size-16 rounded-lg",
+      immersive: "size-[min(40vh,30vw,25rem)] rounded-2xl",
+      immersiveSide: "size-[min(32vh,22vw,20rem)] rounded-2xl",
+      immersiveIdle: "size-[min(54vh,40vw,34rem)] rounded-3xl",
     },
   },
   defaultVariants: { tone: "primary", size: "bar" },
 });
+
+export const coverDepth = cva("shadow-float ring-fg/8 ring-1");
 
 export const coverGlow = cva("", {
   variants: {
@@ -334,6 +355,9 @@ export const coverInitials = cva("text-fg font-mono", {
       stage: "text-[1.625rem]",
       fluid: "text-[1.625rem]",
       sideways: "text-14",
+      immersive: "text-[2rem]",
+      immersiveSide: "text-[1.625rem]",
+      immersiveIdle: "text-[2.75rem]",
     },
   },
   defaultVariants: { size: "bar" },
@@ -745,7 +769,66 @@ export const stageArtist = cva("text-fg text-16");
 
 export const stageAlbum = cva("text-fg-muted text-14");
 
-export const stageChips = cva("mt-1 flex flex-wrap items-center justify-center gap-2 md:justify-start");
+export const stageChips = cva("mt-1 flex flex-wrap items-center gap-2", {
+  variants: {
+    align: {
+      start: "justify-center md:justify-start",
+      center: "justify-center",
+    },
+  },
+  defaultVariants: { align: "start" },
+});
+
+export const immersiveArt = cva("pointer-events-none absolute inset-0 overflow-hidden");
+
+export const immersiveArtImage = cva("scale-125 object-cover opacity-30 blur-3xl");
+
+export const immersiveVeil = cva(
+  "from-surface/40 via-surface/10 to-surface/70 pointer-events-none absolute inset-0 bg-linear-to-b"
+);
+
+export const immersiveHeaderDivider = cva("bg-fg/10 h-6 w-px");
+
+export const immersiveMain = cva("relative flex min-h-0 flex-1 items-center justify-center gap-[5cqw] px-[6cqw] pb-6", {
+  variants: {
+    idle: {
+      true: "cursor-none pt-6",
+      false: "pt-20",
+    },
+  },
+  defaultVariants: { idle: false },
+});
+
+export const immersiveFooterSlide = cva("shrink-0 overflow-hidden");
+
+export const immersiveColumn = cva("flex min-w-0 flex-col items-center gap-5", {
+  variants: {
+    lyrics: {
+      true: "w-[min(26rem,32cqw)] shrink-0",
+      false: "w-full max-w-155",
+    },
+  },
+  defaultVariants: { lyrics: false },
+});
+
+export const immersiveMeta = cva(
+  "flex max-w-full flex-col items-center gap-2 text-center [&_h2]:transition-[font-size] [&_h2]:duration-500 [&_p]:transition-[font-size] [&_p]:duration-500",
+  {
+    variants: {
+      grow: {
+        true: "[&_h2]:text-[3.25rem] [&>p]:text-xl",
+        false: "",
+      },
+    },
+    defaultVariants: { grow: false },
+  }
+);
+
+export const immersiveLyrics = cva("flex h-full min-h-0 max-w-205 min-w-0 flex-1 self-stretch");
+
+export const immersiveQueue = cva("flex h-full min-h-0 max-w-155 min-w-0 flex-1 flex-col self-stretch");
+
+export const immersiveQueueTitle = cva("text-fg text-2xl font-bold tracking-tight");
 
 export const stageChip = cva("rounded-full border px-2.5 py-1 font-mono text-11 whitespace-nowrap", {
   variants: {
@@ -932,16 +1015,66 @@ export const stageFace = cva("flex h-full min-h-0 w-full items-center justify-ce
 
 export const stageVolume = cva("flex justify-center");
 
-export const lyricsPane = cva("flex h-full min-h-0 w-full max-w-225 flex-col items-center gap-3 pb-3");
+export const lyricsPane = cva("flex h-full min-h-0 w-full flex-col gap-3 pb-3", {
+  variants: {
+    fit: {
+      stage: "max-w-225 items-center",
+      column: "relative items-stretch",
+    },
+  },
+  defaultVariants: { fit: "stage" },
+});
 
 export const lyricsScroll = cva("player-lyrics-fade scrollbar-none min-h-0 w-full flex-1 overflow-y-auto px-2");
 
-export const lyricsBody = cva("flex flex-col items-center gap-2.5 py-[32vh] text-center sm:gap-3 sm:py-[42vh]");
+export const lyricsBody = cva("flex flex-col", {
+  variants: {
+    fit: {
+      stage: "items-center gap-2.5 py-[32vh] text-center sm:gap-3 sm:py-[42vh]",
+      column: "items-start gap-3 py-[34vh] text-left",
+    },
+  },
+  defaultVariants: { fit: "stage" },
+});
 
-export const lyricsLine = cva(
-  "player-lyric-line focus-visible:ring-primary-500 w-full rounded-lg px-2 text-[1.5625rem] leading-tight font-bold tracking-tight transition-all duration-500 ease-out focus-visible:ring-2 focus-visible:outline-none sm:text-[2.875rem]",
+export const lyricsAutoScroll = cva(
+  "border-fg/10 bg-surface-overlay/60 focus-visible:ring-primary-500 inline-flex h-8 items-center gap-2 rounded-full border py-0 pr-3 pl-1.5 text-12 transition-colors focus-visible:ring-2 focus-visible:outline-none",
   {
     variants: {
+      on: {
+        true: "text-fg",
+        false: "text-fg-muted hover:text-fg",
+      },
+    },
+    defaultVariants: { on: true },
+  }
+);
+
+export const lyricsAutoScrollSwitch = cva(
+  "border-fg/10 relative h-4.5 w-7.5 rounded-full border transition-colors after:absolute after:top-0.5 after:left-0.5 after:size-3 after:rounded-full after:transition-transform",
+  {
+    variants: {
+      on: {
+        true: "bg-primary-500/45 after:bg-fg after:translate-x-3",
+        false: "bg-surface-sunken after:bg-fg-muted",
+      },
+    },
+    defaultVariants: { on: true },
+  }
+);
+
+export const lyricsReturn = cva(
+  "border-primary-500/50 bg-surface-overlay/90 text-fg focus-visible:ring-primary-500 absolute bottom-4 left-1/2 z-10 inline-flex -translate-x-1/2 items-center gap-2 rounded-full border px-3.5 py-2 text-13 shadow-lg focus-visible:ring-2 focus-visible:outline-none"
+);
+
+export const lyricsLine = cva(
+  "player-lyric-line focus-visible:ring-primary-500 w-full rounded-lg px-2 leading-tight font-bold tracking-tight transition-all duration-500 ease-out focus-visible:ring-2 focus-visible:outline-none",
+  {
+    variants: {
+      fit: {
+        stage: "text-[1.5625rem] sm:text-[2.875rem]",
+        column: "origin-left text-left text-[2.5rem] text-balance",
+      },
       state: {
         active: "text-fg scale-[1.02]",
         resting: "text-fg/30 hover:text-fg/60",
@@ -957,7 +1090,7 @@ export const lyricsLine = cva(
         false: "",
       },
     },
-    defaultVariants: { state: "plain", depth: "near", seekable: false },
+    defaultVariants: { state: "plain", depth: "near", seekable: false, fit: "stage" },
   }
 );
 

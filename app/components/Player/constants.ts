@@ -221,6 +221,24 @@ export const HEADER_SLOT_QUERY = `(min-width: ${HEADER_SLOT_MIN_REM}rem)`;
 
 export const STAGE_WIDE_QUERY = "(min-width: 40rem)";
 
+export const STAGE_IMMERSIVE_QUERY = "(min-width: 58rem)";
+
+export const STAGE_CHIPS_STORAGE_KEY = "synthseek.player.stageChips";
+
+export const LYRICS_AUTO_SCROLL_STORAGE_KEY = "synthseek.player.lyricsAutoScroll";
+
+export const LYRIC_RESUME_DELAY_MS = 500;
+
+export const STAGE_IDLE_MS = 3000;
+
+export const IDLE_TRANSITION = { duration: 0.45, ease: [0.32, 0.72, 0, 1] } as const;
+
+export const STAGE_ACTIVITY_EVENTS = ["pointermove", "wheel", "touchstart", "focusin"] as const;
+
+export const STAGE_OVERLAY_SELECTOR = '[role="menu"], [role="dialog"]:not([data-player-stage])';
+
+export const STAGE_CHROME_SELECTOR = "[data-stage-chrome]";
+
 export const SHORT_LANDSCAPE_QUERY = "(orientation: landscape) and (max-height: 31.25rem)";
 
 export const TOUCH_SHORT_LANDSCAPE_QUERY = `${SHORT_LANDSCAPE_QUERY} and (pointer: coarse)`;

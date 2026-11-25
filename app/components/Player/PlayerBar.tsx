@@ -110,7 +110,7 @@ export function PlayerBar({ view, actions, placement = "dock" }: PlayerBarProps)
 
         <div className={barTransport()}>
           <FavouriteButton view={view} actions={actions} className="@player:hidden" />
-          <PlayerTransport view={view} actions={actions} size="bar" />
+          <PlayerTransport view={view} actions={actions} size="bar" joined={placement === "dock"} />
         </div>
 
         <div className={barExtras()}>

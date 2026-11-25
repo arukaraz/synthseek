@@ -6,7 +6,7 @@ import "@test/mocks/next.mock";
 import { createPlayerActions, createPlayerView } from "@test/factories";
 import enPlayer from "@modules/i18n/messages/en/player.json";
 
-import { PLAYER_HEADER_SLOT_ID } from "../constants";
+import { PLAYER_HEADER_SLOT_ID, STAGE_IMMERSIVE_QUERY } from "../constants";
 import { listeningNoticeId, moreAttention, panelOpen } from "../helpers";
 import { Player } from "../Player";
 import type { PlayerListening, PlayerListeningMember, PlayerView } from "../types";
@@ -26,7 +26,8 @@ function stubMatchMedia(): void {
     writable: true,
     configurable: true,
     value: (query: string) => ({
-      matches: !query.includes("prefers-reduced-motion") && !query.includes("max-height"),
+      matches:
+        !query.includes("prefers-reduced-motion") && !query.includes("max-height") && query !== STAGE_IMMERSIVE_QUERY,
       media: query,
       onchange: null,
       addListener: vi.fn(),

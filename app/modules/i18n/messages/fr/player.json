@@ -230,7 +230,9 @@
   "stage": {
     "label": "Session en plein écran",
     "serverChip": "serveur : {{value}}",
-    "equalizerChip": "EQ : {{value}}"
+    "equalizerChip": "EQ : {{value}}",
+    "chipsShow": "Afficher le fichier, le serveur et l'EQ",
+    "chipsHide": "Masquer le fichier, le serveur et l'EQ"
   },
   "notice": {
     "skipping": "« {{title}} » a échoué, passage à la suivante",
@@ -245,7 +247,9 @@
   "lyrics": {
     "empty": "Aucunes paroles pour ce titre",
     "loading": "Recherche des paroles",
-    "untimed": "Ces paroles n'ont pas de minutage, elles ne suivent donc pas la chanson"
+    "untimed": "Ces paroles n'ont pas de minutage, elles ne suivent donc pas la chanson",
+    "autoScroll": "Défilement automatique",
+    "backToLine": "Revenir à la ligne en cours"
   },
   "scrobble": {
     "off": "Scrobbling désactivé",

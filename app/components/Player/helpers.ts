@@ -26,6 +26,7 @@ import type {
   PlayerTrack,
   PlayerView,
   StageLayout,
+  StageSide,
   WaveCanvas,
   WaveColors,
   WavePaint,
@@ -278,9 +279,35 @@ export function visibleMatch(selector: string): HTMLElement | null {
   );
 }
 
-export function stageLayout(wide: boolean, short: boolean): StageLayout {
+export function stageSide(view: Pick<PlayerView, "queueOpen" | "lyricsOpen">): StageSide {
+  if (view.queueOpen) return "queue";
+  return view.lyricsOpen ? "lyrics" : null;
+}
+
+export function stageLayout(wide: boolean, short: boolean, immersive = false): StageLayout {
   if (short) return "landscape";
+  if (immersive) return "immersive";
   return wide ? "wide" : "compact";
+}
+
+export function centredScrollTop(container: HTMLElement, line: HTMLElement): number {
+  return (
+    line.offsetTop - container.offsetTop - container.clientTop - container.clientHeight / 2 + line.offsetHeight / 2
+  );
+}
+
+export function lineInView(container: HTMLElement, line: HTMLElement): boolean {
+  const frame = container.getBoundingClientRect();
+  const box = line.getBoundingClientRect();
+  return box.bottom > frame.top && box.top < frame.bottom;
+}
+
+export function isShownHidden(raw: string): boolean {
+  return raw === "shown" || raw === "hidden";
+}
+
+export function isOnOff(raw: string): boolean {
+  return raw === "on" || raw === "off";
 }
 
 export function returnFocusTo(...selectors: string[]): void {
@@ -413,8 +440,8 @@ export function moreAttention(
   layout: MoreMenuLayout = "narrow",
   compact = false
 ): PlayerAttention | null {
-  if (layout === "narrow" && view.scrobble === "failed") return "danger";
-  if (layout === "narrow" && view.scrobble === "retrying") return "warning";
+  if (layout !== "wide" && view.scrobble === "failed") return "danger";
+  if (layout !== "wide" && view.scrobble === "retrying") return "warning";
   if (!view.activeDevice.local) return "remote";
   if (view.privateSession) return "private";
   if (compact && view.listening.arrival !== null) return "arrival";

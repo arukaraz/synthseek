@@ -5,11 +5,11 @@ import { useTranslation } from "react-i18next";
 import { stageChip, stageChips } from "./styles";
 import type { StageChipsProps } from "./types";
 
-export function StageChips({ view }: StageChipsProps) {
+export function StageChips({ view, align = "start" }: StageChipsProps) {
   const { t } = useTranslation("player");
 
   return (
-    <div className={stageChips()}>
+    <div className={stageChips({ align })}>
       <span
         className={stageChip({
           tone: view.chain.transcoding ? "warning" : view.track.lossless ? "lossless" : "muted",

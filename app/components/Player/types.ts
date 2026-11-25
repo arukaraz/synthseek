@@ -1,5 +1,5 @@
 import type { LucideIcon } from "lucide-react";
-import type { ReactNode } from "react";
+import type { ReactNode, RefObject } from "react";
 
 import type { SourcePickerRequest } from "@hooks/ui/player";
 
@@ -172,7 +172,7 @@ export interface PlayerSignalChain {
 
 export type PlayerAttention = "remote" | "warning" | "danger" | "private" | "friends" | "arrival";
 
-export type MoreMenuLayout = "narrow" | "wide";
+export type MoreMenuLayout = "narrow" | "wide" | "stage";
 
 export interface PlayerMoreMenuProps extends PlayerProps {
   layout?: MoreMenuLayout;
@@ -349,6 +349,14 @@ export interface PlayerPlacement {
 
 export interface PlayerTransportProps extends PlayerProps {
   size: "bar" | "stage" | "mini" | "sideways";
+  joined?: boolean;
+}
+
+export interface PlayStopBadgeProps extends PlayerProps {
+  size: "bar" | "stage";
+  arrow: string;
+  face: string;
+  folds?: string;
 }
 
 export interface PlayerExtraControlsProps extends PlayerProps {
@@ -361,7 +369,49 @@ export interface MiniPlayerProps extends PlayerProps {
   placement?: "window" | "stage";
 }
 
-export type StageLayout = "wide" | "compact" | "landscape";
+export type StageLayout = "immersive" | "wide" | "compact" | "landscape";
+
+export type StageSide = "queue" | "lyrics" | null;
+
+export interface StageClassicProps extends PlayerProps {
+  layout: Exclude<StageLayout, "immersive">;
+}
+
+export type LyricFollowMode = "always" | "reader" | "off";
+
+export interface LyricFollow {
+  lost: boolean;
+  returnToLine: () => void;
+  scrollerRef: (node: HTMLDivElement | null) => void;
+}
+
+export interface LyricFollowOptions {
+  activeLine: RefObject<HTMLElement | null>;
+  active: number | null;
+  reduceMotion: boolean;
+  mode: LyricFollowMode;
+}
+
+export interface LyricsColumnOptions {
+  autoScroll: boolean;
+}
+
+export interface LyricsAutoScrollSwitchProps {
+  on: boolean;
+  onChange: (next: boolean) => void;
+}
+
+export interface StagePreferences {
+  chipsShown: boolean;
+  toggleChips: () => void;
+  autoScroll: boolean;
+  setAutoScroll: (next: boolean) => void;
+}
+
+export interface QueueHeaderProps extends PlayerProps {
+  title: ReactNode;
+  closeIcon: ReactNode;
+}
 
 export type PlayerQueueBodyProps = PlayerProps;
 
@@ -483,6 +533,7 @@ export interface PlayGlyphProps {
 
 export interface StageChipsProps {
   view: PlayerView;
+  align?: "start" | "center";
 }
 
 export interface PlayerEqualizerBandProps {
@@ -555,12 +606,24 @@ export interface PrivateSessionStatusProps {
   onEnd: () => void;
 }
 
-export type PlayerLyricsProps = PlayerProps;
+export interface PlayerLyricsProps extends PlayerProps {
+  column?: LyricsColumnOptions;
+}
 
 export interface PlayerCoverProps {
   initials: string;
   tone: PlayerTone;
-  size: "row" | "card" | "bar" | "masthead" | "stage" | "fluid" | "sideways";
+  size:
+    | "row"
+    | "card"
+    | "bar"
+    | "masthead"
+    | "stage"
+    | "fluid"
+    | "sideways"
+    | "immersive"
+    | "immersiveSide"
+    | "immersiveIdle";
   artworkUrl?: string | null;
 }
 

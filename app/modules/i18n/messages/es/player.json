@@ -227,7 +227,9 @@
   "stage": {
     "label": "Sesión a pantalla completa",
     "serverChip": "servidor: {{value}}",
-    "equalizerChip": "EQ: {{value}}"
+    "equalizerChip": "EQ: {{value}}",
+    "chipsShow": "Mostrar archivo, servidor y EQ",
+    "chipsHide": "Ocultar archivo, servidor y EQ"
   },
   "notice": {
     "skipping": "«{{title}}» falló, saltando a la siguiente",
@@ -242,7 +244,9 @@
   "lyrics": {
     "empty": "No hay letra para esta canción",
     "loading": "Buscando la letra",
-    "untimed": "Esta letra no trae tiempos, así que no sigue a la canción"
+    "untimed": "Esta letra no trae tiempos, así que no sigue a la canción",
+    "autoScroll": "Desplazamiento automático",
+    "backToLine": "Volver a la línea actual"
   },
   "scrobble": {
     "off": "Scrobbling apagado",

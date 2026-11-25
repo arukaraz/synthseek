@@ -1281,6 +1281,42 @@ describe("player store volume and panels", () => {
     expect(store.getSnapshot().lyricsOpen).toBe(false);
   });
 
+  it("closes the queue with the stage, as it closes the lyrics, so it does not reopen over the bar", async () => {
+    const store = await freshStore();
+    store.actions.toggleQueue();
+    store.actions.toggleFullscreen();
+    expect(store.getSnapshot().queueOpen).toBe(true);
+
+    store.actions.toggleFullscreen();
+
+    expect(store.getSnapshot().fullscreen).toBe(false);
+    expect(store.getSnapshot().queueOpen).toBe(false);
+  });
+
+  it("never holds the lyrics and the queue open at once, whichever opened last wins", async () => {
+    const store = await freshStore();
+    store.actions.toggleQueue();
+    store.actions.openLyrics();
+    expect(store.getSnapshot()).toMatchObject({ fullscreen: true, lyricsOpen: true, queueOpen: false });
+
+    store.actions.toggleQueue();
+    expect(store.getSnapshot()).toMatchObject({ lyricsOpen: false, queueOpen: true });
+
+    store.actions.toggleLyrics();
+    expect(store.getSnapshot()).toMatchObject({ lyricsOpen: true, queueOpen: false });
+  });
+
+  it("leaves the other side closed when the open one is closed", async () => {
+    const store = await freshStore();
+    store.actions.openLyrics();
+    store.actions.toggleLyrics();
+    expect(store.getSnapshot()).toMatchObject({ lyricsOpen: false, queueOpen: false });
+
+    store.actions.toggleQueue();
+    store.actions.toggleQueue();
+    expect(store.getSnapshot()).toMatchObject({ lyricsOpen: false, queueOpen: false });
+  });
+
   it("opens lyrics on the full stage rather than behind it", async () => {
     const store = await freshStore();
     store.actions.toggleDevices();
