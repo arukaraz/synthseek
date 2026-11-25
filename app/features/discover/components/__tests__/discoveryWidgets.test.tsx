@@ -195,7 +195,7 @@ describe("Charts", () => {
 
     const rows = screen.getAllByRole("listitem");
     expect(rows).toHaveLength(2);
-    fireEvent.click(within(rows[0]).getByRole("button", { name: new RegExp(`^${enDiscover.charts.request}: `) }));
+    fireEvent.click(within(rows[0]).getByRole("button", { name: "Request Awake" }));
 
     expect(mocks.playEntity).toHaveBeenCalledWith({ kind: "tracks", trackIds: ["lib1"] });
     expect(mocks.requestResult).toHaveBeenCalledTimes(1);
@@ -218,18 +218,34 @@ describe("Charts", () => {
     expect(mocks.requestResult).toHaveBeenCalledWith(expect.objectContaining({ id: "c1" }), "customize");
   });
 
-  it("splits the rest of the chart in two columns beside the leader across a full row", () => {
-    const chart = ready([
-      { title: "Joga", artist: "Bjork", libraryTrackId: "lib1", track: null },
-      { title: "Awake", artist: "Tycho", libraryTrackId: null, track: null },
-    ]);
-    mocks.charts.mockReturnValue(chart);
-    const { unmount } = renderWithProviders(<Charts size="M" info="x" />);
-    expect(screen.getByRole("list")).not.toHaveClass("grid-cols-2");
-    unmount();
+  it("plays a charted track the library already has, from its row as from the leader", () => {
+    mocks.charts.mockReturnValue(
+      ready([
+        { title: "Awake", artist: "Tycho", libraryTrackId: null, track: catalogTrack("c1") },
+        { title: "Joga", artist: "Bjork", libraryTrackId: "lib1", track: catalogTrack("c2") },
+      ])
+    );
+    renderWithProviders(<Charts size="M" info="x" />);
 
-    renderWithProviders(<Charts size="L" info="x" />);
-    expect(screen.getByRole("list")).toHaveClass("grid-cols-2");
+    const [row] = screen.getAllByRole("listitem");
+    fireEvent.click(within(row).getByRole("button", { name: "Play Joga" }));
+
+    expect(mocks.playEntity).toHaveBeenCalledWith({ kind: "tracks", trackIds: ["lib1"] });
+    expect(within(row).queryByRole("button", { name: "Request Joga" })).not.toBeInTheDocument();
+    expect(mocks.requestResult).not.toHaveBeenCalled();
+  });
+
+  it("shows only the leader in a quarter tile, as the Leader look does", () => {
+    mocks.charts.mockReturnValue(
+      ready([
+        { title: "Joga", artist: "Bjork", libraryTrackId: "lib1", track: null },
+        { title: "Awake", artist: "Tycho", libraryTrackId: null, track: null },
+      ])
+    );
+    renderWithProviders(<Charts size="S" info="x" />);
+
+    expect(screen.getByRole("article")).toHaveTextContent("Joga");
+    expect(screen.queryAllByRole("listitem")).toHaveLength(0);
   });
 
   it("reads the ListenBrainz chart and names it when the tile is the ListenBrainz one", () => {

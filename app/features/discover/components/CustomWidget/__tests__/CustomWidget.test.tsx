@@ -65,6 +65,11 @@ const ALBUMS = createAlbumResult(
     createRecipeAlbumRow({ id: `a${index}`, albumExternalId: `dz-${index}`, name: `Album ${index}` })
   )
 );
+const MISSING_ALBUMS = createAlbumResult(
+  Array.from({ length: 12 }, (_, index) =>
+    createRecipeAlbumRow({ id: `a${index}`, albumExternalId: `dz-${index}`, name: `Album ${index}`, inLibrary: false })
+  )
+);
 const ARTIST_NAME = "Alpha";
 const ARTISTS = createArtistResult([
   {
@@ -190,7 +195,7 @@ describe("CustomWidget", () => {
   });
 
   it("requests an album from a card when the widget asks for requests", () => {
-    show("cards", "M", ALBUMS, "request");
+    show("cards", "M", MISSING_ALBUMS, "request");
     expect(screen.getAllByRole("article")).toHaveLength(6);
     fireEvent.click(screen.getByRole("button", { name: "Request Album 0" }));
     expect(requestResult).toHaveBeenLastCalledWith(expect.objectContaining({ id: "dz-0", type: "album" }), "direct");
@@ -202,10 +207,17 @@ describe("CustomWidget", () => {
 
   it("offers a member only the direct request on a card", () => {
     auth.role = "member";
-    show("cards", "M", ALBUMS, "request");
+    show("cards", "M", MISSING_ALBUMS, "request");
 
     expect(screen.getByRole("button", { name: "Request Album 0" })).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "Request Album 0 with custom settings" })).not.toBeInTheDocument();
+  });
+
+  it("plays an album the library already has instead of requesting it", () => {
+    show("cards", "M", ALBUMS, "request");
+    fireEvent.click(screen.getByRole("button", { name: "Play Album 0" }));
+    expect(screen.queryByRole("button", { name: "Request Album 0" })).not.toBeInTheDocument();
+    expect(requestResult).not.toHaveBeenCalled();
   });
 
   it.each(["S", "M", "L", "XL"] as const)("scrolls every item sideways in a %s rail", (size) => {

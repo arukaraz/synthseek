@@ -94,6 +94,7 @@
   "topArtists": {
     "title": "Meilleurs artistes",
     "subtitle": "Les plus écoutés · de tous les temps · {{provider}}",
+    "leaderBadge": "N°1 le plus écouté",
     "empty": "Aucun artiste populaire pour l'instant, écoutez de la musique pour les voir classés.",
     "unlinked": "Ajoutez votre nom d'utilisateur {{provider}} pour les voir.",
     "link": "Paramètres",
@@ -458,8 +459,6 @@
     "title": "Classements",
     "subtitle": "Meilleurs titres dans le monde · {{provider}}",
     "empty": "Aucun classement pour le moment.",
-    "play": "Lire",
-    "request": "Demander",
     "leaderBadge": "N°1 dans le monde"
   },
   "loved": {

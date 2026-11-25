@@ -110,6 +110,10 @@ export interface WidgetBlockProps extends WidgetView {
   heading: WidgetBlockHeading;
 }
 
+export interface LeaderBlockProps extends Pick<WidgetBlockProps, "items" | "size" | "accent" | "controls"> {
+  badge?: string;
+}
+
 export interface CustomWidgetProps {
   widget: WidgetDocument | null;
   status: CustomWidgetsStatus;

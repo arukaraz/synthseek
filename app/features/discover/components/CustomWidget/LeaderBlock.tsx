@@ -12,9 +12,9 @@ import { WidgetRow } from "../WidgetRow/WidgetRow";
 import { BLOCK_LIMITS } from "./constants";
 import { itemMeta } from "./helpers";
 import { blockList, blockValue, leaderAction, leaderLink } from "./styles";
-import type { WidgetBlockProps } from "./types";
+import type { LeaderBlockProps } from "./types";
 
-export function LeaderBlock({ items, size, accent, controls }: WidgetBlockProps) {
+export function LeaderBlock({ items, size, accent, controls, badge }: LeaderBlockProps) {
   const { t } = useTranslation("discover");
   const [first, ...rest] = items;
   if (!first) return null;
@@ -27,7 +27,7 @@ export function LeaderBlock({ items, size, accent, controls }: WidgetBlockProps)
         <WidgetLeader
           cover={first.cover}
           seed={first.key}
-          badge={{ icon: Trophy, label: t("customWidget.leader") }}
+          badge={{ icon: Trophy, label: badge ?? t("customWidget.leader") }}
           fill={others.length === 0}
         >
           {onSelect ? (

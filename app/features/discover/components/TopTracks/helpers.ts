@@ -1,29 +1,37 @@
 import type { ParseKeys } from "i18next";
 
 import type { ListenedTrack } from "@hooks/api/queries/analytics/types";
-import type { BoardSize } from "@hooks/api/queries/board/types";
 
-import { COMPACT_ROW_LIMIT } from "../constants";
-import { HERO_LIMIT, LIST_LIMIT } from "./constants";
-import type { EmptyReason, TopTrackLook, TopTracksSplit } from "./types";
-
-export function topTrackLookOf(size: BoardSize): TopTrackLook {
-  return size === "M" ? "leader" : "hero";
-}
-
-export function topTracksSplit(tracks: readonly ListenedTrack[], size: BoardSize): TopTracksSplit {
-  if (size === "S") return { hero: null, rest: tracks.slice(0, COMPACT_ROW_LIMIT), startRank: 1 };
-  return {
-    hero: tracks[0] ?? null,
-    rest: tracks.slice(HERO_LIMIT, HERO_LIMIT + LIST_LIMIT),
-    startRank: HERO_LIMIT + 1,
-  };
-}
+import type { WidgetItem } from "../CustomWidget/types";
+import type { EmptyReason, EmptyReasonInput } from "./types";
 
 export function formatPlaycount(n: number): string {
   if (n < 1000) return n.toString();
   if (n < 10_000) return (n / 1000).toFixed(1) + "k";
   return Math.round(n / 1000) + "k";
+}
+
+export function topTrackItem(track: ListenedTrack, plays: string | null): WidgetItem {
+  return {
+    key: track.id,
+    title: track.title,
+    subtitle: track.artist,
+    cover: track.albumImage,
+    value: plays,
+    date: null,
+    move: null,
+    play: null,
+    request: null,
+    open: null,
+    link: null,
+  };
+}
+
+export function emptyReasonOf({ isError, data, empty }: EmptyReasonInput): EmptyReason | null {
+  if (isError) return "error";
+  if (!data) return null;
+  if (data.status !== "ready") return data.status;
+  return empty ? "no-data" : null;
 }
 
 const EMPTY_TEXT_KEYS: Record<EmptyReason, ParseKeys<"discover">> = {

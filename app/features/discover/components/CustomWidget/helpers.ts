@@ -695,7 +695,7 @@ export function itemControls(item: WidgetItem, action: WidgetAction, handlers: W
   const { open, play, request, link } = item;
   if (action === "openUrl") return link ? { onSelect: () => handlers.openUrl(link) } : {};
   const onSelect = open ? () => handlers.open(open) : undefined;
-  if (action === "play" && play) {
+  if ((action === "play" || action === "request") && play) {
     return {
       onSelect,
       coverAction: {

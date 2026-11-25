@@ -24,10 +24,8 @@ export type ProviderArtist = Extract<
   AnalyticsOutputs["discover"]["topArtists"],
   { status: "ready" }
 >["artists"][number];
-export type ListenedTrack = Extract<
-  AnalyticsOutputs["discover"]["listenedTracks"],
-  { status: "ready" }
->["topTracks"][number];
+export type ListenedTracks = AnalyticsOutputs["discover"]["listenedTracks"];
+export type ListenedTrack = Extract<ListenedTracks, { status: "ready" }>["topTracks"][number];
 
 export type ListeningMix = ListeningOutputs["onRepeat"];
 export type UnfinishedAlbum = ListeningOutputs["jumpBackIn"][number];

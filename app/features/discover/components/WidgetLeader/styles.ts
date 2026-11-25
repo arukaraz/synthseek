@@ -26,8 +26,6 @@ export const leaderBadge = cva(
 
 export const leaderBody = cva("relative z-10 mt-auto flex w-full min-w-0 flex-col items-start gap-1 p-4");
 
-export const leaderRank = cva("text-overlay-fg text-4xl leading-none font-black tabular-nums @xl:text-5xl");
-
 export const leaderTitle = cva("text-overlay-fg w-full truncate text-lg font-semibold");
 
 export const leaderSubtitle = cva("text-overlay-fg/80 mb-2 w-full truncate text-sm");

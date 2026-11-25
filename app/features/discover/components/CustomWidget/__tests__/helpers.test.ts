@@ -202,15 +202,25 @@ describe("itemControls", () => {
     expect(calls.open).toHaveBeenCalledWith(expect.objectContaining({ id: "dz-album-1" }));
   });
 
-  it("puts a request button on the cover for the request action", () => {
+  it("puts a request button on the cover for the request action when the item is not here", () => {
     const calls = handlers();
-    itemControls(item, "request", calls).coverAction?.onClick();
+    itemControls({ ...item, play: null }, "request", calls).coverAction?.onClick();
     expect(calls.request).toHaveBeenCalledWith(expect.objectContaining({ type: "album", id: "dz-album-1" }));
+  });
+
+  it("plays instead of requesting what the library already has", () => {
+    const calls = handlers();
+    const controls = itemControls(item, "request", calls);
+    controls.coverAction?.onClick();
+    expect(controls.coverAction).toMatchObject({ kind: "play", label: "Play Album One" });
+    expect(calls.play).toHaveBeenCalledWith({ kind: "album", albumExternalId: "dz-album-1" });
+    expect(calls.request).not.toHaveBeenCalled();
   });
 
   it("offers no request button for an artist, which has nothing to request directly", () => {
     const artistItem: WidgetItem = {
       ...item,
+      play: null,
       request: { type: "artist", id: "dz-artist-1", name: "Artist One", images: [], genres: [], followers: null },
     };
     expect(itemControls(artistItem, "request", handlers()).coverAction).toBeUndefined();

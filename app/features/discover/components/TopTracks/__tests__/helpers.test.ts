@@ -1,12 +1,36 @@
 import { describe, expect, it } from "vitest";
 
-import { formatPlaycount, topTrackLookOf } from "../helpers";
+import { emptyReasonOf, formatPlaycount, topTrackItem } from "../helpers";
+import { createTopTrack } from "./fixtures";
 
-describe("topTrackLookOf", () => {
-  it("uses the Charts leader look only in a half-row tile", () => {
-    expect(topTrackLookOf("M")).toBe("leader");
-    expect(topTrackLookOf("S")).toBe("hero");
-    expect(topTrackLookOf("L")).toBe("hero");
+describe("topTrackItem", () => {
+  it("draws the track with its artist and its plays as the value, with nothing to act on", () => {
+    expect(topTrackItem(createTopTrack(), "4.2k plays")).toMatchObject({
+      key: "deezer:1",
+      title: "Windowlicker",
+      subtitle: "Aphex Twin",
+      cover: "https://img/windowlicker.jpg",
+      value: "4.2k plays",
+      play: null,
+      request: null,
+      open: null,
+    });
+  });
+});
+
+describe("emptyReasonOf", () => {
+  const ready = { status: "ready" as const, username: "aphex", topTracks: [], recentTracks: [] };
+
+  it("names the reason the tile has nothing to rank", () => {
+    expect(emptyReasonOf({ isError: true, data: undefined, empty: true })).toBe("error");
+    expect(emptyReasonOf({ isError: false, data: { status: "inactive" }, empty: true })).toBe("inactive");
+    expect(emptyReasonOf({ isError: false, data: { status: "unlinked" }, empty: true })).toBe("unlinked");
+    expect(emptyReasonOf({ isError: false, data: ready, empty: true })).toBe("no-data");
+  });
+
+  it("names none while loading or once there is something to rank", () => {
+    expect(emptyReasonOf({ isError: false, data: undefined, empty: true })).toBeNull();
+    expect(emptyReasonOf({ isError: false, data: ready, empty: false })).toBeNull();
   });
 });
 

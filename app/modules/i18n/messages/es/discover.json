@@ -94,6 +94,7 @@
   "topArtists": {
     "title": "Artistas más escuchados",
     "subtitle": "Más reproducidos · de todos los tiempos · {{provider}}",
+    "leaderBadge": "N.º 1 más escuchado",
     "empty": "Aún no hay artistas más escuchados, escucha algo de música para verlos clasificados.",
     "unlinked": "Añade tu usuario de {{provider}} para verlos.",
     "link": "Ajustes",
@@ -458,8 +459,6 @@
     "title": "Listas",
     "subtitle": "Lo más escuchado en el mundo · {{provider}}",
     "empty": "No hay lista ahora mismo.",
-    "play": "Reproducir",
-    "request": "Solicitar",
     "leaderBadge": "#1 en el mundo"
   },
   "loved": {

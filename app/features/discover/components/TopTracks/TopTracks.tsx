@@ -1,60 +1,54 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { Trophy } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { SOURCE_NAMES } from "@components/SourceBadge";
-import { glassPanelCard } from "@components/ui/styles";
-import { WidgetHeader } from "@components/WidgetHeader";
+import { WidgetFrame } from "@components/WidgetFrame";
 import { useListenedTracks } from "@hooks/api/queries/analytics/useListenedTracks";
-import { fadeIn } from "@utils/animations";
 
+import { useWidgetControls } from "../../hooks/useWidgetControls";
+import { BUILTIN_LEADER_ACCENT, PROVIDER_SETTINGS_HREFS } from "../constants";
+import { LeaderBlock } from "../CustomWidget/LeaderBlock";
 import type { BoardWidgetProps } from "../ExploreBoard/types";
-import { listColumns } from "../helpers";
-import { leaderFrame, leaderLayout } from "../WidgetLeader/styles";
-import { topTrackLookOf, topTracksSplit } from "./helpers";
-import { TopTrackHero } from "./TopTrackHero";
-import { TopTrackLeader } from "./TopTrackLeader";
-import { TopTracksEmpty } from "./TopTracksEmpty";
-import { TopTracksList } from "./TopTracksList";
-import { TopTracksSkeleton } from "./TopTracksSkeleton";
-import { body, bodyFrame } from "./styles";
+import { emptyReasonOf, emptyTextKey, formatPlaycount, topTrackItem } from "./helpers";
 
 export function TopTracks({ size, info, provider = "lastfm" }: BoardWidgetProps) {
   const { t } = useTranslation("discover");
   const { data, isLoading, isError } = useListenedTracks(provider);
-
-  if (isLoading) return <TopTracksSkeleton />;
-  if (isError || !data) return <TopTracksEmpty reason="error" info={info} provider={provider} />;
-  if (data.status !== "ready") return <TopTracksEmpty reason={data.status} info={info} provider={provider} />;
-  if (data.topTracks.length === 0) return <TopTracksEmpty reason="no-data" info={info} provider={provider} />;
-
-  const { hero, rest, startRank } = topTracksSplit(data.topTracks, size);
-  const look = topTrackLookOf(size);
-  const headingId = `top-tracks-heading-${provider}`;
+  const controls = useWidgetControls("none");
+  const name = SOURCE_NAMES[provider];
+  const tracks = data?.status === "ready" ? data.topTracks : [];
+  const items = tracks.map((track) =>
+    topTrackItem(
+      track,
+      track.playcount === null ? null : t("topTracks.plays", { count: formatPlaycount(track.playcount) })
+    )
+  );
+  const reason = emptyReasonOf({ isError, data, empty: items.length === 0 });
 
   return (
-    <motion.section
-      variants={fadeIn}
-      initial="hidden"
-      animate="visible"
-      className={glassPanelCard({ height: "auto" })}
-      aria-labelledby={headingId}
+    <WidgetFrame
+      icon={Trophy}
+      title={t("topTracks.title")}
+      subtitle={t("topTracks.subtitle", { provider: name })}
+      info={info}
+      titleId={`top-tracks-heading-${provider}`}
+      loading={isLoading}
+      action={
+        reason === "unlinked"
+          ? { label: t("topTracks.empty.ctaConfigure", { provider: name }), href: PROVIDER_SETTINGS_HREFS[provider] }
+          : undefined
+      }
+      note={reason === null ? null : t(emptyTextKey(reason), { provider: name })}
     >
-      <WidgetHeader
-        icon={Trophy}
-        title={t("topTracks.title")}
-        subtitle={t("topTracks.subtitle", { provider: SOURCE_NAMES[provider] })}
-        titleId={headingId}
-        info={info}
+      <LeaderBlock
+        items={items}
+        size={size}
+        accent={BUILTIN_LEADER_ACCENT}
+        controls={controls}
+        badge={t("topTracks.heroBadge")}
       />
-      <div className={look === "leader" ? leaderFrame() : bodyFrame()}>
-        <div className={look === "leader" ? leaderLayout() : body()}>
-          {hero ? look === "leader" ? <TopTrackLeader track={hero} /> : <TopTrackHero track={hero} /> : null}
-          <TopTracksList tracks={rest} startRank={startRank} columns={listColumns(size)} />
-        </div>
-      </div>
-    </motion.section>
+    </WidgetFrame>
   );
 }

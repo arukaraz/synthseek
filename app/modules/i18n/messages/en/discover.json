@@ -94,6 +94,7 @@
   "topArtists": {
     "title": "Top Artists",
     "subtitle": "Most played · all time · {{provider}}",
+    "leaderBadge": "#1 most played",
     "empty": "No top artists yet, play some music to see them ranked.",
     "unlinked": "Add your {{provider}} username to see these.",
     "link": "Settings",
@@ -458,8 +459,6 @@
     "title": "Charts",
     "subtitle": "Top tracks worldwide · {{provider}}",
     "empty": "No chart right now.",
-    "play": "Play",
-    "request": "Request",
     "leaderBadge": "#1 worldwide"
   },
   "loved": {

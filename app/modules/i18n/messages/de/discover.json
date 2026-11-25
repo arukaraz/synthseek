@@ -94,6 +94,7 @@
   "topArtists": {
     "title": "Top-Künstler",
     "subtitle": "Meistgespielt · aller Zeiten · {{provider}}",
+    "leaderBadge": "Nr. 1 meistgespielt",
     "empty": "Noch keine Top-Künstler, höre etwas Musik, um sie nach Rang zu sehen.",
     "unlinked": "Füge deinen {{provider}}-Benutzernamen hinzu, um sie zu sehen.",
     "link": "Einstellungen",
@@ -458,8 +459,6 @@
     "title": "Charts",
     "subtitle": "Top-Titel weltweit · {{provider}}",
     "empty": "Gerade keine Charts.",
-    "play": "Abspielen",
-    "request": "Anfordern",
     "leaderBadge": "#1 weltweit"
   },
   "loved": {
