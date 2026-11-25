@@ -2,7 +2,7 @@ import type { PlaylistVisibility } from "@api/__generated__/types";
 import type { SocialBrand } from "@components/ui/SocialIcon";
 import type { ReactNode } from "react";
 
-import type { DegradedSource, DetailMode } from "../../types";
+import type { DetailMode } from "../../types";
 
 export interface SocialLink {
   brand: SocialBrand;
@@ -18,7 +18,6 @@ export interface HeroVisibilityChoice {
 }
 
 export interface PlaylistHeroControls {
-  syncBadge?: ReactNode;
   quietRequest?: boolean;
   missingCount?: number;
   onOpenWorkshop?: () => void;
@@ -52,7 +51,6 @@ export interface DetailHeroProps {
   requestDisabled?: boolean;
   requestDisabledTooltip?: string | null;
   playlistControls?: PlaylistHeroControls;
-  degradedSources?: DegradedSource[];
 }
 
 export interface HeroPlaySplitProps {

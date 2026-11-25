@@ -3,7 +3,7 @@ import { cva } from "class-variance-authority";
 export const layoutRoot = cva("flex h-full min-h-0");
 
 export const sidebar = cva(
-  "border-fg/10 bg-surface/30 flex h-full w-full shrink-0 flex-col gap-0.5 overflow-y-auto border-r p-3 md:w-60"
+  "player-clearance border-fg/10 bg-surface/30 flex h-full w-full shrink-0 flex-col gap-0.5 overflow-y-auto border-r p-3 md:w-60"
 );
 
 export const sidebarFooter = cva(
@@ -12,7 +12,7 @@ export const sidebarFooter = cva(
 
 export const sidebarBottom = cva("mt-auto flex flex-col gap-2 pt-4");
 
-export const contentScroll = cva("flex h-full min-h-0 min-w-0 flex-1 flex-col overflow-y-auto");
+export const contentScroll = cva("player-clearance flex h-full min-h-0 min-w-0 flex-1 flex-col overflow-y-auto");
 
 export const pageColumn = cva("flex min-w-0 flex-col");
 

@@ -30,8 +30,10 @@
       "followLabel": "Follow the server",
       "customLabel": "Their own",
       "unavailable": "This member's request preset could not be loaded. Try again later.",
-      "followServer": "This member's requests follow the server preset: {{summary}}.",
-      "followDefault": "There is no server preset, so this member's requests use their last request's settings, or the factory defaults ({{summary}}) when there is none.",
+      "usingServer": "Using the server preset:",
+      "usingDefaults": "Using their last request's settings, or the defaults:",
+      "editServerPreset": "Change the server preset",
+      "chooseServerPreset": "Pick one preset for the whole server",
       "cancel": "Cancel",
       "save": "Save"
     }

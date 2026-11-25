@@ -27,7 +27,7 @@ export const trackSourceLicense = cva(
 
 export const trackSourceEmpty = cva("text-fg/40 text-xs");
 
-export const detailContainer = cva("h-full overflow-y-auto", {
+export const detailContainer = cva("player-clearance h-full overflow-y-auto", {
   variants: {},
   defaultVariants: {},
 });

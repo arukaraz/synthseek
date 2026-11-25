@@ -6,5 +6,6 @@
     --glow: 1;
     --neon-accent: var(--color-accent-500);
     --glass-blur: 12px;
+    --player-opacity: 0.7;
   }
 }

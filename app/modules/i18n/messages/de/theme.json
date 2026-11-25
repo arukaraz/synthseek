@@ -158,6 +158,10 @@
     "--glow": { "label": "Leuchten", "hint": "Der Schein um primäre Aktionen" },
     "--neon-accent": { "label": "Leuchtakzent", "hint": "Der Akzentton leuchtender Ränder" },
     "--glass-blur": { "label": "Glasunschärfe", "hint": "Die Player-Leiste und schwebende Leisten" },
+    "--player-opacity": {
+      "label": "Player-Deckkraft",
+      "hint": "Wie deckend die Player-Leiste ist; niedriger zeigt die Seite dahinter"
+    },
 
     "--brand-spotify": { "label": "Spotify", "hint": "Das Spotify-Symbol und seine Badges" },
     "--brand-spotify-ink": { "label": "Spotify, Tinte", "hint": "Die dunklen Linien des Spotify-Symbols" },

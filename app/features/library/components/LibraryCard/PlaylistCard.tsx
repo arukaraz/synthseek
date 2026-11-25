@@ -25,10 +25,10 @@ import {
   cardImage,
   cardInitials as cardInitialsStyle,
   cardMeta,
-  cardMetaRow,
   cardMosaic,
   cardMosaicTile,
   cardRoot,
+  cardSideColumn,
   cardStatusBadge,
   cardStatusDot,
   cardSubtitle,
@@ -36,7 +36,7 @@ import {
 } from "./styles";
 import type { PlaylistCardProps } from "./types";
 
-export function PlaylistCard({ item, onOpen, onPlay, chrome = "overlay" }: PlaylistCardProps) {
+export function PlaylistCard({ item, onOpen, onPlay, onOpenWorkshop, chrome = "overlay" }: PlaylistCardProps) {
   const { t } = useTranslation("library");
   const { t: tDetail } = useTranslation("contentDetail");
   const tiles = mosaicTiles(item.images, item.image);
@@ -99,12 +99,12 @@ export function PlaylistCard({ item, onOpen, onPlay, chrome = "overlay" }: Playl
             {item.name}
           </p>
           <p className={cardSubtitle()}>{playlistSubtitle(item, origin, t)}</p>
-          <p className={cardMetaRow()}>
-            <span className={cardMeta()}>{t("page.counts.tracks", { count: item.total_tracks })}</span>
-            <PlaylistVisibilityMark visibility={item.visibility} />
-          </p>
+          <p className={cardMeta()}>{t("page.counts.tracks", { count: item.total_tracks })}</p>
         </div>
-        <PlaylistCardMenu item={item} />
+        <div className={cardSideColumn()}>
+          <PlaylistCardMenu item={item} onOpenWorkshop={onOpenWorkshop} />
+          <PlaylistVisibilityMark visibility={item.visibility} />
+        </div>
       </div>
     </li>
   );

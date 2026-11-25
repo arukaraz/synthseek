@@ -13,6 +13,8 @@
     "following": "Suivi",
     "followNamed": "Suivre {{artist}}",
     "followingNamed": "Vous suivez {{artist}}. Options de suivi",
+    "followHint": "Ajoutez les nouvelles sorties de cet artiste à votre calendrier et, si vous le souhaitez, demandez-les dès leur sortie.",
+    "followingHint": "Ses nouvelles sorties apparaissent dans votre calendrier. Cliquez pour les demander automatiquement ou ne plus suivre.",
     "automatic": "Demandes automatiques activées",
     "notFollowable": "Cet artiste n'est pas dans le catalogue, ses nouvelles sorties ne peuvent donc pas être suivies.",
     "followFailed": "Impossible de suivre {{artist}}. Réessayez.",

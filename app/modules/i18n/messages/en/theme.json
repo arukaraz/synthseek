@@ -137,6 +137,10 @@
     "--glow": { "label": "Glow", "hint": "The halo around primary actions" },
     "--neon-accent": { "label": "Glow accent", "hint": "The accent tone of glowing edges" },
     "--glass-blur": { "label": "Glass blur", "hint": "The player bar and floating bars" },
+    "--player-opacity": {
+      "label": "Player opacity",
+      "hint": "How solid the docked player bar is; lower shows the page behind it"
+    },
 
     "--brand-spotify": { "label": "Spotify", "hint": "The Spotify mark and its badges" },
     "--brand-spotify-ink": { "label": "Spotify, ink", "hint": "The dark lines of the Spotify mark" },

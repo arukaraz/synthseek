@@ -30,8 +30,10 @@
       "followLabel": "Seguir al servidor",
       "customLabel": "El suyo",
       "unavailable": "No se pudo cargar el preset de solicitud de este miembro. Inténtalo más tarde.",
-      "followServer": "Las solicitudes de este miembro siguen el preset del servidor: {{summary}}.",
-      "followDefault": "No hay preset del servidor, así que las solicitudes de este miembro usan los ajustes de su última solicitud, o los valores de fábrica ({{summary}}) si no hay ninguna.",
+      "usingServer": "Usa el preset del servidor:",
+      "usingDefaults": "Usa los ajustes de su última solicitud, o los predeterminados:",
+      "editServerPreset": "Cambiar el preset del servidor",
+      "chooseServerPreset": "Elegir un preset para todo el servidor",
       "cancel": "Cancelar",
       "save": "Guardar"
     }

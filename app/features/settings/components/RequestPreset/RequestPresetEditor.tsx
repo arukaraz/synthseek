@@ -31,9 +31,9 @@ export function RequestPresetEditor({
         ariaLabel={t("requestPreset.choiceAriaLabel")}
       />
       {value.choice === "follow" ? (
-        <p className={presetFollowNote()} data-cy="request-preset-follow">
+        <div className={presetFollowNote()} data-cy="request-preset-follow">
           {followSummary}
-        </p>
+        </div>
       ) : (
         <RequestRecipe
           selection={value.selection}

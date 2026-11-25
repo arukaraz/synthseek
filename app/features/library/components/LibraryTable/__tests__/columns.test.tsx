@@ -1,11 +1,12 @@
 import { describe, expect, it, vi } from "vitest";
 
-import type { LibraryTrackItem } from "@hooks/api/queries/library/types";
+import type { LibraryTrackPageItem } from "@hooks/api/queries/library/types";
+import i18n from "@locale";
 import { render, screen } from "@test/test-utils";
 
 import { buildTrackColumns } from "../columns";
 
-function track(libraryPath: LibraryTrackItem["libraryPath"]): LibraryTrackItem {
+function track(libraryPath: LibraryTrackPageItem["libraryPath"], plays = 0): LibraryTrackPageItem {
   return {
     id: "trk-1",
     external_id: "ext-1",
@@ -33,7 +34,14 @@ function track(libraryPath: LibraryTrackItem["libraryPath"]): LibraryTrackItem {
     libraryPath,
     created_at: new Date("2024-01-01T00:00:00.000Z"),
     completed_at: null,
+    plays,
   };
+}
+
+function columnOf(key: string) {
+  const column = columnsWith(false).find((entry) => entry.key === key);
+  if (column === undefined) throw new Error(`the ${key} column is missing`);
+  return column;
 }
 
 function columnsWith(showLibraryPath: boolean) {
@@ -82,6 +90,38 @@ describe("buildTrackColumns", () => {
   it("shows a placeholder for a track not in the library", () => {
     const { column } = libraryPathColumn();
     render(<>{column.cell(track(null))}</>);
+
+    expect(screen.getByText("--")).toBeInTheDocument();
+  });
+
+  it("folds the request time into the Status column instead of a column of its own", () => {
+    const keys = columnsWith(false).map((entry) => entry.key);
+
+    expect(keys).toContain("status");
+    expect(keys).not.toContain("requestedAt");
+  });
+
+  it("shows how many times the track was played in the Plays column", () => {
+    const column = columnOf("plays");
+    render(<>{column.cell(track(null, 1234))}</>);
+
+    expect(column.header).toBe("Plays");
+    expect(screen.getByText("1,234")).toBeInTheDocument();
+  });
+
+  it("writes the play count the way the app's language writes numbers, not the browser's", async () => {
+    await i18n.changeLanguage("de");
+    try {
+      render(<>{columnOf("plays").cell(track(null, 1234))}</>);
+
+      expect(screen.getByText("1.234")).toBeInTheDocument();
+    } finally {
+      await i18n.changeLanguage("en");
+    }
+  });
+
+  it("shows a placeholder in the Plays column for a track nobody played", () => {
+    render(<>{columnOf("plays").cell(track(null, 0))}</>);
 
     expect(screen.getByText("--")).toBeInTheDocument();
   });

@@ -112,6 +112,7 @@ export interface PlaylistCardProps {
   item: LibraryPlaylistItem;
   onOpen?: () => void;
   onPlay?: () => Promise<unknown>;
+  onOpenWorkshop?: () => void;
   chrome?: CardChrome;
 }
 
@@ -121,4 +122,5 @@ export interface PlaylistVisibilityMarkProps {
 
 export interface PlaylistCardMenuProps {
   item: LibraryPlaylistItem;
+  onOpenWorkshop?: () => void;
 }

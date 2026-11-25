@@ -1,6 +1,6 @@
 import { cva } from "class-variance-authority";
 
-export const sidebarShell = cva("flex h-full min-h-0 flex-col gap-4 overflow-y-auto pr-1");
+export const sidebarShell = cva("player-clearance flex h-full min-h-0 flex-col gap-4 overflow-y-auto pr-1");
 
 export const sidebarHeader = cva("border-fg/10 flex items-center justify-between border-b pb-3");
 export const sidebarTitle = cva("text-fg/90 text-sm font-semibold tracking-wide uppercase");

@@ -17,13 +17,17 @@ function foldSteps(source: string, from: string): string[] {
   const end = source.indexOf("}", start);
   return source
     .slice(start, end)
-    .split("\n")
-    .map((line) => line.trim().replace(/;$/, ""))
-    .filter((line) => line.startsWith("."));
+    .replace(/\n\s*/g, "")
+    .split(/(?=\.(?:normalize|replace|toLowerCase|trim)\()/)
+    .map((step) => step.split(";")[0].trim())
+    .filter((step) => step.startsWith("."));
 }
 
 function serverFoldSteps(): string[] {
-  return foldSteps(serverSource(), "export function foldForSearch");
+  return [
+    ...foldSteps(serverSource(), "export function foldAccents"),
+    ...foldSteps(serverSource(), "export function foldForSearch"),
+  ];
 }
 
 function clientFoldSteps(): string[] {

@@ -6,7 +6,11 @@ import { act, fireEvent } from "@testing-library/react";
 import { LONG_PRESS_MS } from "@hooks/ui/constants";
 import { createLibraryController, createLibraryShell } from "@test/factories";
 import { renderWithProviders, screen } from "@test/test-utils";
-import type { LibraryTrackItem, LibraryTracksInfiniteResult } from "@hooks/api/queries/library/types";
+import type {
+  LibraryTrackItem,
+  LibraryTrackPageItem,
+  LibraryTracksInfiniteResult,
+} from "@hooks/api/queries/library/types";
 import { useLibrarySelection } from "../../hooks/useLibrarySelection";
 import type { LibraryViewShell, TracksViewModeProps } from "../../types";
 import type { TrackSelectionConfig } from "../LibraryTable/types";
@@ -82,7 +86,7 @@ vi.mock("../LibraryViewLayout/LibraryViewLayout", async () => {
   };
 });
 
-function createTrack(): LibraryTrackItem {
+function createTrack(): LibraryTrackPageItem {
   return {
     id: "trk-1",
     external_id: "ext-1",
@@ -110,6 +114,7 @@ function createTrack(): LibraryTrackItem {
     libraryPath: null,
     created_at: new Date("2024-01-01T00:00:00.000Z"),
     completed_at: null,
+    plays: 0,
   };
 }
 

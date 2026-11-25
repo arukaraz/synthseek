@@ -30,8 +30,10 @@
       "followLabel": "Suivre le serveur",
       "customLabel": "Le sien",
       "unavailable": "Impossible de charger le préréglage de demande de ce membre. Réessayez plus tard.",
-      "followServer": "Les demandes de ce membre suivent le préréglage du serveur : {{summary}}.",
-      "followDefault": "Il n'y a pas de préréglage du serveur, les demandes de ce membre utilisent donc les réglages de sa dernière demande, ou les réglages d'usine ({{summary}}) s'il n'y en a pas.",
+      "usingServer": "Utilise le préréglage du serveur :",
+      "usingDefaults": "Utilise les réglages de sa dernière demande, ou ceux par défaut :",
+      "editServerPreset": "Modifier le préréglage du serveur",
+      "chooseServerPreset": "Choisir un préréglage pour tout le serveur",
       "cancel": "Annuler",
       "save": "Enregistrer"
     }

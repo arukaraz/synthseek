@@ -2,7 +2,6 @@
 
 import type { PlaylistVisibility } from "@api/__generated__/types";
 import { useCatalogPlaylistTracks, usePlaylistDetail } from "@hooks/api/queries/content-detail";
-import { useSetPlaylistSync } from "@hooks/api/mutations/playlists/useSetPlaylistSync";
 import { useSetPlaylistVisibility } from "@hooks/api/mutations/playlists/useSetPlaylistVisibility";
 import { playlistOriginLabel } from "@utils/playlist";
 import { memo, useCallback, useMemo, useState } from "react";
@@ -17,7 +16,7 @@ import {
   failedToLoad,
   unrequestedTracks,
 } from "../../helpers";
-import { DetailHero, PlaylistSyncToggle } from "../DetailHero";
+import { DetailHero } from "../DetailHero";
 import { DetailEmpty, DetailSection } from "../DetailSection";
 import { PlaylistTracklist } from "../PlaylistTracklist";
 import { StatRow } from "../StatRow";
@@ -59,7 +58,6 @@ function PlaylistDetailBodyComponent({
   const handlePlay = useCallback(() => play({ kind: "playlist", playlistId: target.id }), [play, target.id]);
   const handleShuffle = useCallback(() => shuffle({ kind: "playlist", playlistId: target.id }), [shuffle, target.id]);
 
-  const setSync = useSetPlaylistSync();
   const setVisibility = useSetPlaylistVisibility();
   const [sortKey, setSortKey] = useState<TracklistSortKey>(isLibrary ? PLAYLIST_SORT_KEY : DEFAULT_SORT_KEY);
   const [direction, setDirection] = useState<SortDirection>("asc");
@@ -82,7 +80,6 @@ function PlaylistDetailBodyComponent({
   const sortedTracks = useStableTracklistOrder(displayTracks, sortKey, direction);
 
   const totalTracks = isLibrary ? (playlist?.totalTracks ?? 0) : displayTracks.length;
-  const sourceProvider = playlist?.sourceProvider ?? null;
   const subtitle = !isLibrary
     ? t("playlistTrackCount", { count: totalTracks })
     : playlist
@@ -100,8 +97,6 @@ function PlaylistDetailBodyComponent({
 
   const heroCover = isLibrary ? (playlist?.cover ?? target.cover) : target.cover;
 
-  const syncEnabled = playlist?.syncEnabled ?? false;
-  const isImported = sourceProvider != null;
   const playlistName = isLibrary && playlist ? playlist.name : target.name;
 
   const requestWith = useCallback(
@@ -139,11 +134,6 @@ function PlaylistDetailBodyComponent({
       ? t("tracklistCount", { inLibrary: counts.completeCount, total: displayTracks.length })
       : undefined;
 
-  const handleSyncToggle = useCallback(
-    (next: boolean) => setSync.mutate({ playlistId: target.id, enabled: next }),
-    [setSync, target.id]
-  );
-
   const visibility = playlist?.visibility;
   const handleVisibilityChange = useCallback(
     (next: PlaylistVisibility) => {
@@ -165,10 +155,6 @@ function PlaylistDetailBodyComponent({
                 disabled: setVisibility.isPending,
               }
             : undefined,
-        syncBadge:
-          canManage && isImported ? (
-            <PlaylistSyncToggle syncEnabled={syncEnabled} onToggle={handleSyncToggle} disabled={setSync.isPending} />
-          ) : undefined,
       }
     : undefined;
 

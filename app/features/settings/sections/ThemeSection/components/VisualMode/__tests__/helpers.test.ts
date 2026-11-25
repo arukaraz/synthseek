@@ -48,6 +48,10 @@ describe("matchesQuery", () => {
     expect(matchesQuery(token, copy, token.name.toLowerCase())).toBe(true);
     expect(matchesQuery(token, copy, "zzz")).toBe(false);
   });
+
+  it("matches a label written with accents by a query typed without them", () => {
+    expect(matchesQuery(token, { label: "Opacité du lecteur", hint: "" }, "opacite")).toBe(true);
+  });
 });
 
 describe("plainNumber", () => {

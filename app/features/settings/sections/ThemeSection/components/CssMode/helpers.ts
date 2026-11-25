@@ -1,6 +1,7 @@
 import type { Text } from "@codemirror/state";
 
 import { THEME_CONTRACT } from "@theme/contract";
+import { matchesTerms, searchTerms } from "@utils/search";
 import { COMPONENTS_DIRECTORY, CUSTOM_FILE, isFreePath, parseColor, tokenPathOf } from "@theme/custom";
 import type { ThemeDraft } from "@theme/custom";
 
@@ -206,9 +207,9 @@ export function insertItems({ tokens, values, copy, category, query }: InsertQue
       });
     }
   }
-  const needle = query.trim().toLowerCase();
-  if (needle === "") return items;
-  return items.filter((item) => `${item.key} ${item.description}`.toLowerCase().includes(needle));
+  const terms = searchTerms(query);
+  if (terms.length === 0) return items;
+  return items.filter((item) => matchesTerms(terms, [item.key, item.description]));
 }
 
 export function minimalChange(previous: string, next: string): TextChange {

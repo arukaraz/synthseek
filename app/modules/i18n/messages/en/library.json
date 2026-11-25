@@ -306,7 +306,7 @@
       "track": "Track",
       "artistAlbum": "Artist · Album",
       "status": "Status",
-      "requestedAt": "Requested at",
+      "plays": "Plays",
       "length": "Length",
       "album": "Album",
       "artist": "Artist",
@@ -541,6 +541,7 @@
       "shared": "Shared: everyone here can see it"
     },
     "actions": {
+      "workshop": "Open in Workshop",
       "rename": "Rename",
       "editRule": "Edit rule",
       "makePrivate": "Make private",

@@ -1,13 +1,8 @@
-import type { AppRouter, MusicAlbum, MusicArtist, MusicTrack } from "@api/__generated__/types";
+import type { MusicAlbum, MusicArtist, MusicTrack } from "@api/__generated__/types";
 import type { PlayableTracksTarget } from "@hooks/api/queries/library/types";
-import type { inferRouterOutputs } from "@trpc/server";
 import type { ReactNode } from "react";
 
 import type { TracklistTrack } from "./components/Tracklist/types";
-
-export type DegradedSource = NonNullable<
-  inferRouterOutputs<AppRouter>["contentDetail"]["artistStats"]["degraded"]
->[number];
 
 export type DetailMode = "artist" | "album" | "playlist";
 
@@ -23,6 +18,7 @@ export interface DetailTarget {
   preloadedTracks?: TracklistTrack[];
   requestDisabled?: boolean;
   requestDisabledTooltip?: string | null;
+  openWorkshop?: boolean;
 }
 
 export interface ContentDetailModalProps {

@@ -106,7 +106,7 @@ export function SearchResultsWidget() {
           </div>
         </div>
 
-        <div className="flex-1 overflow-auto">
+        <div className="player-clearance flex-1 overflow-auto">
           <div className="p-4 sm:p-6">
             <div className="space-y-6 sm:space-y-8">
               {[0, 1, 2, 3].map((section) => (
@@ -150,7 +150,7 @@ export function SearchResultsWidget() {
         )}
       </div>
 
-      <div className="flex-1 overflow-auto">
+      <div className="player-clearance flex-1 overflow-auto">
         <AnimatePresence mode="wait">
           {isFilterTransitioning ? (
             <motion.div

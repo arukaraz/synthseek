@@ -151,15 +151,6 @@ describe("what the artist page shows", () => {
 
     expect(hero.props?.genres).toEqual(["house", "french touch"]);
   });
-
-  it("gathers the sources that could not be reached across both fetches", () => {
-    api.identity = { image: null, mbid: null, degraded: [{ source: "lastfm", unavailableForSeconds: null }] };
-    api.stats = { genres: [], degraded: [{ source: "musicbrainz", unavailableForSeconds: 10 }] };
-
-    renderBody();
-
-    expect(hero.props?.degradedSources).toHaveLength(2);
-  });
 });
 
 describe("what the artist page offers", () => {

@@ -10,7 +10,6 @@ import {
   artistTarget,
   cardRingFillStyle,
   catalogPlaylistTracks,
-  collectDegradedSources,
   computeRequestState,
   countAlbumsInLibrary,
   deriveTrackStatusCounts,
@@ -801,53 +800,6 @@ describe("content-detail helpers", () => {
       expect(humanizeArtistType(null, contentDetailT)).toBeNull();
       expect(humanizeArtistType("", contentDetailT)).toBeNull();
       expect(humanizeArtistType("   ", contentDetailT)).toBeNull();
-    });
-  });
-
-  describe("collectDegradedSources", () => {
-    it("collects sources from a single query result", () => {
-      expect(collectDegradedSources([[{ source: "lastfm", unavailableForSeconds: 60 }]])).toEqual([
-        { source: "lastfm", unavailableForSeconds: 60 },
-      ]);
-    });
-
-    it("dedupes sources repeated across query results and sorts them", () => {
-      expect(
-        collectDegradedSources([
-          [
-            { source: "wikidata", unavailableForSeconds: null },
-            { source: "lastfm", unavailableForSeconds: null },
-          ],
-          [
-            { source: "lastfm", unavailableForSeconds: null },
-            { source: "discogs", unavailableForSeconds: null },
-          ],
-        ])
-      ).toEqual([
-        { source: "discogs", unavailableForSeconds: null },
-        { source: "lastfm", unavailableForSeconds: null },
-        { source: "wikidata", unavailableForSeconds: null },
-      ]);
-    });
-
-    it("keeps the longest reported outage when a source repeats", () => {
-      expect(
-        collectDegradedSources([
-          [{ source: "lastfm", unavailableForSeconds: null }],
-          [{ source: "lastfm", unavailableForSeconds: 120 }],
-          [{ source: "lastfm", unavailableForSeconds: 90 }],
-        ])
-      ).toEqual([{ source: "lastfm", unavailableForSeconds: 120 }]);
-    });
-
-    it("ignores missing degraded fields", () => {
-      expect(
-        collectDegradedSources([undefined, [{ source: "musicbrainz", unavailableForSeconds: 5 }], undefined])
-      ).toEqual([{ source: "musicbrainz", unavailableForSeconds: 5 }]);
-    });
-
-    it("returns an empty list when nothing degraded", () => {
-      expect(collectDegradedSources([undefined, [], undefined])).toEqual([]);
     });
   });
 

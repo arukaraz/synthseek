@@ -164,6 +164,10 @@ describe("matchesQuery over the name", () => {
     expect(matchesQuery(entry("charts", "Charts", "Top tracks worldwide"), "listenbrainz")).toBe(false);
   });
 
+  it("finds a widget whose name carries accents by a query typed without them", () => {
+    expect(matchesQuery({ ...entry("charts", "Charts"), name: "Éxitos del año" }, "exitos ano")).toBe(true);
+  });
+
   it("sorts twins that share a title by the provider their name carries", () => {
     const twins = [
       { ...entry("listenbrainzCharts", "Charts"), name: "Charts (ListenBrainz)" },

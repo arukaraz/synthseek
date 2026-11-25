@@ -92,7 +92,14 @@ vi.mock("../components/PlaylistDetailBody", () => ({
 
 vi.mock("../components/PlaylistWorkshop", () => ({
   WorkshopSurface: ({ children }: { children: ReactNode }) => <div data-testid="workshop">{children}</div>,
-  PlaylistWorkshop: ({ target }: { target: DetailTarget }) => <div>{target.name} workshop</div>,
+  PlaylistWorkshop: ({ target, onExit }: { target: DetailTarget; onExit: () => void }) => (
+    <div>
+      {target.name} workshop
+      <button type="button" onClick={onExit}>
+        leave workshop
+      </button>
+    </div>
+  ),
 }));
 
 import { ContentDetailModal } from "../ContentDetailModal";
@@ -391,6 +398,27 @@ describe("the playlist workshop and the page under it", () => {
 
     expect(onClose).not.toHaveBeenCalled();
     expect(screen.getByTestId("playlist-body")).toBeInTheDocument();
+  });
+
+  it("opens straight into the workshop when asked to, and leaving it closes the modal", async () => {
+    const { onClose, user } = renderModal({ mode: "playlist", id: "playlist-1", name: "Summer", openWorkshop: true });
+
+    expect(screen.getByTestId("workshop")).toHaveTextContent("Summer workshop");
+    expect(screen.queryByTestId("playlist-body")).not.toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: "leave workshop" }));
+
+    expect(onClose).toHaveBeenCalledTimes(1);
+  });
+
+  it("goes back to the playlist when the workshop was opened from it", async () => {
+    const { onClose, user } = renderModal({ mode: "playlist", id: "playlist-1", name: "Summer" });
+
+    await user.click(screen.getByRole("button", { name: "open workshop" }));
+    await user.click(screen.getByRole("button", { name: "leave workshop" }));
+
+    expect(screen.getByTestId("playlist-body")).toBeInTheDocument();
+    expect(onClose).not.toHaveBeenCalled();
   });
 
   it("stays open when the workshop is opened on a page reached after the modal was mounted", async () => {

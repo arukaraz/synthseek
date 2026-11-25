@@ -13,6 +13,8 @@
     "following": "Following",
     "followNamed": "Follow {{artist}}",
     "followingNamed": "Following {{artist}}. Follow options",
+    "followHint": "Put this artist's new releases on your calendar, and optionally request them as they come out.",
+    "followingHint": "Their new releases show on your calendar. Click to request them automatically or unfollow.",
     "automatic": "Automatic requests on",
     "notFollowable": "This artist isn't in the catalog, so new releases can't be tracked.",
     "followFailed": "Couldn't follow {{artist}}. Try again.",

@@ -7,7 +7,6 @@ import { memo, useCallback, useMemo } from "react";
 
 import { useContentDetailActions } from "../../ContentDetailActionsContext";
 import { EMPTY_GENRES } from "../../constants";
-import { collectDegradedSources } from "../../helpers";
 import { useDetailPlayback } from "../../hooks/useDetailPlayback";
 import {
   ArtistDiscographyWidget,
@@ -38,10 +37,6 @@ function ArtistDetailBodyComponent({ target, onClose, onNavigate }: ArtistDetail
   const cover = identity?.image ?? target.cover;
   const genres = useMemo(() => stats?.genres ?? EMPTY_GENRES, [stats?.genres]);
   const socials = useMemo(() => buildSocialLinks(identity?.socials), [identity?.socials]);
-  const degradedSources = useMemo(
-    () => collectDegradedSources([identity?.degraded, stats?.degraded]),
-    [identity?.degraded, stats?.degraded]
-  );
 
   const handlePlay = useCallback(() => play({ kind: "artist", artist: target.name }), [play, target.name]);
   const handleShuffle = useCallback(() => shuffle({ kind: "artist", artist: target.name }), [shuffle, target.name]);
@@ -79,7 +74,6 @@ function ArtistDetailBodyComponent({ target, onClose, onNavigate }: ArtistDetail
         socials={socials}
         statsSlot={statsSlot}
         followSlot={<FollowControl catalogArtistId={target.id} artistName={target.name} />}
-        degradedSources={degradedSources}
       />
 
       <div className={modalScrollArea()}>

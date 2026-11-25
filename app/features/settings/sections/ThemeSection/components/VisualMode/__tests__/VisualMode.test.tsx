@@ -186,8 +186,9 @@ describe("VisualMode search", () => {
 
     await userEvent.type(screen.getByRole("searchbox", { name: visual.search }), "page background");
 
-    expect(rowCount(container)).toBe(1);
+    expect(rowCount(container)).toBe(2);
     expect(rowOf(container, "--surface-bg")).toBeInTheDocument();
+    expect(rowOf(container, "--backdrop-grid")).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: /Show all/ })).not.toBeInTheDocument();
     expect(screen.queryByRole("img", { name: visual.hiddenChange })).not.toBeInTheDocument();
   });

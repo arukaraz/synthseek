@@ -24,7 +24,8 @@ export type LibraryArtistsResult = LibraryOutputs["getArtists"];
 export type LibraryPlaylistsResult = LibraryOutputs["getPlaylists"];
 export type LibraryCountsResult = LibraryOutputs["getCounts"];
 
-export type LibraryTrackItem = LibraryTracksResult["items"][number];
+export type LibraryTrackItem = LibraryOutputs["getPlayableTracks"]["items"][number];
+export type LibraryTrackPageItem = LibraryTracksResult["items"][number];
 export type LibraryAlbumItem = LibraryAlbumsResult["items"][number];
 export type LibraryArtistItem = LibraryArtistsResult["items"][number];
 export type LibraryPlaylistItem = LibraryPlaylistsResult["items"][number];
@@ -49,7 +50,7 @@ export interface LibraryInfiniteResult<TItem> {
   isError: boolean;
 }
 
-export interface LibraryTracksInfiniteResult extends LibraryInfiniteResult<LibraryTrackItem> {
+export interface LibraryTracksInfiniteResult extends LibraryInfiniteResult<LibraryTrackPageItem> {
   appliedSources: string[];
   isRefreshing: boolean;
 }

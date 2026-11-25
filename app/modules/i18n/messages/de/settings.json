@@ -30,8 +30,10 @@
       "followLabel": "Dem Server folgen",
       "customLabel": "Eigene",
       "unavailable": "Die Anfrage-Voreinstellung dieses Mitglieds konnte nicht geladen werden. Versuche es später erneut.",
-      "followServer": "Die Anfragen dieses Mitglieds folgen der Server-Voreinstellung: {{summary}}.",
-      "followDefault": "Es gibt keine Server-Voreinstellung, daher nutzen die Anfragen dieses Mitglieds die Einstellungen seiner letzten Anfrage, oder die Werkseinstellungen ({{summary}}), wenn es keine gibt.",
+      "usingServer": "Nutzt die Server-Voreinstellung:",
+      "usingDefaults": "Nutzt die Einstellungen der letzten Anfrage, oder die Standardwerte:",
+      "editServerPreset": "Server-Voreinstellung ändern",
+      "chooseServerPreset": "Eine Voreinstellung für den ganzen Server wählen",
       "cancel": "Abbrechen",
       "save": "Speichern"
     }

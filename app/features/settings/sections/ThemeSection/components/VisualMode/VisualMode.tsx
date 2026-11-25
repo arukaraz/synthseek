@@ -64,7 +64,7 @@ export function VisualMode({ editor }: EditorModeProps) {
   const section = SECTION_TOKENS.has(view.section) ? view.section : THEME_CONTRACT.files[0].id;
   const sectionTokens = SECTION_TOKENS.get(section) ?? [];
   const essentials = essentialsOf(sectionTokens);
-  const needle = query.trim().toLowerCase();
+  const needle = query.trim();
   const searching = needle !== "";
 
   const matches = useMemo(

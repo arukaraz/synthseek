@@ -10,7 +10,7 @@ export const sidebarContainer = cva(
 
 export type SidebarContainerProps = VariantProps<typeof sidebarContainer>;
 
-export const sidebarList = cva("flex-1 overflow-y-auto", {
+export const sidebarList = cva("player-clearance flex-1 overflow-y-auto", {
   variants: {},
   defaultVariants: {},
 });

@@ -1,3 +1,5 @@
+import type { ReactNode } from "react";
+
 import type {
   DownloadSourceKey,
   RequestPreset,
@@ -18,7 +20,7 @@ export interface RequestPresetEditorProps {
   offered: DownloadSourceKey[];
   followLabel: string;
   customLabel: string;
-  followSummary: string;
+  followSummary: ReactNode;
 }
 
 export interface RequestPresetCardProps {

@@ -27,6 +27,11 @@ export interface LibraryDurationCellProps {
   durationMs: number;
 }
 
-export interface LibraryRequestedAtCellProps {
+export interface LibraryStatusCellProps {
+  status: LibraryTrackItem["status"];
   createdAt: Date;
+}
+
+export interface LibraryPlaysCellProps {
+  plays: number;
 }

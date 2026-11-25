@@ -201,21 +201,5 @@
     "similar": "No similar artists available.",
     "tracklist": "No tracks available.",
     "moreFrom": "No other releases available."
-  },
-  "degraded": {
-    "label": "Some sources unavailable",
-    "tooltipIntro": "These sources could not be reached:",
-    "providers": {
-      "lastfm": "Last.fm",
-      "listenbrainz": "ListenBrainz",
-      "musicbrainz": "MusicBrainz",
-      "wikidata": "Wikidata",
-      "discogs": "Discogs",
-      "songlink": "Songlink",
-      "fanart": "fanart.tv",
-      "coverartarchive": "Cover Art Archive",
-      "wikipedia": "Wikipedia"
-    },
-    "unavailableFor": "{{provider}} · down {{duration}}"
   }
 }

@@ -34,6 +34,18 @@ export function ContentDetailModal({ open, session, onClose, target, actions }: 
   const openerRef = useRef<HTMLElement | null>(null);
   const [miniVisible, setMiniVisible] = useState(false);
   const [workshopId, setWorkshopId] = useState<string | null>(null);
+  const [workshopOnly, setWorkshopOnly] = useState(false);
+  const openKey = open ? String(session) : null;
+  const [seenOpenKey, setSeenOpenKey] = useState<string | null>(null);
+
+  if (openKey !== seenOpenKey) {
+    setSeenOpenKey(openKey);
+    if (openKey !== null) {
+      const direct = target?.openWorkshop === true;
+      setWorkshopId(direct ? target.id : null);
+      setWorkshopOnly(direct);
+    }
+  }
 
   const currentId = current?.id ?? null;
   const isArtist = current?.mode === "artist";
@@ -75,13 +87,14 @@ export function ContentDetailModal({ open, session, onClose, target, actions }: 
   if (!current) return null;
 
   if (open && isLibraryPlaylist && workshopId === current.id) {
+    const exitWorkshop = workshopOnly ? close : () => setWorkshopId(null);
     return (
-      <WorkshopSurface open name={playlist?.name ?? current.name} onExit={() => setWorkshopId(null)}>
+      <WorkshopSurface open name={playlist?.name ?? current.name} onExit={exitWorkshop}>
         <ContentDetailActionsProvider actions={actions}>
           <PlaylistWorkshop
             key={current.id}
             target={current}
-            onExit={() => setWorkshopId(null)}
+            onExit={exitWorkshop}
             onClose={close}
             onNavigate={navigateTo}
           />
@@ -150,7 +163,10 @@ export function ContentDetailModal({ open, session, onClose, target, actions }: 
                 target={current}
                 onClose={close}
                 onNavigate={navigateTo}
-                onOpenWorkshop={() => setWorkshopId(current.id)}
+                onOpenWorkshop={() => {
+                  setWorkshopOnly(false);
+                  setWorkshopId(current.id);
+                }}
                 showInLibraryPill={showInLibraryPill}
               />
             ) : (

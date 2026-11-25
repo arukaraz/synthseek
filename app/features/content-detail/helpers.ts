@@ -30,7 +30,6 @@ import type { HeroRequestState } from "./components/DetailHero/types";
 import type {
   AlbumRequestInput,
   ArtistRequestInput,
-  DegradedSource,
   DetailTarget,
   FactItem,
   PlaylistPreloadedTargetInput,
@@ -54,28 +53,6 @@ export function humanizeArtistType(rawType: string | null, t: TFunction<"content
   const messageKey = artistTypeMessageKey(normalized);
   if (messageKey) return t(messageKey);
   return capitalize(normalized);
-}
-
-function longestOutage(a: number | null, b: number | null): number | null {
-  if (a === null) return b;
-  if (b === null) return a;
-  return Math.max(a, b);
-}
-
-export function collectDegradedSources(lists: Array<DegradedSource[] | undefined>): DegradedSource[] {
-  const seen = new Map<string, DegradedSource>();
-  for (const list of lists) {
-    for (const entry of list ?? []) {
-      const known = seen.get(entry.source);
-      seen.set(entry.source, {
-        source: entry.source,
-        unavailableForSeconds: known
-          ? longestOutage(known.unavailableForSeconds, entry.unavailableForSeconds)
-          : entry.unavailableForSeconds,
-      });
-    }
-  }
-  return [...seen.values()].sort((a, b) => a.source.localeCompare(b.source));
 }
 
 export function formatBorn(bornDate: string | null, bornPlace: string | null): string | null {

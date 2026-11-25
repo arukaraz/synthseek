@@ -59,7 +59,7 @@ export const chainButton = cva(
 export const bar = cva("flex h-[var(--player-bar-height)] flex-col justify-center @player:gap-1", {
   variants: {
     placement: {
-      dock: "bg-surface-overlay/95 border-primary-500/25 border-t px-2 backdrop-blur-lg @player:px-5",
+      dock: "bg-player-dock border-primary-500/25 border-t px-2 backdrop-blur-md @player:px-5",
       header: "bg-transparent",
     },
   },

@@ -170,6 +170,10 @@
     "--glow": { "label": "Halo", "hint": "La lueur autour des actions principales" },
     "--neon-accent": { "label": "Accent du halo", "hint": "La teinte d'accent des bords lumineux" },
     "--glass-blur": { "label": "Flou du verre", "hint": "La barre du lecteur et les barres flottantes" },
+    "--player-opacity": {
+      "label": "Opacité du lecteur",
+      "hint": "L'opacité de la barre du lecteur ; plus basse, elle laisse voir la page derrière"
+    },
 
     "--brand-spotify": { "label": "Spotify", "hint": "Le symbole Spotify et ses badges" },
     "--brand-spotify-ink": { "label": "Spotify, encre", "hint": "Les traits sombres du symbole Spotify" },

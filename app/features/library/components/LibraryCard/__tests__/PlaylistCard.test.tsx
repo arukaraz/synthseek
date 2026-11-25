@@ -171,14 +171,16 @@ describe("PlaylistCard", () => {
     { visibility: "private", label: "Private: only its owner and administrators can see it", icon: "svg.lucide-lock" },
     { visibility: "shared", label: "Shared: everyone here can see it", icon: "svg.lucide-users" },
   ] as const)(
-    "marks a $visibility playlist beside its track count, and says who can see it on hover",
+    "marks a $visibility playlist below its actions menu, and says who can see it on hover",
     async ({ visibility, label, icon }) => {
       const { user } = renderWithProviders(<PlaylistCard item={createLibraryPlaylist({ visibility })} />);
 
       const mark = screen.getByRole("img", { name: label });
+      const menu = screen.getByRole("button", { name: /Playlist actions for Road Trip/i });
       expect(mark).toHaveAttribute("data-visibility", visibility);
       expect(mark.querySelector(icon)).not.toBeNull();
-      expect(mark.parentElement).toHaveTextContent("20 tracks");
+      expect(mark.parentElement).toContainElement(menu);
+      expect(menu.compareDocumentPosition(mark) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
 
       await user.hover(mark);
 

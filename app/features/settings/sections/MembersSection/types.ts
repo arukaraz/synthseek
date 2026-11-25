@@ -73,6 +73,11 @@ export interface EditUserDialogProps {
   onOpenChange: (open: boolean) => void;
 }
 
+export interface MemberPresetFollowSummaryProps {
+  summary: string;
+  hasServerPreset: boolean;
+}
+
 export interface MemberRequestPresetDialogProps {
   member: MemberListItem | null;
   onClose: () => void;

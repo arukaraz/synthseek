@@ -54,10 +54,10 @@ export const modalSide = cva("flex min-w-0 flex-col gap-8");
 
 export const modalFullRow = cva("flex flex-col gap-8");
 
-export const backBar = cva("relative z-20 flex shrink-0 px-5 pt-5 sm:px-8 sm:pt-6");
+export const backBar = cva("relative z-20 -mb-3 flex shrink-0 px-5 pt-4 sm:-mb-5 sm:px-8 sm:pt-5");
 
 export const backButton = cva(
-  "border-fg/15 bg-veil/40 text-overlay-fg hover:bg-veil/55 flex items-center gap-2 self-start rounded-full border px-5 py-2.5 text-base font-semibold backdrop-blur-md transition-colors"
+  "border-fg/15 bg-veil/40 text-overlay-fg hover:bg-veil/55 flex min-h-9 items-center gap-1.5 self-start rounded-full border px-3.5 py-1.5 text-sm font-semibold backdrop-blur-md transition-colors"
 );
 
 export const hero = cva(
@@ -148,7 +148,7 @@ export const statRow = cva("flex flex-wrap justify-center sm:justify-start", {
 export const statCell = cva("flex", {
   variants: {
     layout: {
-      aside: "flex-col",
+      aside: "flex-col @2xl:odd:last:col-start-2",
       inline: "items-baseline gap-1.5 whitespace-nowrap",
     },
   },

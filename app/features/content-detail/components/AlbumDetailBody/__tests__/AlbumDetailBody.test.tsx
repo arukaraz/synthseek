@@ -12,18 +12,11 @@ interface AlbumTrack {
 const api = vi.hoisted(() => ({
   album: undefined as Record<string, unknown> | undefined,
   albumFailed: false,
-  stats: undefined as Record<string, unknown> | undefined,
-  credits: undefined as Record<string, unknown> | undefined,
   statsArgs: vi.fn(),
 }));
 
 vi.mock("@hooks/api/queries/content-detail", () => ({
   useAlbumDetail: () => ({ data: api.album, isError: api.albumFailed }),
-  useAlbumStats: (args: unknown) => {
-    api.statsArgs(args);
-    return { data: api.stats };
-  },
-  useAlbumCredits: () => ({ data: api.credits }),
 }));
 
 const playback = vi.hoisted(() => ({ playEntity: vi.fn(), startRadio: vi.fn() }));
@@ -76,7 +69,10 @@ vi.mock("../../DetailHero/DetailHero", () => ({
 vi.mock("../../../widgets", () => ({
   AlbumCreditsWidget: () => <div data-testid="credits" />,
   AlbumDetailWidget: () => <div data-testid="tracklist" />,
-  AlbumStatsWidget: ({ slot }: { slot: string }) => <div data-testid={`stats-${slot}`} />,
+  AlbumStatsWidget: (props: { slot: string; artistName: string; albumName: string; catalogAlbumId: string }) => {
+    api.statsArgs({ artistName: props.artistName, albumName: props.albumName, catalogAlbumId: props.catalogAlbumId });
+    return <div data-testid={`stats-${props.slot}`} />;
+  },
   MoreFromArtistWidget: ({ onSelectAlbum }: { onSelectAlbum: (target: DetailTarget) => void }) => (
     <button
       type="button"
@@ -108,7 +104,6 @@ function albumWith(tracks: AlbumTrack[], overrides: Record<string, unknown> = {}
     label: "Virgin",
     recordType: "album",
     length: "60:00",
-    degraded: undefined,
     ...overrides,
   };
 }
@@ -124,8 +119,6 @@ beforeEach(() => {
   vi.clearAllMocks();
   api.album = undefined;
   api.albumFailed = false;
-  api.stats = undefined;
-  api.credits = undefined;
   hero.props = null;
 });
 
@@ -183,15 +176,6 @@ describe("what the album page shows", () => {
       albumName: "Discovery",
       catalogAlbumId: "album-1",
     });
-  });
-
-  it("gathers the sources that could not be reached across every fetch", () => {
-    api.album = albumWith([], { degraded: [{ source: "lastfm", unavailableForSeconds: null }] });
-    api.credits = { degraded: [{ source: "musicbrainz", unavailableForSeconds: 30 }] };
-
-    renderBody();
-
-    expect(hero.props?.degradedSources).toHaveLength(2);
   });
 });
 

@@ -19,8 +19,7 @@ export const contentShell = cva(
       },
       player: {
         hidden: "h-screen-minus-header-and-nav sm:h-screen-minus-header",
-        docked:
-          "player-metrics h-[calc(var(--height-screen-minus-header-and-nav)-var(--player-dock-height))] sm:h-[calc(var(--height-screen-minus-header)-var(--player-dock-height))]",
+        docked: "player-metrics h-screen-minus-header-and-nav sm:h-screen-minus-header",
       },
       chain: {
         true: "player-metrics-chain",

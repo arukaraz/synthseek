@@ -59,6 +59,13 @@
     --player-dock-height: calc(var(--player-bar-height) + var(--height-player-chain) + var(--player-dock-gap));
   }
 
+  .player-clearance::after {
+    content: "";
+    display: block;
+    flex-shrink: 0;
+    height: var(--player-dock-height, 0rem);
+  }
+
   @media (max-width: 39.999rem) {
     .player-metrics,
     .player-metrics-chain {

@@ -5,8 +5,6 @@ import { renderWithProviders, screen } from "@test/test-utils";
 import type { DetailTarget } from "../../../types";
 
 const usePlaylistDetailMock = vi.fn();
-const setSyncMutate = vi.fn();
-let setSyncPending = false;
 
 vi.mock("@hooks/api", () => ({
   useRetryTracks: () => ({ mutate: vi.fn(), isPending: false, variables: undefined }),
@@ -20,10 +18,6 @@ vi.mock("@hooks/api/queries/content-detail", () => ({
   usePlaylistDetail: (args: { playlistId: string; enabled?: boolean }) => usePlaylistDetailMock(args),
   useCatalogPlaylistTracks: () => ({ data: undefined, isLoading: false }),
   useResolveArtistFetcher: () => resolveArtistMock,
-}));
-
-vi.mock("@hooks/api/mutations/playlists/useSetPlaylistSync", () => ({
-  useSetPlaylistSync: () => ({ mutate: setSyncMutate, isPending: setSyncPending }),
 }));
 
 const setVisibilityMutate = vi.fn();
@@ -207,7 +201,6 @@ describe("PlaylistDetailBody shuffle", () => {
 describe("PlaylistDetailBody editing", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    setSyncPending = false;
   });
 
   it("opens the workshop from the wrench beside the request button", async () => {
@@ -302,40 +295,11 @@ describe("PlaylistDetailBody editing", () => {
     expect(screen.queryByText("Local")).not.toBeInTheDocument();
   });
 
-  it("renders the keep-in-sync control as a sync icon plus a switch for an imported playlist", () => {
+  it("leaves keep-in-sync to the workshop, with no switch on an imported playlist", () => {
     usePlaylistDetailMock.mockReturnValue(playlistDetail({ sourceProvider: "spotify", syncEnabled: false }));
     renderWithProviders(<PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} onNavigate={vi.fn()} />);
 
-    const toggle = screen.getByRole("switch", { name: "Keep in sync" });
-    expect(toggle).toBeInTheDocument();
-    expect(toggle.tagName).toBe("BUTTON");
-    expect(screen.queryByText("Keep in sync")).not.toBeInTheDocument();
-  });
-
-  it("does not render the keep-in-sync switch for a local library playlist", () => {
-    usePlaylistDetailMock.mockReturnValue(playlistDetail());
-    renderWithProviders(<PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} onNavigate={vi.fn()} />);
-
-    expect(screen.queryByRole("switch")).not.toBeInTheDocument();
-  });
-
-  it("toggles sync via the keep-in-sync switch on an imported playlist", async () => {
-    usePlaylistDetailMock.mockReturnValue(playlistDetail({ sourceProvider: "spotify", syncEnabled: false }));
-    const { user } = renderWithProviders(
-      <PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} onNavigate={vi.fn()} />
-    );
-
-    await user.click(screen.getByRole("switch"));
-
-    expect(setSyncMutate).toHaveBeenCalledWith({ playlistId: "pl-1", enabled: true });
-  });
-
-  it("disables the keep-in-sync switch while the sync mutation is pending", () => {
-    setSyncPending = true;
-    usePlaylistDetailMock.mockReturnValue(playlistDetail({ sourceProvider: "spotify", syncEnabled: false }));
-    renderWithProviders(<PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} onNavigate={vi.fn()} />);
-
-    expect(screen.getByRole("switch")).toBeDisabled();
+    expect(screen.queryByRole("switch", { name: "Keep in sync" })).not.toBeInTheDocument();
   });
 
   it("shows the already-in-library pill by default but hides it when showInLibraryPill is false", () => {

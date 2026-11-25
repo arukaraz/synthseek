@@ -83,10 +83,25 @@ describe("MemberRequestPresetDialog", () => {
     expect(state.mutate).toHaveBeenCalledWith({ userId: "u-7", preset: null }, { onSuccess: onClose });
   });
 
-  it("says what following means when the server has no preset", () => {
+  it("says what following means when the server has no preset, and links to where one is chosen", () => {
     state.memberPreset.current = null;
     renderWithProviders(<MemberRequestPresetDialog member={member} onClose={vi.fn()} />);
 
-    expect(screen.getByText(/There is no server preset/)).toBeInTheDocument();
+    expect(screen.getByText("Using their last request's settings, or the defaults:")).toBeInTheDocument();
+    expect(screen.getByText(/MP3 320 kbps/)).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Pick one preset for the whole server" })).toHaveAttribute(
+      "href",
+      "/settings/download/engine#engine.requestPreset"
+    );
+  });
+
+  it("keeps the explanation behind the info icon beside the title", () => {
+    state.memberPreset.current = null;
+    renderWithProviders(<MemberRequestPresetDialog member={member} onClose={vi.fn()} />);
+
+    expect(screen.getByRole("button", { name: "More information" })).toBeInTheDocument();
+    expect(screen.getByRole("dialog")).toHaveAccessibleDescription(
+      "What this member's requests use. Members can't change it themselves."
+    );
   });
 });

@@ -13,6 +13,8 @@
     "following": "Gefolgt",
     "followNamed": "{{artist}} folgen",
     "followingNamed": "Du folgst {{artist}}. Folgen-Optionen",
+    "followHint": "Neue Veröffentlichungen dieses Artists landen in deinem Kalender, und auf Wunsch werden sie gleich bei Erscheinen angefragt.",
+    "followingHint": "Neue Veröffentlichungen erscheinen in deinem Kalender. Klicke, um sie automatisch anzufragen oder nicht mehr zu folgen.",
     "automatic": "Automatische Anfragen aktiv",
     "notFollowable": "Dieser Künstler ist nicht im Katalog, deshalb lassen sich neue Veröffentlichungen nicht verfolgen.",
     "followFailed": "{{artist}} konnte nicht gefolgt werden. Versuche es erneut.",

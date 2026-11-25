@@ -44,7 +44,7 @@ export const suggestedApply = cva("w-full");
 export const suggestedScroll = cva("min-h-0 flex-1 overflow-y-auto overscroll-contain px-2 pb-4");
 
 export const suggestedRow = cva(
-  "border-fg/5 hover:bg-fg/5 grid grid-cols-[1.875rem_2.5rem_minmax(0,1fr)_1.75rem_5.75rem] items-center gap-x-2 rounded-lg border-b px-2 py-1.5 last:border-b-0 @[420px]:grid-cols-[2.125rem_2.5rem_minmax(0,1fr)_1.875rem_8.625rem] @[420px]:gap-x-2.5"
+  "border-fg/5 hover:bg-fg/5 grid grid-cols-[1.875rem_2.5rem_minmax(0,1fr)_1.75rem_5.75rem] items-center gap-x-2 rounded-lg border-b px-2 py-1.5 last:border-b-0 @[340px]:grid-cols-[1.875rem_2.5rem_minmax(0,1fr)_1.75rem_8.625rem] @[420px]:grid-cols-[2.125rem_2.5rem_minmax(0,1fr)_1.875rem_8.625rem] @[420px]:gap-x-2.5"
 );
 
 export const suggestedListen = cva(
@@ -97,7 +97,7 @@ export const suggestedAdd = cva(
   }
 );
 
-export const suggestedAddLong = cva("hidden @[420px]:inline");
+export const suggestedAddLong = cva("hidden @[340px]:inline");
 
 export const suggestedSkeleton = cva("flex items-center gap-2.5 px-2 py-2");
 

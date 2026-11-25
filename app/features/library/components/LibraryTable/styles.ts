@@ -11,6 +11,8 @@ export const metaDot = cva("bg-fg/25 size-1 shrink-0 rounded-full");
 
 export const durationText = cva("text-fg/45 font-mono text-xs tabular-nums");
 
+export const statusCellStack = cva("flex flex-col items-start gap-0.5");
+
 export const selectCell = cva("flex items-center justify-center");
 
 export const actionsCell = cva("flex items-center justify-center");

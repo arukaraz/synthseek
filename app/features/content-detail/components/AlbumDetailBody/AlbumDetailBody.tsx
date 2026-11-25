@@ -1,17 +1,11 @@
 "use client";
 
-import { useAlbumCredits, useAlbumDetail, useAlbumStats } from "@hooks/api/queries/content-detail";
+import { useAlbumDetail } from "@hooks/api/queries/content-detail";
 import { memo, useCallback, useMemo } from "react";
 
 import { useContentDetailActions } from "../../ContentDetailActionsContext";
 import { EMPTY_GENRES, EMPTY_SOCIALS, EMPTY_TRACKS } from "../../constants";
-import {
-  artistTarget,
-  collectDegradedSources,
-  computeRequestState,
-  deriveTrackStatusCounts,
-  failedToLoad,
-} from "../../helpers";
+import { artistTarget, computeRequestState, deriveTrackStatusCounts, failedToLoad } from "../../helpers";
 import { useDetailPlayback } from "../../hooks/useDetailPlayback";
 import { AlbumCreditsWidget, AlbumDetailWidget, AlbumStatsWidget, MoreFromArtistWidget } from "../../widgets";
 import { DetailHero } from "../DetailHero/DetailHero";
@@ -26,18 +20,12 @@ function AlbumDetailBodyComponent({ target, onClose, onNavigate, showInLibraryPi
   const { play, shuffle, radio, enqueue } = useDetailPlayback(onClose);
 
   const artistName = album?.artist ?? target.artistName;
-  const { data: albumStats } = useAlbumStats({ artistName, albumName: target.name, catalogAlbumId: target.id });
-  const { data: albumCredits } = useAlbumCredits({ catalogAlbumId: target.id, barcode: null });
   const artistExternalId = album?.artistExternalId ?? null;
   const genres = useMemo(() => album?.genres ?? EMPTY_GENRES, [album?.genres]);
   const trackCount = album?.totalTracks ?? null;
   const cover = album?.cover ?? target.cover;
   const tracks = album?.tracks ?? EMPTY_TRACKS;
   const counts = useMemo(() => deriveTrackStatusCounts(tracks), [tracks]);
-  const degradedSources = useMemo(
-    () => collectDegradedSources([album?.degraded, albumStats?.degraded, albumCredits?.degraded]),
-    [album?.degraded, albumStats?.degraded, albumCredits?.degraded]
-  );
   const requestState = computeRequestState({
     requestedTrackCount: counts.requestedCount,
     failedTrackCount: counts.failedCount,
@@ -98,7 +86,6 @@ function AlbumDetailBodyComponent({ target, onClose, onNavigate, showInLibraryPi
         onSubtitleClick={handleArtistNavigate}
         socials={EMPTY_SOCIALS}
         statsSlot={statsSlot}
-        degradedSources={degradedSources}
       />
 
       <div className={modalScrollArea()}>

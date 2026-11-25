@@ -28,7 +28,6 @@ import {
   heroSubtitleButton,
   heroTop,
 } from "../../styles";
-import { DegradedSourcesChip } from "../DegradedSourcesChip";
 import { GenreChips } from "./GenreChips";
 import { HeroPlaySplit } from "./HeroPlaySplit";
 import { HeroPlaylistTools } from "./HeroPlaylistTools";
@@ -69,7 +68,6 @@ function DetailHeroComponent({
   requestDisabled,
   requestDisabledTooltip,
   playlistControls,
-  degradedSources,
 }: DetailHeroProps) {
   const { t } = useTranslation("contentDetail");
   const badgeType = mode;
@@ -111,9 +109,6 @@ function DetailHeroComponent({
           <div className={heroIdentity()}>
             <div className={heroBadgeRow()}>
               <span className={`type-badge type-badge-overlay type-badge-${badgeType}`}>{t(`badge.${badgeType}`)}</span>
-              {playlistControls?.syncBadge ? <span aria-hidden className={heroBadgeDivider()} /> : null}
-              {playlistControls?.syncBadge}
-              {degradedSources ? <DegradedSourcesChip sources={degradedSources} /> : null}
             </div>
 
             <h2 className={heroName({ size: isPlaylist ? "compact" : "default" })}>{name}</h2>

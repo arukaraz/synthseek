@@ -54,3 +54,15 @@ export const importEmpty = cva("text-fg/60 py-8 text-center text-sm");
 export const memberPresetDialog = cva("max-h-[90dvh] overflow-y-auto sm:max-w-lg");
 
 export const memberPresetLoading = cva("text-fg/60 text-sm");
+
+export const memberPresetTitleRow = cva("flex min-w-0 items-center gap-1.5 outline-none");
+
+export const memberPresetDescription = cva("sr-only");
+
+export const memberPresetFollow = cva("flex flex-col gap-1");
+
+export const memberPresetFollowLabel = cva("text-fg/60 text-sm");
+
+export const memberPresetFollowValue = cva("text-fg text-sm font-semibold");
+
+export const memberPresetFollowLink = cva("mt-2 self-start text-sm");

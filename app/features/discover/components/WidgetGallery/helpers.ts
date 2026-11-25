@@ -20,6 +20,7 @@ import type {
   WidgetProblem,
 } from "@hooks/api/queries/widgets/types";
 import { playbackServerName } from "@utils/playback-servers";
+import { matchesTerms, searchTerms } from "@utils/search";
 
 import {
   BOARD_CATEGORY_ORDER,
@@ -54,9 +55,7 @@ import type {
 } from "./types";
 
 export function matchesQuery(entry: GalleryEntry, query: string): boolean {
-  const needle = query.trim().toLocaleLowerCase();
-  if (!needle) return true;
-  return [entry.name, entry.description].some((text) => text.toLocaleLowerCase().includes(needle));
+  return matchesTerms(searchTerms(query), [entry.name, entry.description]);
 }
 
 function compareEntries(sort: GallerySort, onBoard: ReadonlyMap<BoardWidgetKey, string>) {

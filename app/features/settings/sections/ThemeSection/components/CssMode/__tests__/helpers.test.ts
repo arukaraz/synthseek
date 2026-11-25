@@ -185,6 +185,22 @@ describe("insertItems", () => {
     expect(snippets.find((item) => item.key === "gradient-text")).toBeDefined();
   });
 
+  it("narrows by a query typed without the accents its description carries", () => {
+    const accented: ThemeCopy = {
+      ...copy,
+      tokens: { ...copy.tokens, "--font-sans": { label: "Police d'écran", hint: "" } },
+    };
+    const items = insertItems({
+      tokens: THEME_CONTRACT.tokens,
+      values: new Map(),
+      copy: accented,
+      category: "all",
+      query: "ecran",
+    });
+
+    expect(items.map((item) => item.key)).toEqual(["--font-sans"]);
+  });
+
   it("lists everything under All and narrows by query on key and description", () => {
     const everything = listed("all");
     const found = listed("all", "FROSTED");

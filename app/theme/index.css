@@ -12,6 +12,7 @@
   --color-surface-elevated: var(--surface-bg-elevated);
   --color-surface-overlay: var(--surface-bg-overlay);
   --color-surface-sunken: var(--surface-bg-sunken);
+  --color-player-dock: color-mix(in oklab, var(--surface-bg-overlay) calc(var(--player-opacity) * 100%), transparent);
   --color-background: var(--surface-bg);
 
   --color-fg: var(--surface-fg);

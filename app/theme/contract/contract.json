@@ -433,6 +433,15 @@
       "max": 24,
       "step": 1
     },
+    {
+      "name": "--player-opacity",
+      "file": "elevation",
+      "kind": "number",
+      "essential": true,
+      "min": 0.2,
+      "max": 1,
+      "step": 0.05
+    },
 
     { "name": "--brand-spotify", "file": "services", "kind": "color" },
     { "name": "--brand-spotify-ink", "file": "services", "kind": "color" },

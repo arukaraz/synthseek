@@ -12,7 +12,7 @@ export const mainColumn = cva("flex min-h-0 min-w-0 flex-1 flex-col gap-4");
 
 export const resultsShell = cva("relative flex min-h-0 flex-1 flex-col");
 
-export const resultsScroll = cva("min-h-0 flex-1 overflow-y-auto transition-opacity", {
+export const resultsScroll = cva("player-clearance min-h-0 flex-1 overflow-y-auto transition-opacity", {
   variants: {
     stale: {
       true: "pointer-events-none opacity-40",

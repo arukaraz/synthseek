@@ -41,6 +41,8 @@ export function PlaylistsViewMode({ controller, shell }: LibraryViewModeProps) {
     (item: LibraryPlaylistItem) => {
       const cover = item.image ?? item.images[0] ?? null;
       const open = () => openForTarget(playlistLibraryTarget({ id: item.id, name: item.name, cover }));
+      const openWorkshop = () =>
+        openForTarget({ ...playlistLibraryTarget({ id: item.id, name: item.name, cover }), openWorkshop: true });
 
       if (asRows) {
         return (
@@ -56,7 +58,7 @@ export function PlaylistsViewMode({ controller, shell }: LibraryViewModeProps) {
             trailing={
               <>
                 <PlaylistVisibilityMark visibility={item.visibility} />
-                <PlaylistCardMenu item={item} />
+                <PlaylistCardMenu item={item} onOpenWorkshop={openWorkshop} />
               </>
             }
           />
@@ -69,6 +71,7 @@ export function PlaylistsViewMode({ controller, shell }: LibraryViewModeProps) {
           chrome={chrome}
           onPlay={chrome === "bare" ? undefined : () => playEntity({ kind: "playlist", playlistId: item.id })}
           onOpen={open}
+          onOpenWorkshop={openWorkshop}
         />
       );
     },

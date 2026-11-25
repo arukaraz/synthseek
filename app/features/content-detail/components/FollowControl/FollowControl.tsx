@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { BottomSheet, BottomSheetHeader, bottomSheetBody } from "@components/ui/BottomSheet";
 import { LockedAction } from "@components/ui/LockedAction";
 import { Popover, PopoverAnchor, PopoverContent } from "@components/ui/Popover";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@components/ui/Tooltip";
 import { useFollowArtist } from "@hooks/api/mutations/artist-follow/useFollowArtist";
 import { useFollowStatus } from "@hooks/api/queries/artist-follow/useFollowStatus";
 import { PHONE_QUERY } from "@hooks/ui/constants";
@@ -55,7 +56,7 @@ export function FollowControl({ catalogArtistId, artistName }: FollowControlProp
     setOpen(true);
   };
 
-  const trigger = (
+  const button = (
     <button
       type="button"
       className={followPill({ tone: following ? "following" : "idle" })}
@@ -82,7 +83,7 @@ export function FollowControl({ catalogArtistId, artistName }: FollowControlProp
   if (phone) {
     return (
       <>
-        {trigger}
+        {button}
         <BottomSheet open={open} onOpenChange={setOpen} size="compact" showClose={false}>
           <BottomSheetHeader title={t("popover.title", { artist: artistName })} />
           <div className={bottomSheetBody()}>
@@ -103,16 +104,25 @@ export function FollowControl({ catalogArtistId, artistName }: FollowControlProp
   }
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverAnchor asChild>{trigger}</PopoverAnchor>
-      <PopoverContent align="start" className="max-w-none p-3">
-        <FollowPopoverBody
-          catalogArtistId={catalogArtistId}
-          artistName={artistName}
-          autoRequest={autoRequest}
-          onClose={close}
-        />
-      </PopoverContent>
-    </Popover>
+    <TooltipProvider delayDuration={300}>
+      <Tooltip>
+        <Popover open={open} onOpenChange={setOpen}>
+          <PopoverAnchor asChild>
+            <TooltipTrigger asChild>{button}</TooltipTrigger>
+          </PopoverAnchor>
+          <TooltipContent className="max-w-64">
+            {following ? t("control.followingHint") : t("control.followHint")}
+          </TooltipContent>
+          <PopoverContent align="start" className="max-w-none p-3">
+            <FollowPopoverBody
+              catalogArtistId={catalogArtistId}
+              artistName={artistName}
+              autoRequest={autoRequest}
+              onClose={close}
+            />
+          </PopoverContent>
+        </Popover>
+      </Tooltip>
+    </TooltipProvider>
   );
 }

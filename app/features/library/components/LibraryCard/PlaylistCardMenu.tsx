@@ -6,7 +6,7 @@ import { SmartRuleDialog } from "@features/discover";
 import { useSetPlaylistVisibility } from "@hooks/api/mutations/playlists/useSetPlaylistVisibility";
 import { useAuthContext } from "@modules/providers/AuthProvider";
 import { isOwnerOrAdminFE } from "@utils/authorization";
-import { Lock, Pencil, Trash2, Users, WandSparkles } from "lucide-react";
+import { Lock, Pencil, Trash2, Users, WandSparkles, Wrench } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -16,7 +16,7 @@ import { shieldOwnClick } from "./helpers";
 import { cardInlineKebab } from "./styles";
 import type { PlaylistCardMenuProps } from "./types";
 
-export function PlaylistCardMenu({ item }: PlaylistCardMenuProps) {
+export function PlaylistCardMenu({ item, onOpenWorkshop }: PlaylistCardMenuProps) {
   const { t } = useTranslation("library");
   const [renameOpen, setRenameOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
@@ -29,6 +29,18 @@ export function PlaylistCardMenu({ item }: PlaylistCardMenuProps) {
   const canShare = isOwnerOrAdminFE({ id: item.owner_id }, currentUser);
   const isPrivate = item.visibility === "private";
   const actions: LibraryMenuAction[] = [
+    ...(onOpenWorkshop
+      ? [
+          {
+            key: "workshop",
+            icon: Wrench,
+            label: t("playlists.actions.workshop"),
+            onSelect: onOpenWorkshop,
+            disabled: !canShare,
+            hint: canShare ? undefined : t("playlists.actions.ownerOnly"),
+          },
+        ]
+      : []),
     {
       key: "rename",
       icon: Pencil,

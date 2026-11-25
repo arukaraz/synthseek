@@ -84,6 +84,17 @@ describe("FollowControl", () => {
     expect(server.callsTo("artistFollow.follow")[0]?.input).toEqual({ catalogArtistId: "a1", autoRequest: false });
   });
 
+  it("anchors the options to the button, so they open beside it rather than off screen", async () => {
+    const user = userEvent.setup();
+    renderControl(serverWith(FOLLOWING));
+
+    await user.click(await screen.findByRole("button", { name: "Following Ada. Follow options" }));
+    const body = await screen.findByText("Albums and EPs, when they come out.");
+    const wrapper = body.closest<HTMLElement>("[data-radix-popper-content-wrapper]");
+
+    await waitFor(() => expect(wrapper?.style.transform).not.toContain("-200%"));
+  });
+
   it("names the followed state and the types the automatic requests cover", async () => {
     const user = userEvent.setup();
     renderControl(serverWith(FOLLOWING));

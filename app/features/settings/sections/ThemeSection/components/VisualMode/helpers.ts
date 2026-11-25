@@ -9,6 +9,7 @@ import {
 } from "@theme/custom";
 import type { ThemeDraft } from "@theme/custom";
 import type { ContractToken } from "@theme/contract";
+import { matchesTerms, searchTerms } from "@utils/search";
 
 import {
   COURIER_STACK,
@@ -36,7 +37,7 @@ export function essentialsOf(tokens: readonly ContractToken[]): readonly Contrac
 }
 
 export function matchesQuery(token: ContractToken, copy: TokenCopy, query: string): boolean {
-  return `${copy.label} ${copy.hint} ${token.name}`.toLowerCase().includes(query);
+  return matchesTerms(searchTerms(query), [copy.label, copy.hint, token.name]);
 }
 
 export function changedNamesOf(draft: ThemeDraft, tokens: readonly ContractToken[]): Set<string> {

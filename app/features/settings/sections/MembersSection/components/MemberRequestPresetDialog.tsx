@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Button } from "@components/ui/Button";
+import { InfoTooltip } from "@components/ui/InfoTooltip";
 import {
   Dialog,
   DialogContent,
@@ -30,7 +31,8 @@ import {
   RequestPresetEditor,
   type RequestPresetDraft,
 } from "../../../components/RequestPreset";
-import { memberPresetDialog, memberPresetLoading } from "../styles";
+import { memberPresetDescription, memberPresetDialog, memberPresetLoading, memberPresetTitleRow } from "../styles";
+import { MemberPresetFollowSummary } from "./MemberPresetFollowSummary";
 import type { MemberRequestPresetDialogProps } from "../types";
 
 export function MemberRequestPresetDialog({ member, onClose }: MemberRequestPresetDialogProps) {
@@ -61,6 +63,7 @@ export function MemberRequestPresetDialog({ member, onClose }: MemberRequestPres
     setDraft(presetDraft(own, server ?? factory, offered));
   }, [draft, own, server, factory, offered, isLoadingSources]);
 
+  const titleRowRef = useRef<HTMLDivElement>(null);
   const unavailable = memberPreset.isError || mine.isError;
 
   if (!member) return null;
@@ -77,10 +80,21 @@ export function MemberRequestPresetDialog({ member, onClose }: MemberRequestPres
         if (!open) onClose();
       }}
     >
-      <DialogContent className={memberPresetDialog()}>
+      <DialogContent
+        className={memberPresetDialog()}
+        onOpenAutoFocus={(event) => {
+          event.preventDefault();
+          titleRowRef.current?.focus();
+        }}
+      >
         <DialogHeader>
-          <DialogTitle>{t("requestPreset.member.title", { username: member.username })}</DialogTitle>
-          <DialogDescription>{t("requestPreset.member.description")}</DialogDescription>
+          <div ref={titleRowRef} tabIndex={-1} className={memberPresetTitleRow()}>
+            <DialogTitle>{t("requestPreset.member.title", { username: member.username })}</DialogTitle>
+            <InfoTooltip description={t("requestPreset.member.description")} side="bottom" align="start" />
+          </div>
+          <DialogDescription className={memberPresetDescription()}>
+            {t("requestPreset.member.description")}
+          </DialogDescription>
         </DialogHeader>
         {draft !== null && factory !== undefined && base !== null ? (
           <RequestPresetEditor
@@ -91,9 +105,10 @@ export function MemberRequestPresetDialog({ member, onClose }: MemberRequestPres
             followLabel={t("requestPreset.member.followLabel")}
             customLabel={t("requestPreset.member.customLabel")}
             followSummary={
-              server
-                ? t("requestPreset.member.followServer", { summary: summarizePreset(server, tSearch) })
-                : t("requestPreset.member.followDefault", { summary: summarizePreset(factory, tSearch) })
+              <MemberPresetFollowSummary
+                summary={summarizePreset(server ?? factory, tSearch)}
+                hasServerPreset={server !== null}
+              />
             }
           />
         ) : (
