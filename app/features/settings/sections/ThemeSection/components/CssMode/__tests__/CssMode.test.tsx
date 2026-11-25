@@ -47,6 +47,12 @@ function tree() {
   return screen.getByRole("navigation", { name: "Theme files" });
 }
 
+function head() {
+  const path = screen.getByText("tokens/brand.css", { selector: "code" });
+  if (!path.parentElement) throw new Error("the editor head is missing");
+  return within(path.parentElement);
+}
+
 beforeEach(() => {
   api.files.data = undefined;
 });
@@ -229,18 +235,18 @@ describe("the editor head", () => {
     const editor = editorOf();
     const { rerender } = render(<CssMode editor={editor} />);
 
-    await userEvent.click(screen.getByRole("button", { name: "Insert" }));
+    await userEvent.click(head().getByRole("button", { name: "Insert" }));
     expect(editor.setView).toHaveBeenLastCalledWith({ side: "insert" });
 
     const open = editorOf({ view: view({ side: "insert" }), setView: editor.setView });
     rerender(<CssMode editor={open} />);
-    expect(screen.getByRole("button", { name: "Insert" })).toHaveAttribute("aria-pressed", "true");
-    expect(screen.getByRole("button", { name: "History" })).toHaveAttribute("aria-pressed", "false");
+    expect(head().getByRole("button", { name: "Insert" })).toHaveAttribute("aria-pressed", "true");
+    expect(head().getByRole("button", { name: "History" })).toHaveAttribute("aria-pressed", "false");
 
-    await userEvent.click(screen.getByRole("button", { name: "History" }));
+    await userEvent.click(head().getByRole("button", { name: "History" }));
     expect(editor.setView).toHaveBeenLastCalledWith({ side: "history" });
 
-    await userEvent.click(screen.getByRole("button", { name: "Insert" }));
+    await userEvent.click(head().getByRole("button", { name: "Insert" }));
     expect(editor.setView).toHaveBeenLastCalledWith({ side: null });
   });
 });
