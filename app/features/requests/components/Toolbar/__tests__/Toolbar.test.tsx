@@ -1,13 +1,12 @@
 import { render, screen, userEvent, waitFor } from "@test/test-utils";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { makeRequestWithTracks } from "../../../__tests__/factories";
 import { Toolbar } from "../Toolbar";
 
-const { replace, searchParamsRef, itemsRef, toolbarMenuSpy } = vi.hoisted(() => ({
+const { replace, searchParamsRef, totalRef, toolbarMenuSpy } = vi.hoisted(() => ({
   replace: vi.fn(),
   searchParamsRef: { current: new URLSearchParams() },
-  itemsRef: { current: [] as ReturnType<typeof makeRequestWithTracks>[] },
+  totalRef: { current: 0 },
   toolbarMenuSpy: vi.fn(),
 }));
 
@@ -18,7 +17,7 @@ vi.mock("next/navigation", () => ({
 }));
 
 vi.mock("@hooks/api", () => ({
-  useTrackRequests: () => ({ data: itemsRef.current }),
+  useRequestSummary: () => ({ data: { total: totalRef.current, downloading: false } }),
 }));
 
 vi.mock("../FilterSortMenu", () => ({
@@ -39,7 +38,7 @@ vi.mock("../RequestsToolbarMenu", () => ({
 describe("Toolbar", () => {
   beforeEach(() => {
     searchParamsRef.current = new URLSearchParams();
-    itemsRef.current = [];
+    totalRef.current = 0;
   });
 
   afterEach(() => {
@@ -61,7 +60,7 @@ describe("Toolbar", () => {
   });
 
   it("passes hasItems=true to the overflow menu when requests exist", () => {
-    itemsRef.current = [makeRequestWithTracks()];
+    totalRef.current = 1;
     render(<Toolbar />);
 
     expect(toolbarMenuSpy).toHaveBeenCalledWith(true);

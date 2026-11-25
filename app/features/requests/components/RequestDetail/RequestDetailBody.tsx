@@ -3,6 +3,7 @@
 import { ContentType } from "@api/__generated__/types";
 import { Button } from "@components/ui/Button";
 import { SectionLoading } from "@components/ui/SectionLoading";
+import { useHoldRequestListRefresh } from "@hooks/api";
 import { useAuthContext } from "@modules/providers/AuthProvider";
 import { isOwnerOrAdminFE } from "@utils/authorization";
 import { useState } from "react";
@@ -28,6 +29,7 @@ export function RequestDetailBody({ request, tracks, isResolving, hasFailed, onR
   const [selectedIds, setSelectedIds] = useState<ReadonlySet<string>>(new Set());
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const handlers = useTrackActionHandlers(() => setSelectedIds(new Set()));
+  useHoldRequestListRefresh(selectedIds.size > 0 || handlers.rejectCount > 0);
   const permissions = { canManage: isOwnerOrAdminFE({ id: request.requestedBy.id }, currentUser), isAdmin };
   const visible = orderTracks(tracks, filter, sort);
   const selected = visible.filter((track) => selectedIds.has(track.id));

@@ -1,15 +1,17 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { invalidateRequestList, invalidateRequestListNow } from "../requestListInvalidation";
+import { holdRequestListRefresh, invalidateRequestList, invalidateRequestListNow } from "../requestListInvalidation";
 import { resetThrottledInvalidations } from "../throttledInvalidation";
 
 const invalidateAll = vi.fn();
+const invalidateSummary = vi.fn();
 const invalidateRecent = vi.fn();
 const invalidateDetail = vi.fn();
 
 const utils = {
   requests: {
-    getAll: { invalidate: invalidateAll },
+    list: { invalidate: invalidateAll },
+    summary: { invalidate: invalidateSummary },
     getRecentTracks: { invalidate: invalidateRecent },
     getDetail: { invalidate: invalidateDetail },
   },
@@ -19,6 +21,7 @@ beforeEach(() => {
   vi.useFakeTimers();
   resetThrottledInvalidations();
   invalidateAll.mockClear();
+  invalidateSummary.mockClear();
   invalidateRecent.mockClear();
   invalidateDetail.mockClear();
 });
@@ -35,6 +38,12 @@ describe("invalidateRequestList", () => {
     expect(invalidateAll).toHaveBeenCalledTimes(1);
   });
 
+  it("refreshes the summary counts together with the list", () => {
+    invalidateRequestList(utils);
+
+    expect(invalidateSummary).toHaveBeenCalledTimes(1);
+  });
+
   it("collapses a burst inside the window into ONE trailing refetch, so the last event is never lost", () => {
     invalidateRequestList(utils);
     expect(invalidateAll).toHaveBeenCalledTimes(1);
@@ -44,19 +53,55 @@ describe("invalidateRequestList", () => {
 
     expect(invalidateAll).toHaveBeenCalledTimes(1);
 
-    vi.advanceTimersByTime(899);
+    vi.advanceTimersByTime(4899);
     expect(invalidateAll).toHaveBeenCalledTimes(1);
 
     vi.advanceTimersByTime(1);
     expect(invalidateAll).toHaveBeenCalledTimes(2);
   });
 
-  it("refetches again once the window has elapsed", () => {
+  it("refetches again once the five-second window has elapsed, and not before", () => {
     invalidateRequestList(utils);
     vi.advanceTimersByTime(1000);
     invalidateRequestList(utils);
+    expect(invalidateAll).toHaveBeenCalledTimes(1);
 
+    vi.advanceTimersByTime(4000);
     expect(invalidateAll).toHaveBeenCalledTimes(2);
+  });
+
+  it("holds every refetch while a selection is held, then refetches once on release", () => {
+    const release = holdRequestListRefresh();
+    invalidateRequestList(utils);
+    vi.advanceTimersByTime(20000);
+    for (let i = 0; i < 5; i++) invalidateRequestList(utils);
+    vi.advanceTimersByTime(20000);
+
+    expect(invalidateAll).not.toHaveBeenCalled();
+
+    release();
+
+    expect(invalidateAll).toHaveBeenCalledTimes(1);
+  });
+
+  it("does not refetch on release when nothing arrived during the hold", () => {
+    const release = holdRequestListRefresh();
+    release();
+
+    expect(invalidateAll).not.toHaveBeenCalled();
+  });
+
+  it("waits for the last of two overlapping holds, and a repeated release counts once", () => {
+    const first = holdRequestListRefresh();
+    const second = holdRequestListRefresh();
+    invalidateRequestList(utils);
+
+    first();
+    first();
+    expect(invalidateAll).not.toHaveBeenCalled();
+
+    second();
+    expect(invalidateAll).toHaveBeenCalledTimes(1);
   });
 
   it("refreshes the recent-tracks strip alongside the list, since nothing else invalidates it", () => {
@@ -100,7 +145,7 @@ describe("invalidateRequestListNow", () => {
 
     expect(invalidateAll).toHaveBeenCalledTimes(1);
 
-    vi.advanceTimersByTime(1000);
+    vi.advanceTimersByTime(5000);
     expect(invalidateAll).toHaveBeenCalledTimes(2);
   });
 });

@@ -31,7 +31,9 @@ const spies = vi.hoisted(() => {
 
 vi.mock("@utils/trpc", () => ({
   trpc: {
-    useUtils: () => ({ requests: { getAll: { invalidate: spies.requestsInvalidate } } }),
+    useUtils: () => ({
+      requests: { list: { invalidate: spies.requestsInvalidate }, summary: { invalidate: vi.fn() } },
+    }),
     requests: {
       retryAllFailed: {
         useMutation: (options: MutationOptions) => {

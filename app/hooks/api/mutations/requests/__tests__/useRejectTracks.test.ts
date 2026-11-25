@@ -40,11 +40,16 @@ vi.mock("@trpc/react-query", () => ({
   getQueryKey: () => ["requests", "getDetail"],
 }));
 
+vi.mock("../../../queries/requests/requestListCache", () => ({
+  cancelRequestList: spies.listCancel,
+  invalidateRequestListQueries: spies.invalidate,
+  patchRequestListItems: vi.fn(),
+}));
+
 vi.mock("@utils/trpc", () => ({
   trpc: {
     useUtils: () => ({
       requests: {
-        getAll: { invalidate: spies.invalidate, setData: vi.fn(), cancel: spies.listCancel },
         getDetail: { cancel: spies.detailCancel, invalidate: spies.detailInvalidate },
       },
     }),

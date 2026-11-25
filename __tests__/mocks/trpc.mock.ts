@@ -84,11 +84,6 @@ export function createErrorMutation(error: Error): MockMutationResult {
 
 export const createMockTrpcUtils = () => ({
   requests: {
-    getAll: {
-      invalidate: vi.fn().mockResolvedValue(undefined),
-      setData: vi.fn(),
-      getData: vi.fn().mockReturnValue([]),
-    },
     getLibrarySummary: {
       invalidate: vi.fn().mockResolvedValue(undefined),
     },

@@ -28,7 +28,8 @@ export function useSaveLibrarySourceChanges(providerName: string) {
         }
       }
       await Promise.all([
-        utils.requests.getAll.refetch(),
+        utils.requests.list.refetch(),
+        utils.requests.summary.refetch(),
         utils.requests.getLibrarySummary.invalidate(),
         utils.librarySource.provider.items.invalidate(),
         utils.librarySource.provider.all.invalidate(),

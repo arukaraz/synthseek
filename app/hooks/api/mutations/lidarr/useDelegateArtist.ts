@@ -4,13 +4,15 @@ import i18n from "@locale";
 import { errorToast } from "@modules/errors";
 import { trpc } from "@utils/trpc";
 
+import { invalidateRequestListQueries } from "../../queries/requests/requestListCache";
+
 export function useDelegateArtist() {
   const utils = trpc.useUtils();
 
   return trpc.lidarr.delegateArtist.useMutation({
     onSuccess: () => {
       toast.success(i18n.t("mutations:requests.artistDelegated"));
-      utils.requests.getAll.invalidate();
+      invalidateRequestListQueries(utils);
     },
     onError: (error) => errorToast(error, "requests.artistDelegateFailed"),
   });

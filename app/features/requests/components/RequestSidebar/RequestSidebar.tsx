@@ -1,7 +1,6 @@
 "use client";
 
 import { useInfiniteScroll } from "@hooks/ui/useInfiniteScroll";
-import { useRenderWindow } from "@hooks/ui/useRenderWindow";
 import { useState } from "react";
 
 import { RequestsEmptyState } from "../RequestsEmptyState";
@@ -16,16 +15,26 @@ export function RequestSidebar({
   searchQuery,
   emptySourceLabel,
   filtered,
-  windowKey,
+  hasNextPage,
+  isFetchingNextPage,
+  onLoadNext,
+  hasPreviousPage,
+  isFetchingPreviousPage,
+  onLoadPrevious,
   className,
 }: RequestSidebarProps) {
   const [scrollRoot, setScrollRoot] = useState<HTMLUListElement | null>(null);
-  const { visible, hasMore, loadMore } = useRenderWindow(items, windowKey);
-  const sentinelRef = useInfiniteScroll({
+  const nextSentinelRef = useInfiniteScroll({
     root: scrollRoot,
-    hasNextPage: hasMore,
-    isFetchingNextPage: false,
-    onLoadMore: loadMore,
+    hasNextPage,
+    isFetchingNextPage,
+    onLoadMore: onLoadNext,
+  });
+  const previousSentinelRef = useInfiniteScroll({
+    root: scrollRoot,
+    hasNextPage: hasPreviousPage,
+    isFetchingNextPage: isFetchingPreviousPage,
+    onLoadMore: onLoadPrevious,
   });
 
   if (items.length === 0) {
@@ -41,14 +50,19 @@ export function RequestSidebar({
   return (
     <div className={`${sidebarContainer()} ${className ?? ""}`} data-cy="requests-sidebar" data-part="sidebar">
       <ul ref={setScrollRoot} className={sidebarList()}>
-        {visible.map((item) => (
+        {hasPreviousPage ? (
+          <li role="presentation">
+            <div ref={previousSentinelRef} className={sidebarSentinel()} />
+          </li>
+        ) : null}
+        {items.map((item) => (
           <li key={item.id} className={sidebarListItem()}>
             <RequestSidebarItem request={item} isSelected={item.id === selectedId} onSelect={() => onSelect(item.id)} />
           </li>
         ))}
-        {hasMore ? (
+        {hasNextPage ? (
           <li role="presentation">
-            <div ref={sentinelRef} className={sidebarSentinel()} />
+            <div ref={nextSentinelRef} className={sidebarSentinel()} />
           </li>
         ) : null}
       </ul>

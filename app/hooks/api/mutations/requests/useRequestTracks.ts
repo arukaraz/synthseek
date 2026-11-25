@@ -4,6 +4,8 @@ import { notifyTracksRequested } from "@utils/request-helpers";
 
 import { failRequestDockJob, seedRequestDockJob, settleRequestDockJob } from "@hooks/api/subscriptions";
 
+import { invalidateRequestListQueries } from "../../queries/requests/requestListCache";
+
 export function useRequestTracks(itemNameOf: () => string) {
   const utils = trpc.useUtils();
 
@@ -22,7 +24,7 @@ export function useRequestTracks(itemNameOf: () => string) {
       notifyTracksRequested(result, context?.itemName ?? itemNameOf());
     },
     onSettled: () => {
-      void utils.requests.getAll.invalidate();
+      invalidateRequestListQueries(utils);
       void utils.requestPreset.mine.invalidate();
       void utils.contentDetail.albumDetail.invalidate();
       void utils.contentDetail.artistTopTracks.invalidate();

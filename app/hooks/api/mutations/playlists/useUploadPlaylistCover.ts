@@ -8,6 +8,7 @@ import { toast } from "sonner";
 
 import { PLAYLIST_COVER_FIELD, PLAYLIST_COVER_UPLOAD_PATH } from "./constants";
 import { coverErrorKey, coverUploadFailure } from "./helpers";
+import { invalidateRequestListQueries } from "../../queries/requests/requestListCache";
 
 export function useUploadPlaylistCover(playlistId: string, maxBytes: number) {
   const utils = trpc.useUtils();
@@ -42,7 +43,7 @@ export function useUploadPlaylistCover(playlistId: string, maxBytes: number) {
         setIsUploading(false);
         void utils.contentDetail.playlistDetail.invalidate();
         void utils.library.getPlaylists.invalidate();
-        void utils.requests.getAll.invalidate();
+        invalidateRequestListQueries(utils);
       }
     },
     [playlistId, maxBytes, utils]

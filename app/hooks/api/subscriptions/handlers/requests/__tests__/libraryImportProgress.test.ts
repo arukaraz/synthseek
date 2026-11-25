@@ -23,7 +23,8 @@ vi.mock("@utils/trpc", () => ({
     useUtils: () => ({
       requests: {
         getLibrarySummary: { invalidate: spies.invalidateSummary },
-        getAll: { invalidate: spies.invalidateAll },
+        list: { invalidate: spies.invalidateAll },
+        summary: { invalidate: vi.fn() },
         getRecentTracks: { invalidate: vi.fn() },
         getDetail: { invalidate: vi.fn() },
       },
@@ -126,7 +127,7 @@ describe("handleLibraryImportProgress", () => {
     expect(libJob()?.items.find((item) => item.key === "a")?.reason).toBe("notInLibrary");
   });
 
-  it("invalidates getAll and the library views when an item reaches done so it lands in the list", () => {
+  it("invalidates the request list and the library views when an item reaches done so it lands in the list", () => {
     seedLib();
     const utils = trpc.useUtils();
     markItem({ key: "a", state: "done" }, utils, VIEWER_ID);
@@ -134,7 +135,7 @@ describe("handleLibraryImportProgress", () => {
     expectLibraryViewsInvalidated(1);
   });
 
-  it("does not invalidate getAll or the library views for a non-done item state", () => {
+  it("does not invalidate the request list or the library views for a non-done item state", () => {
     seedLib();
     const utils = trpc.useUtils();
     markItem({ key: "a", state: "failed", reason: "importError" }, utils, VIEWER_ID);

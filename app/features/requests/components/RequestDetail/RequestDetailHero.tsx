@@ -4,6 +4,7 @@ import { Button } from "@components/ui/Button";
 import { IconButton } from "@components/ui/IconButton";
 import { StatusBadge } from "@components/StatusBadge";
 import { useContentRequestFlow } from "@features/search/components/ContentRequestFlow";
+import { useHoldRequestListRefresh } from "@hooks/api";
 import { artworkImage } from "@utils/artworkProxy";
 import { cn } from "@utils/cn";
 import { formatDateTime } from "@utils/formatters";
@@ -68,6 +69,7 @@ export function RequestDetailHero({ request, tracks, onBack }: RequestDetailHero
 
   const [exportFullOpen, setExportFullOpen] = useState(false);
   const [rejectPendingOpen, setRejectPendingOpen] = useState(false);
+  useHoldRequestListRefresh(exportFullOpen || rejectPendingOpen);
   const hasMenuActions =
     canApprove ||
     canRetry ||

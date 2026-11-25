@@ -6,6 +6,7 @@ import i18n from "@locale";
 import { errorToast } from "@modules/errors";
 import { trpc } from "@utils/trpc";
 
+import { cancelRequestList, invalidateRequestListQueries } from "../../queries/requests/requestListCache";
 import { patchCachedApprovalDecision } from "./helpers";
 
 export function useRejectTracks() {
@@ -14,9 +15,9 @@ export function useRejectTracks() {
 
   return trpc.requests.reject.useMutation({
     onMutate: async ({ trackIds }) => {
-      await Promise.all([utils.requests.getAll.cancel(), utils.requests.getDetail.cancel()]);
+      await Promise.all([cancelRequestList(queryClient), utils.requests.getDetail.cancel()]);
 
-      patchCachedApprovalDecision(queryClient, utils, trackIds, RequestStatus.enum.cancelled);
+      patchCachedApprovalDecision(queryClient, trackIds, RequestStatus.enum.cancelled);
     },
     onError: (err) => {
       void utils.requests.getDetail.invalidate();
@@ -30,7 +31,7 @@ export function useRejectTracks() {
       }
     },
     onSettled: () => {
-      void utils.requests.getAll.invalidate();
+      invalidateRequestListQueries(utils);
       void utils.requests.getDetail.invalidate();
     },
   });

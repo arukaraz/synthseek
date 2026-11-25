@@ -4,6 +4,8 @@ import { notifyPendingApproval, notifyReclaimOutcome } from "@utils/request-help
 
 import { failRequestDockJob, seedRequestDockJob, settleRequestDockJob } from "@hooks/api/subscriptions";
 
+import { invalidateRequestListQueries } from "../../queries/requests/requestListCache";
+
 export function useBatchRequest() {
   const utils = trpc.useUtils();
 
@@ -28,7 +30,7 @@ export function useBatchRequest() {
       notifyReclaimOutcome({ outcome, kind: "album", itemName: data.name });
     },
     onSettled: () => {
-      void utils.requests.getAll.invalidate();
+      invalidateRequestListQueries(utils);
       void utils.requestPreset.mine.invalidate();
       void utils.contentDetail.albumDetail.invalidate();
       void utils.contentDetail.artistTopTracks.invalidate();

@@ -7,7 +7,12 @@ export interface RequestSidebarProps {
   searchQuery?: string;
   emptySourceLabel?: string | null;
   filtered?: boolean;
-  windowKey: string;
+  hasNextPage: boolean;
+  isFetchingNextPage: boolean;
+  onLoadNext: () => void;
+  hasPreviousPage: boolean;
+  isFetchingPreviousPage: boolean;
+  onLoadPrevious: () => void;
   className?: string;
 }
 

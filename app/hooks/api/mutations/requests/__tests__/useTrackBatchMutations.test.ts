@@ -23,7 +23,11 @@ const spies = vi.hoisted(() => ({
 vi.mock("@utils/trpc", () => ({
   trpc: {
     useUtils: () => ({
-      requests: { getAll: { invalidate: spies.listInvalidate }, getDetail: { invalidate: spies.detailInvalidate } },
+      requests: {
+        list: { invalidate: spies.listInvalidate },
+        summary: { invalidate: vi.fn() },
+        getDetail: { invalidate: spies.detailInvalidate },
+      },
     }),
     requests: {
       cancelTracks: {

@@ -2,50 +2,76 @@ import type { trpc } from "@utils/trpc";
 
 type Utils = ReturnType<typeof trpc.useUtils>;
 
-const MIN_INTERVAL_MS = 1000;
+const DEFAULT_INTERVAL_MS = 1000;
 
 interface ThrottleState {
   lastRunAt: number;
   timer: ReturnType<typeof setTimeout> | null;
+  holds: number;
+  pending: (() => void) | null;
 }
 
 export interface ThrottledInvalidation<Needs = Utils> {
   run: (utils: Needs) => void;
   runNow: (utils: Needs) => void;
+  hold: () => () => void;
 }
 
 const states = new Set<ThrottleState>();
 
-export function throttledInvalidation<Needs = Utils>(refetch: (utils: Needs) => void): ThrottledInvalidation<Needs> {
-  const state: ThrottleState = { lastRunAt: 0, timer: null };
+export function throttledInvalidation<Needs = Utils>(
+  refetch: (utils: Needs) => void,
+  intervalMs: number = DEFAULT_INTERVAL_MS
+): ThrottledInvalidation<Needs> {
+  const state: ThrottleState = { lastRunAt: 0, timer: null, holds: 0, pending: null };
   states.add(state);
 
+  const fire = (utils: Needs) => {
+    if (state.holds > 0) {
+      state.pending = () => fire(utils);
+      return;
+    }
+    state.lastRunAt = Date.now();
+    refetch(utils);
+  };
+
+  const run = (utils: Needs) => {
+    const sinceLastRun = Date.now() - state.lastRunAt;
+
+    if (sinceLastRun >= intervalMs) {
+      fire(utils);
+      return;
+    }
+
+    if (state.timer !== null) return;
+
+    state.timer = setTimeout(() => {
+      state.timer = null;
+      fire(utils);
+    }, intervalMs - sinceLastRun);
+  };
+
   return {
-    run: (utils) => {
-      const now = Date.now();
-      const sinceLastRun = now - state.lastRunAt;
-
-      if (sinceLastRun >= MIN_INTERVAL_MS) {
-        state.lastRunAt = now;
-        refetch(utils);
-        return;
-      }
-
-      if (state.timer !== null) return;
-
-      state.timer = setTimeout(() => {
-        state.lastRunAt = Date.now();
-        state.timer = null;
-        refetch(utils);
-      }, MIN_INTERVAL_MS - sinceLastRun);
-    },
+    run,
     runNow: (utils) => {
       if (state.timer !== null) {
         clearTimeout(state.timer);
         state.timer = null;
       }
-      state.lastRunAt = Date.now();
-      refetch(utils);
+      fire(utils);
+    },
+    hold: () => {
+      state.holds += 1;
+      let released = false;
+      return () => {
+        if (released) return;
+        released = true;
+        state.holds -= 1;
+        if (state.holds > 0 || state.pending === null) return;
+        const pending = state.pending;
+        state.pending = null;
+        pending();
+      };
     },
   };
 }
@@ -55,5 +81,7 @@ export function resetThrottledInvalidations(): void {
     if (state.timer !== null) clearTimeout(state.timer);
     state.timer = null;
     state.lastRunAt = 0;
+    state.holds = 0;
+    state.pending = null;
   }
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useTrackRequests } from "@hooks/api";
+import { useRequestSummary } from "@hooks/api";
 import { useDebounce } from "@hooks/ui/useDebounce";
 import { useUrlParam } from "@hooks/ui/useUrlParam";
 import { cn } from "@utils/cn";
@@ -13,7 +13,7 @@ import { ReviewQueueButton } from "./ReviewQueueButton";
 import { SearchInput } from "./SearchInput/SearchInput";
 
 export function Toolbar() {
-  const { data: items } = useTrackRequests();
+  const { data: summary } = useRequestSummary();
   const [urlSearchQuery, setUrlSearchQuery] = useUrlParam("q", REQUESTS_URL_PARAMS.q);
 
   const [searchInput, setSearchInput] = useState(urlSearchQuery);
@@ -26,7 +26,7 @@ export function Toolbar() {
   }, [debouncedSearchInput, urlSearchQuery, setUrlSearchQuery]);
 
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const hasItems = (items?.length ?? 0) > 0;
+  const hasItems = (summary?.total ?? 0) > 0;
 
   return (
     <div className={toolbarContainer()}>

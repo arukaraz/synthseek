@@ -1,14 +1,11 @@
 import { ContentType, type PlaylistPlexCreatedPayload } from "@api/__generated__/types";
-import type { trpc } from "@utils/trpc";
+import type { QueryClient } from "@tanstack/react-query";
+import { patchRequestListItems } from "../../../queries/requests/requestListCache";
 
-type Utils = ReturnType<typeof trpc.useUtils>;
-
-export function handlePlaylistPlexCreated(event: PlaylistPlexCreatedPayload, utils: Utils): void {
-  utils.requests.getAll.setData(undefined, (old) => {
-    if (!old) return old;
-    return old.map((item) => {
-      if (item.contentType !== ContentType.enum.playlist || item.id !== event.playlistId) return item;
-      return { ...item, plex_playlist_id: event.plexPlaylistId };
-    });
-  });
+export function handlePlaylistPlexCreated(event: PlaylistPlexCreatedPayload, queryClient: QueryClient): void {
+  patchRequestListItems(queryClient, (item) =>
+    item.contentType === ContentType.enum.playlist && item.id === event.playlistId
+      ? { ...item, plex_playlist_id: event.plexPlaylistId }
+      : item
+  );
 }

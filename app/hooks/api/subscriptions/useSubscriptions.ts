@@ -84,13 +84,13 @@ export function useSubscriptions() {
           handleReleaseProgress(event, queryClient);
           break;
         case SubscriptionEventType.AlbumUpdate:
-          handleAlbumUpdate(event, utils);
+          handleAlbumUpdate(event, utils, queryClient);
           break;
         case SubscriptionEventType.PlaylistUpdate:
-          handlePlaylistUpdate(event, utils);
+          handlePlaylistUpdate(event, utils, queryClient);
           break;
         case SubscriptionEventType.PlaylistPlexCreated:
-          handlePlaylistPlexCreated(event, utils);
+          handlePlaylistPlexCreated(event, queryClient);
           break;
         case SubscriptionEventType.PlaylistSyncAllProgress:
           handlePlaylistSyncAllProgress(event, utils, viewerId);

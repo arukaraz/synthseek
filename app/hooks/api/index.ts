@@ -1,8 +1,8 @@
-export { useTrackRequests } from "./queries/useTrackRequests";
+export { useRequestList } from "./queries/requests/useRequestList";
+export { useRequestSummary } from "./queries/requests/useRequestSummary";
+export type { RequestListInput } from "./queries/requests/types";
 export { useRequestDetail } from "./queries/useRequestDetail";
 export { useRecentTracks } from "./queries/useRecentTracks";
-export { useTrackTitleMatches } from "./queries/useTrackTitleMatches";
-export { useRequestIdsBySource } from "./queries/useRequestIdsBySource";
 export { useCategories } from "./queries/useCategories";
 export { useCategoryPlaylists } from "./queries/useCategoryPlaylists";
 export { useDownloadSourcesAvailability } from "./queries/useDownloadSourcesAvailability";
@@ -89,6 +89,7 @@ export {
 } from "./mutations/scrobble";
 
 export { usePlaylistSyncAllProgress } from "./subscriptions/usePlaylistSyncAllProgress";
+export { useHoldRequestListRefresh } from "./subscriptions/useHoldRequestListRefresh";
 
 export { useDropImportBatches } from "./queries/import/useDropImportBatches";
 export { useDropImportBatch } from "./queries/import/useDropImportBatch";

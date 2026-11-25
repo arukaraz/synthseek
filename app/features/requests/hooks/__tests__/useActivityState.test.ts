@@ -13,7 +13,6 @@ vi.mock("sonner", () => ({
 }));
 
 interface ActivityMocks {
-  items: unknown;
   syncState: { running: boolean; server: string | null; synced: number; total: number } | undefined;
   queueState: { isPaused: boolean } | undefined;
   progress: unknown;
@@ -22,7 +21,6 @@ interface ActivityMocks {
 
 const mocks = vi.hoisted(() => {
   const state: ActivityMocks = {
-    items: undefined,
     syncState: undefined,
     queueState: undefined,
     progress: null,
@@ -32,19 +30,14 @@ const mocks = vi.hoisted(() => {
 });
 
 vi.mock("@hooks/api", () => ({
-  useTrackRequests: () => ({ data: mocks.items }),
+  useRequestSummary: () => ({ data: { total: 1, downloading: mocks.downloading } }),
   useGetPlaylistSyncAllState: () => ({ data: mocks.syncState }),
   useQueueStatus: () => ({ data: mocks.queueState }),
   usePlaylistSyncAllProgress: () => mocks.progress,
 }));
 
-vi.mock("../../helpers", () => ({
-  hasActiveDownload: () => mocks.downloading,
-}));
-
 describe("useActivityState", () => {
   beforeEach(() => {
-    mocks.items = undefined;
     mocks.syncState = undefined;
     mocks.queueState = undefined;
     mocks.progress = null;
@@ -93,7 +86,6 @@ describe("useActivityState", () => {
 
 describe("useActivityState completion toasts", () => {
   beforeEach(() => {
-    mocks.items = undefined;
     mocks.syncState = undefined;
     mocks.queueState = undefined;
     mocks.progress = null;

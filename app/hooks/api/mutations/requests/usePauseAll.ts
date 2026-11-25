@@ -1,6 +1,8 @@
 import i18n from "@locale";
 import { errorToast } from "@modules/errors";
 import { trpc } from "@utils/trpc";
+
+import { invalidateRequestListQueries } from "../../queries/requests/requestListCache";
 import { toast } from "sonner";
 
 export function usePauseAll() {
@@ -10,7 +12,7 @@ export function usePauseAll() {
     onError: (error) => errorToast(error, "requests.pauseAllFailed"),
     onSuccess: () => toast.success(i18n.t("mutations:requests.queuePaused")),
     onSettled: () => {
-      utils.requests.getAll.invalidate();
+      invalidateRequestListQueries(utils);
       utils.requests.getQueueState.invalidate();
     },
   });

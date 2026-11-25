@@ -1,10 +1,10 @@
-import type { RequestListItem, RequestWithTracks, TrackRequest } from "@api/__generated__/types";
+import type { RequestWithTracks, TrackRequest } from "@api/__generated__/types";
 import { RequestStatus } from "@api/__generated__/types";
 import type { QueryClient } from "@tanstack/react-query";
 import { getQueryKey } from "@trpc/react-query";
 import { trpc } from "@utils/trpc";
 
-type Utils = ReturnType<typeof trpc.useUtils>;
+import { patchRequestListItems } from "../../queries/requests/requestListCache";
 
 type TrackPatch = (track: TrackRequest) => TrackRequest;
 
@@ -34,7 +34,6 @@ function applyApproval(detail: RequestWithTracks, ids: Set<string>, nextStatus: 
 
 export function patchCachedApprovalDecision(
   queryClient: QueryClient,
-  utils: Utils,
   trackIds: string[],
   nextStatus: RequestStatus
 ): void {
@@ -52,7 +51,7 @@ export function patchCachedApprovalDecision(
 
   if (settledContainerIds.size === 0) return;
 
-  utils.requests.getAll.setData(undefined, (old?: RequestListItem[]) =>
-    old?.map((item) => (settledContainerIds.has(item.id) ? { ...item, status: nextStatus } : item))
+  patchRequestListItems(queryClient, (item) =>
+    settledContainerIds.has(item.id) ? { ...item, status: nextStatus } : item
   );
 }

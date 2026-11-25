@@ -3,6 +3,8 @@ import i18n from "@locale";
 import { errorToast } from "@modules/errors";
 import { useQueryClient } from "@tanstack/react-query";
 import { trpc } from "@utils/trpc";
+
+import { invalidateRequestListQueries } from "../../queries/requests/requestListCache";
 import { toast } from "sonner";
 
 import { patchCachedDetailTracks } from "./helpers";
@@ -28,7 +30,7 @@ export function usePrioritizeAlbum() {
     },
     onSuccess: () => toast.success(i18n.t("mutations:requests.albumPrioritized")),
     onSettled: () => {
-      void utils.requests.getAll.invalidate();
+      invalidateRequestListQueries(utils);
       void utils.requests.getDetail.invalidate();
     },
   });

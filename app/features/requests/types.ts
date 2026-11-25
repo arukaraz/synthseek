@@ -1,13 +1,7 @@
-import {
-  ACTIVE_STATUSES,
-  DownloadSourceKey,
-  RequestStatus,
-  type AppRouter,
-  type TrackStatusCounts,
-} from "@api/__generated__/types";
+import { DownloadSourceKey, RequestListFilter, type AppRouter } from "@api/__generated__/types";
 import type { inferRouterOutputs } from "@trpc/server";
 
-export type StatusFilter = "all" | "pending_approval" | "review" | "active" | "done" | "failed" | "cancelled";
+export type StatusFilter = RequestListFilter;
 export type SourceFilter = "all" | DownloadSourceKey;
 
 export enum SortField {
@@ -18,15 +12,7 @@ export enum SortField {
 }
 export type SortDirection = "asc" | "desc";
 
-export const STATUS_FILTERS: readonly StatusFilter[] = [
-  "all",
-  "pending_approval",
-  "review",
-  "active",
-  "done",
-  "failed",
-  "cancelled",
-];
+export const STATUS_FILTERS: readonly StatusFilter[] = RequestListFilter.options;
 export const SOURCE_FILTERS: readonly SourceFilter[] = ["all", ...DownloadSourceKey.options];
 const DEFAULT_SOURCE_FILTER: SourceFilter = "all";
 export const SORT_FIELD_VALUES: readonly SortField[] = Object.values(SortField);
@@ -45,33 +31,5 @@ export interface SortConfig {
   field: SortField;
   direction: SortDirection;
 }
-
-export interface StatusFilterMatch {
-  statuses: readonly RequestStatus[];
-  trackCount: keyof TrackStatusCounts | null;
-  losslessPartial: boolean;
-}
-
-export const STATUS_FILTER_MATCH: Record<Exclude<StatusFilter, "all">, StatusFilterMatch> = {
-  pending_approval: { statuses: [RequestStatus.enum.pending_approval], trackCount: null, losslessPartial: false },
-  review: { statuses: [RequestStatus.enum.pending_import_review], trackCount: "review", losslessPartial: false },
-  active: { statuses: ACTIVE_STATUSES, trackCount: null, losslessPartial: false },
-  done: {
-    statuses: [RequestStatus.enum.complete, RequestStatus.enum.delegated],
-    trackCount: null,
-    losslessPartial: true,
-  },
-  failed: { statuses: [RequestStatus.enum.failed], trackCount: "failed", losslessPartial: false },
-  cancelled: { statuses: [RequestStatus.enum.cancelled], trackCount: "cancelled", losslessPartial: false },
-};
-
-export const DOWNLOAD_ACTIVE_STATUSES: readonly RequestStatus[] = [
-  RequestStatus.enum.searching,
-  RequestStatus.enum.pending_download,
-  RequestStatus.enum.downloading,
-  RequestStatus.enum.pending_import,
-  RequestStatus.enum.importing,
-  RequestStatus.enum.in_progress,
-];
 
 export type FlatTrackRow = inferRouterOutputs<AppRouter>["requests"]["getRecentTracks"][number];

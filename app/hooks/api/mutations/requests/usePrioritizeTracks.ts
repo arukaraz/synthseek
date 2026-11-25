@@ -2,6 +2,8 @@ import { errorToast } from "@modules/errors";
 import { notifyTrackBatch } from "@utils/request-helpers";
 import { trpc } from "@utils/trpc";
 
+import { invalidateRequestListQueries } from "../../queries/requests/requestListCache";
+
 export function usePrioritizeTracks() {
   const utils = trpc.useUtils();
 
@@ -9,7 +11,7 @@ export function usePrioritizeTracks() {
     onError: (error) => errorToast(error, "requests.prioritizeTracksFailed"),
     onSuccess: (result) => notifyTrackBatch(result, "prioritize"),
     onSettled: () => {
-      void utils.requests.getAll.invalidate();
+      invalidateRequestListQueries(utils);
       void utils.requests.getDetail.invalidate();
     },
   });

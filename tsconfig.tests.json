@@ -46,7 +46,6 @@
     "app/features/requests/components/RequestDetail/__tests__/RequestDetailHero.test.tsx",
     "app/features/requests/components/RequestDetail/__tests__/RequestDetailHeroMenu.test.tsx",
     "app/features/requests/components/Toolbar/SearchInput/__tests__/SearchInput.test.tsx",
-    "app/features/requests/hooks/__tests__/useFilteredRequests.test.ts",
     "app/features/requests/hooks/__tests__/useRequestActions.actions.test.ts",
     "app/features/requests/hooks/__tests__/useRequestActions.test.ts",
     "app/features/search/components/ConfigRequestModal/__tests__/ConfigRequestModal.test.tsx",

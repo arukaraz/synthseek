@@ -7,18 +7,21 @@ import { patchCachedApprovalDecision, patchCachedDetailTracks } from "../helpers
 
 const setQueriesData = vi.fn();
 const getQueriesData = vi.fn(() => [] as Array<[unknown, unknown]>);
-const setListData = vi.fn();
+type ListRow = { id: string; status: string };
+
+const patchList = vi.hoisted(() => vi.fn<(client: unknown, patch: (row: ListRow) => ListRow) => void>());
 
 vi.mock("@trpc/react-query", () => ({
   getQueryKey: (proc: unknown) => (proc === trpc.requests.getDetail ? ["requests", "getDetail"] : ["wrong-procedure"]),
 }));
 
 vi.mock("@utils/trpc", () => ({
-  trpc: { requests: { getDetail: {}, getAll: {} } },
+  trpc: { requests: { getDetail: {}, list: {} } },
 }));
 
+vi.mock("../../../queries/requests/requestListCache", () => ({ patchRequestListItems: patchList }));
+
 const queryClient = { setQueriesData, getQueriesData } as never;
-const utils = { requests: { getAll: { setData: setListData } } } as never;
 
 function detail(id: string, tracks: Array<{ id: string; status: string; priority?: number }>, status = "in_progress") {
   return { id, status, tracks };
@@ -31,7 +34,7 @@ function runDetailUpdater<T>(cached: T) {
 
 beforeEach(() => {
   setQueriesData.mockClear();
-  setListData.mockClear();
+  patchList.mockClear();
   getQueriesData.mockReset();
   getQueriesData.mockReturnValue([]);
 });
@@ -82,7 +85,7 @@ describe("patchCachedDetailTracks", () => {
 
 describe("patchCachedApprovalDecision", () => {
   it("flips the approved tracks and rolls a drained container forward", () => {
-    patchCachedApprovalDecision(queryClient, utils, ["t1"], RequestStatus.enum.queued);
+    patchCachedApprovalDecision(queryClient, ["t1"], RequestStatus.enum.queued);
 
     const next = runDetailUpdater(
       detail("alb_1", [{ id: "t1", status: RequestStatus.enum.pending_approval }], RequestStatus.enum.pending_approval)
@@ -97,14 +100,15 @@ describe("patchCachedApprovalDecision", () => {
       detail("alb_1", [{ id: "t1", status: RequestStatus.enum.pending_approval }], RequestStatus.enum.pending_approval)
     );
 
-    patchCachedApprovalDecision(queryClient, utils, ["t1"], RequestStatus.enum.queued);
+    patchCachedApprovalDecision(queryClient, ["t1"], RequestStatus.enum.queued);
 
-    expect(setListData).toHaveBeenCalledTimes(1);
-    const updater = setListData.mock.calls[0][1];
-    const next = updater([
+    expect(patchList).toHaveBeenCalledTimes(1);
+    expect(patchList.mock.calls[0][0]).toBe(queryClient);
+    const patch = patchList.mock.calls[0][1];
+    const next = [
       { id: "alb_1", status: RequestStatus.enum.pending_approval },
       { id: "alb_2", status: RequestStatus.enum.pending_approval },
-    ]);
+    ].map(patch);
 
     expect(next[0].status).toBe(RequestStatus.enum.queued);
     expect(next[1].status).toBe(RequestStatus.enum.pending_approval);
@@ -122,25 +126,25 @@ describe("patchCachedApprovalDecision", () => {
       )
     );
 
-    patchCachedApprovalDecision(queryClient, utils, ["t1"], RequestStatus.enum.queued);
+    patchCachedApprovalDecision(queryClient, ["t1"], RequestStatus.enum.queued);
 
-    expect(setListData).not.toHaveBeenCalled();
+    expect(patchList).not.toHaveBeenCalled();
   });
 
   it("does not flip a container that was never awaiting approval, even with nothing pending in it", () => {
     cacheHolds(detail("alb_done", [{ id: "t9", status: RequestStatus.enum.complete }], RequestStatus.enum.complete));
 
-    patchCachedApprovalDecision(queryClient, utils, ["t1"], RequestStatus.enum.queued);
+    patchCachedApprovalDecision(queryClient, ["t1"], RequestStatus.enum.queued);
 
-    expect(setListData).not.toHaveBeenCalled();
+    expect(patchList).not.toHaveBeenCalled();
   });
 
   it("does not touch tracks that are not awaiting approval", () => {
-    patchCachedApprovalDecision(queryClient, utils, ["t1"], RequestStatus.enum.queued);
+    patchCachedApprovalDecision(queryClient, ["t1"], RequestStatus.enum.queued);
 
     const next = runDetailUpdater(detail("alb_1", [{ id: "t1", status: RequestStatus.enum.downloading }]));
 
     expect(next.tracks[0].status).toBe(RequestStatus.enum.downloading);
-    expect(setListData).not.toHaveBeenCalled();
+    expect(patchList).not.toHaveBeenCalled();
   });
 });

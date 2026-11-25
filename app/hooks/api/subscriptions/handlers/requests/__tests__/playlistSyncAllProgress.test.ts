@@ -21,7 +21,8 @@ vi.mock("@utils/trpc", () => ({
       requests: {
         getPlaylistSyncAllState: { setData: spies.setData },
         getPlaylistSyncAllItems: { invalidate: spies.invalidateItems },
-        getAll: { invalidate: spies.invalidate },
+        list: { invalidate: spies.invalidate },
+        summary: { invalidate: vi.fn() },
         getRecentTracks: { invalidate: vi.fn() },
         getDetail: { invalidate: vi.fn() },
       },

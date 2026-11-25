@@ -9,6 +9,8 @@ import i18n from "@locale";
 import { errorToast } from "@modules/errors";
 import { trpc } from "@utils/trpc";
 
+import { invalidateRequestListQueries } from "../../queries/requests/requestListCache";
+
 type ApproveOutcome = inferRouterOutputs<AppRouter>["requests"]["review"]["approve"]["outcome"];
 
 interface ApproveToast {
@@ -42,7 +44,7 @@ export function useApproveHeldImport() {
     },
     onSettled: () => {
       void utils.requests.review.list.invalidate();
-      void utils.requests.getAll.invalidate();
+      invalidateRequestListQueries(utils);
     },
   });
 }

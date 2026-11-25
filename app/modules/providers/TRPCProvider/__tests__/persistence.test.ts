@@ -35,7 +35,7 @@ describe("shouldDehydrateQuery", () => {
   });
 
   it("excludes a requests query even when successful", () => {
-    const candidate = buildCandidate([["requests", "getAll"], { type: "query" }], "success");
+    const candidate = buildCandidate([["requests", "list"], { type: "infinite" }], "success");
     expect(shouldDehydrateQuery(candidate)).toBe(false);
   });
 

@@ -76,8 +76,8 @@ describe("resyncPushFedQueries", () => {
     const handlerWrites = pushFedQueryPaths();
 
     expect(handlerWrites.length).toBeGreaterThan(5);
-    expect(handlerWrites).toContain("requests.getAll");
     expect(handlerWrites).toContain("import.getBatch");
     expect(resyncedQueryPaths()).toEqual(expect.arrayContaining(handlerWrites));
+    expect(resyncedQueryPaths()).toEqual(expect.arrayContaining(["requests.list", "requests.summary"]));
   });
 });

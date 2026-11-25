@@ -2,6 +2,8 @@ import { errorToast } from "@modules/errors";
 import { notifyBulkUpgradeOutcome } from "@utils/request-helpers";
 import { trpc } from "@utils/trpc";
 
+import { invalidateRequestListQueries } from "../../queries/requests/requestListCache";
+
 export function useUpgradeTracks() {
   const utils = trpc.useUtils();
 
@@ -9,7 +11,7 @@ export function useUpgradeTracks() {
     onError: (error) => errorToast(error, "requests.upgradeTracksFailed"),
     onSuccess: ({ results }) => notifyBulkUpgradeOutcome(results),
     onSettled: () => {
-      void utils.requests.getAll.invalidate();
+      invalidateRequestListQueries(utils);
       void utils.library.getTracks.invalidate();
       void utils.library.getCounts.invalidate();
       void utils.contentDetail.albumDetail.invalidate();

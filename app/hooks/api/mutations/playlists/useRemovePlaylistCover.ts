@@ -3,6 +3,8 @@ import { errorToast } from "@modules/errors";
 import { trpc } from "@utils/trpc";
 import { toast } from "sonner";
 
+import { invalidateRequestListQueries } from "../../queries/requests/requestListCache";
+
 export function useRemovePlaylistCover() {
   const utils = trpc.useUtils();
 
@@ -12,7 +14,7 @@ export function useRemovePlaylistCover() {
     onSettled: () => {
       void utils.contentDetail.playlistDetail.invalidate();
       void utils.library.getPlaylists.invalidate();
-      void utils.requests.getAll.invalidate();
+      invalidateRequestListQueries(utils);
     },
   });
 }

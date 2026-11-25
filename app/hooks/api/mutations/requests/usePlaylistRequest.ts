@@ -3,6 +3,8 @@ import { errorToastDetailed } from "@modules/errors";
 import { trpc } from "@utils/trpc";
 import { notifyReclaimOutcome } from "@utils/request-helpers";
 
+import { invalidateRequestListQueries } from "../../queries/requests/requestListCache";
+
 import {
   correlateRequestDockJob,
   failRequestDockJob,
@@ -34,7 +36,7 @@ export function usePlaylistRequest() {
       });
     },
     onSettled: () => {
-      void utils.requests.getAll.invalidate();
+      invalidateRequestListQueries(utils);
       void utils.requestPreset.mine.invalidate();
       void utils.contentDetail.playlistDetail.invalidate();
     },

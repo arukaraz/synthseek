@@ -4,6 +4,8 @@ import { notifyPendingApproval, notifyReclaimOutcome, notifyUpgradeOutcome } fro
 
 import { failRequestDockJob, seedRequestDockJob, settleRequestDockJob } from "@hooks/api/subscriptions";
 
+import { invalidateRequestListQueries } from "../../queries/requests/requestListCache";
+
 export function useRequest() {
   const utils = trpc.useUtils();
 
@@ -33,7 +35,7 @@ export function useRequest() {
       notifyReclaimOutcome({ outcome, kind: "download", itemName });
     },
     onSettled: () => {
-      void utils.requests.getAll.invalidate();
+      invalidateRequestListQueries(utils);
       void utils.requestPreset.mine.invalidate();
       void utils.contentDetail.albumDetail.invalidate();
       void utils.contentDetail.artistTopTracks.invalidate();

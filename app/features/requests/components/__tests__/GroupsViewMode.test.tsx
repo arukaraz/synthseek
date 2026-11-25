@@ -1,19 +1,25 @@
-import { RequestStatus } from "@api/__generated__/types";
 import { render, screen, userEvent, waitFor } from "@test/test-utils";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { makeRequestListItem } from "../../__tests__/factories";
 import { GroupsViewMode } from "../GroupsViewMode";
 
-const { replace, searchParamsRef, queryState, detailSpy } = vi.hoisted(() => ({
+type Item = ReturnType<typeof makeRequestListItem>;
+
+interface AskedList {
+  input: Record<string, unknown>;
+  enabled: boolean;
+}
+
+const { replace, searchParamsRef, listState, detailSpy } = vi.hoisted(() => ({
   replace: vi.fn(),
   searchParamsRef: { current: new URLSearchParams() },
-  queryState: {
-    data: undefined as ReturnType<typeof makeRequestListItem>[] | undefined,
+  listState: {
+    items: [] as Item[],
     isLoading: false,
-    trackTitleMatchIds: undefined as string[] | undefined,
-    sourceMatchIds: undefined as string[] | undefined,
-    askedSource: [] as Array<string | null>,
+    lookup: [] as Item[],
+    lookupLoading: false,
+    asked: [] as AskedList[],
   },
   detailSpy: vi.fn(),
 }));
@@ -25,11 +31,21 @@ vi.mock("next/navigation", () => ({
 }));
 
 vi.mock("@hooks/api", () => ({
-  useTrackRequests: () => ({ data: queryState.data, isLoading: queryState.isLoading }),
-  useTrackTitleMatches: () => ({ data: queryState.trackTitleMatchIds }),
-  useRequestIdsBySource: (source: string | null) => {
-    queryState.askedSource.push(source);
-    return { data: source === null ? undefined : queryState.sourceMatchIds };
+  useRequestList: (input: Record<string, unknown>, enabled: boolean = true) => {
+    listState.asked.push({ input, enabled });
+    const isLookup = Object.hasOwn(input, "externalId");
+    const items = isLookup ? (enabled ? listState.lookup : []) : listState.items;
+    return {
+      items,
+      total: items.length,
+      isLoading: isLookup ? enabled && listState.lookupLoading : listState.isLoading,
+      hasNextPage: false,
+      isFetchingNextPage: false,
+      fetchNextPage: vi.fn(),
+      hasPreviousPage: false,
+      isFetchingPreviousPage: false,
+      fetchPreviousPage: vi.fn(),
+    };
   },
 }));
 
@@ -60,16 +76,24 @@ function setMatchMedia(matches: boolean) {
   }));
 }
 
+function lastMainInput(): Record<string, unknown> | undefined {
+  return listState.asked.filter((call) => !Object.hasOwn(call.input, "externalId")).at(-1)?.input;
+}
+
+function lastLookup(): AskedList | undefined {
+  return listState.asked.filter((call) => Object.hasOwn(call.input, "externalId")).at(-1);
+}
+
 describe("GroupsViewMode", () => {
   beforeEach(() => {
     replace.mockClear();
     detailSpy.mockClear();
     searchParamsRef.current = new URLSearchParams();
-    queryState.data = undefined;
-    queryState.isLoading = false;
-    queryState.trackTitleMatchIds = undefined;
-    queryState.sourceMatchIds = undefined;
-    queryState.askedSource = [];
+    listState.items = [];
+    listState.isLoading = false;
+    listState.lookup = [];
+    listState.lookupLoading = false;
+    listState.asked = [];
     setMatchMedia(false);
   });
 
@@ -79,14 +103,14 @@ describe("GroupsViewMode", () => {
   });
 
   it("shows the loading state while requests are fetching", () => {
-    queryState.isLoading = true;
+    listState.isLoading = true;
     render(<GroupsViewMode />);
 
     expect(screen.getByText("Loading requests...")).toBeInTheDocument();
   });
 
-  it("renders a sidebar row per request once loaded", () => {
-    queryState.data = [
+  it("renders a sidebar row per request the server returned", () => {
+    listState.items = [
       makeRequestListItem({ id: "a", external_id: "ext-a", name: "First" }),
       makeRequestListItem({ id: "b", external_id: "ext-b", name: "Second" }),
     ];
@@ -95,87 +119,50 @@ describe("GroupsViewMode", () => {
     expect(screen.getAllByTestId("sidebar-request-item")).toHaveLength(2);
   });
 
-  it("keeps a request the server matched only on a TRACK title, which the client filter cannot see", () => {
-    searchParamsRef.current = new URLSearchParams("q=hidden");
-    queryState.data = [
-      makeRequestListItem({ id: "a", external_id: "ext-a", name: "Album One", credited_artist: "Artist" }),
-      makeRequestListItem({ id: "b", external_id: "ext-b", name: "Album Two", credited_artist: "Artist" }),
-    ];
-    queryState.trackTitleMatchIds = ["b"];
-
+  it("asks the server for everything, newest first, when the url sets nothing", () => {
     render(<GroupsViewMode />);
 
-    const rows = screen.getAllByTestId("sidebar-request-item");
-    expect(rows).toHaveLength(1);
-    expect(rows[0]).toHaveTextContent("Album Two");
+    expect(lastMainInput()).toEqual({ filter: "all", source: null, q: "", sort: "recent", direction: "desc" });
   });
 
-  it("shows only the requests the server reports for the source in the url, and asks for no source by default", () => {
-    queryState.data = [
-      makeRequestListItem({ id: "a", external_id: "ext-a", name: "From Torrent" }),
-      makeRequestListItem({ id: "b", external_id: "ext-b", name: "From Slskd" }),
-    ];
-    queryState.sourceMatchIds = ["a"];
-
-    const { unmount } = render(<GroupsViewMode />);
-    expect(screen.getAllByTestId("sidebar-request-item")).toHaveLength(2);
-    expect(queryState.askedSource.at(-1)).toBeNull();
-    unmount();
-
-    searchParamsRef.current = new URLSearchParams("source=torrent");
+  it("hands the status, source, search and order in the url to the server", () => {
+    searchParamsRef.current = new URLSearchParams("filter=failed&source=torrent&q=hidden&sort=artist&dir=asc");
     render(<GroupsViewMode />);
 
-    const rows = screen.getAllByTestId("sidebar-request-item");
-    expect(queryState.askedSource.at(-1)).toBe("torrent");
-    expect(rows).toHaveLength(1);
-    expect(rows[0]).toHaveTextContent("From Torrent");
+    expect(lastMainInput()).toEqual({
+      filter: "failed",
+      source: "torrent",
+      q: "hidden",
+      sort: "artist",
+      direction: "asc",
+    });
   });
 
-  it("shows nothing for a chosen source until the server answers", () => {
-    searchParamsRef.current = new URLSearchParams("source=archive");
-    queryState.data = [makeRequestListItem({ id: "a", external_id: "ext-a" })];
-
-    render(<GroupsViewMode />);
-
-    expect(screen.queryAllByTestId("sidebar-request-item")).toHaveLength(0);
-    expect(screen.queryByText("Nothing from Internet Archive yet")).not.toBeInTheDocument();
-  });
-
-  it("says a chosen source has nothing yet once the server answers with no request", () => {
+  it("says a chosen source has nothing yet when the server returns no request for it", () => {
     searchParamsRef.current = new URLSearchParams("source=slskd");
-    queryState.data = [makeRequestListItem({ id: "a", external_id: "ext-a" })];
-    queryState.sourceMatchIds = [];
-
     render(<GroupsViewMode />);
 
     expect(screen.getByText("Nothing from Slskd yet")).toBeInTheDocument();
   });
 
-  it("blames the status filter, not the source, when the source has requests the status hides", () => {
+  it("blames the status filter, not the source, when a status filter is also set", () => {
     searchParamsRef.current = new URLSearchParams("source=archive&filter=failed");
-    queryState.data = [makeRequestListItem({ id: "a", external_id: "ext-a", status: RequestStatus.enum.complete })];
-    queryState.sourceMatchIds = ["a"];
-
     render(<GroupsViewMode />);
 
     expect(screen.getByText("No matching requests")).toBeInTheDocument();
   });
 
-  it("drops every request when the server reports no track-title match either", () => {
+  it("shows the no-results state when the server matches nothing for a search", () => {
     searchParamsRef.current = new URLSearchParams("q=hidden");
-    queryState.data = [
-      makeRequestListItem({ id: "a", external_id: "ext-a", name: "Album One", credited_artist: "Artist" }),
-    ];
-    queryState.trackTitleMatchIds = [];
-
     render(<GroupsViewMode />);
 
     expect(screen.queryAllByTestId("sidebar-request-item")).toHaveLength(0);
+    expect(screen.getByText("No Results")).toBeInTheDocument();
   });
 
   it("selects a request by its external id when a sidebar row is clicked", async () => {
     const user = userEvent.setup();
-    queryState.data = [makeRequestListItem({ id: "a", external_id: "ext-a" })];
+    listState.items = [makeRequestListItem({ id: "a", external_id: "ext-a" })];
     render(<GroupsViewMode />);
 
     await user.click(screen.getByTestId("sidebar-request-item"));
@@ -183,28 +170,55 @@ describe("GroupsViewMode", () => {
     expect(replace).toHaveBeenCalledWith("/requests?selected=ext-a", { scroll: false });
   });
 
-  it("passes the request matching the selected url param down to the detail pane", () => {
+  it("passes the loaded request matching the selected url param down to the detail pane, without a lookup", () => {
     searchParamsRef.current = new URLSearchParams({ selected: "ext-b" });
-    queryState.data = [
+    listState.items = [
       makeRequestListItem({ id: "a", external_id: "ext-a" }),
       makeRequestListItem({ id: "b", external_id: "ext-b" }),
     ];
     render(<GroupsViewMode />);
 
     expect(screen.getByText("detail: b")).toBeInTheDocument();
+    expect(lastLookup()?.enabled).toBe(false);
+  });
+
+  it("looks up a selected request beyond the loaded pages under the same filters, and keeps it selected", () => {
+    setMatchMedia(true);
+    searchParamsRef.current = new URLSearchParams({ selected: "ext-deep", filter: "done" });
+    listState.items = [makeRequestListItem({ id: "a", external_id: "ext-a" })];
+    listState.lookup = [makeRequestListItem({ id: "deep", external_id: "ext-deep" })];
+    render(<GroupsViewMode />);
+
+    expect(lastLookup()).toEqual({
+      input: { filter: "done", source: null, q: "", sort: "recent", direction: "desc", externalId: "ext-deep" },
+      enabled: true,
+    });
+    expect(screen.getByText("detail: deep")).toBeInTheDocument();
+    expect(replace).not.toHaveBeenCalled();
+  });
+
+  it("does not move the selection while the lookup of a deep-linked request is still running", () => {
+    setMatchMedia(true);
+    searchParamsRef.current = new URLSearchParams({ selected: "ext-deep" });
+    listState.items = [makeRequestListItem({ id: "a", external_id: "ext-a" })];
+    listState.lookupLoading = true;
+    render(<GroupsViewMode />);
+
+    expect(replace).not.toHaveBeenCalled();
   });
 
   it("passes a null request to the detail pane when nothing is selected on mobile", () => {
-    queryState.data = [makeRequestListItem({ id: "a", external_id: "ext-a" })];
+    listState.items = [makeRequestListItem({ id: "a", external_id: "ext-a" })];
     render(<GroupsViewMode />);
 
     expect(detailSpy).toHaveBeenCalledWith(null);
+    expect(lastLookup()).toMatchObject({ input: { externalId: null }, enabled: false });
     expect(replace).not.toHaveBeenCalled();
   });
 
   it("auto-selects the first request on desktop when none is selected", async () => {
     setMatchMedia(true);
-    queryState.data = [makeRequestListItem({ id: "a", external_id: "ext-a" })];
+    listState.items = [makeRequestListItem({ id: "a", external_id: "ext-a" })];
     render(<GroupsViewMode />);
 
     await waitFor(() => {
@@ -212,13 +226,11 @@ describe("GroupsViewMode", () => {
     });
   });
 
-  it("moves the selection to the first visible request on desktop when a filter hides the selected one", async () => {
+  it("moves the selection to the first visible request on desktop when the filter excludes the selected one", async () => {
     setMatchMedia(true);
     searchParamsRef.current = new URLSearchParams({ selected: "ext-done", filter: "failed" });
-    queryState.data = [
-      makeRequestListItem({ id: "done", external_id: "ext-done", status: RequestStatus.enum.complete }),
-      makeRequestListItem({ id: "failed", external_id: "ext-failed", status: RequestStatus.enum.failed }),
-    ];
+    listState.items = [makeRequestListItem({ id: "failed", external_id: "ext-failed" })];
+    listState.lookup = [];
     render(<GroupsViewMode />);
 
     await waitFor(() => {
@@ -229,7 +241,7 @@ describe("GroupsViewMode", () => {
   it("keeps a selection the filter still shows", () => {
     setMatchMedia(true);
     searchParamsRef.current = new URLSearchParams({ selected: "ext-b" });
-    queryState.data = [
+    listState.items = [
       makeRequestListItem({ id: "a", external_id: "ext-a" }),
       makeRequestListItem({ id: "b", external_id: "ext-b" }),
     ];
@@ -241,7 +253,7 @@ describe("GroupsViewMode", () => {
   it("clears the selected url param when the detail pane requests a back action", async () => {
     const user = userEvent.setup();
     searchParamsRef.current = new URLSearchParams({ selected: "ext-a" });
-    queryState.data = [makeRequestListItem({ id: "a", external_id: "ext-a" })];
+    listState.items = [makeRequestListItem({ id: "a", external_id: "ext-a" })];
     render(<GroupsViewMode />);
 
     await user.click(screen.getByRole("button", { name: "back" }));

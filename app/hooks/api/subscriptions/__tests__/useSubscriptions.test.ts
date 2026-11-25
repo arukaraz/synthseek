@@ -30,7 +30,8 @@ const handlers = vi.hoisted(() => ({
 
 const utilsStub = vi.hoisted(() => ({
   requests: {
-    getAll: { invalidate: vi.fn() },
+    list: { invalidate: vi.fn() },
+    summary: { invalidate: vi.fn() },
     getRecentTracks: { invalidate: vi.fn() },
     getDetail: { invalidate: vi.fn() },
     getLibrarySummary: { invalidate: vi.fn() },
@@ -82,7 +83,8 @@ const utilsStub = vi.hoisted(() => ({
 }));
 
 const everyPushFedInvalidate = [
-  utilsStub.requests.getAll.invalidate,
+  utilsStub.requests.list.invalidate,
+  utilsStub.requests.summary.invalidate,
   utilsStub.requests.getLibrarySummary.invalidate,
   utilsStub.requests.getPlaylistSyncAllItems.invalidate,
   utilsStub.requests.getPlaylistSyncAllState.invalidate,

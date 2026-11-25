@@ -44,7 +44,8 @@ vi.mock("@utils/trpc", () => ({
         },
       },
       requests: {
-        getAll: { invalidate: spies.invalidateAll },
+        list: { invalidate: spies.invalidateAll },
+        summary: { invalidate: vi.fn() },
         getRecentTracks: { invalidate: vi.fn() },
         getDetail: { invalidate: vi.fn() },
       },

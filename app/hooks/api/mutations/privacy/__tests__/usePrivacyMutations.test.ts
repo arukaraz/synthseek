@@ -52,7 +52,7 @@ vi.mock("@utils/trpc", () => ({
         getPlaylists: { invalidate: spies.invalidatePlaylists },
         getCounts: { invalidate: spies.invalidateCounts },
       },
-      requests: { getAll: { invalidate: spies.invalidateRequests } },
+      requests: { list: { invalidate: spies.invalidateRequests }, summary: { invalidate: vi.fn() } },
       contentDetail: { playlistDetail: { invalidate: spies.invalidatePlaylistDetail } },
     }),
     privacy: {

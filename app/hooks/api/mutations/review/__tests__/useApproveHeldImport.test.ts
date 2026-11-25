@@ -26,7 +26,8 @@ vi.mock("@utils/trpc", () => ({
     useUtils: () => ({
       requests: {
         review: { list: { invalidate: spies.invalidateReview } },
-        getAll: { invalidate: spies.invalidateRequests },
+        list: { invalidate: spies.invalidateRequests },
+        summary: { invalidate: vi.fn() },
       },
     }),
     requests: {

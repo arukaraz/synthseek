@@ -1,11 +1,9 @@
 import type { ActivityDividerState } from "@components/ui/ActivityDivider";
-import { useGetPlaylistSyncAllState, usePlaylistSyncAllProgress, useQueueStatus, useTrackRequests } from "@hooks/api";
+import { useGetPlaylistSyncAllState, usePlaylistSyncAllProgress, useQueueStatus, useRequestSummary } from "@hooks/api";
 import i18n from "@locale";
 import { playbackServerName } from "@utils/playback-servers";
 import { useEffect, useRef } from "react";
 import { toast } from "sonner";
-
-import { hasActiveDownload } from "../helpers";
 
 interface ActivityStateResult {
   state: ActivityDividerState;
@@ -14,7 +12,7 @@ interface ActivityStateResult {
 }
 
 export function useActivityState(): ActivityStateResult {
-  const { data: items } = useTrackRequests();
+  const { data: summary } = useRequestSummary();
   const { data: syncState } = useGetPlaylistSyncAllState();
   const { data: queueState } = useQueueStatus();
   const progress = usePlaylistSyncAllProgress();
@@ -22,7 +20,7 @@ export function useActivityState(): ActivityStateResult {
   const isSyncing = progress ? progress.phase !== "complete" : (syncState?.running ?? false);
   const synced = progress?.synced ?? syncState?.synced ?? 0;
   const total = progress?.total ?? syncState?.total ?? 0;
-  const downloading = hasActiveDownload(items);
+  const downloading = summary?.downloading ?? false;
 
   const completedRef = useRef(false);
   useEffect(() => {

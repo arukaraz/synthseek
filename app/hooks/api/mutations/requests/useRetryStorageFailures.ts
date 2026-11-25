@@ -2,6 +2,8 @@ import { errorToast } from "@modules/errors";
 import { notifyTracksRetried } from "@utils/request-helpers";
 import { trpc } from "@utils/trpc";
 
+import { invalidateRequestListQueries } from "../../queries/requests/requestListCache";
+
 export function useRetryStorageFailures() {
   const utils = trpc.useUtils();
 
@@ -10,7 +12,7 @@ export function useRetryStorageFailures() {
     onSuccess: notifyTracksRetried,
     onSettled: () => {
       void utils.requests.getStorageFailureSummary.invalidate();
-      void utils.requests.getAll.invalidate();
+      invalidateRequestListQueries(utils);
       void utils.library.getTracks.invalidate();
       void utils.library.getCounts.invalidate();
       void utils.contentDetail.albumDetail.invalidate();
