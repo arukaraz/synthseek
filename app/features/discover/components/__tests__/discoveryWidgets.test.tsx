@@ -190,6 +190,7 @@ describe("Charts", () => {
     expect(screen.getByText("Top tracks worldwide · Last.fm")).toBeInTheDocument();
     const leader = screen.getByRole("article");
     expect(leader).toHaveTextContent(enDiscover.charts.leaderBadge);
+    expect(within(leader).queryByText("1")).not.toBeInTheDocument();
     fireEvent.click(within(leader).getByRole("button", { name: "Play Joga" }));
 
     const rows = screen.getAllByRole("listitem");

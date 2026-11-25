@@ -94,9 +94,11 @@ export const cardIcon = cva(
 
 export const cardTitle = cva("text-fg min-w-0 flex-1 text-sm leading-tight font-semibold text-balance break-words");
 
-export const cardCategory = cva("text-fg/60 shrink-0 text-11");
+export const cardCategory = cva(
+  "border-fg/10 bg-fg/5 text-fg/70 inline-flex shrink-0 items-center rounded-full border px-2 py-1 text-11 leading-none font-semibold whitespace-nowrap"
+);
 
-export const cardMeta = cva("flex min-w-0 flex-wrap items-center justify-between gap-2");
+export const cardMeta = cva("flex min-w-0 flex-wrap items-center gap-1");
 
 export const sourcePills = cva("inline-flex min-w-0 flex-wrap items-center gap-1");
 
