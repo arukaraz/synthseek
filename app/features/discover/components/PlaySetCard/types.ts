@@ -20,4 +20,5 @@ export interface PlaySetCardProps {
   onOpen?: () => void;
   revealAction?: boolean;
   pinned?: boolean;
+  folded?: boolean;
 }

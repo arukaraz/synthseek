@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { BARE_VERSION_MESSAGE, IMAGE_FILE_MESSAGE, VIDEO_FILE_MESSAGE, WHATS_NEW_MAX_HIGHLIGHTS } from "./constants";
+import { BARE_VERSION_MESSAGE, GALLERY_SLIDES_MESSAGE, IMAGE_FILE_MESSAGE, VIDEO_FILE_MESSAGE } from "./constants";
 import { isImageFile, isVideoFile } from "./media";
 import { isBareVersion } from "./version";
 
@@ -21,19 +21,29 @@ function isAppRoute(value: string): boolean {
   return [...value].every((character) => character.trim() !== "");
 }
 
+const imageFileSchema = z.string().refine(isImageFile, { message: IMAGE_FILE_MESSAGE });
+
 const mediaSchema = z.discriminatedUnion("type", [
   z.object({
     type: z.literal("image"),
-    file: z.string().refine(isImageFile, { message: IMAGE_FILE_MESSAGE }),
+    file: imageFileSchema,
     alt: z.string().min(1),
   }),
   z.object({
     type: z.literal("video"),
     file: z.string().refine(isVideoFile, { message: VIDEO_FILE_MESSAGE }),
     alt: z.string().min(1),
-    poster: z.string().refine(isImageFile, { message: IMAGE_FILE_MESSAGE }).optional(),
+    poster: imageFileSchema.optional(),
+  }),
+  z.object({
+    type: z.literal("gallery"),
+    slides: z
+      .array(z.object({ file: imageFileSchema, alt: z.string().min(1), caption: z.string().min(1) }))
+      .min(2, { message: GALLERY_SLIDES_MESSAGE }),
   }),
 ]);
+
+export type ParsedMedia = z.infer<typeof mediaSchema>;
 
 const highlightSchema = z.object({
   title: z.string().min(1),
@@ -52,7 +62,7 @@ const versionSchema = z.object({
   date: z.string(),
   type: z.enum(["major", "minor", "patch"]),
   title: z.string(),
-  highlights: z.array(highlightSchema).max(WHATS_NEW_MAX_HIGHLIGHTS).optional(),
+  highlights: z.array(highlightSchema).optional(),
   callouts: z.array(calloutSchema).optional(),
   sections: z.array(sectionSchema),
   issues: z.array(z.number()).optional(),

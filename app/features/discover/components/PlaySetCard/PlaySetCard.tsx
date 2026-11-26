@@ -40,12 +40,13 @@ export function PlaySetCard({
   onOpen,
   revealAction = false,
   pinned = false,
+  folded = false,
 }: PlaySetCardProps) {
   const [onlyCover] = covers;
 
   return (
     <article data-acc={accent} className={mixCard()}>
-      <div className={playSetPoster()}>
+      <div className={playSetPoster({ folded })}>
         {covers.length === 1 && onlyCover ? (
           <Image {...artworkImage(onlyCover)} alt="" fill sizes="320px" className={singleCover()} />
         ) : (
@@ -66,7 +67,7 @@ export function PlaySetCard({
         ) : onPlay ? (
           <button
             type="button"
-            className={playButton({ reveal: revealAction })}
+            className={playButton({ reveal: revealAction, folded })}
             aria-label={playLabel}
             onClick={onPlay}
           >

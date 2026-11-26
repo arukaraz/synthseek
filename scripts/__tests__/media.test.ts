@@ -61,6 +61,27 @@ describe("highlight media in the changelog schema", () => {
     ["a path outside the version folder", { type: "image", file: "../board.png", alt: "x" }],
     ["a video poster that is not an image", { type: "video", file: "stage.mp4", alt: "x", poster: "a.mp4" }],
     ["an unknown type", { type: "audio", file: "a.mp3", alt: "x" }],
+    ["a gallery of one slide", { type: "gallery", slides: [{ file: "a.webp", alt: "a", caption: "A" }] }],
+    [
+      "a gallery slide that is a video",
+      {
+        type: "gallery",
+        slides: [
+          { file: "a.webp", alt: "a", caption: "A" },
+          { file: "b.mp4", alt: "b", caption: "B" },
+        ],
+      },
+    ],
+    [
+      "a gallery slide without a caption",
+      {
+        type: "gallery",
+        slides: [
+          { file: "a.webp", alt: "a", caption: "A" },
+          { file: "b.webp", alt: "b" },
+        ],
+      },
+    ],
   ])("rejects %s", (_label, media) => {
     expect(changelogSchema.safeParse(changelogWith(media)).success).toBe(false);
   });
@@ -87,6 +108,22 @@ describe("missingMediaPaths", () => {
 
   it("lists nothing when every declared file is on disk", () => {
     expect(missingMediaPaths(parsed, () => true)).toEqual([]);
+  });
+
+  it("lists every slide of a gallery", () => {
+    const gallery = changelogSchema.parse(
+      changelogWith({
+        type: "gallery",
+        slides: [
+          { file: "artist.webp", alt: "Artist page", caption: "Artist" },
+          { file: "request.png", alt: "Request detail", caption: "Request" },
+        ],
+      })
+    );
+
+    expect(missingMediaPaths(gallery, (path) => path.endsWith("artist.webp"))).toEqual([
+      "changelog-media/3.0.0/request.png",
+    ]);
   });
 });
 

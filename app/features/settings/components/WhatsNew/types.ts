@@ -7,6 +7,7 @@ type RouterOutputs = inferRouterOutputs<AppRouter>;
 export type WhatsNewEntry = NonNullable<RouterOutputs["updates"]["whatsNew"]["entry"]>;
 export type WhatsNewHighlight = NonNullable<WhatsNewEntry["highlights"]>[number];
 export type WhatsNewMedia = NonNullable<WhatsNewHighlight["media"]>;
+export type WhatsNewGallerySlide = Extract<WhatsNewMedia, { type: "gallery" }>["slides"][number];
 
 export interface WhatsNewDialogProps {
   entry: WhatsNewEntry;
@@ -24,6 +25,19 @@ export interface HighlightCardProps {
 export interface HighlightMediaProps {
   media: WhatsNewMedia;
   mediaPath: string;
+}
+
+export interface HighlightVideoProps {
+  src: string;
+  poster: string | undefined;
+  alt: string;
+  onError: () => void;
+}
+
+export interface HighlightGalleryProps {
+  slides: WhatsNewGallerySlide[];
+  mediaPath: string;
+  onError: () => void;
 }
 
 export interface HighlightVisualProps {

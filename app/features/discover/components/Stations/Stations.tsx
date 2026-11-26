@@ -38,6 +38,7 @@ export function Stations({ size, info }: StationsProps) {
         covers={station.covers}
         seed={station.id}
         playLabel={t("stations.start", { name: title })}
+        folded={!rail}
         onPlay={() => void startRadio(station.seed, null)}
       />
     );
@@ -54,7 +55,7 @@ export function Stations({ size, info }: StationsProps) {
       />
       {isLoading ? (
         <div className={cardRowBody()}>
-          <div className={cardRow()} style={cardRowVars(limit)}>
+          <div className={cardRow({ fold: !rail })} style={cardRowVars(limit)}>
             {CARD_ROW_SKELETONS.slice(0, limit).map((index) => (
               <div key={index} className={cardRowSkeleton()} />
             ))}
@@ -70,7 +71,7 @@ export function Stations({ size, info }: StationsProps) {
         </div>
       ) : (
         <div className={cardRowBody()}>
-          <div className={cardRow()} style={cardRowVars(limit)}>
+          <div className={cardRow({ fold: true })} style={cardRowVars(limit)}>
             {cards}
           </div>
         </div>

@@ -3,9 +3,8 @@
 import Image from "next/image";
 import { useState } from "react";
 
-import { REDUCED_MOTION_QUERY } from "@hooks/ui/constants";
-import { useMediaQuery } from "@hooks/ui/useMediaQuery";
-
+import { HighlightGallery } from "./HighlightGallery";
+import { HighlightVideo } from "./HighlightVideo";
 import { VisualPlaceholder } from "./VisualPlaceholder";
 import { MEDIA_FRAME } from "./constants";
 import { mediaUrl } from "./helpers";
@@ -13,10 +12,13 @@ import { mediaFrame } from "./styles";
 import type { HighlightMediaProps } from "./types";
 
 export function HighlightMedia({ media, mediaPath }: HighlightMediaProps) {
-  const reducedMotion = useMediaQuery(REDUCED_MOTION_QUERY);
   const [failed, setFailed] = useState(false);
 
   if (failed) return <VisualPlaceholder />;
+
+  if (media.type === "gallery") {
+    return <HighlightGallery slides={media.slides} mediaPath={mediaPath} onError={() => setFailed(true)} />;
+  }
 
   if (media.type === "image") {
     return (
@@ -33,17 +35,10 @@ export function HighlightMedia({ media, mediaPath }: HighlightMediaProps) {
   }
 
   return (
-    <video
+    <HighlightVideo
       src={mediaUrl(mediaPath, media.file)}
       poster={media.poster ? mediaUrl(mediaPath, media.poster) : undefined}
-      aria-label={media.alt}
-      className={mediaFrame()}
-      muted
-      loop
-      playsInline
-      autoPlay={!reducedMotion}
-      controls={reducedMotion}
-      preload="metadata"
+      alt={media.alt}
       onError={() => setFailed(true)}
     />
   );

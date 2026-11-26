@@ -14,6 +14,10 @@ export function segmentState(index: number, current: number): SegmentState {
   return index < current ? "done" : "todo";
 }
 
+export function wrapSlide(index: number, total: number): number {
+  return ((index % total) + total) % total;
+}
+
 export function mediaUrl(mediaPath: string, file: string): string {
   return `${mediaPath}/${encodeURIComponent(file)}`;
 }

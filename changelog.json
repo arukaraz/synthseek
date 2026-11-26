@@ -9,19 +9,152 @@
       "highlights": [
         {
           "title": "Your own Explore board",
-          "body": "Add, resize and move widgets, and keep a separate layout for your phone. Build new widgets in the Widget workshop from charts, your listening, smart playlists and outside feeds."
+          "body": "Explore is now a board you arrange yourself: add widgets, move them, give each one a size and choose how tall each row is.",
+          "link": "/",
+          "media": {
+            "type": "video",
+            "file": "explore-board.mp4",
+            "poster": "explore-board-poster.webp",
+            "alt": "Scrolling down a whole Explore board, from the trending banner to the last widget"
+          }
         },
         {
-          "title": "The Stage",
-          "body": "A full screen player on desktop, and on phones a player that lives in the masthead and opens full screen when you play a track."
+          "title": "A board for your phone",
+          "body": "Your phone keeps its own layout, so what you arrange on a small screen does not change the board on your desktop.",
+          "link": "/",
+          "media": {
+            "type": "video",
+            "file": "phone-board.mp4",
+            "poster": "phone-board-poster.webp",
+            "alt": "Scrolling down the board on a phone, under the player in the masthead"
+          }
+        },
+        {
+          "title": "The Widget workshop",
+          "body": "Build your own widgets from a recipe over your library and your listening: pick what it counts and over which period, choose how it looks, then give it a name, a description and an icon. The preview runs on your own data as you go. A recipe can also fill a smart playlist that refreshes every day or week.",
+          "media": {
+            "type": "video",
+            "file": "widget-recipe.mp4",
+            "poster": "widget-recipe-poster.webp",
+            "alt": "Building a widget from a recipe: top tracks over a year, the Posters look in cyan, then its name, description and icon, and saving it"
+          }
+        },
+        {
+          "title": "Widgets from your feeds",
+          "body": "A widget can also be built from a feed instead of a recipe: similar artists, related artists, releases, trending tracks, news and more, seeded from what you play.",
+          "media": {
+            "type": "video",
+            "file": "widget-feed.mp4",
+            "poster": "widget-feed-poster.webp",
+            "alt": "Building a widget from a feed: albums by your top artists, the Posters look in pink, then its name, description and icon, and saving it"
+          }
+        },
+        {
+          "title": "The Stage, redrawn",
+          "body": "The full screen player is redrawn on desktop: the cover sits over its own blurred colors, the lyrics or the queue open beside it, and the controls step aside while you listen. On phones the player sits in the masthead and opens full screen when you play a track.",
+          "media": {
+            "type": "video",
+            "file": "stage.mp4",
+            "poster": "stage-poster.webp",
+            "alt": "The Stage full screen: lyrics open beside the cover, then the controls fade away while the lyrics keep moving"
+          }
         },
         {
           "title": "Follow artists",
-          "body": "A release calendar shows what the artists you follow are putting out, and their new releases can be requested for you."
+          "body": "A release calendar shows what the artists you follow are putting out, and their new releases can be requested for you.",
+          "link": "/settings/releases/calendar",
+          "media": {
+            "type": "video",
+            "file": "follow-calendar.mp4",
+            "poster": "follow-calendar-poster.webp",
+            "alt": "The release calendar in month view: singles turned on, October filled with releases from followed artists, then a release opened with its request buttons"
+          }
         },
         {
-          "title": "Playlists and themes",
-          "body": "Reorder a playlist, get suggestions for it and give it a cover in the playlist workshop. Make Synthseek your own with a Custom theme for your account."
+          "title": "The playlist workshop",
+          "body": "Reorder a playlist by dragging its tracks, get suggestions for it, and set its name, cover and who can see it.",
+          "link": "/library",
+          "media": {
+            "type": "video",
+            "file": "playlist-workshop.mp4",
+            "poster": "playlist-workshop-poster.webp",
+            "alt": "The playlist workshop: a track is dragged from fifth to second, then the Suggested tab lists tracks to request and add"
+          }
+        },
+        {
+          "title": "A theme of your own",
+          "body": "Choose Custom in Customization and pick your own colors. The app changes as you edit, and the theme follows your account to every device.",
+          "link": "/settings/customization/theme",
+          "media": {
+            "type": "video",
+            "file": "custom-theme.mp4",
+            "poster": "custom-theme-poster.webp",
+            "alt": "The Custom theme card: the primary color is changed in the Visual tab, then the CSS tab opens a few of the theme's files"
+          }
+        },
+        {
+          "title": "New look",
+          "body": "Keeping Synthseek clean and easy to find your way around has always mattered to me, so this version also redraws places you already know: artist pages, the request detail and the request window, search, Settings and the Overview.",
+          "media": {
+            "type": "gallery",
+            "slides": [
+              {
+                "file": "new-look-artist.webp",
+                "alt": "An artist page with listeners and plays, a Play button with a menu, top tracks and a biography from Wikipedia",
+                "caption": "Artist pages"
+              },
+              {
+                "file": "new-look-request.webp",
+                "alt": "A playlist request with its progress, counts by status and its tracks in a table",
+                "caption": "Request detail"
+              },
+              {
+                "file": "new-look-request-window.webp",
+                "alt": "The request window with the source and quality of your preset and the Keep requesting box",
+                "caption": "Request window"
+              },
+              {
+                "file": "new-look-search.webp",
+                "alt": "Search in the header, with scopes for playlists, artists, albums and songs and results as you type",
+                "caption": "Search"
+              },
+              {
+                "file": "new-look-settings.webp",
+                "alt": "Settings grouped under You and This server, here the download sources in their search order",
+                "caption": "Settings"
+              },
+              {
+                "file": "new-look-overview.webp",
+                "alt": "Overview analytics: albums by decade and the mix of file formats",
+                "caption": "Overview"
+              }
+            ]
+          }
+        },
+        {
+          "title": "Your privacy",
+          "body": "A Privacy page decides where your plays go, with separate settings for a private session you start from the player. Choose who sees your playlists and your name on requests, clear your history by range, and see what leaves the server. Admins set the defaults for members.",
+          "link": "/settings/privacy",
+          "media": {
+            "type": "gallery",
+            "slides": [
+              {
+                "file": "privacy-page.webp",
+                "alt": "The Privacy page: each channel with its default and its private session setting, and what leaves this server",
+                "caption": "Your privacy"
+              },
+              {
+                "file": "privacy-clear-history.webp",
+                "alt": "Clearing listening history for the last hour, day, week or everything",
+                "caption": "Clear history"
+              },
+              {
+                "file": "privacy-server.webp",
+                "alt": "The server's privacy settings: whether members see each other's requests, their default playlist privacy and Now playing in music apps",
+                "caption": "For admins"
+              }
+            ]
+          }
         }
       ],
       "callouts": [
@@ -45,7 +178,7 @@
           "heading": "Player",
           "category": "feature",
           "items": [
-            "The Stage: a full screen player on desktop.",
+            "The Stage, the full screen player, is redrawn on desktop.",
             "On phones the player sits in the masthead, and playing a track opens the full screen player.",
             "Preview a catalog track for 30 seconds before you request it.",
             "Listening now shows what others on this server are playing, for those who choose to share it."

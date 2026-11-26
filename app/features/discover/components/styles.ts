@@ -10,9 +10,15 @@ export const NAV_BUTTON_CLASSES = cn(
 
 export const cardRowBody = cva("@container flex min-h-0 flex-1 flex-col");
 
-export const cardRow = cva(
-  "grid min-h-0 flex-1 auto-rows-fr gap-3 [grid-template-columns:repeat(var(--card-cols),minmax(0,1fr))]"
-);
+export const cardRow = cva("grid min-h-0 flex-1 auto-rows-fr gap-3", {
+  variants: {
+    fold: {
+      false: "[grid-template-columns:repeat(var(--card-cols),minmax(0,1fr))]",
+      true: "grid-cols-2 @3xl:[grid-template-columns:repeat(var(--card-cols),minmax(0,1fr))]",
+    },
+  },
+  defaultVariants: { fold: false },
+});
 
 export function cardRowVars(columns: number): CssVars {
   return { "--card-cols": String(columns) };

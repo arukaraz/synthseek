@@ -166,13 +166,13 @@ describe("changelogSchema", () => {
     }
   });
 
-  it("rejects more than four highlights", () => {
+  it("accepts as many highlights as an entry carries", () => {
     const base = fixture();
     const highlight = { title: "Item", body: "Body." };
     const result = changelogSchema.safeParse({
       ...base,
-      versions: [{ ...base.versions[0], highlights: Array.from({ length: 5 }, () => highlight) }],
+      versions: [{ ...base.versions[0], highlights: Array.from({ length: 9 }, () => highlight) }],
     });
-    expect(result.success).toBe(false);
+    expect(result.success).toBe(true);
   });
 });

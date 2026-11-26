@@ -43,6 +43,63 @@ export const visualIcon = cva("text-fg/90 size-14 sm:size-16");
 
 export const mediaFrame = cva("border-fg/10 bg-fg/5 block aspect-[16/7] w-full rounded-xl border object-contain");
 
+export const videoFrame = cva("relative");
+
+export const videoToggle = cva(
+  "bg-surface/75 text-fg ring-fg/15 hover:bg-surface focus-visible:ring-primary-400 absolute right-3 bottom-3 grid size-10 place-items-center rounded-full ring-1 backdrop-blur-md transition-colors focus-visible:ring-2 focus-visible:outline-none"
+);
+
+export const videoToggleIcon = cva("size-4 fill-current");
+
+export const galleryFrame = cva("group/gallery relative grid");
+
+export const gallerySlide = cva("[grid-area:1/1] motion-safe:transition-opacity motion-safe:duration-500", {
+  variants: {
+    current: {
+      true: "opacity-100",
+      false: "pointer-events-none opacity-0",
+    },
+  },
+});
+
+export const galleryCaption = cva(
+  "bg-surface/75 text-fg ring-fg/15 pointer-events-none absolute top-2 left-2 rounded-full px-2.5 py-0.5 text-[0.6875rem] font-semibold ring-1 backdrop-blur-md sm:top-3 sm:left-3 sm:px-3 sm:py-1 sm:text-xs"
+);
+
+export const galleryToggle = cva(
+  "bg-surface/75 text-fg ring-fg/15 hover:bg-surface focus-visible:ring-primary-400 absolute right-2 bottom-2 grid size-8 place-items-center rounded-full ring-1 backdrop-blur-md transition-colors focus-visible:ring-2 focus-visible:outline-none sm:right-3 sm:bottom-3 sm:size-10"
+);
+
+export const galleryArrow = cva(
+  "bg-surface/75 text-fg ring-fg/15 hover:bg-surface focus-visible:ring-primary-400 absolute top-1/2 hidden size-9 -translate-y-1/2 sm:grid place-items-center rounded-full ring-1 backdrop-blur-md transition focus-visible:opacity-100 focus-visible:ring-2 focus-visible:outline-none [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover/gallery:opacity-100",
+  {
+    variants: {
+      side: {
+        previous: "left-3",
+        next: "right-3",
+      },
+    },
+  }
+);
+
+export const galleryArrowIcon = cva("size-4");
+
+export const galleryDots = cva(
+  "bg-surface/60 ring-fg/10 absolute bottom-2 left-1/2 sm:bottom-3 flex -translate-x-1/2 items-center rounded-full px-1.5 ring-1 backdrop-blur-md"
+);
+
+export const galleryDot = cva(
+  "focus-visible:ring-primary-400 flex h-7 w-5 items-center justify-center rounded-full before:block before:h-1.5 before:rounded-full before:transition-all before:content-[''] focus-visible:ring-2 focus-visible:outline-none",
+  {
+    variants: {
+      current: {
+        true: "before:bg-secondary-400 before:w-3.5",
+        false: "before:bg-fg/40 hover:before:bg-fg/70 before:w-1.5",
+      },
+    },
+  }
+);
+
 export const cardTitle = cva("text-fg text-2xl font-bold tracking-tight text-balance sm:text-3xl");
 
 export const cardBody = cva("text-fg/70 max-w-[60ch] text-base leading-relaxed");

@@ -1,6 +1,14 @@
 import { cva } from "class-variance-authority";
 
-export const playSetPoster = cva("relative min-h-24 w-full flex-1 overflow-hidden");
+export const playSetPoster = cva("relative w-full flex-1 overflow-hidden", {
+  variants: {
+    folded: {
+      true: "min-h-0 @3xl:min-h-24",
+      false: "min-h-24",
+    },
+  },
+  defaultVariants: { folded: false },
+});
 
 export const singleCover = cva("object-cover");
 
@@ -16,8 +24,12 @@ export const playButton = cva(
         true: "opacity-0 group-hover:opacity-100 focus-visible:opacity-100 [@media(hover:none)]:opacity-100",
         false: "",
       },
+      folded: {
+        true: "@max-3xl:right-2 @max-3xl:bottom-2 @max-3xl:size-9 @max-3xl:[&_svg]:size-4",
+        false: "",
+      },
     },
-    defaultVariants: { reveal: false },
+    defaultVariants: { reveal: false, folded: false },
   }
 );
 

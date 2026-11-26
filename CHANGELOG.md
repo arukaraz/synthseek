@@ -18,7 +18,7 @@
 
 ### Player
 
-- The Stage: a full screen player on desktop.
+- The Stage, the full screen player, is redrawn on desktop.
 - On phones the player sits in the masthead, and playing a track opens the full screen player.
 - Preview a catalog track for 30 seconds before you request it.
 - Listening now shows what others on this server are playing, for those who choose to share it.

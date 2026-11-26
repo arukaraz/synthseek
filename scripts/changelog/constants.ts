@@ -25,8 +25,6 @@ export const DOCUMENT_TITLE = "# Patch Notes";
 
 export const SECTION_SEPARATOR = "---";
 
-export const WHATS_NEW_MAX_HIGHLIGHTS = 4;
-
 export const WHATS_NEW_IMAGE_EXTENSIONS = ["png", "jpg", "jpeg", "webp", "gif"];
 
 export const WHATS_NEW_VIDEO_EXTENSIONS = ["mp4", "webm"];
@@ -37,6 +35,8 @@ export const BARE_VERSION_MESSAGE = "A version must be three dot-separated numbe
 
 const MEDIA_NAME_RULE = "a lowercase name of letters, digits and hyphens ending in";
 
-export const IMAGE_FILE_MESSAGE = `A highlight image or poster must be ${MEDIA_NAME_RULE} .${WHATS_NEW_IMAGE_EXTENSIONS.join(", .")}`;
+export const IMAGE_FILE_MESSAGE = `A highlight image, poster or gallery slide must be ${MEDIA_NAME_RULE} .${WHATS_NEW_IMAGE_EXTENSIONS.join(", .")}`;
+
+export const GALLERY_SLIDES_MESSAGE = "A highlight gallery must have at least two slides; use an image for one";
 
 export const VIDEO_FILE_MESSAGE = `A highlight video must be ${MEDIA_NAME_RULE} .${WHATS_NEW_VIDEO_EXTENSIONS.join(", .")}`;
