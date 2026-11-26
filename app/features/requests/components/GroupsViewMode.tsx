@@ -1,12 +1,13 @@
 "use client";
 
+import type { RequestListItem } from "@api/__generated__/types";
 import { SectionLoading } from "@components/ui/SectionLoading";
 import { useRequestList, type RequestListInput } from "@hooks/api";
 import { useDebounce } from "@hooks/ui/useDebounce";
 import { useDownloadSourceLabel } from "@hooks/ui/useDownloadSourceLabel";
 import { useUrlParams } from "@hooks/ui/useUrlParam";
 import { cn } from "@utils/cn";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { RequestDetail } from "./RequestDetail/RequestDetail";
 import { RequestSidebar } from "./RequestSidebar/RequestSidebar";
@@ -31,8 +32,15 @@ export function GroupsViewMode() {
   const loadedSelection = list.items.find((it) => it.external_id === selectedExternalId) ?? null;
   const selectionOutsidePages = selectedExternalId !== null && loadedSelection === null && !list.isLoading;
   const selectionLookup = useRequestList({ ...listInput, externalId: selectedExternalId }, selectionOutsidePages);
-  const selected = loadedSelection ?? (selectionOutsidePages ? (selectionLookup.items[0] ?? null) : null);
+  const resolvedSelection = loadedSelection ?? (selectionOutsidePages ? (selectionLookup.items[0] ?? null) : null);
   const awaitingSelection = selectionOutsidePages && selectionLookup.isLoading;
+  const [shownSelection, setShownSelection] = useState<RequestListItem | null>(null);
+  if (resolvedSelection !== null && resolvedSelection !== shownSelection) setShownSelection(resolvedSelection);
+  const keptSelection =
+    awaitingSelection && shownSelection !== null && shownSelection.external_id === selectedExternalId
+      ? shownSelection
+      : null;
+  const selected = resolvedSelection ?? keptSelection;
   const emptySourceLabel = sourceKey !== null && values.filter === "all" ? sourceLabel(sourceKey) : null;
 
   useEffect(() => {

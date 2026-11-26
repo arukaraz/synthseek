@@ -1,6 +1,6 @@
 "use client";
 
-import { useHoldRequestListRefresh } from "@hooks/api";
+import { useHoldRequestListRows } from "@hooks/api";
 import { useInfiniteScroll } from "@hooks/ui/useInfiniteScroll";
 import { useScrollEdges } from "@hooks/ui/useScrollEdges";
 
@@ -26,7 +26,7 @@ export function RequestSidebar({
 }: RequestSidebarProps) {
   const edges = useScrollEdges<HTMLUListElement>("y");
   const scrollRoot = edges.node;
-  useHoldRequestListRefresh(edges.start);
+  useHoldRequestListRows(edges.start);
   const nextSentinelRef = useInfiniteScroll({
     root: scrollRoot,
     hasNextPage,

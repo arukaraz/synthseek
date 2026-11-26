@@ -1,7 +1,7 @@
 import type { QueryClient } from "@tanstack/react-query";
 import type { trpc } from "@utils/trpc";
 
-import { invalidateRequestListQueries, trimRequestListToFirstPage } from "../../queries/requests/requestListCache";
+import { trimRequestListToFirstPage } from "../../queries/requests/requestListCache";
 import { throttledInvalidation } from "./throttledInvalidation";
 
 const REQUEST_LIST_REFRESH_INTERVAL_MS = 5000;
@@ -11,15 +11,34 @@ export interface RequestListRefreshDeps {
   queryClient: QueryClient;
 }
 
-const requestList = throttledInvalidation<RequestListRefreshDeps>(({ utils, queryClient }) => {
+const requestListRows = throttledInvalidation<RequestListRefreshDeps>(({ utils, queryClient }) => {
   trimRequestListToFirstPage(queryClient);
-  invalidateRequestListQueries(utils);
+  void utils.requests.list.invalidate();
+}, REQUEST_LIST_REFRESH_INTERVAL_MS);
+
+const requestListCompanions = throttledInvalidation<RequestListRefreshDeps>(({ utils }) => {
+  void utils.requests.summary.invalidate();
   void utils.requests.getRecentTracks.invalidate();
   void utils.requests.getDetail.invalidate();
 }, REQUEST_LIST_REFRESH_INTERVAL_MS);
 
-export const invalidateRequestList = requestList.run;
+export function invalidateRequestList(deps: RequestListRefreshDeps): void {
+  requestListRows.run(deps);
+  requestListCompanions.run(deps);
+}
 
-export const invalidateRequestListNow = requestList.runNow;
+export function invalidateRequestListNow(deps: RequestListRefreshDeps): void {
+  requestListRows.runNow(deps);
+  requestListCompanions.runNow(deps);
+}
 
-export const holdRequestListRefresh = requestList.hold;
+export function holdRequestListRefresh(): () => void {
+  const releaseRows = requestListRows.hold();
+  const releaseCompanions = requestListCompanions.hold();
+  return () => {
+    releaseRows();
+    releaseCompanions();
+  };
+}
+
+export const holdRequestListRows = requestListRows.hold;

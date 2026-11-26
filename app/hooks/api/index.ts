@@ -90,6 +90,7 @@ export {
 
 export { usePlaylistSyncAllProgress } from "./subscriptions/usePlaylistSyncAllProgress";
 export { useHoldRequestListRefresh } from "./subscriptions/useHoldRequestListRefresh";
+export { useHoldRequestListRows } from "./subscriptions/useHoldRequestListRows";
 
 export { useDropImportBatches } from "./queries/import/useDropImportBatches";
 export { useDropImportBatch } from "./queries/import/useDropImportBatch";

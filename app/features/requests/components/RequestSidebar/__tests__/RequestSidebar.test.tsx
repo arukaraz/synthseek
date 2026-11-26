@@ -8,7 +8,7 @@ import type { RequestSidebarProps } from "../types";
 const refresh = vi.hoisted(() => ({ hold: vi.fn(), release: vi.fn() }));
 
 vi.mock("@hooks/api/subscriptions/shared/requestListInvalidation", () => ({
-  holdRequestListRefresh: () => {
+  holdRequestListRows: () => {
     refresh.hold();
     return refresh.release;
   },

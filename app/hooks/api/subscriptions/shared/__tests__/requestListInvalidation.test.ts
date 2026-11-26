@@ -3,6 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import {
   holdRequestListRefresh,
+  holdRequestListRows,
   invalidateRequestList,
   invalidateRequestListNow,
   type RequestListRefreshDeps,
@@ -71,6 +72,48 @@ describe("invalidateRequestList", () => {
     release();
 
     expect(trim).toHaveBeenCalledTimes(1);
+  });
+
+  it("holds only the list rows while scrolled, so counts, recent tracks and the detail stay live", () => {
+    const release = holdRequestListRows();
+    invalidateRequestList(deps);
+
+    expect(trim).not.toHaveBeenCalled();
+    expect(invalidateAll).not.toHaveBeenCalled();
+    expect(invalidateSummary).toHaveBeenCalledTimes(1);
+    expect(invalidateRecent).toHaveBeenCalledTimes(1);
+    expect(invalidateDetail).toHaveBeenCalledTimes(1);
+
+    release();
+
+    expect(trim).toHaveBeenCalledTimes(1);
+    expect(invalidateAll).toHaveBeenCalledTimes(1);
+    expect(invalidateSummary).toHaveBeenCalledTimes(1);
+  });
+
+  it("holds the counts, recent tracks and detail too while a selection or dialog holds the refresh", () => {
+    const release = holdRequestListRefresh();
+    invalidateRequestList(deps);
+
+    expect(invalidateSummary).not.toHaveBeenCalled();
+    expect(invalidateRecent).not.toHaveBeenCalled();
+    expect(invalidateDetail).not.toHaveBeenCalled();
+
+    release();
+
+    expect(invalidateSummary).toHaveBeenCalledTimes(1);
+    expect(invalidateRecent).toHaveBeenCalledTimes(1);
+    expect(invalidateDetail).toHaveBeenCalledTimes(1);
+  });
+
+  it("lets a reconnect resync refresh the counts while the rows are held", () => {
+    const release = holdRequestListRows();
+    invalidateRequestListNow(deps);
+
+    expect(invalidateAll).not.toHaveBeenCalled();
+    expect(invalidateSummary).toHaveBeenCalledTimes(1);
+
+    release();
   });
 
   it("refreshes the summary counts together with the list", () => {

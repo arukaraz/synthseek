@@ -31,7 +31,7 @@ vi.mock("next/navigation", () => ({
 }));
 
 vi.mock("@hooks/api", () => ({
-  useHoldRequestListRefresh: vi.fn(),
+  useHoldRequestListRows: vi.fn(),
   useRequestList: (input: Record<string, unknown>, enabled: boolean = true) => {
     listState.asked.push({ input, enabled });
     const isLookup = Object.hasOwn(input, "externalId");
@@ -206,6 +206,35 @@ describe("GroupsViewMode", () => {
     render(<GroupsViewMode />);
 
     expect(replace).not.toHaveBeenCalled();
+  });
+
+  it("keeps showing the open request while it is looked up again after a refresh dropped its page", () => {
+    searchParamsRef.current = new URLSearchParams({ selected: "ext-b" });
+    listState.items = [
+      makeRequestListItem({ id: "a", external_id: "ext-a" }),
+      makeRequestListItem({ id: "b", external_id: "ext-b" }),
+    ];
+    const { rerender } = render(<GroupsViewMode />);
+    expect(screen.getByText("detail: b")).toBeInTheDocument();
+
+    listState.items = [makeRequestListItem({ id: "a", external_id: "ext-a" })];
+    listState.lookupLoading = true;
+    rerender(<GroupsViewMode />);
+
+    expect(screen.getByText("detail: b")).toBeInTheDocument();
+    expect(detailSpy).not.toHaveBeenCalledWith(null);
+  });
+
+  it("lets go of the open request once the lookup finds it gone", () => {
+    searchParamsRef.current = new URLSearchParams({ selected: "ext-b" });
+    listState.items = [makeRequestListItem({ id: "b", external_id: "ext-b" })];
+    const { rerender } = render(<GroupsViewMode />);
+
+    listState.items = [makeRequestListItem({ id: "a", external_id: "ext-a" })];
+    listState.lookup = [];
+    rerender(<GroupsViewMode />);
+
+    expect(screen.getByText("detail: none")).toBeInTheDocument();
   });
 
   it("passes a null request to the detail pane when nothing is selected on mobile", () => {
