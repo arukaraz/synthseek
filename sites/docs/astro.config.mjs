@@ -4,9 +4,10 @@ import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
 import { rehypeCodeChrome } from "./src/lib/rehype-code-chrome.mjs";
 import { rehypeTableScroll } from "./src/lib/rehype-table-scroll.mjs";
+import { DOCS_ORIGINS, docsChannelOf } from "./src/lib/channels.mjs";
 
 export default defineConfig({
-  site: "https://docs.synthseek.dev",
+  site: DOCS_ORIGINS[docsChannelOf(process.env.PUBLIC_DOCS_CHANNEL)],
   integrations: [mdx(), sitemap()],
   vite: {
     plugins: [tailwindcss()],

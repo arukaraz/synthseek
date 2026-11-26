@@ -1,10 +1,10 @@
 ---
 import AppLogo from "@synthseek/sites-shared/components/AppLogo.astro";
-import Badge from "@synthseek/sites-shared/components/Badge.astro";
 import GithubLink from "@synthseek/sites-shared/components/GithubLink.astro";
 import Search from "./Search.astro";
+import VersionSwitcher from "./VersionSwitcher.astro";
 import { groupNav, type NavEntry } from "../lib/nav";
-import { APP_VERSION, LANDING_URL } from "../lib/site";
+import { LANDING_URL } from "../lib/site";
 
 interface Props {
   entries: NavEntry[];
@@ -20,7 +20,7 @@ const groups = groupNav(entries);
   <div class="px-6 pt-6 pb-4">
     <div class="flex items-center gap-2">
       <AppLogo href={LANDING_URL} iconClass="h-7 w-auto" wordmarkClass="text-[22px]" />
-      <Badge class="font-mono">v{APP_VERSION}</Badge>
+      <VersionSwitcher align="start" />
     </div>
     <div class="dx-eyebrow mt-2">Documentation</div>
   </div>
