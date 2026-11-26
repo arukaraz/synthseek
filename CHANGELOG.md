@@ -2,6 +2,65 @@
 
 ---
 
+# v3.0.0, November 25, 2026
+
+> [!IMPORTANT]
+> This update changes your database. Before it does, Synthseek saves a copy in `/data/backups`. To go back to 2.9.4, put that copy back in place of `/data/db/synthseek.db`.
+
+### A board you build, a full screen Stage, and artists you follow
+
+- Explore is now a board you arrange yourself: add, resize and move widgets, and choose a separate layout for your phone.
+- Build your own widgets in the Widget workshop, from presets, charts, your listening, smart playlists, outside feeds and your media server, and share them.
+- Overview, listening history, catalog and library widgets are redrawn, and charts and top lists can lead with their top entry.
+- Search everything from the Omnibar at the top of every page.
+
+---
+
+### Player
+
+- The Stage: a full screen player on desktop.
+- On phones the player sits in the masthead, and playing a track opens the full screen player.
+- Preview a catalog track for 30 seconds before you request it.
+- Listening now shows what others on this server are playing, for those who choose to share it.
+
+---
+
+### Requests
+
+- Follow artists. A release calendar shows what they are putting out, live and remix releases included, and new releases can be requested for you.
+- Save how you like to request as presets, and pick one from the request button.
+- A request lists its tracks in order, and you can act on several at once.
+- Files waiting for your review are grouped by the request they belong to.
+
+---
+
+### Library
+
+- On phones the library is a shelf, with its options in sheets from the bottom of the screen.
+- An album's edition is decided once for the whole folder.
+- Synthseek asks before settling duplicates, clears folders left without music and fills in missing covers.
+- Large libraries list faster, and covers are sized for the screen that shows them.
+
+---
+
+### Playlists
+
+- The playlist workshop: reorder a playlist, get suggestions you can filter by year, and set its cover and files.
+- Smart playlists can be grouped into sets.
+
+---
+
+### Settings
+
+- Settings is organised by who it applies to, and the download and library settings are on one page.
+- Choose for your account who can see your playlists, requests and listening.
+- Customization holds a Custom theme for your account.
+- Charts each have their own country.
+- Charts and top lists can come from other listening sources, not only Last.fm.
+- Admins see what is new after a major or minor update.
+
+---
+
 # v2.9.4, November 6, 2026
 
 > [!NOTE]

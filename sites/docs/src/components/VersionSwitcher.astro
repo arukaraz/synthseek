@@ -1,0 +1,125 @@
+---
+import Badge from "@synthseek/sites-shared/components/Badge.astro";
+import { APP_VERSION, DOCS_CHANNEL, OTHER_CHANNEL_FILE_URL, OTHER_CHANNEL_ORIGIN, VERSION_LABEL } from "../lib/site";
+
+interface Props {
+  align: "start" | "end";
+  class?: string;
+}
+
+const { align, class: className } = Astro.props;
+---
+
+<div
+  class:list={["relative", className]}
+  data-dx-version
+  data-channel={DOCS_CHANNEL}
+  data-version={APP_VERSION}
+  data-other-origin={OTHER_CHANNEL_ORIGIN}
+  data-other-file={OTHER_CHANNEL_FILE_URL}
+>
+  <div data-dx-version-static>
+    <Badge class="font-mono whitespace-nowrap">{VERSION_LABEL}</Badge>
+  </div>
+  <details class="dx-version" hidden data-dx-version-menu>
+    <summary
+      class="focus-ring cursor-pointer list-none rounded-full"
+      aria-label={`Documentation version ${VERSION_LABEL}`}
+    >
+      <Badge class="gap-1 font-mono whitespace-nowrap">
+        {VERSION_LABEL}
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="dx-version-caret size-3"
+          aria-hidden="true"
+        >
+          <path d="m6 9 6 6 6-6"></path>
+        </svg>
+      </Badge>
+    </summary>
+    <div
+      class:list={[
+        "border-fg/10 bg-surface-elevated absolute top-full z-40 mt-2 min-w-36 rounded-lg border p-1",
+        align === "start" ? "left-0" : "right-0",
+      ]}
+    >
+      <span class="dx-navlink font-mono" aria-current="page">{VERSION_LABEL}</span>
+      <a class="dx-navlink font-mono" href={OTHER_CHANNEL_ORIGIN} data-dx-version-link></a>
+    </div>
+  </details>
+</div>
+
+<script>
+  import * as z from "zod/mini";
+
+  const ManifestSchema = z.object({
+    channel: z.enum(["stable", "beta"]),
+    version: z.string(),
+    label: z.string(),
+  });
+  type Manifest = z.infer<typeof ManifestSchema>;
+
+  function isNewer(candidate: string, current: string): boolean {
+    const left = candidate.split(".").map(Number);
+    const right = current.split(".").map(Number);
+    for (let index = 0; index < 3; index++) {
+      if (left[index] !== right[index]) return left[index] > right[index];
+    }
+    return false;
+  }
+
+  async function readManifest(url: string): Promise<Manifest | null> {
+    try {
+      const response = await fetch(url, { cache: "no-store" });
+      if (!response.ok) return null;
+      const parsed = ManifestSchema.safeParse(await response.json());
+      return parsed.success ? parsed.data : null;
+    } catch {
+      return null;
+    }
+  }
+
+  function offered(host: HTMLElement, other: Manifest): boolean {
+    if (other.channel === host.dataset.channel) return false;
+    if (other.channel === "stable") return true;
+    return isNewer(other.version, host.dataset.version ?? "");
+  }
+
+  function reveal(host: HTMLElement, other: Manifest): void {
+    const link = host.querySelector<HTMLAnchorElement>("[data-dx-version-link]");
+    const menu = host.querySelector<HTMLDetailsElement>("[data-dx-version-menu]");
+    const badge = host.querySelector<HTMLElement>("[data-dx-version-static]");
+    if (!link || !menu || !badge) return;
+    link.textContent = other.label;
+    link.href = `${host.dataset.otherOrigin ?? ""}${window.location.pathname}${window.location.hash}`;
+    badge.hidden = true;
+    menu.hidden = false;
+  }
+
+  function closeOthers(target: EventTarget | null): void {
+    document.querySelectorAll<HTMLDetailsElement>("[data-dx-version-menu][open]").forEach((menu) => {
+      if (!(target instanceof Node) || !menu.contains(target)) menu.open = false;
+    });
+  }
+
+  async function mount(): Promise<void> {
+    const hosts = [...document.querySelectorAll<HTMLElement>("[data-dx-version]")];
+    const url = hosts[0]?.dataset.otherFile;
+    if (!url) return;
+    const other = await readManifest(url);
+    if (!other) return;
+    hosts.filter((host) => offered(host, other)).forEach((host) => reveal(host, other));
+  }
+
+  document.addEventListener("click", (event) => closeOthers(event.target));
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") closeOthers(null);
+  });
+
+  void mount();
+</script>

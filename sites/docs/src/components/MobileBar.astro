@@ -1,7 +1,7 @@
 ---
 import AppLogo from "@synthseek/sites-shared/components/AppLogo.astro";
-import Badge from "@synthseek/sites-shared/components/Badge.astro";
-import { APP_VERSION, LANDING_URL } from "../lib/site";
+import VersionSwitcher from "./VersionSwitcher.astro";
+import { LANDING_URL } from "../lib/site";
 
 interface Props {
   controls: string;
@@ -34,7 +34,7 @@ const { controls } = Astro.props;
     </svg>
   </button>
   <AppLogo href={LANDING_URL} iconClass="h-6 w-auto" wordmarkClass="text-[19px]" />
-  <Badge class="font-mono ml-auto">v{APP_VERSION}</Badge>
+  <VersionSwitcher align="end" class="ml-auto" />
 </div>
 
 <script>

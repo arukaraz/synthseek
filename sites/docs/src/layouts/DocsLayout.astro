@@ -8,6 +8,7 @@ import TocInline from "../components/TocInline.astro";
 import Pager from "../components/Pager.astro";
 import SearchHits from "../components/SearchHits.astro";
 import { getNavEntries, siblingsOf } from "../lib/nav";
+import { DOCS_CHANNEL } from "../lib/site";
 import "../styles/docs.css";
 
 interface Props {
@@ -36,6 +37,7 @@ const DRAWER_ID = "dx-drawer";
     <meta property="og:description" content={blurb} />
     <meta property="og:type" content="website" />
     <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site).href} />
+    {DOCS_CHANNEL === "beta" && <meta name="robots" content="noindex" />}
   </head>
   <body>
     <div class="flex min-h-screen">

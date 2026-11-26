@@ -64,6 +64,7 @@ COPY --chown=synthseek:nodejs --from=server-deps /build/node_modules ./server/no
 COPY --chown=synthseek:nodejs web/standalone ./web/
 COPY --chown=synthseek:nodejs web/static ./web/.next/static/
 COPY --chown=synthseek:nodejs web/public ./web/public/
+COPY --chown=synthseek:nodejs whats-new ./whats-new/
 
 COPY --chown=synthseek:nodejs docker/start.sh ./start.sh
 COPY --chown=synthseek:nodejs docker/append-peer-address.mjs ./web/append-peer-address.mjs

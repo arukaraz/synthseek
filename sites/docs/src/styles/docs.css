@@ -314,6 +314,20 @@
 }
 
 @layer components {
+  .dx-version > summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .dx-version-caret {
+    transition: transform 120ms ease;
+  }
+
+  .dx-version[open] .dx-version-caret {
+    transform: rotate(180deg);
+  }
+}
+
+@layer components {
   .dx-hit {
     background: color-mix(in oklch, var(--color-accent-400) 26%, transparent);
     color: var(--surface-fg);
