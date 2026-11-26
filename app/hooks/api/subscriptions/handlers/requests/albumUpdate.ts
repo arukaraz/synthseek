@@ -10,7 +10,7 @@ export function handleAlbumUpdate(event: AlbumUpdatePayload, utils: Utils, query
   const isEventAlbum = (item: { contentType: ContentType; id: string }) =>
     item.contentType === ContentType.enum.album && item.id === event.albumId;
   const cached = findCachedRequestListItem(queryClient, isEventAlbum);
-  if (!cached || cached.status !== event.status) invalidateRequestList(utils);
+  if (!cached || cached.status !== event.status) invalidateRequestList({ utils, queryClient });
   if (!cached) return;
   patchRequestListItems(queryClient, (item) =>
     isEventAlbum(item)

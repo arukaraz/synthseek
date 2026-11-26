@@ -1,3 +1,4 @@
+import { QueryClient } from "@tanstack/react-query";
 import { renderHook } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
@@ -8,6 +9,13 @@ import { subscribePlaylistSyncAll, type PlaylistSyncAllUpdate } from "../../../s
 import { dismissDockJob, resetDockStore, seedPlaylistSyncDockJob, useDockJobs } from "../../../shared/progressDock";
 import type { DockJob } from "../../../shared/progressDock";
 import { resetThrottledInvalidations } from "../../../shared/throttledInvalidation";
+
+vi.mock("../../../../queries/requests/requestListCache", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("../../../../queries/requests/requestListCache")>()),
+  trimRequestListToFirstPage: vi.fn(),
+}));
+
+const queryClient = new QueryClient();
 
 const spies = vi.hoisted(() => ({
   setData: vi.fn(),
@@ -68,7 +76,7 @@ describe("handlePlaylistSyncAllProgress", () => {
     const unsubscribe = subscribePlaylistSyncAll((u) => received.push(u));
     const utils = trpc.useUtils();
 
-    handlePlaylistSyncAllProgress(makeEvent({ phase: "progress", synced: 3, total: 8 }), utils, VIEWER_ID);
+    handlePlaylistSyncAllProgress(makeEvent({ phase: "progress", synced: 3, total: 8 }), utils, queryClient, VIEWER_ID);
 
     expect(received).toEqual([{ server: "plex", phase: "progress", synced: 3, total: 8, failed: undefined }]);
     unsubscribe();
@@ -77,7 +85,12 @@ describe("handlePlaylistSyncAllProgress", () => {
   it("seeds the query state as running while in progress", () => {
     const utils = trpc.useUtils();
 
-    handlePlaylistSyncAllProgress(makeEvent({ phase: "progress", synced: 4, total: 10 }), utils, VIEWER_ID);
+    handlePlaylistSyncAllProgress(
+      makeEvent({ phase: "progress", synced: 4, total: 10 }),
+      utils,
+      queryClient,
+      VIEWER_ID
+    );
 
     expect(spies.setData).toHaveBeenCalledWith(undefined, { running: true, server: "plex", synced: 4, total: 10 });
     expect(spies.invalidate).not.toHaveBeenCalled();
@@ -86,7 +99,12 @@ describe("handlePlaylistSyncAllProgress", () => {
   it("marks not running and invalidates the list on completion", () => {
     const utils = trpc.useUtils();
 
-    handlePlaylistSyncAllProgress(makeEvent({ phase: "complete", synced: 8, total: 8, failed: 1 }), utils, VIEWER_ID);
+    handlePlaylistSyncAllProgress(
+      makeEvent({ phase: "complete", synced: 8, total: 8, failed: 1 }),
+      utils,
+      queryClient,
+      VIEWER_ID
+    );
 
     expect(spies.setData).toHaveBeenCalledWith(undefined, { running: false, server: "plex", synced: 8, total: 8 });
     expect(spies.invalidate).toHaveBeenCalledTimes(1);
@@ -105,6 +123,7 @@ describe("handlePlaylistSyncAllProgress", () => {
         ],
       }),
       utils,
+      queryClient,
       VIEWER_ID
     );
 
@@ -118,6 +137,7 @@ describe("handlePlaylistSyncAllProgress", () => {
     handlePlaylistSyncAllProgress(
       makeEvent({ server: "jellyfin", phase: "start", synced: 0, total: 1, items: [{ id: "p1", name: "Road Trip" }] }),
       utils,
+      queryClient,
       VIEWER_ID
     );
 
@@ -137,16 +157,19 @@ describe("handlePlaylistSyncAllProgress", () => {
         ],
       }),
       utils,
+      queryClient,
       VIEWER_ID
     );
     handlePlaylistSyncAllProgress(
       makeEvent({ phase: "progress", synced: 1, total: 2, current: { id: "p1", ok: true } }),
       utils,
+      queryClient,
       VIEWER_ID
     );
     handlePlaylistSyncAllProgress(
       makeEvent({ phase: "progress", synced: 1, total: 2, current: { id: "p2", ok: false } }),
       utils,
+      queryClient,
       VIEWER_ID
     );
 
@@ -168,9 +191,15 @@ describe("handlePlaylistSyncAllProgress", () => {
         ],
       }),
       utils,
+      queryClient,
       VIEWER_ID
     );
-    handlePlaylistSyncAllProgress(makeEvent({ phase: "complete", synced: 1, total: 2, failed: 1 }), utils, VIEWER_ID);
+    handlePlaylistSyncAllProgress(
+      makeEvent({ phase: "complete", synced: 1, total: 2, failed: 1 }),
+      utils,
+      queryClient,
+      VIEWER_ID
+    );
 
     expect(syncJob()?.status).toBe("partial");
   });
@@ -186,6 +215,7 @@ describe("handlePlaylistSyncAllProgress", () => {
     handlePlaylistSyncAllProgress(
       makeEvent({ phase: "progress", synced: 2, total: 3, current: { id: "pl_2", ok: true } }),
       utils,
+      queryClient,
       VIEWER_ID
     );
 
@@ -200,6 +230,7 @@ describe("handlePlaylistSyncAllProgress", () => {
     handlePlaylistSyncAllProgress(
       makeEvent({ phase: "progress", synced: 1, total: 3, current: { id: "pl_1", ok: true } }),
       utils,
+      queryClient,
       VIEWER_ID
     );
 
@@ -211,6 +242,7 @@ describe("handlePlaylistSyncAllProgress", () => {
     handlePlaylistSyncAllProgress(
       makeEvent({ phase: "progress", synced: 1, total: 3, current: { id: "pl_1", ok: true } }),
       utils,
+      queryClient,
       VIEWER_ID
     );
 
@@ -224,6 +256,7 @@ describe("handlePlaylistSyncAllProgress", () => {
     handlePlaylistSyncAllProgress(
       makeEvent({ phase: "progress", synced: 1, total: 1, current: { id: "pl_1", ok: true } }),
       utils,
+      queryClient,
       VIEWER_ID
     );
 
@@ -238,6 +271,7 @@ describe("handlePlaylistSyncAllProgress", () => {
     handlePlaylistSyncAllProgress(
       makeEvent({ phase: "progress", synced: 1, total: 1, current: { id: "pl_1", ok: true } }),
       utils,
+      queryClient,
       VIEWER_ID
     );
 
@@ -246,7 +280,12 @@ describe("handlePlaylistSyncAllProgress", () => {
 
   it("does not resurrect a job as complete for a tab that only saw the completion event", () => {
     const utils = trpc.useUtils();
-    handlePlaylistSyncAllProgress(makeEvent({ phase: "complete", synced: 3, total: 3, failed: 0 }), utils, VIEWER_ID);
+    handlePlaylistSyncAllProgress(
+      makeEvent({ phase: "complete", synced: 3, total: 3, failed: 0 }),
+      utils,
+      queryClient,
+      VIEWER_ID
+    );
 
     expect(syncJob()).toBeUndefined();
   });
@@ -265,6 +304,7 @@ describe("handlePlaylistSyncAllProgress", () => {
         ],
       }),
       utils,
+      queryClient,
       VIEWER_ID
     );
 
@@ -276,6 +316,7 @@ describe("handlePlaylistSyncAllProgress", () => {
     handlePlaylistSyncAllProgress(
       makeEvent({ userId: OTHER_USER_ID, phase: "progress", synced: 1, total: 3, current: { id: "p1", ok: true } }),
       utils,
+      queryClient,
       VIEWER_ID
     );
 
@@ -293,11 +334,13 @@ describe("handlePlaylistSyncAllProgress", () => {
     handlePlaylistSyncAllProgress(
       makeEvent({ userId: OTHER_USER_ID, phase: "progress", synced: 1, total: 2, current: { id: "pl_1", ok: true } }),
       utils,
+      queryClient,
       VIEWER_ID
     );
     handlePlaylistSyncAllProgress(
       makeEvent({ userId: OTHER_USER_ID, phase: "complete", synced: 2, total: 2, failed: 0 }),
       utils,
+      queryClient,
       VIEWER_ID
     );
 
@@ -308,12 +351,18 @@ describe("handlePlaylistSyncAllProgress", () => {
   it("does not rewrite a settled card with another user's outcome", () => {
     const utils = trpc.useUtils();
     seedPlaylistSyncDockJob("plex", [{ id: "pl_1", name: "Road Trip", state: "done" }]);
-    handlePlaylistSyncAllProgress(makeEvent({ phase: "complete", synced: 1, total: 1, failed: 0 }), utils, VIEWER_ID);
+    handlePlaylistSyncAllProgress(
+      makeEvent({ phase: "complete", synced: 1, total: 1, failed: 0 }),
+      utils,
+      queryClient,
+      VIEWER_ID
+    );
     expect(syncJob()?.status).toBe("complete");
 
     handlePlaylistSyncAllProgress(
       makeEvent({ userId: OTHER_USER_ID, phase: "complete", synced: 0, total: 4, failed: 4 }),
       utils,
+      queryClient,
       VIEWER_ID
     );
 
@@ -326,11 +375,17 @@ describe("handlePlaylistSyncAllProgress", () => {
       { id: "pl_1", name: "Road Trip", state: "done" },
       { id: "pl_2", name: "Focus", state: "pending" },
     ]);
-    handlePlaylistSyncAllProgress(makeEvent({ phase: "complete", synced: 1, total: 2, failed: 0 }), utils, VIEWER_ID);
+    handlePlaylistSyncAllProgress(
+      makeEvent({ phase: "complete", synced: 1, total: 2, failed: 0 }),
+      utils,
+      queryClient,
+      VIEWER_ID
+    );
 
     handlePlaylistSyncAllProgress(
       makeEvent({ userId: OTHER_USER_ID, phase: "progress", synced: 1, total: 4, current: { id: "pl_2", ok: false } }),
       utils,
+      queryClient,
       VIEWER_ID
     );
 
@@ -340,9 +395,19 @@ describe("handlePlaylistSyncAllProgress", () => {
   it("does not rewrite a settled card from a late event of the viewer's own earlier run", () => {
     const utils = trpc.useUtils();
     seedPlaylistSyncDockJob("plex", [{ id: "pl_1", name: "Road Trip", state: "done" }]);
-    handlePlaylistSyncAllProgress(makeEvent({ phase: "complete", synced: 1, total: 1, failed: 0 }), utils, VIEWER_ID);
+    handlePlaylistSyncAllProgress(
+      makeEvent({ phase: "complete", synced: 1, total: 1, failed: 0 }),
+      utils,
+      queryClient,
+      VIEWER_ID
+    );
 
-    handlePlaylistSyncAllProgress(makeEvent({ phase: "complete", synced: 0, total: 1, failed: 1 }), utils, VIEWER_ID);
+    handlePlaylistSyncAllProgress(
+      makeEvent({ phase: "complete", synced: 0, total: 1, failed: 1 }),
+      utils,
+      queryClient,
+      VIEWER_ID
+    );
 
     expect(syncJob()?.status).toBe("complete");
   });
@@ -357,9 +422,15 @@ describe("handlePlaylistSyncAllProgress", () => {
     handlePlaylistSyncAllProgress(
       makeEvent({ phase: "progress", synced: 1, total: 2, current: { id: "pl_2", ok: false } }),
       utils,
+      queryClient,
       VIEWER_ID
     );
-    handlePlaylistSyncAllProgress(makeEvent({ phase: "complete", synced: 1, total: 2, failed: 1 }), utils, VIEWER_ID);
+    handlePlaylistSyncAllProgress(
+      makeEvent({ phase: "complete", synced: 1, total: 2, failed: 1 }),
+      utils,
+      queryClient,
+      VIEWER_ID
+    );
 
     expect(syncJob()?.items.find((item) => item.key === "pl_2")?.state).toBe("failed");
     expect(syncJob()?.status).toBe("partial");
@@ -370,6 +441,7 @@ describe("handlePlaylistSyncAllProgress", () => {
     handlePlaylistSyncAllProgress(
       makeEvent({ userId: OTHER_USER_ID, phase: "complete", synced: 5, total: 5, failed: 0 }),
       utils,
+      queryClient,
       VIEWER_ID
     );
 
@@ -388,6 +460,7 @@ describe("handlePlaylistSyncAllProgress", () => {
         items: [{ id: "p1", name: "Road Trip" }],
       }),
       utils,
+      queryClient,
       null
     );
 

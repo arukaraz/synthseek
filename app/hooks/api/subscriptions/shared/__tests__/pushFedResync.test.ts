@@ -1,12 +1,18 @@
 import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 
+import { QueryClient } from "@tanstack/react-query";
 import { describe, expect, it, vi, beforeEach } from "vitest";
 
 import { trpc } from "@utils/trpc";
 
 import { resyncPushFedQueries } from "../pushFedResync";
 import { resetThrottledInvalidations } from "../throttledInvalidation";
+
+vi.mock("../../../queries/requests/requestListCache", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("../../../queries/requests/requestListCache")>()),
+  trimRequestListToFirstPage: vi.fn(),
+}));
 
 const recorder = vi.hoisted(() => {
   const invalidated: string[] = [];
@@ -50,7 +56,7 @@ function pushFedQueryPaths(): string[] {
 }
 
 function resyncedQueryPaths(): string[] {
-  resyncPushFedQueries(trpc.useUtils());
+  resyncPushFedQueries(trpc.useUtils(), new QueryClient());
   return [...new Set(recorder.invalidated)].sort();
 }
 

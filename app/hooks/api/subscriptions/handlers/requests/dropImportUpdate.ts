@@ -1,5 +1,6 @@
 import { DropImportFileStatus, type DropImportUpdatePayload } from "@api/__generated__/types";
 import { isDropImportBatchInFlight } from "@utils/status-helpers";
+import type { QueryClient } from "@tanstack/react-query";
 import type { trpc } from "@utils/trpc";
 
 import { invalidateLibraryViews, invalidateLibraryViewsNow } from "../../shared/libraryInvalidation";
@@ -26,20 +27,20 @@ function writeBatch(event: DropImportUpdatePayload, utils: Utils): void {
   });
 }
 
-export function handleDropImportUpdate(event: DropImportUpdatePayload, utils: Utils): void {
+export function handleDropImportUpdate(event: DropImportUpdatePayload, utils: Utils, queryClient: QueryClient): void {
   writeBatch(event, utils);
 
   const batchSettled = !isDropImportBatchInFlight(event.batch.status);
   const fileSettled = event.file !== undefined && SETTLED_FILE_STATUSES.has(event.file.status);
 
   if (batchSettled) {
-    invalidateRequestListNow(utils);
+    invalidateRequestListNow({ utils, queryClient });
     invalidateLibraryViewsNow(utils);
     return;
   }
 
   if (fileSettled) {
-    invalidateRequestList(utils);
+    invalidateRequestList({ utils, queryClient });
     invalidateLibraryViews(utils);
   }
 }

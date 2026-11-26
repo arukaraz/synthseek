@@ -1,3 +1,4 @@
+import type { QueryClient } from "@tanstack/react-query";
 import type { trpc } from "@utils/trpc";
 
 import { invalidateLibrarySummaryNow, invalidateLibraryViewsNow } from "./libraryInvalidation";
@@ -5,8 +6,8 @@ import { invalidateRequestListNow } from "./requestListInvalidation";
 
 type Utils = ReturnType<typeof trpc.useUtils>;
 
-export function resyncPushFedQueries(utils: Utils): void {
-  invalidateRequestListNow(utils);
+export function resyncPushFedQueries(utils: Utils, queryClient: QueryClient): void {
+  invalidateRequestListNow({ utils, queryClient });
   invalidateLibrarySummaryNow(utils);
   void utils.requests.activeReleases.invalidate();
   void utils.requests.keptReleases.invalidate();

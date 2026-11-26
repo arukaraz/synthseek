@@ -1,3 +1,4 @@
+import { QueryClient } from "@tanstack/react-query";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import {
@@ -9,6 +10,11 @@ import {
 import { trpc } from "@utils/trpc";
 import { handleDropImportUpdate } from "../dropImportUpdate";
 import { resetThrottledInvalidations } from "../../../shared/throttledInvalidation";
+
+vi.mock("../../../../queries/requests/requestListCache", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("../../../../queries/requests/requestListCache")>()),
+  trimRequestListToFirstPage: vi.fn(),
+}));
 
 type BatchWithFiles = DropImportBatchRow & { files: DropImportFileRow[] };
 
@@ -63,6 +69,8 @@ vi.mock("@utils/trpc", () => ({
 function utils() {
   return trpc.useUtils();
 }
+
+const queryClient = new QueryClient();
 
 function makeBatch(overrides: Partial<DropImportBatchRow> = {}): DropImportBatchRow {
   return {
@@ -129,7 +137,7 @@ describe("handleDropImportUpdate", () => {
     cache.batches.set("batch-1", { ...makeBatch(), files: [makeFile(), second] } satisfies BatchWithFiles);
     const landed = makeFile({ status: "imported", tag_title: "Airbag" });
 
-    handleDropImportUpdate(makeEvent({ imported_files: 1 }, landed), utils());
+    handleDropImportUpdate(makeEvent({ imported_files: 1 }, landed), utils(), queryClient);
 
     expect(cache.list).toEqual([makeBatch({ imported_files: 1 }), other]);
     expect(cache.batches.get("batch-1")).toEqual({ ...makeBatch({ imported_files: 1 }), files: [landed, second] });
@@ -142,14 +150,14 @@ describe("handleDropImportUpdate", () => {
     cache.list = [older];
     cache.batches.set("batch-1", { ...makeBatch(), files: [makeFile()] } satisfies BatchWithFiles);
 
-    handleDropImportUpdate(makeEvent({ status: "processing", pending_files: 1 }), utils());
+    handleDropImportUpdate(makeEvent({ status: "processing", pending_files: 1 }), utils(), queryClient);
 
     expect(cache.list).toEqual([makeBatch({ pending_files: 1 }), older]);
     expect(cache.batches.get("batch-1")).toEqual({ ...makeBatch({ pending_files: 1 }), files: [makeFile()] });
   });
 
   it("leaves a cache nobody has loaded empty, so the first read still comes from the server", () => {
-    handleDropImportUpdate(makeEvent({}, makeFile({ status: "importing" })), utils());
+    handleDropImportUpdate(makeEvent({}, makeFile({ status: "importing" })), utils(), queryClient);
 
     expect(cache.list).toBeUndefined();
     expect(cache.batches.get("batch-1")).toBeUndefined();
@@ -158,7 +166,7 @@ describe("handleDropImportUpdate", () => {
   it.each(["imported", "already_in_library"] as const)(
     "refreshes requests and the library when a file lands %s",
     (status) => {
-      handleDropImportUpdate(makeEvent({}, makeFile({ status })), utils());
+      handleDropImportUpdate(makeEvent({}, makeFile({ status })), utils(), queryClient);
 
       expect(spies.invalidateAll).toHaveBeenCalledTimes(1);
       expect(spies.invalidateTracks).toHaveBeenCalledTimes(1);
@@ -168,7 +176,7 @@ describe("handleDropImportUpdate", () => {
 
   it("refreshes the library once at the start of a run of landed files and once more at its end", () => {
     for (let index = 0; index < 40; index++) {
-      handleDropImportUpdate(makeEvent({}, makeFile({ id: `f${index}`, status: "imported" })), utils());
+      handleDropImportUpdate(makeEvent({}, makeFile({ id: `f${index}`, status: "imported" })), utils(), queryClient);
     }
 
     expect(spies.invalidateTracks).toHaveBeenCalledTimes(1);
@@ -179,15 +187,15 @@ describe("handleDropImportUpdate", () => {
   });
 
   it("refreshes requests and the library at once when the batch settles, even inside a run", () => {
-    handleDropImportUpdate(makeEvent({}, makeFile({ status: "imported" })), utils());
-    handleDropImportUpdate(makeEvent({ status: "completed", imported_files: 3 }), utils());
+    handleDropImportUpdate(makeEvent({}, makeFile({ status: "imported" })), utils(), queryClient);
+    handleDropImportUpdate(makeEvent({ status: "completed", imported_files: 3 }), utils(), queryClient);
 
     expect(spies.invalidateAll).toHaveBeenCalledTimes(2);
     expect(spies.invalidateAlbums).toHaveBeenCalledTimes(2);
   });
 
   it("does not touch the library for a file that has not landed", () => {
-    handleDropImportUpdate(makeEvent({}, makeFile({ status: "importing" })), utils());
+    handleDropImportUpdate(makeEvent({}, makeFile({ status: "importing" })), utils(), queryClient);
 
     expect(spies.invalidateAll).not.toHaveBeenCalled();
     expect(spies.invalidateAlbums).not.toHaveBeenCalled();

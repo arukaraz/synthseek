@@ -1,9 +1,23 @@
-import { render, screen, userEvent } from "@test/test-utils";
+import { fireEvent, render, screen, userEvent } from "@test/test-utils";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { makeRequestWithTracks } from "../../../__tests__/factories";
 import { RequestSidebar } from "../RequestSidebar";
 import type { RequestSidebarProps } from "../types";
+
+const refresh = vi.hoisted(() => ({ hold: vi.fn(), release: vi.fn() }));
+
+vi.mock("@hooks/api/subscriptions/shared/requestListInvalidation", () => ({
+  holdRequestListRefresh: () => {
+    refresh.hold();
+    return refresh.release;
+  },
+}));
+
+function scrollTo(list: HTMLElement, top: number): void {
+  list.scrollTop = top;
+  fireEvent.scroll(list);
+}
 
 const observed: { callback: IntersectionObserverCallback; element: Element }[] = [];
 
@@ -40,7 +54,24 @@ function props(overrides: Partial<RequestSidebarProps>): RequestSidebarProps {
 describe("RequestSidebar", () => {
   beforeEach(() => {
     observed.length = 0;
+    refresh.hold.mockClear();
+    refresh.release.mockClear();
     vi.stubGlobal("IntersectionObserver", RecordingIntersectionObserver);
+  });
+
+  it("holds the live refresh while the list is scrolled away from the top, and lets it run on the way back", () => {
+    const items = [makeRequestWithTracks({ id: "a", external_id: "ext-a" })];
+    render(<RequestSidebar {...props({ items })} />);
+    const list = screen.getByRole("list");
+
+    expect(refresh.hold).not.toHaveBeenCalled();
+
+    scrollTo(list, 400);
+    expect(refresh.hold).toHaveBeenCalledTimes(1);
+    expect(refresh.release).not.toHaveBeenCalled();
+
+    scrollTo(list, 0);
+    expect(refresh.release).toHaveBeenCalledTimes(1);
   });
 
   it("renders the empty state when there are no items", () => {

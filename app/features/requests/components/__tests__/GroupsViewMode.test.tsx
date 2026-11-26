@@ -31,6 +31,7 @@ vi.mock("next/navigation", () => ({
 }));
 
 vi.mock("@hooks/api", () => ({
+  useHoldRequestListRefresh: vi.fn(),
   useRequestList: (input: Record<string, unknown>, enabled: boolean = true) => {
     listState.asked.push({ input, enabled });
     const isLookup = Object.hasOwn(input, "externalId");

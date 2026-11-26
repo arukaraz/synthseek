@@ -60,7 +60,7 @@ export function useSubscriptions() {
       reconnectAttemptsRef.current = 0;
 
       if (hasStreamConnectedRef.current) {
-        resyncPushFedQueries(utils);
+        resyncPushFedQueries(utils, queryClient);
         void utils.playback.activeState.refetch();
       }
       hasStreamConnectedRef.current = true;
@@ -93,7 +93,7 @@ export function useSubscriptions() {
           handlePlaylistPlexCreated(event, queryClient);
           break;
         case SubscriptionEventType.PlaylistSyncAllProgress:
-          handlePlaylistSyncAllProgress(event, utils, viewerId);
+          handlePlaylistSyncAllProgress(event, utils, queryClient, viewerId);
           break;
         case SubscriptionEventType.VersionUpdate:
           handleVersionUpdate(event);
@@ -108,10 +108,10 @@ export function useSubscriptions() {
           handlePortabilityProgress(event, viewerId);
           break;
         case SubscriptionEventType.LibraryImportProgress:
-          handleLibraryImportProgress(event, utils, viewerId);
+          handleLibraryImportProgress(event, utils, queryClient, viewerId);
           break;
         case SubscriptionEventType.DropImportUpdate:
-          handleDropImportUpdate(event, utils);
+          handleDropImportUpdate(event, utils, queryClient);
           break;
         case SubscriptionEventType.PlayerCommand:
           applyPlayerCommand(event);
@@ -138,7 +138,7 @@ export function useSubscriptions() {
       reconnectAttemptsRef.current++;
 
       if (reconnectAttemptsRef.current > MAX_RECONNECT_ATTEMPTS) {
-        invalidateRequestListNow(utils);
+        invalidateRequestListNow({ utils, queryClient });
         reconnectAttemptsRef.current = 0;
       }
     },

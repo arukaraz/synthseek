@@ -110,7 +110,7 @@ function patchRequestDetailCaches(event: TrackUpdatePayload, queryClient: QueryC
 }
 
 export function handleTrackUpdate(event: TrackUpdatePayload, utils: Utils, queryClient: QueryClient): void {
-  if (COUNTED_STATUSES.includes(event.status)) invalidateRequestList(utils);
+  if (COUNTED_STATUSES.includes(event.status)) invalidateRequestList({ utils, queryClient });
   patchRequestDetailCaches(event, queryClient);
   patchAlbumDetailCaches(event, queryClient);
   patchArtistTopTracksCaches(event, queryClient);

@@ -25,7 +25,7 @@ export function handlePlaylistUpdate(event: PlaylistUpdatePayload, utils: Utils,
   const isEventPlaylist = (item: { contentType: ContentType; id: string }) =>
     item.contentType === ContentType.enum.playlist && item.id === event.playlistId;
   const cached = findCachedRequestListItem(queryClient, isEventPlaylist);
-  if (!cached || cached.status !== event.status) invalidateRequestList(utils);
+  if (!cached || cached.status !== event.status) invalidateRequestList({ utils, queryClient });
   if (!cached) return;
   patchRequestListItems(queryClient, (item) =>
     isEventPlaylist(item)

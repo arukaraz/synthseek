@@ -11,6 +11,7 @@ import {
   removeRequestListItem,
   restoreRequestList,
   snapshotRequestList,
+  trimRequestListToFirstPage,
 } from "../requestListCache";
 import type { RequestListCache } from "../types";
 
@@ -59,6 +60,14 @@ describe("request list cache", () => {
     expect(client.getQueryData<RequestListCache>(DONE_KEY)?.pages[0].items[0].status).toBe(
       RequestStatus.enum.cancelled
     );
+  });
+
+  it("keeps only the first page of every cached list, with its page param", () => {
+    trimRequestListToFirstPage(client);
+
+    expect(ids(ALL_KEY)).toEqual([["a", "b"]]);
+    expect(client.getQueryData<RequestListCache>(ALL_KEY)?.pageParams).toEqual([null]);
+    expect(ids(DONE_KEY)).toEqual([["c"]]);
   });
 
   it("removes an item and lowers the total only in the lists that held it", () => {

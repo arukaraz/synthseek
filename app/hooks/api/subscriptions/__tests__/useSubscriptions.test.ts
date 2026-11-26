@@ -7,10 +7,15 @@ import {
   type PortabilityProgressPayload,
   type SubscriptionEvent,
 } from "@api/__generated__/types";
-import { renderHookWithProviders } from "@test/test-utils";
+import { createTestQueryClient, renderHookWithProviders } from "@test/test-utils";
 
 import { useSubscriptions } from "../useSubscriptions";
 import { resetThrottledInvalidations } from "../shared/throttledInvalidation";
+
+vi.mock("../../queries/requests/requestListCache", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("../../queries/requests/requestListCache")>()),
+  trimRequestListToFirstPage: vi.fn(),
+}));
 
 const auth = vi.hoisted(() => ({ currentUser: null as { id: string } | null }));
 
@@ -230,22 +235,35 @@ describe("useSubscriptions", () => {
 
   it("hands the signed-in user's id to every job-progress handler", () => {
     auth.currentUser = { id: "u_self" };
+    const queryClient = createTestQueryClient();
 
-    renderHookWithProviders(() => useSubscriptions());
+    renderHookWithProviders(() => useSubscriptions(), { queryClient });
     emitAll();
 
-    expect(handlers.plexSyncAll).toHaveBeenCalledWith(plexEvent, utilsStub, "u_self");
+    expect(handlers.plexSyncAll).toHaveBeenCalledWith(plexEvent, utilsStub, queryClient, "u_self");
     expect(handlers.portability).toHaveBeenCalledWith(portabilityEvent, "u_self");
-    expect(handlers.libraryImport).toHaveBeenCalledWith(libraryEvent, utilsStub, "u_self");
+    expect(handlers.libraryImport).toHaveBeenCalledWith(libraryEvent, utilsStub, queryClient, "u_self");
+  });
+
+  it("hands the job-progress handlers the provider's own cache, not a copy", () => {
+    const queryClient = createTestQueryClient();
+
+    renderHookWithProviders(() => useSubscriptions(), { queryClient });
+    emitAll();
+
+    expect(handlers.plexSyncAll.mock.calls[0][2]).toBe(queryClient);
+    expect(handlers.libraryImport.mock.calls[0][2]).toBe(queryClient);
   });
 
   it("hands down a null viewer while no user is resolved", () => {
-    renderHookWithProviders(() => useSubscriptions());
+    const queryClient = createTestQueryClient();
+
+    renderHookWithProviders(() => useSubscriptions(), { queryClient });
     emitAll();
 
-    expect(handlers.plexSyncAll).toHaveBeenCalledWith(plexEvent, utilsStub, null);
+    expect(handlers.plexSyncAll).toHaveBeenCalledWith(plexEvent, utilsStub, queryClient, null);
     expect(handlers.portability).toHaveBeenCalledWith(portabilityEvent, null);
-    expect(handlers.libraryImport).toHaveBeenCalledWith(libraryEvent, utilsStub, null);
+    expect(handlers.libraryImport).toHaveBeenCalledWith(libraryEvent, utilsStub, queryClient, null);
   });
 
   it("leaves a cold cache alone on the first connect", () => {

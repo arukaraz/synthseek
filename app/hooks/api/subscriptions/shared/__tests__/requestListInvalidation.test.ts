@@ -1,7 +1,20 @@
+import { QueryClient } from "@tanstack/react-query";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { holdRequestListRefresh, invalidateRequestList, invalidateRequestListNow } from "../requestListInvalidation";
+import {
+  holdRequestListRefresh,
+  invalidateRequestList,
+  invalidateRequestListNow,
+  type RequestListRefreshDeps,
+} from "../requestListInvalidation";
 import { resetThrottledInvalidations } from "../throttledInvalidation";
+
+const trim = vi.hoisted(() => vi.fn());
+
+vi.mock("../../../queries/requests/requestListCache", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("../../../queries/requests/requestListCache")>()),
+  trimRequestListToFirstPage: trim,
+}));
 
 const invalidateAll = vi.fn();
 const invalidateSummary = vi.fn();
@@ -15,11 +28,15 @@ const utils = {
     getRecentTracks: { invalidate: invalidateRecent },
     getDetail: { invalidate: invalidateDetail },
   },
-} as unknown as Parameters<typeof invalidateRequestList>[0];
+} as unknown as RequestListRefreshDeps["utils"];
+
+const queryClient = new QueryClient();
+const deps: RequestListRefreshDeps = { utils, queryClient };
 
 beforeEach(() => {
   vi.useFakeTimers();
   resetThrottledInvalidations();
+  trim.mockClear();
   invalidateAll.mockClear();
   invalidateSummary.mockClear();
   invalidateRecent.mockClear();
@@ -33,23 +50,41 @@ afterEach(() => {
 
 describe("invalidateRequestList", () => {
   it("refetches immediately on the first call", () => {
-    invalidateRequestList(utils);
+    invalidateRequestList(deps);
 
     expect(invalidateAll).toHaveBeenCalledTimes(1);
   });
 
+  it("drops the loaded pages past the first before refetching, so a refresh costs one request", () => {
+    invalidateRequestList(deps);
+
+    expect(trim).toHaveBeenCalledWith(queryClient);
+    expect(trim.mock.invocationCallOrder[0]).toBeLessThan(invalidateAll.mock.invocationCallOrder[0]);
+  });
+
+  it("keeps the loaded pages while the refresh is held", () => {
+    const release = holdRequestListRefresh();
+    invalidateRequestList(deps);
+
+    expect(trim).not.toHaveBeenCalled();
+
+    release();
+
+    expect(trim).toHaveBeenCalledTimes(1);
+  });
+
   it("refreshes the summary counts together with the list", () => {
-    invalidateRequestList(utils);
+    invalidateRequestList(deps);
 
     expect(invalidateSummary).toHaveBeenCalledTimes(1);
   });
 
   it("collapses a burst inside the window into ONE trailing refetch, so the last event is never lost", () => {
-    invalidateRequestList(utils);
+    invalidateRequestList(deps);
     expect(invalidateAll).toHaveBeenCalledTimes(1);
 
     vi.advanceTimersByTime(100);
-    for (let i = 0; i < 25; i++) invalidateRequestList(utils);
+    for (let i = 0; i < 25; i++) invalidateRequestList(deps);
 
     expect(invalidateAll).toHaveBeenCalledTimes(1);
 
@@ -61,9 +96,9 @@ describe("invalidateRequestList", () => {
   });
 
   it("refetches again once the five-second window has elapsed, and not before", () => {
-    invalidateRequestList(utils);
+    invalidateRequestList(deps);
     vi.advanceTimersByTime(1000);
-    invalidateRequestList(utils);
+    invalidateRequestList(deps);
     expect(invalidateAll).toHaveBeenCalledTimes(1);
 
     vi.advanceTimersByTime(4000);
@@ -72,9 +107,9 @@ describe("invalidateRequestList", () => {
 
   it("holds every refetch while a selection is held, then refetches once on release", () => {
     const release = holdRequestListRefresh();
-    invalidateRequestList(utils);
+    invalidateRequestList(deps);
     vi.advanceTimersByTime(20000);
-    for (let i = 0; i < 5; i++) invalidateRequestList(utils);
+    for (let i = 0; i < 5; i++) invalidateRequestList(deps);
     vi.advanceTimersByTime(20000);
 
     expect(invalidateAll).not.toHaveBeenCalled();
@@ -94,7 +129,7 @@ describe("invalidateRequestList", () => {
   it("waits for the last of two overlapping holds, and a repeated release counts once", () => {
     const first = holdRequestListRefresh();
     const second = holdRequestListRefresh();
-    invalidateRequestList(utils);
+    invalidateRequestList(deps);
 
     first();
     first();
@@ -105,13 +140,13 @@ describe("invalidateRequestList", () => {
   });
 
   it("refreshes the recent-tracks strip alongside the list, since nothing else invalidates it", () => {
-    invalidateRequestList(utils);
+    invalidateRequestList(deps);
 
     expect(invalidateRecent).toHaveBeenCalledTimes(1);
   });
 
   it("refreshes the open container's detail too, since the split moved its tracks off the list query", () => {
-    invalidateRequestList(utils);
+    invalidateRequestList(deps);
 
     expect(invalidateDetail).toHaveBeenCalledTimes(1);
   });
@@ -119,20 +154,20 @@ describe("invalidateRequestList", () => {
 
 describe("invalidateRequestListNow", () => {
   it("refetches immediately even inside the throttle window", () => {
-    invalidateRequestList(utils);
+    invalidateRequestList(deps);
     vi.advanceTimersByTime(10);
 
-    invalidateRequestListNow(utils);
+    invalidateRequestListNow(deps);
 
     expect(invalidateAll).toHaveBeenCalledTimes(2);
   });
 
   it("drops a pending trailing refetch it supersedes, so no redundant refetch lands afterwards", () => {
-    invalidateRequestList(utils);
+    invalidateRequestList(deps);
     vi.advanceTimersByTime(10);
-    invalidateRequestList(utils);
+    invalidateRequestList(deps);
 
-    invalidateRequestListNow(utils);
+    invalidateRequestListNow(deps);
     expect(invalidateAll).toHaveBeenCalledTimes(2);
 
     vi.advanceTimersByTime(5000);
@@ -140,8 +175,8 @@ describe("invalidateRequestListNow", () => {
   });
 
   it("opens a fresh window, so an immediately following repeating event is throttled", () => {
-    invalidateRequestListNow(utils);
-    invalidateRequestList(utils);
+    invalidateRequestListNow(deps);
+    invalidateRequestList(deps);
 
     expect(invalidateAll).toHaveBeenCalledTimes(1);
 

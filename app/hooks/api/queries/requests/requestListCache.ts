@@ -50,6 +50,12 @@ export function removeRequestListItem(queryClient: QueryClient, id: string): voi
   });
 }
 
+export function trimRequestListToFirstPage(queryClient: QueryClient): void {
+  queryClient.setQueriesData<RequestListCache>(listFilter(), (old) =>
+    old && old.pages.length > 1 ? { pages: old.pages.slice(0, 1), pageParams: old.pageParams.slice(0, 1) } : old
+  );
+}
+
 export function findCachedRequestListItem(
   queryClient: QueryClient,
   match: (item: RequestListItem) => boolean

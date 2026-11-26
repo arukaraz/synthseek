@@ -1,4 +1,5 @@
 import type { PlaylistSyncAllProgressPayload } from "@api/__generated__/types";
+import type { QueryClient } from "@tanstack/react-query";
 import type { trpc } from "@utils/trpc";
 
 import { isForeignJobEvent } from "../../shared/eventOwnership";
@@ -43,6 +44,7 @@ function driveDock(event: PlaylistSyncAllProgressPayload, utils: Utils, viewerId
 export function handlePlaylistSyncAllProgress(
   event: PlaylistSyncAllProgressPayload,
   utils: Utils,
+  queryClient: QueryClient,
   viewerId: string | null
 ): void {
   emitPlaylistSyncAll({
@@ -63,6 +65,6 @@ export function handlePlaylistSyncAllProgress(
   driveDock(event, utils, viewerId);
 
   if (event.phase === "complete") {
-    invalidateRequestListNow(utils);
+    invalidateRequestListNow({ utils, queryClient });
   }
 }

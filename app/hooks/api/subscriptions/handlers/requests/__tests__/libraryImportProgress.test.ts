@@ -1,3 +1,4 @@
+import { QueryClient } from "@tanstack/react-query";
 import { renderHook } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
@@ -7,6 +8,11 @@ import { handleLibraryImportProgress } from "../libraryImportProgress";
 import { buildDockItems, resetDockStore, seedDockJob, useDockJobs } from "../../../shared/progressDock";
 import type { DockJob } from "../../../shared/progressDock";
 import { resetThrottledInvalidations } from "../../../shared/throttledInvalidation";
+
+vi.mock("../../../../queries/requests/requestListCache", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("../../../../queries/requests/requestListCache")>()),
+  trimRequestListToFirstPage: vi.fn(),
+}));
 
 const spies = vi.hoisted(() => ({
   invalidateSummary: vi.fn(),
@@ -98,12 +104,14 @@ function expectLibraryViewsInvalidated(times: number): void {
   expect(spies.invalidateCounts).toHaveBeenCalledTimes(times);
 }
 
+const queryClient = new QueryClient();
+
 function markItem(
   state: LibraryImportProgressPayload["item"],
   utils: ReturnType<typeof trpc.useUtils>,
   viewerId: string | null
 ): void {
-  handleLibraryImportProgress(makeEvent({ phase: "progress", item: state }), utils, viewerId);
+  handleLibraryImportProgress(makeEvent({ phase: "progress", item: state }), utils, queryClient, viewerId);
 }
 
 describe("handleLibraryImportProgress", () => {
@@ -155,7 +163,12 @@ describe("handleLibraryImportProgress", () => {
     spies.invalidatePlaylists.mockReset();
     spies.invalidateTracks.mockReset();
     spies.invalidateCounts.mockReset();
-    handleLibraryImportProgress(makeEvent({ phase: "complete", imported: 2, failed: 0, total: 2 }), utils, VIEWER_ID);
+    handleLibraryImportProgress(
+      makeEvent({ phase: "complete", imported: 2, failed: 0, total: 2 }),
+      utils,
+      queryClient,
+      VIEWER_ID
+    );
     expect(libJob()?.status).toBe("complete");
     expect(spies.invalidateSummary).toHaveBeenCalledTimes(1);
     expect(spies.invalidateAll).toHaveBeenCalledTimes(1);
@@ -167,7 +180,12 @@ describe("handleLibraryImportProgress", () => {
     const utils = trpc.useUtils();
     markItem({ key: "a", state: "skipped" }, utils, VIEWER_ID);
     markItem({ key: "b", state: "skipped" }, utils, VIEWER_ID);
-    handleLibraryImportProgress(makeEvent({ phase: "complete", imported: 0, failed: 0, total: 2 }), utils, VIEWER_ID);
+    handleLibraryImportProgress(
+      makeEvent({ phase: "complete", imported: 0, failed: 0, total: 2 }),
+      utils,
+      queryClient,
+      VIEWER_ID
+    );
     expect(libJob()?.status).toBe("complete");
   });
 
@@ -176,7 +194,12 @@ describe("handleLibraryImportProgress", () => {
     const utils = trpc.useUtils();
     markItem({ key: "a", state: "done" }, utils, VIEWER_ID);
     markItem({ key: "b", state: "failed", reason: "noMatchableTracks" }, utils, VIEWER_ID);
-    handleLibraryImportProgress(makeEvent({ phase: "complete", imported: 2, failed: 0, total: 2 }), utils, VIEWER_ID);
+    handleLibraryImportProgress(
+      makeEvent({ phase: "complete", imported: 2, failed: 0, total: 2 }),
+      utils,
+      queryClient,
+      VIEWER_ID
+    );
     expect(libJob()?.status).toBe("partial");
   });
 
@@ -185,7 +208,12 @@ describe("handleLibraryImportProgress", () => {
     const utils = trpc.useUtils();
     markItem({ key: "a", state: "failed", reason: "importError" }, utils, VIEWER_ID);
     markItem({ key: "b", state: "failed", reason: "sourceHasNoTracks" }, utils, VIEWER_ID);
-    handleLibraryImportProgress(makeEvent({ phase: "complete", imported: 0, failed: 2, total: 2 }), utils, VIEWER_ID);
+    handleLibraryImportProgress(
+      makeEvent({ phase: "complete", imported: 0, failed: 2, total: 2 }),
+      utils,
+      queryClient,
+      VIEWER_ID
+    );
     expect(libJob()?.status).toBe("failed");
   });
 
@@ -196,11 +224,13 @@ describe("handleLibraryImportProgress", () => {
     handleLibraryImportProgress(
       makeEvent({ userId: OTHER_USER_ID, phase: "progress", item: { key: "a", state: "done" } }),
       utils,
+      queryClient,
       VIEWER_ID
     );
     handleLibraryImportProgress(
       makeEvent({ userId: OTHER_USER_ID, phase: "complete", imported: 2, failed: 0, total: 2 }),
       utils,
+      queryClient,
       VIEWER_ID
     );
 
@@ -214,6 +244,7 @@ describe("handleLibraryImportProgress", () => {
     handleLibraryImportProgress(
       makeEvent({ userId: OTHER_USER_ID, phase: "complete", imported: 2, failed: 0, total: 2 }),
       utils,
+      queryClient,
       VIEWER_ID
     );
 

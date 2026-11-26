@@ -1,7 +1,8 @@
 "use client";
 
+import { useHoldRequestListRefresh } from "@hooks/api";
 import { useInfiniteScroll } from "@hooks/ui/useInfiniteScroll";
-import { useState } from "react";
+import { useScrollEdges } from "@hooks/ui/useScrollEdges";
 
 import { RequestsEmptyState } from "../RequestsEmptyState";
 import { RequestSidebarItem } from "./RequestSidebarItem";
@@ -23,7 +24,9 @@ export function RequestSidebar({
   onLoadPrevious,
   className,
 }: RequestSidebarProps) {
-  const [scrollRoot, setScrollRoot] = useState<HTMLUListElement | null>(null);
+  const edges = useScrollEdges<HTMLUListElement>("y");
+  const scrollRoot = edges.node;
+  useHoldRequestListRefresh(edges.start);
   const nextSentinelRef = useInfiniteScroll({
     root: scrollRoot,
     hasNextPage,
@@ -49,7 +52,7 @@ export function RequestSidebar({
 
   return (
     <div className={`${sidebarContainer()} ${className ?? ""}`} data-cy="requests-sidebar" data-part="sidebar">
-      <ul ref={setScrollRoot} className={sidebarList()}>
+      <ul ref={edges.ref} className={sidebarList()}>
         {hasPreviousPage ? (
           <li role="presentation">
             <div ref={previousSentinelRef} className={sidebarSentinel()} />
