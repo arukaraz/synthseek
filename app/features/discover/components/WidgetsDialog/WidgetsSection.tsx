@@ -14,7 +14,7 @@ import { useMyWidgets } from "@hooks/api/queries/widgets/useMyWidgets";
 import { useWidgetCatalog } from "@hooks/api/queries/widgets/useWidgetCatalog";
 import { useWidgetPresets } from "@hooks/api/queries/widgets/useWidgetPresets";
 
-import { NEW_WIDGET_DRAFT } from "../../constants";
+import { DEFAULT_QUERIES, NEW_WIDGET_DRAFT } from "../../constants";
 import { BOARD_LIST_KEYS, BOARD_MAX_ITEMS, BOARD_WIDGET_ORDER, BOARD_WIDGETS } from "../ExploreBoard/constants";
 import { boardWidgetName, widgetsOnBoard } from "../ExploreBoard/helpers";
 import { NeverIncludeCard } from "../NeverInclude/NeverIncludeCard";
@@ -180,9 +180,13 @@ export function WidgetsSection({ draft, gallery, filters, onFiltersChange, onImp
                 lists={lists}
                 onAddCustom={draft.addCustom}
                 onEdit={(widget) => gallery.open(draftOf(widget), widget.id, "mine")}
-                onCreate={() =>
+                onCreate={(kind) =>
                   gallery.open(
-                    { ...NEW_WIDGET_DRAFT, meta: { ...NEW_WIDGET_DRAFT.meta, name: t("widgets:mine.newWidget") } },
+                    {
+                      ...NEW_WIDGET_DRAFT,
+                      query: DEFAULT_QUERIES[kind],
+                      meta: { ...NEW_WIDGET_DRAFT.meta, name: t("widgets:mine.newWidget") },
+                    },
                     null,
                     "mine"
                   )

@@ -26,7 +26,15 @@ export const workshopAside = cva(
   "flex min-w-0 flex-col gap-2 min-[980px]:sticky min-[980px]:top-0 min-[980px]:order-last"
 );
 
-export const section = cva("border-fg/10 bg-fg/[0.02] flex flex-col gap-3 rounded-2xl border p-4");
+export const section = cva("border-fg/10 bg-fg/[0.02] flex flex-col gap-3 rounded-2xl border p-4", {
+  variants: {
+    tabbed: {
+      true: "rounded-t-none border-t-0",
+      false: "",
+    },
+  },
+  defaultVariants: { tabbed: false },
+});
 
 export const sectionHead = cva("flex flex-wrap items-center gap-x-3 gap-y-2");
 
@@ -38,9 +46,23 @@ export const sectionTitle = cva("text-fg text-sm font-semibold");
 
 export const sectionHelp = cva("text-fg/60 text-xs");
 
-export const kindSwitch = cva("ml-auto flex items-center gap-2 max-sm:order-last max-sm:w-full");
+export const kindTabbed = cva("flex min-w-0 flex-col");
 
-export const kindLabel = cva("text-fg/60 text-xs");
+export const kindTabs = cva("flex min-w-0 items-end");
+
+export const kindTab = cva(
+  "focus-visible:ring-primary-400 flex min-h-11 shrink-0 items-center gap-2 rounded-t-xl border px-4 text-sm font-medium transition-colors outline-none focus-visible:ring-2 focus-visible:ring-inset motion-reduce:transition-none [&_svg]:size-4",
+  {
+    variants: {
+      active: {
+        true: "border-fg/10 bg-fg/[0.02] text-fg border-b-transparent [&_svg]:text-primary-400",
+        false: "border-b-fg/10 text-fg/60 hover:text-fg hover:bg-fg/[0.03] border-transparent",
+      },
+    },
+  }
+);
+
+export const kindTabsFill = cva("border-fg/10 min-w-0 flex-1 self-stretch border-b");
 
 export const startFromRow = cva("flex min-w-0 items-center gap-3");
 

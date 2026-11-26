@@ -174,10 +174,13 @@ export interface BoardTileSizesProps {
   onResize: (id: string, size: BoardSize) => void;
 }
 
-export interface BoardToolbarProps {
+export interface BoardFabProps {
   editing: boolean;
   onCustomize: () => void;
   onDone: () => void;
+}
+
+export interface BoardEditBarProps {
   onAddSpacer: () => void;
   onWidgets: () => void;
 }

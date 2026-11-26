@@ -4,34 +4,23 @@ import { cva } from "class-variance-authority";
 import { BOARD_ROW_FRAME_HEAD } from "./constants";
 import type { BoardRow, PlacedTile } from "./types";
 
-export const boardRoot = cva("flex flex-col gap-4", {
-  variants: {
-    editing: {
-      true: "pb-36",
-      false: "pb-20",
-    },
-  },
-  defaultVariants: { editing: false },
-});
+export const boardRoot = cva("flex flex-col gap-4 pb-20");
 
 export const boardDock = cva(
-  "player-metrics pointer-events-none fixed inset-x-0 bottom-[var(--toast-offset-mobile)] z-30 flex px-4 sm:bottom-[var(--toast-offset-wide)] sm:px-8",
-  {
-    variants: {
-      editing: {
-        true: "justify-center",
-        false: "justify-end",
-      },
-    },
-    defaultVariants: { editing: false },
-  }
+  "player-metrics pointer-events-none fixed inset-x-0 bottom-[var(--toast-offset-mobile)] z-30 flex justify-end px-4 sm:bottom-[var(--toast-offset-wide)] sm:px-8"
 );
 
-export const boardMenu = cva(
-  "board-menu-glow border-accent-500/70 bg-surface/95 pointer-events-auto flex max-w-full min-w-0 flex-col rounded-xl border p-1 backdrop-blur-xl"
+export const boardEditBar = cva(
+  "board-menu-glow border-accent-500/70 bg-surface/95 sticky top-[max(0.75rem,env(safe-area-inset-top,0px))] z-30 mx-auto flex w-fit max-w-full min-w-0 items-center gap-1 rounded-xl border p-1 pl-3 backdrop-blur-xl"
 );
 
-export const boardMenuRow = cva("flex min-w-0 items-center gap-1");
+export const boardEditStatus = cva("flex shrink-0 items-center gap-2");
+
+export const boardEditDot = cva("bg-accent-500 ring-accent-500/25 size-2 rounded-full ring-4");
+
+export const boardEditTitle = cva("text-fg text-sm font-semibold whitespace-nowrap");
+
+export const boardEditHint = cva("text-fg/60 text-xs whitespace-nowrap max-md:hidden");
 
 export const boardMenuActions = cva("flex w-max items-center gap-1");
 
@@ -41,13 +30,19 @@ export const boardMenuToggle = cva(
 
 export const boardMenuDivider = cva("bg-fg/15 mx-1 h-6 w-px shrink-0");
 
-export const boardMenuDone = cva("shrink-0");
-
 export const boardFab = cva(
-  "from-primary-600 to-accent-600 text-overlay-fg shadow-primary-500/40 hover:from-primary-500 hover:to-accent-500 focus-visible:ring-primary-400 pointer-events-auto flex size-14 items-center justify-center rounded-full bg-linear-to-r shadow-xl transition-all duration-200 outline-none hover:scale-105 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-background motion-reduce:transition-none"
+  "text-overlay-fg focus-visible:ring-primary-400 pointer-events-auto flex size-14 items-center justify-center rounded-full shadow-xl transition-all duration-200 outline-none hover:scale-105 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-background motion-reduce:transition-none",
+  {
+    variants: {
+      editing: {
+        true: "bg-success-vivid shadow-success-vivid/30 [&_svg]:size-7",
+        false:
+          "from-primary-600 to-accent-600 shadow-primary-500/40 hover:from-primary-500 hover:to-accent-500 bg-linear-to-r",
+      },
+    },
+    defaultVariants: { editing: false },
+  }
 );
-
-export const boardFabLabel = cva("sr-only");
 
 export const boardTile = cva(
   "relative flex min-h-0 min-w-0 flex-col rounded-xl outline-none [grid-column:var(--tile-col)] [grid-row:var(--tile-row)]",

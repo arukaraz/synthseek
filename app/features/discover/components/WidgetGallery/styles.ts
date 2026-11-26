@@ -21,7 +21,7 @@ export const searchField = cva("pl-9");
 
 export const galleryScroll = cva("min-h-0 flex-1 overflow-y-auto px-4 pb-10 sm:px-6");
 
-export const galleryGrid = cva("grid grid-cols-1 gap-3 pt-4 sm:grid-cols-2 lg:grid-cols-3");
+export const galleryGrid = cva("grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3");
 
 export const galleryEmpty = cva("text-fg/60 py-12 text-center text-sm");
 
@@ -151,7 +151,7 @@ export const clampedToggle = cva(
 
 export const visuallyHidden = cva("sr-only");
 
-export const galleryToolbar = cva("flex flex-wrap items-center gap-3 px-4 sm:px-6");
+export const galleryToolbar = cva("flex flex-wrap items-center gap-3 px-4 pb-4 sm:px-6");
 
 export const galleryFilters = cva("flex min-w-0 basis-full items-center gap-2 sm:basis-auto");
 
@@ -189,15 +189,47 @@ export const onBoardPill = cva(
   "bg-success-vivid/15 text-success-vivid inline-flex h-9 shrink-0 items-center gap-1 rounded-md px-3 text-xs font-semibold"
 );
 
-export const newCard = cva(
-  "border-fg/20 hover:border-primary-400 flex min-h-60 flex-col items-center rounded-2xl border border-dashed p-3 transition-colors"
+export const newCard = cva("border-fg/10 bg-fg/[0.02] flex min-w-0 flex-col rounded-2xl border p-3");
+
+export const newCardHead = cva("border-fg/10 flex items-center gap-3 border-b px-1 pb-3");
+
+export const newCardRows = cva("flex flex-1 flex-col justify-center gap-1 pt-2");
+
+export const newCardBadge = cva(
+  "from-primary-600 to-accent-600 text-overlay-fg shadow-primary-600/40 flex size-9 shrink-0 items-center justify-center rounded-xl bg-linear-to-br shadow-md [&_svg]:size-5"
 );
 
-export const newCardButton = cva(
-  "from-primary-600 to-accent-600 text-overlay-fg shadow-primary-600/40 focus-visible:ring-primary-400 my-auto flex size-16 items-center justify-center rounded-2xl bg-linear-to-br shadow-lg transition-transform outline-none hover:scale-105 focus-visible:ring-2 motion-reduce:transition-none [&_svg]:size-8"
+export const newCardText = cva("flex min-w-0 flex-col");
+
+export const newCardTitle = cva("text-fg text-sm font-semibold");
+
+export const newCardSubtitle = cva("text-fg/60 text-xs");
+
+export const newCardRow = cva(
+  "group hover:bg-primary-500/15 focus-visible:ring-primary-400 flex min-h-13 w-full min-w-0 items-center gap-3 rounded-xl px-2 text-left transition-colors outline-none focus-visible:ring-2 motion-reduce:transition-none"
 );
 
-export const importBody = cva("flex flex-col gap-3 p-6 sm:max-w-xl");
+export const newCardIcon = cva("flex size-9 shrink-0 items-center justify-center rounded-lg [&_svg]:size-4.5", {
+  variants: {
+    tone: {
+      recipe: "bg-primary-500/20 text-primary-400",
+      feed: "bg-accent-500/20 text-accent-400",
+      json: "bg-fg/10 text-fg/70",
+    },
+  },
+});
+
+export const newCardLabel = cva("text-fg text-sm font-medium");
+
+export const newCardHint = cva("text-fg/60 truncate text-xs");
+
+export const newCardChevron = cva(
+  "text-fg/40 group-hover:text-primary-400 ml-auto size-4 shrink-0 transition-transform group-hover:translate-x-0.5 motion-reduce:transition-none"
+);
+
+export const importBody = cva("p-6 sm:max-w-xl");
+
+export const importStack = cva("flex flex-col gap-5");
 
 export const importField = cva(
   "border-fg/15 bg-fg/5 text-fg focus:border-primary-500/50 focus:ring-primary-500/30 h-56 w-full resize-y rounded-lg border p-3 font-mono text-xs outline-none focus:ring-2"

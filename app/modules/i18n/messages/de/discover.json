@@ -194,6 +194,10 @@
     "providerInactive": "{{provider}} ist auf diesem Server nicht eingerichtet.",
     "customize": "Anpassen",
     "done": "Fertig",
+    "editBar": {
+      "title": "Board bearbeiten",
+      "hint": "Änderungen werden sofort gespeichert."
+    },
     "addWidget": "Widget hinzufügen",
     "add": {
       "action": "Hinzufügen"

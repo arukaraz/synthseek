@@ -1,3 +1,6 @@
+import { List, Rss } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
+
 import type { BoardSize } from "@hooks/api/queries/board/types";
 
 import type { WidgetAction, WidgetBlock, WidgetShape } from "@hooks/api/queries/widgets/types";
@@ -31,6 +34,13 @@ export const UNSET_RULE_VALUE = "-";
 export const WORKSHOP_SIZES: readonly BoardSize[] = ["S", "M", "L", "XL"];
 
 export const WIDGET_KINDS: readonly WidgetKind[] = ["recipe", "feed"];
+
+export const QUERY_PANEL_ID = "workshop-query";
+
+export const WIDGET_KIND_ICONS: Record<WidgetKind, LucideIcon> = {
+  recipe: List,
+  feed: Rss,
+};
 
 export const TIME_MODES: readonly TimeMode[] = ["relative", "named", "absolute", "sameLastYear"];
 

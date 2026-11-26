@@ -5,6 +5,7 @@ import type { BoardList, BoardLists, BoardWidgetKey } from "@hooks/api/queries/b
 import type { WidgetCatalog, WidgetDocument, WidgetDraft } from "@hooks/api/queries/widgets/types";
 
 import type { BoardCategory, BoardWidgetDefinition } from "../ExploreBoard/types";
+import type { WidgetKind } from "../WidgetWorkshop/types";
 
 export type GalleryMode = "widgets" | "mine";
 
@@ -180,7 +181,7 @@ export interface MyWidgetsPanelProps {
   lists: BoardLists;
   onAddCustom: (widget: WidgetDocument, lists: readonly BoardList[]) => void;
   onEdit: (widget: WidgetDocument) => void;
-  onCreate: () => void;
+  onCreate: (kind: WidgetKind) => void;
   onImport: () => void;
   onDeleted: (widgetId: string) => void;
 }
@@ -196,7 +197,7 @@ export interface MyWidgetCardProps {
 }
 
 export interface NewWidgetCardProps {
-  onCreate: () => void;
+  onCreate: (kind: WidgetKind) => void;
   onImport: () => void;
 }
 

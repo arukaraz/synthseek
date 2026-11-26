@@ -160,6 +160,12 @@ export interface WidgetWorkshopProps {
   onSaved: (name: string) => void;
 }
 
+export interface WorkshopKindTabsProps {
+  kind: WidgetKind;
+  panelId: string;
+  onChange: (kind: WidgetKind) => void;
+}
+
 export interface WorkshopSectionProps {
   workshop: WidgetWorkshopState;
   context: WorkshopContext;

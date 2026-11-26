@@ -49,8 +49,14 @@
   "mine": {
     "label": "Meine Widgets",
     "subtitle": "Widgets, die du gebaut oder angepasst hast. Füg eines zum Board hinzu, bearbeite es oder kopiere sein JSON, um es zu teilen.",
-    "empty": "Du hast noch kein Widget gebaut. Starte mit der +-Karte.",
+    "empty": "Du hast noch kein Widget gebaut. Starte mit der Karte Neues Widget.",
     "newWidget": "Neues Widget",
+    "start": {
+      "title": "Wähle, wie du startest",
+      "recipe": "Regeln, die du Zeile für Zeile schreibst",
+      "feed": "Eine Quelle, die du eingrenzt",
+      "json": "Ein Widget-Dokument einfügen"
+    },
     "fromJson": "Aus JSON",
     "basedOn": "Basiert auf {{name}}",
     "playlist": "Smarte Playlist · {{refresh}}",
@@ -209,7 +215,6 @@
     "copyJson": "JSON kopieren",
     "saving": "Wird gespeichert",
     "cancel": "Abbrechen",
-    "buildUsing": "Bauen mit:",
     "kindLabel": "Widget-Typ",
     "recipeHelp": "Eine Zeile pro Teil des Rezepts.",
     "feedHelp": "Wähle eine Quelle und grenze dann ein, was sie liefert.",

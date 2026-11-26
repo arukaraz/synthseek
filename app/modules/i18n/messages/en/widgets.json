@@ -49,8 +49,14 @@
   "mine": {
     "label": "My widgets",
     "subtitle": "Widgets you built or customized. Add one to the board, edit it, or copy its JSON to share it.",
-    "empty": "You have not built a widget yet. Start one with the + card.",
+    "empty": "You have not built a widget yet. Start one from the New widget card.",
     "newWidget": "New widget",
+    "start": {
+      "title": "Pick how to start",
+      "recipe": "Rules you write, line by line",
+      "feed": "A source you narrow down",
+      "json": "Paste a widget document"
+    },
     "fromJson": "From JSON",
     "basedOn": "Based on {{name}}",
     "playlist": "Smart playlist · {{refresh}}",
@@ -209,7 +215,6 @@
     "copyJson": "Copy JSON",
     "saving": "Saving",
     "cancel": "Cancel",
-    "buildUsing": "Build using:",
     "kindLabel": "Widget type",
     "recipeHelp": "One line per part of the recipe.",
     "feedHelp": "Pick a source, then narrow what it brings back.",

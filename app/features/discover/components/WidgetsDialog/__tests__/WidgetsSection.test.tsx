@@ -557,17 +557,19 @@ describe("WidgetsDialog gallery", () => {
     expect(handlers.onClose).toHaveBeenCalledTimes(1);
   });
 
-  it("shows my widgets with their board state and ends the grid with the new widget card", async () => {
+  it("shows my widgets with their board state and starts the grid with the new widget card", async () => {
     myWidgets.data = [createWidget(), createWidget({ id: "w_2", meta: { ...createWidget().meta, name: "Deep" } })];
     const handlers = renderGallery();
     openMine();
 
+    const grid = screen.getByLabelText("My widgets", { selector: "div" });
+    expect(grid.firstElementChild).toBe(screen.getByRole("group", { name: "New widget" }));
     const cards = screen.getAllByRole("article");
     expect(cards.map((card) => card.getAttribute("aria-label"))).toEqual(["Most played", "Deep"]);
     expect(within(cards[0]).getByText("On board")).toBeInTheDocument();
     expect(within(cards[0]).getByText("List · Recipe")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "New widget" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "From JSON" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /^Recipe/ })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /^From JSON/ })).toBeInTheDocument();
     await pickLayout("Add Deep to the board", "Mobile");
     fireEvent.click(screen.getByRole("button", { name: "Save changes" }));
 
@@ -596,7 +598,7 @@ describe("WidgetsDialog gallery", () => {
   it("opens the workshop from the new widget card and starts from a preset with its rules", () => {
     renderGallery();
     openMine();
-    fireEvent.click(screen.getByRole("button", { name: "New widget" }));
+    fireEvent.click(screen.getByRole("button", { name: /^Recipe/ }));
 
     expect(screen.getByText("Show me 10 tracks with the most plays in the last 30 days.")).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Forgotten favorites" }));
@@ -617,7 +619,7 @@ describe("WidgetsDialog gallery", () => {
   it("adds a rule only once it is confirmed", () => {
     renderGallery();
     openMine();
-    fireEvent.click(screen.getByRole("button", { name: "New widget" }));
+    fireEvent.click(screen.getByRole("button", { name: /^Recipe/ }));
 
     fireEvent.click(screen.getByRole("button", { name: "Where" }));
     expect(screen.queryByRole("button", { name: /^Edit rule/ })).not.toBeInTheDocument();
@@ -632,11 +634,11 @@ describe("WidgetsDialog gallery", () => {
   it("leaves a clean workshop without asking and asks before discarding changes", () => {
     renderGallery();
     openMine();
-    fireEvent.click(screen.getByRole("button", { name: "New widget" }));
+    fireEvent.click(screen.getByRole("button", { name: /^Recipe/ }));
     fireEvent.click(screen.getByRole("button", { name: "Back" }));
-    expect(screen.getByRole("button", { name: "New widget" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /^Recipe/ })).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole("button", { name: "New widget" }));
+    fireEvent.click(screen.getByRole("button", { name: /^Recipe/ }));
     fireEvent.change(screen.getByRole("textbox", { name: "Name" }), { target: { value: "Night owl" } });
     fireEvent.click(screen.getByRole("button", { name: "Back" }));
     expect(screen.getByText("Discard changes?")).toBeInTheDocument();
@@ -645,7 +647,7 @@ describe("WidgetsDialog gallery", () => {
 
     fireEvent.click(screen.getByRole("button", { name: "Back" }));
     fireEvent.click(screen.getByRole("button", { name: "Discard" }));
-    expect(screen.getByRole("button", { name: "New widget" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /^Recipe/ })).toBeInTheDocument();
   });
 
   it("saves an edited widget under its own id", () => {
@@ -705,7 +707,7 @@ describe("WidgetsDialog gallery", () => {
 
     expect(screen.getByRole("heading", { level: 2, name: "Edit Most played" })).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Back" }));
-    expect(screen.getByRole("button", { name: "New widget" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /^Recipe/ })).toBeInTheDocument();
   });
 
   it("stays on the gallery when the widget the board asked for is gone", () => {
@@ -779,7 +781,7 @@ describe("WidgetsDialog gallery", () => {
   it("moves the size and the JSON to the preview, and the playlist choice to the footer", () => {
     renderGallery();
     openMine();
-    fireEvent.click(screen.getByRole("button", { name: "New widget" }));
+    fireEvent.click(screen.getByRole("button", { name: /^Recipe/ }));
     const preview = screen.getByRole("complementary", { name: "Preview" });
 
     fireEvent.click(within(preview).getByRole("radio", { name: "L" }));
@@ -798,7 +800,7 @@ describe("WidgetsDialog gallery", () => {
   it("illustrates each view and keeps All views beside the Look title", () => {
     renderGallery();
     openMine();
-    fireEvent.click(screen.getByRole("button", { name: "New widget" }));
+    fireEvent.click(screen.getByRole("button", { name: /^Recipe/ }));
     const heading = screen.getByRole("heading", { name: "Look" });
 
     expect(heading.parentElement).toContainElement(screen.getByRole("button", { name: /^All \d+ views$/ }));
@@ -809,7 +811,7 @@ describe("WidgetsDialog gallery", () => {
   it("picks the rotation from a three option control in one line", () => {
     renderGallery();
     openMine();
-    fireEvent.click(screen.getByRole("button", { name: "New widget" }));
+    fireEvent.click(screen.getByRole("button", { name: /^Recipe/ }));
 
     const group = screen.getByRole("radiogroup", { name: i18n.t("widgets:steps.random") });
     fireEvent.click(within(group).getByRole("radio", { name: "Daily" }));
@@ -822,7 +824,7 @@ describe("WidgetsDialog gallery", () => {
     const user = userEvent.setup();
     renderGallery();
     openMine();
-    fireEvent.click(screen.getByRole("button", { name: "New widget" }));
+    fireEvent.click(screen.getByRole("button", { name: /^Recipe/ }));
 
     await user.click(screen.getByRole("button", { name: "Show" }));
     await user.click(await screen.findByRole("menuitemradio", { name: /a recap/ }));
@@ -839,7 +841,7 @@ describe("WidgetsDialog gallery", () => {
     savePlaylist.mockImplementation((_input, options) => options.onSuccess({ id: "pl_1", name: "Night owl" }));
     renderGallery();
     openMine();
-    fireEvent.click(screen.getByRole("button", { name: "New widget" }));
+    fireEvent.click(screen.getByRole("button", { name: /^Recipe/ }));
     fireEvent.change(screen.getByRole("textbox", { name: "Name" }), { target: { value: "Night owl" } });
 
     fireEvent.click(screen.getByRole("switch", { name: "Also save as a playlist" }));
@@ -866,7 +868,7 @@ describe("WidgetsDialog gallery", () => {
     savePlaylist.mockImplementation((_input, options) => options.onSuccess({ id: "pl_1", name: "Night owl" }));
     renderGallery();
     openMine();
-    fireEvent.click(screen.getByRole("button", { name: "New widget" }));
+    fireEvent.click(screen.getByRole("button", { name: /^Recipe/ }));
     fireEvent.change(screen.getByRole("textbox", { name: "Name" }), { target: { value: "Night owl" } });
     fireEvent.click(screen.getByRole("switch", { name: "Also save as a playlist" }));
 
@@ -881,7 +883,7 @@ describe("WidgetsDialog gallery", () => {
     const user = userEvent.setup();
     renderGallery();
     openMine();
-    fireEvent.click(screen.getByRole("button", { name: "New widget" }));
+    fireEvent.click(screen.getByRole("button", { name: /^Recipe/ }));
     fireEvent.click(screen.getByRole("switch", { name: "Also save as a playlist" }));
 
     await user.click(screen.getByRole("button", { name: "Show" }));
@@ -897,7 +899,7 @@ describe("WidgetsDialog gallery", () => {
     const user = userEvent.setup();
     renderGallery();
     openMine();
-    fireEvent.click(screen.getByRole("button", { name: "New widget" }));
+    fireEvent.click(screen.getByRole("button", { name: /^Recipe/ }));
     fireEvent.click(screen.getByRole("button", { name: "Where" }));
 
     await user.click(screen.getByRole("button", { name: "Field" }));
@@ -917,8 +919,7 @@ describe("WidgetsDialog gallery", () => {
     const user = userEvent.setup();
     renderGallery();
     openMine();
-    fireEvent.click(screen.getByRole("button", { name: "New widget" }));
-    fireEvent.click(screen.getByRole("tab", { name: "Feed" }));
+    fireEvent.click(screen.getByRole("button", { name: /^Feed/ }));
     await user.click(screen.getByRole("button", { name: "Source" }));
     await user.click(await screen.findByRole("menuitemradio", { name: /A news feed/ }));
 
@@ -937,8 +938,7 @@ describe("WidgetsDialog gallery", () => {
     const user = userEvent.setup();
     renderGallery();
     openMine();
-    fireEvent.click(screen.getByRole("button", { name: "New widget" }));
-    fireEvent.click(screen.getByRole("tab", { name: "Feed" }));
+    fireEvent.click(screen.getByRole("button", { name: /^Feed/ }));
     await user.click(screen.getByRole("button", { name: "Source" }));
     await user.click(await screen.findByRole("menuitemradio", { name: /My top tracks \(Last\.fm\)/ }));
 
@@ -966,12 +966,41 @@ describe("WidgetsDialog gallery", () => {
   it("switches to a feed and back without losing the recipe", () => {
     renderGallery();
     openMine();
-    fireEvent.click(screen.getByRole("button", { name: "New widget" }));
+    fireEvent.click(screen.getByRole("button", { name: /^Recipe/ }));
     fireEvent.click(screen.getByRole("button", { name: "Forgotten favorites" }));
 
+    expect(screen.getByRole("tab", { name: "Recipe" })).toHaveAttribute("aria-selected", "true");
     fireEvent.click(screen.getByRole("tab", { name: "Feed" }));
     expect(screen.getByText("Show me 12 items from Similar artists (Last.fm).")).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: "Feed" })).toHaveAttribute("aria-selected", "true");
     fireEvent.click(screen.getByRole("tab", { name: "Recipe" }));
     expect(screen.getByText(/daily pick of 8 tracks/)).toBeInTheDocument();
+  });
+
+  it("sits the type tabs right on top of the recipe card they switch", () => {
+    renderGallery();
+    openMine();
+    fireEvent.click(screen.getByRole("button", { name: /^Recipe/ }));
+    const tabs = screen.getByRole("tablist", { name: "Widget type" });
+    const panel = screen.getByRole("region", { name: "Recipe" });
+
+    expect(tabs.nextElementSibling).toBe(panel);
+    expect(screen.getByRole("tab", { name: "Recipe" })).toHaveAttribute("aria-controls", panel.id);
+  });
+
+  it("starts the new widget card with Recipe, then Feed, then From JSON, and opens a feed straight in Feed", () => {
+    renderGallery();
+    openMine();
+    const card = screen.getByRole("group", { name: "New widget" });
+
+    expect(
+      within(card)
+        .getAllByRole("button")
+        .map((button) => button.textContent)
+    ).toEqual([expect.stringMatching(/^Recipe/), expect.stringMatching(/^Feed/), expect.stringMatching(/^From JSON/)]);
+    fireEvent.click(within(card).getByRole("button", { name: /^Feed/ }));
+
+    expect(screen.getByText("Show me 12 items from Similar artists (Last.fm).")).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: "Feed" })).toHaveAttribute("aria-selected", "true");
   });
 });

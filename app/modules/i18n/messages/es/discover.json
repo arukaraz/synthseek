@@ -194,6 +194,10 @@
     "providerInactive": "{{provider}} no está configurado en este servidor.",
     "customize": "Personalizar",
     "done": "Listo",
+    "editBar": {
+      "title": "Editando el tablero",
+      "hint": "Los cambios se guardan al hacerlos."
+    },
     "addWidget": "Añadir widget",
     "add": {
       "action": "Añadir"

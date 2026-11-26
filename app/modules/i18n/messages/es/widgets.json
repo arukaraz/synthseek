@@ -49,8 +49,14 @@
   "mine": {
     "label": "Mis widgets",
     "subtitle": "Los widgets que creaste o personalizaste. Añade uno al tablero, edítalo o copia su JSON para compartirlo.",
-    "empty": "Aún no has creado ningún widget. Empieza con la tarjeta +.",
+    "empty": "Aún no has creado ningún widget. Empieza desde la tarjeta Nuevo widget.",
     "newWidget": "Nuevo widget",
+    "start": {
+      "title": "Elige cómo empezar",
+      "recipe": "Reglas que escribes, línea a línea",
+      "feed": "Una fuente que vas acotando",
+      "json": "Pega un documento de widget"
+    },
     "fromJson": "Desde JSON",
     "basedOn": "Basado en {{name}}",
     "playlist": "Playlist inteligente · {{refresh}}",
@@ -209,7 +215,6 @@
     "copyJson": "Copiar JSON",
     "saving": "Guardando",
     "cancel": "Cancelar",
-    "buildUsing": "Construir con:",
     "kindLabel": "Tipo de widget",
     "recipeHelp": "Una línea por cada parte de la receta.",
     "feedHelp": "Elige una fuente y luego acota lo que trae.",

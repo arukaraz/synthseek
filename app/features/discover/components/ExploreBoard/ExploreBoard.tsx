@@ -15,7 +15,8 @@ import { WidgetsDialog } from "../WidgetsDialog/WidgetsDialog";
 import { BoardEmpty } from "./BoardEmpty";
 import { BoardRowFrame } from "./BoardRowFrame";
 import { BoardTile } from "./BoardTile";
-import { BoardToolbar } from "./BoardToolbar";
+import { BoardEditBar } from "./BoardEditBar";
+import { BoardFab } from "./BoardFab";
 import { BOARD_LIST_OF } from "./constants";
 import {
   boardListsOf,
@@ -49,11 +50,8 @@ export function ExploreBoard() {
   if (isLoading) return <SectionLoading />;
 
   return (
-    <section
-      ref={editor.rootRef}
-      className={boardRoot({ editing: editor.editing })}
-      aria-label={t("board.regionLabel")}
-    >
+    <section ref={editor.rootRef} className={boardRoot()} aria-label={t("board.regionLabel")}>
+      {editor.editing ? <BoardEditBar onAddSpacer={editor.addSpacer} onWidgets={editor.openWidgets} /> : null}
       {items.length === 0 ? (
         <BoardEmpty onAddWidget={editor.openWidgets} />
       ) : (
@@ -85,13 +83,7 @@ export function ExploreBoard() {
           })}
         </BoardGrid>
       )}
-      <BoardToolbar
-        editing={editor.editing}
-        onCustomize={editor.startEditing}
-        onDone={editor.stopEditing}
-        onAddSpacer={editor.addSpacer}
-        onWidgets={editor.openWidgets}
-      />
+      <BoardFab editing={editor.editing} onCustomize={editor.startEditing} onDone={editor.stopEditing} />
       <p className={liveRegion()} aria-live="polite">
         {editor.announcement}
       </p>

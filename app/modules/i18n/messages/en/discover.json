@@ -194,6 +194,10 @@
     "providerInactive": "{{provider}} is not set up on this server.",
     "customize": "Customize",
     "done": "Done",
+    "editBar": {
+      "title": "Editing board",
+      "hint": "Changes save as you make them."
+    },
     "addWidget": "Add widget",
     "add": {
       "action": "Add"

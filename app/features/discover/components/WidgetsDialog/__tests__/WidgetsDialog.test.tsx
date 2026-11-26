@@ -169,7 +169,7 @@ describe("WidgetsDialog", () => {
     openMine();
 
     const card = screen.getByTestId("never-include");
-    expect(screen.getByRole("button", { name: "New widget" }).compareDocumentPosition(card)).toBe(
+    expect(screen.getByRole("group", { name: "New widget" }).compareDocumentPosition(card)).toBe(
       Node.DOCUMENT_POSITION_FOLLOWING
     );
   });

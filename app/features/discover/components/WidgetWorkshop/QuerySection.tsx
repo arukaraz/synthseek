@@ -10,7 +10,9 @@ import { readbackOf, recapReadbackOf, startsFrom } from "./helpers";
 import { PlaylistSteps } from "./PlaylistSteps/PlaylistSteps";
 import { RecapSteps } from "./RecapSteps";
 import { RecipeSteps } from "./RecipeSteps";
+import { QUERY_PANEL_ID } from "./constants";
 import {
+  kindTabbed,
   presetChip,
   readback,
   section,
@@ -23,13 +25,15 @@ import {
   startFromRow,
 } from "./styles";
 import type { WorkshopSectionProps } from "./types";
+import { WorkshopKindTabs } from "./WorkshopKindTabs";
 
 export function QuerySection({ workshop, context, preview }: WorkshopSectionProps) {
   const { t } = useTranslation("widgets");
   const { query } = workshop.draft;
+  const tabbed = workshop.purpose === "widget";
 
-  return (
-    <section className={section()} aria-labelledby="workshop-query-title">
+  const body = (
+    <section id={QUERY_PANEL_ID} className={section({ tabbed })} aria-labelledby="workshop-query-title">
       <div className={sectionHead()}>
         <span className={sectionNumber()}>1</span>
         <h3 id="workshop-query-title" className={sectionTitle()}>
@@ -83,5 +87,14 @@ export function QuerySection({ workshop, context, preview }: WorkshopSectionProp
         </>
       )}
     </section>
+  );
+
+  if (!tabbed) return body;
+
+  return (
+    <div className={kindTabbed()}>
+      <WorkshopKindTabs kind={workshop.kind} panelId={QUERY_PANEL_ID} onChange={workshop.setKind} />
+      {body}
+    </div>
   );
 }

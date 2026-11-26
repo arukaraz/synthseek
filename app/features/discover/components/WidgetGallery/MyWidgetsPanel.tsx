@@ -33,6 +33,7 @@ export function MyWidgetsPanel({
   return (
     <>
       <div className={galleryGrid()} aria-label={t("mine.label")}>
+        <NewWidgetCard onCreate={onCreate} onImport={onImport} />
         {widgets.map((widget) => (
           <MyWidgetCard
             key={widget.id}
@@ -50,7 +51,6 @@ export function MyWidgetsPanel({
             onDelete={() => setDeleting(widget)}
           />
         ))}
-        <NewWidgetCard onCreate={onCreate} onImport={onImport} />
       </div>
       {widgets.length === 0 ? <p className={galleryEmpty()}>{t("mine.empty")}</p> : null}
       <DeleteWidgetDialog

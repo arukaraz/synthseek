@@ -233,7 +233,10 @@ describe("ExploreBoard", () => {
 
     expect(screen.getAllByRole("button", { name: /^Remove/ })).toHaveLength(2);
     expect(tile(container, "a")).toHaveAttribute("tabindex", "0");
-    expect(screen.getByRole("toolbar")).toHaveTextContent(/^AddAppearance$/);
+    expect(screen.getByRole("toolbar")).toHaveTextContent(/AddAppearance$/);
+    expect(screen.getByRole("toolbar").compareDocumentPosition(tile(container, "a"))).toBe(
+      Node.DOCUMENT_POSITION_FOLLOWING
+    );
 
     fireEvent.click(screen.getByRole("button", { name: i18n.t("discover:board.done") }));
 

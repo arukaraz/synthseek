@@ -194,6 +194,10 @@
     "providerInactive": "{{provider}} n'est pas configuré sur ce serveur.",
     "customize": "Personnaliser",
     "done": "Terminé",
+    "editBar": {
+      "title": "Modification du tableau",
+      "hint": "Les changements sont enregistrés au fur et à mesure."
+    },
     "addWidget": "Ajouter un widget",
     "add": {
       "action": "Ajouter"
