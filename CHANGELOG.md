@@ -61,6 +61,27 @@
 
 ---
 
+### Fixes
+
+- Deleting a playlist or removing tracks from it keeps the songs in your library, with their favourites, plays and lyrics.
+- A correct download credited to more than one artist is no longer rejected, and a request with files to review waits for you instead of failing.
+- Downloads no longer get stuck when many tracks move to their next source at once.
+- Requesting a playlist again retries its missing tracks, and Request missing is offered while other tracks are still downloading.
+- An album's status follows its tracks after one of them is cancelled or paused, and cancelled tracks are counted apart from failed ones.
+- The library scan walks your whole library less often, and a file you import or restore joins the library at once.
+- A smart playlist set that cleans up after itself only removes files its own downloads brought.
+- Clearing leftover files no longer takes other files that share their name.
+- A member's player no longer shows up on, or pauses, an admin's player.
+- Subsonic apps can sync a large library.
+- A track resumed from where you left it plays from that point, not from the start.
+- Playlist covers kept in a hidden folder show again.
+- A track already within your chosen bitrate plays as the original file.
+- On Auto, lossless is no longer offered when your sources leave out Soulseek.
+- The setup wizard can skip the Soulseek step, and an empty library says it is empty instead of filtered.
+- Waits longer than a day are shown in days.
+
+---
+
 # v2.9.4, November 6, 2026
 
 > [!NOTE]

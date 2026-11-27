@@ -83,7 +83,7 @@
         },
         {
           "title": "A theme of your own",
-          "body": "Choose Custom in Customization and pick your own colors. The app changes as you edit, and the theme follows your account to every device.",
+          "body": "Choose Custom in Customization and pick your own colors. The app changes as you edit, and the theme follows your account to every device. An agent connected over MCP can read and change it too, with the new theme tools.",
           "link": "/settings/customization/theme",
           "media": {
             "type": "video",
@@ -94,7 +94,7 @@
         },
         {
           "title": "New look",
-          "body": "Keeping Synthseek clean and easy to find your way around has always mattered to me, so this version also redraws places you already know: artist pages, the request detail and the request window, search, Settings and the Overview.",
+          "body": "Keeping Synthseek clean and easy to find your way around has always mattered to me, so this version also redraws places you already know.",
           "media": {
             "type": "gallery",
             "slides": [
@@ -222,6 +222,28 @@
             "Charts each have their own country.",
             "Charts and top lists can come from other listening sources, not only Last.fm.",
             "Admins see what is new after a major or minor update."
+          ]
+        },
+        {
+          "heading": "Fixes",
+          "category": "fix",
+          "items": [
+            "Deleting a playlist or removing tracks from it keeps the songs in your library, with their favourites, plays and lyrics.",
+            "A correct download credited to more than one artist is no longer rejected, and a request with files to review waits for you instead of failing.",
+            "Downloads no longer get stuck when many tracks move to their next source at once.",
+            "Requesting a playlist again retries its missing tracks, and Request missing is offered while other tracks are still downloading.",
+            "An album's status follows its tracks after one of them is cancelled or paused, and cancelled tracks are counted apart from failed ones.",
+            "The library scan walks your whole library less often, and a file you import or restore joins the library at once.",
+            "A smart playlist set that cleans up after itself only removes files its own downloads brought.",
+            "Clearing leftover files no longer takes other files that share their name.",
+            "A member's player no longer shows up on, or pauses, an admin's player.",
+            "Subsonic apps can sync a large library.",
+            "A track resumed from where you left it plays from that point, not from the start.",
+            "Playlist covers kept in a hidden folder show again.",
+            "A track already within your chosen bitrate plays as the original file.",
+            "On Auto, lossless is no longer offered when your sources leave out Soulseek.",
+            "The setup wizard can skip the Soulseek step, and an empty library says it is empty instead of filtered.",
+            "Waits longer than a day are shown in days."
           ]
         }
       ]
