@@ -1,6 +1,13 @@
 ---
 import Badge from "@synthseek/sites-shared/components/Badge.astro";
-import { APP_VERSION, DOCS_CHANNEL, OTHER_CHANNEL_FILE_URL, OTHER_CHANNEL_ORIGIN, VERSION_LABEL } from "../lib/site";
+import {
+  APP_VERSION,
+  DOCS_CHANNEL,
+  OTHER_CHANNEL_BASE,
+  OTHER_CHANNEL_FILE_URL,
+  OWN_BASE,
+  VERSION_LABEL,
+} from "../lib/site";
 
 interface Props {
   align: "start" | "end";
@@ -15,7 +22,8 @@ const { align, class: className } = Astro.props;
   data-dx-version
   data-channel={DOCS_CHANNEL}
   data-version={APP_VERSION}
-  data-other-origin={OTHER_CHANNEL_ORIGIN}
+  data-own-base={OWN_BASE}
+  data-other-base={OTHER_CHANNEL_BASE}
   data-other-file={OTHER_CHANNEL_FILE_URL}
 >
   <div data-dx-version-static>
@@ -49,7 +57,7 @@ const { align, class: className } = Astro.props;
       ]}
     >
       <span class="dx-navlink font-mono" aria-current="page">{VERSION_LABEL}</span>
-      <a class="dx-navlink font-mono" href={OTHER_CHANNEL_ORIGIN} data-dx-version-link></a>
+      <a class="dx-navlink font-mono" href={OTHER_CHANNEL_BASE} data-dx-version-link></a>
     </div>
   </details>
 </div>
@@ -90,13 +98,18 @@ const { align, class: className } = Astro.props;
     return isNewer(other.version, host.dataset.version ?? "");
   }
 
+  function pageWithinBase(base: string): string {
+    const path = window.location.pathname;
+    return path.startsWith(base) ? path.slice(base.length) : path.slice(1);
+  }
+
   function reveal(host: HTMLElement, other: Manifest): void {
     const link = host.querySelector<HTMLAnchorElement>("[data-dx-version-link]");
     const menu = host.querySelector<HTMLDetailsElement>("[data-dx-version-menu]");
     const badge = host.querySelector<HTMLElement>("[data-dx-version-static]");
     if (!link || !menu || !badge) return;
     link.textContent = other.label;
-    link.href = `${host.dataset.otherOrigin ?? ""}${window.location.pathname}${window.location.hash}`;
+    link.href = `${host.dataset.otherBase ?? "/"}${pageWithinBase(host.dataset.ownBase ?? "/")}${window.location.hash}`;
     badge.hidden = true;
     menu.hidden = false;
   }

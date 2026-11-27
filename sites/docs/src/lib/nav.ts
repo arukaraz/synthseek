@@ -1,5 +1,6 @@
 import { getCollection } from "astro:content";
 import { GROUPS } from "../content.config";
+import { docsHref } from "./site";
 
 export interface NavEntry {
   slug: string;
@@ -17,7 +18,7 @@ export interface NavGroup {
 
 export const PATCH_NOTES: NavEntry = {
   slug: "patch-notes",
-  href: "/patch-notes",
+  href: docsHref("/patch-notes"),
   title: "Patch Notes",
   blurb: "Every release, newest first.",
   group: "Reference",
@@ -28,7 +29,7 @@ export async function getNavEntries(): Promise<NavEntry[]> {
   const collection = await getCollection("docs");
   const entries: NavEntry[] = collection.map((entry) => ({
     slug: entry.id,
-    href: entry.id === "overview" ? "/" : `/${entry.id}`,
+    href: docsHref(entry.id === "overview" ? "/" : `/${entry.id}`),
     title: entry.data.title,
     blurb: entry.data.blurb,
     group: entry.data.group,

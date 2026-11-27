@@ -8,7 +8,7 @@ import TocInline from "../components/TocInline.astro";
 import Pager from "../components/Pager.astro";
 import SearchHits from "../components/SearchHits.astro";
 import { getNavEntries, siblingsOf } from "../lib/nav";
-import { DOCS_CHANNEL } from "../lib/site";
+import { DOCS_CHANNEL, docsHref } from "../lib/site";
 import "../styles/docs.css";
 
 interface Props {
@@ -30,7 +30,7 @@ const DRAWER_ID = "dx-drawer";
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href={docsHref("/favicon.svg")} />
     <title>{title} · Synthseek Docs</title>
     <meta name="description" content={blurb} />
     <meta property="og:title" content={`${title} · Synthseek Docs`} />
