@@ -245,11 +245,40 @@ jobs:
           echo "Updated package.json:"
           grep '"version"' package.json
 
+      - name: Choose the docs the app links to
+        id: docs
+        env:
+          GH_TOKEN: ${{ secrets.SERVER_REPO_PAT }}
+          CHANNEL: ${{ steps.version.outputs.channel }}
+          VERSION: ${{ steps.version.outputs.version }}
+          SERVER_REPO: ${{ steps.version.outputs.server_repo }}
+        run: |
+          case "$CHANNEL" in
+            beta)
+              DOCS_CHANNEL=beta
+              ;;
+            pre-release)
+              STABLE="$(gh release view --repo "$SERVER_REPO" --json tagName --jq .tagName)"
+              STABLE="${STABLE#v}"
+              if [ "${VERSION%%.*}" -gt "${STABLE%%.*}" ]; then
+                DOCS_CHANNEL=beta
+              else
+                DOCS_CHANNEL=stable
+              fi
+              ;;
+            *)
+              DOCS_CHANNEL=stable
+              ;;
+          esac
+          echo "docs_channel=$DOCS_CHANNEL" >> $GITHUB_OUTPUT
+          echo "The app links to the $DOCS_CHANNEL docs (version $VERSION)"
+
       - name: Build Next.js
         run: npm run build
         env:
           NEXT_TELEMETRY_DISABLED: 1
           NODE_ENV: production
+          NEXT_PUBLIC_DOCS_CHANNEL: ${{ steps.docs.outputs.docs_channel }}
 
       - name: Verify frontend build
         run: |

@@ -1,4 +1,5 @@
 import type { BoardDevice } from "@components/BoardGrid";
+import { docsUrl } from "@utils/docs-url";
 
 export const TEMPLATE_FILE_ACCEPT = ".json,application/json";
 
@@ -16,4 +17,4 @@ export const TEMPLATE_SKIPPED_KEYS = {
   mobile: "widgets:board.templates.skippedMobile",
 } as const;
 
-export const TEMPLATES_DOCS_URL = "https://docs.synthseek.dev/widget-templates";
+export const TEMPLATES_DOCS_URL = docsUrl("widget-templates");
