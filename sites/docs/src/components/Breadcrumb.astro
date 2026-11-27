@@ -1,4 +1,6 @@
 ---
+import { docsHref } from "../lib/site";
+
 interface Props {
   group: string;
   title: string;
@@ -8,7 +10,7 @@ const { group, title } = Astro.props;
 ---
 
 <nav class="text-fg-muted mb-4 flex items-center gap-2 text-[12.5px]" aria-label="Breadcrumb">
-  <a href="/" class="hover:text-fg no-underline transition-colors">Docs</a>
+  <a href={docsHref("/")} class="hover:text-fg no-underline transition-colors">Docs</a>
   <span class="opacity-50">/</span>
   <span class="whitespace-nowrap">{group}</span>
   <span class="opacity-50">/</span>

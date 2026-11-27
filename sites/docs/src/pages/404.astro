@@ -1,6 +1,7 @@
 ---
 import AppLogo from "@synthseek/sites-shared/components/AppLogo.astro";
 import Button from "@synthseek/sites-shared/components/Button.astro";
+import { docsHref } from "../lib/site";
 import "../styles/docs.css";
 ---
 
@@ -9,7 +10,7 @@ import "../styles/docs.css";
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href={docsHref("/favicon.svg")} />
     <title>Page not found · Synthseek Docs</title>
     <meta name="description" content="That documentation page does not exist." />
     <meta name="robots" content="noindex" />
@@ -25,8 +26,8 @@ import "../styles/docs.css";
         what you are after.
       </p>
       <div class="mt-1 flex flex-wrap justify-center gap-3">
-        <Button href="/">Back to the documentation</Button>
-        <Button href="/getting-started" variant="outline">Getting started</Button>
+        <Button href={docsHref("/")}>Back to the documentation</Button>
+        <Button href={docsHref("/getting-started")} variant="outline">Getting started</Button>
       </div>
     </main>
   </body>

@@ -1,8 +1,8 @@
 ---
-
+import { OWN_BASE } from "../lib/site";
 ---
 
-<div class="dx-search" data-dx-search>
+<div class="dx-search" data-dx-search data-base={OWN_BASE}>
   <label class="sr-only" for="dx-search-input">Search docs</label>
   <input
     id="dx-search-input"
@@ -30,7 +30,9 @@
     async function loadPagefind() {
       if (pagefind) return pagefind;
       try {
-        pagefind = await import("/pagefind/pagefind.js");
+        const base = host.dataset.base || "/";
+        pagefind = await import(`${base}pagefind/pagefind.js`);
+        await pagefind.options({ baseUrl: base });
         return pagefind;
       } catch {
         return null;
