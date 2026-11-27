@@ -20,8 +20,6 @@ export const boardEditDot = cva("bg-accent-500 ring-accent-500/25 size-2 rounded
 
 export const boardEditTitle = cva("text-fg text-sm font-semibold whitespace-nowrap");
 
-export const boardEditHint = cva("text-fg/60 text-xs whitespace-nowrap max-md:hidden");
-
 export const boardMenuActions = cva("flex w-max items-center gap-1");
 
 export const boardMenuToggle = cva(

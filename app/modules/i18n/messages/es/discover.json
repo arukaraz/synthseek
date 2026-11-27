@@ -195,8 +195,7 @@
     "customize": "Personalizar",
     "done": "Listo",
     "editBar": {
-      "title": "Editando el tablero",
-      "hint": "Los cambios se guardan al hacerlos."
+      "title": "Editando el tablero"
     },
     "addWidget": "Añadir widget",
     "add": {

@@ -195,8 +195,7 @@
     "customize": "Customize",
     "done": "Done",
     "editBar": {
-      "title": "Editing board",
-      "hint": "Changes save as you make them."
+      "title": "Editing board"
     },
     "addWidget": "Add widget",
     "add": {

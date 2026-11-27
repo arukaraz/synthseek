@@ -14,9 +14,9 @@ export const dockCard = cva(
     variants: {
       status: {
         running: "shadow-status-syncing/15",
-        complete: "shadow-success/15",
-        partial: "shadow-warning/20",
-        failed: "shadow-error/20",
+        complete: "shadow-success-vivid/15",
+        partial: "shadow-warning-vivid/20",
+        failed: "shadow-destructive-vivid/20",
       },
     },
     defaultVariants: { status: "running" },
@@ -71,7 +71,7 @@ export const dockSubtitle = cva("text-fg-muted text-11 leading-tight", {
 
 export const dockSubtitleCount = cva("text-status-syncing font-semibold tabular-nums");
 
-export const dockSubtitleCountFailed = cva("text-error font-semibold tabular-nums");
+export const dockSubtitleCountFailed = cva("text-destructive-vivid font-semibold tabular-nums");
 
 export const dockButtons = cva("flex shrink-0 items-center gap-0.5");
 
@@ -100,7 +100,7 @@ export const dockItemName = cva("text-fg/80 min-w-0 truncate text-xs");
 export const dockItemReason = cva("min-w-0 truncate text-11 leading-tight", {
   variants: {
     tone: {
-      error: "text-error/80",
+      error: "text-destructive-vivid/80",
       muted: "text-fg-muted",
     },
   },

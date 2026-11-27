@@ -13,7 +13,7 @@ export const heroImageOverlayBottom = cva("from-surface via-surface/60 absolute 
 export const heroImageOverlayLeft = cva("from-surface/80 absolute inset-0 bg-linear-to-r to-transparent");
 
 export const heroTrendingBadge = cva(
-  "text-warning relative flex items-center gap-2 p-5 text-xs font-mono uppercase tracking-caps-wide sm:p-6"
+  "text-warning-vivid relative flex items-center gap-2 p-5 text-xs font-mono uppercase tracking-caps-wide sm:p-6"
 );
 
 export const heroContent = cva("absolute bottom-5 left-5 right-5 sm:bottom-6 sm:left-6 sm:right-6");

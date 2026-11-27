@@ -195,8 +195,7 @@
     "customize": "Personnaliser",
     "done": "Terminé",
     "editBar": {
-      "title": "Modification du tableau",
-      "hint": "Les changements sont enregistrés au fur et à mesure."
+      "title": "Modification du tableau"
     },
     "addWidget": "Ajouter un widget",
     "add": {

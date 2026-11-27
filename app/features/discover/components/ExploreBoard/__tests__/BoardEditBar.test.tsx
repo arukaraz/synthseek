@@ -16,7 +16,7 @@ describe("BoardEditBar", () => {
     render(<BoardEditBar {...handlers()} />);
     const add = screen.getByRole("button", { name: "Add" });
 
-    expect(screen.getByRole("toolbar")).toHaveTextContent(new RegExp(`^${enDiscover.board.editBar.title}`));
+    expect(screen.getByRole("toolbar").textContent).toBe(`${enDiscover.board.editBar.title}AddAppearance`);
     expect(add.parentElement?.parentElement).toHaveClass("overflow-x-auto");
     expect(Array.from(add.parentElement?.children ?? [], (button) => button.textContent)).toEqual([
       "Add",

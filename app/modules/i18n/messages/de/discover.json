@@ -195,8 +195,7 @@
     "customize": "Anpassen",
     "done": "Fertig",
     "editBar": {
-      "title": "Board bearbeiten",
-      "hint": "Änderungen werden sofort gespeichert."
+      "title": "Board bearbeiten"
     },
     "addWidget": "Widget hinzufügen",
     "add": {

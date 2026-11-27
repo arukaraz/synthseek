@@ -284,7 +284,7 @@ export const cardRing = cva("absolute inset-0");
 
 export const cardRingDisc = cva("absolute inset-[3px] grid place-items-center rounded-full bg-veil/70");
 
-export const cardRingCheck = cva("text-success relative z-10 size-3");
+export const cardRingCheck = cva("text-success-vivid relative z-10 size-3");
 
 export const cardRingCount = cva("relative z-10 text-9 font-semibold tabular-nums text-overlay-fg");
 

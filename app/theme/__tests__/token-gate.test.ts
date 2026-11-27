@@ -103,6 +103,20 @@ const RULES: readonly GateRule[] = [
   },
 ];
 
+const STATUS_UTILITY = new RegExp(
+  `(?<![\\w-])(?:${COLOR_UTILITY})-((?:success|warning|info|error|destructive|danger)[\\w-]*)`,
+  "g"
+);
+
+function registeredColors(): Set<string> {
+  const theme = readFileSync(join(APP_ROOT, "theme/index.css"), "utf8");
+  return new Set(Array.from(theme.matchAll(/--color-([\w-]+)\s*:/g), (match) => match[1]));
+}
+
+function unregisteredStatusColors(line: string, registered: ReadonlySet<string>): string[] {
+  return Array.from(line.matchAll(STATUS_UTILITY), (match) => match[1]).filter((name) => !registered.has(name));
+}
+
 function sourceFiles(directory: string, found: string[] = []): string[] {
   for (const name of readdirSync(directory)) {
     if (SKIPPED_DIRECTORIES.has(name)) continue;
@@ -141,5 +155,37 @@ describe("the theme token gate", () => {
 
   it.each(RULES)("finds no $id outside the contract", (rule) => {
     expect(violationsOf(rule, files)).toEqual([]);
+  });
+
+  describe("status colors", () => {
+    const registered = registeredColors();
+
+    it("reads the status steps the theme registers", () => {
+      expect(registered).toContain("success-vivid");
+      expect(registered).toContain("destructive-vivid");
+    });
+
+    it("recognises a status color the theme never registered", () => {
+      expect(
+        unregisteredStatusColors(
+          "shadow-success/30 text-error-vivid text-info-strong bg-success-vivid/15 hover:text-destructive-vivid",
+          registered
+        )
+      ).toEqual(["success", "error-vivid", "info-strong"]);
+    });
+
+    it("finds no status color outside the registered steps", () => {
+      const found = files.flatMap((file) => {
+        const path = relative(APP_ROOT, file).split(sep).join("/");
+        if (path === SELF) return [];
+        return readFileSync(file, "utf8")
+          .split("\n")
+          .flatMap((line, index) =>
+            unregisteredStatusColors(line, registered).map((name) => `${path}:${index + 1}: ${name}`)
+          );
+      });
+
+      expect(found).toEqual([]);
+    });
   });
 });

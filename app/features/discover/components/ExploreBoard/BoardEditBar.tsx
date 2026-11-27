@@ -12,7 +12,6 @@ import { BOARD_SETTINGS_HREF } from "./constants";
 import {
   boardEditBar,
   boardEditDot,
-  boardEditHint,
   boardEditStatus,
   boardEditTitle,
   boardMenuActions,
@@ -29,7 +28,6 @@ export function BoardEditBar({ onAddSpacer, onWidgets }: BoardEditBarProps) {
       <div className={boardEditStatus()}>
         <span className={boardEditDot()} aria-hidden />
         <span className={boardEditTitle()}>{t("board.editBar.title")}</span>
-        <span className={boardEditHint()}>{t("board.editBar.hint")}</span>
       </div>
       <span className={boardMenuDivider()} aria-hidden />
       <FadeScroll axis="x">
