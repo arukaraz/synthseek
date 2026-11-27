@@ -1,3 +1,4 @@
+import { AI_ASSISTANTS_ANCHOR, APPS_TAB_HREF } from "../../constants";
 import type { SettingsPaletteAction, SettingsSearchEntry } from "../../types";
 
 export const SEARCH_INPUT_ID = "settings-search";
@@ -227,15 +228,15 @@ export const SETTINGS_SEARCH_ENTRIES: readonly SettingsSearchEntry[] = [
   {
     labelKey: "mcp.title",
     page: "connections",
-    href: "/settings/connections/apps",
-    anchor: "ai-assistants",
+    href: APPS_TAB_HREF,
+    anchor: AI_ASSISTANTS_ANCHOR,
     placeKey: "shell.tabs.connections.apps",
   },
   {
     labelKey: "mcp.endpointLabel",
     page: "connections",
-    href: "/settings/connections/apps",
-    anchor: "ai-assistants",
+    href: APPS_TAB_HREF,
+    anchor: AI_ASSISTANTS_ANCHOR,
     placeKey: "mcp.title",
   },
   {

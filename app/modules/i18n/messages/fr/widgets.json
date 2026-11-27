@@ -713,6 +713,11 @@
     "buildFrom": "Construire depuis",
     "buildFromHelp": "Chaque ligne est une playlist de ce widget. Choisissez d'où viennent ses titres et, si vous voulez, donnez-lui un nom. L'épingle garde une liste telle quelle quand les autres s'actualisent. Une liste qui trouve moins de titres que le minimum ci-dessous reste masquée, et la ligne indique combien elle en a trouvé.",
     "buildFromHelpLabel": "Comment fonctionne Construire depuis",
+    "tasteHelp": "Synthseek regroupe les genres que vous écoutez ensemble, d'après vos écoutes. Le groupe 1 est votre genre le plus écouté avec les genres qui partagent ses albums, le groupe 2 est le suivant, jusqu'à {{max}}. Le widget garde le numéro, donc la liste suit vos goûts quand ils changent.",
+    "tasteHelpLabel": "Ce qu'est un groupe de goûts",
+    "playlistSearch": "Rechercher dans vos playlists",
+    "linkedNote": "Une ligne créée depuis une de vos playlists affiche cette playlist telle quelle. Où, Mélange, Actualisation, À l'actualisation, Hors bibliothèque et Ne jamais inclure ne la changent pas.",
+    "linkedGone": "Masquée : cette playlist a été supprimée, rendue privée par son propriétaire ou n'a aucun titre.",
     "addList": "Liste",
     "distinct": "Un titre n'apparaît que dans une liste",
     "hideUnder": "Masquer une liste sous",
@@ -808,7 +813,8 @@
       "mood": "Humeur",
       "scene": "Scénario",
       "taste": "Groupe de goûts",
-      "seed": "Ressemble à"
+      "seed": "Ressemble à",
+      "playlist": "Mes playlists"
     },
     "moods": {
       "energetic": "Énergique",

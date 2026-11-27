@@ -20,15 +20,9 @@ vi.mock("@utils/hash-target-glow", () => ({
 }));
 
 vi.mock("../components/ReviewCandidate", () => ({
-  ReviewCandidate: ({
-    item,
-    siblings,
-    onListen,
-  }: {
-    item: { id: string };
-    siblings: number;
-    onListen: (id: string) => void;
-  }) => <button type="button" onClick={() => onListen(item.id)}>{`candidate ${item.id} siblings ${siblings}`}</button>,
+  ReviewCandidate: ({ item, siblings }: { item: { id: string }; siblings: number }) => (
+    <span>{`candidate ${item.id} siblings ${siblings}`}</span>
+  ),
 }));
 
 vi.mock("../components/ReviewFooter", () => ({
@@ -116,26 +110,6 @@ describe("ImportReviewModal", () => {
     expect(screen.queryByText("candidate held-1 siblings 1")).not.toBeInTheDocument();
     expect(screen.getByText("candidate held-2 siblings 1")).toBeInTheDocument();
     expect(screen.queryByText("Reggaeton")).not.toBeInTheDocument();
-  });
-
-  it("shows the file listened to last in one shared player bar, with no audio element of its own", async () => {
-    const user = userEvent.setup();
-    spies.review.data = twoRequests();
-    const { baseElement } = render(<ImportReviewModal open onOpenChange={vi.fn()} focusTrackId={null} />);
-
-    expect(screen.queryByRole("slider")).not.toBeInTheDocument();
-    await user.click(screen.getByText("candidate held-3 siblings 0"));
-    expect(screen.getAllByRole("slider")).toHaveLength(1);
-    expect(
-      screen.getByRole("slider", { name: "Position in the file Gasolina - Requested Artist" })
-    ).toBeInTheDocument();
-
-    await user.click(screen.getByText("candidate held-1 siblings 1"));
-    expect(screen.getAllByRole("slider")).toHaveLength(1);
-    expect(
-      screen.getByRole("slider", { name: "Position in the file Beautiful - Requested Artist" })
-    ).toBeInTheDocument();
-    expect(baseElement.querySelector("audio")).toBeNull();
   });
 
   it("shows the retry schedule once per track", () => {

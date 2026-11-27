@@ -165,13 +165,15 @@ export const actionRow = cva(
 
 export const actionRowLabel = cva("min-w-0 flex-1 truncate");
 
-export const coverBlock = cva("relative w-full max-w-80 xl:max-w-none");
+export const coverBlock = cva("relative w-full max-w-80 max-sm:mx-auto max-sm:max-w-40 xl:max-w-none");
 
 export const coverPreview = cva(
   "from-primary-500/20 to-accent-500/20 ring-fg/10 relative block aspect-square w-full overflow-hidden rounded-xl bg-linear-to-br ring-1"
 );
 
-export const coverPreviewInitials = cva("text-fg/70 grid h-full w-full place-items-center text-6xl font-bold");
+export const coverPreviewInitials = cva(
+  "text-fg/70 grid h-full w-full place-items-center text-4xl font-bold sm:text-6xl"
+);
 
 export const coverScrim = cva(
   "from-surface-overlay/60 pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-linear-to-t to-transparent"

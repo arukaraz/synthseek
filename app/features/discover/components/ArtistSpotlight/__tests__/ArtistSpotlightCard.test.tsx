@@ -31,6 +31,15 @@ const createAlbum = (overrides: Partial<LatestAlbum> = {}): LatestAlbum => ({
 });
 
 describe("ArtistSpotlightCard", () => {
+  it("says it is finding another artist only while its replacement loads", () => {
+    const { rerender } = render(<ArtistSpotlightCard artist={createArtist()} latestAlbum={null} loading />);
+
+    expect(screen.getByRole("status", { name: "Finding another artist" })).toBeInTheDocument();
+
+    rerender(<ArtistSpotlightCard artist={createArtist()} latestAlbum={null} />);
+    expect(screen.queryByRole("status")).not.toBeInTheDocument();
+  });
+
   it("renders the pluralized song count when total_tracks is available", () => {
     render(<ArtistSpotlightCard artist={createArtist()} latestAlbum={createAlbum({ total_tracks: 12 })} />);
 

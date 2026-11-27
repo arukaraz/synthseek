@@ -1,6 +1,8 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 
+import { Popover, PopoverContent, PopoverTrigger } from "@components/ui/Popover";
+
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogSurface, DialogTitle } from "../Dialog";
 
 afterEach(() => {
@@ -108,5 +110,42 @@ describe("DialogSurface", () => {
     await pressOutside("Undo");
 
     expect(onOpenChange).not.toHaveBeenCalled();
+  });
+});
+
+describe("one blur under an open dialog", () => {
+  it.each([
+    [
+      "content",
+      <DialogContent key="content">
+        <DialogTitle>Title</DialogTitle>
+      </DialogContent>,
+    ],
+    [
+      "surface",
+      <DialogSurface key="surface">
+        <DialogTitle>Title</DialogTitle>
+      </DialogSurface>,
+    ],
+  ])("keeps every layer inside the dialog %s from blurring again over the veil", (_, body) => {
+    render(<Dialog open>{body}</Dialog>);
+
+    expect(screen.getByRole("dialog").className).toContain("[&_*]:[backdrop-filter:none]");
+  });
+
+  it("opens a popover over the dialog without a blur of its own", () => {
+    render(
+      <Dialog open>
+        <DialogContent>
+          <DialogTitle>Title</DialogTitle>
+          <Popover open>
+            <PopoverTrigger>Info</PopoverTrigger>
+            <PopoverContent>Details</PopoverContent>
+          </Popover>
+        </DialogContent>
+      </Dialog>
+    );
+
+    expect(screen.getByText("Details").className).not.toMatch(/backdrop-blur/);
   });
 });

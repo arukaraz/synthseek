@@ -1,6 +1,7 @@
 import { render, screen, within, act } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
+import { DIALOG_COMPANION_SELECTOR } from "@components/ui/Dialog/constants";
 import { dialogContent, dialogOverlay, modalCenterContainer } from "@components/ui/styles";
 import {
   buildDockItems,
@@ -81,6 +82,12 @@ describe("ProgressDock", () => {
   it("renders nothing visible when there is no active job", () => {
     render(<ProgressDock />);
     expect(screen.queryByText("Importing from Spotify")).not.toBeInTheDocument();
+  });
+
+  it("marks itself as a layer beside dialogs, so pressing it leaves an open dialog open", () => {
+    render(<ProgressDock />);
+    act(() => seedLibrary());
+    expect(screen.getByRole("status").closest(DIALOG_COMPANION_SELECTOR)).not.toBeNull();
   });
 
   it("renders a running library import with the provider title and the done count", () => {

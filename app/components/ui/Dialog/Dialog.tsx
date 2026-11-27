@@ -8,8 +8,8 @@ import { type HTMLAttributes, use } from "react";
 import { useTranslation } from "react-i18next";
 import { closeButton } from "../styles";
 import { DialogCloseShownContext } from "./context";
-import { keepOpenForToasts } from "./helpers";
-import { dialogContent, dialogFrame, dialogHeader } from "./styles";
+import { keepOpenForCompanions } from "./helpers";
+import { dialogContent, dialogFrame, dialogHeader, dialogLayer } from "./styles";
 import type {
   DialogContentProps,
   DialogDescriptionProps,
@@ -53,8 +53,8 @@ export function DialogContent({
       <DialogPrimitive.Content
         ref={ref}
         data-part="dialog"
-        className={cn(dialogContent({ animation }), className)}
-        onInteractOutside={keepOpenForToasts(onInteractOutside)}
+        className={cn(dialogContent({ animation }), dialogLayer(), className)}
+        onInteractOutside={keepOpenForCompanions(onInteractOutside)}
         {...props}
       >
         <div className={gradientOverlay({ direction: "toBr", intensity: "mixed", rounded: "2xl" })} />
@@ -80,8 +80,8 @@ export function DialogSurface({ className, children, ref, onInteractOutside, ...
       <DialogPrimitive.Content
         ref={ref}
         data-part="dialog"
-        className={className}
-        onInteractOutside={keepOpenForToasts(onInteractOutside)}
+        className={cn(dialogLayer(), className)}
+        onInteractOutside={keepOpenForCompanions(onInteractOutside)}
         {...props}
       >
         {children}

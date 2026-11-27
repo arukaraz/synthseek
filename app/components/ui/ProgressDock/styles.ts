@@ -9,7 +9,7 @@ export const dockStack = cva(
 );
 
 export const dockCard = cva(
-  "pointer-events-auto border-fg/15 bg-surface/90 w-full overflow-hidden rounded-2xl border shadow-2xl backdrop-blur-xl sm:w-80",
+  "pointer-events-auto border-fg/15 bg-surface/95 w-full overflow-hidden rounded-2xl border shadow-2xl sm:w-80",
   {
     variants: {
       status: {

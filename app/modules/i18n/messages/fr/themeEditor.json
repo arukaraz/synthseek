@@ -11,6 +11,8 @@
   "editor": {
     "title": "Thème personnalisé",
     "reference": "Référence du thème",
+    "aiTip": "Un assistant IA connecté à Synthseek peut créer ce thème pour vous. Décrivez le style voulu et il écrit le CSS.",
+    "aiTipAction": "Connectez-en un dans Assistants IA",
     "modeLabel": "Mode de l'éditeur",
     "visual": "Visuel",
     "css": "CSS",

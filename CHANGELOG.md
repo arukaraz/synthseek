@@ -7,7 +7,7 @@
 > [!IMPORTANT]
 > This update changes your database. Before it does, Synthseek saves a copy in `/data/backups`. To go back to 2.9.4, put that copy back in place of `/data/db/synthseek.db`.
 
-### A board you build, a full screen Stage, and artists you follow
+### A new look, your own board with widgets, a playlist workshop, custom themes, artists you follow and more!
 
 - Explore is now a board you arrange yourself: add, resize and move widgets, and choose a separate layout for your phone.
 - Build your own widgets in the Widget workshop, from presets, charts, your listening, smart playlists, outside feeds and your media server, and share them.

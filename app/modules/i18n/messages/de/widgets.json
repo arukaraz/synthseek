@@ -713,6 +713,11 @@
     "buildFrom": "Aufbauen aus",
     "buildFromHelp": "Jede Zeile ist eine Playlist dieses Widgets. Wähle, woher ihre Titel kommen, und gib ihr auf Wunsch einen Namen. Die Nadel lässt eine Liste unverändert, wenn die anderen aktualisiert werden. Findet eine Liste weniger Titel als das Minimum unten, bleibt sie ausgeblendet, und die Zeile nennt die gefundene Anzahl.",
     "buildFromHelpLabel": "So funktioniert Aufbauen aus",
+    "tasteHelp": "Synthseek fasst die Genres zusammen, die du gemeinsam hörst, nach deinen Wiedergaben. Gruppe 1 ist dein meistgehörtes Genre mit den Genres, die seine Alben teilen, Gruppe 2 ist die nächste, bis zu {{max}}. Das Widget speichert die Nummer, damit die Liste deinem Geschmack folgt, wenn er sich ändert.",
+    "tasteHelpLabel": "Was eine Geschmacksgruppe ist",
+    "playlistSearch": "Deine Playlists durchsuchen",
+    "linkedNote": "Eine Zeile aus einer deiner Playlists zeigt diese Playlist so, wie sie ist. Wobei, Mischung, Aktualisierung, Beim Aktualisieren, Außerhalb der Bibliothek und Nie aufnehmen ändern sie nicht.",
+    "linkedGone": "Ausgeblendet: Diese Playlist wurde gelöscht, von ihrem Besitzer privat gestellt oder hat keine Titel.",
     "addList": "Liste",
     "distinct": "Ein Titel erscheint nur in einer Liste",
     "hideUnder": "Liste ausblenden unter",
@@ -800,7 +805,8 @@
       "mood": "Stimmung",
       "scene": "Szenario",
       "taste": "Geschmacksgruppe",
-      "seed": "Klingt wie"
+      "seed": "Klingt wie",
+      "playlist": "Meine Playlists"
     },
     "moods": {
       "energetic": "Energiegeladen",

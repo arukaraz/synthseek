@@ -7,6 +7,7 @@ export type SetOnRefresh = PlaylistSetQuery["onRefresh"];
 export type SetOutside = PlaylistSetQuery["outside"];
 export type SetParamKind = SetGrammar["origins"][number]["param"];
 export type SetOriginGrammar = Pick<SetGrammar, "origins">;
+export type SetNamingGrammar = SetOriginGrammar & { limits: Pick<SetGrammar["limits"], "nameMax"> };
 
 export interface SetStepProps {
   set: PlaylistSetQuery;
@@ -27,5 +28,11 @@ export interface SlotParamProps {
   slot: SetSlot;
   kind: SetParamKind;
   grammar: SetGrammar;
-  onChange: (param: string) => void;
+  onChange: (param: string, label?: string) => void;
+}
+
+export interface PlaylistParamProps {
+  label: string;
+  slot: SetSlot;
+  onChange: (param: string, label: string) => void;
 }

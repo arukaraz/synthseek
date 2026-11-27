@@ -51,8 +51,8 @@ export function MyWidgetsPanel({
             onDelete={() => setDeleting(widget)}
           />
         ))}
+        {widgets.length === 0 ? <p className={galleryEmpty()}>{t("mine.empty")}</p> : null}
       </div>
-      {widgets.length === 0 ? <p className={galleryEmpty()}>{t("mine.empty")}</p> : null}
       <DeleteWidgetDialog
         widget={deleting}
         tiles={deleting ? tilesOf(deleting.id) : 0}

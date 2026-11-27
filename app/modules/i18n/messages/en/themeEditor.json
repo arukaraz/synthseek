@@ -11,6 +11,8 @@
   "editor": {
     "title": "Custom theme",
     "reference": "Theme reference",
+    "aiTip": "An AI assistant connected to Synthseek can build this theme for you. Describe the look you want and it writes the CSS.",
+    "aiTipAction": "Connect one in AI assistants",
     "modeLabel": "Editor mode",
     "visual": "Visual",
     "css": "CSS",

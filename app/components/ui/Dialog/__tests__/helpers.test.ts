@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-import { keepOpenForToasts } from "../helpers";
+import { DIALOG_COMPANION_ATTRIBUTE } from "../constants";
+import { keepOpenForCompanions } from "../helpers";
 import type { DialogOutsideHandler } from "../types";
 
 type OutsideEvent = Parameters<DialogOutsideHandler>[0];
@@ -18,12 +19,21 @@ afterEach(() => {
   document.body.innerHTML = "";
 });
 
-describe("keepOpenForToasts", () => {
+describe("keepOpenForCompanions", () => {
   it("keeps the dialog open when the press lands on a toast, so its action can run", () => {
     document.body.innerHTML = `<ol data-sonner-toaster><li><button>Undo</button></li></ol>`;
     const event = outsideEventOn(document.querySelector("button") ?? document.body);
 
-    keepOpenForToasts(undefined)(event);
+    keepOpenForCompanions(undefined)(event);
+
+    expect(event.defaultPrevented).toBe(true);
+  });
+
+  it("keeps the dialog open when the press lands on a layer that lives beside dialogs", () => {
+    document.body.innerHTML = `<div ${DIALOG_COMPANION_ATTRIBUTE}=""><button>Minimize</button></div>`;
+    const event = outsideEventOn(document.querySelector("button") ?? document.body);
+
+    keepOpenForCompanions(undefined)(event);
 
     expect(event.defaultPrevented).toBe(true);
   });
@@ -32,7 +42,7 @@ describe("keepOpenForToasts", () => {
     document.body.innerHTML = `<main><button>Elsewhere</button></main>`;
     const event = outsideEventOn(document.querySelector("button") ?? document.body);
 
-    keepOpenForToasts(undefined)(event);
+    keepOpenForCompanions(undefined)(event);
 
     expect(event.defaultPrevented).toBe(false);
   });
@@ -42,7 +52,7 @@ describe("keepOpenForToasts", () => {
     const handler = vi.fn();
     const event = outsideEventOn(document.querySelector("button") ?? document.body);
 
-    keepOpenForToasts(handler)(event);
+    keepOpenForCompanions(handler)(event);
 
     expect(handler).toHaveBeenCalledWith(event);
   });

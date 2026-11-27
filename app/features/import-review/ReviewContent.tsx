@@ -10,7 +10,6 @@ import { useImportReview } from "@hooks/api";
 import { useReviewApprovalsInFlight } from "@hooks/api/subscriptions";
 
 import { ReviewFooter } from "./components/ReviewFooter";
-import { ReviewPlayerBar } from "./components/ReviewPlayerBar";
 import { ReviewReasonChips } from "./components/ReviewReasonChips";
 import { ReviewRequestGroup } from "./components/ReviewRequestGroup";
 import { countReasons, groupReviewItems } from "./helpers";
@@ -22,7 +21,6 @@ export function ReviewContent() {
   const review = useImportReview();
   const inFlight = useReviewApprovalsInFlight();
   const [filter, setFilter] = useState<ReasonFilter>("all");
-  const [listeningId, setListeningId] = useState<string | null>(null);
 
   const held = review.data?.items ?? [];
   const items = held.filter((item) => !inFlight.has(item.id));
@@ -31,7 +29,6 @@ export function ReviewContent() {
   const counts = countReasons(items);
   const activeFilter = filter !== "all" && counts.some((entry) => entry.reason === filter) ? filter : "all";
   const groups = groupReviewItems(items, activeFilter);
-  const listening = items.find((item) => item.id === listeningId) ?? null;
 
   return (
     <>
@@ -50,17 +47,11 @@ export function ReviewContent() {
           ) : null}
           <ul className={itemList()} data-glow-scroller="">
             {groups.map((group) => (
-              <ReviewRequestGroup
-                key={`${group.request.contentType}:${group.request.id}`}
-                group={group}
-                onListen={setListeningId}
-              />
+              <ReviewRequestGroup key={`${group.request.contentType}:${group.request.id}`} group={group} />
             ))}
           </ul>
         </>
       )}
-
-      {listening ? <ReviewPlayerBar item={listening} /> : null}
 
       <ReviewFooter
         totalCount={(review.data?.totalCount ?? 0) - hidden.length}

@@ -1,9 +1,11 @@
 import type { ParseKeys } from "i18next";
 
 import type { ListeningProvider } from "@hooks/api/queries/analytics/types";
-import type { WidgetAccent } from "@hooks/api/queries/widgets/types";
+import type { SetSlot, WidgetAccent } from "@hooks/api/queries/widgets/types";
 
 export const BUILTIN_LEADER_ACCENT: WidgetAccent = "daily";
+
+export const SET_LINKED_ORIGIN: SetSlot["origin"] = "playlist";
 
 export const CARD_ROW_LIMITS = { S: 2, M: 2, L: 3, XL: 4 } as const;
 

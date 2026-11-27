@@ -12,6 +12,8 @@ import {
 import { useTapToOpen } from "@hooks/ui/useTapToOpen";
 
 import {
+  selectMenuAdorned,
+  selectMenuAdornment,
   selectMenuContent,
   selectMenuDescription,
   selectMenuItem,
@@ -31,14 +33,20 @@ export function SelectMenu<T extends string | number>({
   placeholder,
   disabled = false,
   size = "md",
+  adornment,
 }: SelectMenuProps<T>) {
   const tap = useTapToOpen();
   const active = options.find((option) => String(option.value) === String(value));
 
-  return (
+  const menu = (
     <DropdownMenu open={tap.open} onOpenChange={tap.onOpenChange}>
       <DropdownMenuTrigger asChild tapToOpen={tap.triggerProps}>
-        <button type="button" className={selectMenuTrigger({ size })} disabled={disabled} aria-label={ariaLabel}>
+        <button
+          type="button"
+          className={selectMenuTrigger({ size, adorned: adornment !== undefined })}
+          disabled={disabled}
+          aria-label={ariaLabel}
+        >
           <span className={selectMenuValue({ size })}>
             <span className={selectMenuLabel({ size })}>{active ? active.label : placeholder}</span>
             {size === "lg" && active?.description ? (
@@ -65,5 +73,14 @@ export function SelectMenu<T extends string | number>({
         </DropdownMenuRadioGroup>
       </DropdownMenuContent>
     </DropdownMenu>
+  );
+
+  if (adornment === undefined) return menu;
+
+  return (
+    <span className={selectMenuAdorned()}>
+      {menu}
+      <span className={selectMenuAdornment()}>{adornment}</span>
+    </span>
   );
 }

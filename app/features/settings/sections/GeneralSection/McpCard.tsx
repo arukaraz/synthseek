@@ -6,9 +6,11 @@ import { InfoTooltip } from "@components/ui/InfoTooltip";
 import { usePublicConfig } from "@hooks/api/queries/usePublicConfig";
 
 import { Pill } from "../../components/Pill";
+import { AI_ASSISTANTS_ANCHOR } from "../../constants";
 import { SettingsCard } from "../../components/SettingsCard";
 import { fieldLabel } from "../../styles";
 import { ConnectionValueField } from "./ConnectionValueField";
+import { MCP_TOOLS_DOCS_URL } from "./constants";
 import { publicEndpoint } from "./helpers";
 import { connectMethod, connectMethodBody, connectMethods } from "./styles";
 
@@ -17,30 +19,17 @@ export function McpCard() {
   const publicConfig = usePublicConfig();
   const endpoint = publicEndpoint("/api/v1/mcp", publicConfig.data?.publicBaseUrl || undefined);
 
-  const tools = [
-    t("mcp.tools.discovery"),
-    t("mcp.tools.downloads"),
-    t("mcp.tools.requests"),
-    t("mcp.tools.playlists"),
-    t("mcp.tools.library"),
-    t("mcp.tools.listening"),
-    t("mcp.tools.player"),
-    t("mcp.tools.settings"),
-    t("mcp.tools.operations"),
-  ];
-
   return (
     <SettingsCard
       title={t("mcp.title")}
       description={t("mcp.description")}
-      anchor="ai-assistants"
+      anchor={AI_ASSISTANTS_ANCHOR}
       titleTrailing={
         <InfoTooltip
           trigger="click"
           side="bottom"
           title={t("mcp.toolsTitle")}
-          description={t("mcp.toolsDescription")}
-          points={tools}
+          learnMore={{ label: t("mcp.toolsDocs"), href: MCP_TOOLS_DOCS_URL }}
         />
       }
     >

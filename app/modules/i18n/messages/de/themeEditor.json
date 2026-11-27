@@ -11,6 +11,8 @@
   "editor": {
     "title": "Eigenes Design",
     "reference": "Design-Referenz",
+    "aiTip": "Ein mit Synthseek verbundener KI-Assistent kann dieses Design für dich bauen. Beschreibe den gewünschten Look, und er schreibt das CSS.",
+    "aiTipAction": "Verbinde einen unter KI-Assistenten",
     "modeLabel": "Editor-Modus",
     "visual": "Visuell",
     "css": "CSS",

@@ -8,6 +8,7 @@ import { DECADE_CHOICES } from "../constants";
 import { NameRuleValue } from "../NameRuleValue";
 import { TOP_CHOICES, TOP_PARAM_PREFIX } from "./constants";
 import { paramText } from "./helpers";
+import { PlaylistParam } from "./PlaylistParam";
 import type { SlotParamProps } from "./types";
 
 export function SlotParam({ slot, kind, grammar, onChange }: SlotParamProps) {
@@ -76,5 +77,7 @@ export function SlotParam({ slot, kind, grammar, onChange }: SlotParamProps) {
           onChange={onChange}
         />
       );
+    case "playlist":
+      return <PlaylistParam label={label} slot={slot} onChange={onChange} />;
   }
 }

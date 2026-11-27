@@ -13,6 +13,7 @@ import type { SearchComboboxOption, SearchComboboxProps } from "./types";
 export function SearchCombobox({
   label,
   placeholder,
+  selected,
   options,
   query,
   onQueryChange,
@@ -22,12 +23,14 @@ export function SearchCombobox({
 }: SearchComboboxProps) {
   const listId = useId();
   const [open, setOpen] = useState(false);
+  const [typing, setTyping] = useState(false);
   const [active, setActive] = useState(0);
   const showing = open && (options.length > 0 || (query.trim().length > 0 && !loading && emptyText !== undefined));
 
   const pick = (option: SearchComboboxOption) => {
     onPick(option);
     onQueryChange("");
+    setTyping(false);
     setActive(0);
     setOpen(false);
   };
@@ -64,14 +67,22 @@ export function SearchCombobox({
         aria-activedescendant={showing && options[active] ? `${listId}-${active}` : undefined}
         placeholder={placeholder}
         className={comboInput()}
-        value={query}
+        value={typing ? query : (selected ?? query)}
         onChange={(event) => {
           onQueryChange(event.target.value);
+          setTyping(true);
           setActive(0);
           setOpen(true);
         }}
-        onFocus={() => setOpen(true)}
-        onBlur={() => setOpen(false)}
+        onFocus={(event) => {
+          event.currentTarget.select();
+          setOpen(true);
+        }}
+        onBlur={() => {
+          if (selected !== undefined) onQueryChange("");
+          setTyping(false);
+          setOpen(false);
+        }}
         onKeyDown={onKeyDown}
       />
       <div id={listId} role="listbox" aria-label={label} hidden={!showing} className={comboList()}>

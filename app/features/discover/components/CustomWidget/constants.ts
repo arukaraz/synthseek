@@ -122,8 +122,6 @@ export const FRAMELESS_BLOCKS: ReadonlySet<WidgetBlock> = new Set(["mix", "hero"
 
 export const SET_POSTER_COLUMNS = { S: 1, M: 2, L: 4, XL: 6 } as const;
 
-export const SET_POSTER_LIMITS = { S: 2, M: 4, L: 4, XL: 6 } as const;
-
 export const MINUTE_MS = 60_000;
 
 export const BLOCK_LIMITS = {

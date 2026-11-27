@@ -32,7 +32,7 @@ import type { ReviewCandidateProps } from "../types";
 import { ReviewCompareTable } from "./ReviewCompareTable";
 import { ReviewReasonBadge } from "./ReviewReasonBadge";
 
-export function ReviewCandidate({ item, index, siblings, onListen }: ReviewCandidateProps) {
+export function ReviewCandidate({ item, index, siblings }: ReviewCandidateProps) {
   const { t } = useTranslation("requests");
   const sourceLabel = useDownloadSourceLabel();
   const approve = useApproveHeldImport();
@@ -63,10 +63,7 @@ export function ReviewCandidate({ item, index, siblings, onListen }: ReviewCandi
             status={audition.status}
             clock={audition.clock}
             available
-            onToggle={() => {
-              onListen(item.id);
-              audition.toggle();
-            }}
+            onToggle={audition.toggle}
           />
         )}
         <span className={candidateMeta()}>

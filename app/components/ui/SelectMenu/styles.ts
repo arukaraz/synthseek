@@ -8,10 +8,18 @@ export const selectMenuTrigger = cva(
         md: "border-fg/15 h-10 gap-2 rounded-lg px-3 text-sm disabled:opacity-60",
         lg: "text-fg/80 hover:bg-fg/10 rounded-lg px-3 py-2.5 disabled:pointer-events-none disabled:opacity-40",
       },
+      adorned: {
+        true: "pr-15",
+        false: "",
+      },
     },
-    defaultVariants: { size: "md" },
+    defaultVariants: { size: "md", adorned: false },
   }
 );
+
+export const selectMenuAdorned = cva("relative block w-full min-w-0");
+
+export const selectMenuAdornment = cva("absolute top-1/2 right-8 flex -translate-y-1/2 items-center");
 
 export const selectMenuValue = cva("min-w-0 flex-1", {
   variants: {

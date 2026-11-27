@@ -63,19 +63,16 @@ export interface ReviewReasonChipsProps {
 
 export interface ReviewRequestGroupProps {
   group: ReviewRequestGroup;
-  onListen: (id: string) => void;
 }
 
 export interface ReviewTrackCardProps {
   group: ReviewTrackGroup;
-  onListen: (id: string) => void;
 }
 
 export interface ReviewCandidateProps {
   item: ImportReviewItem;
   index: number;
   siblings: number;
-  onListen: (id: string) => void;
 }
 
 export interface ReviewCompareTableProps {
@@ -110,10 +107,6 @@ export interface SimilarityMeterProps {
 export interface DiffTextProps {
   tokens: DiffToken[];
   side: "requested" | "found";
-}
-
-export interface ReviewPlayerBarProps {
-  item: ImportReviewItem;
 }
 
 export interface ReviewReasonBadgeProps {

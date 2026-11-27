@@ -5,6 +5,8 @@ export const dialogHeader = cva("flex flex-col space-y-1.5 text-center sm:text-l
   defaultVariants: { closeShown: false },
 });
 
+export const dialogLayer = cva("[&_*]:[backdrop-filter:none]");
+
 export const dialogFrame = cva("relative z-10 flex h-full min-h-0 flex-col");
 
 export const dialogContent = cva(

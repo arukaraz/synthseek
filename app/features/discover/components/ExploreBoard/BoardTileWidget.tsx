@@ -9,7 +9,7 @@ import type { BoardTileWidgetProps } from "./types";
 
 export const BoardTileWidget = memo(function BoardTileWidget({ info = true, ...content }: BoardTileWidgetProps) {
   return (
-    <div className={tileSurface({ bare: !tileHasBackground(content.item) })}>
+    <div data-part="widget" className={tileSurface({ bare: !tileHasBackground(content.item) })}>
       <BoardTileContent {...content} info={info} />
     </div>
   );

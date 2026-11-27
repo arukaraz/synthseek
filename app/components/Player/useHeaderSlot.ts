@@ -4,7 +4,13 @@ import { useEffect, useState, useSyncExternalStore } from "react";
 
 import { useMediaQuery } from "@hooks/ui/useMediaQuery";
 
-import { HEADER_SLOT_QUERY, PLAYER_HEADER_SLOT_ID, PLAYER_MASTHEAD_SLOT_ID, PLAYER_MODE_ATTRIBUTE } from "./constants";
+import {
+  HEADER_SLOT_QUERY,
+  PLAYER_HEADER_SLOT_ID,
+  PLAYER_MASTHEAD_SLOT_ID,
+  PLAYER_MODE_ATTRIBUTE,
+  PLAYER_PROGRESS_SLOT_ID,
+} from "./constants";
 import { effectivePlayerMode } from "./helpers";
 import { miniWindowBody, subscribeMiniWindow } from "./miniWindow";
 import type { PlayerMode, PlayerPlacement } from "./types";
@@ -35,12 +41,12 @@ function useHeaderSlot(wanted: boolean): HTMLElement | null {
   return slot;
 }
 
-function useMastheadSlot(wanted: boolean): HTMLElement | null {
+function useSlotById(id: string, wanted: boolean): HTMLElement | null {
   const [slot, setSlot] = useState<HTMLElement | null>(null);
 
   useEffect(() => {
-    setSlot(wanted ? document.getElementById(PLAYER_MASTHEAD_SLOT_ID) : null);
-  }, [wanted]);
+    setSlot(wanted ? document.getElementById(id) : null);
+  }, [id, wanted]);
 
   return slot;
 }
@@ -48,10 +54,14 @@ function useMastheadSlot(wanted: boolean): HTMLElement | null {
 export function usePlayerPlacement(mode: PlayerMode, suspended: boolean): PlayerPlacement {
   const wide = useMediaQuery(HEADER_SLOT_QUERY, true);
   const headerSlot = useHeaderSlot(mode === "compact" && !suspended);
-  const masthead = useMastheadSlot(!wide && !suspended);
+  const masthead = useSlotById(PLAYER_MASTHEAD_SLOT_ID, !wide && !suspended);
   const miniBody = useSyncExternalStore(subscribeMiniWindow, miniWindowBody, serverSnapshot);
   const target = mode === "mini" ? miniBody : headerSlot;
   const effective = effectivePlayerMode(mode, target);
+  const progress = useSlotById(
+    PLAYER_PROGRESS_SLOT_ID,
+    masthead !== null || (target !== null && effective === "compact")
+  );
 
   useEffect(() => {
     document.documentElement.setAttribute(PLAYER_MODE_ATTRIBUTE, effective);
@@ -60,5 +70,5 @@ export function usePlayerPlacement(mode: PlayerMode, suspended: boolean): Player
     };
   }, [effective]);
 
-  return { target, masthead, effective };
+  return { target, masthead, progress, effective };
 }

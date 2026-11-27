@@ -1,5 +1,5 @@
 export interface InfoTooltipProps {
-  description: string;
+  description?: string;
   secondary?: string;
   title?: string;
   triggerLabel?: string;

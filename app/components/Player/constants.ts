@@ -127,6 +127,8 @@ export const PLAYER_HEADER_SLOT_ID = "player-header-slot";
 
 export const PLAYER_MASTHEAD_SLOT_ID = "player-masthead-slot";
 
+export const PLAYER_PROGRESS_SLOT_ID = "player-progress-slot";
+
 export const PLAYER_MODE_ATTRIBUTE = "data-player-mode";
 
 export const HEADER_SLOT_MIN_REM = 40;

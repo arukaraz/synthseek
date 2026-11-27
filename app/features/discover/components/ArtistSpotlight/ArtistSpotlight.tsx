@@ -10,23 +10,31 @@ import { useArtistsForYou } from "@hooks/api/queries/analytics/useArtistsForYou"
 import { useEntityPlayback } from "@hooks/ui/useEntityPlayback";
 import { gradientOverlay } from "@theme/utilities/styles";
 import { fadeIn } from "@utils/animations";
-import { motion } from "framer-motion";
-import { AlertCircle, Users } from "lucide-react";
+import { cn } from "@utils/cn";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { AlertCircle, Dices, Users } from "lucide-react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { IconButton } from "@components/ui/IconButton";
 import { isWideSize } from "../helpers";
 import { railScroller, snapRail } from "../styles";
 import { widgetList } from "../WidgetRow/styles";
 import { WidgetRow } from "../WidgetRow/WidgetRow";
 import { ArtistSpotlightCard } from "./ArtistSpotlightCard";
 import { ArtistSpotlightSkeleton } from "./ArtistSpotlightSkeleton";
-import { spotlightBody, spotlightGrid } from "./styles";
+import { SWAP_VARIANTS, SWAP_VARIANTS_REDUCED } from "./constants";
+import { spotlightBody, spotlightGrid, spotlightListBusy, spotlightReroll, spotlightSlot } from "./styles";
 import type { ArtistSpotlightProps } from "./types";
 
 export function ArtistSpotlight({ size, info }: ArtistSpotlightProps) {
   const { t } = useTranslation("discover");
 
-  const { data, isLoading, isError } = useArtistsForYou();
+  const { data, isLoading, isError, pending, replace, reroll } = useArtistsForYou();
   const artists = data ?? [];
+  const swapping = pending.length > 0;
+  const rolling = swapping && artists.every((item) => pending.includes(item.artist.id));
+  const [staggered, setStaggered] = useState(false);
+  const variants = useReducedMotion() ? SWAP_VARIANTS_REDUCED : SWAP_VARIANTS;
 
   const { openForResult } = useContentRequestFlow();
   const { shuffleEntity } = useEntityPlayback();
@@ -38,14 +46,33 @@ export function ArtistSpotlight({ size, info }: ArtistSpotlightProps) {
   const shuffleOf = (name: string, inLibrary: boolean) =>
     inLibrary ? () => void shuffleEntity({ kind: "artist", artist: name }) : undefined;
 
-  const cards = artists.map((item) => (
-    <ArtistSpotlightCard
-      key={item.artist.id}
-      artist={item.artist}
-      latestAlbum={item.latestAlbum}
-      onClick={() => handleArtistClick(item.artist)}
-      onPlay={shuffleOf(item.artist.name, item.inLibrary)}
-    />
+  const cards = artists.map((item, index) => (
+    <div key={index} className={spotlightSlot()}>
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.div
+          key={item.artist.id}
+          className={spotlightSlot()}
+          variants={variants}
+          custom={staggered ? index : 0}
+          initial="hidden"
+          animate="visible"
+          exit="exit"
+        >
+          <ArtistSpotlightCard
+            artist={item.artist}
+            latestAlbum={item.latestAlbum}
+            onClick={() => handleArtistClick(item.artist)}
+            onPlay={shuffleOf(item.artist.name, item.inLibrary)}
+            onDismiss={() => {
+              setStaggered(false);
+              void replace(item.artist.id);
+            }}
+            dismissDisabled={swapping}
+            loading={pending.includes(item.artist.id)}
+          />
+        </motion.div>
+      </AnimatePresence>
+    </div>
   ));
 
   return (
@@ -65,6 +92,24 @@ export function ArtistSpotlight({ size, info }: ArtistSpotlightProps) {
           subtitle={t("artistSpotlight.subtitle")}
           titleId="artist-spotlight-heading"
           info={info}
+          aside={
+            artists.length > 0 ? (
+              <IconButton
+                icon={Dices}
+                variant="ghost"
+                size="lg"
+                aria-label={t("artistSpotlight.reroll")}
+                title={t("artistSpotlight.reroll")}
+                className={spotlightReroll({ rolling })}
+                aria-busy={rolling}
+                disabled={swapping}
+                onClick={() => {
+                  setStaggered(true);
+                  void reroll();
+                }}
+              />
+            ) : undefined
+          }
         />
 
         {isLoading && <ArtistSpotlightSkeleton />}
@@ -87,7 +132,7 @@ export function ArtistSpotlight({ size, info }: ArtistSpotlightProps) {
 
         {!isLoading && !isError && artists.length > 0 && size === "S" && (
           <FadeScroll>
-            <ul className={widgetList()}>
+            <ul className={cn(widgetList(), spotlightListBusy({ busy: swapping }))} aria-busy={swapping}>
               {artists.map((item) => (
                 <WidgetRow
                   key={item.artist.id}

@@ -119,12 +119,6 @@ export const reasonChip = cva(
 
 export const reasonChipCount = cva("text-fg font-semibold tabular-nums");
 
-export const playerBar = cva("border-fg/10 bg-surface/60 flex min-w-0 flex-col gap-1.5 rounded-xl border px-3 py-2");
-
-export const playerNow = cva("text-fg/80 truncate text-xs");
-
-export const playerSource = cva("text-fg/50");
-
 export const reasonBadge = cva("inline-flex shrink-0 items-center rounded px-1.5 py-0.5 text-10 font-medium", {
   variants: {
     tone: {

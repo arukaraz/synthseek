@@ -16,9 +16,15 @@ export const slotCell = cva("min-w-0 [&>button]:w-full", {
       true: "col-span-2 @[34rem]:col-span-1",
       false: "",
     },
+    linked: {
+      true: "@[34rem]:col-span-2",
+      false: "",
+    },
   },
-  defaultVariants: { alone: false },
+  defaultVariants: { alone: false, linked: false },
 });
+
+export const linkedNote = cva("text-fg/60 text-xs");
 
 export const slotName = cva("col-span-2 col-start-2 min-w-0 @[34rem]:col-start-auto", {
   variants: {
@@ -31,6 +37,8 @@ export const slotName = cva("col-span-2 col-start-2 min-w-0 @[34rem]:col-start-a
 });
 
 export const listOptions = cva("mt-3 flex min-w-0 flex-col gap-2");
+
+export const pushEnd = cva("ml-auto");
 
 export const whereHead = cva("flex min-h-10 min-w-0 items-center justify-between gap-2");
 

@@ -20,4 +20,7 @@ export interface ArtistSpotlightCardProps {
   } | null;
   onClick?: () => void;
   onPlay?: () => void;
+  onDismiss?: () => void;
+  dismissDisabled?: boolean;
+  loading?: boolean;
 }

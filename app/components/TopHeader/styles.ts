@@ -87,6 +87,8 @@ export const clearButton = cva("text-fg/40 hover:bg-fg/10 hover:text-fg shrink-0
 
 export const playerSlot = cva("hidden shrink-0 items-center empty:hidden sm:flex");
 
+export const progressSlot = cva("contents");
+
 export const searchEmblem = cva(
   "focus-visible:ring-primary-400 flex h-11 shrink-0 items-end rounded-lg pb-2 outline-none focus-visible:ring-2 sm:hidden"
 );

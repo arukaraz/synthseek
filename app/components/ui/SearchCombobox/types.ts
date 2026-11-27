@@ -7,6 +7,7 @@ export interface SearchComboboxOption {
 export interface SearchComboboxProps {
   label: string;
   placeholder: string;
+  selected?: string;
   options: readonly SearchComboboxOption[];
   query: string;
   onQueryChange: (query: string) => void;

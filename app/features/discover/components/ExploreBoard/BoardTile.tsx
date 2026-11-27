@@ -35,7 +35,6 @@ export function BoardTile({
   return (
     <div
       {...{ [BOARD_TILE_ATTRIBUTE]: item.id }}
-      data-part="widget"
       className={boardTile({ editing, dragging })}
       style={tileVars(tile)}
       role={editing ? "group" : undefined}

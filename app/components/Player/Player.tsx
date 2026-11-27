@@ -7,6 +7,7 @@ import { DeviceMenu } from "./DeviceMenu";
 import { ListeningAvatars } from "./ListeningAvatars";
 import { ListeningArrival } from "./ListeningArrival";
 import { ListeningRoom } from "./ListeningRoom";
+import { HeaderProgress } from "./HeaderProgress";
 import { panelOpen } from "./helpers";
 import { MiniPlayer } from "./MiniPlayer";
 import { PlayerBar } from "./PlayerBar";
@@ -23,7 +24,7 @@ import type { PlayerProps } from "./types";
 
 export function Player({ view, actions }: PlayerProps) {
   const anchorToChain = view.chainVisible && !view.fullscreen;
-  const { target, masthead, effective } = usePlayerPlacement(view.mode, view.fullscreen);
+  const { target, masthead, progress, effective } = usePlayerPlacement(view.mode, view.fullscreen);
   const hanging = effective === "compact" && !view.fullscreen;
   const docked = target === null && masthead === null;
 
@@ -75,6 +76,7 @@ export function Player({ view, actions }: PlayerProps) {
           )
         : null}
       {masthead !== null ? createPortal(<PlayerMasthead view={view} actions={actions} />, masthead) : null}
+      {progress !== null ? createPortal(<HeaderProgress view={view} />, progress) : null}
       {view.fullscreen || !docked ? null : (
         <div className={playerRoot()} data-cy="player">
           <div className={playerDock()}>

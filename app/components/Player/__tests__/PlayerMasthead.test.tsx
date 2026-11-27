@@ -57,11 +57,4 @@ describe("the player in the phone's header", () => {
 
     expect(await screen.findByText("Queue")).toBeInTheDocument();
   });
-
-  it("draws the progress line at the share of the track already played", () => {
-    const { view } = renderMasthead({ positionSeconds: 30 });
-    const line = document.querySelector<HTMLElement>("[data-cy=player] [style]");
-
-    expect(line?.getAttribute("style")).toContain(`${((30 / view.track.durationSeconds) * 100).toFixed(2)}%`);
-  });
 });

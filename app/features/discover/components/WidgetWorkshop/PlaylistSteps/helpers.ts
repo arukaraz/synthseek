@@ -3,6 +3,7 @@ import i18n from "@locale";
 import type { HouseholdMember, PlaylistSetQuery, SetSlot } from "@hooks/api/queries/widgets/types";
 import { formatTimeOfDay, formatWeekday, formatWeekdayDateTime } from "@utils/formatters";
 
+import { SET_LINKED_ORIGIN } from "../../constants";
 import { MOOD_CHOICES } from "../constants";
 import { ruleListOf, ruleText } from "../helpers";
 import type { RuleChoice } from "../types";
@@ -15,7 +16,7 @@ import {
   TOP_PARAM_PREFIX,
   WEEKDAY_REFERENCE_MONDAY,
 } from "./constants";
-import type { SetMix, SetOrigin, SetOriginGrammar, SetParamKind, SetRefresh } from "./types";
+import type { SetMix, SetNamingGrammar, SetOrigin, SetOriginGrammar, SetParamKind, SetRefresh } from "./types";
 
 export function paramKindOf(grammar: SetOriginGrammar, origin: SetOrigin): SetParamKind {
   return grammar.origins.find((entry) => entry.key === origin)?.param ?? "none";
@@ -36,6 +37,8 @@ export function defaultParam(kind: SetParamKind): string | null {
       return "focus";
     case "taste":
       return "1";
+    case "playlist":
+      return null;
   }
 }
 
@@ -65,6 +68,8 @@ export function paramText(kind: SetParamKind, param: string | null): string {
     }
     case "taste":
       return i18n.t("widgets:set.tasteGroup", { group: param });
+    case "playlist":
+      return "";
   }
 }
 
@@ -122,8 +127,13 @@ export function withOrigin(slot: SetSlot, grammar: SetOriginGrammar, origin: Set
   return { ...slot, origin, param, label: slotLabelOf(grammar, origin, param) };
 }
 
-export function withParam(slot: SetSlot, grammar: SetOriginGrammar, param: string): SetSlot {
-  return { ...slot, param, label: slotLabelOf(grammar, slot.origin, param) };
+export function withParam(slot: SetSlot, grammar: SetNamingGrammar, param: string, label?: string): SetSlot {
+  const named = label ?? slotLabelOf(grammar, slot.origin, param);
+  return { ...slot, param, label: named.trim().slice(0, grammar.limits.nameMax) };
+}
+
+export function isLinkedSlot(slot: Pick<SetSlot, "origin">): boolean {
+  return slot.origin === SET_LINKED_ORIGIN;
 }
 
 export function nextRunText(next: Date | string | null): string {

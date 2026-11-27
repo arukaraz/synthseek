@@ -5,13 +5,14 @@ import { useEffect, useId, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { SegmentedControl } from "@components/ui/SegmentedControl";
+import { TipBadge } from "@components/ui/TipBadge";
 import { DockedToBottom } from "@features/settings/components/SettingsBottomDock";
 import { settingsCard } from "@features/settings/styles";
 
 import { SharePanel } from "../SharePanel";
 import type { SharePanelKind } from "../SharePanel";
 import { VisualMode } from "../VisualMode/VisualMode";
-import { THEME_DOCS_URL } from "../../constants";
+import { AI_ASSISTANTS_HREF, AI_THEME_TIP_ID, THEME_DOCS_URL } from "../../constants";
 import { EditorBar } from "./EditorBar";
 import { EditorMenu } from "./EditorMenu";
 import { EditorNotes } from "./EditorNotes";
@@ -54,6 +55,11 @@ export function EditorFrame({ editor, safeEdit }: EditorFrameProps) {
           <span className="max-sm:sr-only">{t("editor.reference")}</span>
           <ExternalLink className="size-3.5 shrink-0 max-sm:hidden" aria-hidden />
         </a>
+        <TipBadge
+          tipId={AI_THEME_TIP_ID}
+          body={t("editor.aiTip")}
+          action={{ label: t("editor.aiTipAction"), href: AI_ASSISTANTS_HREF }}
+        />
         <div className={editorControls()}>
           <SegmentedControl<EditorMode>
             value={editor.view.mode}

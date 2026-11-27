@@ -9,7 +9,7 @@ import { filesCount, itemTitle, trackCard, trackCardArtist, trackCardHeader } fr
 import type { ReviewTrackCardProps } from "../types";
 import { ReviewCandidate } from "./ReviewCandidate";
 
-export function ReviewTrackCard({ group, onListen }: ReviewTrackCardProps) {
+export function ReviewTrackCard({ group }: ReviewTrackCardProps) {
   const { t } = useTranslation("requests");
   const { track, items, shown } = group;
   const siblings = items.length - 1;
@@ -33,13 +33,7 @@ export function ReviewTrackCard({ group, onListen }: ReviewTrackCardProps) {
       <TrackRetrySchedule nextRetryAt={track.nextRetryAt} retryCount={track.retryCount} />
 
       {shown.map((item) => (
-        <ReviewCandidate
-          key={item.id}
-          item={item}
-          index={items.indexOf(item)}
-          siblings={siblings}
-          onListen={onListen}
-        />
+        <ReviewCandidate key={item.id} item={item} index={items.indexOf(item)} siblings={siblings} />
       ))}
     </article>
   );

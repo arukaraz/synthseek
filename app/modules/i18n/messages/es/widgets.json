@@ -713,6 +713,11 @@
     "buildFrom": "Construir desde",
     "buildFromHelp": "Cada fila es una playlist de este widget. Elige de dónde salen sus pistas y, si quieres, ponle nombre. El pin deja una lista como está cuando las demás se refrescan. Una lista que encuentra menos pistas que el mínimo de abajo queda oculta, y la fila te dice cuántas encontró.",
     "buildFromHelpLabel": "Cómo funciona Construir desde",
+    "tasteHelp": "Synthseek agrupa los géneros que escuchas juntos, según lo que reproduces. El grupo 1 es tu género más escuchado con los géneros que comparten sus álbumes, el grupo 2 es el siguiente, hasta {{max}}. El widget guarda el número, así la lista sigue tu gusto cuando cambia.",
+    "tasteHelpLabel": "Qué es un grupo de gustos",
+    "playlistSearch": "Busca en tus playlists",
+    "linkedNote": "Una fila creada desde una de tus playlists muestra esa playlist tal como está. Donde, Mezcla, Refresco, Al refrescar, Fuera de la biblioteca y Nunca incluir no la cambian.",
+    "linkedGone": "Oculta: esta playlist se borró, su dueño la hizo privada o no tiene pistas.",
     "addList": "Lista",
     "distinct": "Una pista aparece en una sola lista",
     "hideUnder": "Ocultar una lista con menos de",
@@ -800,7 +805,8 @@
       "mood": "Estado de ánimo",
       "scene": "Escenario",
       "taste": "Grupo de gustos",
-      "seed": "Suena como"
+      "seed": "Suena como",
+      "playlist": "Mis playlists"
     },
     "moods": {
       "energetic": "Enérgico",

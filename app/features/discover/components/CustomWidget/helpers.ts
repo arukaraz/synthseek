@@ -37,6 +37,7 @@ import {
 } from "@utils/formatters";
 import { playbackServerName } from "@utils/playback-servers";
 
+import { SET_LINKED_ORIGIN } from "../constants";
 import { compactCount } from "../helpers";
 import { MINUTES_PER_HOUR } from "../WidgetStory/constants";
 import { storyCoversOf, storyNoteOf, storyPagesOf } from "../WidgetStory/helpers";
@@ -449,17 +450,24 @@ function setListValue(list: SetListResult): string {
 }
 
 function setListItem(list: SetListResult): WidgetItem {
+  const cover = list.covers[0] ?? null;
+  const linked = list.origin === SET_LINKED_ORIGIN ? list.playlistId : null;
+  const playable = list.trackIds.length > 0;
   return {
     key: list.slotId,
     title: list.name,
     subtitle: i18n.t(`widgets:set.origins.${list.origin}`),
-    cover: list.covers[0] ?? null,
+    cover,
     value: setListValue(list),
     date: null,
     move: null,
-    play: list.trackIds.length > 0 ? { kind: "tracks", trackIds: list.trackIds } : null,
+    play: !playable
+      ? null
+      : linked === null
+        ? { kind: "tracks", trackIds: list.trackIds }
+        : { kind: "playlist", playlistId: linked },
     request: null,
-    open: null,
+    open: linked === null ? null : playlistLibraryTarget({ id: linked, name: list.name, cover }),
     link: null,
     covers: list.covers.slice(0, MIX_COVER_LIMIT),
     listSlot: list.slotId,
@@ -495,7 +503,9 @@ export function withListOpening(
   if (!onOpenList) return actions;
   return (item) => {
     const { listSlot } = item;
-    return listSlot === undefined ? actions(item) : { ...actions(item), onSelect: () => onOpenList(listSlot) };
+    return listSlot === undefined || item.open !== null
+      ? actions(item)
+      : { ...actions(item), onSelect: () => onOpenList(listSlot) };
   };
 }
 

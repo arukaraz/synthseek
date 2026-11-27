@@ -43,7 +43,8 @@ export function NameRuleValue({ label, value, kind, display, full = false, extra
     <span className={nameValue({ full })}>
       <SearchCombobox
         label={label}
-        placeholder={value === UNSET_RULE_VALUE ? t("rules.searchValue") : (display ?? value)}
+        placeholder={t("rules.searchValue")}
+        selected={value === UNSET_RULE_VALUE ? undefined : (display ?? value)}
         options={artistOptions}
         query={query}
         onQueryChange={setQuery}

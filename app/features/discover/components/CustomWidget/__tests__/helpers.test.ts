@@ -544,6 +544,18 @@ describe("playlist sets", () => {
     const plain = onlyItem(widgetItemsOf(createTrackResult([createRecipeTrackRow()]), undefined));
     expect(opening(plain).onSelect).toBeUndefined();
   });
+
+  it("plays and opens a member's own playlist itself, never a copy of it", () => {
+    const linked = createSetList({ slotId: "s4", origin: "playlist", playlistId: "pl-7", name: "Road trip" });
+    const item = onlyItem(widgetItemsOf(createSetResult({ lists: [linked] }), undefined));
+    expect(item.play).toEqual({ kind: "playlist", playlistId: "pl-7" });
+    expect(item.open).toMatchObject({ mode: "playlist", id: "pl-7", playlistSource: "library" });
+    const openPlaylist = vi.fn();
+    const onOpenList = vi.fn();
+    withListOpening((): WidgetItemControls => ({ onSelect: openPlaylist }), onOpenList)(item).onSelect?.();
+    expect(openPlaylist).toHaveBeenCalledOnce();
+    expect(onOpenList).not.toHaveBeenCalled();
+  });
 });
 
 describe("measureText and fieldText edges", () => {

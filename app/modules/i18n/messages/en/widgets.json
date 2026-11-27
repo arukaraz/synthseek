@@ -713,6 +713,11 @@
     "buildFrom": "Build from",
     "buildFromHelp": "Each row is one playlist of this widget. Choose where its tracks come from and, if you like, give it a name. The pin keeps a list as it is when the others refresh. A list that finds fewer tracks than the minimum below stays hidden, and the row tells you how many it found.",
     "buildFromHelpLabel": "How Build from works",
+    "tasteHelp": "Synthseek groups the genres you play together, from what you listen to. Group 1 is your most played genre with the genres that share its albums, group 2 is the next one, up to {{max}}. The widget keeps the number, so the list follows your taste as it changes.",
+    "tasteHelpLabel": "What a taste group is",
+    "playlistSearch": "Search your playlists",
+    "linkedNote": "A row built from one of your playlists shows that playlist as it is. Where, Mix, Refresh, On refresh, Outside library and Never include don't change it.",
+    "linkedGone": "Hidden: this playlist was deleted, made private by its owner, or has no tracks.",
     "addList": "List",
     "distinct": "A track appears in one list only",
     "hideUnder": "Hide a list under",
@@ -800,7 +805,8 @@
       "mood": "Mood",
       "scene": "Scenario",
       "taste": "Taste group",
-      "seed": "Sounds like"
+      "seed": "Sounds like",
+      "playlist": "My playlists"
     },
     "moods": {
       "energetic": "Energetic",

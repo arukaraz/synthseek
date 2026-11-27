@@ -393,7 +393,9 @@ export const mastheadArtist = cva("text-fg-muted truncate text-xs");
 
 export const mastheadNext = cva("text-fg");
 
-export const mastheadProgress = cva("bg-fg-muted/20 pointer-events-none absolute inset-x-0 bottom-0 h-0.5");
+export const headerProgress = cva(
+  "bg-fg-muted/20 pointer-events-none absolute inset-x-0 bottom-0 h-0.5 sm:-bottom-0.5"
+);
 
 export const volumeTrack = cva("flex h-4 cursor-pointer items-center touch-none", {
   variants: {

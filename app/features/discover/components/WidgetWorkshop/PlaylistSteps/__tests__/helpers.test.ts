@@ -9,6 +9,7 @@ import {
   clockFrom,
   clockValue,
   defaultParam,
+  isLinkedSlot,
   nextRunText,
   paramText,
   windowChoiceOf,
@@ -16,12 +17,14 @@ import {
   withDayToggled,
   withNewSlot,
   withOrigin,
+  withParam,
   withSlotCount,
   withSlotLabels,
 } from "../helpers";
-import type { SetOriginGrammar } from "../types";
+import type { SetNamingGrammar } from "../types";
 
-const grammar: SetOriginGrammar = {
+const grammar: SetNamingGrammar = {
+  limits: { nameMax: 60 },
   origins: [
     { key: "onRepeat", param: "none" },
     { key: "rediscover", param: "none" },
@@ -31,6 +34,7 @@ const grammar: SetOriginGrammar = {
     { key: "favorites", param: "none" },
     { key: "genre", param: "genre" },
     { key: "mood", param: "mood" },
+    { key: "playlist", param: "playlist" },
   ],
 };
 
@@ -83,6 +87,26 @@ describe("slots", () => {
     expect(withOrigin(slot, grammar, "genre").param).toBe("top:1");
     expect(withOrigin(slot, grammar, "rewind").param).toBeNull();
     expect(defaultParam("mood")).toBe("calm");
+  });
+
+  it("starts a playlist row empty and names it after the playlist picked", () => {
+    const [slot] = setOf(1).slots;
+    if (!slot) throw new Error("no slot");
+    const linked = withOrigin(slot, grammar, "playlist");
+    expect(linked.param).toBeNull();
+    expect(isLinkedSlot(linked)).toBe(true);
+    expect(isLinkedSlot(slot)).toBe(false);
+    expect(withParam(linked, grammar, "pl-7", "Road trip")).toMatchObject({ param: "pl-7", label: "Road trip" });
+  });
+
+  it("keeps a long playlist name within the length a slot name may have", () => {
+    const [slot] = setOf(1).slots;
+    if (!slot) throw new Error("no slot");
+    const long = "x".repeat(grammar.limits.nameMax + 40);
+
+    const picked = withParam(withOrigin(slot, grammar, "playlist"), grammar, "pl-7", long);
+
+    expect(picked.label).toBe("x".repeat(grammar.limits.nameMax));
   });
 });
 

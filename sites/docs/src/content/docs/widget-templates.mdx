@@ -376,15 +376,18 @@ In `outside`, `mode` is `library`, `suggest` or `download`, and `share` is 5 to 
 
 Each slot names an `origin`. These nine take a `param` of `null`: `onRepeat`, `rediscover`, `forgotten`, `deepCuts`, `rewind`, `top`, `favorites`, `unplayed` and `added`. The rest need one:
 
-| `origin` | `param`                                                                                 |
-| -------- | --------------------------------------------------------------------------------------- |
-| `genre`  | A genre, or `top:1` for your top genre                                                  |
-| `artist` | An artist, or `top:1` for your top artist                                               |
-| `decade` | A year such as `1990`                                                                   |
-| `mood`   | `energetic`, `calm`, `aggressive`, `party`, `danceable`, `happy`, `sad`, `instrumental` |
-| `scene`  | `focus`, `workout`, `sleep` or `dinner`                                                 |
-| `taste`  | 1 to 6                                                                                  |
-| `seed`   | An artist. The list sounds like them                                                    |
+| `origin`   | `param`                                                                                 |
+| ---------- | --------------------------------------------------------------------------------------- |
+| `genre`    | A genre, or `top:1` for your top genre                                                  |
+| `artist`   | An artist, or `top:1` for your top artist                                               |
+| `decade`   | A year such as `1990`                                                                   |
+| `mood`     | `energetic`, `calm`, `aggressive`, `party`, `danceable`, `happy`, `sad`, `instrumental` |
+| `scene`    | `focus`, `workout`, `sleep` or `dinner`                                                 |
+| `taste`    | 1 to 6                                                                                  |
+| `seed`     | An artist. The list sounds like them                                                    |
+| `playlist` | The id of a playlist you can see in your library. The list is that playlist as it is    |
+
+A `playlist` slot shows the playlist itself, in its own order. `rules`, `mix`, `refresh`, `onRefresh`, `outside` and `allow` do not change it, and it has no pin. If the playlist is deleted, made private by another member, or has no tracks, the list stays hidden.
 
 The `mix` keys:
 
@@ -538,7 +541,7 @@ Tiles fill the board in order, each one beside the last while it fits. On a phon
 A template carries what a widget asks, not the data behind it. The same widget shows the new listener's own plays and library.
 
 - A feed that needs a service you have not connected still applies. The check names what is missing, and so does the tile.
-- A seed that names a playlist, and a rule that names a member, point at things on the server they came from. They may find nothing on another one.
+- A seed or a `playlist` slot that names a playlist, and a rule that names a member, point at things on the server they came from. They may find nothing on another one.
 - The board check skips what it cannot read and says so. A tile whose widget is missing or refused is left out, and the rest applies.
 
 ## When a template is refused

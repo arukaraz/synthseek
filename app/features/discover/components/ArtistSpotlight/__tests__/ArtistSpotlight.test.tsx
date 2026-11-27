@@ -16,7 +16,13 @@ interface SpotlightQuery {
   data: SpotlightArtist[] | undefined;
   isLoading: boolean;
   isError: boolean;
+  pending: readonly string[];
+  replace: (artistId: string) => Promise<void>;
+  reroll: () => Promise<void>;
 }
+
+const replace = vi.fn(async (_artistId: string) => {});
+const reroll = vi.fn(async () => {});
 
 const useArtistsForYouMock = vi.fn<() => SpotlightQuery>();
 const openForResult = vi.fn();
@@ -35,11 +41,22 @@ vi.mock("@hooks/ui/useEntityPlayback", () => ({
 }));
 
 vi.mock("../ArtistSpotlightCard", () => ({
-  ArtistSpotlightCard: ({ artist, onClick, onPlay }: ArtistSpotlightCardProps) => (
+  ArtistSpotlightCard: ({ artist, onClick, onPlay, onDismiss, loading }: ArtistSpotlightCardProps) => (
     <>
-      <button type="button" data-testid="artist-card" data-id={artist.id} onClick={onClick}>
+      <button
+        type="button"
+        data-testid="artist-card"
+        data-id={artist.id}
+        data-loading={loading ? "true" : "false"}
+        onClick={onClick}
+      >
         {artist.name}
       </button>
+      {onDismiss ? (
+        <button type="button" onClick={onDismiss}>
+          dismiss {artist.name}
+        </button>
+      ) : null}
       {onPlay ? (
         <button type="button" onClick={onPlay}>
           play {artist.name}
@@ -62,6 +79,9 @@ function buildQuery(overrides: Partial<SpotlightQuery> = {}): SpotlightQuery {
     data: [buildArtist("artist-1", "Aphex Twin")],
     isLoading: false,
     isError: false,
+    pending: [],
+    replace,
+    reroll,
     ...overrides,
   };
 }
@@ -181,6 +201,46 @@ describe("ArtistSpotlight", () => {
 
     fireEvent.click(screen.getByRole("button", { name: /Autechre/ }));
     expect(openForResult.mock.calls[0][0]).toMatchObject({ id: "b", name: "Autechre" });
+  });
+
+  it("swaps one artist from its card and every artist from the header", () => {
+    useArtistsForYouMock.mockReturnValue(
+      buildQuery({ data: [buildArtist("a", "Boards of Canada"), buildArtist("b", "Autechre")] })
+    );
+
+    renderWithProviders(<ArtistSpotlight size="L" info="Artists to explore next" />);
+
+    fireEvent.click(screen.getByRole("button", { name: "dismiss Autechre" }));
+    expect(replace).toHaveBeenCalledWith("b");
+    fireEvent.click(screen.getByRole("button", { name: enDiscover.artistSpotlight.reroll }));
+    expect(reroll).toHaveBeenCalledOnce();
+  });
+
+  it("holds both swaps while one is loading and shows which card is loading", () => {
+    useArtistsForYouMock.mockReturnValue(
+      buildQuery({ data: [buildArtist("a", "Boards of Canada"), buildArtist("b", "Autechre")], pending: ["b"] })
+    );
+
+    renderWithProviders(<ArtistSpotlight size="L" info="Artists to explore next" />);
+
+    const reroll = screen.getByRole("button", { name: enDiscover.artistSpotlight.reroll });
+    expect(reroll).toBeDisabled();
+    expect(reroll).toHaveAttribute("aria-busy", "false");
+    expect(screen.getAllByTestId("artist-card").map((card) => card.dataset.loading)).toEqual(["false", "true"]);
+  });
+
+  it("marks the reroll busy while every artist is being replaced", () => {
+    useArtistsForYouMock.mockReturnValue(
+      buildQuery({ data: [buildArtist("a", "Boards of Canada"), buildArtist("b", "Autechre")], pending: ["a", "b"] })
+    );
+
+    renderWithProviders(<ArtistSpotlight size="L" info="Artists to explore next" />);
+
+    expect(screen.getByRole("button", { name: enDiscover.artistSpotlight.reroll })).toHaveAttribute(
+      "aria-busy",
+      "true"
+    );
+    expect(screen.getAllByTestId("artist-card").map((card) => card.dataset.loading)).toEqual(["true", "true"]);
   });
 
   it("opens the request flow for the clicked artist", () => {

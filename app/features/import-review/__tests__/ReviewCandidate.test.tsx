@@ -7,7 +7,6 @@ import { FakeAudio } from "@test/mocks/audio.mock";
 const spies = vi.hoisted(() => ({
   approve: vi.fn(),
   discard: vi.fn(),
-  listen: vi.fn(),
 }));
 
 vi.mock("@hooks/api", () => ({
@@ -28,7 +27,7 @@ import type { ImportReviewItem } from "../types";
 import { makeReviewItem } from "./factories";
 
 function renderCandidate(item: ImportReviewItem, options: { siblings?: number } = {}) {
-  return render(<ReviewCandidate item={item} index={0} siblings={options.siblings ?? 0} onListen={spies.listen} />);
+  return render(<ReviewCandidate item={item} index={0} siblings={options.siblings ?? 0} />);
 }
 
 describe("ReviewCandidate", () => {
@@ -104,13 +103,12 @@ describe("ReviewCandidate", () => {
     expect(screen.queryByText("peer-one")).not.toBeInTheDocument();
   });
 
-  it("plays the held file and names it as the one to show in the player bar", async () => {
+  it("plays the held file from its own button", async () => {
     const user = userEvent.setup();
     renderCandidate(makeReviewItem());
 
     await user.click(screen.getByRole("button", { name: "Play the file Requested Song - Requested Artist" }));
 
-    expect(spies.listen).toHaveBeenCalledWith("held-1");
     expect(FakeAudio.only().src).toBe("/api/v1/review/held-1/audio");
   });
 

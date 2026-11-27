@@ -4,15 +4,23 @@ import { Badge } from "@components/ui/Badge";
 import { artworkImage } from "@utils/artworkProxy";
 import { scale } from "@utils/animations";
 import { categoryPlaceholder, cardBottomContent, albumThumbnail, hoverBorder, playIcon } from "../styles";
-import { spotlightCard, spotlightCardMedia, spotlightPlay } from "./styles";
+import { spotlightCard, spotlightCardMedia, spotlightDismiss, spotlightLoading, spotlightPlay } from "./styles";
 import { motion } from "framer-motion";
-import { Play, User, Music } from "lucide-react";
+import { Loader2, Play, User, Music, X } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import type { ArtistSpotlightCardProps } from "./types";
 
-export function ArtistSpotlightCard({ artist, latestAlbum, onClick, onPlay }: ArtistSpotlightCardProps) {
+export function ArtistSpotlightCard({
+  artist,
+  latestAlbum,
+  onClick,
+  onPlay,
+  onDismiss,
+  dismissDisabled = false,
+  loading = false,
+}: ArtistSpotlightCardProps) {
   const { t } = useTranslation("discover");
   const [imageError, setImageError] = useState(false);
   const [albumImageError, setAlbumImageError] = useState(false);
@@ -25,6 +33,7 @@ export function ArtistSpotlightCard({ artist, latestAlbum, onClick, onPlay }: Ar
     <motion.div
       onClick={onClick}
       className={spotlightCard()}
+      aria-busy={loading}
       variants={scale}
       initial="initial"
       whileHover="hover"
@@ -97,6 +106,28 @@ export function ArtistSpotlightCard({ artist, latestAlbum, onClick, onPlay }: Ar
         </div>
 
         <div className={hoverBorder()} />
+
+        {loading ? (
+          <div role="status" aria-label={t("artistSpotlight.finding")} className={spotlightLoading()}>
+            <Loader2 aria-hidden="true" />
+          </div>
+        ) : null}
+
+        {onDismiss ? (
+          <button
+            type="button"
+            className={spotlightDismiss()}
+            aria-label={t("artistSpotlight.dismiss", { name: artist.name })}
+            title={t("artistSpotlight.dismiss", { name: artist.name })}
+            disabled={dismissDisabled}
+            onClick={(event) => {
+              event.stopPropagation();
+              onDismiss();
+            }}
+          >
+            <X />
+          </button>
+        ) : null}
 
         {onPlay ? (
           <button

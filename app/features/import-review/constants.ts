@@ -13,8 +13,6 @@ export const REVIEW_AUDIO_PATH_SUFFIX = "/audio";
 
 export const REVIEW_CLIP_KEY_PREFIX = "held:";
 
-export const REVIEW_UNKNOWN_LENGTH = "–";
-
 export const REVIEW_TRACK_ANCHOR_PREFIX = "review-track-";
 
 export const METER_MID_SCORE = 50;

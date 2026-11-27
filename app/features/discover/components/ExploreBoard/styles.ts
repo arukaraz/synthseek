@@ -76,7 +76,7 @@ export const tileBody = cva("flex min-h-0 min-w-0 flex-1 [&>*]:min-h-0 [&>*]:siz
 export const tileSurface = cva("flex min-h-0 min-w-0 flex-1 [&>*]:min-h-0 [&>*]:size-full", {
   variants: {
     bare: {
-      true: "[&>*]:border-transparent! [&>*]:bg-transparent! [&>*]:bg-none! [&>*]:shadow-none!",
+      true: "border-transparent! bg-transparent! bg-none! shadow-none! [&>*]:border-transparent! [&>*]:bg-transparent! [&>*]:bg-none! [&>*]:shadow-none!",
       false: "",
     },
   },

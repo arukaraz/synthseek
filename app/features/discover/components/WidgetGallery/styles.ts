@@ -23,7 +23,9 @@ export const galleryScroll = cva("min-h-0 flex-1 overflow-y-auto px-4 pb-10 sm:p
 
 export const galleryGrid = cva("grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3");
 
-export const galleryEmpty = cva("text-fg/60 py-12 text-center text-sm");
+export const galleryEmpty = cva(
+  "text-fg/60 flex items-center justify-center px-4 py-6 text-center text-sm lg:col-span-2"
+);
 
 export const band = cva("bg-surface/95 sticky top-0 z-20 col-span-full -mx-4 sm:-mx-6");
 

@@ -481,6 +481,7 @@
   ],
   "attributes": [
     { "name": "data-acc", "values": ["daily", "weekly", "explore", "cf"] },
-    { "name": "data-type", "values": ["track", "album", "artist", "playlist"] }
+    { "name": "data-type", "values": ["track", "album", "artist", "playlist"] },
+    { "name": "data-placement", "values": ["dock", "header"] }
   ]
 }

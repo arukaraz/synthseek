@@ -344,6 +344,7 @@ export interface PanelAnchorPoint {
 export interface PlayerPlacement {
   target: HTMLElement | null;
   masthead: HTMLElement | null;
+  progress: HTMLElement | null;
   effective: PlayerMode;
 }
 

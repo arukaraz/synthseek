@@ -94,6 +94,9 @@
   "infoTooltip": {
     "trigger": "More information"
   },
+  "tip": {
+    "label": "Tip"
+  },
   "fadeScroll": {
     "scrollLeft": "Scroll left",
     "scrollRight": "Scroll right"

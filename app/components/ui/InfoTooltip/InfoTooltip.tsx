@@ -34,7 +34,7 @@ export function InfoTooltip({
   const content = (
     <div className={infoTooltipBody()}>
       {title ? <p className={infoTooltipTitle()}>{title}</p> : null}
-      <p className={infoTooltipText()}>{description}</p>
+      {description ? <p className={infoTooltipText()}>{description}</p> : null}
       {secondary ? <p className={infoTooltipText()}>{secondary}</p> : null}
       {points && points.length > 0 ? (
         <ul className={infoTooltipList()}>

@@ -31,3 +31,13 @@ export type ListeningMix = ListeningOutputs["onRepeat"];
 export type UnfinishedAlbum = ListeningOutputs["jumpBackIn"][number];
 export type LastYearWeek = ListeningOutputs["lastYear"];
 export type Station = ListeningOutputs["stations"][number];
+export type ArtistSuggestion = AnalyticsOutputs["discover"]["artistsForYou"][number];
+
+export interface ArtistSuggestions {
+  data: ArtistSuggestion[] | undefined;
+  isLoading: boolean;
+  isError: boolean;
+  pending: readonly string[];
+  replace: (artistId: string) => Promise<void>;
+  reroll: () => Promise<void>;
+}

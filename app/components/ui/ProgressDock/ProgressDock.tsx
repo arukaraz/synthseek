@@ -1,5 +1,6 @@
 "use client";
 
+import { DIALOG_COMPANION_ATTRIBUTE } from "@components/ui/Dialog/constants";
 import { countDockItems, dismissDockJob, useDockJobs } from "@hooks/api/subscriptions";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -80,7 +81,7 @@ export function ProgressDock() {
   }, []);
 
   return (
-    <div className={dockViewport()}>
+    <div className={dockViewport()} {...{ [DIALOG_COMPANION_ATTRIBUTE]: "" }}>
       <div className={dockStack()}>
         <AnimatePresence initial={false}>
           {ordered.map((job) => {

@@ -164,3 +164,27 @@ describe("BoardTile", () => {
     expect(screen.getByRole("group", { name: "Custom widget, position 1 of 1" })).toBeInTheDocument();
   });
 });
+
+describe("a tile with its background turned off", () => {
+  it.each([
+    [false, true],
+    [true, false],
+  ])("clears the part a theme paints when background is %s", (background, cleared) => {
+    render(
+      <BoardTile
+        tile={{ ...TILE, item: { ...TILE.item, background } }}
+        device="wide"
+        custom={NO_CUSTOM}
+        customStatus="ready"
+        editing={false}
+        dragging={false}
+        position={1}
+        total={1}
+        actions={actions()}
+      />
+    );
+
+    const part = tileElement().querySelector("[data-part=widget]");
+    expect(part?.className.split(" ").includes("bg-transparent!")).toBe(cleared);
+  });
+});

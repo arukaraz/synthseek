@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next";
 import { Button } from "@components/ui/Button";
 import { Checkbox } from "@components/ui/Checkbox";
 import { InfoTooltip } from "@components/ui/InfoTooltip";
+import { cn } from "@utils/cn";
 import { useLibraryPlaylists } from "@hooks/api/queries/library/useLibraryPlaylists";
 import { useSetGrammar } from "@hooks/api/queries/widgets/useSetGrammar";
 
@@ -16,7 +17,7 @@ import { StepRow } from "../StepRow";
 import { SubjectSelect } from "../SubjectSelect";
 import { compareField, readback, stepList, stepText } from "../styles";
 import type { PlaylistStepsProps } from "../types";
-import { playlistReadbackOf, withNewSlot, withSlotCount } from "./helpers";
+import { isLinkedSlot, playlistReadbackOf, withNewSlot, withSlotCount } from "./helpers";
 import { SetMixStep } from "./SetMixStep";
 import { SetNeverStep } from "./SetNeverStep";
 import { SetOnRefreshStep } from "./SetOnRefreshStep";
@@ -24,7 +25,7 @@ import { SetOutsideStep } from "./SetOutsideStep";
 import { SetRefreshStep } from "./SetRefreshStep";
 import { SetWhereStep } from "./SetWhereStep";
 import { SlotRow } from "./SlotRow";
-import { line, listOptions, stack } from "./styles";
+import { line, linkedNote, listOptions, pushEnd, stack } from "./styles";
 
 export function PlaylistSteps({ workshop, set, context, preview }: Omit<PlaylistStepsProps, "grammar">) {
   const { t } = useTranslation("widgets");
@@ -71,9 +72,10 @@ export function PlaylistSteps({ workshop, set, context, preview }: Omit<Playlist
             {set.slots.map((slot, index) => (
               <SlotRow key={slot.id} slot={slot} index={index} result={result} {...step} />
             ))}
+            {set.slots.some(isLinkedSlot) ? <p className={linkedNote()}>{t("set.linkedNote")}</p> : null}
             <div className={listOptions()}>
-              <div className={line()}>
-                {set.slots.length < limits.slotsMax ? (
+              {set.slots.length < limits.slotsMax ? (
+                <div className={line()}>
                   <Button
                     variant="ghost"
                     size="sm"
@@ -82,17 +84,8 @@ export function PlaylistSteps({ workshop, set, context, preview }: Omit<Playlist
                     <Plus />
                     {t("set.addList")}
                   </Button>
-                ) : null}
-                <label className={compareField()}>
-                  <Checkbox
-                    checked={set.mix.distinct}
-                    onCheckedChange={(checked) =>
-                      onChange((current) => ({ ...current, mix: { ...current.mix, distinct: checked === true } }))
-                    }
-                  />
-                  {t("set.distinct")}
-                </label>
-              </div>
+                </div>
+              ) : null}
               <div className={line()}>
                 <span className={stepText()}>{t("set.hideUnder")}</span>
                 <NumberField
@@ -103,6 +96,15 @@ export function PlaylistSteps({ workshop, set, context, preview }: Omit<Playlist
                   onChange={(minTracks) => onChange((current) => ({ ...current, mix: { ...current.mix, minTracks } }))}
                 />
                 <span className={stepText()}>{t("set.tracks")}</span>
+                <label className={cn(compareField(), pushEnd())}>
+                  <Checkbox
+                    checked={set.mix.distinct}
+                    onCheckedChange={(checked) =>
+                      onChange((current) => ({ ...current, mix: { ...current.mix, distinct: checked === true } }))
+                    }
+                  />
+                  {t("set.distinct")}
+                </label>
               </div>
             </div>
           </div>

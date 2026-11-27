@@ -68,6 +68,16 @@ describe("McpCard", () => {
     expect(screen.getByText(enSettings.mcp.keyBody)).toBeVisible();
   });
 
+  it("sends the list of tools to the docs section that explains them", async () => {
+    render(<McpCard />);
+
+    await userEvent.click(screen.getByRole("button", { name: "More information" }));
+
+    const link = await screen.findByRole("link", { name: enSettings.mcp.toolsDocs });
+    expect(link.getAttribute("href")).toMatch(/\/ai-assistants\/#the-tools$/);
+    expect(screen.queryByRole("listitem")).not.toBeInTheDocument();
+  });
+
   it("derives the endpoint from the configured public base URL", async () => {
     publicConfigQuery = createMockQuery<PublicConfig>({ publicBaseUrl: "https://music.example.com" });
     render(<McpCard />);

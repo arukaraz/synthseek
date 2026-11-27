@@ -7,25 +7,21 @@ import { useTranslation } from "react-i18next";
 import { PlayerMoreMenu } from "./PlayerMoreMenu";
 import { PlayGlyph } from "./PlayGlyph";
 import { TrackCover } from "./TrackCover";
-import { labelled, percentOf, trackInitials } from "./helpers";
+import { labelled, trackInitials } from "./helpers";
 import {
-  barMobileProgressFill,
   iconButton,
   masthead,
   mastheadArtist,
   mastheadIdentity,
   mastheadNext,
-  mastheadProgress,
   mastheadText,
   mastheadTitle,
   playButton,
-  progressVars,
 } from "./styles";
 import type { PlayerProps } from "./types";
 
 export function PlayerMasthead({ view, actions }: PlayerProps) {
   const { t } = useTranslation("player");
-  const progress = percentOf(view.positionSeconds, view.track.durationSeconds);
 
   return (
     <div className={masthead()} data-cy="player">
@@ -64,9 +60,6 @@ export function PlayerMasthead({ view, actions }: PlayerProps) {
         <SkipForward className="size-4 fill-current" />
       </button>
       <PlayerMoreMenu view={view} actions={actions} compact />
-      <div className={mastheadProgress()} style={progressVars(progress)}>
-        <div className={barMobileProgressFill()} />
-      </div>
     </div>
   );
 }

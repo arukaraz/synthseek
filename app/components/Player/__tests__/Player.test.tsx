@@ -6,7 +6,12 @@ import "@test/mocks/next.mock";
 import { createPlayerActions, createPlayerDevice, createPlayerTrack, createPlayerView } from "@test/factories";
 import enPlayer from "@modules/i18n/messages/en/player.json";
 
-import { PLAYER_HEADER_SLOT_ID, PLAYER_MASTHEAD_SLOT_ID, STAGE_IMMERSIVE_QUERY } from "../constants";
+import {
+  PLAYER_HEADER_SLOT_ID,
+  PLAYER_MASTHEAD_SLOT_ID,
+  PLAYER_PROGRESS_SLOT_ID,
+  STAGE_IMMERSIVE_QUERY,
+} from "../constants";
 import { Player } from "../Player";
 import type { PlayerView } from "../types";
 
@@ -155,6 +160,35 @@ describe("the player dock", () => {
     expect(container.querySelector("[data-cy=player]")).toBeNull();
     expect(slot.querySelector("[data-cy=player]")).not.toBeNull();
     expect(within(slot).getByRole("button", { name: enPlayer.controls.next })).toBeInTheDocument();
+  });
+
+  it.each([
+    ["compact player", PLAYER_HEADER_SLOT_ID, true],
+    ["phone's header player", PLAYER_MASTHEAD_SLOT_ID, false],
+  ])("draws the %s progress line in the header's own slot, so a theme on the bar cannot narrow it", (_, id, wide) => {
+    const slot = document.createElement("div");
+    slot.id = id;
+    const line = document.createElement("div");
+    line.id = PLAYER_PROGRESS_SLOT_ID;
+    document.body.append(slot, line);
+    wideScreen = wide;
+
+    const { view } = renderPlayer({ mode: "compact", positionSeconds: 30 });
+
+    const share = `${((30 / view.track.durationSeconds) * 100).toFixed(2)}%`;
+    expect(line.querySelector("[style]")?.getAttribute("style")).toContain(share);
+    expect(slot.querySelector(`[style*="${share}"]`)).toBeNull();
+    line.remove();
+  });
+
+  it("tells a theme where the bar is drawn", () => {
+    const slot = document.createElement("div");
+    slot.id = PLAYER_HEADER_SLOT_ID;
+    document.body.appendChild(slot);
+
+    renderPlayer({ mode: "compact" });
+
+    expect(slot.querySelector("[data-part=player-bar]")?.getAttribute("data-placement")).toBe("header");
   });
 
   it("names the track, the artist and the album it is playing", () => {

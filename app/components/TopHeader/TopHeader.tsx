@@ -6,7 +6,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslation } from "react-i18next";
 
-import { PLAYER_HEADER_SLOT_ID, PLAYER_MASTHEAD_SLOT_ID } from "@components/Player";
+import { PLAYER_HEADER_SLOT_ID, PLAYER_MASTHEAD_SLOT_ID, PLAYER_PROGRESS_SLOT_ID } from "@components/Player";
 import { Avatar } from "@components/ui/Avatar";
 import { isSettingsPath } from "@features/settings/helpers";
 import { useOmniSearch } from "@hooks/ui/omni/useOmniSearch";
@@ -33,6 +33,7 @@ import {
   omniClose,
   omniSlot,
   playerSlot,
+  progressSlot,
   rightCluster,
 } from "./styles";
 import type { TopHeaderProps } from "./types";
@@ -90,6 +91,8 @@ export function TopHeader({ onSearch, initialQuery, initialScope }: TopHeaderPro
         <div id={PLAYER_MASTHEAD_SLOT_ID} className={mastheadSlot({ covered: omni.open })} />
 
         <div id={PLAYER_HEADER_SLOT_ID} className={playerSlot()} />
+
+        <div id={PLAYER_PROGRESS_SLOT_ID} className={progressSlot()} />
 
         <div className={rightCluster()}>
           <SettingsLink variant="gear" />

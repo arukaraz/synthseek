@@ -115,6 +115,29 @@
     animation: border-shimmer 3s ease-in-out infinite;
   }
 
+  @keyframes tip-halo {
+    0% {
+      box-shadow: 0 0 0 0 color-mix(in oklab, var(--neon-accent) 55%, transparent);
+    }
+    70% {
+      box-shadow: 0 0 0 10px color-mix(in oklab, var(--neon-accent) 0%, transparent);
+    }
+    100% {
+      box-shadow: 0 0 0 0 color-mix(in oklab, var(--neon-accent) 0%, transparent);
+    }
+  }
+
+  .animate-tip-halo {
+    animation: tip-halo 2.2s ease-out infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .animate-tip-halo {
+      animation: none;
+      box-shadow: 0 0 0 1.5px color-mix(in oklab, var(--neon-accent) 45%, transparent);
+    }
+  }
+
   @keyframes loading-ring-spin {
     0% {
       transform: rotate(0deg);

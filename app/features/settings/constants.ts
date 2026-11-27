@@ -170,6 +170,10 @@ export const YOU_PAGES: readonly SettingsPage[] = SETTINGS_PAGES.filter((page) =
 
 export const SERVER_PAGES: readonly SettingsPage[] = SETTINGS_PAGES.filter((page) => page.group === "server");
 
+export const APPS_TAB_HREF = "/settings/connections/apps";
+
+export const AI_ASSISTANTS_ANCHOR = "ai-assistants";
+
 export const SETTINGS_TABS: Readonly<Record<SettingsTabbedPageId, readonly SettingsTab[]>> = {
   customization: [
     { href: "/settings/customization/theme", labelKey: "shell.tabs.customization.theme", icon: Palette },
@@ -177,7 +181,7 @@ export const SETTINGS_TABS: Readonly<Record<SettingsTabbedPageId, readonly Setti
   ],
   connections: [
     { href: "/settings/connections/services", labelKey: "shell.tabs.connections.services", icon: Link2 },
-    { href: "/settings/connections/apps", labelKey: "shell.tabs.connections.apps", icon: KeyRound },
+    { href: APPS_TAB_HREF, labelKey: "shell.tabs.connections.apps", icon: KeyRound },
   ],
   download: [
     { href: "/settings/download/sources", labelKey: "shell.tabs.download.sources", icon: Download },

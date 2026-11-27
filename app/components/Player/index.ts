@@ -6,7 +6,7 @@ export { ConversionSection } from "./ConversionSection";
 export { EqualizerSection } from "./EqualizerSection";
 export { LoudnessSection } from "./LoudnessSection";
 export { TransitionSection } from "./TransitionSection";
-export { APP_TITLE, PLAYER_HEADER_SLOT_ID, PLAYER_MASTHEAD_SLOT_ID } from "./constants";
+export { APP_TITLE, PLAYER_HEADER_SLOT_ID, PLAYER_MASTHEAD_SLOT_ID, PLAYER_PROGRESS_SLOT_ID } from "./constants";
 export { nextRepeat, restorablePlayerMode, shouldRestart } from "./helpers";
 export { closeMiniWindow, openMiniWindow } from "./miniWindow";
 export type {
