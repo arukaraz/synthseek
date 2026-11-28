@@ -52,7 +52,7 @@ describe("BoardEditBar", () => {
     const actions = handlers();
     render(<BoardEditBar {...actions} />);
 
-    fireEvent.pointerDown(screen.getByRole("button", { name: "Add" }), { button: 0, ctrlKey: false });
+    fireEvent.pointerDown(screen.getByRole("button", { name: "Add" }), { button: 0, pointerType: "mouse" });
     fireEvent.click(await screen.findByRole("menuitem", { name }));
 
     expect(actions[handler]).toHaveBeenCalledTimes(1);
@@ -61,7 +61,7 @@ describe("BoardEditBar", () => {
   it("lists Widgets before Spacer in the Add menu", async () => {
     render(<BoardEditBar {...handlers()} />);
 
-    fireEvent.pointerDown(screen.getByRole("button", { name: "Add" }), { button: 0, ctrlKey: false });
+    fireEvent.pointerDown(screen.getByRole("button", { name: "Add" }), { button: 0, pointerType: "mouse" });
 
     expect((await screen.findAllByRole("menuitem")).map((item) => item.textContent)).toEqual(["Widgets", "Spacer"]);
   });

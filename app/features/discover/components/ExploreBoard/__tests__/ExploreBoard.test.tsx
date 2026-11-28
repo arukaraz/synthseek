@@ -113,7 +113,7 @@ async function openWidgets() {
   fireEvent.click(screen.getByRole("button", { name: i18n.t("discover:board.customize") }));
   fireEvent.pointerDown(screen.getByRole("button", { name: i18n.t("discover:board.add.action") }), {
     button: 0,
-    ctrlKey: false,
+    pointerType: "mouse",
   });
   fireEvent.click(await screen.findByRole("menuitem", { name: i18n.t("widgets:board.widgetsDialog.action") }));
 }
@@ -368,7 +368,7 @@ describe("ExploreBoard", () => {
     );
     fireEvent.pointerDown(screen.getByRole("button", { name: i18n.t("discover:board.add.action") }), {
       button: 0,
-      ctrlKey: false,
+      pointerType: "mouse",
     });
     fireEvent.click(await screen.findByRole("menuitem", { name: i18n.t("widgets:board.widgetsDialog.action") }));
     expect(screen.getByRole("dialog", { name: i18n.t("widgets:board.widgetsDialog.title") })).toBeInTheDocument();
@@ -377,7 +377,7 @@ describe("ExploreBoard", () => {
   async function openTileSettings(element: HTMLElement) {
     fireEvent.pointerDown(within(element).getByRole("button", { name: /^Settings for/ }), {
       button: 0,
-      ctrlKey: false,
+      pointerType: "mouse",
     });
     await screen.findByRole("menu");
   }

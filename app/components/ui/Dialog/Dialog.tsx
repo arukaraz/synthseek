@@ -17,6 +17,7 @@ import type {
   DialogSurfaceProps,
   DialogTitleProps,
 } from "./types";
+import { useOpenerFocus } from "./useOpenerFocus";
 
 export const Dialog = DialogPrimitive.Root;
 export const DialogTrigger = DialogPrimitive.Trigger;
@@ -44,9 +45,12 @@ export function DialogContent({
   animation,
   overlayClassName,
   onInteractOutside,
+  onOpenAutoFocus,
+  onCloseAutoFocus,
   ...props
 }: DialogContentProps) {
   const { t } = useTranslation("components");
+  const openerFocus = useOpenerFocus(onOpenAutoFocus, onCloseAutoFocus);
   return (
     <DialogPortal>
       <DialogOverlay className={overlayClassName} />
@@ -55,6 +59,8 @@ export function DialogContent({
         data-part="dialog"
         className={cn(dialogContent({ animation }), dialogLayer(), className)}
         onInteractOutside={keepOpenForCompanions(onInteractOutside)}
+        onOpenAutoFocus={openerFocus.onOpenAutoFocus}
+        onCloseAutoFocus={openerFocus.onCloseAutoFocus}
         {...props}
       >
         <div className={gradientOverlay({ direction: "toBr", intensity: "mixed", rounded: "2xl" })} />
@@ -74,7 +80,16 @@ export function DialogContent({
   );
 }
 
-export function DialogSurface({ className, children, ref, onInteractOutside, ...props }: DialogSurfaceProps) {
+export function DialogSurface({
+  className,
+  children,
+  ref,
+  onInteractOutside,
+  onOpenAutoFocus,
+  onCloseAutoFocus,
+  ...props
+}: DialogSurfaceProps) {
+  const openerFocus = useOpenerFocus(onOpenAutoFocus, onCloseAutoFocus);
   return (
     <DialogPortal>
       <DialogPrimitive.Content
@@ -82,6 +97,8 @@ export function DialogSurface({ className, children, ref, onInteractOutside, ...
         data-part="dialog"
         className={cn(dialogLayer(), className)}
         onInteractOutside={keepOpenForCompanions(onInteractOutside)}
+        onOpenAutoFocus={openerFocus.onOpenAutoFocus}
+        onCloseAutoFocus={openerFocus.onCloseAutoFocus}
         {...props}
       >
         {children}

@@ -12,5 +12,10 @@ export type DialogContentProps = ComponentProps<typeof DialogPrimitive.Content> 
   };
 export type DialogSurfaceProps = ComponentProps<typeof DialogPrimitive.Content>;
 export type DialogOutsideHandler = NonNullable<DialogSurfaceProps["onInteractOutside"]>;
+export type DialogAutoFocusHandler = NonNullable<DialogSurfaceProps["onOpenAutoFocus"]>;
+export interface DialogOpenerFocus {
+  onOpenAutoFocus: DialogAutoFocusHandler;
+  onCloseAutoFocus: DialogAutoFocusHandler;
+}
 export type DialogTitleProps = ComponentProps<typeof DialogPrimitive.Title>;
 export type DialogDescriptionProps = ComponentProps<typeof DialogPrimitive.Description>;

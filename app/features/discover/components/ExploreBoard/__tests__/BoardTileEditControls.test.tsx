@@ -50,7 +50,7 @@ function renderControls(item: BoardItem, handlers = actions(), position = 2, tot
 }
 
 async function openSettings(): Promise<void> {
-  fireEvent.pointerDown(screen.getByRole("button", { name: "Settings for Tile" }), { button: 0, ctrlKey: false });
+  fireEvent.pointerDown(screen.getByRole("button", { name: "Settings for Tile" }), { button: 0, pointerType: "mouse" });
   await screen.findByRole("menu");
 }
 

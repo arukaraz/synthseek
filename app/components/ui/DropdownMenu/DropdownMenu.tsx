@@ -6,7 +6,7 @@ import type { HTMLAttributes } from "react";
 
 import { cn } from "@utils/cn";
 import { menuFitsViewport, popoverLayer } from "../styles";
-import { composePointerHandlers } from "./helpers";
+import { composePointerHandlers, skipKeyboardPress } from "./helpers";
 import type {
   DropdownMenuCheckboxItemProps,
   DropdownMenuContentProps,
@@ -25,13 +25,14 @@ export const DropdownMenuPortal = DropdownMenuPrimitive.Portal;
 export const DropdownMenuSub = DropdownMenuPrimitive.Sub;
 export const DropdownMenuRadioGroup = DropdownMenuPrimitive.RadioGroup;
 
-export function DropdownMenuTrigger({ tapToOpen, ref, ...props }: DropdownMenuTriggerProps) {
-  if (!tapToOpen) return <DropdownMenuPrimitive.Trigger ref={ref} {...props} />;
+export function DropdownMenuTrigger({ tapToOpen, ref, onPointerDown, ...props }: DropdownMenuTriggerProps) {
+  const pressed = skipKeyboardPress(onPointerDown);
+  if (!tapToOpen) return <DropdownMenuPrimitive.Trigger ref={ref} {...props} onPointerDown={pressed} />;
   return (
     <DropdownMenuPrimitive.Trigger
       ref={ref}
       {...props}
-      onPointerDown={composePointerHandlers(props.onPointerDown, tapToOpen.onPointerDown)}
+      onPointerDown={composePointerHandlers(pressed, tapToOpen.onPointerDown)}
       onPointerUp={composePointerHandlers(props.onPointerUp, tapToOpen.onPointerUp)}
       onPointerCancel={composePointerHandlers(props.onPointerCancel, tapToOpen.onPointerCancel)}
     />

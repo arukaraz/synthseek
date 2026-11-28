@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@components/ui/Dialog";
@@ -19,7 +19,6 @@ export function SmartListDialog({ widgetId, slotId, accent, onClose }: SmartList
   const { t } = useTranslation("discover");
   const [tab, setTab] = useState<SmartListTab>("tracks");
   const { data: detail, isError } = useSetList(widgetId, slotId);
-  const openerRef = useRef<HTMLElement | null>(null);
 
   return (
     <Dialog open onOpenChange={(open) => (open ? undefined : onClose())}>
@@ -29,12 +28,7 @@ export function SmartListDialog({ widgetId, slotId, accent, onClose }: SmartList
         aria-describedby={undefined}
         onOpenAutoFocus={(event) => {
           event.preventDefault();
-          openerRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
           if (event.currentTarget instanceof HTMLElement) event.currentTarget.focus();
-        }}
-        onCloseAutoFocus={(event) => {
-          event.preventDefault();
-          if (openerRef.current?.isConnected) openerRef.current.focus();
         }}
       >
         {detail ? (

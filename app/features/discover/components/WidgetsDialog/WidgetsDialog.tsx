@@ -39,7 +39,6 @@ export function WidgetsDialog({ lists, opening, custom, onSave, onClose }: Widge
   const presets = useWidgetPresets();
   const household = useWidgetHousehold();
   const { country } = useCountry();
-  const openerRef = useRef<HTMLElement | null>(null);
   const headerRef = useRef<HTMLDivElement>(null);
 
   const workshopOpen = gallery.opening !== null;
@@ -82,12 +81,7 @@ export function WidgetsDialog({ lists, opening, custom, onSave, onClose }: Widge
         className={galleryDialog({ workshop: true })}
         onOpenAutoFocus={(event) => {
           event.preventDefault();
-          openerRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
           headerRef.current?.focus();
-        }}
-        onCloseAutoFocus={(event) => {
-          event.preventDefault();
-          if (openerRef.current?.isConnected) openerRef.current.focus();
         }}
       >
         {gallery.opening ? (
