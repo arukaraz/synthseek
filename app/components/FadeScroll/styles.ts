@@ -1,6 +1,6 @@
 import { cva } from "class-variance-authority";
 
-export const fadeScroll = cva("min-w-0", {
+export const fadeScroll = cva("min-w-0 focus-visible:-outline-offset-2", {
   variants: {
     axis: {
       x: "overflow-x-auto overscroll-x-contain",

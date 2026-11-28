@@ -81,6 +81,16 @@ describe("FadeScroll", () => {
     expect(node).toHaveAttribute("tabindex", "0");
   });
 
+  it("draws its focus outline inside its own box, where the frame around it cannot clip it", () => {
+    const { container } = render(
+      <FadeScroll>
+        <p>rows</p>
+      </FadeScroll>
+    );
+
+    expect(container.firstElementChild).toHaveClass("focus-visible:-outline-offset-2");
+  });
+
   it("adds no stop of its own when a row inside it can already take focus", () => {
     const { container } = render(
       <FadeScroll>
