@@ -66,14 +66,24 @@ describe("a track that could not be played", () => {
   it("is not on screen for anyone without the accessibility mode, so the player looks as it does today", () => {
     renderPlayer({ failing: true });
 
-    expect(screen.getByText(enPlayer.problem.playback)).toHaveClass("sr-only");
+    expect(screen.getByText(enPlayer.problem.playback)).not.toBeVisible();
+  });
+
+  it("is hidden rather than only moved off screen, so it is not loose text outside the page's regions", () => {
+    renderPlayer({ failing: true });
+
+    const message = screen.getByText(enPlayer.problem.playback);
+    expect(message).toHaveAttribute("hidden");
+    expect(screen.getByRole("button", { name: enPlayer.controls.play })).toHaveAccessibleDescription(
+      enPlayer.problem.playback
+    );
   });
 
   it("stays on screen in the accessibility mode", () => {
     accessibility.mode = true;
     renderPlayer({ failing: true });
 
-    expect(screen.getByText(enPlayer.problem.playback)).not.toHaveClass("sr-only");
+    expect(screen.getByText(enPlayer.problem.playback)).toBeVisible();
   });
 
   it("is absent while nothing has failed", () => {

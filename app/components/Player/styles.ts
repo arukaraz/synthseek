@@ -13,7 +13,7 @@ export const playbackProblem = cva("", {
   variants: {
     visible: {
       true: "text-destructive-vivid bg-surface/90 flex items-center gap-2 px-4 py-2 text-13",
-      false: "sr-only",
+      false: "",
     },
   },
   defaultVariants: { visible: false },

@@ -11,7 +11,7 @@ export function PlaybackProblem({ visible }: PlaybackProblemProps) {
   const { t } = useTranslation("player");
 
   return (
-    <p id={PLAYBACK_PROBLEM_ID} className={playbackProblem({ visible })} data-playback-problem>
+    <p id={PLAYBACK_PROBLEM_ID} hidden={!visible} className={playbackProblem({ visible })} data-playback-problem>
       {visible ? <TriangleAlert className="size-4 shrink-0" aria-hidden /> : null}
       {t("problem.playback")}
     </p>
