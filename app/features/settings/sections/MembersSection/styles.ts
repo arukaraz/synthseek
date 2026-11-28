@@ -20,7 +20,7 @@ export const userEmail = cva("text-fg/50 truncate text-xs");
 
 export const requestCount = cva("text-fg/60 text-sm tabular-nums");
 
-export const joinedDate = cva("text-fg/50 text-xs");
+export const joinedDate = cva("text-fg/50 text-xs whitespace-nowrap");
 
 export const quotaLines = cva("text-fg/60 flex flex-col text-xs whitespace-nowrap tabular-nums");
 
