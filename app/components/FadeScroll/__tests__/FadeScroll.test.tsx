@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { fireEvent, render, screen } from "@test/test-utils";
+import { fireEvent, render, screen, waitFor } from "@test/test-utils";
 
 import { FadeScroll } from "../FadeScroll";
 
@@ -63,6 +63,71 @@ describe("FadeScroll", () => {
 
     expect(left.parentElement).toHaveClass("invisible");
     expect(right.parentElement).toHaveClass("invisible");
+  });
+
+  it("can be reached and scrolled by keyboard when it hides rows and holds nothing to focus", () => {
+    const { container } = render(
+      <FadeScroll>
+        <p>rows</p>
+      </FadeScroll>
+    );
+    const node = container.firstElementChild;
+    if (!(node instanceof HTMLElement)) throw new Error("scroller missing");
+    expect(node).not.toHaveAttribute("tabindex");
+
+    overflow(node, 0);
+
+    expect(screen.getByRole("group", { name: "Scrollable list" })).toBe(node);
+    expect(node).toHaveAttribute("tabindex", "0");
+  });
+
+  it("adds no stop of its own when a row inside it can already take focus", () => {
+    const { container } = render(
+      <FadeScroll>
+        <button type="button">Play</button>
+      </FadeScroll>
+    );
+    const node = container.firstElementChild;
+    if (!(node instanceof HTMLElement)) throw new Error("scroller missing");
+
+    overflow(node, 0);
+
+    expect(node).not.toHaveAttribute("tabindex");
+    expect(node).not.toHaveAttribute("role");
+  });
+
+  it("gives its stop back once a row that can take focus arrives", async () => {
+    const { container, rerender } = render(
+      <FadeScroll>
+        <p>rows</p>
+      </FadeScroll>
+    );
+    const node = container.firstElementChild;
+    if (!(node instanceof HTMLElement)) throw new Error("scroller missing");
+    overflow(node, 0);
+    expect(node).toHaveAttribute("tabindex", "0");
+
+    rerender(
+      <FadeScroll>
+        <p>rows</p>
+        <button type="button">Play</button>
+      </FadeScroll>
+    );
+
+    await waitFor(() => expect(node).not.toHaveAttribute("tabindex"));
+  });
+
+  it("keeps the name it was given when it also hides rows", () => {
+    render(
+      <FadeScroll label="All stations">
+        <p>cards</p>
+      </FadeScroll>
+    );
+    const node = screen.getByRole("region", { name: "All stations" });
+
+    overflow(node, 0);
+
+    expect(screen.getByRole("region", { name: "All stations" })).toHaveAttribute("tabindex", "0");
   });
 
   it("renders no arrows unless asked", () => {

@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 
 import { hiddenScrollbar, scrollFade } from "@components/ui/styles";
 import { useScrollEdges } from "@hooks/ui/useScrollEdges";
+import { useStrandedScroller } from "@hooks/ui/useStrandedScroller";
 import { cn } from "@utils/cn";
 
 import { SCROLL_PAGE_SHARE } from "./constants";
@@ -14,6 +15,8 @@ import type { FadeScrollProps, ScrollEdgeSide } from "./types";
 export function FadeScroll({ axis = "y", arrows = false, className, label, children }: FadeScrollProps) {
   const { t } = useTranslation("components");
   const edges = useScrollEdges<HTMLDivElement>(axis);
+  const stranded = useStrandedScroller(edges.node, edges.start || edges.end);
+  const named = label !== undefined;
 
   const scroller = (
     <div
@@ -24,9 +27,9 @@ export function FadeScroll({ axis = "y", arrows = false, className, label, child
         scrollFade({ axis, start: edges.start, end: edges.end }),
         className
       )}
-      role={label ? "region" : undefined}
-      aria-label={label}
-      tabIndex={label ? 0 : undefined}
+      role={named ? "region" : stranded ? "group" : undefined}
+      aria-label={named ? label : stranded ? t("fadeScroll.scrollable") : undefined}
+      tabIndex={named || stranded ? 0 : undefined}
     >
       {children}
     </div>

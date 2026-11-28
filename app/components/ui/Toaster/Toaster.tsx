@@ -2,11 +2,12 @@
 
 import { useDockJobs } from "@hooks/api/subscriptions";
 import { usePlayerBottomDock } from "@hooks/ui/player";
+import { useKeyboardFocusWithin } from "@hooks/ui/useKeyboardFocusWithin";
 import { useAccessibility } from "@modules/providers/AccessibilityProvider";
 import { useThemeContext } from "@theme/ThemeProvider";
 import { useEffect } from "react";
 import { Toaster as Sonner } from "sonner";
-import { TOAST_OFFSET_AT_LAYOUT_BREAKPOINT } from "./constants";
+import { TOAST_OFFSET_AT_LAYOUT_BREAKPOINT, TOAST_STACK_SELECTOR } from "./constants";
 import { resolveToastDuration, resolveToastMobileOffset, resolveToastOffset } from "./helpers";
 import { TOAST_ICONS } from "./icons";
 import { installToastPolicy, setToastPolicy } from "./policy";
@@ -18,6 +19,7 @@ export function Toaster({ ...props }: ToasterProps) {
   const dockVisible = useDockJobs().length > 0;
   const playerDock = usePlayerBottomDock();
   const { toastDuration, mode } = useAccessibility();
+  const keyboardInside = useKeyboardFocusWithin(TOAST_STACK_SELECTOR);
   useEffect(() => {
     installToastPolicy();
     setToastPolicy({ choice: toastDuration, mode });
@@ -28,6 +30,7 @@ export function Toaster({ ...props }: ToasterProps) {
       position="bottom-right"
       className="player-metrics"
       closeButton
+      expand={keyboardInside}
       gap={12}
       icons={TOAST_ICONS}
       toastOptions={{ classNames: TOAST_CLASS_NAMES }}

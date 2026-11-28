@@ -134,7 +134,8 @@
   },
   "fadeScroll": {
     "scrollLeft": "Défiler à gauche",
-    "scrollRight": "Défiler à droite"
+    "scrollRight": "Défiler à droite",
+    "scrollable": "Liste défilante"
   },
   "trackStatus": {
     "moreInfo": "Plus d'infos : {{label}}"

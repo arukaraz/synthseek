@@ -12,6 +12,9 @@ export const CLIENT_PAGINATION = {
 
 export const SCROLL_EDGE_TOLERANCE_PX = 4;
 
+export const TABBABLE_SELECTOR =
+  'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
 export const PHONE_QUERY = "(max-width: 639px)";
 
 export const DESKTOP_AUTOFOCUS_QUERY = "(min-width: 640px) and (hover: hover) and (pointer: fine)";

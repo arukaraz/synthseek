@@ -134,7 +134,8 @@
   },
   "fadeScroll": {
     "scrollLeft": "Nach links scrollen",
-    "scrollRight": "Nach rechts scrollen"
+    "scrollRight": "Nach rechts scrollen",
+    "scrollable": "Scrollbare Liste"
   },
   "trackStatus": {
     "moreInfo": "Mehr Infos: {{label}}"

@@ -1,4 +1,5 @@
-import { render, screen, waitFor, within } from "@testing-library/react";
+import { act, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
+import userEvent, { type UserEvent } from "@testing-library/user-event";
 import { afterEach, describe, expect, it } from "vitest";
 import { toast } from "sonner";
 
@@ -7,6 +8,14 @@ import { Toaster } from "../Toaster";
 afterEach(() => {
   toast.dismiss();
 });
+
+async function tabInto(user: UserEvent, target: Element, options: { shift?: boolean } = {}): Promise<void> {
+  for (let stop = 0; stop < 12; stop++) {
+    await user.tab(options);
+    if (target.contains(document.activeElement)) return;
+  }
+  throw new Error("the keyboard never reached the target");
+}
 
 async function findToast(title: string): Promise<HTMLElement> {
   const titleNode = await screen.findByText(title);
@@ -79,6 +88,81 @@ describe("Toaster", () => {
     const toaster = document.querySelector("[data-sonner-toaster]");
     if (!(toaster instanceof HTMLElement)) throw new Error("toaster element not found");
     expect(toaster).toHaveClass("player-metrics");
+  });
+
+  it("opens the stack while the keyboard is inside it, so the toast behind is not focused unseen", async () => {
+    render(<Toaster />);
+    toast.error("First failure");
+    toast.error("Second failure");
+    const behind = await findToast("First failure");
+    const front = await findToast("Second failure");
+    await waitFor(() => expect(behind).toHaveAttribute("data-front", "false"));
+    expect(behind).toHaveAttribute("data-expanded", "false");
+
+    await tabInto(userEvent.setup(), behind);
+
+    expect(behind).toHaveAttribute("data-expanded", "true");
+    expect(front).toHaveAttribute("data-expanded", "true");
+  });
+
+  it("closes the stack again when the keyboard leaves it", async () => {
+    render(
+      <>
+        <button type="button">Elsewhere</button>
+        <Toaster />
+      </>
+    );
+    toast.error("First failure");
+    toast.error("Second failure");
+    const behind = await findToast("First failure");
+    await waitFor(() => expect(behind).toHaveAttribute("data-front", "false"));
+    const user = userEvent.setup();
+    await tabInto(user, behind);
+    expect(behind).toHaveAttribute("data-expanded", "true");
+
+    await tabInto(user, screen.getByRole("button", { name: "Elsewhere" }), { shift: true });
+
+    await waitFor(() => expect(behind).toHaveAttribute("data-expanded", "false"));
+  });
+
+  it("stays open at every stop while the keyboard moves from one toast to the next", async () => {
+    render(<Toaster />);
+    toast.error("First failure");
+    toast.error("Second failure");
+    const behind = await findToast("First failure");
+    const front = await findToast("Second failure");
+    await waitFor(() => expect(behind).toHaveAttribute("data-front", "false"));
+    const user = userEvent.setup();
+    const collapsedAt: string[] = [];
+    const seen = new Set<Element>();
+
+    for (let stop = 0; stop < 6; stop++) {
+      await user.tab();
+      const active = document.activeElement;
+      const toastNode = active?.closest("[data-sonner-toast]") ?? null;
+      if (toastNode === null) continue;
+      seen.add(toastNode);
+      if (toastNode.getAttribute("data-expanded") !== "true") collapsedAt.push(active?.tagName ?? "");
+    }
+
+    expect(seen).toEqual(new Set([behind, front]));
+    expect(collapsedAt).toEqual([]);
+  });
+
+  it("leaves the stack as it is when focus arrives without the keyboard", async () => {
+    render(<Toaster />);
+    toast.error("First failure");
+    toast.error("Second failure");
+    const behind = await findToast("First failure");
+    await waitFor(() => expect(behind).toHaveAttribute("data-front", "false"));
+    const user = userEvent.setup();
+    await user.tab();
+    fireEvent.pointerDown(document.body);
+
+    act(() => behind.focus());
+
+    expect(behind).toHaveFocus();
+    expect(behind).toHaveAttribute("data-expanded", "false");
   });
 
   it("keeps an accessible close control", async () => {

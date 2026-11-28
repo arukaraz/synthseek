@@ -1,5 +1,7 @@
 import type { ToasterOffset } from "./types";
 
+export const TOAST_STACK_SELECTOR = "[data-sonner-toaster]";
+
 export const TOAST_DEFAULT_DURATION_MS = 2000;
 
 export const TOAST_MODE_DEFAULT_DURATION_MS = 4000;

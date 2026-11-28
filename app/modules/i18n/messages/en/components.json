@@ -134,7 +134,8 @@
   },
   "fadeScroll": {
     "scrollLeft": "Scroll left",
-    "scrollRight": "Scroll right"
+    "scrollRight": "Scroll right",
+    "scrollable": "Scrollable list"
   },
   "trackStatus": {
     "moreInfo": "More info: {{label}}"
