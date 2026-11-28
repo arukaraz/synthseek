@@ -3,7 +3,7 @@ import { cva } from "class-variance-authority";
 export const railWrap = cva("relative flex min-h-0 flex-1 flex-col [container-type:size]");
 
 export const rail = cva(
-  "relative flex h-full snap-x snap-mandatory gap-3 overflow-x-auto scroll-smooth pb-2 pt-7 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+  "relative flex h-full snap-x snap-mandatory gap-3 overflow-x-auto scroll-smooth pb-2 pt-7 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden focus-visible:ring-primary-500/40 focus-visible:ring-2 focus-visible:ring-inset focus-visible:outline-none"
 );
 
 export const axisLine = cva(

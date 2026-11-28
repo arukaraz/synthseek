@@ -113,6 +113,26 @@ describe("DataTable", () => {
     expect(screen.getByRole("columnheader", { name: /Name/ })).toHaveAttribute("aria-sort", "none");
   });
 
+  it("says how long the whole table is and where each row sits when only part of it is drawn", () => {
+    render(<DataTable data={rows} columns={columns} getRowId={(row) => row.id} totalRows={250} />);
+
+    expect(screen.getByRole("table")).toHaveAttribute("aria-rowcount", "251");
+    expect(screen.getAllByRole("row").map((row) => row.getAttribute("aria-rowindex"))).toEqual(["1", "2", "3", "4"]);
+  });
+
+  it("never reports fewer rows than it draws", () => {
+    render(<DataTable data={rows} columns={columns} getRowId={(row) => row.id} totalRows={1} />);
+
+    expect(screen.getByRole("table")).toHaveAttribute("aria-rowcount", "4");
+  });
+
+  it("leaves a table without a known total exactly as it was", () => {
+    render(<DataTable data={rows} columns={columns} getRowId={(row) => row.id} />);
+
+    expect(screen.getByRole("table")).not.toHaveAttribute("aria-rowcount");
+    for (const row of screen.getAllByRole("row")) expect(row).not.toHaveAttribute("aria-rowindex");
+  });
+
   it("leaves a link inside a clickable row to the link, without clicking the row", async () => {
     const onRowClick = vi.fn();
     render(<DataTable data={rows} columns={columns} getRowId={(row) => row.id} onRowClick={onRowClick} />);

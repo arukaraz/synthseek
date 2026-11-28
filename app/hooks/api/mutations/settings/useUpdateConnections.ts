@@ -4,16 +4,20 @@ import i18n from "@locale";
 import { errorToast } from "@modules/errors";
 import { trpc } from "@utils/trpc";
 
-export function useUpdateConnectionsSlskd() {
+import type { FeedbackOptions } from "./types";
+
+export function useUpdateConnectionsSlskd({ silent = false }: FeedbackOptions = {}) {
   const utils = trpc.useUtils();
   return trpc.settings.updateConnectionsSlskd.useMutation({
     onSuccess: () => {
       utils.settings.get.invalidate();
       utils.settings.slskdStatus.invalidate();
       utils.settings.downloadSourcesAvailability.invalidate();
-      toast.success(i18n.t("mutations:settings.slskdSaved"));
+      if (!silent) toast.success(i18n.t("mutations:settings.slskdSaved"));
     },
-    onError: (error) => errorToast(error, "settings.slskdFailed"),
+    onError: (error) => {
+      if (!silent) errorToast(error, "settings.slskdFailed");
+    },
   });
 }
 
@@ -33,15 +37,17 @@ export function useTestLidarr() {
   return trpc.settings.testLidarr.useMutation();
 }
 
-export function useUpdateConnectionsNavidrome() {
+export function useUpdateConnectionsNavidrome({ silent = false }: FeedbackOptions = {}) {
   const utils = trpc.useUtils();
   return trpc.settings.updateConnectionsNavidrome.useMutation({
     onSuccess: () => {
       utils.settings.get.invalidate();
       utils.playback.sources.accounts.invalidate();
-      toast.success(i18n.t("mutations:settings.navidromeSaved"));
+      if (!silent) toast.success(i18n.t("mutations:settings.navidromeSaved"));
     },
-    onError: (error) => errorToast(error, "settings.navidromeFailed"),
+    onError: (error) => {
+      if (!silent) errorToast(error, "settings.navidromeFailed");
+    },
   });
 }
 
@@ -49,15 +55,17 @@ export function useTestNavidrome() {
   return trpc.settings.testNavidrome.useMutation();
 }
 
-export function useUpdateConnectionsJellyfin() {
+export function useUpdateConnectionsJellyfin({ silent = false }: FeedbackOptions = {}) {
   const utils = trpc.useUtils();
   return trpc.settings.updateConnectionsJellyfin.useMutation({
     onSuccess: () => {
       utils.settings.get.invalidate();
       utils.playback.sources.accounts.invalidate();
-      toast.success(i18n.t("mutations:settings.jellyfinSaved"));
+      if (!silent) toast.success(i18n.t("mutations:settings.jellyfinSaved"));
     },
-    onError: (error) => errorToast(error, "settings.jellyfinFailed"),
+    onError: (error) => {
+      if (!silent) errorToast(error, "settings.jellyfinFailed");
+    },
   });
 }
 
@@ -76,14 +84,16 @@ export function useUpdateConnectionsPlex() {
   });
 }
 
-export function useUpdateConnectionsEnrichment() {
+export function useUpdateConnectionsEnrichment({ silent = false }: FeedbackOptions = {}) {
   const utils = trpc.useUtils();
   return trpc.settings.updateConnectionsEnrichment.useMutation({
     onSuccess: () => {
       utils.settings.get.invalidate();
-      toast.success(i18n.t("mutations:settings.enrichmentSaved"));
+      if (!silent) toast.success(i18n.t("mutations:settings.enrichmentSaved"));
     },
-    onError: (error) => errorToast(error, "settings.enrichmentFailed"),
+    onError: (error) => {
+      if (!silent) errorToast(error, "settings.enrichmentFailed");
+    },
   });
 }
 

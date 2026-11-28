@@ -1,9 +1,13 @@
 import type { RequestPresetOrigin } from "@features/search/components/ConfigRequestModal/types";
 import type { ParseKeys } from "i18next";
 
-import type { SourceLinkOutcome } from "./types";
+import type { LinkCallbackOutcome, SourceLinkOutcome } from "./types";
 
 export const PLEX_SOURCE_KEY = "plex";
+
+export const NO_LINK_OUTCOME: LinkCallbackOutcome = { linked: false, failure: null };
+
+export const PLEX_SERVICES_HREF = "/settings/connections/services#plex";
 
 export const LOCKED_PRESET_KEYS: Readonly<Record<RequestPresetOrigin, ParseKeys<"settings">>> = {
   user: "requestPreset.locked.byAdmin",

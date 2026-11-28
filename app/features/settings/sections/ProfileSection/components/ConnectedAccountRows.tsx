@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
+import { PlexPinHelp } from "@components/PlexPinHelp";
 import { Button } from "@components/ui/Button";
 import { ProviderMark, providerTone } from "@components/LibrarySourceModal";
 import { usePlaybackSourceAccounts } from "@hooks/api";
@@ -110,6 +111,7 @@ export function ConnectedAccountRows() {
               {plexIsOnlySignIn ? (
                 <p className="text-fg/40 mt-1 text-xs">{t("profile.connected.plex.needsPassword")}</p>
               ) : null}
+              <PlexPinHelp session={plexLink.session} phase={plexLink.phase} />
             </div>
             {plexLinked ? (
               <Button

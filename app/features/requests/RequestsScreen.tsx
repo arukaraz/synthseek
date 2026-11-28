@@ -1,6 +1,7 @@
 "use client";
 
 import { Suspense } from "react";
+import { useTranslation } from "react-i18next";
 import { GroupsViewMode } from "./components/GroupsViewMode";
 import { RequestsActivityDivider } from "./components/RequestsActivityDivider";
 import { SpotifyCallbackToast } from "./components/SpotifyCallbackToast";
@@ -9,8 +10,11 @@ import { Toolbar } from "./components/Toolbar/Toolbar";
 import { requestsView } from "./components/styles";
 
 export function RequestsScreen() {
+  const { t } = useTranslation("components");
+
   return (
     <div className={requestsView()}>
+      <h1 className="sr-only">{t("header.requests")}</h1>
       <Suspense fallback={null}>
         <SpotifyCallbackToast />
       </Suspense>

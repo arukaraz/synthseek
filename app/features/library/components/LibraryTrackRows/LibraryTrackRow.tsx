@@ -3,13 +3,16 @@
 import { TrackStatusIndicator } from "@components/TrackStatusIndicator";
 import { Checkbox } from "@components/ui/Checkbox";
 import { ImagePlaceholder } from "@components/ui/ImagePlaceholder";
+import { useListPosition } from "@hooks/ui/useListPosition";
 import { useLongPress } from "@hooks/ui/useLongPress";
 import { artworkImage } from "@utils/artworkProxy";
+import { listPositionAttributes } from "@utils/list-position";
 import { Music, Play } from "lucide-react";
 import Image from "next/image";
 import { useTranslation } from "react-i18next";
 
-import { handleCardActivationKey, joinMeta, onOwnClick, shieldOwnClick } from "../LibraryCard/helpers";
+import { joinMeta, onOwnClick, shieldOwnClick } from "../LibraryCard/helpers";
+import { RowPrimaryButton } from "../LibraryCard/RowPrimaryButton";
 import { LibraryDurationCell } from "../LibraryTable/cells/LibraryDurationCell";
 import { TrackActionsCell } from "../LibraryTable/cells/TrackActionsCell";
 import {
@@ -37,7 +40,9 @@ export function LibraryTrackRow({
 }: LibraryTrackRowProps) {
   const { t } = useTranslation("library");
   const longPress = useLongPress(onHold);
+  const position = useListPosition();
   const activates = selecting || item.playable;
+  const subtitle = joinMeta([item.artist, item.albumName]);
   const activate = () => {
     if (selecting) onToggle();
     else if (item.playable) onPlay(item.id);
@@ -45,17 +50,9 @@ export function LibraryTrackRow({
 
   return (
     <li
+      {...listPositionAttributes(position)}
       className={trackRow({ selected })}
-      role={activates ? "button" : undefined}
-      tabIndex={activates ? 0 : undefined}
-      aria-pressed={selecting ? selected : undefined}
-      aria-label={
-        selecting
-          ? t("page.selection.selectTrack", { title: item.title })
-          : t("page.actions.playTrack", { title: item.title })
-      }
       onClick={activates ? onOwnClick(activate) : undefined}
-      onKeyDown={activates ? (event) => handleCardActivationKey(event, activate) : undefined}
       {...longPress}
     >
       {selecting ? <Checkbox checked={selected} tabIndex={-1} aria-hidden className={trackRowCheck()} /> : null}
@@ -72,13 +69,28 @@ export function LibraryTrackRow({
         ) : null}
       </div>
       <div className={trackRowText()}>
-        <p className={trackRowTitle()}>{item.title}</p>
-        <p className={trackRowSubtitle()}>{joinMeta([item.artist, item.albumName])}</p>
+        <p className={trackRowTitle()}>
+          {activates ? (
+            <RowPrimaryButton
+              label={
+                selecting
+                  ? t("page.selection.selectTrack", { title: item.title })
+                  : t("page.actions.playTrack", { title: item.title })
+              }
+              pressed={selecting ? selected : undefined}
+            >
+              {item.title}
+            </RowPrimaryButton>
+          ) : (
+            item.title
+          )}
+        </p>
+        <p className={trackRowSubtitle()}>{subtitle}</p>
         {item.status === "complete" ? null : <TrackStatusIndicator status={item.status} className={trackRowStatus()} />}
       </div>
       <LibraryDurationCell durationMs={item.duration_ms} />
       {selecting ? null : (
-        <div onClick={shieldOwnClick} onKeyDown={(event) => event.stopPropagation()}>
+        <div onClick={shieldOwnClick}>
           <TrackActionsCell
             item={item}
             onEnqueue={onEnqueue}

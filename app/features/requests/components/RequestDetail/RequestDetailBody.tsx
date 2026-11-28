@@ -111,6 +111,8 @@ export function RequestDetailBody({ request, tracks, isResolving, hasFailed, onR
           if (!open) handlers.closeReject();
         }}
         count={handlers.rejectCount}
+        error={handlers.rejectError}
+        pending={handlers.isRejecting}
         onConfirm={handlers.confirmReject}
       />
     </>

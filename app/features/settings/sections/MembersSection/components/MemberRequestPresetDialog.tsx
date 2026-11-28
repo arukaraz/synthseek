@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 
 import { Button } from "@components/ui/Button";
 import { InfoTooltip } from "@components/ui/InfoTooltip";
+import { InlineError } from "@components/ui/InlineError";
 import {
   Dialog,
   DialogContent,
@@ -116,6 +117,7 @@ export function MemberRequestPresetDialog({ member, onClose }: MemberRequestPres
             {unavailable ? t("requestPreset.member.unavailable") : t("header.loading")}
           </p>
         )}
+        <InlineError error={save.error} />
         <DialogFooter>
           <Button variant="outline" size="sm" onClick={onClose} disabled={save.isPending}>
             {t("requestPreset.member.cancel")}

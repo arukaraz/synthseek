@@ -44,6 +44,7 @@ export function EditProfileCard({ user }: ProfileCardProps) {
           value={draft.username}
           onChange={(v) => form.setField("username", v)}
           ariaLabel={t("profile.edit.usernameAriaLabel")}
+          autoComplete="username"
         />
       </SettingsField>
 
@@ -58,6 +59,7 @@ export function EditProfileCard({ user }: ProfileCardProps) {
           onChange={(v) => form.setField("email", v)}
           disabled={!isLocal}
           ariaLabel={t("profile.edit.emailAriaLabel")}
+          autoComplete="email"
         />
       </SettingsField>
 

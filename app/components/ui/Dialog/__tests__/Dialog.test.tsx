@@ -140,7 +140,7 @@ describe("one blur under an open dialog", () => {
           <DialogTitle>Title</DialogTitle>
           <Popover open>
             <PopoverTrigger>Info</PopoverTrigger>
-            <PopoverContent>Details</PopoverContent>
+            <PopoverContent aria-label="Info details">Details</PopoverContent>
           </Popover>
         </DialogContent>
       </Dialog>

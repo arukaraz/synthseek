@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Button } from "@components/ui/Button";
+import { InlineError } from "@components/ui/InlineError";
 import { Notice } from "@components/ui/Notice";
 import { useChangePassword } from "@hooks/api/mutations/auth/useChangePassword";
 import { ACCOUNT_FIELD_RULES, isValidPassword } from "@utils/account";
@@ -47,6 +48,7 @@ export function ChangePasswordCard({ user }: ProfileCardProps) {
               onChange={setCurrent}
               source={TYPED_SECRET}
               ariaLabel={t("profile.password.currentAriaLabel")}
+              autoComplete="current-password"
             />
           </SettingsField>
           <SettingsField
@@ -58,8 +60,10 @@ export function ChangePasswordCard({ user }: ProfileCardProps) {
               onChange={setNext}
               source={TYPED_SECRET}
               ariaLabel={t("profile.password.newAriaLabel")}
+              autoComplete="new-password"
             />
           </SettingsField>
+          <InlineError error={change.error} />
           <div className="flex justify-end">
             <Button type="submit" size="sm" disabled={!canSubmit}>
               {t("profile.password.submit")}
@@ -67,7 +71,10 @@ export function ChangePasswordCard({ user }: ProfileCardProps) {
           </div>
         </form>
       ) : (
-        <Notice variant="info" title={t("profile.password.managedByPlex")} />
+        <Notice
+          variant="info"
+          title={user.plexLinked ? t("profile.password.managedByPlex") : t("profile.password.managedElsewhere")}
+        />
       )}
     </SettingsCard>
   );

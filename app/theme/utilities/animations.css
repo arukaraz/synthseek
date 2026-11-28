@@ -14,8 +14,8 @@
     }
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    .omni-reveal {
+  .omni-reveal {
+    @variant motion-reduce {
       animation: none;
     }
   }
@@ -131,8 +131,8 @@
     animation: tip-halo 2.2s ease-out infinite;
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    .animate-tip-halo {
+  .animate-tip-halo {
+    @variant motion-reduce {
       animation: none;
       box-shadow: 0 0 0 1.5px color-mix(in oklab, var(--neon-accent) 45%, transparent);
     }
@@ -151,8 +151,8 @@
     animation: loading-ring-spin 1.2s linear infinite;
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    .animate-loading-ring {
+  .animate-loading-ring {
+    @variant motion-reduce {
       animation: none;
     }
   }
@@ -212,11 +212,13 @@
     animation: anchor-target-glow 5s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    [data-glow="true"]::before {
-      animation: none;
-      box-shadow: 0 0 0 1.5px color-mix(in oklab, var(--neon-accent) 45%, transparent);
-      background-color: color-mix(in oklab, var(--neon-accent) 4%, transparent);
+  [data-glow="true"] {
+    @variant motion-reduce {
+      &::before {
+        animation: none;
+        box-shadow: 0 0 0 1.5px color-mix(in oklab, var(--neon-accent) 45%, transparent);
+        background-color: color-mix(in oklab, var(--neon-accent) 4%, transparent);
+      }
     }
   }
 
@@ -332,14 +334,16 @@
     background-color: var(--surface-bg);
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    .activity-rail-idle,
-    .activity-rail-progress,
-    .activity-rail-sync {
+  .activity-rail-idle,
+  .activity-rail-progress,
+  .activity-rail-sync {
+    @variant motion-reduce {
       animation: none;
     }
+  }
 
-    .activity-rail-travel {
+  .activity-rail-travel {
+    @variant motion-reduce {
       animation: none;
       display: none;
     }
@@ -414,8 +418,8 @@
     animation-name: loading-dots-3;
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    .loading-dots > span {
+  .loading-dots > span {
+    @variant motion-reduce {
       animation: none;
       opacity: 0.5;
     }
@@ -462,17 +466,21 @@
     animation-play-state: paused;
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    .now-playing-bars > span {
+  .now-playing-bars > span {
+    @variant motion-reduce {
       animation: none;
       transform: scaleY(0.6);
     }
+  }
 
-    .now-playing-bars > span:nth-child(2) {
+  .now-playing-bars > span:nth-child(2) {
+    @variant motion-reduce {
       transform: scaleY(1);
     }
+  }
 
-    .now-playing-bars > span:nth-child(3) {
+  .now-playing-bars > span:nth-child(3) {
+    @variant motion-reduce {
       transform: scaleY(0.4);
     }
   }

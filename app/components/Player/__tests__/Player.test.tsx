@@ -191,6 +191,14 @@ describe("the player dock", () => {
     expect(slot.querySelector("[data-part=player-bar]")?.getAttribute("data-placement")).toBe("header");
   });
 
+  it("makes the docked bar a named region of the page", () => {
+    renderPlayer();
+
+    expect(screen.getByRole("region", { name: enPlayer.controls.region })).toContainElement(
+      screen.getByRole("button", { name: enPlayer.controls.next })
+    );
+  });
+
   it("names the track, the artist and the album it is playing", () => {
     renderPlayer();
 
@@ -309,10 +317,18 @@ describe("the player dock", () => {
     expect(screen.getAllByRole("button", { name: enPlayer.controls.repeat.one }).length).toBeGreaterThan(0);
   });
 
+  it("starts the name of the cover button with the initials it draws", () => {
+    renderPlayer({ track: createPlayerTrack({ artworkUrl: null, album: "Random Access Memories" }) });
+
+    const cover = screen.getByRole("button", { name: new RegExp(enPlayer.controls.openTrack) });
+
+    expect(cover.getAttribute("aria-label")).toBe(`RA ${enPlayer.controls.openTrack}`);
+  });
+
   it("opens the full stage from the cover", async () => {
     const { actions, user } = renderPlayer();
 
-    await user.click(screen.getByRole("button", { name: enPlayer.controls.openTrack }));
+    await user.click(screen.getByRole("button", { name: new RegExp(enPlayer.controls.openTrack) }));
 
     expect(actions.toggleFullscreen).toHaveBeenCalled();
   });
@@ -849,7 +865,9 @@ describe("the full stage on a phone", () => {
 
     rerender(<Player view={{ ...view, fullscreen: false }} actions={actions} />);
 
-    await waitFor(() => expect(screen.getByRole("button", { name: enPlayer.controls.openTrack })).toHaveFocus());
+    await waitFor(() =>
+      expect(screen.getByRole("button", { name: new RegExp(enPlayer.controls.openTrack) })).toHaveFocus()
+    );
     rect.mockRestore();
   });
 });

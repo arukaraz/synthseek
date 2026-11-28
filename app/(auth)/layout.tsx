@@ -8,7 +8,7 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
   return (
     <div className={authLayoutRoot()} data-theme="dark">
       <AuthScene />
-      <div className={authLayoutContent()}>{children}</div>
+      <main className={authLayoutContent()}>{children}</main>
     </div>
   );
 }

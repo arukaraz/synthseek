@@ -16,7 +16,13 @@
     "noNewImported": "Keine neuen Benutzer importiert",
     "imported_one": "{{count}} Benutzer importiert{{skipped}}",
     "imported_other": "{{count}} Benutzer importiert{{skipped}}",
-    "importedSkipped": " ({{count}} übersprungen)"
+    "importedSkipped": " ({{count}} übersprungen)",
+    "approved": "Konto freigegeben",
+    "approveFailed": "Das Konto konnte nicht freigegeben werden",
+    "rejected": "Konto abgelehnt und entfernt",
+    "rejectFailed": "Das Konto konnte nicht abgelehnt werden",
+    "identityUnlinked": "Anmeldemöglichkeit entfernt",
+    "identityUnlinkFailed": "Die Anmeldemöglichkeit konnte nicht entfernt werden"
   },
   "settings": {
     "audioAnalysisSaved": "Geschwindigkeit der Audioanalyse gespeichert",
@@ -46,6 +52,7 @@
     "enrichmentFailed": "Anreicherungseinstellungen konnten nicht aktualisiert werden",
     "spotifyFailed": "Spotify-Einstellungen konnten nicht aktualisiert werden",
     "finishWizardFailed": "Einrichtung konnte nicht abgeschlossen werden",
+    "dismissSetupFailed": "Die Einrichtungskarte konnte nicht ausgeblendet werden",
     "formattingSaved": "Formatierung gespeichert",
     "downloadSourcesSaved": "Download-Quellen aktualisiert",
     "downloadSourceOrderSaved": "Reihenfolge der Download-Quellen gespeichert",
@@ -80,6 +87,15 @@
     "recycleBinSaved": "Papierkorb-Einstellungen gespeichert",
     "duplicateResolutionSaved": "Umgang mit Duplikaten gespeichert",
     "duplicateResolutionFailed": "Der Umgang mit Duplikaten konnte nicht gespeichert werden",
+    "signInSaved": "Einstellung der Anmeldeseite gespeichert",
+    "signInFailed": "Die Einstellung der Anmeldeseite konnte nicht gespeichert werden",
+    "oidcSaved": "Single-Sign-on-Anbieter gespeichert",
+    "oidcFailed": "Der Single-Sign-on-Anbieter konnte nicht gespeichert werden",
+    "oidcTestFailed": "Die Verbindung konnte nicht getestet werden",
+    "oidcSignInModeSaved": "Anmeldeoptionen gespeichert",
+    "oidcSignInModeFailed": "Die Anmeldeoptionen konnten nicht gespeichert werden",
+    "accountProvisioningSaved": "Kontoerstellung gespeichert",
+    "accountProvisioningFailed": "Die Kontoerstellung konnte nicht gespeichert werden",
     "recycleBinSaveFailed": "Papierkorb-Einstellungen konnten nicht gespeichert werden",
     "recycleBinEmptied_one": "Papierkorb geleert, {{count}} Datei entfernt",
     "recycleBinEmptied_other": "Papierkorb geleert, {{count}} Dateien entfernt",
@@ -113,12 +129,16 @@
   "auth": {
     "changePasswordFailed": "Passwort konnte nicht geändert werden",
     "loginFailed": "Anmeldung fehlgeschlagen",
-    "setupFailed": "Einrichtung fehlgeschlagen",
     "updateProfileFailed": "Profil konnte nicht aktualisiert werden",
     "plexUnlinkFailed": "Plex konnte nicht getrennt werden",
     "passwordChanged": "Passwort geändert",
     "profileUpdated": "Profil aktualisiert",
-    "plexUnlinked": "Plex-Konto getrennt"
+    "plexUnlinked": "Plex-Konto getrennt",
+    "oidcLinkFailed": "Die Verknüpfung des Kontos konnte nicht gestartet werden",
+    "jellyfinLinked": "Jellyfin-Konto verknüpft",
+    "jellyfinLinkFailed": "Das Jellyfin-Konto konnte nicht verknüpft werden",
+    "identityUnlinked": "Anmeldemöglichkeit entfernt",
+    "identityUnlinkFailed": "Die Anmeldemöglichkeit konnte nicht entfernt werden"
   },
   "oauth": {
     "denyFailed": "Autorisierung konnte nicht abgebrochen werden",

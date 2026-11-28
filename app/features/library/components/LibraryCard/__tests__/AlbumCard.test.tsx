@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 
+import { expectNoAxeViolations } from "@test/a11y/axe";
 import { renderWithProviders, screen } from "@test/test-utils";
 import type { LibraryAlbumItem } from "@hooks/api/queries/library/types";
 
@@ -249,5 +250,27 @@ describe("AlbumCard", () => {
 
     expect(screen.getByText("2001 · FLAC")).toBeInTheDocument();
     expect(screen.queryByText(/Music/)).not.toBeInTheDocument();
+  });
+});
+
+describe("AlbumCard axe", () => {
+  it("has no violation as a plain card", async () => {
+    renderWithProviders(
+      <ul>
+        <AlbumCard item={createLibraryAlbum()} />
+      </ul>
+    );
+
+    await expectNoAxeViolations();
+  });
+
+  it("has no violation when it opens and plays", async () => {
+    renderWithProviders(
+      <ul>
+        <AlbumCard item={createLibraryAlbum()} onOpen={vi.fn()} onPlay={vi.fn(async () => undefined)} />
+      </ul>
+    );
+
+    await expectNoAxeViolations();
   });
 });

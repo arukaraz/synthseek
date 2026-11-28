@@ -12,7 +12,7 @@ export function AllResults({ title, results, totalCount, maxDisplay, onSeeAll, o
 
   return (
     <div>
-      <h4 className="text-fg mb-4 text-xl font-bold">{title}</h4>
+      <h3 className="text-fg mb-4 text-xl font-bold">{title}</h3>
       <Results results={results.slice(0, maxDisplay)} onResultClick={onResultClick} />
       {totalCount > maxDisplay && (
         <button onClick={onSeeAll} className="text-fg/60 hover:text-fg mt-4 text-sm font-medium transition-colors">

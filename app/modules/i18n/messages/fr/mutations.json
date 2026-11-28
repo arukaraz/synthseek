@@ -16,7 +16,13 @@
     "noNewImported": "Aucun nouvel utilisateur importé",
     "imported_one": "{{count}} utilisateur importé{{skipped}}",
     "imported_other": "{{count}} utilisateurs importés{{skipped}}",
-    "importedSkipped": " ({{count}} ignorés)"
+    "importedSkipped": " ({{count}} ignorés)",
+    "approved": "Compte validé",
+    "approveFailed": "Impossible de valider le compte",
+    "rejected": "Compte refusé et supprimé",
+    "rejectFailed": "Impossible de refuser le compte",
+    "identityUnlinked": "Méthode de connexion retirée",
+    "identityUnlinkFailed": "Impossible de retirer la méthode de connexion"
   },
   "settings": {
     "audioAnalysisSaved": "Vitesse de l'analyse audio enregistrée",
@@ -46,6 +52,7 @@
     "enrichmentFailed": "Échec de la mise à jour des réglages d'enrichissement",
     "spotifyFailed": "Échec de la mise à jour des réglages Spotify",
     "finishWizardFailed": "Impossible de terminer la configuration",
+    "dismissSetupFailed": "Impossible de masquer la carte de configuration",
     "formattingSaved": "Formatage enregistré",
     "downloadSourcesSaved": "Sources de téléchargement mises à jour",
     "downloadSourceOrderSaved": "Ordre des sources de téléchargement enregistré",
@@ -80,6 +87,15 @@
     "recycleBinSaved": "Réglages de la corbeille enregistrés",
     "duplicateResolutionSaved": "Gestion des doublons enregistrée",
     "duplicateResolutionFailed": "Impossible d'enregistrer la gestion des doublons",
+    "signInSaved": "Réglage de l'écran de connexion enregistré",
+    "signInFailed": "Impossible d'enregistrer le réglage de l'écran de connexion",
+    "oidcSaved": "Fournisseur d'authentification unique enregistré",
+    "oidcFailed": "Impossible d'enregistrer le fournisseur d'authentification unique",
+    "oidcTestFailed": "Impossible de tester la connexion",
+    "oidcSignInModeSaved": "Options de connexion enregistrées",
+    "oidcSignInModeFailed": "Impossible d'enregistrer les options de connexion",
+    "accountProvisioningSaved": "Création de comptes enregistrée",
+    "accountProvisioningFailed": "Impossible d'enregistrer la création de comptes",
     "recycleBinSaveFailed": "Échec de l'enregistrement des réglages de la corbeille",
     "recycleBinEmptied_one": "Corbeille vidée, {{count}} fichier supprimé",
     "recycleBinEmptied_other": "Corbeille vidée, {{count}} fichiers supprimés",
@@ -113,12 +129,16 @@
   "auth": {
     "changePasswordFailed": "Échec du changement de mot de passe",
     "loginFailed": "Échec de la connexion",
-    "setupFailed": "Échec de la configuration",
     "updateProfileFailed": "Échec de la mise à jour du profil",
     "plexUnlinkFailed": "Échec de la déconnexion de Plex",
     "passwordChanged": "Mot de passe modifié",
     "profileUpdated": "Profil mis à jour",
-    "plexUnlinked": "Compte Plex déconnecté"
+    "plexUnlinked": "Compte Plex déconnecté",
+    "oidcLinkFailed": "Impossible de commencer la liaison du compte",
+    "jellyfinLinked": "Compte Jellyfin lié",
+    "jellyfinLinkFailed": "Impossible de lier le compte Jellyfin",
+    "identityUnlinked": "Méthode de connexion retirée",
+    "identityUnlinkFailed": "Impossible de retirer la méthode de connexion"
   },
   "oauth": {
     "denyFailed": "Échec de l'annulation de l'autorisation",

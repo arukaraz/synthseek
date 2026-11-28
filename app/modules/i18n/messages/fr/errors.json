@@ -11,6 +11,18 @@
     "title": "Identifiants invalides",
     "description": "Vérifiez votre nom d'utilisateur et votre mot de passe, puis réessayez."
   },
+  "TOO_MANY_LOGIN_ATTEMPTS": {
+    "title": "Trop de tentatives de connexion",
+    "description": "Patientez quelques minutes, puis réessayez."
+  },
+  "SETUP_TOKEN_INVALID": {
+    "title": "Jeton de configuration manquant ou incorrect",
+    "description": "Copiez le jeton de configuration depuis le journal du serveur, puis réessayez."
+  },
+  "PLEX_SIGN_IN_NEEDS_SETUP": {
+    "title": "Terminez d'abord la configuration initiale",
+    "description": "Créez le compte administrateur sur la page de configuration, puis connectez Plex."
+  },
   "CURRENT_PASSWORD_INCORRECT": {
     "title": "Mot de passe actuel incorrect",
     "description": "Le mot de passe actuel que vous avez saisi est incorrect."
@@ -198,6 +210,34 @@
   "LIBRARY_SOURCE_REAUTH_REQUIRED": {
     "title": "Connexion à la bibliothèque expirée",
     "description": "Reconnectez ce compte pour charger sa bibliothèque."
+  },
+  "LIBRARY_SOURCE_NOT_CONNECTED": {
+    "title": "Non connecté",
+    "description": "Connectez d'abord cette source, puis réessayez."
+  },
+  "LIBRARY_SOURCE_UNAVAILABLE": {
+    "title": "Source indisponible",
+    "description": "Cette source n'a pas pu être lue pour le moment. Réessayez plus tard."
+  },
+  "LIBRARY_SOURCE_SESSION_TOO_LARGE": {
+    "title": "Le texte collé est trop volumineux",
+    "description": "Il dépasse la taille que peut avoir une session de navigateur. Collez seulement le contenu du fichier de cookies exporté."
+  },
+  "LIBRARY_SOURCE_SESSION_UNUSABLE": {
+    "title": "Rien d'utilisable dans le texte collé",
+    "description": "Il ne contient aucun cookie que cette source puisse utiliser. Exportez les cookies au format Netscape et collez le fichier entier."
+  },
+  "LIBRARY_SOURCE_SESSION_REFUSED": {
+    "title": "Session refusée",
+    "description": "La source n'a pas accepté la session collée. Reconnectez-vous dans votre navigateur, exportez un nouveau fichier de cookies et collez-le."
+  },
+  "LIBRARY_SOURCE_LINK_NOT_RECOGNIZED": {
+    "title": "Pas un lien de playlist",
+    "description": "Ce n'est pas un lien de playlist de cette source. Copiez le lien depuis la page de la playlist elle-même."
+  },
+  "LIBRARY_SOURCE_PLAYLIST_UNAVAILABLE": {
+    "title": "Playlist introuvable",
+    "description": "Cette playlist n'existe pas ou est privée."
   },
   "LIDARR_CONNECTION_FAILED": {
     "title": "Échec de la connexion à Lidarr",
@@ -558,5 +598,77 @@
   "THEME_CHANGED_ELSEWHERE": {
     "title": "Le thème a changé avant l'arrivée de votre enregistrement",
     "description": "Rien n'a été écrasé. Vos modifications sont toujours dans l'éditeur, par-dessus ce qui a changé. Vérifiez-les et enregistrez à nouveau."
+  },
+  "OIDC_NOT_AVAILABLE": {
+    "title": "Cette méthode de connexion n'est pas disponible",
+    "description": "Elle est désactivée ou non configurée sur ce serveur. Utilisez une autre méthode."
+  },
+  "OIDC_SIGN_IN_EXPIRED": {
+    "title": "La connexion a pris trop de temps",
+    "description": "Recommencez depuis la page de connexion."
+  },
+  "OIDC_USER_NOT_LINKED": {
+    "title": "Aucun compte lié à cette identité",
+    "description": "Connectez-vous autrement et liez-la depuis votre compte, ou demandez un compte à l'administrateur."
+  },
+  "OIDC_ALREADY_LINKED": {
+    "title": "Cette identité est déjà liée",
+    "description": "Elle appartient à un compte de ce serveur. Déliez-la d'abord à cet endroit."
+  },
+  "OIDC_LINK_SESSION_MISMATCH": {
+    "title": "Connecté avec un autre compte",
+    "description": "Le fournisseur d'identité a répondu pour une autre session. Recommencez la liaison."
+  },
+  "OIDC_PROVIDER_REFUSED": {
+    "title": "Le fournisseur a refusé la connexion",
+    "description": "Vérifiez votre accès auprès du fournisseur, puis réessayez."
+  },
+  "OIDC_PROVIDER_UNREACHABLE": {
+    "title": "Le fournisseur est injoignable",
+    "description": "Réessayez dans un instant, ou utilisez une autre méthode de connexion."
+  },
+  "OIDC_SIGN_IN_FAILED": {
+    "title": "La connexion n'a pas abouti",
+    "description": "Réessayez, ou utilisez une autre méthode de connexion."
+  },
+  "EXTERNAL_IDENTITY_NOT_FOUND": {
+    "title": "Cette identité liée n'existe pas",
+    "description": "Elle a peut-être déjà été retirée. Rechargez et réessayez."
+  },
+  "LAST_SIGN_IN_METHOD": {
+    "title": "C'est la dernière façon de se connecter",
+    "description": "Le compte n'a ni mot de passe ni autre compte lié. Ajoutez-en un avant de retirer celui-ci."
+  },
+  "OIDC_CONNECTION_NOT_TESTED": {
+    "title": "Testez d'abord la connexion",
+    "description": "Lancez Tester la connexion et attendez qu'il réussisse, puis activez ceci."
+  },
+  "ADMIN_WAY_IN_REQUIRED": {
+    "title": "Aucun administrateur ne pourrait revenir",
+    "description": "Donnez d'abord un mot de passe à un administrateur ou liez son compte chez le fournisseur."
+  },
+  "ACCOUNT_PENDING_APPROVAL": {
+    "title": "Votre compte attend une validation",
+    "description": "Un administrateur doit le valider avant que vous puissiez vous connecter. Réessayez ensuite."
+  },
+  "ACCOUNT_NOT_PENDING": {
+    "title": "Ce compte n'attend pas de validation",
+    "description": "Il a déjà été validé ou supprimé. Rechargez la liste."
+  },
+  "ACCOUNT_EMAIL_IN_USE": {
+    "title": "Cette adresse a déjà un compte",
+    "description": "Connectez-vous à ce compte autrement, puis liez ce fournisseur depuis votre compte."
+  },
+  "JELLYFIN_SIGN_IN_NOT_AVAILABLE": {
+    "title": "La connexion avec Jellyfin n'est pas disponible",
+    "description": "Elle est désactivée ou non configurée sur ce serveur. Utilisez une autre méthode."
+  },
+  "JELLYFIN_SIGN_IN_UNAVAILABLE": {
+    "title": "Jellyfin est injoignable",
+    "description": "Réessayez dans un instant ou utilisez une autre méthode de connexion."
+  },
+  "JELLYFIN_ALREADY_LINKED": {
+    "title": "Ce compte Jellyfin est déjà lié",
+    "description": "Il appartient à un autre compte sur ce serveur. Retirez le lien là-bas d'abord."
   }
 }

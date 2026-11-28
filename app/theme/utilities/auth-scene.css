@@ -46,8 +46,8 @@
     }
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    .auth-orb {
+  .auth-orb {
+    @variant motion-reduce {
       animation: none;
     }
   }
@@ -58,8 +58,8 @@
     box-shadow: var(--auth-ring-glow);
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    .branded-loader-ring {
+  .branded-loader-ring {
+    @variant motion-reduce {
       border-top-color: var(--auth-ring-calm);
       border-right-color: var(--auth-ring-calm);
       border-bottom-color: var(--auth-ring-calm);
@@ -75,6 +75,64 @@
   @media (max-width: 639px) {
     .auth-card {
       background-image: var(--auth-card-bg-compact);
+      backdrop-filter: none;
+    }
+  }
+
+  .auth-collage {
+    opacity: var(--auth-collage-opacity);
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      color-mix(in oklab, var(--surface-fg) 90%, transparent),
+      transparent 88%
+    );
+    mask-image: linear-gradient(to bottom, color-mix(in oklab, var(--surface-fg) 90%, transparent), transparent 88%);
+  }
+
+  .auth-scrim {
+    --auth-scrim-radius: 118% 74%;
+    background-image:
+      radial-gradient(
+        var(--auth-scrim-radius) at 50% 32%,
+        color-mix(in oklab, var(--surface-bg) 88%, transparent) 0%,
+        color-mix(in oklab, var(--surface-bg) 76%, transparent) 22%,
+        color-mix(in oklab, var(--surface-bg) 46%, transparent) 50%,
+        transparent 84%
+      ),
+      linear-gradient(
+        to bottom,
+        color-mix(in oklab, var(--surface-bg) 36%, transparent) 0%,
+        transparent 20%,
+        transparent 60%,
+        var(--surface-bg) 100%
+      );
+  }
+
+  .auth-sheet {
+    background-image: var(--auth-sheet-bg);
+    box-shadow: var(--auth-sheet-shadow);
+  }
+
+  @media (max-width: 639px) {
+    .auth-collage {
+      opacity: var(--auth-collage-opacity-compact);
+    }
+
+    .auth-scrim {
+      --auth-scrim-radius: 165% 62%;
+    }
+  }
+
+  @media (min-width: 640px) {
+    .auth-sheet {
+      backdrop-filter: blur(18px);
+    }
+  }
+
+  .auth-sheet {
+    @variant reduce-transparency {
+      background-image: none;
+      background-color: var(--auth-sheet-solid);
       backdrop-filter: none;
     }
   }

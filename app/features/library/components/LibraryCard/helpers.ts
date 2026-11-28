@@ -1,10 +1,11 @@
 import type { RequestStatus } from "@api/__generated__/types";
 import type { LibraryArtistItem, LibraryPlaylistItem } from "@hooks/api/queries/library/types";
 import type { TFunction } from "i18next";
+import { isProcessingStatus } from "@utils/status-helpers";
 import { REQUEST_STATUS_CONFIG } from "@utils/statusConfig";
-import type { KeyboardEvent, MouseEvent, SyntheticEvent } from "react";
+import type { MouseEvent, SyntheticEvent } from "react";
 
-import type { CardCoverTone, CardSelection } from "./types";
+import type { CardCoverTone, CardSelection, StatusDotTone } from "./types";
 
 export function cardCoverTone(selection: CardSelection | undefined): CardCoverTone {
   if (selection === undefined) return "none";
@@ -23,21 +24,6 @@ export function playlistSubtitle(item: LibraryPlaylistItem, origin: string, t: T
 
 export function joinMeta(parts: readonly (string | number | null | undefined)[]): string {
   return parts.filter((part) => part !== null && part !== undefined && part !== "").join(" · ");
-}
-
-function isCardActivationKey(event: KeyboardEvent<HTMLElement>): boolean {
-  return event.key === "Enter" || event.key === " ";
-}
-
-export function handleCardActivationKey(event: KeyboardEvent<HTMLElement>, onOpen: () => void): void {
-  if (isCardActivationKey(event)) {
-    event.preventDefault();
-    onOpen();
-  }
-}
-
-export function shieldCardActivationKey(event: KeyboardEvent<HTMLElement>): void {
-  if (isCardActivationKey(event)) event.stopPropagation();
 }
 
 function isOwnEvent(event: SyntheticEvent<HTMLElement>): boolean {
@@ -70,6 +56,12 @@ export function cardInitials(name: string): string {
 
 export function statusDotClass(status: RequestStatus): string {
   return REQUEST_STATUS_CONFIG[status].glowColor;
+}
+
+export function statusDotTone(status: RequestStatus): StatusDotTone {
+  if (status === "complete" || status === "partially_complete") return "complete";
+  if (status === "failed" || status === "cancelled") return "failed";
+  return isProcessingStatus(status) ? "active" : "idle";
 }
 
 export function albumMetaLine(

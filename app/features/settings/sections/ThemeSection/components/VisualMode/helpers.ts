@@ -23,7 +23,7 @@ import {
   SERIF_STACK,
   TEXT_SECTION,
 } from "./constants";
-import type { FontChoice, FontLabelKey, FontPreset, RangeToken, TokenCopy, UnreadablePair } from "./types";
+import type { FontChoice, FontLabelKey, FontPreset, RangeToken, TokenCopy, UnreadablePair, UnsavedKind } from "./types";
 
 const NUMBER_CHARACTERS = "0123456789.-+";
 
@@ -48,12 +48,37 @@ export function changedNamesOf(draft: ThemeDraft, tokens: readonly ContractToken
   return changed;
 }
 
-export function dirtySectionsOf(draft: ThemeDraft, saved: ThemeDraft, tokens: readonly ContractToken[]): Set<string> {
+function unsavedKindsOf(
+  draft: ThemeDraft,
+  saved: ThemeDraft,
+  tokens: readonly ContractToken[]
+): Map<string, UnsavedKind> {
   const now = draftValues(draft);
   const before = draftValues(saved);
+  const kinds = new Map<string, UnsavedKind>();
+  for (const token of tokens) {
+    const follows = draft.meta.follows.includes(token.name);
+    const refollowed = follows !== saved.meta.follows.includes(token.name);
+    const moved = now.get(token.name) !== before.get(token.name);
+    if (refollowed || (moved && !follows)) kinds.set(token.name, "own");
+    else if (moved) kinds.set(token.name, "derived");
+  }
+  return kinds;
+}
+
+export function unsavedNamesOf(draft: ThemeDraft, saved: ThemeDraft, tokens: readonly ContractToken[]): Set<string> {
+  const unsaved = new Set<string>();
+  for (const [name, kind] of unsavedKindsOf(draft, saved, tokens)) {
+    if (kind === "own") unsaved.add(name);
+  }
+  return unsaved;
+}
+
+export function dirtySectionsOf(draft: ThemeDraft, saved: ThemeDraft, tokens: readonly ContractToken[]): Set<string> {
+  const kinds = unsavedKindsOf(draft, saved, tokens);
   const dirty = new Set<string>();
   for (const token of tokens) {
-    if (now.get(token.name) !== before.get(token.name)) dirty.add(token.file);
+    if (kinds.has(token.name)) dirty.add(token.file);
   }
   return dirty;
 }

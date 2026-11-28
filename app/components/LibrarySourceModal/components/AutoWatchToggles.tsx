@@ -50,6 +50,7 @@ export function AutoWatchToggles({ providerName, watch, value, onChange }: AutoW
         align="end"
         side="bottom"
         className={autoImportPopover()}
+        aria-label={t("librarySource.autoWatch.title")}
         onEscapeKeyDown={(e) => e.stopPropagation()}
       >
         <div className={autoImportTitle()}>
@@ -68,6 +69,7 @@ export function AutoWatchToggles({ providerName, watch, value, onChange }: AutoW
               side="bottom"
               align="start"
               className="text-11 max-w-65 leading-relaxed"
+              aria-label={t("librarySource.autoWatch.howAria")}
               onEscapeKeyDown={(e) => e.stopPropagation()}
             >
               {t("librarySource.autoWatch.help", { provider: providerName })}

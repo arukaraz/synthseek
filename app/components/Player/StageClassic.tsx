@@ -1,10 +1,11 @@
 "use client";
 
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { Minimize, MonitorSpeaker } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
+import { useMotionReduced } from "@hooks/ui/useMotionReduced";
 import { stageFlip as stageFlipVariants, stageFade } from "@utils/animations";
 
 import { ListeningAvatars } from "./ListeningAvatars";
@@ -42,7 +43,7 @@ import type { StageClassicProps, StageDrawerName } from "./types";
 
 export function StageClassic({ view, actions, layout }: StageClassicProps) {
   const { t } = useTranslation("player");
-  const reduceMotion = useReducedMotion() === true;
+  const reduceMotion = useMotionReduced();
   const faceVariants = reduceMotion ? stageFade : stageFlipVariants;
   const wide = layout === "wide";
   const [drawer, setDrawer] = useState<StageDrawerName | null>(null);

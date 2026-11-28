@@ -20,7 +20,10 @@ vi.mock("framer-motion", () => ({
     div: ({ children, ...props }: React.ComponentProps<"div">) => <div {...props}>{children}</div>,
   },
   AnimatePresence: ({ children }: { children: React.ReactNode }) => <>{children}</>,
-  useReducedMotion: () => true,
+}));
+
+vi.mock("@hooks/ui/useMotionReduced", () => ({
+  useMotionReduced: () => true,
 }));
 
 import { render, screen } from "@testing-library/react";

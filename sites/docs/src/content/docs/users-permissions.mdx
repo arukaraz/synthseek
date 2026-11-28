@@ -7,13 +7,48 @@ order: 7
 
 ## Accounts
 
-Synthseek supports two ways to sign in.
-
 **Local accounts.** An email, a username, and a password. Created by an administrator, or by you during first-run setup.
 
 **Plex.** Sign in with your Plex account. Administrators can also import members straight from their Plex server, which creates accounts for people who already have access to the media you are building.
 
 A member can link Plex to an existing local account, and sign in either way afterwards. An account without a password is asked for an email and one before disconnecting Plex, and signs in with those afterwards.
+
+## Signing in
+
+The sign-in screen offers the methods this server has set up: the password form, Plex, Jellyfin and a single sign-on provider. Repeated failed attempts are slowed down. An **Accessibility** link on the screen opens a shorter set of [the accessibility options](/configuration#accessibility).
+
+**Album covers.** The screen can show covers from this library behind the form. An administrator turns this on or off under **Settings**, then **Members & access**, and it is on by default. Anyone who can open the sign-in page sees them, with or without an account. A library with too few different covers keeps the plain background.
+
+**Plex.** Offered once Plex is connected or an account is linked to it. Signing in with Plex needs an account that already exists and is linked to that Plex user.
+
+**Jellyfin.** Offered once Jellyfin is connected, and either account creation is on or someone has linked a Jellyfin account. People sign in with their Jellyfin username and password.
+
+### Single sign-on
+
+Under **Settings**, then **Members & access**, an administrator can connect an OpenID Connect provider.
+
+1. Set `PUBLIC_BASE_URL`. The provider sends people back to it.
+2. Enter the **Issuer URL**, the **Client ID** and the **Client secret**. The secret is never shown again once saved. **Scopes** and the **Button label** are optional.
+3. Register the **Callback address** shown on the card as the redirect URI at the provider.
+4. Turn on **Offer single sign-on**, save, then press **Test connection**. The test checks the saved provider and says what went wrong when it fails.
+
+Two more switches wait for a test that passed, and for an administrator who can still get in with a password or an account linked at the provider.
+
+- **Show the single sign-on button first** makes the provider's button the main action and folds the password form behind a link.
+- **Go straight to the provider** sends people to the provider as soon as the sign-in screen opens. It stays on the screen after a sign-out or a failed sign-in.
+
+Changing the issuer, the client ID or the secret clears the test and turns both switches off.
+
+**Create an account on first sign-in** is off by default. When it is on, someone who signs in with single sign-on or Jellyfin and has no account can get one. Every such account waits for an administrator to approve it, and it can sign in only after that. Approve or reject it in the member list, where it is marked **Waiting for approval**.
+
+### Linking, and getting back in
+
+Under **Settings**, then **Account**, **Ways to sign in** lists the password and the linked accounts. A member can link or unlink single sign-on and Jellyfin there, and Plex is linked under **Connections**. The last way in cannot be unlinked, so link another account first, or ask an administrator to set a password. An administrator can unlink a member's sign-in from the member's edit dialog.
+
+If the provider stops working, there are two ways back to the password form:
+
+- Open `/login?local`, which is the sign-in address with `?local` added.
+- Start the server with `FORCE_LOCAL_SIGN_IN=true`. Single sign-on stays off until you remove it.
 
 ## Roles
 
@@ -99,6 +134,7 @@ A request that would go over a quota is refused. Automatic requests, such as a l
 **Settings**, then **Members & access**, administrators only.
 
 - Add a local member, or import from Plex.
+- Approve or reject an account that is waiting for approval.
 - Change a member's role.
 - Set a member's own download quotas.
 - Remove a member.

@@ -26,6 +26,15 @@ describe("TrackRetrySchedule", () => {
     expect(screen.getByText(/watching this track/i)).toBeInTheDocument();
   });
 
+  it("names the popover after its own heading", async () => {
+    const user = userEvent.setup();
+    render(<TrackRetrySchedule nextRetryAt={inHours(2)} retryCount={0} />);
+
+    await user.click(screen.getByRole("button", { name: /watching this track/i }));
+
+    expect(await screen.findByRole("dialog", { name: /watching this track/i })).toBeInTheDocument();
+  });
+
   it("shows the attempt count even without a schedule", () => {
     render(<TrackRetrySchedule nextRetryAt={null} retryCount={3} />);
 

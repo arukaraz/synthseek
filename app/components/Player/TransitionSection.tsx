@@ -20,6 +20,7 @@ import {
   TRANSITION_STEP_SECONDS,
 } from "@hooks/ui/player/constants";
 import { isTransitionCurve, isTransitionMode } from "@hooks/ui/player/transition";
+import { nameAfterVisibleText } from "@utils/accessibleName";
 
 import { SettingsSlider } from "./SettingsSlider";
 import {
@@ -38,6 +39,7 @@ import type { PlayerSettingsControlProps } from "./types";
 export function TransitionSection({ view, actions }: PlayerSettingsControlProps) {
   const { t } = useTranslation("player");
   const { transition } = view;
+  const modeName = t(`settings.transition.modes.${transition.mode}`);
   const [draftSeconds, setDraftSeconds] = useState(transition.seconds);
 
   useEffect(() => {
@@ -56,9 +58,9 @@ export function TransitionSection({ view, actions }: PlayerSettingsControlProps)
               variant="secondary"
               size="sm"
               className={equalizerPresetTrigger()}
-              aria-label={t("settings.transition.mode")}
+              aria-label={nameAfterVisibleText(t("settings.transition.mode"), modeName)}
             >
-              {t(`settings.transition.modes.${transition.mode}`)}
+              {modeName}
               <ChevronDown className="size-3.5" />
             </Button>
           </DropdownMenuTrigger>

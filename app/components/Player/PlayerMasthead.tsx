@@ -7,7 +7,8 @@ import { useTranslation } from "react-i18next";
 import { PlayerMoreMenu } from "./PlayerMoreMenu";
 import { PlayGlyph } from "./PlayGlyph";
 import { TrackCover } from "./TrackCover";
-import { labelled, trackInitials } from "./helpers";
+import { PLAYBACK_PROBLEM_ID } from "./constants";
+import { labelled, labelledAfterContent, labelledBelow, trackInitials } from "./helpers";
 import {
   iconButton,
   masthead,
@@ -29,7 +30,11 @@ export function PlayerMasthead({ view, actions }: PlayerProps) {
         type="button"
         className={mastheadIdentity()}
         onClick={actions.toggleFullscreen}
-        {...labelled(t("controls.openTrack"))}
+        {...labelledAfterContent(t("controls.openTrack"), [
+          view.track.artworkUrl === null ? trackInitials(view.track.album) : null,
+          view.track.title,
+          view.track.artist,
+        ])}
         data-player-open-track
       >
         <TrackCover
@@ -47,7 +52,8 @@ export function PlayerMasthead({ view, actions }: PlayerProps) {
         type="button"
         className={playButton({ size: "masthead" })}
         onClick={actions.togglePlay}
-        {...labelled(view.playing ? t("controls.pause") : t("controls.play"))}
+        aria-describedby={view.failing ? PLAYBACK_PROBLEM_ID : undefined}
+        {...labelledBelow(view.playing ? t("controls.pause") : t("controls.play"))}
       >
         <PlayGlyph view={view} spin="size-4" face="size-3.5" />
       </button>

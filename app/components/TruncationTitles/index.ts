@@ -1,0 +1,1 @@
+export { TruncationTitles } from "./TruncationTitles";

@@ -67,6 +67,7 @@ export function GroupsViewMode() {
     <div className="flex h-full md:flex-row">
       <RequestSidebar
         items={list.items}
+        total={list.total}
         selectedId={selected?.id ?? null}
         onSelect={handleSelect}
         searchQuery={debouncedSearchQuery}

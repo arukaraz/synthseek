@@ -32,6 +32,8 @@ export interface TokenCopy {
   hint: string;
 }
 
+export type UnsavedKind = "own" | "derived";
+
 export interface UnreadablePair {
   text: string;
   ratio: number;
@@ -48,6 +50,7 @@ export interface RowBaseProps {
   hint: string;
   value: string;
   changed: boolean;
+  unsaved: boolean;
   presetName: string;
   baseLabel: string | null;
   onWrite: (name: string, value: string) => void;
@@ -87,6 +90,7 @@ export interface ResetDotProps {
   baseLabel: string | null;
   presetName: string;
   changed: boolean;
+  unsaved: boolean;
   onReset: (name: string) => void;
 }
 

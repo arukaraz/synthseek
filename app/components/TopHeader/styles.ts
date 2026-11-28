@@ -1,7 +1,7 @@
 import { cva, type VariantProps } from "class-variance-authority";
 
 export const headerContainer = cva(
-  "sticky top-0 z-50 h-16 w-full border-b border-fg/5 max-sm:relative max-sm:transition-[margin-top] max-sm:duration-300 max-sm:ease-out sm:h-[var(--height-header-wide)] motion-reduce:transition-none",
+  "sticky top-0 z-50 h-16 w-full border-b border-fg/5 short-window:static max-sm:relative max-sm:transition-[margin-top] max-sm:duration-300 max-sm:ease-out sm:h-[var(--height-header-wide)] motion-reduce:transition-none",
   {
     variants: {
       collapsed: {
@@ -65,7 +65,7 @@ export const omniField = cva("text-fg/40 flex h-8 min-w-0 flex-1 items-center ga
   variants: {
     open: {
       true: "[&>svg:first-child]:text-primary-400",
-      false: "focus-visible:text-fg/70 cursor-text",
+      false: "focus-visible:text-fg/70 focus-visible:ring-primary-400 cursor-text rounded-lg focus-visible:ring-2",
     },
   },
   defaultVariants: { open: false },
@@ -172,7 +172,7 @@ export const scopeIcon = cva("", {
 });
 
 export const dropdownPanel = cva(
-  "bg-surface-overlay w-[var(--radix-popover-trigger-width)] max-w-none rounded-2xl p-2 text-sm text-fg shadow-2xl"
+  "bg-surface-overlay w-[calc(100vw-2rem)] max-w-none rounded-2xl p-2 text-sm text-fg shadow-2xl sm:w-[var(--radix-popover-trigger-width)]"
 );
 
 export const groupLabel = cva("text-fg/50 px-2.5 pt-2 pb-1 font-mono text-10 tracking-caps uppercase");

@@ -3,7 +3,13 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
-import type { PlexPinPhase, UsePlexPinPopupOptions, UsePlexPinPopupResult } from "./types";
+import type {
+  PlexPinFailure,
+  PlexPinPhase,
+  PlexPinSession,
+  UsePlexPinPopupOptions,
+  UsePlexPinPopupResult,
+} from "./types";
 
 const POLL_INTERVAL_MS = 2000;
 const POLL_TIMEOUT_MS = 2 * 60 * 1000;
@@ -16,6 +22,7 @@ export function usePlexPinPopup<TResolved>(options: UsePlexPinPopupOptions<TReso
     start: startFlow,
     poll,
     onResolved,
+    onFailure,
     popupBlockedMessage = DEFAULT_POPUP_BLOCKED_MESSAGE,
     timeoutMessage = DEFAULT_TIMEOUT_MESSAGE,
     errorFallbackMessage = DEFAULT_ERROR_FALLBACK_MESSAGE,
@@ -25,12 +32,29 @@ export function usePlexPinPopup<TResolved>(options: UsePlexPinPopupOptions<TReso
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const onResolvedRef = useRef(onResolved);
+  const onFailureRef = useRef(onFailure);
   const pollRef = useRef(poll);
 
   onResolvedRef.current = onResolved;
+  onFailureRef.current = onFailure;
   pollRef.current = poll;
 
   const [phase, setPhase] = useState<PlexPinPhase>("idle");
+  const [session, setSession] = useState<PlexPinSession | null>(null);
+
+  const reportFailure = useCallback(
+    (failure: PlexPinFailure) => {
+      const handler = onFailureRef.current;
+      if (handler) {
+        handler(failure);
+        return;
+      }
+      if (failure.kind === "popupBlocked") toast.error(popupBlockedMessage);
+      else if (failure.kind === "timeout") toast.error(timeoutMessage);
+      else toast.error(failure.error instanceof Error ? failure.error.message : errorFallbackMessage);
+    },
+    [errorFallbackMessage, popupBlockedMessage, timeoutMessage]
+  );
 
   const cleanup = useCallback(() => {
     if (intervalRef.current) clearInterval(intervalRef.current);
@@ -39,6 +63,7 @@ export function usePlexPinPopup<TResolved>(options: UsePlexPinPopupOptions<TReso
     timeoutRef.current = null;
     if (popupRef.current && !popupRef.current.closed) popupRef.current.close();
     popupRef.current = null;
+    setSession(null);
   }, []);
 
   useEffect(() => cleanup, [cleanup]);
@@ -57,15 +82,16 @@ export function usePlexPinPopup<TResolved>(options: UsePlexPinPopupOptions<TReso
       if (!popup) {
         cleanup();
         setPhase("error");
-        toast.error(popupBlockedMessage);
+        reportFailure({ kind: "popupBlocked" });
         return;
       }
       popupRef.current = popup;
+      setSession({ authUrl, expiresAt: Date.now() + POLL_TIMEOUT_MS });
 
       timeoutRef.current = setTimeout(() => {
         cleanup();
         setPhase("error");
-        toast.error(timeoutMessage);
+        reportFailure({ kind: "timeout" });
       }, POLL_TIMEOUT_MS);
 
       intervalRef.current = setInterval(async () => {
@@ -79,15 +105,15 @@ export function usePlexPinPopup<TResolved>(options: UsePlexPinPopupOptions<TReso
         } catch (error) {
           cleanup();
           setPhase("error");
-          toast.error(error instanceof Error ? error.message : errorFallbackMessage);
+          reportFailure({ kind: "failed", error });
         }
       }, POLL_INTERVAL_MS);
     } catch (error) {
       cleanup();
       setPhase("error");
-      toast.error(error instanceof Error ? error.message : errorFallbackMessage);
+      reportFailure({ kind: "failed", error });
     }
-  }, [cleanup, errorFallbackMessage, popupBlockedMessage, startFlow, timeoutMessage]);
+  }, [cleanup, reportFailure, startFlow]);
 
-  return { start, reset, phase, isPending: phase === "pending" };
+  return { start, reset, phase, session, isPending: phase === "pending" };
 }

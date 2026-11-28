@@ -1,8 +1,32 @@
-import { LayoutTemplate, Monitor, PanelBottom, PanelTop, PictureInPicture2, Smartphone, Tablet } from "lucide-react";
+import {
+  ArrowDown,
+  ArrowUp,
+  ChevronsDown,
+  ChevronsUp,
+  Check,
+  LayoutTemplate,
+  Minus,
+  Monitor,
+  PanelBottom,
+  PanelTop,
+  PictureInPicture2,
+  RotateCw,
+  Smartphone,
+  Tablet,
+  X,
+  type LucideIcon,
+} from "lucide-react";
 
 import type { CompressorParam } from "@hooks/ui/player/types";
 
-import type { PlayerMode, SettingsUnit } from "./types";
+import type { PlayerMode, PlayerScrobbleState, QueueMoveTarget, SettingsUnit } from "./types";
+
+export const SCROBBLE_SIGNS: Readonly<Record<PlayerScrobbleState, LucideIcon>> = {
+  off: Minus,
+  sending: Check,
+  retrying: RotateCw,
+  failed: X,
+};
 
 export const WAVE = {
   LOBES: [
@@ -64,6 +88,10 @@ export const SEEK_STEP_SECONDS = 5;
 export const SEEK_PAGE_SECONDS = 30;
 
 export const VOLUME_STEP = 0.02;
+
+export const VOLUME_PAGE_STEP = 0.1;
+
+export const PLAYBACK_PROBLEM_ID = "player-playback-problem";
 
 export const RESTART_THRESHOLD_SECONDS = 3;
 
@@ -254,3 +282,11 @@ export const LYRIC_FAR_DISTANCE = 4;
 export const QUEUE_WINDOW_KEY = "player-queue";
 
 export const QUEUE_LOOP_WINDOW_KEY = "player-queue-loop";
+
+export const QUEUE_MOVE_TARGETS: readonly QueueMoveTarget[] = ["top", "up", "down", "bottom"];
+
+export const QUEUE_MOVE_SHORTCUTS = "Alt+ArrowUp Alt+ArrowDown Alt+Shift+ArrowUp Alt+Shift+ArrowDown";
+
+export const QUEUE_TRACK_SELECTOR = "[data-queue-track]";
+
+export const QUEUE_MOVE_ICONS = { top: ChevronsUp, up: ArrowUp, down: ArrowDown, bottom: ChevronsDown } as const;

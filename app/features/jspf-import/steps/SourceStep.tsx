@@ -109,6 +109,7 @@ export function SourceStep({ onLoaded }: SourceStepProps) {
         <input
           className={urlInput()}
           type="url"
+          autoComplete="off"
           placeholder={t("jspfImport.source.urlPlaceholder")}
           value={url}
           onChange={(e) => setUrl(e.target.value)}

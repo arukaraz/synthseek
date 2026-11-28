@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 
 import { Input } from "@components/ui/Input";
 import { cn } from "@utils/cn";
+import { useSettingsFieldLabelId } from "../hooks/useSettingsFieldLabel";
 import { SECRET_SENTINEL } from "./constants";
 import type { SettingsSecretInputProps } from "./types";
 
@@ -17,9 +18,10 @@ export function SettingsSecretInput({
   disabled,
   id,
   ariaLabel,
-  autoComplete,
+  autoComplete = "off",
 }: SettingsSecretInputProps) {
   const { t } = useTranslation("settings");
+  const fieldLabelId = useSettingsFieldLabelId();
   const [revealed, setRevealed] = useState(false);
   const [stored, setStored] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
@@ -56,6 +58,7 @@ export function SettingsSecretInput({
         placeholder={placeholder}
         disabled={disabled}
         aria-label={ariaLabel}
+        aria-labelledby={ariaLabel === undefined ? (fieldLabelId ?? undefined) : undefined}
         autoComplete={autoComplete}
         onChange={(e) => {
           setStored(null);

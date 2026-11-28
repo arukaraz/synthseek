@@ -1,16 +1,20 @@
 "use client";
 
+import { useAccessibility } from "@modules/providers/AccessibilityProvider";
 import { Volume2, VolumeX } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
-import { VOLUME_STEP } from "./constants";
+import { VOLUME_PAGE_STEP, VOLUME_STEP } from "./constants";
 import { fractionFromPointer, labelled } from "./helpers";
+import { spokenVolume } from "./spoken";
 import { iconButton, volumeFill, volumeGroup, volumeHead, volumeRail, volumeTrack, volumeVars } from "./styles";
 import type { PlayerVolumeProps } from "./types";
 
 export function PlayerVolume({ view, actions, size }: PlayerVolumeProps) {
   const { t } = useTranslation("player");
+  const { mode } = useAccessibility();
   const percent = (view.muted ? 0 : view.volume) * 100;
+  const silent = view.muted || (mode && percent === 0);
 
   return (
     <div className={volumeGroup({ size })}>
@@ -20,7 +24,7 @@ export function PlayerVolume({ view, actions, size }: PlayerVolumeProps) {
         onClick={actions.toggleMute}
         {...labelled(view.muted ? t("controls.unmute") : t("controls.mute"))}
       >
-        {view.muted ? <VolumeX className="size-3.5" /> : <Volume2 className="size-3.5" />}
+        {silent ? <VolumeX className="size-3.5" /> : <Volume2 className="size-3.5" />}
       </button>
       <div
         role="slider"
@@ -29,7 +33,7 @@ export function PlayerVolume({ view, actions, size }: PlayerVolumeProps) {
         aria-valuemin={0}
         aria-valuemax={100}
         aria-valuenow={Math.round(percent)}
-        aria-valuetext={`${Math.round(percent)}%`}
+        aria-valuetext={spokenVolume(t, percent / 100)}
         className={volumeTrack({ size })}
         style={volumeVars(percent)}
         onPointerDown={(event) => {
@@ -43,14 +47,15 @@ export function PlayerVolume({ view, actions, size }: PlayerVolumeProps) {
         onPointerUp={(event) => event.currentTarget.releasePointerCapture(event.pointerId)}
         onKeyDown={(event) => {
           const current = view.muted ? 0 : view.volume;
-          if (event.key === "ArrowRight" || event.key === "PageUp") {
+          const step = event.key === "PageUp" || event.key === "PageDown" ? VOLUME_PAGE_STEP : VOLUME_STEP;
+          if (event.key === "ArrowRight" || event.key === "ArrowUp" || event.key === "PageUp") {
             event.preventDefault();
-            actions.setVolume(current + VOLUME_STEP);
+            actions.setVolume(current + step);
             return;
           }
-          if (event.key === "ArrowLeft" || event.key === "PageDown") {
+          if (event.key === "ArrowLeft" || event.key === "ArrowDown" || event.key === "PageDown") {
             event.preventDefault();
-            actions.setVolume(current - VOLUME_STEP);
+            actions.setVolume(current - step);
             return;
           }
           if (event.key === "Home") {

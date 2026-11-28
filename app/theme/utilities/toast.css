@@ -116,8 +116,8 @@ body:has([data-board-dock]) [data-sonner-toaster] {
   color: oklch(from var(--surface-fg) l c h / 0.85);
 }
 
-@media (prefers-reduced-motion: reduce) {
-  [data-sonner-toaster] [data-sonner-toast][data-styled="true"] {
+[data-sonner-toaster] [data-sonner-toast][data-styled="true"] {
+  @variant motion-reduce {
     transition: none !important;
     animation: none !important;
   }

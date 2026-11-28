@@ -85,6 +85,21 @@ describe("SearchResultsWidget", () => {
     expect(container.querySelector("[data-cy='filter-tab-track']")).not.toBeNull();
   });
 
+  it("never skips a heading level between the results heading, a section and its cards", () => {
+    setParam("q", "daft");
+    searchState.data = resultsWithTracksAndAlbums();
+
+    const { container } = renderWithProviders(<SearchResultsWidget />);
+    const levels = [...container.querySelectorAll("h1, h2, h3, h4, h5, h6")].map((heading) =>
+      Number(heading.tagName.slice(1))
+    );
+    const skips = levels.filter((level, index) => index > 0 && level > levels[index - 1] + 1);
+
+    expect(levels[0]).toBe(2);
+    expect(levels.length).toBeGreaterThan(2);
+    expect(skips).toEqual([]);
+  });
+
   it("renders filtered results when a non-all filter is active", () => {
     setParam("q", "daft");
     setParam("filter", "track");

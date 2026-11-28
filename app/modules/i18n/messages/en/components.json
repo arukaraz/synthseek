@@ -1,4 +1,26 @@
 {
+  "accessibilityPanel": {
+    "open": "Accessibility",
+    "title": "Accessibility",
+    "description": "Changes apply right away. They are kept in this browser and added to your account when you sign in."
+  },
+  "a11yMode": {
+    "progress": {
+      "generic": "Progress",
+      "downloadStarted": "Download started",
+      "downloadFinished": "Download finished, {{done}} of {{total}} tracks",
+      "downloadFailed": "Download failed",
+      "importStarted": "Import started",
+      "importFinished": "Import finished, {{imported}} imported, {{failed}} failed",
+      "importFailed": "Import failed"
+    },
+    "plex": {
+      "copy": "Copy sign-in link",
+      "copied": "Link copied",
+      "copyFailed": "The link could not be copied",
+      "expiring": "This Plex sign-in expires in less than 30 seconds. Start again if you have not finished."
+    }
+  },
   "activity": {
     "paused": "Paused"
   },
@@ -75,6 +97,18 @@
     "ascending": "Ascending",
     "descending": "Descending"
   },
+  "sessionConnect": {
+    "howTo": "Export your browser's cookies for {{provider}} to a text file in the Netscape format, for example with a cookie export extension, then open the file and paste its contents below.",
+    "kept": "Only the {{provider}} entries are kept, stored encrypted on the server, and what you paste is never shown again.",
+    "warningTitle": "Your {{provider}} account could be restricted",
+    "warningBody": "Using an account through automated tools can lead {{provider}} to restrict or ban it, for a while or for good. A secondary account is the prudent choice.",
+    "label": "Contents of the cookie file",
+    "placeholder": "Paste the contents of the cookie file here",
+    "submit": "Connect {{provider}}",
+    "reconnect": "Reconnect {{provider}}",
+    "submitting": "Checking the session…",
+    "connected": "{{provider}} connected"
+  },
   "passwordField": {
     "label": "Password",
     "show": "Show password",
@@ -84,7 +118,8 @@
     "ariaLabel": "Synthseek Logo"
   },
   "table": {
-    "empty": "No items to display"
+    "empty": "No items to display",
+    "scrollRegion": "Table, scrolls sideways"
   },
   "loading": {
     "section": "Loading...",
@@ -103,6 +138,13 @@
   },
   "trackStatus": {
     "moreInfo": "More info: {{label}}"
+  },
+  "pageTitle": {
+    "format": "{{page}} | {{app}}",
+    "nested": "{{page}} · {{parent}}",
+    "login": "Sign in",
+    "setup": "Set up",
+    "consent": "Authorize access"
   },
   "header": {
     "primaryNav": "Primary",

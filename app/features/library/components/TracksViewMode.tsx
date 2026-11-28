@@ -69,6 +69,7 @@ export function TracksViewMode({ controller, shell, selection, fileActions }: Tr
         rows: shell.phone ? (
           <LibraryTrackRows
             items={items}
+            total={query.total}
             selection={selection}
             selecting={shell.selectMode}
             onHold={

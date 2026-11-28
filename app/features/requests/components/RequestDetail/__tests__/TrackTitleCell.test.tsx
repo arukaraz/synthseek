@@ -23,7 +23,8 @@ describe("TrackTitleCell", () => {
   it("names the track and its artist inside the button that opens its details", () => {
     renderCell({ title: "Midnight City", credited_artist: "M83" });
 
-    const toggle = screen.getByRole("button", { name: "Show details of Midnight City" });
+    const toggle = screen.getByRole("button", { name: /^Midnight City.*M83/ });
+    expect(toggle).not.toHaveAttribute("aria-label");
     expect(toggle).toHaveTextContent("Midnight City");
     expect(toggle).toHaveTextContent("M83");
     expect(toggle).toHaveAttribute("aria-expanded", "false");
@@ -32,14 +33,14 @@ describe("TrackTitleCell", () => {
   it("offers to hide the details once they are open", () => {
     renderCell({ title: "Midnight City" }, true);
 
-    const toggle = screen.getByRole("button", { name: "Hide details of Midnight City" });
+    const toggle = screen.getByRole("button", { name: /^Midnight City/ });
     expect(toggle).toHaveAttribute("aria-expanded", "true");
   });
 
   it("calls onToggle when the title is clicked", async () => {
     const { onToggle } = renderCell();
 
-    await userEvent.click(screen.getByRole("button", { name: /details of A Song/ }));
+    await userEvent.click(screen.getByRole("button", { name: /^A Song/ }));
 
     expect(onToggle).toHaveBeenCalledOnce();
   });

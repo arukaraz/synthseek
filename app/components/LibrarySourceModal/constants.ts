@@ -9,6 +9,7 @@ import { NavidromeMark } from "./components/NavidromeMark";
 import { PlexMark } from "./components/PlexMark";
 import { SpotifyMark } from "./components/SpotifyMark";
 import type { BrandMarkProps } from "./components/types";
+import { YoutubeMark } from "./components/YoutubeMark";
 import type { AutoWatchState, LibraryFilter, LibraryItemType, LibrarySort, WatchRowKeys } from "./types";
 
 export const FILTER_ICONS: Record<LibraryFilter, typeof Layers> = {
@@ -28,6 +29,7 @@ export const FILTER_ITEM_TYPE: Record<Exclude<LibraryFilter, "all">, LibraryItem
 
 export const PROVIDER_MARKS: Record<LibrarySourceProvider, ComponentType<BrandMarkProps>> = {
   spotify: SpotifyMark,
+  youtube: YoutubeMark,
   plex: PlexMark,
   navidrome: NavidromeMark,
   jellyfin: JellyfinMark,
@@ -35,6 +37,7 @@ export const PROVIDER_MARKS: Record<LibrarySourceProvider, ComponentType<BrandMa
 
 export const PROVIDER_ERROR_CATEGORY: Record<LibrarySourceProvider, ErrorCategory> = {
   spotify: "spotify",
+  youtube: "generic",
   plex: "generic",
   navidrome: "generic",
   jellyfin: "generic",

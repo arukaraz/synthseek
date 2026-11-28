@@ -35,16 +35,18 @@ export const navContainer = cva(
 );
 
 export const navArrow = cva(
-  "text-fg/70 hover:text-fg pointer-events-auto transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-fg/40 rounded"
+  "text-fg/70 hover:text-fg a11y-mode:grid a11y-mode:size-6 a11y-mode:place-items-center pointer-events-auto transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-fg/40 rounded"
 );
 
-export const dotsRow = cva("flex items-center gap-1.5");
+export const dotsRow = cva("a11y-mode:gap-0 a11y-mode:max-sm:hidden flex items-center gap-1.5");
 
-export const dotBase = cva("pointer-events-auto h-1 rounded-full transition-all duration-300", {
+export const dotButton = cva("group a11y-mode:h-6 a11y-mode:min-w-6 pointer-events-auto grid place-items-center");
+
+export const dotBase = cva("h-1 rounded-full transition-all duration-300", {
   variants: {
     active: {
       true: "bg-fg w-5",
-      false: "bg-fg/30 hover:bg-fg/50 w-1.5",
+      false: "bg-fg/30 group-hover:bg-fg/50 w-1.5",
     },
   },
 });

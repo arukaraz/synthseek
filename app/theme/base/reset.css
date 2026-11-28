@@ -4,7 +4,7 @@
   }
 
   html {
-    font-size: calc(100% * var(--ui-scale, 1));
+    font-size: calc(100% * var(--ui-scale, 1) * var(--a11y-text-scale, 1));
     scroll-behavior: smooth;
   }
 
@@ -99,9 +99,11 @@
     }
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    *::-webkit-scrollbar-thumb {
-      transition: none;
+  * {
+    @variant motion-reduce {
+      &::-webkit-scrollbar-thumb {
+        transition: none;
+      }
     }
   }
 }

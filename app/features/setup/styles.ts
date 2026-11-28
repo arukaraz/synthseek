@@ -1,43 +1,57 @@
 import { cva } from "class-variance-authority";
 
-export const wizardCard = cva(
-  "auth-card relative z-10 mx-auto flex max-h-[calc(100dvh-3rem)] w-full max-w-lg flex-col rounded-3xl border border-fg/[0.09] sm:max-w-[34rem] sm:backdrop-blur-lg"
+export const setupProgressTrack = cva("bg-fg/10 pointer-events-none fixed inset-x-0 top-0 z-20 h-[3px]");
+
+export const setupProgressFill = cva(
+  "from-primary-500 to-secondary-500 bg-linear-to-r block h-full transition-[width] duration-300 motion-reduce:transition-none"
 );
 
-export const wizardHead = cva("flex flex-col gap-4 px-6 pt-6 sm:px-9 sm:pt-9");
+export const setupAsk = cva(
+  "bg-surface/60 relative z-10 mx-auto flex w-full max-w-[40rem] flex-col gap-[1.375rem] rounded-3xl px-5 py-6 backdrop-blur-md sm:px-8 sm:py-8 reduce-transparency:bg-surface reduce-transparency:backdrop-blur-none"
+);
 
-export const wizardBrand = cva("flex flex-col items-center gap-1.5");
+export const setupEyebrow = cva("text-primary-400 font-mono text-12 tracking-wide uppercase");
 
-export const wizardEyebrow = cva("text-fg-muted text-11 font-bold uppercase tracking-caps-wide");
+export const setupQuestion = cva(
+  "text-fg text-balance text-2xl leading-[1.12] font-bold tracking-tight focus-visible:outline-none sm:text-4xl"
+);
 
-export const stepProgress = cva("flex items-center gap-1.5");
+export const setupDescription = cva("text-fg-muted text-sm");
 
-export const stepIndicator = cva("h-1.5 rounded-full transition-all", {
-  variants: {
-    state: {
-      completed: "bg-primary-500/45 flex-1",
-      current: "bg-primary-500 shadow-[0_0_12px_-2px_var(--color-primary-500)] flex-[1.6]",
-      upcoming: "bg-fg/10 flex-1",
+export const setupFooter = cva("border-fg/10 flex items-center justify-between gap-3 border-t pt-3");
+
+export const setupForm = cva("flex flex-col gap-[1.375rem]");
+
+export const setupColumn = cva("flex min-w-0 flex-col gap-3");
+
+export const setupActions = cva("flex flex-wrap items-center gap-2.5");
+
+export const setupActionIcon = cva("size-4 shrink-0");
+
+export const choiceTiles = cva("grid grid-cols-[repeat(auto-fit,minmax(8.5rem,1fr))] gap-2");
+
+export const choiceTile = cva(
+  "has-focus-visible:ring-primary-500 flex cursor-pointer flex-col gap-0.5 rounded-xl border p-4 text-left transition-colors hover:bg-fg/[0.07] has-focus-visible:ring-2 has-disabled:cursor-not-allowed has-disabled:opacity-60 motion-reduce:transition-none",
+  {
+    variants: {
+      selected: {
+        true: "border-primary-500 bg-primary-500/15",
+        false: "border-fg/15 bg-fg/[0.035]",
+      },
     },
-  },
-  defaultVariants: { state: "upcoming" },
-});
-
-export const wizardBody = cva("flex min-h-0 flex-1 flex-col gap-5 overflow-y-auto px-6 py-5 sm:px-9");
-
-export const stepHeader = cva("flex flex-col gap-1.5");
-
-export const stepTitle = cva("text-fg text-xl font-bold focus-visible:outline-none sm:text-2xl");
-
-export const stepDescription = cva("text-fg-muted text-sm");
-
-export const stepBody = cva("flex flex-col gap-4");
-
-export const stepFooter = cva(
-  "border-fg/10 flex flex-col gap-2.5 border-t px-6 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-9"
+    defaultVariants: { selected: false },
+  }
 );
 
-export const stepFooterTrailing = cva("flex flex-col gap-2.5 sm:flex-row-reverse sm:items-center");
+export const choiceInput = cva("sr-only");
+
+export const setupProgressText = cva("text-fg-muted text-12");
+
+export const setupHeader = cva("flex flex-col gap-2");
+
+export const choiceTileTitle = cva("text-fg text-base font-semibold");
+
+export const choiceTileCaption = cva("text-fg-muted text-12");
 
 export const statusStrip = cva("status-strip", {
   variants: {
@@ -60,44 +74,22 @@ export const statusStripAction = cva(
 
 export const fieldGroup = cva("flex flex-col gap-1.5");
 
-export const fieldLabel = cva("text-fg-muted text-xs font-semibold");
-
 export const fieldHint = cva("text-fg-muted text-xs");
 
 export const fieldError = cva("text-destructive-vivid text-xs");
 
-export const fieldWarning = cva("text-plex-400 text-xs");
+export const testRow = cva("flex flex-wrap items-center gap-3");
 
-export const slskdTestRow = cva("flex flex-wrap items-center gap-3");
-
-export const slskdTestButton = cva(
-  "border-fg/15 bg-fg/[0.04] text-fg hover:border-fg/25 focus-visible:ring-primary-500 inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border px-4 text-sm font-semibold outline-none transition-colors hover:bg-fg/[0.08] focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50"
+export const testButton = cva(
+  "border-fg/15 bg-fg/[0.04] text-fg hover:border-fg/25 focus-visible:ring-primary-500 inline-flex h-9 items-center justify-center gap-2 rounded-[0.625rem] border px-3 text-13 font-bold outline-none transition-colors hover:bg-fg/[0.08] focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50"
 );
-
-export const doneCard = cva("flex items-center gap-3 rounded-2xl border p-4 transition-opacity", {
-  variants: {
-    deemphasized: {
-      true: "border-fg/5 bg-fg/[0.02] opacity-50",
-      false: "border-fg/10 bg-fg/[0.04] opacity-100",
-    },
-  },
-  defaultVariants: { deemphasized: false },
-});
-
-export const doneCheckBadge = cva(
-  "bg-primary-500/15 text-primary-400 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full"
-);
-
-export const doneCardHeading = cva("text-fg text-sm font-medium");
-
-export const doneCardBody = cva("text-fg-muted text-xs");
 
 export const serverPickerCard = cva("border-fg/15 bg-fg/[0.04] flex flex-col gap-2 rounded-2xl border p-3");
 
 export const serverPickerIntro = cva("text-fg-muted text-xs");
 
 export const wizardPickerButton = cva(
-  "border-fg/15 bg-fg/[0.03] hover:bg-fg/[0.07] hover:border-fg/25 focus-visible:ring-primary-500 flex min-h-11 items-center justify-between gap-3 rounded-xl border px-3 py-2 text-left transition-all hover:-translate-y-px focus-visible:outline-none focus-visible:ring-2"
+  "border-fg/15 bg-fg/[0.03] hover:bg-fg/[0.07] hover:border-fg/25 focus-visible:ring-primary-500 flex min-h-11 items-center justify-between gap-3 rounded-xl border px-3 py-2 text-left transition-all hover:-translate-y-px focus-visible:outline-none focus-visible:ring-2 motion-reduce:transition-none motion-reduce:hover:translate-y-0"
 );
 
 export const serverPickerName = cva("text-fg truncate text-sm font-medium");
@@ -109,5 +101,27 @@ export const serverPickerLocation = cva(
 );
 
 export const plexIntro = cva("text-fg-muted flex items-center gap-2 text-sm");
+
+export const summaryList = cva("flex flex-col gap-2");
+
+export const summaryRow = cva(
+  "border-fg/10 bg-fg/[0.03] flex items-center justify-between gap-2.5 rounded-[0.625rem] border px-3 py-2 text-13"
+);
+
+export const summaryLabel = cva("text-fg-muted");
+
+export const summaryPill = cva(
+  "inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-11 font-semibold whitespace-nowrap",
+  {
+    variants: {
+      outcome: {
+        answered: "border-success-vivid/40 bg-success-vivid/10 text-success-vivid",
+        skipped: "border-fg/15 text-fg-muted",
+        open: "border-fg/15 text-fg-muted",
+      },
+    },
+    defaultVariants: { outcome: "open" },
+  }
+);
 
 export const skeletonBlock = cva("bg-fg/10 rounded");

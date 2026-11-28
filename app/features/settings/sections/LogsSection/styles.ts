@@ -30,7 +30,7 @@ export const toolbarActions = cva("flex w-full flex-wrap items-center gap-2 sm:w
 export const exportActions = cva("flex flex-wrap items-center gap-3");
 
 export const logTerminal = cva(
-  `border-fg/10 mt-1 max-h-[28rem] min-h-[8rem] w-full min-w-0 overflow-auto rounded-lg border ${terminalSurface} p-3 font-mono text-xs leading-relaxed`
+  `border-fg/10 mt-1 max-h-[28rem] min-h-[8rem] w-full min-w-0 overflow-auto rounded-lg border ${terminalSurface} p-3 font-mono text-xs leading-relaxed focus-visible:ring-primary-500/40 focus-visible:ring-2 focus-visible:ring-inset focus-visible:outline-none`
 );
 
 export const logLine = cva("whitespace-pre-wrap break-words");

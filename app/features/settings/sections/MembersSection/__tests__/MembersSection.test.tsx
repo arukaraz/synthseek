@@ -40,9 +40,16 @@ vi.mock("@hooks/api/mutations/users/useBulkUpdateRole", () => ({ useBulkUpdateRo
 vi.mock("@hooks/api/mutations/users/useBulkDeleteUsers", () => ({ useBulkDeleteUsers: () => bulkDelete }));
 
 const settingsQuery = vi.hoisted(() => ({
-  data: { users: { requireApprovalForMembers: false } },
+  data: { users: { requireApprovalForMembers: false }, connections: { oidc: { buttonLabel: "Authentik" } } },
   isLoading: false,
   isError: false,
+}));
+const approveMember = vi.hoisted(() => ({ mutate: vi.fn(), isPending: false }));
+const rejectMember = vi.hoisted(() => ({ mutate: vi.fn(), isPending: false }));
+
+vi.mock("@hooks/api/mutations/users/useMemberSignIn", () => ({
+  useApproveMember: () => approveMember,
+  useRejectMember: () => rejectMember,
 }));
 const updateUsers = vi.hoisted(() => ({ mutateAsync: vi.fn(), isPending: false }));
 
@@ -63,6 +70,8 @@ vi.mock("../components/QuotasCard", () => ({ QuotasCard: () => <div data-testid=
 vi.mock("../components/MembersPrivacyCard", () => ({
   MembersPrivacyCard: () => <div data-testid="privacy-card" />,
 }));
+vi.mock("../components/SignInCard", () => ({ SignInCard: () => <div data-testid="sign-in-card" /> }));
+vi.mock("../components/OidcProviderCard", () => ({ OidcProviderCard: () => <div data-testid="oidc-card" /> }));
 vi.mock("../components/MemberRequestPresetDialog", () => ({
   MemberRequestPresetDialog: ({ member, onClose }: { member: { id: string } | null; onClose: () => void }) =>
     member ? (
@@ -130,6 +139,11 @@ describe("MembersSection", () => {
   it("puts the server's privacy settings right under the download quotas", () => {
     render(<MembersSection />);
     expect(screen.getByTestId("quotas-card").nextElementSibling).toBe(screen.getByTestId("privacy-card"));
+  });
+
+  it("puts the sign-in screen setting right under the server's privacy settings", () => {
+    render(<MembersSection />);
+    expect(screen.getByTestId("privacy-card").nextElementSibling).toBe(screen.getByTestId("sign-in-card"));
   });
 
   it("opens the create and import dialogs from the toolbar", async () => {
@@ -233,6 +247,67 @@ describe("MembersSection", () => {
 
     await userEvent.click(screen.getByRole("button", { name: "close-preset" }));
     expect(screen.queryByTestId("preset-dialog")).not.toBeInTheDocument();
+  });
+
+  it("lists accounts waiting for approval first, whatever the sort", () => {
+    usersQuery = createMockQuery<MemberListItem[]>([
+      createMockUser({ id: "m1", username: "alice" }),
+      createMockUser({ id: "m2", username: "zed", pendingApproval: true }),
+    ]);
+    render(<MembersSection />);
+
+    const names = screen.getAllByRole("row").map((row) => row.textContent ?? "");
+    const zed = names.findIndex((text) => text.includes("zed"));
+    const alice = names.findIndex((text) => text.includes("alice"));
+    expect(zed).toBeGreaterThan(-1);
+    expect(zed).toBeLessThan(alice);
+    expect(screen.getByText(enSettings.members.pending.badge)).toBeInTheDocument();
+  });
+
+  it("approves a waiting account from its row", async () => {
+    usersQuery = createMockQuery<MemberListItem[]>([
+      createMockUser({ id: "m2", username: "zed", pendingApproval: true }),
+    ]);
+    render(<MembersSection />);
+
+    await userEvent.click(screen.getByLabelText("Approve zed"));
+
+    expect(approveMember.mutate).toHaveBeenCalledWith({ id: "m2" });
+  });
+
+  it("rejects a waiting account only after confirming", async () => {
+    usersQuery = createMockQuery<MemberListItem[]>([
+      createMockUser({ id: "m2", username: "zed", pendingApproval: true }),
+    ]);
+    confirmMock.mockResolvedValueOnce(false).mockResolvedValueOnce(true);
+    render(<MembersSection />);
+
+    await userEvent.click(screen.getByLabelText("Reject zed"));
+    await waitFor(() => expect(confirmMock).toHaveBeenCalledTimes(1));
+    expect(rejectMember.mutate).not.toHaveBeenCalled();
+
+    await userEvent.click(screen.getByLabelText("Reject zed"));
+    await waitFor(() => expect(rejectMember.mutate).toHaveBeenCalledWith({ id: "m2" }));
+  });
+
+  it("says what each member signs in with, naming the provider as the server labels it", () => {
+    usersQuery = createMockQuery<MemberListItem[]>([
+      createMockUser({
+        id: "m1",
+        username: "alice",
+        hasPassword: true,
+        signInIdentities: [
+          { id: "i1", provider: "oidc", displayName: "alice@auth" },
+          { id: "i2", provider: "jellyfin", displayName: "alice" },
+        ],
+      }),
+    ]);
+    render(<MembersSection />);
+
+    expect(screen.getByText(enSettings.members.columns.signsInWith)).toBeInTheDocument();
+    expect(screen.getByText(enSettings.members.signsIn.password)).toBeInTheDocument();
+    expect(screen.getByText("Authentik")).toBeInTheDocument();
+    expect(screen.getByText(enSettings.members.signsIn.jellyfin)).toBeInTheDocument();
   });
 
   it("offers no request preset on an admin's row, since only members are bound by one", () => {

@@ -13,13 +13,21 @@ vi.mock("../ListeningServiceRows", () => ({
   ListeningServiceRows: () => <div data-testid="services-rows">listening</div>,
 }));
 
+vi.mock("../SessionSourceRows", () => ({
+  SessionSourceRows: () => <div data-testid="services-rows">sessions</div>,
+}));
+
 import { ServicesCard } from "../ServicesCard";
 
 describe("ServicesCard", () => {
-  it("names the card and lists the account rows before the listening rows", () => {
+  it("names the card and lists the account rows, then the session sources, before the listening rows", () => {
     render(<ServicesCard />);
     expect(screen.getByRole("heading", { name: new RegExp(enSettings.profile.connected.title) })).toBeInTheDocument();
-    expect(screen.getAllByTestId("services-rows").map((rows) => rows.textContent)).toEqual(["accounts", "listening"]);
+    expect(screen.getAllByTestId("services-rows").map((rows) => rows.textContent)).toEqual([
+      "accounts",
+      "sessions",
+      "listening",
+    ]);
   });
 
   it("explains the card behind its info tooltip", async () => {

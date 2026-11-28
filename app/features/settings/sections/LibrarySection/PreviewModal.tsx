@@ -8,6 +8,7 @@ import { Button } from "@components/ui/Button";
 import { ConfirmationModal } from "@components/ui/ConfirmationModal";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@components/ui/Dialog";
 import { IconButton } from "@components/ui/IconButton";
+import { InlineError } from "@components/ui/InlineError";
 import { Notice } from "@components/ui/Notice";
 import { Pagination } from "@components/ui/Pagination";
 import { SegmentTabs } from "@components/ui/SegmentTabs";
@@ -222,6 +223,7 @@ export function PreviewModal({ open, onOpenChange, pathId, pathLabel, template }
             ) : null}
           </div>
 
+          <InlineError error={apply.error} />
           <DialogFooter className={previewFooterRow()}>
             <Button variant="ghost" onClick={() => onOpenChange(false)} disabled={apply.isPending}>
               {t("libraryNaming.preview.cancel")}

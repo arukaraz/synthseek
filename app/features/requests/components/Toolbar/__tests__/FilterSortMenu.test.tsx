@@ -86,7 +86,7 @@ describe("FilterSortMenu", () => {
     const user = userEvent.setup();
     render(<FilterSortMenu />);
 
-    await user.click(screen.getByRole("button", { name: "Filter and sort" }));
+    await user.click(screen.getByRole("button", { name: /Filter and sort/ }));
     await user.click(screen.getByRole("button", { name: "Ascending" }));
 
     expect(replace).toHaveBeenCalledWith("/requests?dir=asc", { scroll: false });

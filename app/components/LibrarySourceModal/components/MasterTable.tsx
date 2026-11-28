@@ -2,14 +2,18 @@
 
 import { useTranslation } from "react-i18next";
 
-import { masterControls, masterEmpty, masterScroll, masterXScroll, table } from "../styles";
+import { useOverflowsX } from "@hooks/ui/useOverflowsX";
+import { scrollRegionProps } from "@utils/scroll-region";
+
+import { masterControls, masterEmpty, masterFooter, masterScroll, masterXScroll, table } from "../styles";
 
 import { MasterTableHeader } from "./MasterTableHeader";
 import { MasterTableRow } from "./MasterTableRow";
 import type { MasterTableProps } from "./types";
 
-export function MasterTable({ items, isLoading, draft, hiddenOnMobile, selectionBar }: MasterTableProps) {
-  const { t } = useTranslation("library");
+export function MasterTable({ items, isLoading, draft, hiddenOnMobile, selectionBar, footer }: MasterTableProps) {
+  const { t } = useTranslation(["library", "components"]);
+  const [scrollRef, overflowsX] = useOverflowsX<HTMLDivElement>();
 
   const handleBackgroundClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) draft.setFocus(null);
@@ -23,7 +27,12 @@ export function MasterTable({ items, isLoading, draft, hiddenOnMobile, selection
       ) : items.length === 0 ? (
         <div className={masterEmpty()}>{t("librarySource.table.empty")}</div>
       ) : (
-        <div className={masterXScroll()} onClick={handleBackgroundClick}>
+        <div
+          ref={scrollRef}
+          className={masterXScroll()}
+          onClick={handleBackgroundClick}
+          {...scrollRegionProps(overflowsX, t("components:table.scrollRegion"))}
+        >
           <table className={table()}>
             <MasterTableHeader />
             <tbody>
@@ -43,6 +52,7 @@ export function MasterTable({ items, isLoading, draft, hiddenOnMobile, selection
               ))}
             </tbody>
           </table>
+          {footer ? <div className={masterFooter()}>{footer}</div> : null}
         </div>
       )}
     </div>

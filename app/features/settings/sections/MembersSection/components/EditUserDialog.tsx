@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 
 import { Role } from "@api/__generated__/types";
 import { Button } from "@components/ui/Button";
+import { InlineError } from "@components/ui/InlineError";
 import {
   Dialog,
   DialogContent,
@@ -25,8 +26,9 @@ import { SegmentedControl } from "@components/ui/SegmentedControl";
 
 import { buildRoleOptions, isValidQuotaInput, parseQuotaInput, quotaInputOf } from "../helpers";
 import type { EditUserDialogProps, RoleValue } from "../types";
+import { MemberWaysIn } from "./MemberWaysIn";
 
-export function EditUserDialog({ member, open, onOpenChange }: EditUserDialogProps) {
+export function EditUserDialog({ member, oidcLabel, open, onOpenChange }: EditUserDialogProps) {
   const { t } = useTranslation("settings");
   const roleOptions = buildRoleOptions(t);
   const [username, setUsername] = useState("");
@@ -94,6 +96,7 @@ export function EditUserDialog({ member, open, onOpenChange }: EditUserDialogPro
               value={username}
               onChange={setUsername}
               ariaLabel={t("members.edit.usernameAriaLabel")}
+              autoComplete="off"
             />
           </SettingsField>
 
@@ -103,6 +106,7 @@ export function EditUserDialog({ member, open, onOpenChange }: EditUserDialogPro
               value={email}
               onChange={setEmail}
               ariaLabel={t("members.edit.emailAriaLabel")}
+              autoComplete="off"
             />
           </SettingsField>
 
@@ -153,8 +157,13 @@ export function EditUserDialog({ member, open, onOpenChange }: EditUserDialogPro
               source={TYPED_SECRET}
               placeholder={t("members.edit.passwordPlaceholder")}
               ariaLabel={t("members.edit.passwordAriaLabel")}
+              autoComplete="new-password"
             />
           </SettingsField>
+
+          <InlineError error={update.error} />
+
+          <MemberWaysIn memberId={member.id} oidcLabel={oidcLabel} />
 
           <DialogFooter>
             <Button type="submit" size="sm" disabled={!canSubmit}>

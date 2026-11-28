@@ -1,9 +1,12 @@
 "use client";
 
 import { Checkbox } from "@components/ui/Checkbox";
+import { useListPosition } from "@hooks/ui/useListPosition";
 import { useLongPress } from "@hooks/ui/useLongPress";
+import { listPositionAttributes } from "@utils/list-position";
 
-import { handleCardActivationKey, onOwnClick } from "./helpers";
+import { onOwnClick } from "./helpers";
+import { RowPrimaryButton } from "./RowPrimaryButton";
 import { listRow, listRowArt, listRowCheck, listRowSubtitle, listRowText, listRowTitle } from "./styles";
 import type { LibraryListRowProps } from "./types";
 
@@ -20,6 +23,7 @@ export function LibraryListRow({
   onHold,
 }: LibraryListRowProps) {
   const selecting = selection?.selecting === true;
+  const position = useListPosition();
   const longPress = useLongPress(onHold);
   const activate = () => {
     if (selection?.selecting) selection.onToggle(false);
@@ -29,13 +33,9 @@ export function LibraryListRow({
 
   return (
     <li
+      {...listPositionAttributes(position)}
       className={listRow({ selected: selection?.selected === true })}
-      role={activates ? "button" : undefined}
-      tabIndex={activates ? 0 : undefined}
-      aria-label={selecting ? selectLabel : openLabel}
-      aria-pressed={selecting ? selection?.selected : undefined}
       onClick={activates ? onOwnClick(activate) : undefined}
-      onKeyDown={activates ? (event) => handleCardActivationKey(event, activate) : undefined}
       {...longPress}
     >
       {selecting && selection ? (
@@ -43,7 +43,18 @@ export function LibraryListRow({
       ) : null}
       <div className={listRowArt({ round })}>{artwork}</div>
       <div className={listRowText()}>
-        <p className={listRowTitle()}>{title}</p>
+        <p className={listRowTitle()}>
+          {activates ? (
+            <RowPrimaryButton
+              label={selecting ? (selectLabel ?? openLabel) : openLabel}
+              pressed={selecting ? selection?.selected : undefined}
+            >
+              {title}
+            </RowPrimaryButton>
+          ) : (
+            title
+          )}
+        </p>
         <p className={listRowSubtitle()}>{subtitle}</p>
       </div>
       {selecting ? null : trailing}

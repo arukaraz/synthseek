@@ -40,7 +40,7 @@ export const playlistRowTitle = cva("truncate text-sm font-medium", {
 });
 
 export const playlistRowHover = cva(
-  "flex shrink-0 items-center gap-0.5 opacity-0 transition-opacity group-focus-within:opacity-100 group-hover:opacity-100 max-sm:hidden"
+  "flex shrink-0 items-center gap-0.5 opacity-0 transition-opacity group-focus-within:opacity-100 group-hover:opacity-100 a11y-mode:opacity-100 [@media(hover:none)]:opacity-100 max-sm:hidden"
 );
 
 export const playlistRowIcon = cva(

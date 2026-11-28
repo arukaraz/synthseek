@@ -43,7 +43,9 @@ export function TrackStatusIndicator({
               <HelpCircle className="size-3.5" />
             </button>
           </PopoverTrigger>
-          <PopoverContent side="top">{description}</PopoverContent>
+          <PopoverContent side="top" aria-label={label}>
+            {description}
+          </PopoverContent>
         </Popover>
       )}
     </div>

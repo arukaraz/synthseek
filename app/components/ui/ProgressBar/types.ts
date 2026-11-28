@@ -3,5 +3,6 @@ export interface ProgressBarProps {
   isActive?: boolean;
   gradient?: string;
   size?: "sm" | "md" | "lg";
+  label?: string;
   className?: string;
 }

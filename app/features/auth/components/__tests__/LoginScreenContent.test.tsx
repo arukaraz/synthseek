@@ -1,21 +1,21 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import { useAuthTransition } from "../../hooks/useAuthTransition";
 
-vi.mock("../LoginForm", () => ({
-  LoginForm: () => {
+vi.mock("../SignInPanel", () => ({
+  SignInPanel: () => {
     const { markNavigating } = useAuthTransition();
     return (
       <button type="button" onClick={markNavigating}>
-        mock-sign-in
+        mock-panel
       </button>
     );
   },
 }));
 
-vi.mock("../PlexLoginButton", () => ({
-  PlexLoginButton: () => <div>mock-plex</div>,
+vi.mock("../SignInBackdrop", () => ({
+  SignInBackdrop: () => <div>mock-backdrop</div>,
 }));
 
 import { AuthTransitionProvider } from "../../hooks/useAuthTransition";
@@ -30,19 +30,21 @@ function renderContent() {
 }
 
 describe("LoginScreenContent", () => {
-  it("shows the login card before navigation begins", () => {
+  it("shows the backdrop and the panel before navigation begins", () => {
     renderContent();
 
-    expect(screen.getByText("mock-sign-in")).toBeInTheDocument();
+    expect(screen.getByText("mock-backdrop")).toBeInTheDocument();
+    expect(screen.getByText("mock-panel")).toBeInTheDocument();
     expect(screen.queryByRole("status")).not.toBeInTheDocument();
   });
 
-  it("swaps the card for the branded loader once navigation is marked", () => {
+  it("swaps both for the branded loader once navigation is marked", () => {
     renderContent();
 
-    fireEvent.click(screen.getByText("mock-sign-in"));
+    fireEvent.click(screen.getByText("mock-panel"));
 
     expect(screen.getByRole("status")).toBeInTheDocument();
-    expect(screen.queryByText("mock-sign-in")).not.toBeInTheDocument();
+    expect(screen.queryByText("mock-panel")).not.toBeInTheDocument();
+    expect(screen.queryByText("mock-backdrop")).not.toBeInTheDocument();
   });
 });

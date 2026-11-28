@@ -14,7 +14,7 @@ import { PlayerWave } from "./PlayerWave";
 import { TrackCover } from "./TrackCover";
 import { UpgradeButton } from "./UpgradeButton";
 import { TOUCH_SHORT_LANDSCAPE_QUERY } from "./constants";
-import { formatClock, labelled, percentOf, trackInitials } from "./helpers";
+import { formatClock, labelled, labelledAfterContent, percentOf, trackInitials } from "./helpers";
 import {
   bar,
   barTop,
@@ -54,13 +54,15 @@ export function PlayerBar({ view, actions, placement = "dock" }: PlayerBarProps)
         </div>
       ) : null}
 
-      <div className={barTop()}>
+      <div className={barTop()} data-names-area="bar-top">
         <div className={barIdentity({ placement })}>
           <button
             type="button"
             className={barCoverButton()}
             onClick={actions.toggleFullscreen}
-            {...labelled(t("controls.openTrack"))}
+            {...labelledAfterContent(t("controls.openTrack"), [
+              view.track.artworkUrl === null ? trackInitials(view.track.album) : null,
+            ])}
             data-player-open-track
           >
             <TrackCover
@@ -115,7 +117,7 @@ export function PlayerBar({ view, actions, placement = "dock" }: PlayerBarProps)
           <PlayerTransport view={view} actions={actions} size="bar" joined={placement === "dock"} />
         </div>
 
-        <div className={barExtras()}>
+        <div className={barExtras()} data-names-area="bar-extras">
           <div className={barDesktopExtras()}>
             <PlayerExtraControls view={view} actions={actions} besideMoreMenu />
           </div>

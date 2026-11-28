@@ -139,7 +139,7 @@ Full playlist management inside your library.
 
 ### Playlist import and export
 
-- Import from **JSPF**, **XSPF**, and **Exportify CSV**. The flow is a dry run first, showing you exactly what matched and what did not, then a commit of the selection you approve.
+- Import from **JSPF**, **XSPF**, and **CSV**, either an Exportify export or a YouTube Music library song list with the columns `Song Title`, `Album Title` and `Artist Name`. Song length is not read from the latter. The flow is a dry run first, showing you exactly what matched and what did not, then a commit of the selection you approve.
 - Export to **JSPF**, round-trippable back into Synthseek, or to **M3U**, listing each file by its path on the server.
 - Add the tracks of an **M3U** file to a playlist you already have. It shows what matched before anything is added.
 - Duplicate tracks within an imported playlist are collapsed, with a count of how many were skipped.
@@ -204,6 +204,8 @@ One limit worth knowing. A track is offered once Synthseek has located its file,
 
 Discover is a board of widgets that each member arranges. Some show what is trending and your queue to pick up. Others hold sets and stations built from your own plays, discovery mixes and charts. The rest cover artists and albums similar to what you play, what just landed in the library, and your library's size with its top artists and genres. They also show the releases your top artists are missing and your latest requests. [The board](#the-board) says how to arrange it, and [Your own widgets](#your-own-widgets) how to add widgets of your own.
 
+**Artists you might want next** lets you replace one artist or all of them. Synthseek remembers the artists you passed over recently, so a reload does not bring them back. The widget also moves on to other artists on its own.
+
 ### Follow artists
 
 Press **Follow** on an artist to keep track of what they release. **Settings**, then **Releases**, has two tabs. **Calendar** shows what is out and what is announced, by month or as a list, and picks which release types count. **Following** lists the artists you follow, and **Follow my most played** adds your top artists in one step.
@@ -237,7 +239,7 @@ A widget can also hold up to six playlists. Each one is either a smart playlist 
 
 Connect a library source and bring your existing collection across.
 
-From Spotify, browse your saved albums, saved tracks, and playlists in a table with bulk selection, pick what you want, and import it. From Plex, Navidrome, or Jellyfin, import your playlists the same way. Imported playlists can be kept in sync, so new additions on the source side flow through automatically.
+From Spotify, browse your saved albums, saved tracks, and playlists in a table with bulk selection, pick what you want, and import it. From Plex, Navidrome, or Jellyfin, import your playlists the same way. From YouTube, import your own playlists and Liked music once you connect your account. YouTube can restrict or ban an account used through automated tools, so a secondary account is the prudent choice, as [the YouTube section](/integrations#youtube) explains. A Spotify or YouTube playlist also imports from its link, and a public or unlisted YouTube playlist needs no account. Imported playlists can be kept in sync, so new additions on the source side flow through automatically.
 
 A playlist from one of those servers can skip downloading the tracks Synthseek does not have yet. Those can play from the server instead.
 
@@ -247,7 +249,7 @@ Each member connects their own account and imports into their own library.
 
 Synthseek is built for more than one person.
 
-- Local accounts, or sign in with Plex.
+- Sign in with a password, or with Plex, Jellyfin or an OpenID Connect provider you set up. See [Signing in](/users-permissions#signing-in).
 - Import members straight from your Plex server.
 - Three roles: admin, trusted, and user.
 - Administrator-only settings are hidden from everyone else, not merely disabled.
@@ -262,6 +264,7 @@ Synthseek is built for more than one person.
 - Modern and responsive, with a bottom navigation bar on phones.
 - Three themes, Synthseek, Midnight, and Ocean, and a [custom theme](/custom-themes) of your own.
 - Four languages: English, Español, Deutsch, and Français.
+- An accessibility mode, with options for motion, transparency, contrast, text size and more. See [Settings](/configuration#accessibility).
 - Live progress everywhere, driven by server-sent events rather than polling.
 - A progress dock that follows long-running work such as playlist population, library imports, and media server sync.
 - In-app update notifications when a newer version is published, with the patch notes for it. After a major or minor update, administrators see its main changes once, in a **What's new** window.

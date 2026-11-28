@@ -38,6 +38,16 @@ describe("EditProfileCard", () => {
     expect(screen.getByLabelText(enSettings.profile.edit.avatarAriaLabel)).toHaveValue("https://img/a.png");
   });
 
+  it("tells the browser which standard fields the username and email are", () => {
+    render(<EditProfileCard user={createMockUser({ username: "alice", email: "alice@example.com" })} />);
+
+    expect(screen.getByLabelText(enSettings.profile.edit.usernameAriaLabel)).toHaveAttribute(
+      "autocomplete",
+      "username"
+    );
+    expect(screen.getByLabelText(enSettings.profile.edit.emailAriaLabel)).toHaveAttribute("autocomplete", "email");
+  });
+
   it("sends only the changed username and leaves untouched fields undefined", async () => {
     render(<EditProfileCard user={createMockUser({ username: "alice", email: "alice@example.com" })} />);
 

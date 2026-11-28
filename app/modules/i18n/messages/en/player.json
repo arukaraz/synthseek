@@ -31,7 +31,32 @@
     "volumeControls": "Volume controls",
     "lyrics": "Lyrics",
     "lyricsClose": "Close the lyrics",
-    "settings": "Playback settings"
+    "settings": "Playback settings",
+    "region": "Player"
+  },
+  "spoken": {
+    "seek": "{{elapsed}} of {{total}}",
+    "volume": "{{percent}} percent",
+    "hours_one": "{{count}} hour",
+    "hours_other": "{{count}} hours",
+    "minutes_one": "{{count}} minute",
+    "minutes_other": "{{count}} minutes",
+    "seconds_one": "{{count}} second",
+    "seconds_other": "{{count}} seconds"
+  },
+  "announce": {
+    "track": "Now playing {{title}} by {{artist}}"
+  },
+  "problem": {
+    "playback": "This track could not be played."
+  },
+  "queueMove": {
+    "moved": "{{title}} moved to position {{position}} of {{total}}",
+    "up": "Move up",
+    "down": "Move down",
+    "top": "Move to top",
+    "bottom": "Move to bottom",
+    "menu": "Move {{title}}"
   },
   "menu": {
     "playback": "Playback",

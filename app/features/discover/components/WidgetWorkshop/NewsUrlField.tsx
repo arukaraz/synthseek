@@ -24,6 +24,7 @@ export function NewsUrlField({ url, onCommit }: NewsUrlFieldProps) {
       <Input
         size="sm"
         type="url"
+        autoComplete="off"
         inputMode="url"
         aria-label={t("feeds.url")}
         aria-invalid={!valid}

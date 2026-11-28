@@ -31,7 +31,7 @@ describe("FilterSortDropdown columns", () => {
     const user = userEvent.setup();
     renderMenu();
 
-    await user.click(screen.getByRole("button", { name: "Filter and sort" }));
+    await user.click(screen.getByRole("button", { name: /Filter and sort/ }));
 
     const menu = within(await screen.findByRole("menu"));
     const category = menu.getByRole("group", { name: "Category" });
@@ -39,12 +39,21 @@ describe("FilterSortDropdown columns", () => {
     expect(category.compareDocumentPosition(state) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
   });
 
+  it("starts the name of the trigger with the text it draws", () => {
+    renderMenu();
+
+    const trigger = screen.getByRole("button", { name: /Filter and sort/ });
+
+    expect(trigger.getAttribute("aria-label")?.startsWith(trigger.textContent ?? "")).toBe(true);
+    expect(trigger.textContent).not.toBe("");
+  });
+
   it("hands back the option picked in that column", async () => {
     const user = userEvent.setup();
     const onFilter = vi.fn();
     renderMenu(onFilter);
 
-    await user.click(screen.getByRole("button", { name: "Filter and sort" }));
+    await user.click(screen.getByRole("button", { name: /Filter and sort/ }));
     await user.click(await screen.findByRole("menuitemradio", { name: "Rock" }));
 
     expect(onFilter).toHaveBeenCalledWith("rock");

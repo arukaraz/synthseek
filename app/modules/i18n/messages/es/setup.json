@@ -1,87 +1,126 @@
 {
   "shell": {
-    "eyebrow": "Configuración inicial",
     "loading": "Cargando la configuración",
-    "progress": "Paso {{current}} de {{total}}",
-    "back": "Atrás"
+    "loadError": "No se pudo cargar tu progreso de configuración.",
+    "retry": "Reintentar"
+  },
+  "frame": {
+    "progress": "Pregunta {{current}} de {{total}}",
+    "progressReady": "Las {{total}} preguntas están hechas, listo para terminar",
+    "label": "{{number}} · {{name}}",
+    "steps": {
+      "account": "Tú",
+      "media": "Reproducción",
+      "downloads": "Música nueva",
+      "metadata": "Etiquetas",
+      "summary": "Listo"
+    }
   },
   "actions": {
+    "back": "Atrás",
     "continue": "Continuar",
-    "skip": "Omitir",
-    "saving": "Guardando..."
+    "skip": "Omitir por ahora",
+    "recordFailed": "No se pudo guardar tu respuesta. Inténtalo de nuevo."
   },
-  "admin": {
-    "title": "Crea tu cuenta de administrador",
-    "description": "Esta es la primera cuenta en esta instalación de Synthseek. Podrás invitar a otras personas más adelante.",
-    "creating": "Creando administrador...",
-    "submit": "Crear administrador",
-    "createError": "No se pudo crear la cuenta de administrador. Inténtalo de nuevo.",
-    "emailLabel": "Correo electrónico",
+  "account": {
+    "title": "Empecemos con tu cuenta.",
+    "submit": "Crear cuenta",
+    "creating": "Creando...",
+    "createError": "No se pudo crear la cuenta. Inténtalo de nuevo.",
+    "tokenLabel": "Token de configuración",
+    "tokenPlaceholder": "Pega el token",
+    "tokenHint": "El token se imprime en el registro del servidor cuando arranca.",
+    "tokenMissing": "Pega el token de configuración del registro del servidor.",
+    "emailLabel": "Correo",
     "emailPlaceholder": "tu@dominio.com",
-    "emailError": "Introduce una dirección de correo válida.",
+    "emailError": "Introduce un correo válido.",
     "usernameLabel": "Nombre de usuario",
     "usernamePlaceholder": "admin",
-    "usernameHint": "Mínimo 3 caracteres",
+    "usernameHint": "Al menos 3 caracteres",
     "usernameError": "Usa entre 3 y 32 caracteres.",
     "passwordHint": "Al menos 8 caracteres",
-    "passwordError": "Usa al menos 8 caracteres."
+    "passwordError": "Usa al menos 8 caracteres.",
+    "throttled": {
+      "visible": "Demasiados intentos. Inténtalo de nuevo en {{time}}.",
+      "announce": "Demasiados intentos. Puedes volver a intentarlo en {{duration}}.",
+      "released": "Ya puedes intentarlo de nuevo."
+    }
   },
-  "slskd": {
-    "title": "Conectar con slskd (opcional)",
-    "description": "Synthseek llega a la red Soulseek a través de tu demonio slskd. Puedes hacerlo más tarde desde Ajustes.",
-    "apiUrlLabel": "URL de la API",
-    "apiUrlPlaceholder": "http://localhost:5030",
-    "apiKeyLabel": "Clave de la API",
-    "testIdle": "Probar conexión",
-    "testBusy": "Probando...",
-    "passed": "Conexión verificada.",
-    "failed": "No se pudo conectar con slskd. Revisa la URL y la clave de la API.",
-    "failedReason": "Error de conexión: {{reason}}",
-    "overrideLink": "Continuar sin una conexión verificada",
-    "overrideArmed": "Continuando sin una conexión verificada. Podrás corregirlo más adelante en Ajustes.",
-    "saveFailed": "No se pudo guardar la conexión de slskd. Confirma la URL y la clave de la API, y vuelve a intentarlo.",
-    "blockedHint": "Prueba la conexión u omite este paso para continuar"
+  "media": {
+    "title": "¿Dónde suena tu música?",
+    "description": "Elige el servidor donde ya vive tu biblioteca, si tienes uno.",
+    "groupLabel": "Servidor multimedia",
+    "existing": "Ya lo uso",
+    "none": "Ninguno por ahora",
+    "noneCaption": "Synthseek la reproduce por sí mismo"
+  },
+  "connect": {
+    "title": "Conecta {{server}}.",
+    "urlLabel": "URL de {{server}}",
+    "urlError": "Introduce una URL completa con http:// o https://, como http://host:puerto.",
+    "navidromeUrlPlaceholder": "http://navidrome:4533",
+    "jellyfinUrlPlaceholder": "http://jellyfin:8096",
+    "usernameLabel": "Nombre de usuario",
+    "passwordLabel": "Contraseña",
+    "apiKeyLabel": "Clave de API",
+    "apiKeyHint": "Crea una en el panel de Jellyfin, en Claves de API.",
+    "test": "Probar conexión",
+    "testing": "Probando...",
+    "passed": "{{server}} conectado.",
+    "unreachable": "No se pudo conectar con {{server}} en esa dirección. Revisa la URL y que el servidor esté encendido.",
+    "unauthorized": "{{server}} rechazó esas credenciales. Revísalas e inténtalo de nuevo.",
+    "saveFailed": "No se pudo guardar la conexión con {{server}}. Inténtalo de nuevo."
   },
   "plex": {
-    "title": "Conectar Plex (opcional)",
-    "description": "Permite que Synthseek explore tu biblioteca después de cada importación y refleje las listas de reproducción. Puedes hacerlo más tarde desde Ajustes.",
-    "blockedHint": "Conecta Plex u omite este paso para continuar",
-    "intro": "Se abrirá una ventana emergente para que inicies sesión en plex.tv.",
+    "intro": "Se abrirá una ventana emergente para iniciar sesión en plex.tv.",
     "connect": "Iniciar sesión con <0>Plex</0>",
     "connecting": "Esperando a Plex...",
     "saving": "Guardando...",
-    "connected": "Plex conectado. Continúa al siguiente paso.",
-    "noServers": "No se encontraron servidores de Plex en esta cuenta. Puedes omitirlo y añadir uno más tarde.",
-    "timeout": "El inicio de sesión de Plex agotó el tiempo de espera. Inténtalo de nuevo, u omítelo y conecta Plex más tarde desde Ajustes.",
-    "popupUnfinished": "El inicio de sesión de Plex no se completó. Vuelve a abrir la ventana emergente y aprueba el acceso, u omite este paso.",
-    "serverPickerIntro": "Elige el servidor de Plex que Synthseek debe usar:",
+    "connected": "Plex conectado.",
+    "noServers": "No se encontraron servidores de Plex en esta cuenta. Puedes omitir y añadir uno después.",
+    "timeout": "El inicio de sesión de Plex caducó. Inténtalo de nuevo, u omite y conecta Plex después desde Ajustes.",
+    "popupUnfinished": "El inicio de sesión de Plex no terminó. Vuelve a abrir la ventana y aprueba el acceso, u omite esta pregunta.",
+    "serverPickerIntro": "Elige el servidor de Plex al que Synthseek debe apuntar:",
     "serverLocal": "local",
     "serverRemote": "remoto"
   },
-  "enrichment": {
-    "title": "Enriquecimiento de metadatos (opcional)",
-    "description": "Mejora cómo Synthseek etiqueta, puntúa y recomienda las canciones. Todas las claves son opcionales pero recomendadas.",
-    "saveFailed": "No se pudo guardar tu configuración. Revisa los datos e inténtalo de nuevo.",
-    "lastfmLabel": "Clave de la API de Last.fm",
-    "lastfmHint": "Clave de la API de Last.fm para todo el sistema. Compartida entre todos los usuarios.",
-    "fanartLabel": "Clave de la API de FanART",
-    "fanartHint": "Fuente de las imágenes.",
-    "songlinkLabel": "Clave de la API de Songlink",
-    "songlinkHint": "Resuelve las URL de las canciones en distintas plataformas para importar listas multiplataforma. Synthseek usa el endpoint público de forma predeterminada. Déjalo en blanco a menos que tengas una clave.",
-    "acoustidLabel": "Clave de la API de AcoustID",
-    "acoustidHint": "Alternativa de huella digital de audio para canciones sin metadatos de etiqueta fiables.",
-    "musicbrainzLabel": "Correo de contacto de MusicBrainz",
-    "musicbrainzPlaceholder": "tu@ejemplo.com",
-    "musicbrainzHint": "Obligatorio. Sin él, Synthseek comparte un correo con límite de frecuencia."
+  "downloads": {
+    "title": "¿Cómo debe llegar la música nueva?",
+    "description": "Synthseek descarga por Soulseek usando tu slskd.",
+    "apiUrlLabel": "URL de la API de slskd",
+    "apiUrlPlaceholder": "http://localhost:5030",
+    "apiKeyLabel": "Clave de API",
+    "apiKeyHint": "Pega la clave de API para probar.",
+    "testIdle": "Probar conexión",
+    "testBusy": "Probando...",
+    "passed": "Conexión verificada.",
+    "failed": "No se pudo conectar con slskd. Revisa la URL y la clave de API.",
+    "failedReason": "La conexión falló: {{reason}}",
+    "overrideLink": "Continuar sin una conexión verificada",
+    "overrideArmed": "Se continuará sin una conexión verificada. Puedes arreglarlo después en Ajustes.",
+    "saveFailed": "No se pudo guardar la conexión con slskd. Confirma la URL y la clave de API e inténtalo de nuevo."
   },
-  "done": {
-    "title": "Todo listo",
-    "description": "Synthseek está listo para empezar. Puedes ajustar todo más adelante en Ajustes.",
-    "cardHeading": "Configuración completada",
-    "cardBody": "slskd, Plex y el enriquecimiento de metadatos se pueden añadir o editar en cualquier momento.",
-    "primaryRest": "Ir al panel",
-    "primaryBusy": "Finalizando...",
-    "primaryRetry": "Reintentar",
-    "failed": "No se pudo finalizar la configuración. Inténtalo de nuevo."
+  "metadata": {
+    "title": "Con un correo, tus etiquetas llegan más rápido.",
+    "label": "Correo de contacto de MusicBrainz",
+    "placeholder": "tu@ejemplo.com",
+    "hint": "MusicBrainz pide a cada aplicación que se identifique. Sin ello, las consultas comparten un límite más lento.",
+    "emailError": "Introduce un correo válido.",
+    "saveFailed": "No se pudieron guardar tus ajustes. Revisa los datos e inténtalo de nuevo."
+  },
+  "summary": {
+    "title": "Eso es todo.",
+    "answered": "Hecho",
+    "skipped": "Después",
+    "open": "Sin definir",
+    "questions": {
+      "account": "Administrador",
+      "media": "Servidor multimedia",
+      "downloads": "Descargas",
+      "metadata": "Metadatos"
+    },
+    "finish": "Ir al tablero",
+    "finishing": "Terminando...",
+    "failed": "No se pudo terminar la configuración. Inténtalo de nuevo."
   }
 }

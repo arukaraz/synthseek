@@ -86,10 +86,21 @@ export const contrastBadge = cva("rounded-full border px-1.5 py-0.5 text-11 whit
 });
 
 export const resetButton = cva(
-  "focus-visible:ring-primary-500/50 grid size-5.5 cursor-pointer place-items-center rounded-full outline-none focus-visible:ring-2 disabled:invisible"
+  "focus-visible:ring-primary-500/50 text-fg/45 hover:text-fg grid size-5.5 cursor-pointer place-items-center rounded-full outline-none transition-colors focus-visible:ring-2 disabled:cursor-default",
+  {
+    variants: {
+      shown: {
+        true: "",
+        false: "invisible",
+      },
+    },
+    defaultVariants: { shown: false },
+  }
 );
 
-export const resetGlyph = cva("bg-warning-vivid size-2 rounded-full");
+export const unsavedGlyph = cva("bg-warning-vivid size-2 rounded-full");
+
+export const resetGlyph = cva("size-3.5");
 
 export const fontSelectCell = cva("min-w-0");
 

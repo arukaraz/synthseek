@@ -24,6 +24,7 @@ export function NumberRow({
   hint,
   value,
   changed,
+  unsaved,
   presetName,
   baseLabel,
   onWrite,
@@ -75,6 +76,7 @@ export function NumberRow({
         baseLabel={baseLabel}
         presetName={presetName}
         changed={changed}
+        unsaved={unsaved}
         onReset={onReset}
       />
     </div>

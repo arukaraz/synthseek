@@ -9,6 +9,16 @@ export const playerDock = cva(
   "player-metrics @container pointer-events-auto absolute inset-x-0 bottom-[var(--height-bottom-nav)] flex flex-col sm:inset-x-[var(--player-dock-gap)] sm:bottom-[var(--player-dock-gap)] sm:overflow-hidden sm:rounded-2xl sm:border-x sm:border-b sm:border-primary-500/25 sm:shadow-2xl"
 );
 
+export const playbackProblem = cva("", {
+  variants: {
+    visible: {
+      true: "text-destructive-vivid bg-surface/90 flex items-center gap-2 px-4 py-2 text-13",
+      false: "sr-only",
+    },
+  },
+  defaultVariants: { visible: false },
+});
+
 export const headerPlayer = cva(
   "player-metrics flex w-max max-w-[min(var(--width-player-compact),42vw)] min-w-0 flex-col"
 );
@@ -165,9 +175,9 @@ export const moreBadge = cva("ring-surface-overlay absolute top-1 right-1 size-2
   variants: {
     tone: {
       remote: "bg-secondary-400",
-      warning: "bg-warning-vivid animate-pulse",
-      danger: "bg-destructive-vivid",
-      notice: "bg-warning-vivid",
+      warning: "bg-warning-vivid animate-pulse a11y-mode:rotate-45 a11y-mode:rounded-xs",
+      danger: "bg-destructive-vivid a11y-mode:rounded-none",
+      notice: "bg-warning-vivid a11y-mode:rotate-45 a11y-mode:rounded-xs",
       private: "bg-primary-400",
       friends: "bg-accent-400",
       arrival: "bg-accent-400 animate-pulse",
@@ -278,7 +288,7 @@ export const iconButton = cva(
 );
 
 export const playButton = cva(
-  "bg-primary-500 text-primary-foreground focus-visible:ring-primary-400 grid shrink-0 place-items-center rounded-full transition-transform hover:scale-105 focus-visible:ring-2 focus-visible:outline-none disabled:opacity-60",
+  "bg-primary-500 text-primary-foreground focus-visible:ring-primary-400 relative grid shrink-0 place-items-center rounded-full transition-transform hover:scale-105 focus-visible:ring-2 focus-visible:outline-none disabled:opacity-60",
   {
     variants: {
       size: {
@@ -299,7 +309,7 @@ export const stopBadge = cva(
   {
     variants: {
       size: {
-        bar: "-right-1.5 -bottom-1.5 size-5",
+        bar: "-right-1.5 -bottom-1.5 size-5 a11y-mode:-right-2.5 a11y-mode:-bottom-2.5 a11y-mode:size-6",
         stage: "-right-1 -bottom-1 size-6.5",
       },
     },
@@ -990,7 +1000,9 @@ export const privateSessionStatus = cva(
   }
 );
 
-export const scrobbleDot = cva("absolute right-0.5 bottom-0.5 size-1.5 rounded-full", {
+export const scrobbleSign = cva("bg-surface absolute right-0 bottom-0 hidden size-3 rounded-full p-px a11y-mode:block");
+
+export const scrobbleDot = cva("absolute right-0.5 bottom-0.5 size-1.5 rounded-full a11y-mode:hidden", {
   variants: {
     state: {
       off: "bg-fg-muted/50",

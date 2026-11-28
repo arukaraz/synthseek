@@ -17,6 +17,7 @@ export function FontRow({
   value,
   families,
   changed,
+  unsaved,
   presetName,
   baseLabel,
   onWrite,
@@ -48,6 +49,7 @@ export function FontRow({
         baseLabel={baseLabel}
         presetName={presetName}
         changed={changed}
+        unsaved={unsaved}
         onReset={onReset}
       />
     </div>

@@ -14,7 +14,7 @@ Only for slskd, which needs one. Synthseek talks only to slskd's HTTP API and ho
 No. The music catalog needs none. Everything else is optional. An AcoustID key is free and is the one worth getting, because without it Synthseek cannot verify by listening that a downloaded file really is what you asked for.
 
 **Can I run it without slskd?**
-Yes. slskd comes first by default, but any other source you enable can deliver, and the yt-dlp fallback is on from the start. The setup wizard asks for slskd, and lets you skip that step.
+Yes. slskd comes first by default, but any other source you enable can deliver, and the yt-dlp fallback is on from the start. First-run setup asks for slskd, and lets you skip that question.
 
 **Does it work on a Raspberry Pi?**
 There is an `arm64` image, built and smoke tested natively.
@@ -62,7 +62,7 @@ Filing may be disabled, in which case files stay in the downloads folder. Check 
 Usually two programs are writing into the same music root under different naming conventions, typically Lidarr using MusicBrainz spelling and Synthseek using the catalog's. Check which program created each folder before treating it as a bug.
 
 **Can I import music I already have?**
-Yes, three ways. Drag files or zip archives in. Connect a library source such as Spotify and import from it. Or import a playlist file in JSPF, XSPF, or Exportify CSV.
+Yes, three ways. Drag files or zip archives in. Connect a library source such as Spotify or YouTube and import from it. Or import a playlist file in JSPF, XSPF, or CSV.
 
 **Does a quality upgrade delete my old file?**
 No. It is moved to a recycle bin under `/data` before the replacement is imported, and that move is verified before anything else happens. You can see what the bin is holding and put any of it back from **Settings**, then **Maintenance**, then **Recycle bin**. The bin empties itself after thirty days by default.

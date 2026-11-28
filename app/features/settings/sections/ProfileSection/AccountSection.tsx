@@ -13,6 +13,7 @@ import { EditProfileCard } from "./components/EditProfileCard";
 import { LanguageCard } from "./components/LanguageCard";
 import { MyRequestPresetCard } from "./components/MyRequestPresetCard";
 import { QuotaCard } from "./components/QuotaCard";
+import { WaysInCard } from "./components/WaysInCard";
 
 export function AccountSection() {
   const { t } = useTranslation("settings");
@@ -31,6 +32,7 @@ export function AccountSection() {
         <QuotaCard />
         <MyRequestPresetCard />
       </div>
+      <WaysInCard />
       <ChangePasswordCard user={currentUser} />
     </div>
   );

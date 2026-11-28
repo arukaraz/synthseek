@@ -5,7 +5,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useRef, use
 
 import { triggerHashTargetGlow } from "@utils/hash-target-glow";
 
-import { internalHrefOf, leavesPage, saveEach, sameEntryState } from "./helpers";
+import { internalHrefOf, leavesPage, saveEachOutcome, sameEntryState } from "./helpers";
 import { LeaveChangesDialog } from "./LeaveChangesDialog";
 import type { SaveEntry, SaveRegistry, SaveScopeState, SettingsSaveScopeProps } from "./types";
 
@@ -32,6 +32,7 @@ export function SettingsSaveScope({ children }: SettingsSaveScopeProps) {
   const [entries, setEntries] = useState<Record<string, SaveEntry>>({});
   const [pending, setPending] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
+  const [failure, setFailure] = useState<unknown>(null);
 
   const dirty = useMemo(() => Object.values(entries).filter((entry) => entry.isDirty), [entries]);
   const dirtyRef = useRef(dirty);
@@ -71,26 +72,31 @@ export function SettingsSaveScope({ children }: SettingsSaveScopeProps) {
 
   const saveAll = useCallback(async () => {
     setSaving(true);
+    setFailure(null);
     try {
-      return await saveEach(dirtyRef.current);
+      const outcome = await saveEachOutcome(dirtyRef.current);
+      setFailure(outcome.failure);
+      return outcome.saved;
     } finally {
       setSaving(false);
     }
   }, []);
 
   const cancelAll = useCallback(() => {
+    setFailure(null);
     for (const entry of dirtyRef.current) entry.cancel();
   }, []);
 
   const state = useMemo<SaveScopeState>(
     () => ({
       dirty,
+      failure,
       saving: saving || dirty.some((entry) => entry.isSaving),
       saveDisabled: dirty.some((entry) => entry.saveDisabled),
       saveAll,
       cancelAll,
     }),
-    [dirty, saving, saveAll, cancelAll]
+    [dirty, failure, saving, saveAll, cancelAll]
   );
 
   const hasChanges = dirty.length > 0;

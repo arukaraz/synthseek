@@ -33,6 +33,14 @@ describe("SuggestedFilters", () => {
     expect(screen.getByText("Any year")).toBeInTheDocument();
   });
 
+  it("names the panel after the filter button", async () => {
+    renderFilters(ANY);
+
+    await openPanel();
+
+    expect(screen.getByRole("dialog", { name: "Filter suggestions" })).toBeInTheDocument();
+  });
+
   it("opens on the years the playlist remembers", async () => {
     renderFilters({ from: 1990, to: 2005 });
 

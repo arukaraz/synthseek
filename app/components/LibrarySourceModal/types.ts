@@ -16,6 +16,8 @@ export type LibrarySort = "name" | "type" | "tracks" | "imported" | "lastSync" |
 
 export type ToggleAggregateState = "on" | "off" | "mixed";
 
+export type ModalLayout = "list" | "listWithLink" | "linkOnly";
+
 export type WatchCapabilities = LibrarySourceDescription["capabilities"]["watch"];
 
 export interface LibrarySourceModalProps {

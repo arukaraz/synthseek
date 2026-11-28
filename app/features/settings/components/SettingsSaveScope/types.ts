@@ -15,8 +15,14 @@ export interface SaveRegistry {
   navigate: (href: string) => void;
 }
 
+export interface SaveOutcome {
+  saved: boolean;
+  failure: unknown;
+}
+
 export interface SaveScopeState {
   dirty: SaveEntry[];
+  failure: unknown;
   saving: boolean;
   saveDisabled: boolean;
   saveAll: () => Promise<boolean>;

@@ -24,11 +24,12 @@ import {
   EQUALIZER_STEP_DB,
 } from "@hooks/ui/player/constants";
 import { equalizerPresetIds, isEqualizerPresetId, presetNameFrom } from "@hooks/ui/player/equalizer";
+import { nameAfterVisibleText } from "@utils/accessibleName";
 
 import { EqualizerBand } from "./EqualizerBand";
 import { SettingsSlider } from "./SettingsSlider";
 import { CUSTOM_PRESET_VALUE_PREFIX, EQUALIZER_SCALE_TICKS_DB } from "./constants";
-import { formatGainDb, labelled, presetValueFor, presetRefFromValue } from "./helpers";
+import { formatGainDb, labelled, labelledOnHover, presetValueFor, presetRefFromValue } from "./helpers";
 import {
   equalizerBands,
   equalizerFootnote,
@@ -77,7 +78,7 @@ export function EqualizerSection({ view, actions }: PlayerSettingsControlProps) 
                 size="sm"
                 className={equalizerPresetTrigger()}
                 disabled={!equalizer.enabled}
-                aria-label={t("equalizer.preset")}
+                aria-label={nameAfterVisibleText(t("equalizer.preset"), presetName)}
               >
                 {presetName}
                 <ChevronDown className="size-3.5" />
@@ -118,7 +119,7 @@ export function EqualizerSection({ view, actions }: PlayerSettingsControlProps) 
               onClick={() => {
                 if (equalizer.preset?.kind === "custom") actions.deleteEqualizerPreset(equalizer.preset.name);
               }}
-              {...labelled(t("equalizer.deletePreset", { name: equalizer.preset.name }))}
+              {...labelledOnHover(t("equalizer.deletePreset", { name: equalizer.preset.name }))}
             >
               <Trash2 className="size-3.5" />
             </button>

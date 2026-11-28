@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 
 import { Button } from "@components/ui/Button";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@components/ui/Dialog";
+import { InlineError } from "@components/ui/InlineError";
 import { Input } from "@components/ui/Input";
 import { Notice } from "@components/ui/Notice";
 import { useCreateLibraryPath, useUpdateLibraryPath } from "@hooks/api/mutations/library/useLibraryPaths";
@@ -229,6 +230,8 @@ export function LibraryPathModal({ target, paths, rules, members, organise, onCl
               )}
             </Notice>
           )}
+
+          <InlineError error={create.error ?? update.error} />
 
           <DialogFooter className={modalFooter()}>
             {path === null ? null : (

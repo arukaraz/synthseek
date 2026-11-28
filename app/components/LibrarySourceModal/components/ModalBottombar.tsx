@@ -19,6 +19,7 @@ export function ModalBottombar({
   hasChanges,
   onRefresh,
   isRefreshing,
+  refreshable = true,
 }: ModalBottombarProps) {
   const { t } = useTranslation("library");
 
@@ -34,19 +35,21 @@ export function ModalBottombar({
             <span className={bbStatStrong()}>{totalTracks}</span>{" "}
             {t("librarySource.bottombar.tracksTotal", { count: totalTracks })}
           </span>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={onRefresh}
-            disabled={isRefreshing}
-            title={t("librarySource.bottombar.refreshTitle")}
-            className="ml-auto sm:ml-0"
-          >
-            <RefreshCw className={`size-3.5 ${isRefreshing ? "animate-spin" : ""}`} />
-            <span className="hidden sm:inline">
-              {isRefreshing ? t("librarySource.bottombar.refreshing") : t("librarySource.bottombar.refreshList")}
-            </span>
-          </Button>
+          {refreshable ? (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={onRefresh}
+              disabled={isRefreshing}
+              title={t("librarySource.bottombar.refreshTitle")}
+              className="ml-auto sm:ml-0"
+            >
+              <RefreshCw className={`size-3.5 ${isRefreshing ? "animate-spin" : ""}`} />
+              <span className="hidden sm:inline">
+                {isRefreshing ? t("librarySource.bottombar.refreshing") : t("librarySource.bottombar.refreshList")}
+              </span>
+            </Button>
+          ) : null}
         </>
       }
       choice={

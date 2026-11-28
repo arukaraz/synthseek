@@ -1,6 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
+import { FIRST_BODY_ROW_INDEX } from "./consts";
 import { tableBody, tableEmptyCell, tableExpansionCell, tableGroupCell } from "./styles";
 import { TableRow } from "./TableRow";
 import type { TableBodyProps } from "./types";
@@ -15,6 +16,7 @@ export function TableBody<TData>({
   staggerDelay,
   onRowClick,
   isRowClickable,
+  numbered = false,
   renderExpansion,
   renderGroupHeader,
 }: TableBodyProps<TData>) {
@@ -46,6 +48,7 @@ export function TableBody<TData>({
                 item={item}
                 columns={columns}
                 index={index}
+                rowIndex={numbered ? index + FIRST_BODY_ROW_INDEX : undefined}
                 staggerDelay={staggerDelay}
                 attrs={rowAttrs?.(item)}
                 clickable={clickable}

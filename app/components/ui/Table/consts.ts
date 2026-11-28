@@ -15,3 +15,7 @@ export const TABLE_HEADER_SORT_INDICATOR_VARIANTS: Variants = {
 };
 
 export const DEFAULT_STAGGER_DELAY = 0;
+
+export const HEADER_ROW_INDEX = 1;
+
+export const FIRST_BODY_ROW_INDEX = 2;

@@ -7,6 +7,7 @@ import {
   type RequestWithTracks,
   type TrackRequest,
 } from "@api/__generated__/types";
+import { DEFAULT_ACCESSIBILITY } from "@modules/accessibility";
 
 export function makeRequestsUser(overrides: Partial<PublicUser> = {}): PublicUser {
   return {
@@ -31,6 +32,7 @@ export function makeRequestsUser(overrides: Partial<PublicUser> = {}): PublicUse
       mediaServer: { default: true, private: false },
       nowPlaying: { default: false, private: false },
     },
+    accessibility: { ...DEFAULT_ACCESSIBILITY },
     plex_username: null,
     plexLinked: false,
     hasPassword: true,

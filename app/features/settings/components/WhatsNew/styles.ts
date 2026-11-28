@@ -71,7 +71,7 @@ export const galleryToggle = cva(
 );
 
 export const galleryArrow = cva(
-  "bg-surface/75 text-fg ring-fg/15 hover:bg-surface focus-visible:ring-primary-400 absolute top-1/2 hidden size-9 -translate-y-1/2 sm:grid place-items-center rounded-full ring-1 backdrop-blur-md transition focus-visible:opacity-100 focus-visible:ring-2 focus-visible:outline-none [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover/gallery:opacity-100",
+  "bg-surface/75 text-fg ring-fg/15 hover:bg-surface focus-visible:ring-primary-400 absolute top-1/2 hidden size-9 -translate-y-1/2 a11y-mode:grid sm:grid place-items-center rounded-full ring-1 backdrop-blur-md transition focus-visible:opacity-100 focus-visible:ring-2 focus-visible:outline-none [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover/gallery:opacity-100 [@media(hover:hover)]:a11y-mode:opacity-100",
   {
     variants: {
       side: {
@@ -89,7 +89,7 @@ export const galleryDots = cva(
 );
 
 export const galleryDot = cva(
-  "focus-visible:ring-primary-400 flex h-7 w-5 items-center justify-center rounded-full before:block before:h-1.5 before:rounded-full before:transition-all before:content-[''] focus-visible:ring-2 focus-visible:outline-none",
+  "focus-visible:ring-primary-400 a11y-mode:w-6 flex h-7 w-5 items-center justify-center rounded-full before:block before:h-1.5 before:rounded-full before:transition-all before:content-[''] focus-visible:ring-2 focus-visible:outline-none",
   {
     variants: {
       current: {

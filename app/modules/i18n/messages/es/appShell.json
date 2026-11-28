@@ -49,6 +49,7 @@
     },
     "provider": {
       "spotify": "Spotify",
+      "youtube": "YouTube",
       "plex": "Plex",
       "navidrome": "Navidrome",
       "jellyfin": "Jellyfin",

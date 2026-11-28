@@ -14,7 +14,17 @@
       "reconnect": "Reconnect {{provider}}",
       "connect": "Connect {{provider}}",
       "bodyAccount": "Link your {{provider}} account under Connections so Synthseek can read your playlists.",
-      "linkAccount": "Link {{provider}} in Connections"
+      "linkAccount": "Link {{provider}} in Connections",
+      "bodySession": "Connect your {{provider}} account to see your own playlists and your liked music here."
+    },
+    "link": {
+      "label": "Import a playlist by its link",
+      "placeholder": "Paste a {{provider}} playlist link",
+      "load": "Load",
+      "loading": "Loading…",
+      "busy": "Reading the playlist from {{provider}}. A large one can take a minute.",
+      "loaded": "{{name}} loaded",
+      "needsConnection": "Connect {{provider}} first, then you can import its playlists by link."
     },
     "loadFailed": {
       "title": "Could not load your {{provider}} library",
@@ -45,7 +55,8 @@
       "columnTracks": "Tracks",
       "columnImported": "Imported",
       "columnLastSync": "Last sync",
-      "columnSync": "Sync"
+      "columnSync": "Sync",
+      "columnSelect": "Select"
     },
     "row": {
       "select": "Select",
@@ -241,6 +252,7 @@
     "schedule": {
       "day": "Day",
       "hour": "Hour",
+      "picker": "Schedule day and hour",
       "summary": "{{day}} at {{hour}}:00",
       "dailyShort": "Daily",
       "dailyFull": "Every day",
@@ -308,6 +320,7 @@
       "status": "Status",
       "plays": "Plays",
       "length": "Length",
+      "actions": "Actions",
       "album": "Album",
       "artist": "Artist",
       "playlist": "Playlist",

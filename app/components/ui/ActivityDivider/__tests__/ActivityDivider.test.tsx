@@ -5,8 +5,8 @@ import { ActivityDivider } from "../ActivityDivider";
 
 const reducedMotion = vi.hoisted(() => ({ value: false }));
 
-vi.mock("framer-motion", () => ({
-  useReducedMotion: () => reducedMotion.value,
+vi.mock("@hooks/ui/useMotionReduced", () => ({
+  useMotionReduced: () => reducedMotion.value,
 }));
 
 describe("ActivityDivider", () => {

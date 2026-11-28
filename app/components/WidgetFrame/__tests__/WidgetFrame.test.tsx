@@ -33,6 +33,24 @@ describe("WidgetFrame", () => {
     expect(screen.getByRole("region", { name: "Plays" })).toHaveTextContent("body");
   });
 
+  it("lets a keyboard reach a body that scrolls, named by the title of the widget", () => {
+    const scrollHeight = vi.spyOn(HTMLElement.prototype, "scrollHeight", "get").mockReturnValue(300);
+    const clientHeight = vi.spyOn(HTMLElement.prototype, "clientHeight", "get").mockReturnValue(100);
+    frame();
+
+    expect(screen.getByRole("group", { name: "Plays" })).toHaveAttribute("tabindex", "0");
+
+    scrollHeight.mockRestore();
+    clientHeight.mockRestore();
+  });
+
+  it("adds no stop for the keyboard to a body that fits", () => {
+    frame();
+
+    expect(screen.queryByRole("group", { name: "Plays" })).not.toBeInTheDocument();
+    expect(screen.getByText("body").parentElement).not.toHaveAttribute("tabindex");
+  });
+
   it("shows a skeleton instead of the body while loading", () => {
     frame({ loading: true });
 

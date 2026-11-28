@@ -3,6 +3,7 @@
 import { glassPanelCard } from "@components/ui/styles";
 import { WidgetHeader } from "@components/WidgetHeader";
 import { useBoardDevice } from "@hooks/ui/board/useBoardDevice";
+import { useScrollEdges } from "@hooks/ui/useScrollEdges";
 import { cn } from "@utils/cn";
 
 import { widgetFrame, widgetFrameBody, widgetFrameNote, widgetFrameSkeleton } from "./styles";
@@ -22,6 +23,8 @@ export function WidgetFrame({
   children,
 }: WidgetFrameProps) {
   const device = useBoardDevice();
+  const edges = useScrollEdges<HTMLDivElement>("y");
+  const scrolls = edges.start || edges.end;
   const showIcon = !(compactOnPhone && device === "narrow");
 
   return (
@@ -41,7 +44,15 @@ export function WidgetFrame({
       ) : note ? (
         <p className={widgetFrameNote()}>{note}</p>
       ) : (
-        <div className={widgetFrameBody()}>{children}</div>
+        <div
+          ref={edges.ref}
+          className={widgetFrameBody()}
+          role={scrolls ? "group" : undefined}
+          aria-labelledby={scrolls ? titleId : undefined}
+          tabIndex={scrolls ? 0 : undefined}
+        >
+          {children}
+        </div>
       )}
     </section>
   );

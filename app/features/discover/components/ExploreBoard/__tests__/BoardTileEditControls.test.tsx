@@ -68,10 +68,10 @@ describe("BoardTileEditControls", () => {
 
     expect(barButtons()).toEqual([
       "Drag Tile",
-      "Small",
-      "Medium",
-      "Large",
-      "Extra large",
+      "S Small",
+      "M Medium",
+      "L Large",
+      "XL Extra large",
       "Settings for Tile",
       "Remove Tile",
     ]);
@@ -103,7 +103,7 @@ describe("BoardTileEditControls", () => {
       fireEvent.click(chip);
     }
     expect(handlers.resize).not.toHaveBeenCalled();
-    fireEvent.click(screen.getByRole("button", { name: "Small" }));
+    fireEvent.click(screen.getByRole("button", { name: "S Small" }));
     expect(handlers.resize).toHaveBeenCalledWith("o", "S");
   });
 
@@ -203,11 +203,11 @@ describe("BoardTileEditControls", () => {
     const handlers = actions();
     renderControls(ITEM, handlers);
 
-    expect(screen.getByRole("button", { name: "Large" })).toHaveAttribute("aria-pressed", "true");
-    expect(screen.getByRole("button", { name: "Extra large" })).toHaveAttribute("aria-pressed", "false");
-    expect(screen.getByRole("button", { name: "Medium" })).toHaveAttribute("aria-pressed", "false");
+    expect(screen.getByRole("button", { name: "L Large" })).toHaveAttribute("aria-pressed", "true");
+    expect(screen.getByRole("button", { name: "XL Extra large" })).toHaveAttribute("aria-pressed", "false");
+    expect(screen.getByRole("button", { name: "M Medium" })).toHaveAttribute("aria-pressed", "false");
 
-    fireEvent.click(screen.getByRole("button", { name: "Medium" }));
+    fireEvent.click(screen.getByRole("button", { name: "M Medium" }));
 
     expect(handlers.resize).toHaveBeenCalledWith("t", "M");
   });

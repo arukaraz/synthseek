@@ -19,7 +19,8 @@ import { PlayGlyph } from "./PlayGlyph";
 import { PlayerVolume } from "./PlayerVolume";
 import { StageActions } from "./StageActions";
 import { StageDrawer } from "./StageDrawer";
-import { labelled } from "./helpers";
+import { PLAYBACK_PROBLEM_ID } from "./constants";
+import { labelled, labelledOnHover } from "./helpers";
 import {
   iconButton,
   moreBadge,
@@ -64,7 +65,7 @@ export function StageController({ view, actions, drawer, onToggle }: StageContro
         >
           <Shuffle className="size-4.5" />
         </button>
-        <div className={stageRing()}>
+        <div className={stageRing()} data-names-area="ring">
           <button
             type="button"
             className={cn(iconButton({ size: "stage" }), stageRingSlot({ at: "top" }))}
@@ -86,7 +87,8 @@ export function StageController({ view, actions, drawer, onToggle }: StageContro
             type="button"
             className={cn(playButton({ size: "ring" }), stageRingSlot({ at: "center" }))}
             onClick={actions.togglePlay}
-            {...labelled(view.playing ? t("controls.pause") : t("controls.play"))}
+            aria-describedby={view.failing ? PLAYBACK_PROBLEM_ID : undefined}
+            {...labelledOnHover(view.playing ? t("controls.pause") : t("controls.play"))}
           >
             <PlayGlyph view={view} spin="size-5" face="size-5" />
           </button>

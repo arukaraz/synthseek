@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Button } from "@components/ui/Button";
+import { InlineError } from "@components/ui/InlineError";
 import {
   Dialog,
   DialogContent,
@@ -76,6 +77,7 @@ export function UnlinkPlexDialog({ email: currentEmail, open, onOpenChange }: Un
             />
           </SettingsField>
 
+          <InlineError error={unlink.error} />
           <DialogFooter>
             <Button type="button" variant="ghost" size="sm" onClick={() => onOpenChange(false)}>
               {t("profile.connected.plex.unlinkDialog.cancel")}

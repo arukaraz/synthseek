@@ -11,6 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "@components/ui/DropdownMenu";
 import { ghostButton } from "@theme/utilities/styles";
+import { nameAfterVisibleText } from "@utils/accessibleName";
 import { cn } from "@utils/cn";
 import { ArrowDown, ArrowUp, ChevronDown, Filter, SlidersHorizontal } from "lucide-react";
 import { useTranslation } from "react-i18next";
@@ -53,7 +54,7 @@ export function FilterSortDropdown<F extends string, S extends string = string>(
         <button
           type="button"
           className={cn(filterSortTriggerDefault(), triggerClassName)}
-          aria-label={t("filterSort.trigger", { defaultValue: "Filter and sort" })}
+          aria-label={nameAfterVisibleText(t("filterSort.trigger", { defaultValue: "Filter and sort" }), label)}
           data-cy={dataCy}
         >
           <TriggerIcon className="size-4" />

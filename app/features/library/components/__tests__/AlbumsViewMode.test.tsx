@@ -469,7 +469,8 @@ describe("AlbumsViewMode", () => {
       const { user } = renderWithProviders(<AlbumsHarness />);
 
       await user.click(screen.getByRole("checkbox", { name: "Select Discovery" }));
-      const alive = screen.getByRole("button", { name: "Select Alive" });
+      const alive = screen.getByRole("button", { name: "Select Alive" }).closest("li");
+      if (alive === null) throw new Error("The Alive card is not a list item");
       await user.click(within(alive).getByRole("button", { name: /Play everything we have of Alive/i }));
 
       expect(playback.playEntity).toHaveBeenCalledWith({ kind: "album", albumExternalId: "ext-3" });

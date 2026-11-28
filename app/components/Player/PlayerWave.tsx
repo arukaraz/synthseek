@@ -3,8 +3,9 @@
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { REDUCED_MOTION_QUERY } from "@hooks/ui/constants";
 import { audioEnergy } from "@hooks/ui/player/energy";
+import { readMotionReduced, subscribeAccessibility } from "@modules/accessibility";
+import { useAccessibility } from "@modules/providers/AccessibilityProvider";
 
 import {
   ENERGY_ATTACK_MS,
@@ -18,12 +19,16 @@ import {
   WAVE,
 } from "./constants";
 import { followed, formatClock, fractionOf, paintWave, secondsFromPointer, waveColors, wavePhase } from "./helpers";
+import { spokenPosition } from "./spoken";
 import { waveCanvas, waveTrack } from "./styles";
 import type { PlayerWaveProps, WaveColors, WaveSnapshot } from "./types";
 
 export function PlayerWave({ view, actions, size }: PlayerWaveProps) {
   const { t } = useTranslation("player");
+  const { reactiveWave } = useAccessibility();
   const [dragging, setDragging] = useState(false);
+  const [held, setHeld] = useState<number | null>(null);
+  const reactiveRef = useRef(reactiveWave);
   const wakeRef = useRef<(() => void) | null>(null);
   const trackRef = useRef<HTMLDivElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -41,22 +46,24 @@ export function PlayerWave({ view, actions, size }: PlayerWaveProps) {
   const played = fractionOf(view.positionSeconds, duration);
   const scrubbed = view.scrubSeconds === null ? null : fractionOf(view.scrubSeconds, duration);
   const target = dragging && scrubbed !== null ? scrubbed : played;
-  const announced = dragging && view.scrubSeconds !== null ? view.scrubSeconds : view.positionSeconds;
+  const announced = dragging && view.scrubSeconds !== null ? view.scrubSeconds : (held ?? view.positionSeconds);
 
   const clampedSeek = (seconds: number) => {
-    actions.seekTo(Math.min(duration, Math.max(0, seconds)));
+    const clamped = Math.min(duration, Math.max(0, seconds));
+    if (held !== null) setHeld(clamped);
+    actions.seekTo(clamped);
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
     const step = event.key === "PageUp" || event.key === "PageDown" ? SEEK_PAGE_SECONDS : SEEK_STEP_SECONDS;
-    if (event.key === "ArrowRight" || event.key === "PageUp") {
+    if (event.key === "ArrowRight" || event.key === "ArrowUp" || event.key === "PageUp") {
       event.preventDefault();
-      clampedSeek(view.positionSeconds + step);
+      clampedSeek((held ?? view.positionSeconds) + step);
       return;
     }
-    if (event.key === "ArrowLeft" || event.key === "PageDown") {
+    if (event.key === "ArrowLeft" || event.key === "ArrowDown" || event.key === "PageDown") {
       event.preventDefault();
-      clampedSeek(view.positionSeconds - step);
+      clampedSeek((held ?? view.positionSeconds) - step);
       return;
     }
     if (event.key === "Home") {
@@ -75,6 +82,7 @@ export function PlayerWave({ view, actions, size }: PlayerWaveProps) {
       trackIdRef.current = view.track.id;
       shownRef.current = target;
     }
+    reactiveRef.current = reactiveWave;
     snapshotRef.current = {
       phase: wavePhase(view.track.id),
       progress: target,
@@ -95,7 +103,6 @@ export function PlayerWave({ view, actions, size }: PlayerWaveProps) {
     if (context === null) return;
     const offscreen = offscreenRef.current ?? document.createElement("canvas");
     offscreenRef.current = offscreen;
-    const stillness = window.matchMedia(REDUCED_MOTION_QUERY);
 
     let frame = 0;
     let previous: number | null = null;
@@ -128,16 +135,17 @@ export function PlayerWave({ view, actions, size }: PlayerWaveProps) {
         offscreen.height = canvas.height;
       }
 
-      const still = stillness.matches;
+      const still = readMotionReduced();
       const travelling = pending.playing && !pending.loading && !still;
       const jumped = Math.abs(pending.progress - shownRef.current) > PROGRESS_SNAP_FRACTION;
       shownRef.current =
         pending.dragging || still || jumped
           ? pending.progress
           : followed(shownRef.current, pending.progress, sinceLast, PROGRESS_FOLLOW_MS);
-      const heard = still ? 1 : audioEnergy();
+      const steady = still || !reactiveRef.current;
+      const heard = steady ? 1 : audioEnergy();
       const swell = heard > energyRef.current ? ENERGY_ATTACK_MS : ENERGY_RELEASE_MS;
-      energyRef.current = still ? 1 : followed(energyRef.current, heard, sinceLast, swell);
+      energyRef.current = steady ? 1 : followed(energyRef.current, heard, sinceLast, swell);
       if (travelling) elapsedRef.current += sinceLast / 1000;
 
       paintWave(context, offscreen, {
@@ -164,13 +172,13 @@ export function PlayerWave({ view, actions, size }: PlayerWaveProps) {
 
     const observer = new ResizeObserver(wake);
     observer.observe(canvas);
-    stillness.addEventListener("change", wake);
+    const unsubscribe = subscribeAccessibility(wake);
     wakeRef.current = wake;
     wake();
 
     return () => {
       observer.disconnect();
-      stillness.removeEventListener("change", wake);
+      unsubscribe();
       wakeRef.current = null;
       cancelAnimationFrame(frame);
       frame = 0;
@@ -186,8 +194,10 @@ export function PlayerWave({ view, actions, size }: PlayerWaveProps) {
       aria-valuemin={0}
       aria-valuemax={Math.round(duration)}
       aria-valuenow={Math.round(announced)}
-      aria-valuetext={formatClock(announced)}
+      aria-valuetext={spokenPosition(t, announced, duration)}
       className={waveTrack({ size })}
+      onFocus={() => setHeld(view.positionSeconds)}
+      onBlur={() => setHeld(null)}
       onPointerDown={(event) => {
         event.currentTarget.setPointerCapture(event.pointerId);
         originRef.current = shownRef.current;

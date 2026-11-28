@@ -59,7 +59,7 @@ export function CategoriesScreen() {
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
               {genres.map((genre) => (
                 <div key={genre.id} className="aspect-square">
-                  <CategoryCard category={genre} size="small" onClick={handleCategoryClick} />
+                  <CategoryCard category={genre} size="small" heading="h2" onClick={handleCategoryClick} />
                 </div>
               ))}
             </div>

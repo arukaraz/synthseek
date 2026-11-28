@@ -59,6 +59,10 @@
     --player-dock-height: calc(var(--player-bar-height) + var(--height-player-chain) + var(--player-dock-gap));
   }
 
+  .player-clearance:has(:focus-visible) {
+    scroll-padding-bottom: var(--player-dock-height, 0rem);
+  }
+
   .player-clearance::after {
     content: "";
     display: block;
@@ -117,12 +121,14 @@
     top: var(--player-eq-head-top, 50%);
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    .player-bar-progress {
+  .player-bar-progress {
+    @variant motion-reduce {
       transition: none;
     }
+  }
 
-    .player-lyric-line {
+  .player-lyric-line {
+    @variant motion-reduce {
       filter: none;
     }
   }

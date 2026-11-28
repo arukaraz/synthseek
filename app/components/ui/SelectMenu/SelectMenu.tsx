@@ -10,6 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@components/ui/DropdownMenu";
 import { useTapToOpen } from "@hooks/ui/useTapToOpen";
+import { nameAfterVisibleText } from "@utils/accessibleName";
 
 import {
   selectMenuAdorned,
@@ -45,7 +46,11 @@ export function SelectMenu<T extends string | number>({
           type="button"
           className={selectMenuTrigger({ size, adorned: adornment !== undefined })}
           disabled={disabled}
-          aria-label={ariaLabel}
+          aria-label={nameAfterVisibleText(
+            ariaLabel,
+            active ? active.label : placeholder,
+            size === "lg" ? active?.description : undefined
+          )}
         >
           <span className={selectMenuValue({ size })}>
             <span className={selectMenuLabel({ size })}>{active ? active.label : placeholder}</span>

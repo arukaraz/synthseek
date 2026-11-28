@@ -2,7 +2,9 @@ import type { AppRouter, PublicUser } from "@api/__generated__/types";
 import type { inferRouterOutputs } from "@trpc/server";
 import type { ReactNode } from "react";
 
+import type { LibrarySourceDescription } from "@hooks/api/queries/library-source/types";
 import type { Locale } from "@locale/config";
+import type { FriendlyError } from "@modules/errors";
 
 export interface ProfileCardProps {
   user: PublicUser;
@@ -27,6 +29,10 @@ export interface ServerAccountRowProps {
   account: SourceAccountView;
 }
 
+export interface SessionSourceRowProps {
+  source: LibrarySourceDescription;
+}
+
 export type ListeningConnectionView = inferRouterOutputs<AppRouter>["playback"]["scrobble"]["connections"][number];
 
 export type ListeningService = ListeningConnectionView["service"];
@@ -43,6 +49,26 @@ export interface ListeningServiceRowProps {
   connection: ListeningConnectionView;
   seenClients: string[];
   children?: ReactNode;
+}
+
+export type SignInIdentitiesView = inferRouterOutputs<AppRouter>["auth"]["signInIdentities"];
+
+export type SignInIdentityView = SignInIdentitiesView["identities"][number];
+
+export interface WayInRowProps {
+  name: string;
+  status: string;
+  children?: ReactNode;
+}
+
+export interface LinkJellyfinDialogProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}
+
+export interface LinkCallbackOutcome {
+  linked: boolean;
+  failure: FriendlyError | null;
 }
 
 export interface LanguageSelectorProps {

@@ -40,6 +40,7 @@ export const createPlayerView = (overrides: Partial<PlayerView> = {}): PlayerVie
     playing: false,
     stopped: false,
     loading: false,
+    failing: false,
     shuffle: false,
     repeat: "off",
     volume: 0.8,

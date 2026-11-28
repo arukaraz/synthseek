@@ -32,5 +32,5 @@ export const tableWrap = cva(
 export const primaryCellArtwork = cva("relative size-10 shrink-0 overflow-hidden rounded-md");
 
 export const primaryCellPlay = cva(
-  "text-overlay-fg focus-visible:ring-primary-400 absolute inset-0 grid place-items-center rounded-md bg-veil/55 opacity-100 transition-opacity focus-visible:ring-2 focus-visible:outline-none sm:opacity-0 sm:hover:opacity-100 sm:focus-visible:opacity-100"
+  "text-overlay-fg focus-visible:ring-primary-400 absolute inset-0 grid place-items-center rounded-md bg-veil/55 opacity-100 transition-opacity focus-visible:ring-2 focus-visible:outline-none a11y-mode:opacity-100 sm:opacity-0 sm:hover:opacity-100 sm:focus-visible:opacity-100"
 );

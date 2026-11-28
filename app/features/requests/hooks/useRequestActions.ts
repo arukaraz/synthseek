@@ -56,6 +56,8 @@ interface UseRequestActions {
   canApprove: boolean;
   pendingApprovalCount: number;
   isApproving: boolean;
+  rejectError: unknown;
+  isRejecting: boolean;
   canRetry: boolean;
   failedTrackCount: number;
   canRequeueCancelled: boolean;
@@ -227,6 +229,8 @@ export function useRequestActions(request: RequestListItem, tracks: TrackRequest
     canApprove,
     pendingApprovalCount: pendingApprovalTrackIds.length,
     isApproving: approveTracks.isPending || rejectTracks.isPending,
+    rejectError: rejectTracks.error,
+    isRejecting: rejectTracks.isPending,
     canRetry,
     failedTrackCount: failedTrackIds.length,
     canRequeueCancelled,

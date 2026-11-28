@@ -5,6 +5,9 @@ import {
   emptyReason,
   fractionFromPointer,
   labelled,
+  labelledAfterContent,
+  labelledBelow,
+  labelledOnHover,
   lyricLineState,
   returnFocusTo,
   visibleMatch,
@@ -186,8 +189,34 @@ describe("emptyReason", () => {
 });
 
 describe("labelled", () => {
-  it("gives a control the same text for a screen reader and for a hover", () => {
-    expect(labelled("Play")).toEqual({ "aria-label": "Play", title: "Play" });
+  it("gives a control the same text for a screen reader, for a hover and for its written name", () => {
+    expect(labelled("Shuffle")).toEqual({ "aria-label": "Shuffle", title: "Shuffle", "data-button-name": "Shuffle" });
+  });
+
+  it("marks a filled round control so its written name goes under it, not inside it", () => {
+    expect(labelledBelow("Play")).toEqual({
+      "aria-label": "Play",
+      title: "Play",
+      "data-button-name": "Play",
+      "data-button-name-below": "",
+    });
+  });
+
+  it("writes no name on a control repeated on every row, whose name carries the row's title", () => {
+    expect(labelledOnHover("Remove Song from the queue")).toEqual({
+      "aria-label": "Remove Song from the queue",
+      title: "Remove Song from the queue",
+    });
+  });
+});
+
+describe("labelledAfterContent", () => {
+  it("starts the spoken name with what is drawn and keeps the hover text as it was", () => {
+    expect(labelledAfterContent("Open", ["AB"])).toEqual({ "aria-label": "AB Open", title: "Open" });
+  });
+
+  it("drops what is not drawn", () => {
+    expect(labelledAfterContent("Open", [null, ""])).toEqual({ "aria-label": "Open", title: "Open" });
   });
 });
 

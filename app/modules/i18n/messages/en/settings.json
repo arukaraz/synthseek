@@ -1,4 +1,64 @@
 {
+  "accessibility": {
+    "mode": {
+      "label": "Accessibility mode",
+      "description": "Makes text and controls easier to see and to use, and shows more of the interface at once."
+    },
+    "motion": {
+      "label": "Reduce motion",
+      "description": "Calms animations and movement across the app."
+    },
+    "transparency": {
+      "label": "Reduce transparency",
+      "description": "Swaps see-through, blurred panels for solid ones. By default it matches your Reduce motion choice."
+    },
+    "contrast": {
+      "label": "More contrast",
+      "description": "Makes borders and outlines easier to see. Accessibility mode always uses it."
+    },
+    "choices": {
+      "auto": "Follow my device",
+      "on": "On",
+      "off": "Off"
+    },
+    "toastDuration": {
+      "label": "Notification duration",
+      "description": "How long a notification stays on screen. Default is 2 seconds, or 4 seconds with accessibility mode on.",
+      "options": {
+        "default": "Default",
+        "2": "2 seconds",
+        "4": "4 seconds",
+        "8": "8 seconds",
+        "sticky": "Until dismissed"
+      }
+    },
+    "shortcuts": {
+      "label": "Single-key shortcuts",
+      "description": "Lets one key on its own, like Space or /, do something. Turn this off if you press keys by accident. Shortcuts that use Ctrl or Command keep working."
+    },
+    "textSize": {
+      "label": "Text size",
+      "description": "Makes text larger in this browser only. It adds to your browser's own text size and zoom.",
+      "options": {
+        "normal": "Normal",
+        "large": "Large",
+        "larger": "Larger",
+        "largest": "Largest"
+      }
+    },
+    "buttonNames": {
+      "label": "Show button names",
+      "description": "Writes the name of the icon buttons in the player and in toolbars next to their icon, so you can say it to a voice control tool. Buttons repeated on every row or card keep only their icon."
+    },
+    "monoAudio": {
+      "label": "Mono audio",
+      "description": "Plays the same sound in both ears, for hearing with one ear. It applies to playback in the app, not to short previews."
+    },
+    "reactiveWave": {
+      "label": "Moving wave",
+      "description": "Lets the wave on the seek bar swell and fall with the music. Turn it off to keep it steady. Reduce motion is a separate switch."
+    }
+  },
   "requestPreset": {
     "choiceAriaLabel": "Which settings requests use",
     "unavailable": "The request preset could not be loaded. Try again later.",
@@ -901,6 +961,91 @@
     "loading": "Loading members...",
     "empty": "No members yet.",
     "loadError": "Failed to load members: {{message}}",
+    "signIn": {
+      "cardTitle": "Sign-in screen",
+      "cardDescription": "What anyone sees before they sign in.",
+      "libraryCovers": {
+        "label": "Show album covers from this library on the sign-in screen",
+        "description": "Anyone who can open the sign-in page sees these covers, whether or not they have an account. They are picked at random from your library and refreshed on a schedule. Turn this off to keep the plain background."
+      },
+      "providerFirst": {
+        "label": "Show the single sign-on button first",
+        "description": "The provider's button becomes the main action and the password form folds behind a link."
+      },
+      "autoRedirect": {
+        "label": "Go straight to the provider",
+        "description": "Opening the sign-in screen sends people to the provider at once. It stays on the sign-in screen after a sign-out or a failed sign-in."
+      },
+      "needsTest": "Available once the single sign-on provider has passed a connection test.",
+      "lockout": "If the provider stops working, add ?{{param}} to the sign-in address to get the password form back, or start the server with FORCE_LOCAL_SIGN_IN=true.",
+      "forcedLocal": "FORCE_LOCAL_SIGN_IN is set on the server: single sign-on is off and the password form is always offered until it is removed.",
+      "accountCreation": {
+        "label": "Create an account on first sign-in",
+        "description": "Someone who signs in with single sign-on or Jellyfin and has no account here gets one. New accounts wait for an admin to approve them in the user list."
+      }
+    },
+    "oidc": {
+      "cardTitle": "Single sign-on (OpenID Connect)",
+      "cardDescription": "Let people sign in with their account at an identity provider such as Authentik, Authelia or Keycloak.",
+      "enabled": {
+        "label": "Offer single sign-on",
+        "description": "Shows the provider's button on the sign-in screen once the issuer and the client ID are filled in."
+      },
+      "issuerUrl": {
+        "label": "Issuer URL",
+        "helper": "The provider's address for this application, without /.well-known/openid-configuration.",
+        "placeholder": "https://auth.example.com/application/o/synthseek/"
+      },
+      "clientId": {
+        "label": "Client ID"
+      },
+      "clientSecret": {
+        "label": "Client secret",
+        "helper": "Write-only: it is never shown again once saved. Leave it empty to keep the one stored.",
+        "storedPlaceholder": "Stored. Type a new one to replace it."
+      },
+      "scopes": {
+        "label": "Scopes",
+        "helper": "Separated by spaces. openid is always added."
+      },
+      "buttonLabel": {
+        "label": "Button label",
+        "helper": "What the sign-in button says. Leave it empty to show Single sign-on.",
+        "placeholder": "Single sign-on"
+      },
+      "callback": {
+        "label": "Callback address",
+        "helper": "Register this address as the redirect URI at the provider.",
+        "copyAriaLabel": "Copy the callback address",
+        "copied": "Callback address copied",
+        "copyFailed": "Failed to copy the callback address",
+        "missing": "Set PUBLIC_BASE_URL on the server first. The provider needs a public address to send people back to."
+      },
+      "test": {
+        "action": "Test connection",
+        "testing": "Testing...",
+        "saveFirst": "Save your changes first. The test checks the saved provider.",
+        "passed": "The provider answered as expected.",
+        "failed": "The test did not pass",
+        "lastPassed": "Last passed {{date}}",
+        "neverPassed": "It has not passed a test yet."
+      },
+      "failures": {
+        "notConfigured": "Enter the issuer URL and the client ID, save, then test.",
+        "addressRefused": "The provider's address is one Synthseek is not allowed to contact.",
+        "unreachable": "Synthseek could not reach the provider.",
+        "timeout": "The provider took too long to answer.",
+        "notAnIssuer": "That address does not answer as an OpenID Connect provider.",
+        "issuerMismatch": "The provider names a different issuer than the one entered.",
+        "noAuthorizationEndpoint": "The provider does not publish a usable sign-in address.",
+        "noTokenEndpoint": "The provider does not publish a usable token address.",
+        "codeFlowUnsupported": "The provider does not offer the authorization code sign-in Synthseek uses.",
+        "noUsableSigningAlgorithm": "The provider signs its tokens in a way Synthseek cannot check.",
+        "jwksUnreachable": "Synthseek could not fetch the provider's signing keys.",
+        "jwksInvalid": "The provider's signing keys are missing or unreadable.",
+        "unexpected": "The test failed for an unexpected reason."
+      }
+    },
     "toolbar": {
       "createLocal": "Create Local User",
       "importPlex": "Import Plex Users"
@@ -913,11 +1058,37 @@
       "joined": "Joined",
       "quota": "Quota",
       "selectAll": "Select all members",
-      "selectMember": "Select {{username}}"
+      "selectMember": "Select {{username}}",
+      "signsInWith": "Signs in with",
+      "actions": "Actions"
     },
     "type": {
       "plex": "Plex User",
       "local": "Local User"
+    },
+    "signsIn": {
+      "password": "Password",
+      "plex": "Plex",
+      "jellyfin": "Jellyfin",
+      "oidcFallback": "Single sign-on",
+      "none": "No way in yet"
+    },
+    "pending": {
+      "badge": "Waiting for approval",
+      "approve": "Approve {{username}}",
+      "reject": "Reject {{username}}",
+      "rejectTitle": "Reject this account",
+      "rejectMessage": "Reject {{username}}? The account is removed and cannot sign in.",
+      "rejectConfirm": "Reject"
+    },
+    "waysIn": {
+      "title": "Ways to sign in",
+      "unlink": "Unlink {{method}}",
+      "unlinkTitle": "Unlink this sign-in",
+      "unlinkMessage": "Unlink {{method}} from {{username}}? They can no longer sign in with it.",
+      "unlinkConfirm": "Unlink",
+      "lastWayIn": "This is the account's only way in. Set a password above, save, then unlink it.",
+      "none": "No linked accounts."
     },
     "role": {
       "owner": "Owner",
@@ -978,9 +1149,9 @@
       "passwordAriaLabel": "New password",
       "ownerRoleNote": "The owner account must stay an admin.",
       "quotaTracksLabel": "Own track quota",
-      "quotaTracksAriaLabel": "This member's track quota",
+      "quotaTracksAriaLabel": "Own track quota: this member's track quota",
       "quotaStorageLabel": "Own storage quota (GB)",
-      "quotaStorageAriaLabel": "This member's storage quota in gigabytes",
+      "quotaStorageAriaLabel": "Own storage quota (GB): this member's storage quota in gigabytes",
       "quotaPlaceholder": "Follow the global quota",
       "quotaNote": "Leave a quota empty to follow the global one. Zero means no limit for this member.",
       "submit": "Save changes"
@@ -1164,7 +1335,37 @@
       "newLabel": "New password",
       "newAriaLabel": "New password",
       "submit": "Change password",
-      "managedByPlex": "You sign in with Plex. To use a password instead, disconnect Plex under Connections."
+      "managedByPlex": "You sign in with Plex. To use a password instead, disconnect Plex under Connections.",
+      "managedElsewhere": "This account has no password: it signs in with a linked account. An admin can set a password for it."
+    },
+    "waysIn": {
+      "title": "Ways to sign in",
+      "description": "The accounts you can sign in with. One of them always has to stay.",
+      "password": "Password",
+      "passwordSet": "Set",
+      "passwordNone": "Not set",
+      "plexHint": "Link or disconnect Plex under Connections, Services.",
+      "plexManage": "Open Services",
+      "linkedAs": "Linked as {{name}}",
+      "linked": "Linked",
+      "notLinked": "Not linked",
+      "link": "Link",
+      "unlink": "Unlink",
+      "unlinkLabel": "Unlink {{method}}",
+      "unlinkTitle": "Unlink {{method}}",
+      "unlinkMessage": "You can no longer sign in with {{method}} once it is unlinked.",
+      "unlinkConfirm": "Unlink",
+      "lastWayIn": "This is your only way to sign in, so it cannot be unlinked. Link another account first, or ask an admin to set a password for you.",
+      "linkedNotice": "{{method}} is linked. You can sign in with it now.",
+      "jellyfin": {
+        "title": "Link Jellyfin",
+        "description": "Enter your Jellyfin username and password once to link the account.",
+        "usernameLabel": "Jellyfin username",
+        "passwordLabel": "Jellyfin password",
+        "cancel": "Cancel",
+        "submit": "Link",
+        "submitting": "Linking..."
+      }
     },
     "connected": {
       "title": "Services",
@@ -1179,6 +1380,15 @@
         "notConnected": "Not connected",
         "notConfigured": "Ask an admin to configure Spotify first.",
         "needsReconnect": "Spotify stopped accepting this connection. Reconnect to keep your library in sync."
+      },
+      "session": {
+        "connected": "Connected",
+        "connectedAs": "Connected as {{username}}",
+        "notConnected": "Not connected",
+        "needsReconnect": "{{provider}} stopped accepting the saved session. Paste a fresh one below to reconnect.",
+        "disconnectTitle": "Disconnect {{provider}}?",
+        "disconnectMessage": "The saved {{provider}} session is deleted from the server. Playlists you already imported stay in your library.",
+        "loadFailed": "Could not check the sources you connect with a browser session. Reload the page to try again."
       },
       "plex": {
         "name": "Plex",
@@ -1336,6 +1546,7 @@
       "description": "The most recent lines from the active log file.",
       "searchPlaceholder": "Search logs",
       "searchAriaLabel": "Search logs",
+      "terminalLabel": "Log lines",
       "linesAriaLabel": "Lines to load",
       "linesLabel": "Lines to load",
       "refreshAriaLabel": "Auto-refresh interval",
@@ -1526,6 +1737,10 @@
       "release-watch": {
         "name": "Release Watch",
         "description": "Checks the artists people follow for new releases twice a day."
+      },
+      "sign-in-background": {
+        "name": "Sign-in background",
+        "description": "Builds the sign-in screen's background from a fresh sample of this library's album covers. It runs only while that option is on."
       }
     }
   },
@@ -1686,6 +1901,10 @@
         "title": "Privacy",
         "description": "What the other members of this server can see of you."
       },
+      "accessibility": {
+        "title": "Accessibility",
+        "description": "Motion, transparency, contrast and other ways to make Synthseek easier to use."
+      },
       "notifications": {
         "title": "Notifications"
       },
@@ -1771,6 +1990,7 @@
       "entries": {
         "navidromeAccount": "Navidrome account",
         "jellyfinAccount": "Jellyfin account",
+        "youtubeAccount": "YouTube account",
         "lastfmFeeds": "Last.fm discovery feeds",
         "listenbrainzFeeds": "ListenBrainz discovery feeds",
         "listenbrainzAutoRequest": "Request ListenBrainz playlists automatically",
@@ -1781,10 +2001,16 @@
       },
       "keywords": {
         "playbackAccount": "volume normalization loudness gain autoplay similar tracks",
+        "youtubeAccount": "cookies session playlists liked music import",
         "playbackBrowser": "equalizer compressor crossfade gapless transition conversion bitrate mp3",
         "theme": "dark midnight ocean color colour custom css font fonts radius shadow import export appearance",
         "language": "english spanish french german",
         "members": "role trusted quota request preset quality format",
+        "signIn": "login log in background covers mosaic artwork public anonymous visitors",
+        "oidc": "sso single sign-on openid oidc authentik authelia keycloak issuer client id secret callback redirect uri",
+        "signInMode": "sso single sign-on provider first redirect automatic password form local",
+        "accountCreation": "sso single sign-on jellyfin new accounts sign up provisioning approval pending",
+        "waysIn": "sso single sign-on openid jellyfin link unlink login password identity",
         "board": "density text size background templates arrange layout widgets appearance",
         "scrobble": "scrobble plays listening history",
         "privacy": "private visibility share now playing incognito history clear name",
@@ -1797,7 +2023,17 @@
         "updates": "updates version release changelog patch notes",
         "timeout": "timeout time limit wait",
         "logout": "logout log out sign out signout session",
-        "following": "calendar"
+        "following": "calendar",
+        "accessibility": "accessibility mode screen reader keyboard easier to see vision",
+        "accessibilityMotion": "motion animation animations reduce calm movement",
+        "accessibilityTransparency": "transparency blur glass see-through translucent",
+        "accessibilityContrast": "contrast borders outline high",
+        "accessibilityToast": "notification notifications toast popup duration time seconds dismiss",
+        "accessibilityShortcuts": "shortcut shortcuts keyboard key keys space slash",
+        "accessibilityTextSize": "text size font bigger larger zoom letters reading",
+        "accessibilityButtonNames": "button names labels icons voice control speech say",
+        "accessibilityMonoAudio": "mono audio sound ear ears deaf hearing balance stereo",
+        "accessibilityReactiveWave": "wave seek bar waveform moving flashing flicker music reaction"
       }
     },
     "palette": {

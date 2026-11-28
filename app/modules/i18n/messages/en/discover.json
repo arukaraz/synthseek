@@ -2,6 +2,18 @@
   "screen": {
     "srHeading": "Discover"
   },
+  "finishSetup": {
+    "title": "Finish setting up",
+    "progress": "{{done}} of {{total}}",
+    "listLabel": "Still to set up",
+    "setUp": "Set up",
+    "hide": "Hide for now",
+    "items": {
+      "mediaServer": "Media server",
+      "downloadSource": "Download source",
+      "musicbrainzContact": "MusicBrainz contact email"
+    }
+  },
   "categories": {
     "screen": {
       "back": "Back",
@@ -109,9 +121,10 @@
     "title": "Recent Scrobbles",
     "listensTitle": "Recent Listens",
     "seeMore": "See more",
-    "seeMoreAriaLabel": "Open {{provider}} profile",
+    "seeMoreAriaLabel": "See more: {{provider}} profile",
     "scrollLeftAriaLabel": "Scroll left",
     "scrollRightAriaLabel": "Scroll right",
+    "railLabel": "Recent plays",
     "ageJustNow": "just now",
     "ageMinutes": "{{count}}m ago",
     "ageHours": "{{count}}h ago",

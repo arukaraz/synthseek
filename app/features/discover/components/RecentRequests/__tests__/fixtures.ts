@@ -1,5 +1,6 @@
 import { ContentType, type PublicUser, RequestStatus, Role } from "@api/__generated__/types";
 import type { FlatTrackRow } from "@features/requests/types";
+import { DEFAULT_ACCESSIBILITY } from "@modules/accessibility";
 
 const owner: PublicUser = {
   id: "user-1",
@@ -23,6 +24,7 @@ const owner: PublicUser = {
     mediaServer: { default: true, private: false },
     nowPlaying: { default: false, private: false },
   },
+  accessibility: { ...DEFAULT_ACCESSIBILITY },
   plex_username: null,
   plexLinked: false,
   hasPassword: true,

@@ -1,4 +1,26 @@
 {
+  "accessibilityPanel": {
+    "open": "Accesibilidad",
+    "title": "Accesibilidad",
+    "description": "Los cambios se aplican al momento. Se guardan en este navegador y se añaden a tu cuenta cuando inicies sesión."
+  },
+  "a11yMode": {
+    "progress": {
+      "generic": "Progreso",
+      "downloadStarted": "Descarga iniciada",
+      "downloadFinished": "Descarga terminada, {{done}} de {{total}} pistas",
+      "downloadFailed": "La descarga ha fallado",
+      "importStarted": "Importación iniciada",
+      "importFinished": "Importación terminada, {{imported}} importadas, {{failed}} con error",
+      "importFailed": "La importación ha fallado"
+    },
+    "plex": {
+      "copy": "Copiar el enlace de inicio de sesión",
+      "copied": "Enlace copiado",
+      "copyFailed": "No se pudo copiar el enlace",
+      "expiring": "Este inicio de sesión con Plex caduca en menos de 30 segundos. Empieza de nuevo si no has terminado."
+    }
+  },
   "activity": {
     "paused": "En pausa"
   },
@@ -75,6 +97,18 @@
     "ascending": "Ascendente",
     "descending": "Descendente"
   },
+  "sessionConnect": {
+    "howTo": "Exporta las cookies de tu navegador para {{provider}} a un archivo de texto en formato Netscape, por ejemplo con una extensión para exportar cookies, luego abre el archivo y pega su contenido abajo.",
+    "kept": "Solo se conservan las entradas de {{provider}}, guardadas cifradas en el servidor, y lo que pegues no se vuelve a mostrar.",
+    "warningTitle": "Tu cuenta de {{provider}} podría quedar restringida",
+    "warningBody": "Usar una cuenta mediante herramientas automáticas puede llevar a {{provider}} a restringirla o bloquearla, por un tiempo o para siempre. Lo prudente es usar una cuenta secundaria.",
+    "label": "Contenido del archivo de cookies",
+    "placeholder": "Pega aquí el contenido del archivo de cookies",
+    "submit": "Conectar {{provider}}",
+    "reconnect": "Volver a conectar {{provider}}",
+    "submitting": "Comprobando la sesión…",
+    "connected": "{{provider}} conectado"
+  },
   "passwordField": {
     "label": "Contraseña",
     "show": "Mostrar contraseña",
@@ -84,7 +118,8 @@
     "ariaLabel": "Logo de Synthseek"
   },
   "table": {
-    "empty": "No hay elementos que mostrar"
+    "empty": "No hay elementos que mostrar",
+    "scrollRegion": "Tabla, se desplaza hacia los lados"
   },
   "loading": {
     "section": "Cargando...",
@@ -103,6 +138,13 @@
   },
   "trackStatus": {
     "moreInfo": "Más información: {{label}}"
+  },
+  "pageTitle": {
+    "format": "{{page}} | {{app}}",
+    "nested": "{{page}} · {{parent}}",
+    "login": "Iniciar sesión",
+    "setup": "Configuración inicial",
+    "consent": "Autorizar acceso"
   },
   "header": {
     "primaryNav": "Principal",

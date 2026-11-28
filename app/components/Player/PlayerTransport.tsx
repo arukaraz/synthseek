@@ -6,8 +6,8 @@ import { useTranslation } from "react-i18next";
 
 import { PlayGlyph } from "./PlayGlyph";
 import { PlayStopBadge } from "./PlayStopBadge";
-import { TRANSPORT_METRICS } from "./constants";
-import { labelled } from "./helpers";
+import { PLAYBACK_PROBLEM_ID, TRANSPORT_METRICS } from "./constants";
+import { labelled, labelledBelow } from "./helpers";
 import { iconButton, playButton, transportSide } from "./styles";
 import type { PlayerTransportProps } from "./types";
 
@@ -54,7 +54,8 @@ export function PlayerTransport({ view, actions, size, joined = false }: PlayerT
           type="button"
           className={playButton({ size: metrics.play })}
           onClick={actions.togglePlay}
-          {...labelled(view.playing ? t("controls.pause") : t("controls.play"))}
+          aria-describedby={view.failing ? PLAYBACK_PROBLEM_ID : undefined}
+          {...labelledBelow(view.playing ? t("controls.pause") : t("controls.play"))}
         >
           <PlayGlyph view={view} spin={metrics.arrow} face={metrics.face} />
         </button>

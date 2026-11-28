@@ -25,10 +25,21 @@ describe("the player in the phone's header", () => {
   it("opens the full stage from the track", async () => {
     const { actions, user } = renderMasthead();
 
-    await user.click(screen.getByRole("button", { name: "Open the full screen session" }));
+    await user.click(screen.getByRole("button", { name: /Open the full screen session/ }));
 
     expect(actions.toggleFullscreen).toHaveBeenCalledTimes(1);
     expect(actions.togglePlay).not.toHaveBeenCalled();
+  });
+
+  it("puts the title and artist it draws ahead of the action in the name of the open button", () => {
+    const { view } = renderMasthead();
+
+    const open = screen.getByRole("button", { name: /Open the full screen session/ });
+
+    expect(open.getAttribute("aria-label")).toContain(
+      `${view.track.title} ${view.track.artist} Open the full screen session`
+    );
+    expect(open).toHaveAttribute("title", "Open the full screen session");
   });
 
   it.each([

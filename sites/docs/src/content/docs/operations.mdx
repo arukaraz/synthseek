@@ -26,6 +26,7 @@ Listed under **Settings**, then **System**, then **Jobs**, with what each does, 
 | **Audio Analysis**        | Listens to each track to learn its mood, energy and tempo for smart playlists.                                          | Every 30 minutes                                     |
 | **Smart Playlists**       | Refreshes the playlists a widget rule fills.                                                                            | Every 5 minutes, when a smart playlist exists        |
 | **Release Watch**         | Checks the artists members follow for new releases and tells them when there are any.                                   | Twice a day, once someone follows an artist          |
+| **Sign-in Background**    | Builds the sign-in screen's background from a fresh sample of the library's album covers.                               | Weekly, while the sign-in screen shows album covers  |
 
 Running the discovery sweep by hand checks every feed, including those not due yet. The other jobs do a normal pass, which still honours their own per-item cadence. Neither permanently shifts the schedule.
 
@@ -33,20 +34,21 @@ Running the discovery sweep by hand checks every feed, including those not due y
 
 These run on a fixed schedule and are not user-triggerable.
 
-| Job                     | What it does                                                                                                                                |
-| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| Cache warmup            | Keeps commonly needed catalog data warm.                                                                                                    |
-| Search cleanup          | Clears finished searches out of slskd.                                                                                                      |
-| Version check           | Checks the container registry for a newer release.                                                                                          |
-| Session cleanup         | Removes expired sessions.                                                                                                                   |
-| Recording ID enrichment | Resolves MusicBrainz recording identifiers for tracks with an ISRC, and writes them into your files where it safely can.                    |
-| Artist identity         | Resolves MusicBrainz identifiers for the artists in your library.                                                                           |
-| Query statistics        | Refreshes the statistics the database uses to plan its lookups.                                                                             |
-| Cache cleanup           | Reaps expired metadata cache entries.                                                                                                       |
-| Recycle bin cleanup     | Permanently removes replaced library files once their retention window passes.                                                              |
-| Drop import cleanup     | Clears drag-and-drop import batches left untouched for days, and their staged files, unless one waits for you to choose between two copies. |
-| Held import cleanup     | Discards review-queue files once their retention window passes.                                                                             |
-| Notification digest     | Sends the daily recycle bin summary, and a warning before its files are removed for good, to whoever asked for them.                        |
+| Job                        | What it does                                                                                                                                |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| Cache warmup               | Keeps commonly needed catalog data warm.                                                                                                    |
+| Search cleanup             | Clears finished searches out of slskd.                                                                                                      |
+| Version check              | Checks the container registry for a newer release.                                                                                          |
+| Session cleanup            | Removes expired sessions.                                                                                                                   |
+| Recording ID enrichment    | Resolves MusicBrainz recording identifiers for tracks with an ISRC, and writes them into your files where it safely can.                    |
+| Artist identity            | Resolves MusicBrainz identifiers for the artists in your library.                                                                           |
+| Query statistics           | Refreshes the statistics the database uses to plan its lookups.                                                                             |
+| Cache cleanup              | Reaps expired metadata cache entries.                                                                                                       |
+| Recycle bin cleanup        | Permanently removes replaced library files once their retention window passes.                                                              |
+| Drop import cleanup        | Clears drag-and-drop import batches left untouched for days, and their staged files, unless one waits for you to choose between two copies. |
+| Held import cleanup        | Discards review-queue files once their retention window passes.                                                                             |
+| Notification digest        | Sends the daily recycle bin summary, and a warning before its files are removed for good, to whoever asked for them.                        |
+| Artist suggestion rotation | Moves each member's **Artists you might want next** on to other artists.                                                                    |
 
 ### What the library scan shows you
 

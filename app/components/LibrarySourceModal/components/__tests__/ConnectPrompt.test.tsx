@@ -4,12 +4,18 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import "@test/mocks/next.mock";
 import type { LibrarySourceDescription } from "@hooks/api/queries/library-source/types";
+import i18n from "@locale";
+import enComponents from "@modules/i18n/messages/en/components.json";
 import enLibrary from "@modules/i18n/messages/en/library.json";
 
 const connect = vi.hoisted(() => ({ mutate: vi.fn(), isPending: false }));
 
 vi.mock("@hooks/api/mutations/library-source/useConnectLibrarySource", () => ({
   useConnectLibrarySource: () => connect,
+}));
+
+vi.mock("@hooks/api/mutations/library-source/useConnectLibrarySession", () => ({
+  useConnectLibrarySession: () => ({ mutateAsync: vi.fn(), reset: vi.fn(), isPending: false }),
 }));
 
 import { ConnectPrompt } from "../ConnectPrompt";
@@ -28,6 +34,7 @@ function source(overrides: Partial<LibrarySourceDescription> = {}): LibrarySourc
       itemTypes: ["playlist", "album", "liked"],
       watch: { playlists: true, savedAlbums: true },
       streamsAudio: false,
+      playlistLinks: { accepted: true, needsConnection: true },
     },
     ...overrides,
   };
@@ -101,6 +108,7 @@ describe("ConnectPrompt", () => {
             itemTypes: ["playlist"],
             watch: { playlists: true, savedAlbums: false },
             streamsAudio: true,
+            playlistLinks: { accepted: false, needsConnection: false },
           },
         })}
       />
@@ -111,5 +119,58 @@ describe("ConnectPrompt", () => {
     expect(link).toHaveAttribute("href", "/settings/connections/services");
     expect(screen.queryByRole("button")).not.toBeInTheDocument();
     expect(connect.mutate).not.toHaveBeenCalled();
+  });
+
+  const sessionCapabilities: LibrarySourceDescription["capabilities"] = {
+    connect: "session",
+    itemTypes: ["playlist", "liked"],
+    watch: { playlists: true, savedAlbums: false },
+    streamsAudio: false,
+    playlistLinks: { accepted: true, needsConnection: false },
+  };
+
+  it("asks a session source for its pasted session, with the account warning, instead of an authorization", () => {
+    render(
+      <ConnectPrompt source={source({ provider: "youtube", name: "YouTube", capabilities: sessionCapabilities })} />
+    );
+
+    expect(screen.getByText(named(enLibrary.librarySource.connect.bodySession, "YouTube"))).toBeInTheDocument();
+    expect(screen.getByLabelText(enComponents.sessionConnect.label)).toBeInTheDocument();
+    expect(
+      screen.getByText(i18n.t("components:sessionConnect.warningTitle", { provider: "YouTube" }))
+    ).toBeInTheDocument();
+    const buttons = screen.getAllByRole("button");
+    expect(buttons).toHaveLength(1);
+    expect(buttons[0]).toHaveAttribute("type", "submit");
+    expect(buttons[0]).toBeDisabled();
+    expect(connect.mutate).not.toHaveBeenCalled();
+  });
+
+  it("offers a reconnect of the session when the saved one expired", () => {
+    render(
+      <ConnectPrompt
+        source={source({ provider: "youtube", name: "YouTube", capabilities: sessionCapabilities })}
+        expired
+      />
+    );
+
+    expect(screen.getByText(named(enLibrary.librarySource.connect.expiredTitle, "YouTube"))).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: i18n.t("components:sessionConnect.reconnect", { provider: "YouTube" }) })
+    ).toBeInTheDocument();
+  });
+
+  it("renders its words and no action for a connect kind this app does not know", () => {
+    const unknownKind = {
+      ...source().capabilities,
+      connect: "carrier-pigeon",
+    } as unknown as LibrarySourceDescription["capabilities"];
+
+    render(<ConnectPrompt source={source({ name: "Future", capabilities: unknownKind })} />);
+
+    expect(screen.getByText(named(enLibrary.librarySource.connect.title, "Future"))).toBeInTheDocument();
+    expect(screen.queryByRole("button")).not.toBeInTheDocument();
+    expect(screen.queryByRole("link")).not.toBeInTheDocument();
+    expect(screen.queryByLabelText(enComponents.sessionConnect.label)).not.toBeInTheDocument();
   });
 });

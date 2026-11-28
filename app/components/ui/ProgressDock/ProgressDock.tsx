@@ -2,7 +2,8 @@
 
 import { DIALOG_COMPANION_ATTRIBUTE } from "@components/ui/Dialog/constants";
 import { countDockItems, dismissDockJob, useDockJobs } from "@hooks/api/subscriptions";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { useMotionReduced } from "@hooks/ui/useMotionReduced";
+import { AnimatePresence, motion } from "framer-motion";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -20,7 +21,7 @@ import { dockStack, dockViewport } from "./styles";
 export function ProgressDock() {
   const { t } = useTranslation("appShell");
   const jobs = useDockJobs();
-  const reduced = useReducedMotion() ?? false;
+  const reduced = useMotionReduced();
 
   const ordered = useMemo(() => orderDockJobs(jobs), [jobs]);
   const activeJob = useMemo(() => selectActiveJob(jobs), [jobs]);

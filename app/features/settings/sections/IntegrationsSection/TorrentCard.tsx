@@ -140,6 +140,7 @@ export function TorrentCard({ initial }: TorrentCardProps) {
           id={`${fieldId}-client-username`}
           value={draft.qbittorrentUsername}
           onChange={(v) => setField("qbittorrentUsername", v)}
+          autoComplete="off"
         />
       </SettingsField>
 

@@ -70,6 +70,7 @@ describe("the file tree", () => {
     expect(within(tree()).getByText("/data/theme/account-1/")).toBeInTheDocument();
     const names = within(tree())
       .getAllByRole("button")
+      .filter((button) => !button.hasAttribute("data-icon-button"))
       .map((button) => button.textContent)
       .filter((name) => name !== "");
     expect(names.slice(0, 2)).toEqual(["theme.json", "brand.css"]);
@@ -117,7 +118,7 @@ describe("the file tree", () => {
   it("becomes a select above the editor on a phone", () => {
     render(<CssMode editor={editorOf()} />);
 
-    const select = screen.getByRole("button", { name: "File" });
+    const select = screen.getByRole("button", { name: /File$/ });
     expect(select).toHaveTextContent("tokens/brand.css");
     expect(select.closest("div.md\\:hidden")).not.toBeNull();
     expect(tree().className).toContain("hidden");

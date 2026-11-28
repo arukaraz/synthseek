@@ -57,6 +57,7 @@ export function EditorMenu({ editor, panel, onShare }: EditorMenuProps) {
         ref={content}
         align="end"
         className={menuPanel()}
+        aria-label={t("editor.options")}
         onOpenAutoFocus={(event) => {
           event.preventDefault();
           content.current?.focus();

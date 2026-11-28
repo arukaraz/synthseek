@@ -232,7 +232,7 @@ export const trackMeta = cva("text-fg/50 flex shrink-0 items-center gap-2.5 text
 export const trackStatusCell = cva("flex w-16 shrink-0 items-center justify-end gap-1");
 
 export const trackRetryButton = cva(
-  "text-fg/50 hover:text-fg focus-visible:ring-primary-400 flex size-7 shrink-0 items-center justify-center rounded-full transition-[color,background-color,opacity] hover:bg-fg/10 focus-visible:opacity-100 focus-visible:ring-2 focus-visible:outline-none sm:opacity-0 sm:group-hover:opacity-100"
+  "text-fg/50 hover:text-fg focus-visible:ring-primary-400 flex size-7 shrink-0 items-center justify-center rounded-full transition-[color,background-color,opacity] hover:bg-fg/10 focus-visible:opacity-100 group-has-[:focus-visible]:opacity-100 a11y-mode:opacity-100 focus-visible:ring-2 focus-visible:outline-none sm:opacity-0 sm:group-hover:opacity-100 sm:[@media(hover:none)]:opacity-100"
 );
 
 export const trackStatusIcon = cva("flex size-5 shrink-0 items-center justify-center");
@@ -245,7 +245,8 @@ export const trackPlayButton = cva(
     variants: {
       current: {
         true: "text-primary-400 hover:text-primary-500",
-        false: "text-fg/45 hover:text-fg sm:opacity-0 sm:group-hover:opacity-100",
+        false:
+          "text-fg/45 hover:text-fg group-has-[:focus-visible]:opacity-100 a11y-mode:opacity-100 sm:opacity-0 sm:group-hover:opacity-100 sm:[@media(hover:none)]:opacity-100",
       },
     },
     defaultVariants: { current: false },

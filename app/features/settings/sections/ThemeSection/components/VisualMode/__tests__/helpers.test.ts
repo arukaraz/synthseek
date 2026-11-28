@@ -14,6 +14,7 @@ import {
   matchesQuery,
   plainNumber,
   unreadableOn,
+  unsavedNamesOf,
 } from "../helpers";
 import { SECTION_TOKENS } from "../constants";
 import { LIME, makeDraft, MID_GRAY, SOFT_VIOLET } from "./fixtures";
@@ -179,5 +180,29 @@ describe("changedNamesOf and dirtySectionsOf", () => {
 
     expect([...dirtySectionsOf(draft, saved, tokens)]).toEqual(["shape"]);
     expect(dirtySectionsOf(saved, saved, tokens).size).toBe(0);
+  });
+
+  it("lists the tokens that differ from the saved draft, not from the preset", () => {
+    const saved = setToken(makeDraft(), "--radius", "0.75rem");
+    const draft = setToken(saved, "--radius", "1rem");
+
+    expect([...unsavedNamesOf(draft, saved, tokens)]).toEqual(["--radius"]);
+    expect(unsavedNamesOf(saved, saved, tokens).size).toBe(0);
+  });
+
+  it("counts a token that stopped following without moving as unsaved", () => {
+    const saved = makeDraft();
+    const detached = makeDraft(saved.meta.follows.filter((name) => name !== "--color-primary-700"));
+
+    expect([...unsavedNamesOf(detached, saved, tokens)]).toEqual(["--color-primary-700"]);
+    expect([...dirtySectionsOf(detached, saved, tokens)]).toEqual(["brand"]);
+  });
+
+  it("leaves out a token that moved only because the one it follows moved, and still marks its section", () => {
+    const saved = makeDraft();
+    const draft = setToken(saved, "--color-primary-500", LIME);
+
+    expect([...unsavedNamesOf(draft, saved, tokens)]).toEqual(["--color-primary-500"]);
+    expect(dirtySectionsOf(draft, saved, tokens)).toContain("status");
   });
 });

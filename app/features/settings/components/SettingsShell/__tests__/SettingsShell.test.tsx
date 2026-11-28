@@ -30,6 +30,12 @@ vi.mock("@hooks/api/mutations/jobs/useTriggerJob", () => ({
   useTriggerJob: () => ({ mutate: vi.fn() }),
 }));
 
+vi.mock("@hooks/ui/player", () => ({
+  usePlayerDock: () => "hidden",
+}));
+
+import { ContentShell } from "@components/ContentShell";
+
 import { SaveBar } from "../../SaveBar";
 import { SEARCH_INPUT_ID } from "../../SettingsSearch";
 import { SettingsShell } from "../SettingsShell";
@@ -38,9 +44,10 @@ const shell = enSettings.shell;
 
 function renderShell(child = <p>page body</p>) {
   render(<SettingsShell>{child}</SettingsShell>);
+  const content = screen.getByTestId("settings-content");
   return {
     sidebar: screen.getByRole("navigation", { name: shell.sidebar.ariaLabel }),
-    main: screen.getByRole("main"),
+    main: content,
   };
 }
 
@@ -67,9 +74,22 @@ describe("SettingsShell layout", () => {
     expect(main).not.toHaveClass("hidden");
   });
 
-  it("renders the page inside the main region", () => {
+  it("renders the page inside the content region", () => {
     const { main } = renderShell();
     expect(main).toHaveTextContent("page body");
+  });
+
+  it("leaves the one main landmark of the page to the content shell around it", () => {
+    render(
+      <ContentShell>
+        <SettingsShell>
+          <p>page body</p>
+        </SettingsShell>
+      </ContentShell>
+    );
+    const mains = screen.getAllByRole("main");
+    expect(mains).toHaveLength(1);
+    expect(mains[0]).toHaveTextContent("page body");
   });
 
   it("hosts the page save bar for dirty cards on the page", () => {

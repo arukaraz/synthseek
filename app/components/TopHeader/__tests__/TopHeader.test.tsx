@@ -154,6 +154,15 @@ describe("TopHeader", () => {
     expect(screen.queryByRole("combobox")).not.toBeInTheDocument();
   });
 
+  it("names the results panel after the search field", () => {
+    renderHeader();
+    openSearch();
+    type("karma");
+
+    const field = screen.getByRole("combobox");
+    expect(screen.getByRole("dialog", { name: field.getAttribute("aria-label") ?? "" })).toBeInTheDocument();
+  });
+
   it("submits the trimmed query with the scope on Enter, and ignores a blank one", () => {
     const onSearch = renderHeader();
     openSearch();
@@ -279,9 +288,18 @@ describe("TopHeader", () => {
   ] as const)("folds the closed search field away on a phone while the dock is %s: %s", (state, folded) => {
     dock.current = state;
     renderHeader();
-    const field = screen.getAllByRole("button", { name: "Search" })[1];
+    const field = screen.getByRole("button", { name: /Search or jump to/ });
 
     expect(field.closest(".max-sm\\:hidden") !== null).toBe(folded);
+  });
+
+  it("names the closed search field after the text it draws", () => {
+    renderHeader();
+
+    const field = screen.getByRole("button", { name: /Search or jump to/ });
+
+    expect(field).not.toHaveAttribute("aria-label");
+    expect(field.textContent?.startsWith("Search or jump to")).toBe(true);
   });
 
   it("slides out of a phone's way while a list is scrolled, out of the tab order too", () => {

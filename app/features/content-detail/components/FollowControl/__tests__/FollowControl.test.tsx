@@ -104,6 +104,15 @@ describe("FollowControl", () => {
     expect(await screen.findByText("Albums and EPs, when they come out.")).toBeInTheDocument();
   });
 
+  it("names the options panel after the followed artist", async () => {
+    const user = userEvent.setup();
+    renderControl(serverWith(FOLLOWING));
+
+    await user.click(await screen.findByRole("button", { name: "Following Ada. Follow options" }));
+
+    expect(await screen.findByRole("dialog", { name: "Following Ada" })).toBeInTheDocument();
+  });
+
   it("closes the artist window when the calendar link is followed", async () => {
     const user = userEvent.setup();
     renderControl(serverWith(FOLLOWING));

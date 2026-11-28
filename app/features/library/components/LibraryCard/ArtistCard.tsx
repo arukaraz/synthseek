@@ -3,11 +3,14 @@
 import Image from "next/image";
 import { useTranslation } from "react-i18next";
 
+import { useListPosition } from "@hooks/ui/useListPosition";
 import { artworkImage } from "@utils/artworkProxy";
+import { listPositionAttributes } from "@utils/list-position";
 
 import { CardCoverActions } from "./CardCoverActions";
 import { CardPlayButton } from "./CardPlayButton";
-import { artistSubtitle, cardInitials, handleCardActivationKey, onOwnClick } from "./helpers";
+import { artistSubtitle, cardInitials, onOwnClick } from "./helpers";
+import { RowPrimaryButton } from "./RowPrimaryButton";
 import {
   cardBody,
   cardCover,
@@ -22,6 +25,7 @@ import type { ArtistCardProps } from "./types";
 
 export function ArtistCard({ item, image, isResolving = false, onOpen, onPlay, chrome = "overlay" }: ArtistCardProps) {
   const { t } = useTranslation(["library", "contentDetail"]);
+  const position = useListPosition();
   const subtitle = artistSubtitle(item, t("library:page.counts.albums", { count: item.albumCount }));
   const cover = isResolving ? null : (image ?? item.albumArt);
   const activates = onOpen !== undefined;
@@ -30,12 +34,9 @@ export function ArtistCard({ item, image, isResolving = false, onOpen, onPlay, c
     <li
       data-part="media-tile"
       data-type="artist"
+      {...listPositionAttributes(position)}
       className={cardRoot({ interactive: activates })}
-      role={activates ? "button" : undefined}
-      tabIndex={activates ? 0 : undefined}
-      aria-label={activates ? t("contentDetail:openDetail", { name: item.artist }) : undefined}
       onClick={onOpen ? onOwnClick(onOpen) : undefined}
-      onKeyDown={activates && onOpen ? (event) => handleCardActivationKey(event, onOpen) : undefined}
     >
       <div className={cardCover()}>
         {cover ? (
@@ -55,7 +56,13 @@ export function ArtistCard({ item, image, isResolving = false, onOpen, onPlay, c
 
       <div className={cardBody()}>
         <p className={cardTitle()} data-part="media-tile-title">
-          {item.artist}
+          {activates ? (
+            <RowPrimaryButton label={t("contentDetail:openDetail", { name: item.artist })}>
+              {item.artist}
+            </RowPrimaryButton>
+          ) : (
+            item.artist
+          )}
         </p>
         <p className={cardSubtitle()}>{subtitle}</p>
         <p className={cardMeta()}>{t("library:page.counts.tracks", { count: item.trackCount })}</p>

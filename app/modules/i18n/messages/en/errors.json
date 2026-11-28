@@ -11,6 +11,18 @@
     "title": "Invalid credentials",
     "description": "Check your username and password and try again."
   },
+  "TOO_MANY_LOGIN_ATTEMPTS": {
+    "title": "Too many sign-in attempts",
+    "description": "Wait a few minutes, then try again."
+  },
+  "SETUP_TOKEN_INVALID": {
+    "title": "Setup token missing or wrong",
+    "description": "Copy the setup token from the server log and try again."
+  },
+  "PLEX_SIGN_IN_NEEDS_SETUP": {
+    "title": "Finish the first setup first",
+    "description": "Create the administrator account on the setup page, then connect Plex."
+  },
   "CURRENT_PASSWORD_INCORRECT": {
     "title": "Current password incorrect",
     "description": "The current password you entered is incorrect."
@@ -198,6 +210,34 @@
   "LIBRARY_SOURCE_REAUTH_REQUIRED": {
     "title": "Library connection expired",
     "description": "Connect that account again to load its library."
+  },
+  "LIBRARY_SOURCE_NOT_CONNECTED": {
+    "title": "Not connected",
+    "description": "Connect this source first, then try again."
+  },
+  "LIBRARY_SOURCE_UNAVAILABLE": {
+    "title": "Source unavailable",
+    "description": "This source could not be read right now. Try again later."
+  },
+  "LIBRARY_SOURCE_SESSION_TOO_LARGE": {
+    "title": "The pasted text is too large",
+    "description": "It is larger than a browser session can be. Paste only the contents of the exported cookie file."
+  },
+  "LIBRARY_SOURCE_SESSION_UNUSABLE": {
+    "title": "Nothing usable in the pasted text",
+    "description": "It holds no cookie this source can use. Export the cookies in the Netscape format and paste the whole file."
+  },
+  "LIBRARY_SOURCE_SESSION_REFUSED": {
+    "title": "Session not accepted",
+    "description": "The source did not accept the pasted session. Sign in again in your browser, export a fresh cookie file and paste it."
+  },
+  "LIBRARY_SOURCE_LINK_NOT_RECOGNIZED": {
+    "title": "Not a playlist link",
+    "description": "That is not a playlist link for this source. Copy the link from the playlist's own page."
+  },
+  "LIBRARY_SOURCE_PLAYLIST_UNAVAILABLE": {
+    "title": "Playlist not found",
+    "description": "This playlist does not exist or is private."
   },
   "LIDARR_CONNECTION_FAILED": {
     "title": "Lidarr connection failed",
@@ -558,5 +598,77 @@
   "THEME_CHANGED_ELSEWHERE": {
     "title": "The theme changed before your save arrived",
     "description": "Nothing was overwritten. Your changes are still in the editor, on top of what changed. Check them and save again."
+  },
+  "OIDC_NOT_AVAILABLE": {
+    "title": "This sign-in method is not available",
+    "description": "It is turned off or not set up on this server. Use another method."
+  },
+  "OIDC_SIGN_IN_EXPIRED": {
+    "title": "The sign-in took too long",
+    "description": "Start again from the sign-in page."
+  },
+  "OIDC_USER_NOT_LINKED": {
+    "title": "No account linked to this identity",
+    "description": "Sign in another way and link it from your account, or ask the admin for an account."
+  },
+  "OIDC_ALREADY_LINKED": {
+    "title": "This identity is already linked",
+    "description": "It belongs to an account on this server. Unlink it there first."
+  },
+  "OIDC_LINK_SESSION_MISMATCH": {
+    "title": "Signed in as a different account",
+    "description": "The identity provider answered for another session. Start the link again."
+  },
+  "OIDC_PROVIDER_REFUSED": {
+    "title": "The provider refused the sign-in",
+    "description": "Check your access with the provider, then try again."
+  },
+  "OIDC_PROVIDER_UNREACHABLE": {
+    "title": "The provider could not be reached",
+    "description": "Try again in a moment, or use another sign-in method."
+  },
+  "OIDC_SIGN_IN_FAILED": {
+    "title": "The sign-in did not complete",
+    "description": "Try again, or use another sign-in method."
+  },
+  "EXTERNAL_IDENTITY_NOT_FOUND": {
+    "title": "That linked identity does not exist",
+    "description": "It may have been removed already. Reload and try again."
+  },
+  "LAST_SIGN_IN_METHOD": {
+    "title": "This is the last way to sign in",
+    "description": "The account has no password and no other linked account. Add one before removing this."
+  },
+  "OIDC_CONNECTION_NOT_TESTED": {
+    "title": "Test the connection first",
+    "description": "Run Test connection and let it pass, then turn this on."
+  },
+  "ADMIN_WAY_IN_REQUIRED": {
+    "title": "No administrator could get back in",
+    "description": "Give an administrator a password or link their account at the provider first."
+  },
+  "ACCOUNT_PENDING_APPROVAL": {
+    "title": "Your account is waiting for approval",
+    "description": "An admin has to approve it before you can sign in. Try again once they have."
+  },
+  "ACCOUNT_NOT_PENDING": {
+    "title": "This account is not waiting for approval",
+    "description": "It was approved or removed already. Reload the list."
+  },
+  "ACCOUNT_EMAIL_IN_USE": {
+    "title": "That email already has an account",
+    "description": "Sign in to that account another way, then link this provider from your account."
+  },
+  "JELLYFIN_SIGN_IN_NOT_AVAILABLE": {
+    "title": "Jellyfin sign-in is not available",
+    "description": "It is turned off or not set up on this server. Use another method."
+  },
+  "JELLYFIN_SIGN_IN_UNAVAILABLE": {
+    "title": "Jellyfin could not be reached",
+    "description": "Try again in a moment, or use another sign-in method."
+  },
+  "JELLYFIN_ALREADY_LINKED": {
+    "title": "This Jellyfin account is already linked",
+    "description": "It belongs to another account on this server. Unlink it there first."
   }
 }

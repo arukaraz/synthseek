@@ -1,4 +1,26 @@
 {
+  "accessibilityPanel": {
+    "open": "Barrierefreiheit",
+    "title": "Barrierefreiheit",
+    "description": "Änderungen gelten sofort. Sie bleiben in diesem Browser gespeichert und werden zu deinem Konto hinzugefügt, wenn du dich anmeldest."
+  },
+  "a11yMode": {
+    "progress": {
+      "generic": "Fortschritt",
+      "downloadStarted": "Download gestartet",
+      "downloadFinished": "Download beendet, {{done}} von {{total}} Titeln",
+      "downloadFailed": "Download fehlgeschlagen",
+      "importStarted": "Import gestartet",
+      "importFinished": "Import beendet, {{imported}} importiert, {{failed}} fehlgeschlagen",
+      "importFailed": "Import fehlgeschlagen"
+    },
+    "plex": {
+      "copy": "Anmeldelink kopieren",
+      "copied": "Link kopiert",
+      "copyFailed": "Der Link konnte nicht kopiert werden",
+      "expiring": "Diese Plex-Anmeldung läuft in weniger als 30 Sekunden ab. Starte neu, falls du nicht fertig bist."
+    }
+  },
   "activity": {
     "paused": "Pausiert"
   },
@@ -75,6 +97,18 @@
     "ascending": "Aufsteigend",
     "descending": "Absteigend"
   },
+  "sessionConnect": {
+    "howTo": "Exportiere die Cookies deines Browsers für {{provider}} in eine Textdatei im Netscape-Format, etwa mit einer Erweiterung zum Exportieren von Cookies, öffne dann die Datei und füge ihren Inhalt unten ein.",
+    "kept": "Nur die Einträge für {{provider}} werden behalten, verschlüsselt auf dem Server gespeichert, und was du einfügst, wird nie wieder angezeigt.",
+    "warningTitle": "Dein {{provider}}-Konto könnte eingeschränkt werden",
+    "warningBody": "Wird ein Konto über automatisierte Werkzeuge genutzt, kann {{provider}} es einschränken oder sperren, zeitweise oder dauerhaft. Ein Zweitkonto ist die umsichtige Wahl.",
+    "label": "Inhalt der Cookie-Datei",
+    "placeholder": "Füge hier den Inhalt der Cookie-Datei ein",
+    "submit": "{{provider}} verbinden",
+    "reconnect": "{{provider}} erneut verbinden",
+    "submitting": "Sitzung wird geprüft…",
+    "connected": "{{provider}} verbunden"
+  },
   "passwordField": {
     "label": "Passwort",
     "show": "Passwort anzeigen",
@@ -84,7 +118,8 @@
     "ariaLabel": "Synthseek-Logo"
   },
   "table": {
-    "empty": "Keine Einträge zum Anzeigen"
+    "empty": "Keine Einträge zum Anzeigen",
+    "scrollRegion": "Tabelle, seitlich scrollbar"
   },
   "loading": {
     "section": "Wird geladen...",
@@ -103,6 +138,13 @@
   },
   "trackStatus": {
     "moreInfo": "Mehr Infos: {{label}}"
+  },
+  "pageTitle": {
+    "format": "{{page}} | {{app}}",
+    "nested": "{{page}} · {{parent}}",
+    "login": "Anmelden",
+    "setup": "Einrichtung",
+    "consent": "Zugriff erlauben"
   },
   "header": {
     "primaryNav": "Haupt",

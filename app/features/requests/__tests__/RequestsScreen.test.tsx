@@ -34,6 +34,13 @@ describe("RequestsScreen", () => {
     expect(screen.getByText("storage failure notice")).toBeInTheDocument();
   });
 
+  it("heads the page with a level one heading that only assistive technology reads", () => {
+    render(<RequestsScreen />);
+
+    const heading = screen.getByRole("heading", { level: 1, name: "Requests" });
+    expect(heading).toHaveClass("sr-only");
+  });
+
   it("keeps the storage failure notice outside the scrolling group list", () => {
     render(<RequestsScreen />);
 

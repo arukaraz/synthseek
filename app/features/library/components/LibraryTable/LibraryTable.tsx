@@ -19,6 +19,7 @@ import type { LibraryTableProps } from "./types";
 
 export function LibraryTable<TItem>({
   items,
+  total,
   columns,
   getRowId,
   emptyMessage,
@@ -188,6 +189,7 @@ export function LibraryTable<TItem>({
           getRowId={getRowId}
           emptyMessage={emptyMessage}
           fixedLayout
+          totalRows={total}
           stickyOffset={barHeight}
           rowAttrs={(item) => ({
             "data-range-preview": previewTone !== "none" && previewIds.has(getRowId(item)) ? previewTone : undefined,

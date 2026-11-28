@@ -42,7 +42,7 @@ export function MainLayoutContent({ children }: MainLayoutContentProps) {
   };
 
   return (
-    <div className="bg-surface h-dvh overflow-hidden">
+    <div className="bg-surface short-window:h-auto short-window:min-h-dvh short-window:overflow-visible h-dvh overflow-hidden">
       <ContentRequestFlow>
         <TopHeader onSearch={handleSearch} initialQuery={searchQuery} initialScope={searchScope} />
         <ContentShell

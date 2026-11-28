@@ -10,6 +10,8 @@ import type { CompressorParam, CompressorParams, SessionSnapshot } from "./types
 
 export const LOAD_TIMEOUT_MS = 15000;
 
+export const TRACK_ANNOUNCE_DELAY_MS = 400;
+
 export const NO_PANEL_OPEN = {
   devicesOpen: false,
   settingsOpen: false,
@@ -320,4 +322,5 @@ export const EQUALIZER_PRESETS: Readonly<Record<EqualizerPresetId, readonly numb
   vocal: [-2, -1, 0, 2, 4, 4, 3, 1, 0, -1],
 };
 
-export const DIALOG_OR_MENU_SELECTOR = '[role="dialog"], [role="alertdialog"], [role="menu"], [role="listbox"]';
+export const DIALOG_OR_MENU_SELECTOR =
+  '[role="dialog"]:not([data-player-stage]), [role="alertdialog"], [role="menu"], [role="listbox"]';

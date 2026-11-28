@@ -129,7 +129,7 @@ const READABLE: BoardTemplatePreview = {
 };
 
 function settingsColumn(): HTMLElement {
-  const column = screen.getByRole("tablist", { name: "Board settings sections" }).closest("aside");
+  const column = screen.getByRole("tablist", { name: "Board settings sections" }).closest("[data-board-settings]");
   if (!(column instanceof HTMLElement)) throw new Error("no settings column");
   return column;
 }
@@ -198,9 +198,9 @@ describe("BoardSettingsForm", () => {
   it("offers every size on the mobile layout too", () => {
     renderForm({ device: "narrow" });
 
-    fireEvent.click(within(tileNamed(/^Recent requests/)).getByRole("button", { name: "Large" }));
+    fireEvent.click(within(tileNamed(/^Recent requests/)).getByRole("button", { name: /Large$/ }));
 
-    expect(within(tileNamed(/^Recent requests/)).getByRole("button", { name: "Large" })).toHaveAttribute(
+    expect(within(tileNamed(/^Recent requests/)).getByRole("button", { name: /Large$/ })).toHaveAttribute(
       "aria-pressed",
       "true"
     );
@@ -209,7 +209,7 @@ describe("BoardSettingsForm", () => {
   it("saves both layouts once on Save, waiting for the server, with the one the member did not touch as it was, and offers an undo", async () => {
     renderForm();
     openTab("Mobile");
-    fireEvent.click(within(tileNamed(/^Recent requests/)).getByRole("button", { name: "Large" }));
+    fireEvent.click(within(tileNamed(/^Recent requests/)).getByRole("button", { name: /Large$/ }));
     expect(saveMock).not.toHaveBeenCalled();
 
     fireEvent.click(saveButton());
@@ -225,7 +225,7 @@ describe("BoardSettingsForm", () => {
 
   it("keeps a change to one layout while the member arranges the other", () => {
     renderForm();
-    fireEvent.click(within(tileNamed(/^Recent requests/)).getByRole("button", { name: "Large" }));
+    fireEvent.click(within(tileNamed(/^Recent requests/)).getByRole("button", { name: /Large$/ }));
     openTab("Mobile");
     fireEvent.click(screen.getByRole("button", { name: "Remove Recent requests" }));
 
@@ -294,7 +294,7 @@ describe("BoardSettingsForm", () => {
 
   it("joins the page's save bar, so leaving the page with an unsaved board asks first", () => {
     renderForm();
-    fireEvent.click(within(tileNamed(/^Recent requests/)).getByRole("button", { name: "Large" }));
+    fireEvent.click(within(tileNamed(/^Recent requests/)).getByRole("button", { name: /Large$/ }));
 
     fireEvent.click(screen.getByRole("link", { name: "Theme" }));
 
@@ -305,7 +305,7 @@ describe("BoardSettingsForm", () => {
   it("stays on the page with the board still unsaved when the server refuses it from the leave dialog", async () => {
     saveMock.mockResolvedValueOnce(false);
     renderForm();
-    fireEvent.click(within(tileNamed(/^Recent requests/)).getByRole("button", { name: "Large" }));
+    fireEvent.click(within(tileNamed(/^Recent requests/)).getByRole("button", { name: /Large$/ }));
     fireEvent.click(screen.getByRole("link", { name: "Theme" }));
 
     fireEvent.click(screen.getByRole("button", { name: enSettings.shell.leaveDialog.save }));
@@ -314,7 +314,7 @@ describe("BoardSettingsForm", () => {
     expect(saveMock).toHaveBeenCalledTimes(1);
     expect(toastMock.success).not.toHaveBeenCalled();
     expect(nav.router.push).not.toHaveBeenCalled();
-    expect(within(tileNamed(/^Recent requests/)).getByRole("button", { name: "Large" })).toHaveAttribute(
+    expect(within(tileNamed(/^Recent requests/)).getByRole("button", { name: /Large$/ })).toHaveAttribute(
       "aria-pressed",
       "true"
     );
@@ -323,7 +323,7 @@ describe("BoardSettingsForm", () => {
 
   it("leaves once the server has kept the board", async () => {
     renderForm();
-    fireEvent.click(within(tileNamed(/^Recent requests/)).getByRole("button", { name: "Large" }));
+    fireEvent.click(within(tileNamed(/^Recent requests/)).getByRole("button", { name: /Large$/ }));
     fireEvent.click(screen.getByRole("link", { name: "Theme" }));
 
     fireEvent.click(screen.getByRole("button", { name: enSettings.shell.leaveDialog.save }));
@@ -357,11 +357,11 @@ describe("BoardSettingsForm", () => {
 
   it("puts the saved board back on the page's Cancel, as every Settings card does", () => {
     renderForm();
-    fireEvent.click(within(tileNamed(/^Recent requests/)).getByRole("button", { name: "Large" }));
+    fireEvent.click(within(tileNamed(/^Recent requests/)).getByRole("button", { name: /Large$/ }));
 
     fireEvent.click(resetButton());
 
-    expect(within(tileNamed(/^Recent requests/)).getByRole("button", { name: "Medium" })).toHaveAttribute(
+    expect(within(tileNamed(/^Recent requests/)).getByRole("button", { name: /Medium$/ })).toHaveAttribute(
       "aria-pressed",
       "true"
     );
@@ -395,7 +395,7 @@ describe("BoardSettingsForm", () => {
     checkTemplate();
     fireEvent.click(screen.getByRole("button", { name: "Apply template" }));
     openTab("Appearance");
-    fireEvent.click(within(tileNamed(/^Recent requests/)).getByRole("button", { name: "Small" }));
+    fireEvent.click(within(tileNamed(/^Recent requests/)).getByRole("button", { name: /Small$/ }));
     fireEvent.click(screen.getByRole("radio", { name: "Large" }));
 
     fireEvent.click(saveButton());
@@ -432,7 +432,7 @@ describe("BoardSettingsForm", () => {
 
   it("asks before a template replaces an unsaved change, and stages it only once confirmed", () => {
     renderForm();
-    fireEvent.click(within(tileNamed(/^Recent requests/)).getByRole("button", { name: "Large" }));
+    fireEvent.click(within(tileNamed(/^Recent requests/)).getByRole("button", { name: /Large$/ }));
     checkTemplate();
 
     fireEvent.click(screen.getByRole("button", { name: "Apply template" }));
@@ -482,7 +482,7 @@ describe("BoardSettingsForm", () => {
     const tile = tileNamed(/^Recent Scrobbles/);
     const ghosts = () => Array.from(document.body.children).filter((node) => node.className.includes(DRAG_GHOST_CLASS));
 
-    fireEvent.pointerDown(within(tile).getByRole("button", { name: "Large" }), { pointerType: "mouse", button: 0 });
+    fireEvent.pointerDown(within(tile).getByRole("button", { name: /Large$/ }), { pointerType: "mouse", button: 0 });
     expect(ghosts()).toHaveLength(0);
 
     fireEvent.pointerDown(tile, { pointerType: "mouse", button: 0 });

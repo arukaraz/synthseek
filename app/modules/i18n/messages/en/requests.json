@@ -171,8 +171,6 @@
     "prioritized": "Prioritized",
     "explicit": "Explicit",
     "disc": "Disc {{number}}",
-    "showDetails": "Show details of {{title}}",
-    "hideDetails": "Hide details of {{title}}",
     "actionsFor": "Actions for {{title}}",
     "nextTry": "next try {{time}}",
     "noTrySet": "waiting for the next sweep",

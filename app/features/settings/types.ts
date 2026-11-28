@@ -44,6 +44,7 @@ export type SettingsPageId =
   | "privacy"
   | "customization"
   | "playback"
+  | "accessibility"
   | "connections"
   | "notifications"
   | "releases"

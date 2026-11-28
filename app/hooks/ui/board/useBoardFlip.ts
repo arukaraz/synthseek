@@ -2,8 +2,7 @@
 
 import { useCallback, useLayoutEffect, useRef } from "react";
 
-import { REDUCED_MOTION_QUERY } from "../constants";
-import { useMediaQuery } from "../useMediaQuery";
+import { useMotionReduced } from "../useMotionReduced";
 import { measureTiles, slideTiles } from "./helpers";
 import type { BoardFlip, TilePosition, UseBoardFlipOptions } from "./types";
 
@@ -12,7 +11,7 @@ export function useBoardFlip({ orderKey, skipId }: UseBoardFlipOptions): BoardFl
   const rects = useRef<Map<HTMLElement, TilePosition>>(new Map());
   const slidUntil = useRef(0);
   const lastOrder = useRef(orderKey);
-  const stillness = useMediaQuery(REDUCED_MOTION_QUERY);
+  const stillness = useMotionReduced();
 
   useLayoutEffect(() => {
     const container = ref.current;

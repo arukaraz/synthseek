@@ -1,0 +1,1 @@
+export const PIN_EXPIRY_WARNING_MS = 30_000;

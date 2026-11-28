@@ -9,6 +9,7 @@ import {
   DropdownMenuTrigger,
 } from "@components/ui/DropdownMenu";
 import { isLocale, LANGUAGE_OPTIONS } from "@locale/config";
+import { nameAfterVisibleText } from "@utils/accessibleName";
 
 import type { LanguageSelectorProps } from "../types";
 
@@ -18,7 +19,12 @@ export function LanguageSelector({ value, onSelect, ariaLabel }: LanguageSelecto
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="secondary" size="sm" aria-label={ariaLabel} className="w-fit">
+        <Button
+          variant="secondary"
+          size="sm"
+          aria-label={nameAfterVisibleText(ariaLabel, current.nativeName)}
+          className="w-fit"
+        >
           {current.nativeName}
         </Button>
       </DropdownMenuTrigger>

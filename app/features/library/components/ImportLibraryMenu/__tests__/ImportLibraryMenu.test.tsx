@@ -44,6 +44,7 @@ function spotify(overrides: Partial<LibrarySourceDescription> = {}): LibrarySour
       itemTypes: ["playlist", "album", "liked"],
       watch: { playlists: true, savedAlbums: true },
       streamsAudio: false,
+      playlistLinks: { accepted: true, needsConnection: true },
     },
     ...overrides,
   };

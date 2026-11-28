@@ -25,11 +25,7 @@ export function CalendarBlock({ items, size, accent, controls }: WidgetBlockProp
             const parts = calendarPartsOf(item.date);
             return (
               <Fragment key={item.key}>
-                {index === boundary ? (
-                  <li role="separator" className={followToday()}>
-                    {t("widget.today")}
-                  </li>
-                ) : null}
+                {index === boundary ? <li className={followToday()}>{t("widget.today")}</li> : null}
                 <WidgetRow
                   cover={item.cover}
                   seed={item.key}

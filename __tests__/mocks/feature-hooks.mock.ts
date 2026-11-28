@@ -1,5 +1,6 @@
 import type { inferRouterOutputs } from "@trpc/server";
-import type { AppRouter } from "@api/__generated__/types";
+import type { AppRouter, PublicUser } from "@api/__generated__/types";
+import { DEFAULT_ACCESSIBILITY } from "@modules/accessibility";
 
 import { createMockMutation, createMockQuery } from "./trpc.mock";
 import type { MockMutationResult, MockQueryResult } from "./trpc.mock";
@@ -37,6 +38,17 @@ export function createMockSettings(overrides: Partial<SettingsOutput> = {}): Set
         bandsintownAppId: "",
       },
       spotify: { enabled: false, clientId: "", publicBaseUrl: "" },
+      oidc: {
+        enabled: false,
+        issuerUrl: "",
+        clientId: "",
+        clientSecret: "",
+        scopes: "openid profile email",
+        buttonLabel: "",
+        lastTestPassedAt: null,
+        providerFirst: false,
+        autoRedirect: false,
+      },
     },
     engine: {
       queue: { maxSize: 100, maxConcurrentSearches: 3, maxPendingImports: 5 },
@@ -129,6 +141,8 @@ export function createMockSettings(overrides: Partial<SettingsOutput> = {}): Set
     quotas: { tracksPerWindow: 0, windowDays: 7, userStorageGb: 0, libraryStorageGb: 0 },
     notifications: { memberNtfyServer: "" },
     privacy: { membersSeeRequests: true, defaultPlaylistVisibility: "shared", nowPlayingEnabled: true },
+    signIn: { libraryCovers: false },
+    accountProvisioning: { enabled: false },
     ...overrides,
   };
 }
@@ -137,7 +151,9 @@ export const createMockUseSettings = (
   overrides: Partial<MockQueryResult<SettingsOutput>> = {}
 ): MockQueryResult<SettingsOutput> => createMockQuery(createMockSettings(), overrides);
 
-export function createMockUser(overrides: Partial<UsersOutput[number]> = {}): UsersOutput[number] {
+type MockUser = UsersOutput[number] & Pick<PublicUser, "accessibility">;
+
+export function createMockUser(overrides: Partial<MockUser> = {}): MockUser {
   return {
     id: "user-001",
     email: "member@example.com",
@@ -160,6 +176,7 @@ export function createMockUser(overrides: Partial<UsersOutput[number]> = {}): Us
       mediaServer: { default: true, private: false },
       nowPlaying: { default: false, private: false },
     },
+    accessibility: { ...DEFAULT_ACCESSIBILITY },
     plex_username: null,
     plexLinked: false,
     hasPassword: true,
@@ -174,6 +191,8 @@ export function createMockUser(overrides: Partial<UsersOutput[number]> = {}): Us
       tracks: { limit: null, used: 0, windowDays: 7 },
       storage: { limitBytes: null, storedBytes: 0, pendingBytes: 0 },
     },
+    pendingApproval: false,
+    signInIdentities: [],
     ...overrides,
   };
 }

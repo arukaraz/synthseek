@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { Avatar } from "@components/ui/Avatar";
 
 import { LISTENING_AVATAR_LIMIT } from "./constants";
-import { labelled } from "./helpers";
+import { labelledOnHover } from "./helpers";
 import { listeningAvatar, listeningAvatars, listeningMore } from "./styles";
 import type { ListeningAvatarsProps } from "./types";
 
@@ -23,7 +23,7 @@ export function ListeningAvatars({ view, actions, placement }: ListeningAvatarsP
       onClick={actions.toggleRoom}
       aria-expanded={view.listening.roomOpen}
       data-player-room-toggle
-      {...labelled(t("listening.count", { count: live.length }))}
+      {...labelledOnHover(t("listening.count", { count: live.length }))}
     >
       {shown.map((member, index) => (
         <span key={member.userId} className={listeningAvatar()}>

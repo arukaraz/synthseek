@@ -67,7 +67,7 @@ describe("CategoriesGrid", () => {
     useCategoriesMock.mockReturnValue(createMockQuery<CategoriesPayload>(buildPayload(genres)));
 
     renderWithProviders(<CategoriesGrid size="M" info="Browse genres" />);
-    fireEvent.click(screen.getByText("Rock"));
+    fireEvent.click(screen.getByRole("button", { name: "Rock" }));
 
     expect(mockRouter.push).toHaveBeenCalledWith("/discover/category/rock?name=Rock");
   });
@@ -97,7 +97,7 @@ describe("CategoriesGrid", () => {
     );
 
     renderWithProviders(<CategoriesGrid size="M" info="Browse genres" />);
-    fireEvent.click(screen.getByText("Hip Hop"));
+    fireEvent.click(screen.getByRole("button", { name: "Hip Hop" }));
 
     expect(mockRouter.push).toHaveBeenCalledWith("/discover/category/hip-hop?name=Hip%20Hop");
   });

@@ -4,7 +4,7 @@ import type { ColumnDef } from "@components/ui/Table";
 import { MemberActionsCell } from "./components/MemberActionsCell";
 import { MemberQuotaCell } from "./components/MemberQuotaCell";
 import { MemberRoleBadge } from "./components/MemberRoleBadge";
-import { MemberTypeBadge } from "./components/MemberTypeBadge";
+import { MemberSignInCell } from "./components/MemberSignInCell";
 import { MemberUserCell } from "./components/MemberUserCell";
 import { formatJoinedDate } from "./helpers";
 import { joinedDate, requestCount } from "./styles";
@@ -50,9 +50,9 @@ export function buildMemberColumns(args: BuildMemberColumnsArgs): ColumnDef<Memb
       sortable: true,
     },
     {
-      key: "type",
-      header: t("members.columns.type"),
-      cell: (member) => <MemberTypeBadge isPlexUser={member.isPlexUser} />,
+      key: "signIn",
+      header: t("members.columns.signsInWith"),
+      cell: (member) => <MemberSignInCell member={member} oidcLabel={args.oidcLabel} />,
       sortable: true,
     },
     {
@@ -69,7 +69,7 @@ export function buildMemberColumns(args: BuildMemberColumnsArgs): ColumnDef<Memb
     },
     {
       key: "actions",
-      header: "",
+      header: <span className="sr-only">{t("members.columns.actions")}</span>,
       cell: (member) => (
         <MemberActionsCell
           member={member}
@@ -77,6 +77,9 @@ export function buildMemberColumns(args: BuildMemberColumnsArgs): ColumnDef<Memb
           onEdit={() => args.onEdit(member)}
           onEditPreset={() => args.onEditPreset(member)}
           onDelete={() => args.onDelete(member)}
+          onApprove={() => args.onApprove(member)}
+          onReject={() => args.onReject(member)}
+          decisionPending={args.decisionPending}
         />
       ),
       className: "w-32",

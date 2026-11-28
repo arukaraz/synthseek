@@ -1,27 +1,35 @@
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
+* {
+  @variant motion-reduce {
+    &,
+    &::before,
+    &::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
+}
 
-  .backdrop-blur-sm,
-  .backdrop-blur-md,
-  .backdrop-blur-lg,
-  .backdrop-blur-xl,
-  .backdrop-blur-2xl,
-  .backdrop-blur-3xl {
+.backdrop-blur-sm,
+.backdrop-blur-md,
+.backdrop-blur-lg,
+.backdrop-blur-xl,
+.backdrop-blur-2xl,
+.backdrop-blur-3xl {
+  @variant reduce-transparency {
     backdrop-filter: none !important;
   }
+}
 
-  .hover-lift:hover {
+.hover-lift:hover {
+  @variant motion-reduce {
     transform: none !important;
   }
+}
 
-  .decorative-animation {
+.decorative-animation {
+  @variant motion-reduce {
     display: none !important;
   }
 }
@@ -69,10 +77,224 @@
   }
 }
 
-@media (prefers-contrast: high) {
-  :root {
-    --border-default: color-mix(in oklab, var(--surface-fg) 42%, var(--surface-bg));
+:root:root {
+  @variant more-contrast {
+    --border-default: color-mix(in oklab, var(--surface-fg) 52%, var(--surface-bg));
     --border-subtle: color-mix(in oklab, var(--surface-fg) 30%, var(--surface-bg));
     --glass-border: color-mix(in oklab, var(--surface-fg) 21%, transparent);
+  }
+}
+
+@layer utilities {
+  :is(
+    [class~="text-fg/20"],
+    [class~="text-fg/25"],
+    [class~="text-fg/30"],
+    [class~="text-fg/35"],
+    [class~="text-fg/40"],
+    [class~="text-fg/45"],
+    [class~="text-fg/50"],
+    [class~="text-fg-muted/40"],
+    [class~="text-fg-muted/60"]
+  ):where(:not(svg, [aria-hidden="true"], [disabled], [aria-disabled="true"], [data-disabled])) {
+    @variant more-contrast {
+      color: var(--surface-fg-muted);
+    }
+  }
+
+  :is(
+    [class~="placeholder:text-fg/30"],
+    [class~="placeholder:text-fg/35"],
+    [class~="placeholder:text-fg/40"],
+    [class~="placeholder:text-fg/50"]
+  )::placeholder {
+    @variant more-contrast {
+      color: var(--surface-fg-muted);
+      opacity: 1;
+    }
+  }
+}
+
+@media (forced-colors: active) {
+  :focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+  }
+
+  [aria-pressed="true"],
+  [aria-selected="true"],
+  [aria-current="true"],
+  [aria-current="page"],
+  [aria-current="step"],
+  [data-state="checked"],
+  [data-state="active"],
+  [data-state="on"],
+  [data-selected="true"],
+  [data-active="true"] {
+    forced-color-adjust: none;
+    background-color: Highlight;
+    color: HighlightText;
+    border-color: HighlightText;
+  }
+
+  [role="switch"],
+  [role="checkbox"],
+  [role="slider"],
+  [role="progressbar"] {
+    forced-color-adjust: none;
+    border: 1px solid CanvasText;
+    background-color: Canvas;
+    color: CanvasText;
+  }
+
+  [role="switch"][aria-checked="true"],
+  [role="checkbox"][aria-checked="true"],
+  [role="switch"][data-state="checked"],
+  [role="checkbox"][data-state="checked"] {
+    background-color: Highlight;
+    color: HighlightText;
+    border-color: Highlight;
+  }
+
+  [role="progressbar"] > * {
+    forced-color-adjust: none;
+    background: Highlight;
+  }
+
+  [role="slider"] {
+    background-color: ButtonText;
+    border-color: ButtonText;
+  }
+
+  [data-status-dot] {
+    forced-color-adjust: none;
+    background-color: CanvasText;
+    border: 2px solid CanvasText;
+  }
+
+  [data-status-dot="complete"],
+  [data-status-dot="active"] {
+    background-color: Highlight;
+    border-color: Highlight;
+  }
+
+  [data-status-dot="failed"] {
+    background-color: Canvas;
+    border-color: Mark;
+  }
+}
+
+:root[data-a11y-text="large"] {
+  --a11y-text-scale: 1.125;
+}
+
+:root[data-a11y-text="larger"] {
+  --a11y-text-scale: 1.25;
+}
+
+:root[data-a11y-text="largest"] {
+  --a11y-text-scale: 1.5;
+}
+
+[data-icon-button-name] {
+  display: none;
+}
+
+:root[data-a11y-names="on"] [data-icon-button] {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.125rem;
+  width: auto;
+  height: auto;
+  min-width: 1.875rem;
+  min-height: 1.875rem;
+  padding: 0.25rem 0.375rem;
+}
+
+:root[data-a11y-names="on"] [data-icon-button] [data-icon-button-name] {
+  display: block;
+  max-width: 6rem;
+  font-size: var(--text-xs);
+  line-height: 1.15;
+  text-align: center;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+:root[data-a11y-names="on"] :has(> [data-icon-button]) {
+  flex-wrap: wrap;
+}
+
+:root[data-a11y-names="on"] [data-button-name]::after {
+  content: attr(data-button-name);
+  display: block;
+  max-width: 5.5rem;
+  font-size: var(--text-xs);
+  font-weight: 400;
+  line-height: 1.15;
+  text-align: center;
+  white-space: normal;
+  overflow-wrap: break-word;
+}
+
+:root[data-a11y-names="on"] [data-names-area="ring"] [data-button-name]::after {
+  max-width: 3.5rem;
+}
+
+:root[data-a11y-names="on"] [data-button-name]:not([data-button-name-below]) {
+  gap: 0.125rem;
+  width: auto;
+  height: auto;
+  min-width: min-content;
+  min-height: 1.875rem;
+  padding: 0.25rem 0.375rem;
+  border-radius: var(--radius-md);
+}
+
+@media (min-width: 58rem) {
+  :root[data-a11y-names="on"] {
+    --height-player-bar-wide: 11.5rem;
+  }
+
+  :root[data-a11y-names="on"] [data-placement="dock"] > [data-names-area="bar-top"] {
+    flex-wrap: wrap;
+    row-gap: 0.25rem;
+  }
+
+  :root[data-a11y-names="on"] [data-placement="dock"] [data-names-area="bar-extras"] {
+    flex-basis: 100%;
+    justify-content: center;
+  }
+}
+
+:root[data-a11y-names="on"] [data-play-cluster] {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+:root[data-a11y-names="on"] [data-play-cluster] > [data-button-name-below] {
+  position: relative;
+  inset: auto;
+}
+
+:root[data-a11y-names="on"] [data-button-name-below] {
+  margin-bottom: 1rem;
+}
+
+:root[data-a11y-names="on"] [data-button-name-below]::after {
+  position: absolute;
+  top: calc(100% + 0.125rem);
+  left: 50%;
+  translate: -50% 0;
+  color: var(--color-fg);
+  white-space: nowrap;
+}
+
+:root {
+  @variant short-window {
+    --height-bottom-nav: 0px;
   }
 }

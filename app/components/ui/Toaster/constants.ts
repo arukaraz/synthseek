@@ -1,5 +1,11 @@
 import type { ToasterOffset } from "./types";
 
+export const TOAST_DEFAULT_DURATION_MS = 2000;
+
+export const TOAST_MODE_DEFAULT_DURATION_MS = 4000;
+
+export const TOAST_DURATION_MS_BY_SECONDS = { "2": 2000, "4": 4000, "8": 8000 } as const;
+
 export const TOAST_ACTION_DURATION_MS = 8000;
 
 export const TOAST_DETAIL_DURATION_MS = 8000;

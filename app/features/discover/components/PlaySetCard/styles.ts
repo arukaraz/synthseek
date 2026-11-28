@@ -21,7 +21,7 @@ export const playButton = cva(
   {
     variants: {
       reveal: {
-        true: "opacity-0 group-hover:opacity-100 focus-visible:opacity-100 [@media(hover:none)]:opacity-100",
+        true: "opacity-0 group-hover:opacity-100 focus-visible:opacity-100 group-has-[:focus-visible]:opacity-100 a11y-mode:opacity-100 [@media(hover:none)]:opacity-100",
         false: "",
       },
       folded: {

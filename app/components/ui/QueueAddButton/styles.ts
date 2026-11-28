@@ -13,7 +13,9 @@ export const queueAddButton = cva(
   }
 );
 
-export const queueAddReveal = cva("focus-visible:opacity-100 sm:opacity-0 sm:group-hover:opacity-100");
+export const queueAddReveal = cva(
+  "focus-visible:opacity-100 group-has-[:focus-visible]:opacity-100 a11y-mode:opacity-100 sm:opacity-0 sm:group-hover:opacity-100 sm:[@media(hover:none)]:opacity-100"
+);
 
 export const queueAddGlyph = cva("size-4");
 

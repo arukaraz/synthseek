@@ -29,6 +29,12 @@ import {
   handleVersionUpdate,
 } from "./handlers/system";
 import { isDuplicate } from "./shared/dedup";
+import {
+  announceAlbumProgress,
+  announceDropImport,
+  announceLibraryImport,
+  announcePlaylistProgress,
+} from "./shared/progressAnnouncements";
 import { invalidateKeptReleases, invalidateLibrarySummary, invalidateLibraryViews } from "./shared/libraryInvalidation";
 import { resyncPushFedQueries } from "./shared/pushFedResync";
 import { invalidateRequestListNow } from "./shared/requestListInvalidation";
@@ -85,9 +91,11 @@ export function useSubscriptions() {
           break;
         case SubscriptionEventType.AlbumUpdate:
           handleAlbumUpdate(event, utils, queryClient);
+          announceAlbumProgress(event);
           break;
         case SubscriptionEventType.PlaylistUpdate:
           handlePlaylistUpdate(event, utils, queryClient);
+          announcePlaylistProgress(event);
           break;
         case SubscriptionEventType.PlaylistPlexCreated:
           handlePlaylistPlexCreated(event, queryClient);
@@ -109,9 +117,11 @@ export function useSubscriptions() {
           break;
         case SubscriptionEventType.LibraryImportProgress:
           handleLibraryImportProgress(event, utils, queryClient, viewerId);
+          announceLibraryImport(event, viewerId);
           break;
         case SubscriptionEventType.DropImportUpdate:
           handleDropImportUpdate(event, utils, queryClient);
+          announceDropImport(event, viewerId);
           break;
         case SubscriptionEventType.PlayerCommand:
           applyPlayerCommand(event);

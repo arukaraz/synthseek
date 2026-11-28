@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeAll, afterEach } from "vitest";
 import { render, screen, cleanup } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 
 import { FailureReason, RequestStatus } from "@api/__generated__/types";
 import i18n from "@modules/i18n";
@@ -24,6 +25,16 @@ describe("TrackStatusIndicator", () => {
 
     expect(screen.getByText(enStatus.failureReason[reason].label)).toBeInTheDocument();
     expect(screen.queryByText(`failureReason.${reason}.label`)).not.toBeInTheDocument();
+  });
+
+  it("names the reason popover after the failure label", async () => {
+    const [reason] = FailureReason.options;
+    const label = enStatus.failureReason[reason].label;
+    render(<TrackStatusIndicator status={RequestStatus.enum.failed} failureReason={reason} />);
+
+    await userEvent.click(screen.getByRole("button", { name: `More info: ${label}` }));
+
+    expect(await screen.findByRole("dialog", { name: label })).toBeInTheDocument();
   });
 
   it("falls back to the status label when there is no failure reason", () => {

@@ -22,6 +22,15 @@ describe("LidarrTagsInput", () => {
     expect(screen.getByText("hi-fi")).toBeInTheDocument();
   });
 
+  it("names the suggestions panel after the field", async () => {
+    const user = userEvent.setup();
+    renderInput([]);
+
+    await user.click(screen.getByLabelText("Tags"));
+
+    expect(await screen.findByRole("dialog", { name: "Tags" })).toBeInTheDocument();
+  });
+
   it("removes a tag when its remove button is clicked", async () => {
     const user = userEvent.setup();
     const onChange = renderInput(["hi-fi", "favorites"]);

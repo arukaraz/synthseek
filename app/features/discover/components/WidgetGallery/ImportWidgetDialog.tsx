@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 
 import { Button } from "@components/ui/Button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@components/ui/Dialog";
+import { InlineError } from "@components/ui/InlineError";
 import { useImportWidgetPreview } from "@hooks/api/mutations/widgets/useImportWidgetPreview";
 import type { WidgetImportReport } from "@hooks/api/queries/widgets/types";
 
@@ -58,6 +59,7 @@ export function ImportWidgetDialog({ open, onClose, onImported }: ImportWidgetDi
               </ul>
             </div>
           ) : null}
+          <InlineError error={check.error} />
           <div className={importActions()}>
             <Button variant="ghost" size="sm" onClick={onClose}>
               {t("workshop.cancel")}

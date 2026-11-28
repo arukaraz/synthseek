@@ -14,7 +14,7 @@ import { useDebounce } from "@hooks/ui/useDebounce";
 import { useAuthContext } from "@modules/providers/AuthProvider";
 
 import { HeaderTab } from "../../HeaderTab";
-import { OMNI_DEBOUNCE_MS, OMNI_GOTO_HINTS, OMNI_LIST_ID, OMNI_RESULT_LIMIT } from "../constants";
+import { OMNI_DEBOUNCE_MS, OMNI_GOTO_HINTS, OMNI_LIST_ID, OMNI_PANEL_EDGE_PX, OMNI_RESULT_LIMIT } from "../constants";
 import { omniOptions, optionId, resultOption, scopeTypes } from "../helpers";
 import {
   clearButton,
@@ -93,7 +93,7 @@ export function OmniBar({ omni, navItems }: OmniBarProps) {
       }}
     >
       <PopoverAnchor asChild>
-        <div ref={pillRef} role="search" className={omniPill({ open: omni.open })}>
+        <div ref={pillRef} role="search" aria-label={t("header.search")} className={omniPill({ open: omni.open })}>
           {omni.open ? (
             <OmniScopes layout="inline" value={omni.scope} onChange={omni.changeScope} />
           ) : (
@@ -148,7 +148,7 @@ export function OmniBar({ omni, navItems }: OmniBarProps) {
               ) : null}
             </div>
           ) : (
-            <button type="button" className={omniField()} aria-label={t("header.search")} onClick={omni.openSearch}>
+            <button type="button" className={omniField()} onClick={omni.openSearch}>
               <Search className={omniFieldIcon()} aria-hidden />
               <span className={omniPlaceholder()}>{omni.draft || t("header.omni.placeholder")}</span>
               {omni.shortcutEnabled ? (
@@ -163,7 +163,9 @@ export function OmniBar({ omni, navItems }: OmniBarProps) {
       <PopoverContent
         align="start"
         sideOffset={8}
+        collisionPadding={OMNI_PANEL_EDGE_PX}
         className={dropdownPanel()}
+        aria-label={t("header.search")}
         onOpenAutoFocus={(event) => event.preventDefault()}
         onCloseAutoFocus={(event) => event.preventDefault()}
         onInteractOutside={(event) => {

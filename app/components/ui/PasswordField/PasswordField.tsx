@@ -20,6 +20,7 @@ export function PasswordField({
   minLength,
   describedBy,
   className,
+  inputRef,
 }: PasswordFieldProps) {
   const { t } = useTranslation("components");
   const [visible, setVisible] = useState(false);
@@ -32,6 +33,7 @@ export function PasswordField({
       <div className={authInputRow({ invalid })}>
         <Lock className={authInputIcon()} aria-hidden="true" />
         <input
+          ref={inputRef}
           id={id}
           type={visible ? "text" : "password"}
           value={value}

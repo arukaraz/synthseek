@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 
 import { Button } from "@components/ui/Button";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@components/ui/Dialog";
+import { InlineError } from "@components/ui/InlineError";
 import { Input } from "@components/ui/Input";
 import { Notice } from "@components/ui/Notice";
 import { SegmentedControl } from "@components/ui/SegmentedControl";
@@ -163,6 +164,8 @@ export function LibraryRuleModal({ rule, members, onClose }: LibraryRuleModalPro
           {refusal?.outcome === "too_many" ? <Notice variant="danger" title={t("libraryRules.modal.tooMany")} /> : null}
 
           <Notice variant="info" title={t("libraryRules.modal.pathNote")} />
+
+          <InlineError error={create.error ?? update.error} />
 
           <DialogFooter className={modalFooter()}>
             <Button variant="ghost" onClick={onClose} disabled={saving}>

@@ -66,6 +66,7 @@ export function InfoTooltip({
           side={side}
           align={align}
           className={infoTooltipContent()}
+          aria-label={resolvedTriggerLabel}
           onOpenAutoFocus={(e) => e.preventDefault()}
         >
           {content}

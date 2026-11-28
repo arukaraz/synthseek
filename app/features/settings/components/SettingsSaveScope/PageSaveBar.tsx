@@ -3,6 +3,7 @@
 import { useTranslation } from "react-i18next";
 
 import { Button } from "@components/ui/Button";
+import { InlineError } from "@components/ui/InlineError";
 
 import { dirtyLabels } from "./helpers";
 import { useSaveScopeState } from "./SettingsSaveScope";
@@ -16,17 +17,20 @@ export function PageSaveBar() {
   const names = dirtyLabels(state.dirty);
 
   return (
-    <div className={pageSaveBar()} role="region" aria-label={t("shell.saveBar.region")}>
-      <p className={pageSaveBarSummary()} aria-live="polite">
-        {t("shell.saveBar.summary", { count: state.dirty.length })}
-        {names.length > 0 ? <span className={pageSaveBarNames()}>{names.join(", ")}</span> : null}
-      </p>
-      <Button variant="ghost" size="sm" onClick={state.cancelAll} disabled={state.saving}>
-        {t("shell.saveBar.cancel")}
-      </Button>
-      <Button size="sm" onClick={() => void state.saveAll()} disabled={state.saving || state.saveDisabled}>
-        {state.saving ? t("shell.saveBar.saving") : t("shell.saveBar.save")}
-      </Button>
-    </div>
+    <>
+      <InlineError error={state.failure} className="px-4 pt-3 sm:px-6" />
+      <div className={pageSaveBar()} role="region" aria-label={t("shell.saveBar.region")}>
+        <p className={pageSaveBarSummary()} aria-live="polite">
+          {t("shell.saveBar.summary", { count: state.dirty.length })}
+          {names.length > 0 ? <span className={pageSaveBarNames()}>{names.join(", ")}</span> : null}
+        </p>
+        <Button variant="ghost" size="sm" onClick={state.cancelAll} disabled={state.saving}>
+          {t("shell.saveBar.cancel")}
+        </Button>
+        <Button size="sm" onClick={() => void state.saveAll()} disabled={state.saving || state.saveDisabled}>
+          {state.saving ? t("shell.saveBar.saving") : t("shell.saveBar.save")}
+        </Button>
+      </div>
+    </>
   );
 }

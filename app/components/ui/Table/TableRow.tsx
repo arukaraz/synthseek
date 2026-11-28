@@ -10,6 +10,7 @@ export function TableRow<TData>({
   item,
   columns,
   index,
+  rowIndex,
   staggerDelay,
   attrs,
   clickable,
@@ -29,6 +30,7 @@ export function TableRow<TData>({
       exit="exit"
       transition={{ duration: TABLE_ROW_TRANSITION_DURATION, delay: staggerDelay * index }}
       className={tableRow({ clickable })}
+      aria-rowindex={rowIndex}
       onClick={handleClick}
       {...attrs}
     >

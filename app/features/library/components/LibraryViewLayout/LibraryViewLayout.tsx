@@ -100,6 +100,7 @@ export function LibraryViewLayout<TItem>({
                   <>
                     <LibraryTable
                       items={items ?? []}
+                      total={total}
                       columns={content.columns}
                       getRowId={content.getRowId}
                       emptyMessage={t(config.emptyTitleKey)}
@@ -118,6 +119,7 @@ export function LibraryViewLayout<TItem>({
                     {content.bulkBar}
                     <LibraryInfiniteGrid
                       items={items ?? []}
+                      total={total}
                       ariaLabel={t(config.labelKey)}
                       density={shell.phone ? shell.density : "comfortable"}
                       renderCard={content.renderCard}

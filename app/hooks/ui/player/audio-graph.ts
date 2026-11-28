@@ -16,6 +16,8 @@ let output: AudioOutput = { volume: 1, muted: false, headroom: 1 };
 let equalizerGains: readonly number[] = EQUALIZER_BANDS_HZ.map(() => 0);
 let preampDb = 0;
 let compressor: CompressorSettings = defaultCompressor();
+let monoRequested = false;
+let monoNode: GainNode | null = null;
 const trackGains = new Map<DeckKey, number>();
 
 function ensureGraph(): AudioGraph | null {
@@ -94,6 +96,7 @@ function createGraph(): AudioGraph | null {
     wireTail();
     output = { ...output, headroom: headroomFactorFor(equalizerGains, context.sampleRate) };
     gain.gain.value = outputLevel();
+    routeMono(built);
     return built;
   } catch {
     unsupported = true;
@@ -185,6 +188,29 @@ export function setCompressor(next: CompressorSettings): void {
   if (graph === null) return;
   applyCompressorParams();
   if (graph.compressorEngaged !== next.enabled) wireTail();
+}
+
+export function setMonoAudio(enabled: boolean): void {
+  monoRequested = enabled;
+  if (graph !== null) routeMono(graph);
+}
+
+function routeMono(built: AudioGraph): void {
+  if (monoRequested === (monoNode !== null)) return;
+  built.analyser.disconnect();
+  if (monoRequested) {
+    const node = built.context.createGain();
+    node.channelCount = 1;
+    node.channelCountMode = "explicit";
+    node.channelInterpretation = "speakers";
+    built.analyser.connect(node);
+    node.connect(built.context.destination);
+    monoNode = node;
+    return;
+  }
+  monoNode?.disconnect();
+  monoNode = null;
+  built.analyser.connect(built.context.destination);
 }
 
 function outputLevel(): number {

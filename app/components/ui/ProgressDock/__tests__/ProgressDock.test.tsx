@@ -22,11 +22,14 @@ const zIndexOf = (classes: string): number => {
 
 const reducedMotion = vi.hoisted(() => ({ value: false }));
 
+vi.mock("@hooks/ui/useMotionReduced", () => ({
+  useMotionReduced: () => reducedMotion.value,
+}));
+
 vi.mock("framer-motion", async (importOriginal) => {
   const actual = await importOriginal<typeof import("framer-motion")>();
   return {
     ...actual,
-    useReducedMotion: () => reducedMotion.value,
     AnimatePresence: ({ children }: { children: React.ReactNode }) => children,
     motion: new Proxy(
       {},

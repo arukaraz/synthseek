@@ -31,12 +31,32 @@ export const pill = cva(
   {
     variants: {
       tone: {
-        plex: "bg-warning-tint/15 text-warning-soft ring-warning-tint/30",
+        pending: "bg-warning-tint/15 text-warning-soft ring-warning-tint/30",
         local: "ring-fg/10 bg-fg/5 text-fg/60",
       },
     },
   }
 );
+
+export const signInChips = cva("m-0 flex list-none flex-wrap gap-1 p-0");
+
+export const pendingBadge = cva("mt-1");
+
+export const waysInList = cva("flex flex-col gap-2");
+
+export const waysInRow = cva(
+  "border-fg/10 bg-fg/5 flex items-center justify-between gap-3 rounded-lg border px-3 py-2"
+);
+
+export const waysInName = cva("text-fg min-w-0 truncate text-sm");
+
+export const waysInNote = cva("text-fg/60 text-xs");
+
+export const oidcTestRow = cva("flex flex-wrap items-center gap-3");
+
+export const oidcTestMeta = cva("text-fg/60 text-xs");
+
+export const signInSwitchNote = cva("text-fg/60 text-xs");
 
 export const importList = cva("flex max-h-80 flex-col gap-1 overflow-y-auto");
 

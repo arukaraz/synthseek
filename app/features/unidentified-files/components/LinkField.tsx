@@ -29,6 +29,7 @@ export function LinkField({ placeholder, pending, notFound, onSubmit }: LinkFiel
         <div className={toolField()}>
           <Input
             type="url"
+            autoComplete="off"
             value={url}
             onChange={(event) => setUrl(event.target.value)}
             placeholder={placeholder}

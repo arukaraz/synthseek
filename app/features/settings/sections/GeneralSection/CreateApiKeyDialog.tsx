@@ -7,6 +7,7 @@ import { useCopiedFlag } from "@hooks/ui/useCopiedFlag";
 import { toast } from "sonner";
 
 import { Button } from "@components/ui/Button";
+import { InlineError } from "@components/ui/InlineError";
 import {
   Dialog,
   DialogContent,
@@ -100,6 +101,7 @@ export function CreateApiKeyDialog({ open, onOpenChange }: CreateApiKeyDialogPro
               />
             </SettingsField>
 
+            <InlineError error={create.error} />
             <DialogFooter>
               <Button type="submit" size="sm" disabled={!canCreate}>
                 {t("api.create.create")}

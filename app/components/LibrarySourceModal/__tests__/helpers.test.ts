@@ -9,13 +9,47 @@ import {
   compareItems,
   filterValuesFor,
   formatLastSync,
+  itemsWithLinked,
   libraryTypeLowerLabelKey,
   libraryTypeTone,
   matchesFilter,
   matchesSearch,
+  modalLayoutOf,
   resolveToggleTarget,
   watchedKeys,
+  withLinkedItem,
 } from "../helpers";
+
+describe("withLinkedItem", () => {
+  it("puts the newest linked playlist first and keeps one copy of a playlist loaded twice", () => {
+    const first = createMockLibraryItem({ id: "PL1" });
+    const second = createMockLibraryItem({ id: "PL2" });
+    const again = createMockLibraryItem({ id: "PL1", name: "Renamed" });
+
+    expect(withLinkedItem(withLinkedItem(withLinkedItem([], first), second), again)).toEqual([again, second]);
+  });
+});
+
+describe("itemsWithLinked", () => {
+  it("lists linked playlists the library does not already hold, before the listed ones", () => {
+    const listed = [createMockLibraryItem({ id: "a" }), createMockLibraryItem({ id: "b" })];
+    const linked = [createMockLibraryItem({ id: "PL1" }), createMockLibraryItem({ id: "a" })];
+
+    expect(itemsWithLinked(linked, listed).map((item) => item.id)).toEqual(["PL1", "a", "b"]);
+  });
+});
+
+describe("modalLayoutOf", () => {
+  it("adds the link row to a listed library only when the source takes links", () => {
+    expect(modalLayoutOf(true, false, 0)).toBe("list");
+    expect(modalLayoutOf(true, true, 0)).toBe("listWithLink");
+  });
+
+  it("shows the link field alone until a link loads, then the list of what was loaded", () => {
+    expect(modalLayoutOf(false, true, 0)).toBe("linkOnly");
+    expect(modalLayoutOf(false, true, 2)).toBe("list");
+  });
+});
 
 describe("filterValuesFor", () => {
   it("offers every filter to a source with every item type", () => {

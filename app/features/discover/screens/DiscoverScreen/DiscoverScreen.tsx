@@ -3,6 +3,7 @@
 import { useTranslation } from "react-i18next";
 
 import { ExploreBoard } from "../../components/ExploreBoard/ExploreBoard";
+import { FinishSetupCard } from "../../components/FinishSetupCard/FinishSetupCard";
 import { pageStack, scrollRegion, srOnlyHeading } from "./styles";
 
 export function DiscoverScreen() {
@@ -12,6 +13,7 @@ export function DiscoverScreen() {
     <div className={scrollRegion()}>
       <div className={pageStack()}>
         <h1 className={srOnlyHeading()}>{t("screen.srHeading")}</h1>
+        <FinishSetupCard />
         <ExploreBoard />
       </div>
     </div>

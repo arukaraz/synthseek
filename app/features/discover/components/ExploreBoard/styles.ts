@@ -111,7 +111,7 @@ export const sizeChip = cva(
         locked: "text-fg/25 inline-flex items-center justify-center",
       },
       dense: {
-        true: "h-5 min-w-5 px-1 text-10",
+        true: "h-5 min-w-5 px-1 text-10 a11y-mode:h-6 a11y-mode:min-w-6",
         false: "h-7 min-w-7",
       },
     },

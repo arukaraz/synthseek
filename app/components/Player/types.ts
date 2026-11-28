@@ -221,6 +221,7 @@ export interface PlayerView {
   playing: boolean;
   stopped: boolean;
   loading: boolean;
+  failing: boolean;
   shuffle: boolean;
   repeat: PlayerRepeat;
   volume: number;
@@ -353,6 +354,13 @@ export interface PlayerTransportProps extends PlayerProps {
   joined?: boolean;
 }
 
+export interface NamedControlProps {
+  "aria-label": string;
+  title: string;
+  "data-button-name"?: string;
+  "data-button-name-below"?: "";
+}
+
 export interface PlayStopBadgeProps extends PlayerProps {
   size: "bar" | "stage";
   arrow: string;
@@ -416,12 +424,36 @@ export interface QueueHeaderProps extends PlayerProps {
 
 export type PlayerQueueBodyProps = PlayerProps;
 
+export type QueueMoveTarget = "top" | "up" | "down" | "bottom";
+
+export interface PendingQueueFocus {
+  trackId: string;
+  fallbackIndex: number;
+}
+
+export interface QueueRowPlace {
+  position: number;
+  total: number;
+}
+
 export interface PlayerQueueRowProps {
   entry: PlayerQueueEntry;
   current: boolean;
   editable: boolean;
   removable?: boolean;
   actions: PlayerActions;
+  place?: QueueRowPlace;
+  onMove?: (target: QueueMoveTarget) => void;
+}
+
+export interface QueueRowMenuProps {
+  title: string;
+  place: QueueRowPlace;
+  onMove: (target: QueueMoveTarget) => void;
+}
+
+export interface PlaybackProblemProps {
+  visible: boolean;
 }
 
 export interface PlayerWaveProps extends PlayerProps {

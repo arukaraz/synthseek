@@ -12,9 +12,13 @@ export const CLIENT_PAGINATION = {
 
 export const SCROLL_EDGE_TOLERANCE_PX = 4;
 
-export const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
-
 export const PHONE_QUERY = "(max-width: 639px)";
+
+export const DESKTOP_AUTOFOCUS_QUERY = "(min-width: 640px) and (hover: hover) and (pointer: fine)";
+
+export const COUNTDOWN_TICK_MS = 1000;
+
+export const CLAMP_OVERFLOW_TOLERANCE_PX = 1;
 
 export const LONG_PRESS_MS = 450;
 
@@ -23,6 +27,8 @@ export const LONG_PRESS_SLOP_PX = 10;
 export const LONG_PRESS_CLICK_GRACE_MS = 350;
 
 export const LONG_PRESS_IGNORED_SELECTOR = "button, a, input, select, textarea, [role=menuitem]";
+
+export const ROW_PRIMARY_ATTRIBUTE = "data-row-primary";
 
 export const SHEET_DRAG = {
   AXIS_LOCK_PX: 6,

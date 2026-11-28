@@ -247,7 +247,7 @@ describe("Play channels table", () => {
 });
 
 describe("Private session length row", () => {
-  const lengthMenu = () => screen.getByRole("button", { name: copy.sessionLength.label });
+  const lengthMenu = () => screen.getByRole("button", { name: new RegExp(`${copy.sessionLength.label}$`) });
 
   it("shows the saved length as its preset", () => {
     state.user = createMockUser({ privateSessionMinutes: 120 });

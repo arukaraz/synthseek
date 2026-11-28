@@ -2,6 +2,8 @@ import { cva } from "class-variance-authority";
 
 import type { LibrarySourceProvider } from "@hooks/api/queries/library-source/types";
 
+import type { ModalLayout } from "./types";
+
 export const modalRoot = cva(
   [
     "!flex w-full flex-col gap-0 overflow-hidden p-0 shadow-2xl !border-0",
@@ -11,16 +13,45 @@ export const modalRoot = cva(
   ].join(" ")
 );
 
-export const modalGrid = cva(
-  "grid h-full min-h-0 w-full min-w-0 grid-cols-[minmax(0,1fr)] grid-rows-[auto_auto_1fr_auto]"
-);
+export const modalGrid = cva("grid h-full min-h-0 w-full min-w-0 grid-cols-[minmax(0,1fr)]", {
+  variants: {
+    layout: {
+      list: "grid-rows-[auto_auto_1fr_auto]",
+      listWithLink: "grid-rows-[auto_auto_auto_1fr_auto]",
+      linkOnly: "grid-rows-[auto_auto_1fr]",
+    } satisfies Record<ModalLayout, string>,
+  },
+  defaultVariants: { layout: "list" },
+});
 
-export const connectPrompt = cva("flex h-full flex-col items-center justify-center gap-4 px-6 py-12 text-center");
+export const linkBar = cva("flex flex-col gap-2 border-b border-fg/10 px-4 py-3");
+
+export const linkForm = cva("flex flex-col gap-2 sm:flex-row sm:items-center");
+
+export const linkLabel = cva("text-fg/70 text-xs font-medium");
+
+export const linkNote = cva("text-fg/60 flex items-center gap-2 text-xs");
+
+export const linkPromptBody = cva("min-h-0");
+
+export const masterFooter = cva("border-t border-fg/10");
+
+export const connectPrompt = cva("flex flex-col items-center gap-4 px-6 text-center", {
+  variants: {
+    fit: {
+      fill: "h-full justify-center py-12",
+      scroll: "h-full justify-start overflow-y-auto py-8",
+      inline: "py-8",
+    },
+  },
+  defaultVariants: { fit: "fill" },
+});
 
 export const providerTone = cva("", {
   variants: {
     provider: {
       spotify: "bg-(--brand-spotify)/15 text-(--brand-spotify)",
+      youtube: "bg-(--brand-youtube)/15 text-(--brand-youtube)",
       plex: "bg-plex-500/15 text-plex-400",
       navidrome: "bg-(--brand-navidrome)/15 text-(--brand-navidrome)",
       jellyfin: "bg-(--brand-jellyfin)/15 text-(--brand-jellyfin)",

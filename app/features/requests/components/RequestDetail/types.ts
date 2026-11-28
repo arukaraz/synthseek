@@ -130,10 +130,14 @@ export interface RequestDetailHeroMenuProps {
   triggerClassName: string;
 }
 
+export type RejectPhase = "idle" | "submitted" | "running";
+
 export interface RejectApprovalDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   count: number;
+  error: unknown;
+  pending: boolean;
   onConfirm: (reason?: string) => void;
 }
 

@@ -1,7 +1,8 @@
 "use client";
 
+import { useMotionReduced } from "@hooks/ui/useMotionReduced";
 import { cn } from "@utils/cn";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { ALBUM_SCOPE_CHOICES, DEFAULT_ALBUM_ARTIST_SCOPE } from "../constants";
 import { OptionGrid } from "../OptionGrid";
@@ -13,7 +14,7 @@ import type { AlbumMonitorControlProps } from "./types";
 
 export function AlbumMonitorControl({ label, value, onChange }: AlbumMonitorControlProps) {
   const { t } = useTranslation("search");
-  const prefersReducedMotion = useReducedMotion();
+  const prefersReducedMotion = useMotionReduced();
   const onAlbumScope = isAlbumScope(value);
 
   const choiceOptions: Option<AlbumScopeChoice["value"]>[] = ALBUM_SCOPE_CHOICES.map((choice) => ({

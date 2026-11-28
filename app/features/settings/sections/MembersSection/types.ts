@@ -10,6 +10,35 @@ export type MemberListItem = RouterOutputs["users"]["list"][number];
 export type PlexImportableUser = RouterOutputs["users"]["plexImportable"][number];
 export type RoleValue = MemberListItem["role"];
 export type ServerPrivacy = RouterOutputs["privacy"]["overview"]["server"];
+export type MemberSignInIdentity = MemberListItem["signInIdentities"][number];
+export type OidcConnection = RouterOutputs["settings"]["get"]["connections"]["oidc"];
+export type OidcProviderDraft = Pick<
+  OidcConnection,
+  "enabled" | "issuerUrl" | "clientId" | "clientSecret" | "scopes" | "buttonLabel"
+>;
+export type OidcTestResult = RouterOutputs["settings"]["testOidc"];
+export type OidcTestFailure = NonNullable<OidcTestResult["failure"]>;
+
+export interface MemberSignInChip {
+  key: string;
+  label: string;
+}
+
+export interface MemberSignInCellProps {
+  member: MemberListItem;
+  oidcLabel: string;
+}
+
+export interface OidcTestRowProps {
+  dirty: boolean;
+  configured: boolean;
+  lastPassedAt: string | null;
+}
+
+export interface MemberWaysInProps {
+  memberId: string;
+  oidcLabel: string;
+}
 
 export interface RoleOption {
   value: RoleValue;
@@ -21,6 +50,10 @@ export type MemberSort = SortState;
 export interface BuildMemberColumnsArgs {
   t: TFunction<"settings">;
   currentUserId: string | undefined;
+  oidcLabel: string;
+  onApprove: (member: MemberListItem) => void;
+  onReject: (member: MemberListItem) => void;
+  decisionPending: boolean;
   selectedIds: Set<string>;
   allSelected: boolean;
   someSelected: boolean;
@@ -37,16 +70,15 @@ export interface MemberCellProps {
   member: MemberListItem;
 }
 
-export interface MemberTypeBadgeProps {
-  isPlexUser: boolean;
-}
-
 export interface MemberActionsCellProps {
   member: MemberListItem;
   currentUserId: string | undefined;
   onEdit: () => void;
   onEditPreset: () => void;
   onDelete: () => void;
+  onApprove: () => void;
+  onReject: () => void;
+  decisionPending: boolean;
 }
 
 export interface MembersToolbarProps {
@@ -69,6 +101,7 @@ export interface CreateLocalUserDialogProps {
 
 export interface EditUserDialogProps {
   member: MemberListItem | null;
+  oidcLabel: string;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }

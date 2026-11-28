@@ -75,7 +75,7 @@
     "search": "Alle Tokens durchsuchen",
     "showAll": "Alle {{count}} anzeigen",
     "showEssentials": "Nur das Wesentliche anzeigen",
-    "hiddenChange": "Ein geänderter Wert ist hier ausgeblendet",
+    "hiddenChange": "Eine ungespeicherte Änderung ist hier ausgeblendet",
     "noMatch": "Kein Token passt zu dieser Suche.",
     "contrast": "Kontrast zum Hintergrund",
     "unreadable": "{{text}} ist auf dieser Farbe schwer zu lesen ({{ratio}}).",

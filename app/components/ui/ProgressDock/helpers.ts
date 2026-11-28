@@ -10,6 +10,7 @@ import type {
   LibraryImportFailureReason,
 } from "@hooks/api/subscriptions";
 
+import type { LibrarySourceProvider } from "@hooks/api/queries/library-source/types";
 import { countDockItems } from "@hooks/api/subscriptions";
 import { resolveByCode, type CodedError } from "@modules/errors";
 
@@ -120,15 +121,18 @@ export function failureReasonKey(reason: LibraryImportFailureReason | undefined)
   return key ?? "progressDock.itemState.failed";
 }
 
-const PROVIDER_LABEL_KEYS: Record<string, AppShellKey> = {
+const PROVIDER_LABEL_KEYS = {
   spotify: "progressDock.provider.spotify",
+  youtube: "progressDock.provider.youtube",
   plex: "progressDock.provider.plex",
   navidrome: "progressDock.provider.navidrome",
   jellyfin: "progressDock.provider.jellyfin",
-};
+} satisfies Record<LibrarySourceProvider, AppShellKey>;
+
+const PROVIDER_LABELS = new Map<string, AppShellKey>(Object.entries(PROVIDER_LABEL_KEYS));
 
 export function providerLabelKey(provider: string | undefined): AppShellKey {
-  const key = provider ? PROVIDER_LABEL_KEYS[provider] : undefined;
+  const key = provider ? PROVIDER_LABELS.get(provider) : undefined;
   return key ?? "progressDock.provider.generic";
 }
 

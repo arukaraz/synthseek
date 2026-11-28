@@ -32,6 +32,7 @@ function buildSource(overrides: Partial<LibrarySourceDescription> = {}): Library
       itemTypes: ["playlist", "album", "liked"],
       watch: { playlists: true, savedAlbums: true },
       streamsAudio: false,
+      playlistLinks: { accepted: false, needsConnection: false },
     },
     ...overrides,
   };
@@ -108,6 +109,13 @@ interface SelectionBarCapture {
   disabled: boolean;
 }
 
+interface LinkFieldCapture {
+  source: LibrarySourceDescription;
+  connected: boolean;
+  onLoaded: (item: LibraryItem) => void;
+}
+
+let linkFieldProps: LinkFieldCapture | null = null;
 let bottombarProps: BottombarCapture | null = null;
 let toolbarProps: ToolbarCapture | null = null;
 let selectionBarProps: SelectionBarCapture | null = null;
@@ -147,13 +155,21 @@ vi.mock("../components/SelectionBulkBar", () => ({
 }));
 
 vi.mock("../components/MasterTable", () => ({
-  MasterTable: (props: { items: LibraryItem[]; draft: LibraryDraft; selectionBar: ReactNode }) => {
+  MasterTable: (props: { items: LibraryItem[]; draft: LibraryDraft; selectionBar: ReactNode; footer?: ReactNode }) => {
     capturedDraft = props.draft;
     return (
-      <div data-testid="master-table" data-count={props.items.length}>
+      <div data-testid="master-table" data-count={props.items.length} data-ids={props.items.map((i) => i.id).join(",")}>
         {props.selectionBar}
+        {props.footer}
       </div>
     );
+  },
+}));
+
+vi.mock("../components/PlaylistLinkField", () => ({
+  PlaylistLinkField: (props: LinkFieldCapture) => {
+    linkFieldProps = props;
+    return <div data-testid="link-field" data-connected={String(props.connected)} />;
   },
 }));
 
@@ -176,12 +192,13 @@ vi.mock("../components/ModalBottombar", () => ({
 }));
 
 vi.mock("../components/ConnectPrompt", () => ({
-  ConnectPrompt: (props: { source: LibrarySourceDescription | undefined; expired?: boolean }) => (
+  ConnectPrompt: (props: { source: LibrarySourceDescription | undefined; expired?: boolean; inline?: boolean }) => (
     <div
       data-testid="connect-prompt"
       data-source={props.source?.provider ?? "none"}
       data-pending={String(props.source?.pending ?? false)}
       data-expired={String(Boolean(props.expired))}
+      data-inline={String(Boolean(props.inline))}
     />
   ),
 }));
@@ -214,6 +231,7 @@ function resetState() {
   subscriptionData = { watch_new_playlists: false, watch_saved_albums: false };
   savePending = false;
   bottombarProps = null;
+  linkFieldProps = null;
   toolbarProps = null;
   selectionBarProps = null;
   capturedDraft = null;
@@ -265,6 +283,7 @@ describe("LibrarySourceModal", () => {
           itemTypes: ["playlist"],
           watch: { playlists: true, savedAlbums: false },
           streamsAudio: false,
+          playlistLinks: { accepted: false, needsConnection: false },
         },
       }),
     ];
@@ -474,6 +493,7 @@ describe("LibrarySourceModal", () => {
           itemTypes: ["playlist"],
           watch: { playlists: true, savedAlbums: false },
           streamsAudio: true,
+          playlistLinks: { accepted: false, needsConnection: false },
         },
       }),
     ];
@@ -656,5 +676,125 @@ describe("LibrarySourceModal", () => {
     expect(toastMocks.error).toHaveBeenCalledTimes(1);
     expect(toastMocks.error).toHaveBeenCalledWith("Could not load your Spotify library", expect.anything());
     expect(invalidateSources).not.toHaveBeenCalled();
+  });
+
+  describe("playlist links", () => {
+    function linkSource(overrides: Partial<LibrarySourceDescription> = {}) {
+      return buildSource({
+        provider: "youtube",
+        name: "YouTube",
+        capabilities: {
+          connect: "session",
+          itemTypes: ["playlist", "liked"],
+          watch: { playlists: true, savedAlbums: false },
+          streamsAudio: false,
+          playlistLinks: { accepted: true, needsConnection: false },
+        },
+        ...overrides,
+      });
+    }
+
+    it("offers no link field to a source that does not accept playlist links", () => {
+      render(<LibrarySourceModal provider="spotify" open onOpenChange={vi.fn()} />);
+
+      expect(screen.queryByTestId("link-field")).not.toBeInTheDocument();
+    });
+
+    it("offers the link field beside the listed library of a connected source that accepts links", () => {
+      sources = [linkSource()];
+
+      render(<LibrarySourceModal provider="youtube" open onOpenChange={vi.fn()} />);
+
+      expect(screen.getByTestId("link-field")).toHaveAttribute("data-connected", "true");
+      expect(screen.getByTestId("toolbar-search")).toBeInTheDocument();
+      expect(screen.getByTestId("master-table")).toHaveAttribute("data-count", "2");
+    });
+
+    it("opens a source that is not connected on the link field, with the connect invitation below it", () => {
+      sources = [linkSource({ connected: false })];
+
+      render(<LibrarySourceModal provider="youtube" open onOpenChange={vi.fn()} />);
+
+      expect(screen.getByTestId("topbar")).toBeInTheDocument();
+      expect(screen.getByTestId("link-field")).toHaveAttribute("data-connected", "false");
+      expect(screen.getByTestId("connect-prompt")).toHaveAttribute("data-source", "youtube");
+      expect(screen.queryByTestId("toolbar-search")).not.toBeInTheDocument();
+      expect(screen.queryByTestId("master-table")).not.toBeInTheDocument();
+      expect(screen.queryByTestId("bottombar")).not.toBeInTheDocument();
+      expect(itemsCalls.args.at(-1)).toEqual(["youtube", false]);
+    });
+
+    it("lists a playlist loaded from a link while not connected, marks it for import and saves it like a listed one", async () => {
+      sources = [linkSource({ connected: false })];
+      const onOpenChange = vi.fn();
+      render(<LibrarySourceModal provider="youtube" open onOpenChange={onOpenChange} />);
+
+      act(() => {
+        linkFieldProps?.onLoaded(
+          createMockLibraryItem({ id: "PL9", type: "playlist", name: "Linked", imported: false })
+        );
+      });
+
+      expect(screen.getByTestId("master-table")).toHaveAttribute("data-ids", "PL9");
+      expect(screen.getByTestId("detail-panel")).toHaveAttribute("data-focused", "PL9");
+      expect(screen.getByTestId("connect-prompt")).toHaveAttribute("data-inline", "true");
+      expect(screen.getByTestId("bottombar")).toHaveAttribute("data-haschanges", "true");
+
+      await act(async () => {
+        await bottombarProps?.onSave();
+      });
+
+      const payload = saveMutateAsync.mock.calls[0][0];
+      expect(payload.provider).toBe("youtube");
+      expect(payload.toImport).toEqual([expect.objectContaining({ id: "PL9", type: "playlist" })]);
+      expect(onOpenChange).toHaveBeenCalledWith(false);
+    });
+
+    it("carries the watch choice of a linked playlist into its import", async () => {
+      sources = [linkSource({ connected: false })];
+      render(<LibrarySourceModal provider="youtube" open onOpenChange={vi.fn()} />);
+
+      const linked = createMockLibraryItem({ id: "PL9", type: "playlist", imported: false });
+      act(() => {
+        linkFieldProps?.onLoaded(linked);
+      });
+      act(() => {
+        capturedDraft?.setSyncForItems([linked], true);
+      });
+      await act(async () => {
+        await bottombarProps?.onSave();
+      });
+
+      expect(saveMutateAsync.mock.calls[0][0].toImport).toEqual([
+        expect.objectContaining({ id: "PL9", syncEnabled: true }),
+      ]);
+    });
+
+    it("puts a linked playlist that is already listed in focus without listing it twice", () => {
+      sources = [linkSource()];
+      render(<LibrarySourceModal provider="youtube" open onOpenChange={vi.fn()} />);
+
+      act(() => {
+        linkFieldProps?.onLoaded(createMockLibraryItem({ id: "a", type: "playlist", name: "Alpha", imported: false }));
+      });
+
+      expect(screen.getByTestId("master-table").getAttribute("data-ids")?.split(",").sort()).toEqual(["a", "b"]);
+      expect(screen.getByTestId("detail-panel")).toHaveAttribute("data-focused", "a");
+      expect(screen.getByTestId("bottombar")).toHaveAttribute("data-haschanges", "true");
+    });
+
+    it("hands a source that needs a connection for links an unconnected field", () => {
+      sources = [
+        buildSource({
+          connected: false,
+          capabilities: { ...buildSource().capabilities, playlistLinks: { accepted: true, needsConnection: true } },
+        }),
+      ];
+
+      render(<LibrarySourceModal provider="spotify" open onOpenChange={vi.fn()} />);
+
+      expect(screen.getByTestId("link-field")).toHaveAttribute("data-connected", "false");
+      expect(linkFieldProps?.source.capabilities.playlistLinks.needsConnection).toBe(true);
+    });
   });
 });

@@ -1,1 +1,0 @@
-export const ARTIST_SUGGESTIONS_EXCLUDE_MAX = 100;

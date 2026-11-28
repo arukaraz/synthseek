@@ -1,9 +1,10 @@
 "use client";
 
-import { useReducedMotion } from "framer-motion";
 import { LocateFixed, X } from "lucide-react";
 import { useRef } from "react";
 import { useTranslation } from "react-i18next";
+
+import { useMotionReduced } from "@hooks/ui/useMotionReduced";
 
 import { activeLyricIndex, emptyReason, labelled, lyricDepth, lyricLineState } from "./helpers";
 import {
@@ -21,7 +22,7 @@ import { useLyricFollow } from "./useLyricFollow";
 
 export function PlayerLyrics({ view, actions, column }: PlayerLyricsProps) {
   const { t } = useTranslation("player");
-  const reduceMotion = useReducedMotion() === true;
+  const reduceMotion = useMotionReduced();
   const lines = view.lyrics?.lines ?? [];
   const synced = view.lyrics?.synced === true;
   const active = activeLyricIndex(view.lyrics, view.positionSeconds);

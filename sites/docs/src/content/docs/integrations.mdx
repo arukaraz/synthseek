@@ -105,11 +105,28 @@ Artwork from the catalog, Cover Art Archive, fanart.tv and the Spotify image CDN
 
 ## Library sources
 
-A library source is where your existing collection lives: Spotify, or a connected Plex, Navidrome, or Jellyfin server. **Import** on the library page lists them.
+A library source is where your existing collection lives: Spotify, YouTube, or a connected Plex, Navidrome, or Jellyfin server. **Import** on the library page lists them.
 
 Each member connects their own. Spotify connects over OAuth, and you can then browse your saved albums, saved tracks, and playlists, select what you want, and import it. A server offers its playlists through the account the member linked under **Connections**. An imported playlist can be kept in sync so later additions flow through.
 
 The Spotify connection needs a client ID and a public base URL, because the OAuth callback returns over the internet.
+
+### Importing a playlist by its link
+
+The Import dialog for Spotify and for YouTube also takes a playlist's link. Spotify needs your Spotify connection for this. YouTube does not need an account for a public or unlisted playlist.
+
+### YouTube
+
+**Using an account through automated tools can lead YouTube to restrict or ban it, for a while or for good. A secondary account is the prudent choice.**
+
+Synthseek reads YouTube with its bundled yt-dlp. A public or unlisted playlist imports from its link, with no account. Your own playlists, the ones you saved and **Liked music** need your browser's youtube.com cookies.
+
+- Export the cookies to a text file in the Netscape format, for example with a cookie export extension.
+- Paste the contents of the file under **Settings**, then **Connections**, then **Services**, or when the Import dialog asks.
+- Synthseek keeps only the youtube.com cookies, stores them encrypted on the server, and never shows them again. Disconnecting deletes them.
+- When YouTube stops accepting the saved session, Synthseek asks for a fresh one.
+
+Saved albums, your listening history and the general list of videos you liked are not available.
 
 ## Discovery services
 

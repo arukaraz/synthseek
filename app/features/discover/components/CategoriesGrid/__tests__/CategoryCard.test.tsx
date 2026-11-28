@@ -24,7 +24,7 @@ describe("CategoryCard", () => {
     const onClick = vi.fn();
     render(<CategoryCard category={createGenre({ id: "rock", name: "Rock" })} onClick={onClick} />);
 
-    fireEvent.click(screen.getByText("Rock"));
+    fireEvent.click(screen.getByRole("button", { name: "Rock" }));
 
     expect(onClick).toHaveBeenCalledWith("rock", "Rock");
   });
@@ -32,7 +32,21 @@ describe("CategoryCard", () => {
   it("does not throw when clicked without onClick handler", () => {
     render(<CategoryCard category={createGenre()} />);
 
-    expect(() => fireEvent.click(screen.getByText("Test Genre"))).not.toThrow();
+    expect(() => fireEvent.click(screen.getByRole("button", { name: "Test Genre" }))).not.toThrow();
+  });
+
+  it("is one keyboard stop that covers the whole card and takes its name from the title", () => {
+    render(<CategoryCard category={createGenre({ name: "Rock" })} heading="h2" />);
+
+    const button = screen.getByRole("button", { name: "Rock" });
+    expect(button).toHaveClass("absolute", "inset-0");
+    expect(button).toHaveAttribute("aria-labelledby", screen.getByRole("heading", { level: 2, name: "Rock" }).id);
+  });
+
+  it("titles the card with a third level heading unless the screen asks for another", () => {
+    render(<CategoryCard category={createGenre({ name: "Rock" })} />);
+
+    expect(screen.getByRole("heading", { level: 3, name: "Rock" })).toBeInTheDocument();
   });
 
   it("applies small size classes by default", () => {

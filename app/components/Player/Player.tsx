@@ -2,6 +2,10 @@
 
 import { AnimatePresence } from "framer-motion";
 import { createPortal } from "react-dom";
+import { useTranslation } from "react-i18next";
+
+import { useTrackAnnouncement } from "@hooks/ui/player/useTrackAnnouncement";
+import { useAccessibility } from "@modules/providers/AccessibilityProvider";
 
 import { DeviceMenu } from "./DeviceMenu";
 import { ListeningAvatars } from "./ListeningAvatars";
@@ -10,6 +14,7 @@ import { ListeningRoom } from "./ListeningRoom";
 import { HeaderProgress } from "./HeaderProgress";
 import { panelOpen } from "./helpers";
 import { MiniPlayer } from "./MiniPlayer";
+import { PlaybackProblem } from "./PlaybackProblem";
 import { PlayerBar } from "./PlayerBar";
 import { PlayerMasthead } from "./PlayerMasthead";
 import { PlayerModeMenu } from "./PlayerModeMenu";
@@ -23,13 +28,23 @@ import { headerPlayer, playerDock, playerRoot } from "./styles";
 import type { PlayerProps } from "./types";
 
 export function Player({ view, actions }: PlayerProps) {
+  const { t } = useTranslation("player");
   const anchorToChain = view.chainVisible && !view.fullscreen;
   const { target, masthead, progress, effective } = usePlayerPlacement(view.mode, view.fullscreen);
   const hanging = effective === "compact" && !view.fullscreen;
   const docked = target === null && masthead === null;
+  const { mode: accessibilityMode } = useAccessibility();
+  const dockedProblem = view.failing && docked && !view.fullscreen;
+  useTrackAnnouncement({
+    id: view.track.id,
+    title: view.track.title,
+    artist: view.track.artist,
+    playing: view.playing,
+  });
 
   return (
     <>
+      {view.failing && !dockedProblem ? <PlaybackProblem visible={false} /> : null}
       {view.fullscreen ? <PlayerStage view={view} actions={actions} /> : null}
       <AnimatePresence>
         {view.chainVisible && hanging ? (
@@ -78,11 +93,12 @@ export function Player({ view, actions }: PlayerProps) {
       {masthead !== null ? createPortal(<PlayerMasthead view={view} actions={actions} />, masthead) : null}
       {progress !== null ? createPortal(<HeaderProgress view={view} />, progress) : null}
       {view.fullscreen || !docked ? null : (
-        <div className={playerRoot()} data-cy="player">
+        <div className={playerRoot()} data-cy="player" role="region" aria-label={t("controls.region")}>
           <div className={playerDock()}>
             <AnimatePresence>
               {view.chainVisible ? <SignalChain key="chain" view={view} actions={actions} /> : null}
             </AnimatePresence>
+            {dockedProblem ? <PlaybackProblem visible={accessibilityMode} /> : null}
             <PlayerBar view={view} actions={actions} />
           </div>
           {panelOpen(view) ? null : <ListeningAvatars view={view} actions={actions} placement="dock" />}

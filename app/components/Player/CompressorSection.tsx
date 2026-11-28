@@ -14,6 +14,7 @@ import {
 import { Switch } from "@components/ui/Switch";
 import { compressorPresetIds, isCompressorPresetId } from "@hooks/ui/player/compressor";
 import { COMPRESSOR_LIMITS, COMPRESSOR_PARAMS } from "@hooks/ui/player/constants";
+import { nameAfterVisibleText } from "@utils/accessibleName";
 
 import { SettingsSlider } from "./SettingsSlider";
 import { COMPRESSOR_PARAM_UNITS } from "./constants";
@@ -54,7 +55,7 @@ export function CompressorSection({ view, actions }: PlayerSettingsControlProps)
                 variant="secondary"
                 size="sm"
                 className={equalizerPresetTrigger()}
-                aria-label={t("settings.compressor.preset")}
+                aria-label={nameAfterVisibleText(t("settings.compressor.preset"), presetName)}
               >
                 {presetName}
                 <ChevronDown className="size-3.5" />

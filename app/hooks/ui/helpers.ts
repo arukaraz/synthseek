@@ -1,5 +1,26 @@
-import { LONG_PRESS_CLICK_GRACE_MS, LONG_PRESS_IGNORED_SELECTOR } from "./constants";
-import type { ScrollAxis, ScrollEdges, ScrollMetrics } from "./types";
+import { LONG_PRESS_CLICK_GRACE_MS, LONG_PRESS_IGNORED_SELECTOR, ROW_PRIMARY_ATTRIBUTE } from "./constants";
+import type { ScrollAxis, ScrollEdges, ScrollMetrics, SetupTarget, SetupTargetInput } from "./types";
+
+export function setupTargetOf({
+  context,
+  setupRequired,
+  tokenRequired,
+  signedIn,
+  isAdmin,
+}: SetupTargetInput): SetupTarget {
+  if (context === "app") {
+    if (signedIn) return "stay";
+    if (!setupRequired) return "loginBack";
+    return tokenRequired ? "setup" : "loginToSetup";
+  }
+  if (context === "login") {
+    if (signedIn) return "returnPath";
+    return setupRequired && tokenRequired ? "setup" : "stay";
+  }
+  if (!setupRequired) return "home";
+  if (!signedIn) return tokenRequired ? "stay" : "loginBack";
+  return isAdmin ? "stay" : "home";
+}
 
 export function swallowNextClick(): void {
   let grace: number | null = null;
@@ -27,7 +48,8 @@ export function swallowNextClick(): void {
 export function startsLongPress(target: EventTarget | null, holder: HTMLElement): boolean {
   if (!(target instanceof Element) || !holder.contains(target)) return false;
   const control = target.closest(LONG_PRESS_IGNORED_SELECTOR);
-  return control === null || control === holder || !holder.contains(control);
+  if (control === null || control === holder || !holder.contains(control)) return true;
+  return control.hasAttribute(ROW_PRIMARY_ATTRIBUTE);
 }
 
 export function canStartSheetDrag(target: EventTarget | null, boundary: HTMLElement): boolean {

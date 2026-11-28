@@ -138,7 +138,7 @@ describe("BoardTile", () => {
   it("leaves keys pressed on its controls to the controls", () => {
     const handlers = renderTile(true);
 
-    fireEvent.keyDown(screen.getByRole("button", { name: "Large" }), { key: "ArrowLeft" });
+    fireEvent.keyDown(screen.getByRole("button", { name: /Large$/ }), { key: "ArrowLeft" });
 
     expect(handlers.move).not.toHaveBeenCalled();
   });

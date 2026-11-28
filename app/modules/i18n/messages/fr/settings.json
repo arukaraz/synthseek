@@ -1,4 +1,64 @@
 {
+  "accessibility": {
+    "mode": {
+      "label": "Mode accessibilité",
+      "description": "Rend le texte et les commandes plus faciles à voir et à utiliser, et affiche plus de l'interface à la fois."
+    },
+    "motion": {
+      "label": "Réduire les mouvements",
+      "description": "Apaise les animations et les mouvements dans toute l'application."
+    },
+    "transparency": {
+      "label": "Réduire la transparence",
+      "description": "Remplace les panneaux transparents et flous par des panneaux pleins. Par défaut, cela suit votre choix pour Réduire les mouvements."
+    },
+    "contrast": {
+      "label": "Plus de contraste",
+      "description": "Rend les bordures et les contours plus visibles. Le mode accessibilité l'utilise toujours."
+    },
+    "choices": {
+      "auto": "Suivre mon appareil",
+      "on": "Activé",
+      "off": "Désactivé"
+    },
+    "toastDuration": {
+      "label": "Durée des notifications",
+      "description": "Combien de temps une notification reste à l'écran. Par défaut, 2 secondes, ou 4 secondes avec le mode accessibilité activé.",
+      "options": {
+        "default": "Par défaut",
+        "2": "2 secondes",
+        "4": "4 secondes",
+        "8": "8 secondes",
+        "sticky": "Jusqu'à fermeture"
+      }
+    },
+    "shortcuts": {
+      "label": "Raccourcis à une seule touche",
+      "description": "Permet à une touche seule, comme Espace ou /, de déclencher une action. Désactivez-les si vous appuyez sur des touches par erreur. Les raccourcis avec Ctrl ou Commande continuent de fonctionner."
+    },
+    "textSize": {
+      "label": "Taille du texte",
+      "description": "Agrandit le texte dans ce navigateur seulement. S'ajoute à la taille du texte et au zoom de votre navigateur.",
+      "options": {
+        "normal": "Normale",
+        "large": "Grande",
+        "larger": "Plus grande",
+        "largest": "La plus grande"
+      }
+    },
+    "buttonNames": {
+      "label": "Afficher le nom des boutons",
+      "description": "Écrit le nom des boutons à icône du lecteur et des barres d'outils à côté de leur icône, pour pouvoir le dire à un outil de commande vocale. Les boutons répétés sur chaque ligne ou carte ne gardent que leur icône."
+    },
+    "monoAudio": {
+      "label": "Audio mono",
+      "description": "Joue le même son dans les deux oreilles, pour entendre d'une seule oreille. S'applique à la lecture dans l'app, pas aux courts aperçus."
+    },
+    "reactiveWave": {
+      "label": "Onde animée",
+      "description": "Laisse l'onde de la barre de lecture gonfler et retomber avec la musique. Désactivez-la pour la garder stable. Réduire les mouvements est un autre réglage."
+    }
+  },
   "requestPreset": {
     "choiceAriaLabel": "Quels réglages les demandes utilisent",
     "unavailable": "Impossible de charger le préréglage de demande. Réessayez plus tard.",
@@ -901,6 +961,91 @@
     "loading": "Chargement des membres...",
     "empty": "Aucun membre pour l'instant.",
     "loadError": "Échec du chargement des membres : {{message}}",
+    "signIn": {
+      "cardTitle": "Écran de connexion",
+      "cardDescription": "Ce que chacun voit avant de se connecter.",
+      "libraryCovers": {
+        "label": "Afficher sur l'écran de connexion des pochettes d'albums de cette bibliothèque",
+        "description": "Toute personne qui peut ouvrir la page de connexion voit ces pochettes, avec ou sans compte. Elles sont tirées au hasard dans votre bibliothèque et renouvelées régulièrement. Désactivez cette option pour garder le fond uni."
+      },
+      "providerFirst": {
+        "label": "Afficher d'abord le bouton d'authentification unique",
+        "description": "Le bouton du fournisseur devient l'action principale et le formulaire de mot de passe se replie derrière un lien."
+      },
+      "autoRedirect": {
+        "label": "Aller directement chez le fournisseur",
+        "description": "Ouvrir l'écran de connexion envoie aussitôt chez le fournisseur. Après une déconnexion ou un échec de connexion, l'écran de connexion reste affiché."
+      },
+      "needsTest": "Disponible dès que le fournisseur d'authentification unique a réussi un test de connexion.",
+      "lockout": "Si le fournisseur ne fonctionne plus, ajoutez ?{{param}} à l'adresse de connexion pour retrouver le formulaire de mot de passe, ou démarrez le serveur avec FORCE_LOCAL_SIGN_IN=true.",
+      "forcedLocal": "FORCE_LOCAL_SIGN_IN est défini sur le serveur : l'authentification unique est désactivée et le formulaire de mot de passe est toujours proposé tant qu'il n'est pas retiré.",
+      "accountCreation": {
+        "label": "Créer un compte à la première connexion",
+        "description": "Une personne qui se connecte par authentification unique ou avec Jellyfin sans avoir de compte ici en reçoit un. Les nouveaux comptes attendent qu'un administrateur les valide dans la liste des utilisateurs."
+      }
+    },
+    "oidc": {
+      "cardTitle": "Authentification unique (OpenID Connect)",
+      "cardDescription": "Permettez aux gens de se connecter avec leur compte chez un fournisseur d'identité comme Authentik, Authelia ou Keycloak.",
+      "enabled": {
+        "label": "Proposer l'authentification unique",
+        "description": "Affiche le bouton du fournisseur sur l'écran de connexion dès que l'émetteur et l'ID client sont renseignés."
+      },
+      "issuerUrl": {
+        "label": "URL de l'émetteur",
+        "helper": "L'adresse du fournisseur pour cette application, sans /.well-known/openid-configuration.",
+        "placeholder": "https://auth.example.com/application/o/synthseek/"
+      },
+      "clientId": {
+        "label": "ID client"
+      },
+      "clientSecret": {
+        "label": "Secret client",
+        "helper": "En écriture seule : il n'est plus jamais affiché une fois enregistré. Laissez vide pour garder celui enregistré.",
+        "storedPlaceholder": "Enregistré. Saisissez-en un nouveau pour le remplacer."
+      },
+      "scopes": {
+        "label": "Portées",
+        "helper": "Séparées par des espaces. openid est toujours ajouté."
+      },
+      "buttonLabel": {
+        "label": "Texte du bouton",
+        "helper": "Ce qu'affiche le bouton de connexion. Laissez vide pour afficher Authentification unique.",
+        "placeholder": "Authentification unique"
+      },
+      "callback": {
+        "label": "Adresse de retour",
+        "helper": "Enregistrez cette adresse comme URI de redirection chez le fournisseur.",
+        "copyAriaLabel": "Copier l'adresse de retour",
+        "copied": "Adresse de retour copiée",
+        "copyFailed": "Impossible de copier l'adresse de retour",
+        "missing": "Définissez d'abord PUBLIC_BASE_URL sur le serveur. Le fournisseur a besoin d'une adresse publique où renvoyer les gens."
+      },
+      "test": {
+        "action": "Tester la connexion",
+        "testing": "Test en cours...",
+        "saveFirst": "Enregistrez d'abord vos modifications. Le test vérifie le fournisseur enregistré.",
+        "passed": "Le fournisseur a répondu comme prévu.",
+        "failed": "Le test n'a pas réussi",
+        "lastPassed": "Dernière réussite le {{date}}",
+        "neverPassed": "Aucun test réussi pour l'instant."
+      },
+      "failures": {
+        "notConfigured": "Saisissez l'URL de l'émetteur et l'ID client, enregistrez, puis testez.",
+        "addressRefused": "Synthseek n'a pas le droit de contacter l'adresse du fournisseur.",
+        "unreachable": "Synthseek n'a pas pu joindre le fournisseur.",
+        "timeout": "Le fournisseur a mis trop de temps à répondre.",
+        "notAnIssuer": "Cette adresse ne répond pas comme un fournisseur OpenID Connect.",
+        "issuerMismatch": "Le fournisseur indique un autre émetteur que celui saisi.",
+        "noAuthorizationEndpoint": "Le fournisseur ne publie pas d'adresse de connexion utilisable.",
+        "noTokenEndpoint": "Le fournisseur ne publie pas d'adresse de jetons utilisable.",
+        "codeFlowUnsupported": "Le fournisseur ne propose pas la connexion par code d'autorisation qu'utilise Synthseek.",
+        "noUsableSigningAlgorithm": "Le fournisseur signe ses jetons d'une façon que Synthseek ne peut pas vérifier.",
+        "jwksUnreachable": "Synthseek n'a pas pu récupérer les clés de signature du fournisseur.",
+        "jwksInvalid": "Les clés de signature du fournisseur sont absentes ou illisibles.",
+        "unexpected": "Le test a échoué pour une raison inattendue."
+      }
+    },
     "toolbar": {
       "createLocal": "Créer un utilisateur local",
       "importPlex": "Importer des utilisateurs Plex"
@@ -913,11 +1058,37 @@
       "joined": "Inscrit le",
       "quota": "Quota",
       "selectAll": "Sélectionner tous les membres",
-      "selectMember": "Sélectionner {{username}}"
+      "selectMember": "Sélectionner {{username}}",
+      "signsInWith": "Se connecte avec",
+      "actions": "Actions"
     },
     "type": {
       "plex": "Utilisateur Plex",
       "local": "Utilisateur local"
+    },
+    "signsIn": {
+      "password": "Mot de passe",
+      "plex": "Plex",
+      "jellyfin": "Jellyfin",
+      "oidcFallback": "Authentification unique",
+      "none": "Aucun moyen de connexion"
+    },
+    "pending": {
+      "badge": "En attente de validation",
+      "approve": "Valider {{username}}",
+      "reject": "Refuser {{username}}",
+      "rejectTitle": "Refuser ce compte",
+      "rejectMessage": "Refuser {{username}} ? Le compte est supprimé et ne peut pas se connecter.",
+      "rejectConfirm": "Refuser"
+    },
+    "waysIn": {
+      "title": "Moyens de connexion",
+      "unlink": "Délier {{method}}",
+      "unlinkTitle": "Délier cette connexion",
+      "unlinkMessage": "Délier {{method}} de {{username}} ? Cette personne ne pourra plus se connecter avec.",
+      "unlinkConfirm": "Délier",
+      "lastWayIn": "C'est le seul moyen de connexion du compte. Définissez un mot de passe ci-dessus, enregistrez, puis déliez-le.",
+      "none": "Aucun compte lié."
     },
     "role": {
       "owner": "Propriétaire",
@@ -978,9 +1149,9 @@
       "passwordAriaLabel": "Nouveau mot de passe",
       "ownerRoleNote": "Le compte propriétaire doit rester administrateur.",
       "quotaTracksLabel": "Quota de pistes propre",
-      "quotaTracksAriaLabel": "Quota de pistes de ce membre",
+      "quotaTracksAriaLabel": "Quota de pistes propre : quota de pistes de ce membre",
       "quotaStorageLabel": "Quota d'espace propre (Go)",
-      "quotaStorageAriaLabel": "Quota d'espace de ce membre en gigaoctets",
+      "quotaStorageAriaLabel": "Quota d'espace propre (Go) : quota d'espace de ce membre en gigaoctets",
       "quotaPlaceholder": "Suivre le quota global",
       "quotaNote": "Laissez un quota vide pour suivre le quota global. Zéro signifie aucune limite pour ce membre.",
       "submit": "Enregistrer les modifications"
@@ -1164,7 +1335,37 @@
       "newLabel": "Nouveau mot de passe",
       "newAriaLabel": "Nouveau mot de passe",
       "submit": "Changer le mot de passe",
-      "managedByPlex": "Vous vous connectez avec Plex. Pour utiliser un mot de passe, déconnectez Plex dans Connexions."
+      "managedByPlex": "Vous vous connectez avec Plex. Pour utiliser un mot de passe, déconnectez Plex dans Connexions.",
+      "managedElsewhere": "Ce compte n'a pas de mot de passe : il se connecte avec un compte lié. Un administrateur peut lui en définir un."
+    },
+    "waysIn": {
+      "title": "Moyens de connexion",
+      "description": "Les comptes avec lesquels vous pouvez vous connecter. Il doit toujours en rester un.",
+      "password": "Mot de passe",
+      "passwordSet": "Défini",
+      "passwordNone": "Non défini",
+      "plexHint": "Liez ou déconnectez Plex dans Connexions, Services.",
+      "plexManage": "Ouvrir Services",
+      "linkedAs": "Lié en tant que {{name}}",
+      "linked": "Lié",
+      "notLinked": "Non lié",
+      "link": "Lier",
+      "unlink": "Délier",
+      "unlinkLabel": "Délier {{method}}",
+      "unlinkTitle": "Délier {{method}}",
+      "unlinkMessage": "Une fois délié, vous ne pourrez plus vous connecter avec {{method}}.",
+      "unlinkConfirm": "Délier",
+      "lastWayIn": "C'est votre seul moyen de connexion, il ne peut donc pas être délié. Liez d'abord un autre compte ou demandez à un administrateur de vous définir un mot de passe.",
+      "linkedNotice": "{{method}} est lié. Vous pouvez maintenant vous connecter avec.",
+      "jellyfin": {
+        "title": "Lier Jellyfin",
+        "description": "Saisissez une fois votre nom d'utilisateur et votre mot de passe Jellyfin pour lier le compte.",
+        "usernameLabel": "Nom d'utilisateur Jellyfin",
+        "passwordLabel": "Mot de passe Jellyfin",
+        "cancel": "Annuler",
+        "submit": "Lier",
+        "submitting": "Liaison..."
+      }
     },
     "connected": {
       "title": "Services",
@@ -1179,6 +1380,15 @@
         "notConnected": "Non connecté",
         "notConfigured": "Demandez d'abord à un administrateur de configurer Spotify.",
         "needsReconnect": "Spotify n'accepte plus cette connexion. Reconnectez-la pour garder votre bibliothèque synchronisée."
+      },
+      "session": {
+        "connected": "Connecté",
+        "connectedAs": "Connecté en tant que {{username}}",
+        "notConnected": "Non connecté",
+        "needsReconnect": "{{provider}} n'accepte plus la session enregistrée. Collez-en une nouvelle ci-dessous pour vous reconnecter.",
+        "disconnectTitle": "Déconnecter {{provider}} ?",
+        "disconnectMessage": "La session {{provider}} enregistrée est supprimée du serveur. Les playlists déjà importées restent dans votre bibliothèque.",
+        "loadFailed": "Impossible de vérifier les sources que vous connectez avec une session de navigateur. Rechargez la page pour réessayer."
       },
       "plex": {
         "name": "Plex",
@@ -1336,6 +1546,7 @@
       "description": "Les lignes les plus récentes du fichier journal actif.",
       "searchPlaceholder": "Rechercher dans les journaux",
       "searchAriaLabel": "Rechercher dans les journaux",
+      "terminalLabel": "Lignes du journal",
       "linesAriaLabel": "Lignes à charger",
       "linesLabel": "Lignes à charger",
       "refreshAriaLabel": "Intervalle d'actualisation automatique",
@@ -1526,6 +1737,10 @@
       "release-watch": {
         "name": "Veille des sorties",
         "description": "Vérifie deux fois par jour si les artistes suivis par les membres ont sorti du nouveau."
+      },
+      "sign-in-background": {
+        "name": "Arrière-plan de connexion",
+        "description": "Compose l'arrière-plan de l'écran de connexion à partir d'un échantillon récent des pochettes de cette bibliothèque. Ne s'exécute que lorsque cette option est activée."
       }
     }
   },
@@ -1686,6 +1901,10 @@
         "title": "Confidentialité",
         "description": "Ce que les autres membres de ce serveur peuvent voir de vous."
       },
+      "accessibility": {
+        "title": "Accessibilité",
+        "description": "Mouvement, transparence, contraste et autres moyens de rendre Synthseek plus facile à utiliser."
+      },
       "notifications": {
         "title": "Notifications"
       },
@@ -1771,6 +1990,7 @@
       "entries": {
         "navidromeAccount": "Compte Navidrome",
         "jellyfinAccount": "Compte Jellyfin",
+        "youtubeAccount": "Compte YouTube",
         "lastfmFeeds": "Flux de découverte Last.fm",
         "listenbrainzFeeds": "Flux de découverte ListenBrainz",
         "listenbrainzAutoRequest": "Demander automatiquement les playlists ListenBrainz",
@@ -1781,10 +2001,16 @@
       },
       "keywords": {
         "playbackAccount": "normalisation du volume sonie gain lecture automatique pistes similaires",
+        "youtubeAccount": "cookies session playlists musique aimée importer",
         "playbackBrowser": "égaliseur compresseur crossfade fondu gapless transition conversion débit mp3",
         "theme": "sombre minuit océan couleur personnalisé css police polices rayon ombre importer exporter apparence",
         "language": "anglais espagnol français allemand",
         "members": "rôle confiance quota préréglage demande qualité format",
+        "signIn": "login connexion arrière-plan fond pochettes mosaïque public visiteurs anonymes",
+        "oidc": "sso authentification unique openid oidc authentik authelia keycloak émetteur client secret retour redirection uri",
+        "signInMode": "sso authentification unique fournisseur d'abord redirection automatique formulaire mot de passe local",
+        "accountCreation": "sso authentification unique jellyfin nouveaux comptes inscription validation en attente",
+        "waysIn": "sso authentification unique openid jellyfin lier délier connexion mot de passe identité",
         "board": "densité taille du texte arrière-plan modèles organiser disposition widgets apparence",
         "scrobble": "scrobble écoutes historique",
         "privacy": "privé visibilité partager lecture en cours incognito historique effacer nom",
@@ -1797,7 +2023,17 @@
         "updates": "mises à jour version publication changelog notes",
         "timeout": "délai expiration timeout attente",
         "logout": "déconnexion se déconnecter logout session",
-        "following": "calendrier"
+        "following": "calendrier",
+        "accessibility": "accessibilité mode lecteur d'écran clavier voir plus facile vision",
+        "accessibilityMotion": "mouvement animation animations réduire apaiser",
+        "accessibilityTransparency": "transparence flou verre translucide",
+        "accessibilityContrast": "contraste bordures contour",
+        "accessibilityToast": "notification notifications durée temps secondes fermer",
+        "accessibilityShortcuts": "raccourci raccourcis clavier touche espace barre oblique",
+        "accessibilityTextSize": "taille texte police plus grand agrandir zoom lecture",
+        "accessibilityButtonNames": "nom boutons étiquettes icônes commande vocale parler dire",
+        "accessibilityMonoAudio": "mono audio son oreille oreilles sourd audition balance stéréo",
+        "accessibilityReactiveWave": "onde barre de lecture forme d'onde mouvement clignotement scintillement musique réaction"
       }
     },
     "palette": {

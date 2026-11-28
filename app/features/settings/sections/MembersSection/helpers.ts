@@ -5,7 +5,17 @@ import type { RoleTone } from "@components/ui/RoleChip";
 import i18n from "@locale";
 import { formatBytes } from "@utils/formatters";
 
-import type { MemberListItem, MemberSort, RoleOption, ServerPrivacy } from "./types";
+import { SECRET_SENTINEL } from "../../components/constants";
+import type {
+  MemberListItem,
+  MemberSignInChip,
+  MemberSignInIdentity,
+  MemberSort,
+  OidcConnection,
+  OidcProviderDraft,
+  RoleOption,
+  ServerPrivacy,
+} from "./types";
 
 export function sameServerPrivacy(a: ServerPrivacy, b: ServerPrivacy): boolean {
   return (
@@ -87,16 +97,20 @@ function quotaFill(member: MemberListItem): number {
   return Math.max(trackFill, storageFill);
 }
 
+function waysToSignIn(member: MemberListItem): number {
+  return Number(member.hasPassword) + member.signInIdentities.length;
+}
+
 function compareByField(a: MemberListItem, b: MemberListItem, field: string): number {
   switch (field) {
+    case "signIn":
+      return waysToSignIn(a) - waysToSignIn(b);
     case "user":
       return a.username.localeCompare(b.username);
     case "requests":
       return a.requestCount - b.requestCount;
     case "quota":
       return quotaFill(a) - quotaFill(b);
-    case "type":
-      return Number(a.isPlexUser) - Number(b.isPlexUser);
     case "role":
       return roleRank(a) - roleRank(b);
     case "joined":
@@ -108,5 +122,52 @@ function compareByField(a: MemberListItem, b: MemberListItem, field: string): nu
 
 export function sortMembers(rows: MemberListItem[], sort: MemberSort): MemberListItem[] {
   const direction = sort.direction === "asc" ? 1 : -1;
-  return [...rows].sort((a, b) => direction * compareByField(a, b, sort.field));
+  return [...rows].sort(
+    (a, b) => Number(b.pendingApproval) - Number(a.pendingApproval) || direction * compareByField(a, b, sort.field)
+  );
+}
+
+export function identityLabel(provider: MemberSignInIdentity["provider"], oidcLabel: string): string {
+  if (provider === "plex") return i18n.t("settings:members.signsIn.plex");
+  if (provider === "jellyfin") return i18n.t("settings:members.signsIn.jellyfin");
+  return oidcLabel;
+}
+
+export function memberSignInChips(member: MemberListItem, oidcLabel: string): MemberSignInChip[] {
+  const chips: MemberSignInChip[] = member.hasPassword
+    ? [{ key: "password", label: i18n.t("settings:members.signsIn.password") }]
+    : [];
+  for (const identity of member.signInIdentities) {
+    chips.push({ key: identity.id, label: identityLabel(identity.provider, oidcLabel) });
+  }
+  return chips;
+}
+
+export function oidcLabelOf(buttonLabel: string | undefined): string {
+  const label = buttonLabel?.trim() ?? "";
+  return label === "" ? i18n.t("settings:members.signsIn.oidcFallback") : label;
+}
+
+export function isOnlyWayIn(member: MemberListItem): boolean {
+  return !member.hasPassword && member.signInIdentities.length === 1;
+}
+
+export function oidcFormSeed(config: OidcConnection): OidcProviderDraft {
+  return {
+    enabled: config.enabled,
+    issuerUrl: config.issuerUrl,
+    clientId: config.clientId,
+    clientSecret: "",
+    scopes: config.scopes,
+    buttonLabel: config.buttonLabel,
+  };
+}
+
+export function oidcSecretToSend(typed: string, stored: boolean): string {
+  if (typed !== "") return typed;
+  return stored ? SECRET_SENTINEL : "";
+}
+
+export function formatTestedAt(iso: string): string {
+  return new Date(iso).toLocaleString(i18n.language, { dateStyle: "medium", timeStyle: "short" });
 }

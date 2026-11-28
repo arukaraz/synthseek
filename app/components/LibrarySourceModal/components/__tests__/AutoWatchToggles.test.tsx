@@ -95,4 +95,22 @@ describe("AutoWatchToggles", () => {
 
     expect(screen.getByText(autoWatch.help.replace("{{provider}}", "Jellyfin"))).toBeInTheDocument();
   });
+
+  it("names the settings panel and the explanation panel", async () => {
+    render(
+      <AutoWatchToggles
+        providerName="Jellyfin"
+        watch={{ playlists: true, savedAlbums: false }}
+        value={{ playlists: false, savedAlbums: false }}
+        onChange={vi.fn()}
+      />
+    );
+    const user = await openPopover();
+
+    expect(screen.getByRole("dialog", { name: autoWatch.title })).toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: autoWatch.howAria }));
+
+    expect(screen.getByRole("dialog", { name: autoWatch.howAria })).toBeInTheDocument();
+  });
 });

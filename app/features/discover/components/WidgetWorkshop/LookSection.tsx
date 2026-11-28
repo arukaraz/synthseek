@@ -12,6 +12,8 @@ import { PLAYLIST_SET_ACTIONS } from "./constants";
 import { viewChoicesOf } from "./helpers";
 import {
   accentDot,
+  accentItem,
+  accentName,
   accentRow,
   fieldLabel,
   lookAction,
@@ -83,17 +85,21 @@ export function LookSection({ workshop, context }: WorkshopSectionProps) {
           {t("look.accent")}
           <div className={accentRow()} role="radiogroup" aria-label={t("look.accent")}>
             {context.catalog.accents.map((accent) => (
-              <button
-                key={accent}
-                type="button"
-                role="radio"
-                data-acc={accent}
-                aria-checked={meta.accent === accent}
-                aria-label={t(`accents.${accent}`)}
-                title={t(`accents.${accent}`)}
-                className={accentDot({ selected: meta.accent === accent })}
-                onClick={() => workshop.setAccent(accent)}
-              />
+              <span key={accent} className={accentItem()}>
+                <button
+                  type="button"
+                  role="radio"
+                  data-acc={accent}
+                  aria-checked={meta.accent === accent}
+                  aria-label={t(`accents.${accent}`)}
+                  title={t(`accents.${accent}`)}
+                  className={accentDot({ selected: meta.accent === accent })}
+                  onClick={() => workshop.setAccent(accent)}
+                />
+                <span aria-hidden className={accentName()}>
+                  {t(`accents.${accent}`)}
+                </span>
+              </span>
             ))}
           </div>
         </div>

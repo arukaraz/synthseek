@@ -25,6 +25,8 @@ interface UseTrackActionHandlers {
   runTrackAction: (id: TrackActionId, track: TrackRequest) => void;
   runBulkAction: (id: BulkActionId, tracks: TrackRequest[]) => Promise<void>;
   rejectCount: number;
+  rejectError: unknown;
+  isRejecting: boolean;
   closeReject: () => void;
   confirmReject: (reason?: string) => void;
 }
@@ -134,6 +136,8 @@ export function useTrackActionHandlers(onBulkSent: () => void): UseTrackActionHa
     runTrackAction,
     runBulkAction,
     rejectCount: reject?.ids.length ?? 0,
+    rejectError: rejectTracks.error,
+    isRejecting: rejectTracks.isPending,
     closeReject: () => setReject(null),
     confirmReject,
   };

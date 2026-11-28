@@ -1,0 +1,47 @@
+{
+  "click-events-have-key-events": {
+    "app/components/LibrarySourceModal/components/MasterTable.tsx": 2,
+    "app/components/TopHeader/components/OmniOptionRow.tsx": 1,
+    "app/components/ui/PreviewButton/PreviewButton.tsx": 1,
+    "app/features/content-detail/components/FollowControl/FollowControl.tsx": 1,
+    "app/features/library/components/LibraryCard/AlbumCard.tsx": 2,
+    "app/features/library/components/LibraryCard/ArtistCard.tsx": 1,
+    "app/features/library/components/LibraryCard/LibraryListRow.tsx": 1,
+    "app/features/library/components/LibraryCard/PlaylistCard.tsx": 1,
+    "app/features/library/components/LibraryTrackRows/LibraryTrackRow.tsx": 2,
+    "app/features/settings/sections/MembersSection/components/ImportPlexUsersDialog.tsx": 1
+  },
+  "no-noninteractive-element-interactions": {
+    "app/features/discover/components/BoardArrange/ArrangeTile.tsx": 1,
+    "app/features/discover/components/WidgetStory/StoryBlock.tsx": 1,
+    "app/features/library/components/LibraryCard/AlbumCard.tsx": 1,
+    "app/features/library/components/LibraryCard/ArtistCard.tsx": 1,
+    "app/features/library/components/LibraryCard/LibraryListRow.tsx": 1,
+    "app/features/library/components/LibraryCard/PlaylistCard.tsx": 1,
+    "app/features/library/components/LibraryTrackRows/LibraryTrackRow.tsx": 1,
+    "app/features/settings/sections/ThemeSection/components/CssMode/components/NewFileForm.tsx": 1
+  },
+  "no-noninteractive-element-to-interactive-role": {
+    "app/components/TopHeader/components/OmniOptionRow.tsx": 1
+  },
+  "no-noninteractive-tabindex": {
+    "app/components/ReleaseState/ReleaseState.tsx": 1,
+    "app/features/content-detail/components/DetailHero/DetailHero.tsx": 1,
+    "app/features/discover/components/WidgetGallery/MyWidgetCard.tsx": 1,
+    "app/features/settings/sections/ThemeSection/components/CssMode/components/HistoryRow.tsx": 1
+  },
+  "no-static-element-interactions": {
+    "app/components/LibrarySourceModal/components/MasterTable.tsx": 2,
+    "app/features/content-detail/components/FollowControl/FollowControl.tsx": 1,
+    "app/features/discover/components/CustomWidget/HeroBlock.tsx": 1,
+    "app/features/discover/components/ExploreBoard/BoardTile.tsx": 1,
+    "app/features/library/components/LibraryActionMenu/LibraryActionMenu.tsx": 2,
+    "app/features/library/components/LibraryCard/AlbumCard.tsx": 1,
+    "app/features/library/components/LibraryCard/CardCoverActions.tsx": 1,
+    "app/features/library/components/LibraryCard/PlaylistCardMenu.tsx": 1,
+    "app/features/library/components/LibraryTable/LibraryTable.tsx": 2,
+    "app/features/library/components/LibraryTrackRows/LibraryTrackRow.tsx": 1,
+    "app/features/settings/sections/MembersSection/components/ImportPlexUsersDialog.tsx": 1,
+    "app/features/unidentified-files/components/GroupRow.tsx": 1
+  }
+}

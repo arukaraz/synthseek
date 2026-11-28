@@ -603,7 +603,7 @@ describe("ConfigRequestModal", () => {
 
       await user.click(row("Destination"));
 
-      expect(screen.getByRole("button", { name: "Library path" })).toHaveTextContent("Soundtracks");
+      expect(screen.getByRole("button", { name: /Library path$/ })).toHaveTextContent("Soundtracks");
       expect(screen.getByText(/Matched 1 rule:/)).toBeInTheDocument();
       expect(screen.getByText("Soundtracks", { selector: "p span" })).toBeInTheDocument();
     });
@@ -626,7 +626,7 @@ describe("ConfigRequestModal", () => {
 
       render(<ConfigRequestModal isOpen onClose={vi.fn()} item={makeAlbum()} itemType={ContentType.enum.album} />);
       await user.click(row("Destination"));
-      await user.click(screen.getByRole("button", { name: "Library path" }));
+      await user.click(screen.getByRole("button", { name: /Library path$/ }));
       await user.click(await screen.findByRole("menuitemradio", { name: "Music" }));
 
       expect(row("Destination")).toHaveTextContent("Music");
@@ -644,7 +644,7 @@ describe("ConfigRequestModal", () => {
 
       render(<ConfigRequestModal isOpen onClose={vi.fn()} item={makeAlbum()} itemType={ContentType.enum.album} />);
       await user.click(row("Destination"));
-      await user.click(screen.getByRole("button", { name: "Library path" }));
+      await user.click(screen.getByRole("button", { name: /Library path$/ }));
 
       expect(await screen.findByRole("menuitemradio", { name: "Music" })).toBeInTheDocument();
       expect(screen.queryByRole("menuitemradio", { name: "Archive" })).toBeNull();
@@ -663,7 +663,7 @@ describe("ConfigRequestModal", () => {
       render(<ConfigRequestModal isOpen onClose={vi.fn()} item={makeAlbum()} itemType={ContentType.enum.album} />);
       await user.click(row("Destination"));
 
-      expect(screen.getByRole("button", { name: "Library path" })).toBeDisabled();
+      expect(screen.getByRole("button", { name: /Library path$/ })).toBeDisabled();
       expect(
         screen.getByText("3 songs of this album are already in Music, the rest go with them.")
       ).toBeInTheDocument();
@@ -678,7 +678,7 @@ describe("ConfigRequestModal", () => {
       render(<ConfigRequestModal isOpen onClose={vi.fn()} item={makeAlbum()} itemType={ContentType.enum.album} />);
       await user.click(row("Destination"));
 
-      expect(screen.getByRole("button", { name: "Library path" })).toBeDisabled();
+      expect(screen.getByRole("button", { name: /Library path$/ })).toBeDisabled();
     });
 
     it("hides the row when there is only one path", () => {

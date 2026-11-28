@@ -33,7 +33,7 @@ export function TipBadge({ tipId, body, action }: TipBadgeProps) {
           {t("tip.label")}
         </button>
       </PopoverTrigger>
-      <PopoverContent side="bottom" align="start" className={tipContent()}>
+      <PopoverContent side="bottom" align="start" className={tipContent()} aria-label={t("tip.label")}>
         <p className={tipHeading()}>{t("tip.label")}</p>
         <p className={tipBody()}>{body}</p>
         <Link href={action.href} className={tipAction()} onClick={() => setOpen(false)}>

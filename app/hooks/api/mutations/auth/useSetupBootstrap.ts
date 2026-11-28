@@ -1,4 +1,4 @@
-import { errorToast } from "@modules/errors";
+import { extractAppCode } from "@modules/errors";
 import { trpc } from "@utils/trpc";
 
 export function useSetupBootstrap() {
@@ -10,7 +10,7 @@ export function useSetupBootstrap() {
       utils.auth.setupRequired.invalidate();
     },
     onError: (error) => {
-      errorToast(error, "auth.setupFailed");
+      if (extractAppCode(error) === "SETUP_ALREADY_COMPLETED") utils.auth.setupRequired.invalidate();
     },
   });
 }

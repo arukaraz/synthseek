@@ -30,6 +30,7 @@ export interface DataTableProps<TData> {
   onRowClick?: (item: TData) => void;
   isRowClickable?: (item: TData) => boolean;
   stickyOffset?: number;
+  totalRows?: number;
   renderExpansion?: (item: TData) => ReactNode;
   renderGroupHeader?: (item: TData, index: number) => ReactNode;
 }
@@ -39,6 +40,7 @@ export interface TableHeaderProps<TData> {
   sortState?: SortState;
   onSort?: (field: string) => void;
   rowRef?: (node: HTMLTableRowElement | null) => void;
+  rowIndex?: number;
 }
 
 export interface TableHeaderCellProps<TData> {
@@ -58,6 +60,7 @@ export interface TableBodyProps<TData> {
   staggerDelay: number;
   onRowClick?: (item: TData) => void;
   isRowClickable?: (item: TData) => boolean;
+  numbered?: boolean;
   renderExpansion?: (item: TData) => ReactNode;
   renderGroupHeader?: (item: TData, index: number) => ReactNode;
 }
@@ -66,6 +69,7 @@ export interface TableRowProps<TData> {
   item: TData;
   columns: ColumnDef<TData>[];
   index: number;
+  rowIndex?: number;
   staggerDelay: number;
   attrs?: RowAttrs;
   clickable: boolean;

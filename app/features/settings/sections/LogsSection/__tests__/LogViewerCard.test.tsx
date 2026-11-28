@@ -59,6 +59,14 @@ describe("LogViewerCard", () => {
     expect(screen.getByText("[INFO] started")).toBeInTheDocument();
   });
 
+  it("lets a keyboard scroll the log lines, as a named region", () => {
+    render(<LogViewerCard />);
+
+    const terminal = screen.getByRole("region", { name: enSettings.logs.viewer.terminalLabel });
+    expect(terminal).toHaveAttribute("tabindex", "0");
+    expect(terminal).toHaveTextContent("[INFO] started");
+  });
+
   it("shows the loading state while the tail loads", () => {
     logTailQuery = createMockQuery<LogTailResult | undefined>(undefined, { isLoading: true });
     render(<LogViewerCard />);

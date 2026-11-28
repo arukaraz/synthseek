@@ -7,7 +7,7 @@ import { useBoardDrag } from "../useBoardDrag";
 
 const motion = vi.hoisted(() => ({ reduced: true }));
 
-vi.mock("../../useMediaQuery", () => ({ useMediaQuery: () => motion.reduced }));
+vi.mock("../../useMotionReduced", () => ({ useMotionReduced: () => motion.reduced }));
 
 interface Item {
   id: string;

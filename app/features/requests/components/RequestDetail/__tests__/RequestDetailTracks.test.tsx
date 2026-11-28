@@ -162,7 +162,7 @@ describe("RequestDetailTracks sorting and details", () => {
   it("asks to sort by the column whose header was clicked", async () => {
     const props = renderTracks([makeRequestsTrack()]);
 
-    await userEvent.click(screen.getByRole("button", { name: /Artist/ }));
+    await userEvent.click(screen.getByRole("button", { name: /^Artist/ }));
 
     expect(props.onSort).toHaveBeenCalledWith("artist");
   });
@@ -170,7 +170,7 @@ describe("RequestDetailTracks sorting and details", () => {
   it("opens a track's details from its row", async () => {
     const props = renderTracks([makeRequestsTrack({ id: "a", title: "One" })]);
 
-    await userEvent.click(screen.getByRole("button", { name: "Show details of One" }));
+    await userEvent.click(screen.getByRole("button", { name: /^One/, expanded: false }));
 
     expect(props.onToggleExpanded).toHaveBeenCalledWith("a");
   });

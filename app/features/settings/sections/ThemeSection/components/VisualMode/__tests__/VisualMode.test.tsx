@@ -156,8 +156,15 @@ describe("VisualMode essentials and Show all", () => {
     expect(screen.queryByRole("button", { name: /Show all/ })).not.toBeInTheDocument();
   });
 
-  it("dots Show all while a hidden token differs from the preset, and drops the dot once expanded", async () => {
-    render(<Harness draft={withHiddenChange()} />);
+  it("drops the Show all dot once the hidden change is saved", () => {
+    const draft = withHiddenChange();
+    render(<Harness draft={draft} saved={draft} />);
+
+    expect(screen.queryByRole("img", { name: visual.hiddenChange })).not.toBeInTheDocument();
+  });
+
+  it("dots Show all while a hidden token differs from the saved theme, and drops the dot once expanded", async () => {
+    render(<Harness draft={withHiddenChange()} saved={makeDraft()} />);
 
     expect(screen.getByRole("img", { name: visual.hiddenChange })).toBeInTheDocument();
 
@@ -413,6 +420,32 @@ describe("VisualMode reset dot", () => {
     expect(dot).toBeDisabled();
   });
 
+  it("marks a row unsaved only while its value differs from the saved theme", () => {
+    const saved = makeDraft();
+    const edited = setToken(saved, "--radius", "0.75rem");
+    const unsaved = render(<Harness draft={edited} saved={saved} view={{ section: "shape" }} />);
+
+    expect(screen.getByRole("button", { name: `Reset ${radius}` })).toHaveAccessibleDescription(
+      enThemeEditor.bar.unsaved
+    );
+    unsaved.unmount();
+
+    render(<Harness draft={edited} saved={edited} view={{ section: "shape" }} />);
+    const dot = screen.getByRole("button", { name: `Reset ${radius}` });
+
+    expect(dot).not.toHaveAttribute("aria-describedby");
+    expect(dot).toBeEnabled();
+  });
+
+  it("marks a row unsaved when it went back to the preset value after a save, with nothing to reset", () => {
+    const saved = setToken(makeDraft(), "--radius", "0.75rem");
+    render(<Harness draft={makeDraft()} saved={saved} view={{ section: "shape" }} />);
+    const dot = screen.getByRole("button", { name: `Reset ${radius}` });
+
+    expect(dot).toBeDisabled();
+    expect(dot).toHaveAccessibleDescription(enThemeEditor.bar.unsaved);
+  });
+
   it("is named after the base for a token that follows another, and enabled once set by hand", async () => {
     const draft = setToken(makeDraft(), "--color-primary-600", PICKED_HEX);
     const change = vi.fn();
@@ -452,7 +485,7 @@ describe("VisualMode font rows", () => {
     const change = vi.fn();
     render(<Harness change={change} view={{ section: "typography" }} />);
 
-    await userEvent.click(screen.getByRole("button", { name: sans }));
+    await userEvent.click(screen.getByRole("button", { name: new RegExp(`^(?!About |Reset ).*${sans}$`) }));
     expect(screen.getAllByRole("menuitemradio")).toHaveLength(6);
     await userEvent.click(screen.getByRole("menuitemradio", { name: enThemeEditor.fonts.serif }));
 
@@ -464,7 +497,7 @@ describe("VisualMode font rows", () => {
     const change = vi.fn();
     render(<Harness change={change} view={{ section: "typography" }} />);
 
-    await userEvent.click(screen.getByRole("button", { name: sans }));
+    await userEvent.click(screen.getByRole("button", { name: new RegExp(`^(?!About |Reset ).*${sans}$`) }));
     expect(screen.getAllByRole("menuitemradio")).toHaveLength(7);
     await userEvent.click(screen.getByRole("menuitemradio", { name: "Inter" }));
 
@@ -473,21 +506,27 @@ describe("VisualMode font rows", () => {
 
   it("shows the factory stack as System and an extra Custom value option for a stack it does not list", async () => {
     const { unmount } = render(<Harness view={{ section: "typography" }} />);
-    expect(screen.getByRole("button", { name: sans })).toHaveTextContent(enThemeEditor.fonts.system);
+    expect(screen.getByRole("button", { name: new RegExp(`^(?!About |Reset ).*${sans}$`) })).toHaveTextContent(
+      enThemeEditor.fonts.system
+    );
     unmount();
 
     const draft = makeDraft(ALL_FOLLOWS, { "tokens/typography.css": ":root {\n  --font-sans: Papyrus, fantasy;\n}\n" });
     render(<Harness draft={draft} view={{ section: "typography" }} />);
-    expect(screen.getByRole("button", { name: sans })).toHaveTextContent(visual.customOption);
+    expect(screen.getByRole("button", { name: new RegExp(`^(?!About |Reset ).*${sans}$`) })).toHaveTextContent(
+      visual.customOption
+    );
 
-    await userEvent.click(screen.getByRole("button", { name: sans }));
+    await userEvent.click(screen.getByRole("button", { name: new RegExp(`^(?!About |Reset ).*${sans}$`) }));
     expect(screen.getAllByRole("menuitemradio")).toHaveLength(7);
   });
 
   it("offers the three mono stacks", async () => {
     render(<Harness view={{ section: "typography", showAll: true }} />);
 
-    await userEvent.click(screen.getByRole("button", { name: tokens["--font-mono"].label }));
+    await userEvent.click(
+      screen.getByRole("button", { name: new RegExp(`^(?!About |Reset ).*${tokens["--font-mono"].label}$`) })
+    );
 
     expect(screen.getAllByRole("menuitemradio").map((item) => item.textContent)).toEqual([
       enThemeEditor.fonts.systemMono,
@@ -524,7 +563,9 @@ describe("VisualMode font upload block", () => {
     expect(screen.getByRole("button", { name: "Use Inter.woff2" })).toBeInTheDocument();
     expect(screen.getAllByText(enThemeEditor.fonts.leftOut)).toHaveLength(1);
 
-    await userEvent.click(screen.getByRole("button", { name: tokens["--font-sans"].label }));
+    await userEvent.click(
+      screen.getByRole("button", { name: new RegExp(`^(?!About |Reset ).*${tokens["--font-sans"].label}$`) })
+    );
     const options = screen.getAllByRole("menuitemradio").map((option) => option.textContent);
     expect(options).toContain("Inter");
     expect(options).not.toContain("Heavy");

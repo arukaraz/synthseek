@@ -42,9 +42,32 @@ What the other members see of you: your listening, your playlists and your name 
 
 Volume normalization, the extra gain on top of it and autoplay, for your account on every device. Below them, the equalizer, compressor, transitions and conversion, which belong to the browser you set them in. The player's own settings menu holds the same controls.
 
+### Accessibility
+
+**Accessibility mode** makes text and controls easier to see and to use, and shows more of the interface at once. It is the version of Synthseek built to meet WCAG 2.2 level AA, and that describes how it is built, not a certification. With the mode off, the interface keeps its regular design and makes no such claim.
+
+| Setting               | Default                               | What it does                                                                                                                                      |
+| --------------------- | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Accessibility mode    | Off                                   | Turns the mode on for your account.                                                                                                               |
+| Reduce motion         | Follow my device                      | Calms animations and movement. Also On or Off.                                                                                                    |
+| Reduce transparency   | Follow my device                      | Swaps see-through, blurred panels for solid ones. Left on Follow my device, it matches Reduce motion.                                             |
+| More contrast         | Follow my device                      | Makes borders and outlines easier to see. The mode always uses it.                                                                                |
+| Notification duration | 2 seconds, 4 seconds with the mode on | How long a notification stays on screen: 2, 4 or 8 seconds, or until dismissed.                                                                   |
+| Single-key shortcuts  | On                                    | Lets one key on its own, like Space or /, do something. Shortcuts that use Ctrl or Command keep working.                                          |
+| Text size             | Normal                                | Larger text in this browser only. It adds to your browser's own text size and zoom.                                                               |
+| Show button names     | Off                                   | Writes the name of the icon buttons in the player and in toolbars next to their icon. Buttons repeated on every row or card keep only their icon. |
+| Mono audio            | Off                                   | Plays the same sound in both ears. It applies to playback in the app, not to short previews.                                                      |
+| Moving wave           | On                                    | Lets the wave on the seek bar swell and fall with the music. Reduce motion is a separate switch.                                                  |
+
+Everything except Text size is saved to your account. The sign-in and setup screens carry an **Accessibility** link with a shorter set of these options. What you set there is kept in the browser. When you sign in after changing an option, the options of that panel replace the ones saved to your account.
+
 ### Connections
 
 Two tabs. **Services** holds your own accounts on Spotify, Plex, Navidrome and Jellyfin, which Synthseek uses on your behalf, and your Last.fm and ListenBrainz connections, which send what you play to them and bring their discovery mixes to Discover. Each server's row also offers to count your plays on that server.
+
+YouTube is in the same list. Connect it to import your own playlists and Liked music. It takes the contents of your browser's youtube.com cookie file, in the Netscape format, which Synthseek keeps encrypted on the server.
+
+**Using an account through automated tools can lead YouTube to restrict or ban it, for a while or for good. A secondary account is the prudent choice.** [Library sources](/integrations#library-sources) says what else the connection does and does not cover.
 
 **Apps & API keys** holds what connects to your Synthseek from outside.
 
@@ -67,18 +90,19 @@ Analytics shows your plays and listening time for the last week, when you listen
 
 Administrators only. Covered on the [Users and Permissions page](/users-permissions). The approval gate, the download quotas and the server's privacy settings live here too:
 
-| Setting                           | Default | What it does                                                         |
-| --------------------------------- | ------- | -------------------------------------------------------------------- |
-| Require approval for members      | Off     | Hold a plain member's requests until an administrator approves them. |
-| Tracks per member                 | 0       | New tracks a member can request within the window. 0 is no limit.    |
-| Window                            | 7 days  | The rolling number of days the track quota counts over.              |
-| Storage per member                | 0 GB    | Space a member's music can take. 0 is no limit.                      |
-| Whole library                     | 0 GB    | Downloads stop once the library reaches this size. 0 is no limit.    |
-| Members see each other's requests | On      | When off, the Requests list shows each member only their own.        |
-| Default playlists privacy         | Shared  | How new playlists start for members who have not picked their own.   |
-| Now playing in music apps         | On      | When off, music apps and Listening now show nobody.                  |
+| Setting                            | Default | What it does                                                         |
+| ---------------------------------- | ------- | -------------------------------------------------------------------- |
+| Require approval for members       | Off     | Hold a plain member's requests until an administrator approves them. |
+| Tracks per member                  | 0       | New tracks a member can request within the window. 0 is no limit.    |
+| Window                             | 7 days  | The rolling number of days the track quota counts over.              |
+| Storage per member                 | 0 GB    | Space a member's music can take. 0 is no limit.                      |
+| Whole library                      | 0 GB    | Downloads stop once the library reaches this size. 0 is no limit.    |
+| Members see each other's requests  | On      | When off, the Requests list shows each member only their own.        |
+| Default playlists privacy          | Shared  | How new playlists start for members who have not picked their own.   |
+| Now playing in music apps          | On      | When off, music apps and Listening now show nobody.                  |
+| Album covers on the sign-in screen | On      | Shows covers from this library behind the sign-in form.              |
 
-Each plain member's row also sets that member's request preset.
+Each plain member's row also sets that member's request preset. The sign-in screen's cards, single sign-on among them, are described under [Signing in](/users-permissions#signing-in).
 
 ### Notifications
 
@@ -320,25 +344,26 @@ Two live where you use them rather than in a settings section.
 
 ### Sessions and cookies
 
-| Variable                 | Default             | What it is                                   |
-| ------------------------ | ------------------- | -------------------------------------------- |
-| `SESSION_DURATION_HOURS` | 720                 | Thirty days. Range 1 to 8760.                |
-| `COOKIE_NAME`            | `synthseek_session` | The session cookie name.                     |
-| `COOKIE_SECURE`          | false               | Set true when behind an HTTPS reverse proxy. |
-| `PLEX_CLIENT_IDENTIFIER` | `synthseek`         | Advertised during Plex sign-in.              |
+| Variable                 | Default             | What it is                                                                                                                                                        |
+| ------------------------ | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `SESSION_DURATION_HOURS` | 720                 | Thirty days. Range 1 to 8760.                                                                                                                                     |
+| `COOKIE_NAME`            | `synthseek_session` | The session cookie name.                                                                                                                                          |
+| `COOKIE_SECURE`          | false               | Set true when behind an HTTPS reverse proxy.                                                                                                                      |
+| `PLEX_CLIENT_IDENTIFIER` | `synthseek`         | Advertised during Plex sign-in.                                                                                                                                   |
+| `FORCE_LOCAL_SIGN_IN`    | false               | Turns single sign-on off until you remove it, which brings the password form back if the provider locks you out. See [Signing in](/users-permissions#signing-in). |
 
 ### Public reachability
 
-| Variable          | What it is                                                                                                                                                                                                                                                         |
-| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `PUBLIC_BASE_URL` | The public HTTPS address this instance is reachable at. Required for assistant connectors and for the Spotify OAuth callback, both of which call back over the internet. Discord, ntfy and Telegram notifications link back to it. Leave empty for local-only use. |
-| `TRUSTED_PROXIES` | Who may report a visitor's address in `X-Forwarded-For`, as comma-separated addresses or CIDR ranges. Unset, any address on a private network may. Set it to your reverse proxy's address so nothing else on your network can claim another one.                   |
+| Variable          | What it is                                                                                                                                                                                                                                                                                                                         |
+| ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `PUBLIC_BASE_URL` | The public HTTPS address this instance is reachable at. Required for assistant connectors and for the Spotify OAuth callback, both of which call back over the internet, and for single sign-on, whose provider sends people back to it. Discord, ntfy and Telegram notifications link back to it. Leave empty for local-only use. |
+| `TRUSTED_PROXIES` | Who may report a visitor's address in `X-Forwarded-For`, as comma-separated addresses or CIDR ranges. Unset, any address on a private network may. Set it to your reverse proxy's address so nothing else on your network can claim another one.                                                                                   |
 
 ### Bootstrap credentials
 
 These exist for one situation: upgrading a 1.x instance, where environment variables were the only way to configure anything. On the first boot after the upgrade each one is copied into Settings, and from then on Settings is the source of truth and the variable is never read again. Keep them for that one boot, then remove them.
 
-A fresh install needs none of them. The setup wizard collects the same values and writes them to the same place. Leave them out, because setting either slskd variable also records the instance as an upgrade from before 2.0.0 rather than a new one.
+A fresh install needs none of them. Settings holds the same values, and first-run setup asks for the slskd address and key, Plex and the MusicBrainz email. Leave them out, because setting either slskd variable also records the instance as an upgrade from before 2.0.0 rather than a new one.
 
 `SLSKD_API_URL`, `SLSKD_API_KEY`, `PLEX_URL`, `PLEX_TOKEN`, `LASTFM_API_KEY`, `FANART_API_KEY`, `ACOUSTID_API_KEY`, `MUSICBRAINZ_CONTACT_EMAIL`, `SONGLINK_API_KEY`.
 

@@ -1,6 +1,7 @@
 "use client";
 
 import { Switch } from "@components/ui/Switch";
+import { useId } from "react";
 import { useTranslation } from "react-i18next";
 
 import { libraryTypeLowerLabelKey } from "../helpers";
@@ -9,6 +10,7 @@ import type { DetailSyncConfigProps } from "./types";
 
 export function DetailSyncConfig({ itemType, syncEnabled, onToggle }: DetailSyncConfigProps) {
   const { t } = useTranslation("library");
+  const labelId = useId();
 
   return (
     <div className={detailSection()}>
@@ -17,12 +19,14 @@ export function DetailSyncConfig({ itemType, syncEnabled, onToggle }: DetailSync
       </h3>
       <div className={cfgRow()}>
         <div>
-          <div className={cfgRowLabel()}>{t("librarySource.syncConfig.keepInSync")}</div>
+          <div id={labelId} className={cfgRowLabel()}>
+            {t("librarySource.syncConfig.keepInSync")}
+          </div>
           <div className={cfgRowDesc()}>
             {t("librarySource.syncConfig.keepInSyncDesc", { type: t(libraryTypeLowerLabelKey(itemType)) })}
           </div>
         </div>
-        <Switch checked={syncEnabled} onCheckedChange={onToggle} />
+        <Switch checked={syncEnabled} onCheckedChange={onToggle} aria-labelledby={labelId} />
       </div>
     </div>
   );

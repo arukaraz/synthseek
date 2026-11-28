@@ -12,6 +12,8 @@ import { useUsers } from "@hooks/api/queries/useUsers";
 import { useDeleteUser } from "@hooks/api/mutations/users/useDeleteUser";
 import { useBulkUpdateRole } from "@hooks/api/mutations/users/useBulkUpdateRole";
 import { useBulkDeleteUsers } from "@hooks/api/mutations/users/useBulkDeleteUsers";
+import { useApproveMember, useRejectMember } from "@hooks/api/mutations/users/useMemberSignIn";
+import { useSettings } from "@hooks/api/queries/useSettings";
 
 import { SettingsCard } from "../../components/SettingsCard";
 import { SettingsPageHeader } from "../../components/SettingsPageHeader";
@@ -25,9 +27,11 @@ import { MemberRequestPresetDialog } from "./components/MemberRequestPresetDialo
 import { ImportPlexUsersDialog } from "./components/ImportPlexUsersDialog";
 import { MembersPrivacyCard } from "./components/MembersPrivacyCard";
 import { MembersToolbar } from "./components/MembersToolbar";
+import { OidcProviderCard } from "./components/OidcProviderCard";
 import { QuotasCard } from "./components/QuotasCard";
+import { SignInCard } from "./components/SignInCard";
 import { buildMemberColumns } from "./columns";
-import { sortMembers } from "./helpers";
+import { oidcLabelOf, sortMembers } from "./helpers";
 import { useMemberSelection } from "./hooks/useMemberSelection";
 import { useMemberSort } from "./hooks/useMemberSort";
 import type { MemberListItem, RoleValue } from "./types";
@@ -48,6 +52,11 @@ export function MembersSection() {
   const deleteUser = useDeleteUser();
   const bulkRole = useBulkUpdateRole();
   const bulkDelete = useBulkDeleteUsers();
+  const approve = useApproveMember();
+  const reject = useRejectMember();
+  const settings = useSettings({ enabled: isAdmin });
+  const oidcLabel = oidcLabelOf(settings.data?.connections.oidc.buttonLabel);
+  const decisionPending = approve.isPending || reject.isPending;
 
   const rows = useMemo(() => sortMembers(usersQuery.data ?? [], sort), [usersQuery.data, sort]);
   const members = useClientPagination(rows);
@@ -73,6 +82,23 @@ export function MembersSection() {
       if (confirmed) deleteUser.mutate({ id: member.id });
     },
     [deleteUser, t]
+  );
+
+  const approveMember = approve.mutate;
+  const rejectMember = reject.mutate;
+  const handleApprove = useCallback((member: MemberListItem) => approveMember({ id: member.id }), [approveMember]);
+
+  const handleReject = useCallback(
+    async (member: MemberListItem) => {
+      const confirmed = await confirm({
+        title: t("members.pending.rejectTitle"),
+        message: t("members.pending.rejectMessage", { username: member.username }),
+        variant: "danger",
+        confirmText: t("members.pending.rejectConfirm"),
+      });
+      if (confirmed) rejectMember({ id: member.id });
+    },
+    [rejectMember, t]
   );
 
   const handleBulkRole = useCallback(
@@ -107,8 +133,25 @@ export function MembersSection() {
         onEdit: setEditMember,
         onEditPreset: setPresetMember,
         onDelete: handleDelete,
+        oidcLabel,
+        onApprove: handleApprove,
+        onReject: handleReject,
+        decisionPending,
       }),
-    [t, currentUser?.id, selected, allSelected, someSelected, toggle, toggleAll, handleDelete]
+    [
+      t,
+      currentUser?.id,
+      selected,
+      allSelected,
+      someSelected,
+      toggle,
+      toggleAll,
+      handleDelete,
+      oidcLabel,
+      handleApprove,
+      handleReject,
+      decisionPending,
+    ]
   );
 
   if (!isAdmin) {
@@ -183,11 +226,14 @@ export function MembersSection() {
       <ApprovalCard />
       <QuotasCard />
       <MembersPrivacyCard />
+      <SignInCard />
+      <OidcProviderCard />
 
       <CreateLocalUserDialog open={createOpen} onOpenChange={setCreateOpen} />
       <ImportPlexUsersDialog open={importOpen} onOpenChange={setImportOpen} />
       <EditUserDialog
         member={editMember}
+        oidcLabel={oidcLabel}
         open={editMember !== null}
         onOpenChange={(open) => {
           if (!open) setEditMember(null);

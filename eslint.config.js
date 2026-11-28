@@ -4,6 +4,8 @@ import htmlEntities from "eslint-plugin-i18next/lib/options/htmlEntities.js";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
 
+import { a11yConfigBlocks } from "./lint/a11y-groups.js";
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -195,6 +197,8 @@ const eslintConfig = [
       "i18next/no-literal-string": ["error", noLiteralStringOptions],
     },
   },
+
+  ...a11yConfigBlocks,
 
   {
     ignores: [

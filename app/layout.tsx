@@ -1,10 +1,22 @@
+import { PageTitle } from "@components/PageTitle";
+import { TruncationTitles } from "@components/TruncationTitles";
 import { Toaster } from "@components/ui/Toaster";
 import { TooltipProvider } from "@components/ui/Tooltip";
 import { DEFAULT_LOCALE, isLocale, LANG_COOKIE } from "@locale/config";
+import {
+  accessibilityAttributesOf,
+  ACCESSIBILITY_COOKIE,
+  parseAccessibilityCookie,
+  parseTextSize,
+  TEXT_SIZE_COOKIE,
+  textSizeAttributesOf,
+} from "@modules/accessibility";
+import { AccessibilityProvider } from "@modules/providers/AccessibilityProvider";
 import { AuthProvider } from "@modules/providers/AuthProvider";
 import { ClientSessionIdProvider } from "@modules/providers/ClientSessionIdProvider";
 import { CountryProvider } from "@modules/providers/CountryProvider";
 import { I18nProvider } from "@modules/providers/I18nProvider";
+import { MotionProvider } from "@modules/providers/MotionProvider";
 import { TRPCProvider } from "@modules/providers/TRPCProvider";
 import { fontVariables } from "@theme/fonts";
 import "@theme/index.css";
@@ -20,7 +32,6 @@ import type { Metadata, Viewport } from "next";
 import { cookies } from "next/headers";
 
 export const metadata: Metadata = {
-  title: "Synthseek",
   description: "Intelligent music download and library management.",
 };
 
@@ -44,8 +55,17 @@ export default async function RootLayout({
     ...(boot.theme === "custom" ? { [THEME_BASE_ATTRIBUTE]: boot.base } : {}),
   };
 
+  const accessibilityBoot = parseAccessibilityCookie(cookieStore.get(ACCESSIBILITY_COOKIE)?.value);
+  const textSizeBoot = parseTextSize(cookieStore.get(TEXT_SIZE_COOKIE)?.value);
+
   return (
-    <html lang={locale} {...themeAttributes} suppressHydrationWarning>
+    <html
+      lang={locale}
+      {...themeAttributes}
+      {...accessibilityAttributesOf(accessibilityBoot)}
+      {...textSizeAttributesOf(textSizeBoot)}
+      suppressHydrationWarning
+    >
       <head>
         <ThemeHead boot={boot} />
       </head>
@@ -53,14 +73,20 @@ export default async function RootLayout({
         <ClientSessionIdProvider>
           <TRPCProvider>
             <AuthProvider>
-              <ThemeProvider boot={boot}>
-                <TooltipProvider delayDuration={150} skipDelayDuration={0}>
-                  <I18nProvider locale={locale}>
-                    <CountryProvider>{children}</CountryProvider>
-                  </I18nProvider>
-                </TooltipProvider>
-                <Toaster />
-              </ThemeProvider>
+              <AccessibilityProvider boot={accessibilityBoot} textSizeBoot={textSizeBoot}>
+                <ThemeProvider boot={boot}>
+                  <TooltipProvider delayDuration={150} skipDelayDuration={0}>
+                    <I18nProvider locale={locale}>
+                      <MotionProvider>
+                        <PageTitle />
+                        <TruncationTitles />
+                        <CountryProvider>{children}</CountryProvider>
+                      </MotionProvider>
+                    </I18nProvider>
+                  </TooltipProvider>
+                  <Toaster />
+                </ThemeProvider>
+              </AccessibilityProvider>
             </AuthProvider>
           </TRPCProvider>
         </ClientSessionIdProvider>

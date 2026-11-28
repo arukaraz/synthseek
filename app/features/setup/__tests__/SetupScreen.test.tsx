@@ -1,8 +1,11 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
+import type { SetupGate } from "@hooks/ui/types";
+import enSetup from "@modules/i18n/messages/en/setup.json";
 
 import { SetupScreen } from "../SetupScreen";
-import type { SetupGate } from "@hooks/ui/types";
 
 let gate: SetupGate;
 
@@ -10,47 +13,50 @@ vi.mock("@hooks/ui/useSetupRedirect", () => ({
   useSetupRedirect: () => gate,
 }));
 
-vi.mock("../components/SetupWizard", () => ({
-  SetupWizard: () => <div data-testid="setup-wizard" />,
+vi.mock("../components/SetupFlow", () => ({
+  SetupFlow: () => <div data-testid="setup-flow" />,
 }));
 
-const skeleton = () => screen.queryByText("Loading setup");
-const wizard = () => screen.queryByTestId("setup-wizard");
+const skeleton = () => screen.queryByText(enSetup.shell.loading);
+const flow = () => screen.queryByTestId("setup-flow");
 
 describe("SetupScreen", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  it("renders the skeleton and not the wizard while resolving", () => {
+  it("shows the skeleton and not the flow while resolving", () => {
     gate = { status: "resolving" };
     render(<SetupScreen />);
 
     expect(skeleton()).toBeInTheDocument();
-    expect(wizard()).not.toBeInTheDocument();
+    expect(flow()).not.toBeInTheDocument();
   });
 
-  it("renders the skeleton and not the wizard while redirecting", () => {
+  it("shows the skeleton and not the flow while redirecting", () => {
     gate = { status: "redirecting" };
     render(<SetupScreen />);
 
     expect(skeleton()).toBeInTheDocument();
-    expect(wizard()).not.toBeInTheDocument();
+    expect(flow()).not.toBeInTheDocument();
   });
 
-  it("renders the skeleton and not the wizard on error", () => {
-    gate = { status: "error" };
+  it("offers a retry on a gate error and retries when asked", async () => {
+    const retry = vi.fn();
+    gate = { status: "error", retry };
     render(<SetupScreen />);
 
-    expect(skeleton()).toBeInTheDocument();
-    expect(wizard()).not.toBeInTheDocument();
+    expect(flow()).not.toBeInTheDocument();
+    await userEvent.click(screen.getByRole("button", { name: enSetup.shell.retry }));
+
+    expect(retry).toHaveBeenCalledTimes(1);
   });
 
-  it("renders the wizard and not the skeleton when ready", () => {
+  it("shows the flow and not the skeleton when ready", () => {
     gate = { status: "ready" };
     render(<SetupScreen />);
 
-    expect(wizard()).toBeInTheDocument();
+    expect(flow()).toBeInTheDocument();
     expect(skeleton()).not.toBeInTheDocument();
   });
 });

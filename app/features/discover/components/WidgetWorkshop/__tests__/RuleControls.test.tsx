@@ -16,7 +16,7 @@ function renderRule(rule: WidgetRule, playlists: { id: string; name: string }[] 
 }
 
 function selected(name: string): string | null {
-  return screen.getByRole("button", { name }).textContent;
+  return screen.getByRole("button", { name: new RegExp(`${name}$`) }).textContent;
 }
 
 describe("RuleControls", () => {

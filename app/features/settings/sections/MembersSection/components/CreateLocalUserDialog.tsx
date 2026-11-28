@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Button } from "@components/ui/Button";
+import { InlineError } from "@components/ui/InlineError";
 import {
   Dialog,
   DialogContent,
@@ -71,6 +72,7 @@ export function CreateLocalUserDialog({ open, onOpenChange }: CreateLocalUserDia
               onChange={setEmail}
               placeholder={t("members.create.emailPlaceholder")}
               ariaLabel={t("members.create.emailAriaLabel")}
+              autoComplete="off"
             />
           </SettingsField>
 
@@ -86,6 +88,7 @@ export function CreateLocalUserDialog({ open, onOpenChange }: CreateLocalUserDia
               onChange={setUsername}
               placeholder={t("members.create.usernamePlaceholder")}
               ariaLabel={t("members.create.usernameAriaLabel")}
+              autoComplete="off"
             />
           </SettingsField>
 
@@ -98,6 +101,7 @@ export function CreateLocalUserDialog({ open, onOpenChange }: CreateLocalUserDia
               onChange={setPassword}
               source={TYPED_SECRET}
               ariaLabel={t("members.create.passwordAriaLabel")}
+              autoComplete="new-password"
             />
           </SettingsField>
 
@@ -109,6 +113,8 @@ export function CreateLocalUserDialog({ open, onOpenChange }: CreateLocalUserDia
               ariaLabel={t("members.create.roleAriaLabel")}
             />
           </SettingsField>
+
+          <InlineError error={create.error} />
 
           <DialogFooter>
             <Button type="submit" size="sm" disabled={!canSubmit}>

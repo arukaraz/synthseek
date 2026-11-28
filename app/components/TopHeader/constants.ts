@@ -15,3 +15,5 @@ export const OMNI_RESULT_LIMIT = 6;
 export const OMNI_DEBOUNCE_MS = 250;
 
 export const OMNI_LIST_ID = "omni-search-options";
+
+export const OMNI_PANEL_EDGE_PX = 16;

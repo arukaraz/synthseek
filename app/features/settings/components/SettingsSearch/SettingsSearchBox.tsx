@@ -13,7 +13,7 @@ export function SettingsSearchBox({ value, onChange, onSubmit }: SettingsSearchB
   const { t } = useTranslation("settings");
 
   return (
-    <div className={searchBox()} role="search">
+    <div className={searchBox()} role="search" aria-label={t("shell.search.label")}>
       <Search className={searchIcon()} aria-hidden />
       <Input
         id={SEARCH_INPUT_ID}

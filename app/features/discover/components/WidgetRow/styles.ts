@@ -36,7 +36,7 @@ export const widgetRowMain = cva("flex min-w-0 flex-1 items-center gap-3 text-le
 export const widgetRowCover = cva("bg-surface-sunken relative size-10 shrink-0 overflow-hidden rounded-md");
 
 export const widgetRowCoverAction = cva(
-  "text-overlay-fg focus-visible:ring-primary-400 absolute inset-0 z-10 flex items-center justify-center bg-veil/55 opacity-0 transition-opacity outline-none group-hover/row:opacity-100 focus-visible:opacity-100 focus-visible:ring-2 focus-visible:ring-inset [@media(hover:none)]:bg-veil/35 [@media(hover:none)]:opacity-100 [&_svg]:size-4 [&_svg]:fill-current"
+  "text-overlay-fg focus-visible:ring-primary-400 absolute inset-0 z-10 flex items-center justify-center bg-veil/55 opacity-0 transition-opacity outline-none group-hover/row:opacity-100 focus-visible:opacity-100 a11y-mode:bg-veil/35 a11y-mode:opacity-100 focus-visible:ring-2 focus-visible:ring-inset [@media(hover:none)]:bg-veil/35 [@media(hover:none)]:opacity-100 [&_svg]:size-4 [&_svg]:fill-current"
 );
 
 export const widgetRowCopy = cva("flex min-w-0 flex-col");

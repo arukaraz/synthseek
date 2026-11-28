@@ -3,7 +3,7 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { MAX_DOTS } from "./constants";
-import { dotBase, dotsRow, navArrow, navContainer } from "./styles";
+import { dotBase, dotButton, dotsRow, navArrow, navContainer } from "./styles";
 import type { TrendingHeroNavProps } from "./types";
 
 export function TrendingHeroNav({ total, currentIndex, onSelect, onPrev, onNext }: TrendingHeroNavProps) {
@@ -30,8 +30,10 @@ export function TrendingHeroNav({ total, currentIndex, onSelect, onPrev, onNext 
               type="button"
               onClick={() => onSelect(realIndex)}
               aria-label={t("trendingHero.slideAriaLabel", { number: index + 1 })}
-              className={dotBase({ active: isActive })}
-            />
+              className={dotButton()}
+            >
+              <span className={dotBase({ active: isActive })} />
+            </button>
           );
         })}
       </div>

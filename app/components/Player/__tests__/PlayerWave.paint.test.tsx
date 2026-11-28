@@ -6,6 +6,26 @@ import { createPlayerActions, createPlayerTrack, createPlayerView } from "@test/
 import { PlayerWave } from "../PlayerWave";
 import type { PlayerView } from "../types";
 
+const accessibility = vi.hoisted(() => ({ reactiveWave: true, heard: 1 }));
+const painted = vi.hoisted(() => ({ energies: [] as number[] }));
+
+vi.mock("@hooks/ui/player/energy", () => ({ audioEnergy: () => accessibility.heard }));
+
+vi.mock("@modules/providers/AccessibilityProvider", () => ({
+  useAccessibility: () => ({ reactiveWave: accessibility.reactiveWave }),
+}));
+
+vi.mock("../helpers", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("../helpers")>();
+  return {
+    ...actual,
+    paintWave: (...args: Parameters<typeof actual.paintWave>) => {
+      painted.energies.push(args[2].energy);
+      actual.paintWave(...args);
+    },
+  };
+});
+
 const surfaces: FakeSurface[] = [];
 const frames = new Map<number, () => void>();
 let nextFrameId = 0;
@@ -95,6 +115,9 @@ beforeEach(() => {
   nextFrameId = 0;
   resizeCallbacks = [];
   stillness = false;
+  accessibility.reactiveWave = true;
+  accessibility.heard = 1;
+  painted.energies.length = 0;
 
   vi.stubGlobal("ResizeObserver", FakeResizeObserver);
   vi.stubGlobal("requestAnimationFrame", (callback: FrameRequestCallback) => {
@@ -185,6 +208,35 @@ describe("painting the wave", () => {
     paint();
 
     expect(pendingFrames()).toBe(0);
+  });
+
+  it("lets the wave swell and fall with the music by default", () => {
+    accessibility.heard = 0.3;
+    renderWave({ playing: true });
+
+    for (let frame = 0; frame < 20; frame += 1) paint(100);
+
+    expect(Math.min(...painted.energies)).toBeLessThan(1);
+  });
+
+  it("keeps the wave at one steady height when it has been asked not to react", () => {
+    accessibility.reactiveWave = false;
+    accessibility.heard = 0.3;
+    renderWave({ playing: true });
+
+    for (let frame = 0; frame < 20; frame += 1) paint(100);
+
+    expect(painted.energies.length).toBeGreaterThan(1);
+    expect(new Set(painted.energies)).toEqual(new Set([1]));
+  });
+
+  it("still travels with the track while it is not reacting, because that motion is not the music", () => {
+    accessibility.reactiveWave = false;
+    renderWave({ playing: true });
+
+    paint();
+
+    expect(pendingFrames()).toBeGreaterThan(0);
   });
 
   it("paints again when the strip is resized", () => {

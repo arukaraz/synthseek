@@ -9,7 +9,7 @@ import { createMockUser } from "@test/mocks/feature-hooks.mock";
 import { BulkEditBar } from "../components/BulkEditBar";
 import { MemberActionsCell } from "../components/MemberActionsCell";
 import { MemberRoleBadge } from "../components/MemberRoleBadge";
-import { MemberTypeBadge } from "../components/MemberTypeBadge";
+import { MemberSignInCell } from "../components/MemberSignInCell";
 import { MemberUserCell } from "../components/MemberUserCell";
 import { MembersToolbar } from "../components/MembersToolbar";
 
@@ -20,15 +20,29 @@ afterEach(() => {
   vi.restoreAllMocks();
 });
 
-describe("MemberTypeBadge", () => {
-  it("renders the plex label for plex users", () => {
-    render(<MemberTypeBadge isPlexUser />);
-    expect(screen.getByText(enSettings.members.type.plex)).toBeInTheDocument();
+describe("MemberSignInCell", () => {
+  it("lists a password, then each linked account by its provider", () => {
+    render(
+      <MemberSignInCell
+        member={createMockUser({
+          hasPassword: true,
+          signInIdentities: [
+            { id: "p", provider: "plex", displayName: "ana" },
+            { id: "o", provider: "oidc", displayName: null },
+          ],
+        })}
+        oidcLabel="Authentik"
+      />
+    );
+
+    const chips = screen.getAllByRole("listitem").map((item) => item.textContent);
+    expect(chips).toEqual([enSettings.members.signsIn.password, enSettings.members.signsIn.plex, "Authentik"]);
   });
 
-  it("renders the local label for local users", () => {
-    render(<MemberTypeBadge isPlexUser={false} />);
-    expect(screen.getByText(enSettings.members.type.local)).toBeInTheDocument();
+  it("says so when an account has no way in yet", () => {
+    render(<MemberSignInCell member={createMockUser({ hasPassword: false, signInIdentities: [] })} oidcLabel="SSO" />);
+
+    expect(screen.getByText(enSettings.members.signsIn.none)).toBeInTheDocument();
   });
 });
 
@@ -104,6 +118,8 @@ describe("BulkEditBar", () => {
 });
 
 describe("MemberActionsCell", () => {
+  const decisions = { onApprove: vi.fn(), onReject: vi.fn(), decisionPending: false };
+
   it("enables the delete button for a deletable member", () => {
     render(
       <MemberActionsCell
@@ -112,6 +128,7 @@ describe("MemberActionsCell", () => {
         onEdit={vi.fn()}
         onEditPreset={vi.fn()}
         onDelete={vi.fn()}
+        {...decisions}
       />
     );
     expect(screen.getByLabelText("Delete alice")).not.toBeDisabled();
@@ -125,6 +142,7 @@ describe("MemberActionsCell", () => {
         onEdit={vi.fn()}
         onEditPreset={vi.fn()}
         onDelete={vi.fn()}
+        {...decisions}
       />
     );
     expect(screen.getByLabelText("Delete self")).toBeDisabled();
@@ -138,8 +156,25 @@ describe("MemberActionsCell", () => {
         onEdit={vi.fn()}
         onEditPreset={vi.fn()}
         onDelete={vi.fn()}
+        {...decisions}
       />
     );
     expect(screen.getByLabelText("Delete owner")).toBeDisabled();
+  });
+
+  it("offers only Approve and Reject on an account waiting for approval", () => {
+    render(
+      <MemberActionsCell
+        member={createMockUser({ id: "m2", username: "zed", pendingApproval: true })}
+        currentUserId="current"
+        onEdit={vi.fn()}
+        onEditPreset={vi.fn()}
+        onDelete={vi.fn()}
+        {...decisions}
+      />
+    );
+    expect(screen.getByLabelText("Approve zed")).toBeInTheDocument();
+    expect(screen.getByLabelText("Reject zed")).toBeInTheDocument();
+    expect(screen.queryByLabelText("Edit zed")).not.toBeInTheDocument();
   });
 });

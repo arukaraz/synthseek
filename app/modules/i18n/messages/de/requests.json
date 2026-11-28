@@ -171,8 +171,6 @@
     "prioritized": "Priorisiert",
     "explicit": "Explizit",
     "disc": "CD {{number}}",
-    "showDetails": "Details zu {{title}} zeigen",
-    "hideDetails": "Details zu {{title}} ausblenden",
     "actionsFor": "Aktionen für {{title}}",
     "nextTry": "nächster Versuch {{time}}",
     "noTrySet": "wartet auf den nächsten Durchlauf",

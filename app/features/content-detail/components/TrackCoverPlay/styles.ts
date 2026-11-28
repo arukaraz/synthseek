@@ -15,9 +15,9 @@ export const coverPlayImage = cva("h-full w-full object-cover");
 export const coverPlayInitials = cva("text-fg/60 grid h-full w-full place-items-center text-11 font-bold");
 
 export const coverPlayVeil = cva(
-  "text-overlay-fg absolute inset-0 grid place-items-center bg-veil/65 opacity-0 transition-opacity group-hover/cover:opacity-100 group-focus-visible/cover:opacity-100"
+  "text-overlay-fg absolute inset-0 grid place-items-center bg-veil/65 opacity-0 transition-opacity group-hover/cover:opacity-100 group-focus-visible/cover:opacity-100 a11y-mode:opacity-100"
 );
 
 export const coverPlayBars = cva(
-  "text-overlay-fg absolute inset-0 grid place-items-center bg-veil/65 transition-opacity group-hover/cover:opacity-0 group-focus-visible/cover:opacity-0"
+  "text-overlay-fg absolute inset-0 grid place-items-center bg-veil/65 transition-opacity group-hover/cover:opacity-0 group-focus-visible/cover:opacity-0 a11y-mode:opacity-0"
 );

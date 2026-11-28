@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Dialog, DialogSurface, DialogTitle } from "@components/ui/Dialog";
@@ -14,7 +15,7 @@ import {
   STAGE_IMMERSIVE_QUERY,
   STAGE_WIDE_QUERY,
 } from "./constants";
-import { returnFocusTo, stageLayout } from "./helpers";
+import { returnFocusToOpener, stageLayout } from "./helpers";
 import { srOnly, stage } from "./styles";
 import type { PlayerProps } from "./types";
 
@@ -24,6 +25,7 @@ export function PlayerStage({ view, actions }: PlayerProps) {
   const short = useMediaQuery(SHORT_LANDSCAPE_QUERY);
   const immersive = useMediaQuery(STAGE_IMMERSIVE_QUERY);
   const layout = stageLayout(wide, short, immersive);
+  const [opener] = useState(() => (typeof document === "undefined" ? null : document.activeElement));
 
   return (
     <Dialog
@@ -39,7 +41,7 @@ export function PlayerStage({ view, actions }: PlayerProps) {
         aria-describedby={undefined}
         onCloseAutoFocus={(event) => {
           event.preventDefault();
-          returnFocusTo(FULLSCREEN_TOGGLE_SELECTOR, OPEN_TRACK_SELECTOR);
+          returnFocusToOpener(opener, FULLSCREEN_TOGGLE_SELECTOR, OPEN_TRACK_SELECTOR);
         }}
         onEscapeKeyDown={(event) => {
           if (layout !== "immersive") return;

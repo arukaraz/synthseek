@@ -72,7 +72,7 @@ describe("LidarrSelect", () => {
       />
     );
 
-    expect(screen.getByRole("button", { name: "Root folder" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: /Root folder$/ })).toBeDisabled();
   });
 
   it("opens the menu and selects an option", async () => {
@@ -88,7 +88,7 @@ describe("LidarrSelect", () => {
       />
     );
 
-    await user.click(screen.getByRole("button", { name: "Root folder" }));
+    await user.click(screen.getByRole("button", { name: /Root folder$/ }));
 
     const items = await screen.findAllByRole("menuitemradio");
     expect(items).toHaveLength(OPTIONS.length);
@@ -110,7 +110,7 @@ describe("LidarrSelect", () => {
       />
     );
 
-    await user.click(screen.getByRole("button", { name: "Root folder" }));
+    await user.click(screen.getByRole("button", { name: /Root folder$/ }));
 
     const descriptions = await screen.findAllByText("50 GB free");
     expect(descriptions.length).toBeGreaterThan(0);

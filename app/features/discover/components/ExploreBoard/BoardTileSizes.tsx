@@ -3,6 +3,7 @@
 import { useTranslation } from "react-i18next";
 
 import { LockedAction } from "@components/ui/LockedAction";
+import { nameAfterVisibleText } from "@utils/accessibleName";
 import { BOARD_SIZE_LABEL_KEYS, BOARD_SIZE_NAME_KEYS, BOARD_SIZE_ORDER } from "./constants";
 import { allowedSizesOf } from "./helpers";
 import { sizeChip, sizeGroup } from "./styles";
@@ -31,7 +32,7 @@ export function BoardTileSizes({ item, name, custom, dense = false, onResize }: 
             key={size}
             type="button"
             aria-pressed={size === item.size}
-            aria-label={t(BOARD_SIZE_NAME_KEYS[size])}
+            aria-label={nameAfterVisibleText(t(BOARD_SIZE_NAME_KEYS[size]), t(BOARD_SIZE_LABEL_KEYS[size]))}
             className={sizeChip({ active: size === item.size, dense })}
             onClick={() => onResize(item.id, size)}
           >

@@ -21,6 +21,7 @@ const spies = vi.hoisted(() => {
     start: vi.fn(),
     reset: vi.fn(),
     phase: "idle",
+    session: null,
     isPending: false,
   };
   return {

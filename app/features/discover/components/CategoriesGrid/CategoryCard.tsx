@@ -5,12 +5,19 @@ import { artworkImage } from "@utils/artworkProxy";
 import { Music } from "lucide-react";
 import Image from "next/image";
 import { categoryPlaceholder } from "../styles";
-import { useState } from "react";
+import { useId, useState } from "react";
 import { sizeClasses } from "./styles";
 import type { CategoryCardProps } from "./types";
 
-export function CategoryCard({ category, size = "small", className, onClick }: CategoryCardProps) {
+export function CategoryCard({
+  category,
+  size = "small",
+  heading: Heading = "h3",
+  className,
+  onClick,
+}: CategoryCardProps) {
   const [imageError, setImageError] = useState(false);
+  const titleId = useId();
   const imageUrl = category.images?.[0]?.url;
 
   const handleClick = () => {
@@ -19,7 +26,6 @@ export function CategoryCard({ category, size = "small", className, onClick }: C
 
   return (
     <div
-      onClick={handleClick}
       className={cn(
         "group relative h-full cursor-pointer overflow-hidden rounded-lg",
         "transition-transform duration-200 hover:-translate-y-0.5",
@@ -46,20 +52,24 @@ export function CategoryCard({ category, size = "small", className, onClick }: C
       <div className="from-veil/80 via-veil/40 absolute inset-0 bg-linear-to-t to-transparent" />
 
       <div className="absolute right-0 bottom-0 left-0 z-10 p-3">
-        <h3
+        <Heading
+          id={titleId}
           className={cn(
             "text-overlay-fg font-bold",
             size === "large" ? "text-lg sm:text-xl" : size === "medium" ? "text-base" : "text-sm"
           )}
         >
           {category.name}
-        </h3>
+        </Heading>
       </div>
 
-      <div
+      <button
+        type="button"
+        onClick={handleClick}
+        aria-labelledby={titleId}
         className={cn(
-          "absolute inset-0 rounded-lg border-2 border-transparent transition-colors duration-200",
-          "group-hover:border-primary-500/50"
+          "absolute inset-0 z-20 cursor-pointer rounded-lg border-2 border-transparent transition-colors duration-200 outline-none",
+          "group-hover:border-primary-500/50 focus-visible:border-primary-400"
         )}
       />
     </div>

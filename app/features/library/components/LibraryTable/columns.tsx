@@ -57,7 +57,7 @@ export function buildTrackColumns(options: TrackColumnOptions): ColumnDef<Librar
     },
     {
       key: "actions",
-      header: "",
+      header: <span className="sr-only">{i18n.t("library:page.columns.actions")}</span>,
       cell: (item) => (
         <TrackActionsCell
           item={item}

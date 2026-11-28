@@ -89,7 +89,7 @@ export function SearchSelect<T extends string | number>({
           <ChevronDown className={searchSelectChevron()} aria-hidden />
         </button>
       </PopoverTrigger>
-      <PopoverContent align="start" className={searchSelectContent()}>
+      <PopoverContent align="start" className={searchSelectContent()} aria-label={ariaLabel}>
         <div className={searchSelectField()}>
           <Search className={searchSelectIcon()} aria-hidden />
           <Input

@@ -7,6 +7,7 @@ type LibrarySourceKey = inferRouterInputs<AppRouter>["librarySource"]["provider"
 
 export const LIBRARY_SOURCE_NAMES = {
   spotify: "Spotify",
+  youtube: "YouTube",
   ...PLAYBACK_SERVER_NAMES,
 } as const satisfies Record<LibrarySourceKey, string>;
 

@@ -7,6 +7,7 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from "@components/ui/DropdownMenu";
+import { nameAfterVisibleText } from "@utils/accessibleName";
 import { cn } from "@utils/cn";
 import { ChevronDown, ChevronLeft, ChevronRight, MoreHorizontal } from "lucide-react";
 import { useTranslation } from "react-i18next";
@@ -38,6 +39,7 @@ export function Pagination({
   const { t } = useTranslation("components");
   const { start, end } = pageRangeLabel(page, pageSize, totalItems);
   const pages = buildPageRange(page, pageCount);
+  const perPage = t("pagination.perPage", { defaultValue: "{{size}} / page", size: pageSize });
 
   return (
     <div className={cn(paginationContainer(), className)}>
@@ -56,9 +58,9 @@ export function Pagination({
             <button
               type="button"
               className={paginationSizeTrigger()}
-              aria-label={t("pagination.rowsPerPage", { defaultValue: "Rows per page" })}
+              aria-label={nameAfterVisibleText(t("pagination.rowsPerPage", { defaultValue: "Rows per page" }), perPage)}
             >
-              {t("pagination.perPage", { defaultValue: "{{size}} / page", size: pageSize })}
+              {perPage}
               <ChevronDown className="size-3.5 opacity-50" />
             </button>
           </DropdownMenuTrigger>

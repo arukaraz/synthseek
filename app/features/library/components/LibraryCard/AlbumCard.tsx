@@ -1,23 +1,18 @@
 "use client";
 
 import { Checkbox } from "@components/ui/Checkbox";
+import { useListPosition } from "@hooks/ui/useListPosition";
 import { useLongPress } from "@hooks/ui/useLongPress";
-import { cn } from "@utils/cn";
 import { artworkImage } from "@utils/artworkProxy";
+import { listPositionAttributes } from "@utils/list-position";
 import Image from "next/image";
 import { useTranslation } from "react-i18next";
 
 import { CardCoverActions } from "./CardCoverActions";
 import { CardPlayButton } from "./CardPlayButton";
-import {
-  albumMetaLine,
-  cardCoverTone,
-  cardInitials,
-  handleCardActivationKey,
-  onOwnClick,
-  shieldCardActivationKey,
-  statusDotClass,
-} from "./helpers";
+import { CardStatusDot } from "./CardStatusDot";
+import { albumMetaLine, cardCoverTone, cardInitials, onOwnClick } from "./helpers";
+import { RowPrimaryButton } from "./RowPrimaryButton";
 import {
   cardBody,
   cardBodyRow,
@@ -29,7 +24,6 @@ import {
   cardSelectBox,
   cardSelectCheckbox,
   cardStatusBadge,
-  cardStatusDot,
   cardSubtitle,
   cardTitle,
 } from "./styles";
@@ -46,6 +40,7 @@ export function AlbumCard({
   onHold,
 }: AlbumCardProps) {
   const longPress = useLongPress(onHold);
+  const position = useListPosition();
   const { t } = useTranslation(["contentDetail", "library"]);
   const meta = albumMetaLine(
     item.year,
@@ -65,13 +60,9 @@ export function AlbumCard({
     <li
       data-part="media-tile"
       data-type="album"
+      {...listPositionAttributes(position)}
       className={cardRoot({ interactive: activates })}
-      role={activates ? "button" : undefined}
-      tabIndex={activates ? 0 : undefined}
-      aria-label={selecting ? selectLabel : activates ? t("contentDetail:openDetail", { name: item.name }) : undefined}
-      aria-pressed={selecting ? selection?.selected : undefined}
       onClick={activates ? onOwnClick((event) => activate(event.shiftKey)) : undefined}
-      onKeyDown={activates ? (event) => handleCardActivationKey(event, () => activate(event.shiftKey)) : undefined}
       onMouseDown={
         selecting
           ? (event) => {
@@ -98,7 +89,7 @@ export function AlbumCard({
           </span>
         )}
         <span className={cardStatusBadge()}>
-          <span className={cn(cardStatusDot(), statusDotClass(item.status))} />
+          <CardStatusDot status={item.status} />
           {item.completed_tracks}/{item.total_tracks}
         </span>
         {onPlay && chrome === "overlay" ? <CardCoverActions name={item.name} order="inOrder" onPlay={onPlay} /> : null}
@@ -116,7 +107,6 @@ export function AlbumCard({
               selection.onToggle(event.shiftKey);
             }}
             onClick={(event) => event.stopPropagation()}
-            onKeyDown={shieldCardActivationKey}
           >
             <Checkbox
               checked={selection.selected}
@@ -131,7 +121,16 @@ export function AlbumCard({
       <div className={cardBodyRow()}>
         <div className={cardBody()}>
           <p className={cardTitle()} data-part="media-tile-title">
-            {item.name}
+            {activates ? (
+              <RowPrimaryButton
+                label={selecting ? selectLabel : t("contentDetail:openDetail", { name: item.name })}
+                pressed={selecting ? selection?.selected : undefined}
+              >
+                {item.name}
+              </RowPrimaryButton>
+            ) : (
+              item.name
+            )}
           </p>
           <p className={cardSubtitle()}>{item.artist}</p>
           {meta ? <p className={cardMeta()}>{meta}</p> : null}

@@ -76,6 +76,7 @@ export function TrackDetailHead({ track, release, showRawError }: TrackDetailHea
           <div
             className={detailProgress()}
             role="progressbar"
+            aria-label={t("status:request.downloading.label")}
             aria-valuemin={0}
             aria-valuemax={100}
             aria-valuenow={percent}

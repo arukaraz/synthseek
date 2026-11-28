@@ -46,6 +46,12 @@ describe("RecentScrobblesRail", () => {
     expect(screen.getAllByTestId("node")).toHaveLength(2);
   });
 
+  it("lets a keyboard scroll the rail, as a named region", () => {
+    renderWithProviders(<RecentScrobblesRail scrobbles={[createScrobble()]} />);
+
+    expect(screen.getByRole("region", { name: "Recent plays" })).toHaveAttribute("tabindex", "0");
+  });
+
   it("hides both edge affordances when content fits without scrolling", () => {
     renderWithProviders(<RecentScrobblesRail scrobbles={[createScrobble()]} />);
 

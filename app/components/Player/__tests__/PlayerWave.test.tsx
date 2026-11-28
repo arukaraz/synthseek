@@ -1,6 +1,7 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { act, fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+import i18n from "@locale";
 import { createPlayerActions, createPlayerTrack, createPlayerView } from "@test/factories";
 
 import { SEEK_PAGE_SECONDS, SEEK_STEP_SECONDS } from "../constants";
@@ -49,7 +50,38 @@ describe("the seek bar as a slider", () => {
     expect(slider).toHaveAttribute("aria-valuemin", "0");
     expect(slider).toHaveAttribute("aria-valuemax", "300");
     expect(slider).toHaveAttribute("aria-valuenow", "65");
-    expect(slider).toHaveAttribute("aria-valuetext", "1:05");
+    expect(slider).toHaveAttribute("aria-valuetext", "1 minute 5 seconds of 5 minutes");
+  });
+
+  it("says the position in words in the other languages too", async () => {
+    await i18n.changeLanguage("es");
+    try {
+      const { slider } = renderWave({ positionSeconds: 65 });
+
+      expect(slider).toHaveAttribute("aria-valuetext", "1 minuto 5 segundos de 5 minutos");
+    } finally {
+      await i18n.changeLanguage("en");
+    }
+  });
+
+  it("holds the spoken position still while focused, so a screen reader is not read a new value every second", () => {
+    const actions = createPlayerActions();
+    const track = createPlayerTrack({ durationSeconds: 300 });
+    const { rerender } = render(
+      <PlayerWave view={createPlayerView({ track, positionSeconds: 10 })} actions={actions} size="bar" />
+    );
+    const slider = screen.getByRole("slider");
+
+    act(() => slider.focus());
+    rerender(<PlayerWave view={createPlayerView({ track, positionSeconds: 11 })} actions={actions} size="bar" />);
+    expect(slider).toHaveAttribute("aria-valuenow", "10");
+
+    fireEvent.keyDown(slider, { key: "ArrowUp" });
+    expect(slider).toHaveAttribute("aria-valuenow", String(10 + SEEK_STEP_SECONDS));
+    expect(actions.seekTo).toHaveBeenCalledWith(10 + SEEK_STEP_SECONDS);
+
+    act(() => slider.blur());
+    expect(slider).toHaveAttribute("aria-valuenow", "11");
   });
 
   it("reports the position being dragged to rather than the one still playing", () => {
@@ -67,6 +99,16 @@ describe("seeking from the keyboard", () => {
     expect(actions.seekTo).toHaveBeenCalledWith(100 + SEEK_STEP_SECONDS);
 
     fireEvent.keyDown(slider, { key: "ArrowLeft" });
+    expect(actions.seekTo).toHaveBeenCalledWith(100 - SEEK_STEP_SECONDS);
+  });
+
+  it("steps with the up and down arrows too, as a slider is expected to", () => {
+    const { actions, slider } = renderWave({ positionSeconds: 100 });
+
+    fireEvent.keyDown(slider, { key: "ArrowUp" });
+    expect(actions.seekTo).toHaveBeenCalledWith(100 + SEEK_STEP_SECONDS);
+
+    fireEvent.keyDown(slider, { key: "ArrowDown" });
     expect(actions.seekTo).toHaveBeenCalledWith(100 - SEEK_STEP_SECONDS);
   });
 

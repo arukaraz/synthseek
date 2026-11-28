@@ -19,6 +19,8 @@ import {
 describe("providerLabelKey", () => {
   it("names every library source an import can come from, and falls back for anything else", () => {
     expect(providerLabelKey("spotify")).toBe("progressDock.provider.spotify");
+    expect(providerLabelKey("youtube")).toBe("progressDock.provider.youtube");
+    expect(providerLabelKey("toString")).toBe("progressDock.provider.generic");
     expect(providerLabelKey("plex")).toBe("progressDock.provider.plex");
     expect(providerLabelKey("navidrome")).toBe("progressDock.provider.navidrome");
     expect(providerLabelKey("jellyfin")).toBe("progressDock.provider.jellyfin");

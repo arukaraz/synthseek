@@ -4,15 +4,14 @@ import { Pause, Play } from "lucide-react";
 import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { REDUCED_MOTION_QUERY } from "@hooks/ui/constants";
-import { useMediaQuery } from "@hooks/ui/useMediaQuery";
+import { useMotionReduced } from "@hooks/ui/useMotionReduced";
 
 import { mediaFrame, videoFrame, videoToggle, videoToggleIcon } from "./styles";
 import type { HighlightVideoProps } from "./types";
 
 export function HighlightVideo({ src, poster, alt, onError }: HighlightVideoProps) {
   const { t } = useTranslation("settings");
-  const reducedMotion = useMediaQuery(REDUCED_MOTION_QUERY);
+  const reducedMotion = useMotionReduced();
   const videoRef = useRef<HTMLVideoElement>(null);
   const [playing, setPlaying] = useState(false);
 

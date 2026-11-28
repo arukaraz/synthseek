@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import "@test/mocks/next.mock";
 
@@ -101,6 +101,10 @@ describe("the artist's figures", () => {
 });
 
 describe("the artist's biography", () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   function renderAbout() {
     render(<ArtistStatsWidget catalogArtistId="artist-1" artistName="Daft Punk" mbid={null} slot="about" />);
   }
@@ -113,6 +117,28 @@ describe("the artist's biography", () => {
     const link = screen.getByRole("link", { name: "Read on Wikipedia" });
     expect(link).toHaveAttribute("href", "https://en.wikipedia.org/wiki/Daft_Punk");
     expect(link.querySelector("[data-source-badge]")).toHaveTextContent("Wikipedia");
+  });
+
+  it("offers to show the rest of a short text the column cuts, and to fold it back", async () => {
+    vi.spyOn(Element.prototype, "scrollHeight", "get").mockReturnValue(180);
+    vi.spyOn(Element.prototype, "clientHeight", "get").mockReturnValue(120);
+    api.artistStats = { bio: { text: "A French electronic duo formed in Paris.", url: null } };
+    renderAbout();
+    const user = userEvent.setup();
+
+    await user.click(screen.getByRole("button", { name: "Show more" }));
+    await user.click(screen.getByRole("button", { name: "Show less" }));
+
+    expect(screen.getByRole("button", { name: "Show more" })).toBeInTheDocument();
+  });
+
+  it("offers nothing to unfold when the whole text fits, however long it is", () => {
+    vi.spyOn(Element.prototype, "scrollHeight", "get").mockReturnValue(120);
+    vi.spyOn(Element.prototype, "clientHeight", "get").mockReturnValue(120);
+    api.artistStats = { bio: { text: "A French electronic duo. ".repeat(40), url: null } };
+    renderAbout();
+
+    expect(screen.queryByRole("button", { name: "Show more" })).not.toBeInTheDocument();
   });
 
   it("offers no link when there is no biography", () => {

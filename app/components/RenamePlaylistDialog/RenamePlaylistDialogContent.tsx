@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@components/ui/Button";
+import { InlineError } from "@components/ui/InlineError";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@components/ui/Dialog";
 import { Input } from "@components/ui/Input";
 import { useRenamePlaylist } from "@hooks/api/mutations/playlists/useRenamePlaylist";
@@ -44,6 +45,7 @@ export function RenamePlaylistDialogContent({
             maxLength={200}
             autoFocus
           />
+          <InlineError error={renamePlaylist.error} />
           <div className={renameFooter()}>
             <Button type="button" variant="ghost" onClick={() => onOpenChange(false)}>
               {t("playlists.renameDialog.cancel")}

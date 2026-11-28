@@ -11,7 +11,9 @@ export function MasterTableHeader() {
   return (
     <thead>
       <tr>
-        <th className={cn(tableHead(), "w-9.5 pl-4")} />
+        <th className={cn(tableHead(), "w-9.5 pl-4")}>
+          <span className="sr-only">{t("librarySource.table.columnSelect")}</span>
+        </th>
         <th className={tableHead()}>{t("librarySource.table.columnName")}</th>
         <th className={cn(tableHead(), "hidden w-23.75 sm:table-cell")}>{t("librarySource.table.columnType")}</th>
         <th className={cn(tableHead(), "hidden w-15 text-right md:table-cell")}>

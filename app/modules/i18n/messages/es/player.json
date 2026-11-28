@@ -31,7 +31,35 @@
     "volumeControls": "Controles de volumen",
     "lyrics": "Letra",
     "lyricsClose": "Cerrar la letra",
-    "settings": "Ajustes de reproducción"
+    "settings": "Ajustes de reproducción",
+    "region": "Reproductor"
+  },
+  "spoken": {
+    "seek": "{{elapsed}} de {{total}}",
+    "volume": "{{percent}} por ciento",
+    "hours_one": "{{count}} hora",
+    "hours_many": "{{count}} horas",
+    "hours_other": "{{count}} horas",
+    "minutes_one": "{{count}} minuto",
+    "minutes_many": "{{count}} minutos",
+    "minutes_other": "{{count}} minutos",
+    "seconds_one": "{{count}} segundo",
+    "seconds_many": "{{count}} segundos",
+    "seconds_other": "{{count}} segundos"
+  },
+  "announce": {
+    "track": "Suena {{title}} de {{artist}}"
+  },
+  "problem": {
+    "playback": "No se pudo reproducir esta pista."
+  },
+  "queueMove": {
+    "moved": "{{title}} pasó a la posición {{position}} de {{total}}",
+    "up": "Subir",
+    "down": "Bajar",
+    "top": "Mover al principio",
+    "bottom": "Mover al final",
+    "menu": "Mover {{title}}"
   },
   "menu": {
     "playback": "Reproducción",

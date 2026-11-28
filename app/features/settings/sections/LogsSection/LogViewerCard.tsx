@@ -148,7 +148,7 @@ export function LogViewerCard() {
       ) : displayed.length === 0 ? (
         <span className="text-fg/50 text-sm">{t("logs.viewer.empty")}</span>
       ) : (
-        <div className={logTerminal()}>
+        <div className={logTerminal()} role="region" tabIndex={0} aria-label={t("logs.viewer.terminalLabel")}>
           {displayed.map((entry, index) => (
             <LogLineRow key={index} entry={entry} />
           ))}

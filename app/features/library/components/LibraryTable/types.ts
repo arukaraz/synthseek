@@ -15,6 +15,7 @@ export interface TrackColumnOptions {
 
 export interface LibraryTableProps<TItem> {
   items: TItem[];
+  total?: number;
   columns: ColumnDef<TItem>[];
   getRowId: (item: TItem) => string;
   emptyMessage: string;

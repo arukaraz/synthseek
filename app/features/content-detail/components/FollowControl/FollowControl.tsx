@@ -113,7 +113,11 @@ export function FollowControl({ catalogArtistId, artistName }: FollowControlProp
           <TooltipContent className="max-w-64">
             {following ? t("control.followingHint") : t("control.followHint")}
           </TooltipContent>
-          <PopoverContent align="start" className="max-w-none p-3">
+          <PopoverContent
+            align="start"
+            className="max-w-none p-3"
+            aria-label={t("popover.title", { artist: artistName })}
+          >
             <FollowPopoverBody
               catalogArtistId={catalogArtistId}
               artistName={artistName}

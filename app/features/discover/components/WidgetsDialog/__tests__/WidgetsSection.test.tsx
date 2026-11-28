@@ -226,7 +226,7 @@ afterEach(() => {
 });
 
 async function openSource(user: ReturnType<typeof userEvent.setup>) {
-  await user.click(screen.getByRole("button", { name: "Filter and sort" }));
+  await user.click(screen.getByRole("button", { name: /Filter and sort/ }));
   return within(await screen.findByRole("group", { name: "Source" }));
 }
 
@@ -333,8 +333,8 @@ describe("WidgetsDialog gallery", () => {
       "Charts",
       "Loved on ListenBrainz, not here",
     ]);
-    expect(screen.getByRole("button", { name: "Filter and sort" })).toHaveTextContent("All · ListenBrainz · Suggested");
-    await user.click(screen.getByRole("button", { name: "Filter and sort" }));
+    expect(screen.getByRole("button", { name: /Filter and sort/ })).toHaveTextContent("All · ListenBrainz · Suggested");
+    await user.click(screen.getByRole("button", { name: /Filter and sort/ }));
     const category = within(await screen.findByRole("group", { name: "Category" }));
     expect(category.getByRole("menuitemradio", { name: /^All/ })).toHaveTextContent("7");
     expect(category.getByRole("menuitemradio", { name: /^Discover/ })).toHaveTextContent("3");
@@ -718,7 +718,7 @@ describe("WidgetsDialog gallery", () => {
 
   it("puts the filter first, the search after it and the tabs last", () => {
     renderGallery();
-    const filter = screen.getByRole("button", { name: "Filter and sort" });
+    const filter = screen.getByRole("button", { name: /Filter and sort/ });
     const search = screen.getByRole("searchbox");
     const tabs = screen.getByRole("tablist", { name: "Widget lists" });
 
@@ -730,7 +730,7 @@ describe("WidgetsDialog gallery", () => {
     const user = userEvent.setup();
     renderGallery();
 
-    await user.click(screen.getByRole("button", { name: "Filter and sort" }));
+    await user.click(screen.getByRole("button", { name: /Filter and sort/ }));
     expect(within(await screen.findByRole("menu")).getByRole("group", { name: "Category" })).toBeInTheDocument();
     await user.click(await screen.findByRole("menuitemradio", { name: /^Library/ }));
 
@@ -826,13 +826,13 @@ describe("WidgetsDialog gallery", () => {
     openMine();
     fireEvent.click(screen.getByRole("button", { name: /^Recipe/ }));
 
-    await user.click(screen.getByRole("button", { name: "Show" }));
+    await user.click(screen.getByRole("button", { name: /Show$/ }));
     await user.click(await screen.findByRole("menuitemradio", { name: /a recap/ }));
     expect(screen.getByText("Show me a recap of my listening this year.")).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "Measure" })).not.toBeInTheDocument();
     expect(screen.getByRole("radio", { name: /Story/ })).toHaveAttribute("aria-checked", "true");
 
-    await user.click(screen.getByRole("button", { name: "Show" }));
+    await user.click(screen.getByRole("button", { name: /Show$/ }));
     await user.click(await screen.findByRole("menuitemradio", { name: /^tracks/ }));
     expect(screen.getByText("Show me 10 tracks with the most plays in the last 30 days.")).toBeInTheDocument();
   });
@@ -886,11 +886,11 @@ describe("WidgetsDialog gallery", () => {
     fireEvent.click(screen.getByRole("button", { name: /^Recipe/ }));
     fireEvent.click(screen.getByRole("switch", { name: "Also save as a playlist" }));
 
-    await user.click(screen.getByRole("button", { name: "Show" }));
+    await user.click(screen.getByRole("button", { name: /Show$/ }));
     await user.click(await screen.findByRole("menuitemradio", { name: /^albums/ }));
     expect(screen.queryByRole("switch", { name: "Also save as a playlist" })).not.toBeInTheDocument();
 
-    await user.click(screen.getByRole("button", { name: "Show" }));
+    await user.click(screen.getByRole("button", { name: /Show$/ }));
     await user.click(await screen.findByRole("menuitemradio", { name: /^tracks/ }));
     expect(screen.getByRole("switch", { name: "Also save as a playlist" })).not.toBeChecked();
   });
@@ -902,11 +902,11 @@ describe("WidgetsDialog gallery", () => {
     fireEvent.click(screen.getByRole("button", { name: /^Recipe/ }));
     fireEvent.click(screen.getByRole("button", { name: "Where" }));
 
-    await user.click(screen.getByRole("button", { name: "Field" }));
+    await user.click(screen.getByRole("button", { name: /Field$/ }));
     await user.click(await screen.findByRole("menuitemradio", { name: /Whose listening/ }));
-    await user.click(screen.getByRole("button", { name: "Condition" }));
+    await user.click(screen.getByRole("button", { name: /Condition$/ }));
     await user.click(await screen.findByRole("menuitemradio", { name: /played by me and/ }));
-    await user.click(screen.getByRole("button", { name: "Value" }));
+    await user.click(screen.getByRole("button", { name: /Value$/ }));
     await user.click(await screen.findByRole("menuitemradio", { name: /^bo/ }));
     fireEvent.click(screen.getByRole("button", { name: "Add rule" }));
 
@@ -920,7 +920,7 @@ describe("WidgetsDialog gallery", () => {
     renderGallery();
     openMine();
     fireEvent.click(screen.getByRole("button", { name: /^Feed/ }));
-    await user.click(screen.getByRole("button", { name: "Source" }));
+    await user.click(screen.getByRole("button", { name: /Source$/ }));
     await user.click(await screen.findByRole("menuitemradio", { name: /A news feed/ }));
 
     const address = screen.getByRole("textbox", { name: "Feed address" });
@@ -939,10 +939,10 @@ describe("WidgetsDialog gallery", () => {
     renderGallery();
     openMine();
     fireEvent.click(screen.getByRole("button", { name: /^Feed/ }));
-    await user.click(screen.getByRole("button", { name: "Source" }));
+    await user.click(screen.getByRole("button", { name: /Source$/ }));
     await user.click(await screen.findByRole("menuitemradio", { name: /My top tracks \(Last\.fm\)/ }));
 
-    await user.click(screen.getByRole("button", { name: "Period" }));
+    await user.click(screen.getByRole("button", { name: /Period$/ }));
     const periods = (await screen.findAllByRole("menuitemradio")).map((item) => item.textContent);
     expect(periods).toEqual([
       "All time",
@@ -953,9 +953,9 @@ describe("WidgetsDialog gallery", () => {
       "Last 12 months",
     ]);
     await user.click(screen.getByRole("menuitemradio", { name: "Last 3 months" }));
-    expect(screen.getByRole("button", { name: "Period" })).toHaveTextContent("Last 3 months");
+    expect(screen.getByRole("button", { name: /Period$/ })).toHaveTextContent("Last 3 months");
 
-    await user.click(screen.getByRole("button", { name: "Source" }));
+    await user.click(screen.getByRole("button", { name: /Source$/ }));
     await user.click(await screen.findByRole("menuitemradio", { name: /Fresh releases/ }));
     const window = screen.getByRole("radiogroup", { name: "Which releases" });
     expect(within(window).getByRole("radio", { name: "Recent" })).toHaveAttribute("aria-checked", "true");

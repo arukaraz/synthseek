@@ -1,1 +1,0 @@
-export const ABOUT_BIO_EXPAND_THRESHOLD = 360;

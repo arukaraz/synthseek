@@ -2,6 +2,7 @@ import { useCallback } from "react";
 
 import type { PublicUser } from "@api/__generated__/types";
 import type { PlexPinStart } from "@hooks/ui/types";
+import { extractAppCode } from "@modules/errors";
 import { trpc } from "@utils/trpc";
 
 interface PlexLoginFlow {
@@ -18,12 +19,17 @@ export function usePlexLoginFlow(): PlexLoginFlow {
 
   const poll = useCallback(
     async (pinId: string) => {
-      const result = await completeMutation.mutateAsync({ pinId });
-      if (result.status !== "authenticated" || !result.user) return null;
-      utils.auth.me.setData(undefined, result.user);
-      return result.user;
+      try {
+        const result = await completeMutation.mutateAsync({ pinId });
+        if (result.status !== "authenticated" || !result.user) return null;
+        utils.auth.me.setData(undefined, result.user);
+        return result.user;
+      } catch (error) {
+        if (extractAppCode(error) === "PLEX_SIGN_IN_NEEDS_SETUP") await utils.auth.setupRequired.invalidate();
+        throw error;
+      }
     },
-    [completeMutation, utils.auth.me]
+    [completeMutation, utils.auth.me, utils.auth.setupRequired]
   );
 
   return { start, poll };

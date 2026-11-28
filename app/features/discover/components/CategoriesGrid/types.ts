@@ -16,6 +16,7 @@ export interface GenreItem {
 export interface CategoryCardProps {
   category: GenreItem;
   size?: CardSize;
+  heading?: "h2" | "h3";
   className?: string;
   onClick?: (categoryId: string, categoryName: string) => void;
 }

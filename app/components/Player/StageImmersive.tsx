@@ -5,6 +5,8 @@ import { Info, ListMusic, Mic2, Minimize, MonitorSpeaker, X } from "lucide-react
 import Image from "next/image";
 import { useTranslation } from "react-i18next";
 
+import { motionConfigOf } from "@modules/accessibility";
+import { useAccessibility } from "@modules/providers/AccessibilityProvider";
 import { artworkImage } from "@utils/artworkProxy";
 
 import { FavouriteButton } from "./FavouriteButton";
@@ -51,6 +53,7 @@ import { useStagePreferences } from "./useStagePreferences";
 
 export function StageImmersive({ view, actions }: PlayerProps) {
   const { t } = useTranslation("player");
+  const { motion: motionChoice } = useAccessibility();
   const { chipsShown, toggleChips, autoScroll, setAutoScroll } = useStagePreferences();
   const side = stageSide(view);
   const beside = side !== null;
@@ -61,7 +64,7 @@ export function StageImmersive({ view, actions }: PlayerProps) {
   const grow = idle && !beside;
 
   return (
-    <MotionConfig reducedMotion="user">
+    <MotionConfig reducedMotion={motionConfigOf(motionChoice)}>
       <div className={stageBackdrop()} />
       {artworkUrl === null ? (
         <div className={stageTint({ tone: view.track.tone })} />

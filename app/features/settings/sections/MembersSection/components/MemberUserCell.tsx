@@ -1,9 +1,14 @@
-import { User as UserIcon } from "lucide-react";
+"use client";
 
-import { userAvatar, userCell, userEmail, userName } from "../styles";
+import { User as UserIcon } from "lucide-react";
+import { useTranslation } from "react-i18next";
+
+import { pendingBadge, pill, userAvatar, userCell, userEmail, userName } from "../styles";
 import type { MemberCellProps } from "../types";
 
 export function MemberUserCell({ member }: MemberCellProps) {
+  const { t } = useTranslation("settings");
+
   return (
     <div className={userCell()}>
       <div className={userAvatar()}>
@@ -17,6 +22,11 @@ export function MemberUserCell({ member }: MemberCellProps) {
       <div className="min-w-0">
         <p className={userName()}>{member.username}</p>
         <p className={userEmail()}>{member.email}</p>
+        {member.pendingApproval ? (
+          <p className={pendingBadge()}>
+            <span className={pill({ tone: "pending" })}>{t("members.pending.badge")}</span>
+          </p>
+        ) : null}
       </div>
     </div>
   );

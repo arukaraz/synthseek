@@ -12,6 +12,7 @@ interface TrackRowActions {
 
 export interface LibraryTrackRowsProps extends TrackRowActions {
   items: LibraryTrackItem[];
+  total?: number;
   selection: LibrarySelection;
   selecting: boolean;
   onHold?: (trackId: string) => void;

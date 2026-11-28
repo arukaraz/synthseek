@@ -39,6 +39,11 @@
     --auth-card-shadow:
       0 50px 100px -30px oklch(0 0 0 / 0.85), inset 0 0 0 1px oklch(1 0 0 / 0.03),
       0 0 80px -20px color-mix(in oklab, var(--color-primary-500) 45%, transparent);
+    --auth-sheet-bg: linear-gradient(to bottom, oklch(0.16 0.06 285 / 0.96), oklch(0.1 0.04 285 / 0.98));
+    --auth-sheet-solid: oklch(0.12 0.045 285);
+    --auth-sheet-shadow: -30px 0 80px -30px oklch(0 0 0 / 0.9);
+    --auth-collage-opacity: 0.47;
+    --auth-collage-opacity-compact: 0.34;
     --auth-ring-lead: color-mix(in oklab, var(--color-secondary-500) 85%, transparent);
     --auth-ring-trail: color-mix(in oklab, var(--neon-accent) 55%, transparent);
     --auth-ring-calm: color-mix(in oklab, var(--color-secondary-500) 55%, transparent);

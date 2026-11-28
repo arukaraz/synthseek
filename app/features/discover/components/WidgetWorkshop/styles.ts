@@ -176,6 +176,10 @@ export const fieldLabel = cva("text-fg/70 flex min-w-0 flex-col gap-1.5 text-xs"
 
 export const accentRow = cva("flex items-center gap-2");
 
+export const accentItem = cva("contents a11y-mode:flex a11y-mode:flex-col a11y-mode:items-center a11y-mode:gap-1");
+
+export const accentName = cva("text-fg/70 hidden text-11 a11y-mode:block");
+
 export const accentDot = cva(
   "focus-visible:ring-primary-400 size-6 rounded-full bg-mix-acc outline-none ring-offset-2 focus-visible:ring-2",
   {

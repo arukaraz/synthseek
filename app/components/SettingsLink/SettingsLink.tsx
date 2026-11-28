@@ -30,6 +30,7 @@ export function SettingsLink({ variant }: SettingsLinkProps) {
     <Link
       href={variant === "avatar" ? SETTINGS_ROOT : settingsHomeFor(isAdmin)}
       aria-label={label}
+      data-button-name={variant === "gear" ? label : undefined}
       className={settingsLink({ variant })}
     >
       {variant === "gear" ? (

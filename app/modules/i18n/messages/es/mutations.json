@@ -16,7 +16,13 @@
     "noNewImported": "No se importaron usuarios nuevos",
     "imported_one": "Se importó {{count}} usuario{{skipped}}",
     "imported_other": "Se importaron {{count}} usuarios{{skipped}}",
-    "importedSkipped": " ({{count}} omitidos)"
+    "importedSkipped": " ({{count}} omitidos)",
+    "approved": "Cuenta aprobada",
+    "approveFailed": "No se pudo aprobar la cuenta",
+    "rejected": "Cuenta rechazada y eliminada",
+    "rejectFailed": "No se pudo rechazar la cuenta",
+    "identityUnlinked": "Método de acceso eliminado",
+    "identityUnlinkFailed": "No se pudo eliminar el método de acceso"
   },
   "settings": {
     "audioAnalysisSaved": "Velocidad del análisis de audio guardada",
@@ -46,6 +52,7 @@
     "enrichmentFailed": "No se pudo actualizar la configuración de enriquecimiento",
     "spotifyFailed": "No se pudo actualizar la configuración de Spotify",
     "finishWizardFailed": "No se pudo finalizar la configuración",
+    "dismissSetupFailed": "No se pudo ocultar la tarjeta de configuración",
     "formattingSaved": "Formato guardado",
     "downloadSourcesSaved": "Fuentes de descarga actualizadas",
     "downloadSourceOrderSaved": "Orden de las fuentes de descarga guardado",
@@ -80,6 +87,15 @@
     "recycleBinSaved": "Ajustes de la papelera guardados",
     "duplicateResolutionSaved": "Manejo de duplicados guardado",
     "duplicateResolutionFailed": "No se pudo guardar cómo se manejan los duplicados",
+    "signInSaved": "Ajuste de la pantalla de inicio de sesión guardado",
+    "signInFailed": "No se pudo guardar el ajuste de la pantalla de inicio de sesión",
+    "oidcSaved": "Proveedor de inicio de sesión único guardado",
+    "oidcFailed": "No se pudo guardar el proveedor de inicio de sesión único",
+    "oidcTestFailed": "No se pudo probar la conexión",
+    "oidcSignInModeSaved": "Opciones de acceso guardadas",
+    "oidcSignInModeFailed": "No se pudieron guardar las opciones de acceso",
+    "accountProvisioningSaved": "Creación de cuentas guardada",
+    "accountProvisioningFailed": "No se pudo guardar la creación de cuentas",
     "recycleBinSaveFailed": "No se pudieron guardar los ajustes de la papelera",
     "recycleBinEmptied_one": "Papelera vaciada, {{count}} archivo eliminado",
     "recycleBinEmptied_other": "Papelera vaciada, {{count}} archivos eliminados",
@@ -113,12 +129,16 @@
   "auth": {
     "changePasswordFailed": "No se pudo cambiar la contraseña",
     "loginFailed": "Error al iniciar sesión",
-    "setupFailed": "Error en la configuración",
     "updateProfileFailed": "No se pudo actualizar el perfil",
     "plexUnlinkFailed": "No se pudo desconectar Plex",
     "passwordChanged": "Contraseña cambiada",
     "profileUpdated": "Perfil actualizado",
-    "plexUnlinked": "Cuenta de Plex desconectada"
+    "plexUnlinked": "Cuenta de Plex desconectada",
+    "oidcLinkFailed": "No se pudo empezar a vincular la cuenta",
+    "jellyfinLinked": "Cuenta de Jellyfin vinculada",
+    "jellyfinLinkFailed": "No se pudo vincular la cuenta de Jellyfin",
+    "identityUnlinked": "Método de acceso eliminado",
+    "identityUnlinkFailed": "No se pudo eliminar el método de acceso"
   },
   "oauth": {
     "denyFailed": "No se pudo cancelar la autorización",

@@ -10,7 +10,7 @@ export const gridBackgroundStyle: CSSProperties = {
 };
 
 export const contentShell = cva(
-  "relative flex overflow-hidden max-sm:transition-[height] max-sm:duration-300 max-sm:ease-out motion-reduce:transition-none",
+  "relative flex overflow-hidden short-window:h-auto short-window:overflow-visible max-sm:transition-[height] max-sm:duration-300 max-sm:ease-out motion-reduce:transition-none",
   {
     variants: {
       collapsed: {

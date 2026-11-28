@@ -1,37 +1,96 @@
 {
   "shell": {
-    "eyebrow": "First-run setup",
     "loading": "Loading setup",
-    "progress": "Step {{current}} of {{total}}",
-    "back": "Back"
+    "loadError": "Could not load your setup progress.",
+    "retry": "Try again"
+  },
+  "frame": {
+    "progress": "Question {{current}} of {{total}}",
+    "progressReady": "All {{total}} questions done, ready to finish",
+    "label": "{{number}} · {{name}}",
+    "steps": {
+      "account": "You",
+      "media": "Playback",
+      "downloads": "New music",
+      "metadata": "Tags",
+      "summary": "Ready"
+    }
   },
   "actions": {
+    "back": "Back",
     "continue": "Continue",
-    "skip": "Skip",
-    "saving": "Saving..."
+    "skip": "Skip for now",
+    "recordFailed": "Could not save your answer. Please try again."
   },
-  "admin": {
-    "title": "Create your admin account",
-    "description": "This is the first account on this Synthseek install. You can invite others later.",
-    "creating": "Creating admin...",
-    "submit": "Create admin",
-    "createError": "Could not create the admin account. Please try again.",
+  "account": {
+    "title": "Let us start with your account.",
+    "submit": "Create account",
+    "creating": "Creating...",
+    "createError": "Could not create the account. Please try again.",
+    "tokenLabel": "Setup token",
+    "tokenPlaceholder": "Paste the token",
+    "tokenHint": "The token is printed in the server log when the server starts.",
+    "tokenMissing": "Paste the setup token from the server log.",
     "emailLabel": "Email",
     "emailPlaceholder": "you@domain.com",
     "emailError": "Enter a valid email address.",
     "usernameLabel": "Username",
     "usernamePlaceholder": "admin",
-    "usernameHint": "Min 3 characters",
+    "usernameHint": "At least 3 characters",
     "usernameError": "Use between 3 and 32 characters.",
     "passwordHint": "At least 8 characters",
-    "passwordError": "Use at least 8 characters."
+    "passwordError": "Use at least 8 characters.",
+    "throttled": {
+      "visible": "Too many attempts. Try again in {{time}}.",
+      "announce": "Too many attempts. You can try again in {{duration}}.",
+      "released": "You can try again."
+    }
   },
-  "slskd": {
-    "title": "Connect to slskd (optional)",
-    "description": "Synthseek reaches the Soulseek network through your slskd daemon. You can do this later from Settings.",
-    "apiUrlLabel": "API URL",
+  "media": {
+    "title": "Where does your music play?",
+    "description": "Pick the server your library already lives in, if any.",
+    "groupLabel": "Media server",
+    "existing": "I already use it",
+    "none": "None for now",
+    "noneCaption": "Synthseek plays it itself"
+  },
+  "connect": {
+    "title": "Connect {{server}}.",
+    "urlLabel": "{{server}} URL",
+    "urlError": "Enter a full URL including http:// or https://, like http://host:port.",
+    "navidromeUrlPlaceholder": "http://navidrome:4533",
+    "jellyfinUrlPlaceholder": "http://jellyfin:8096",
+    "usernameLabel": "Username",
+    "passwordLabel": "Password",
+    "apiKeyLabel": "API key",
+    "apiKeyHint": "Create one in the Jellyfin dashboard, under API keys.",
+    "test": "Test connection",
+    "testing": "Testing...",
+    "passed": "{{server}} connected.",
+    "unreachable": "Could not reach {{server}} at that address. Check the URL and that the server is up.",
+    "unauthorized": "{{server}} refused those credentials. Check them and try again.",
+    "saveFailed": "Could not save the {{server}} connection. Please try again."
+  },
+  "plex": {
+    "intro": "A popup will open for you to sign in to plex.tv.",
+    "connect": "Login with <0>Plex</0>",
+    "connecting": "Waiting for Plex...",
+    "saving": "Saving...",
+    "connected": "Plex connected.",
+    "noServers": "No Plex servers were found on this account. You can skip and add one later.",
+    "timeout": "Plex sign-in timed out. Try again, or skip and connect Plex later from Settings.",
+    "popupUnfinished": "Plex sign-in did not finish. Reopen the popup and approve access, or skip this question.",
+    "serverPickerIntro": "Pick the Plex server Synthseek should target:",
+    "serverLocal": "local",
+    "serverRemote": "remote"
+  },
+  "downloads": {
+    "title": "How should new music arrive?",
+    "description": "Synthseek downloads through Soulseek using your slskd.",
+    "apiUrlLabel": "slskd API URL",
     "apiUrlPlaceholder": "http://localhost:5030",
-    "apiKeyLabel": "API Key",
+    "apiKeyLabel": "API key",
+    "apiKeyHint": "Paste the API key to test.",
     "testIdle": "Test connection",
     "testBusy": "Testing...",
     "passed": "Connection verified.",
@@ -39,49 +98,29 @@
     "failedReason": "Connection failed: {{reason}}",
     "overrideLink": "Continue without a verified connection",
     "overrideArmed": "Continuing without a verified connection. You can fix this later in Settings.",
-    "saveFailed": "Could not save the slskd connection. Confirm the URL and API key, then try again.",
-    "blockedHint": "Test the connection or skip this step to continue"
+    "saveFailed": "Could not save the slskd connection. Confirm the URL and API key, then try again."
   },
-  "plex": {
-    "title": "Connect Plex (optional)",
-    "description": "Lets Synthseek scan your library after each import and mirror playlists. You can do this later from Settings.",
-    "blockedHint": "Connect Plex or skip this step to continue",
-    "intro": "A popup will open for you to sign in to plex.tv.",
-    "connect": "Login with <0>Plex</0>",
-    "connecting": "Waiting for Plex...",
-    "saving": "Saving...",
-    "connected": "Plex connected. Continue to the next step.",
-    "noServers": "No Plex servers were found on this account. You can skip and add one later.",
-    "timeout": "Plex sign-in timed out. Try again, or skip and connect Plex later from Settings.",
-    "popupUnfinished": "Plex sign-in did not finish. Reopen the popup and approve access, or skip this step.",
-    "serverPickerIntro": "Pick the Plex server Synthseek should target:",
-    "serverLocal": "local",
-    "serverRemote": "remote"
+  "metadata": {
+    "title": "One email keeps your tags fast.",
+    "label": "MusicBrainz contact email",
+    "placeholder": "you@example.com",
+    "hint": "MusicBrainz asks every app to identify itself. Without it, lookups share a slower limit.",
+    "emailError": "Enter a valid email address.",
+    "saveFailed": "Could not save your settings. Check the details and try again."
   },
-  "enrichment": {
-    "title": "Metadata enrichment (optional)",
-    "description": "Improves how Synthseek labels, scores, and recommends tracks. All keys are optional but recommended.",
-    "saveFailed": "Could not save your settings. Check the details and try again.",
-    "lastfmLabel": "Last.fm API key",
-    "lastfmHint": "System-wide Last.fm API key. Shared across all users.",
-    "fanartLabel": "FanART API key",
-    "fanartHint": "Artwork sourcing.",
-    "songlinkLabel": "Songlink API key",
-    "songlinkHint": "Resolves track URLs across platforms for cross-platform playlist imports. Synthseek uses the public endpoint by default. Leave blank unless you have a key.",
-    "acoustidLabel": "AcoustID API key",
-    "acoustidHint": "Audio fingerprinting fallback for tracks without reliable tag metadata.",
-    "musicbrainzLabel": "MusicBrainz contact email",
-    "musicbrainzPlaceholder": "you@example.com",
-    "musicbrainzHint": "Required. Without it, Synthseek shares rate-limited email."
-  },
-  "done": {
-    "title": "You're all set",
-    "description": "Synthseek is ready to go. You can adjust everything later under Settings.",
-    "cardHeading": "Setup complete",
-    "cardBody": "slskd, Plex and metadata enrichment can be added or edited any time.",
-    "primaryRest": "Go to dashboard",
-    "primaryBusy": "Finishing...",
-    "primaryRetry": "Retry",
+  "summary": {
+    "title": "That is everything.",
+    "answered": "Done",
+    "skipped": "Later",
+    "open": "Not set",
+    "questions": {
+      "account": "Admin",
+      "media": "Media server",
+      "downloads": "Downloads",
+      "metadata": "Metadata"
+    },
+    "finish": "Go to the board",
+    "finishing": "Finishing...",
     "failed": "Could not finish setup. Please try again."
   }
 }

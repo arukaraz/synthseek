@@ -28,6 +28,10 @@ function buildArgs(overrides: Partial<BuildMemberColumnsArgs> = {}): BuildMember
     onEdit: vi.fn(),
     onEditPreset: vi.fn(),
     onDelete: vi.fn(),
+    oidcLabel: "Authentik",
+    onApprove: vi.fn(),
+    onReject: vi.fn(),
+    decisionPending: false,
     ...overrides,
   };
 }
@@ -49,11 +53,27 @@ describe("buildMemberColumns", () => {
       "user",
       "requests",
       "quota",
-      "type",
+      "signIn",
       "role",
       "joined",
       "actions",
     ]);
+  });
+
+  it("gives the actions column a header name for assistive technology", () => {
+    const header = buildMemberColumns(buildArgs()).find((column) => column.key === "actions")?.header;
+
+    render(
+      <table>
+        <thead>
+          <tr>
+            <th>{typeof header === "function" ? header() : header}</th>
+          </tr>
+        </thead>
+      </table>
+    );
+
+    expect(screen.getByRole("columnheader", { name: "members.columns.actions" })).toBeInTheDocument();
   });
 
   it("renders the header select-all checkbox and invokes onToggleAll", async () => {

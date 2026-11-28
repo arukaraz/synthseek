@@ -2,6 +2,7 @@ import type { RequestListItem } from "@api/__generated__/types";
 
 export interface RequestSidebarProps {
   items: RequestListItem[];
+  total?: number;
   selectedId: string | null;
   onSelect: (id: string) => void;
   searchQuery?: string;

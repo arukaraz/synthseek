@@ -25,13 +25,7 @@ export function TrackTitleCell({ track, expanded, onToggle }: TrackTitleCellProp
 
   return (
     <div className="min-w-0">
-      <button
-        type="button"
-        className={trackTitleButton()}
-        aria-expanded={expanded}
-        aria-label={t(expanded ? "tracks.hideDetails" : "tracks.showDetails", { title: track.title })}
-        onClick={onToggle}
-      >
+      <button type="button" className={trackTitleButton()} aria-expanded={expanded} onClick={onToggle}>
         <span className={trackTitleText({ tone })}>
           <span className={trackTitleLabel()}>{track.title}</span>
           {track.explicit ? (

@@ -5,6 +5,9 @@ import { DEFAULT_LOCALE, SUPPORTED_LOCALES } from "./config";
 import { resources } from "./resources";
 
 if (!i18next.isInitialized) {
+  i18next.on("languageChanged", (language) => {
+    if (typeof document !== "undefined") document.documentElement.lang = language;
+  });
   void i18next.use(initReactI18next).init({
     resources,
     lng: DEFAULT_LOCALE,

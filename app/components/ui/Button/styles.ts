@@ -8,12 +8,12 @@ export const buttonVariants = cva(
         default: "bg-primary text-primary-foreground hover:bg-primary/90 focus-visible:ring-ring",
         destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90 focus-visible:ring-ring",
         outline:
-          "border-4 border-primary/60 bg-background text-primary hover:border-primary hover:bg-accent/60 focus-visible:ring-primary",
+          "border-4 border-primary/60 bg-background text-primary more-contrast:text-primary-400 hover:border-primary hover:bg-accent/60 focus-visible:ring-primary",
         secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80 focus-visible:ring-ring",
         accent:
           "border border-accent-500/30 bg-accent-500/10 text-accent-400 hover:bg-accent-500/20 focus-visible:ring-ring",
         ghost: "hover:bg-accent hover:text-accent-foreground focus-visible:ring-ring",
-        link: "text-primary underline-offset-4 hover:underline focus-visible:ring-ring",
+        link: "text-primary more-contrast:text-primary-400 underline-offset-4 hover:underline focus-visible:ring-ring",
       },
       size: {
         default: "h-10 px-4 py-2",

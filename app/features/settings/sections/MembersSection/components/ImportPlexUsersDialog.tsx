@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next";
 import { Button } from "@components/ui/Button";
 import { Checkbox } from "@components/ui/Checkbox";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@components/ui/Dialog";
+import { InlineError } from "@components/ui/InlineError";
 import { Notice } from "@components/ui/Notice";
 import { Role } from "@api/__generated__/types";
 import { SegmentedControl } from "@components/ui/SegmentedControl";
@@ -125,6 +126,8 @@ export function ImportPlexUsersDialog({ open, onOpenChange }: ImportPlexUsersDia
               </SettingsField>
             </>
           )}
+
+          <InlineError error={importUsers.error} />
 
           <DialogFooter>
             <Button size="sm" onClick={handleImport} disabled={selected.size === 0 || importUsers.isPending}>

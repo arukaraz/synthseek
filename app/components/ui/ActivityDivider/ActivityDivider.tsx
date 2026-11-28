@@ -1,7 +1,7 @@
 "use client";
 
+import { useMotionReduced } from "@hooks/ui/useMotionReduced";
 import { cn } from "@utils/cn";
-import { useReducedMotion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 
 import { clampRatio, fillStyle } from "./helpers";
@@ -17,7 +17,7 @@ import type { ActivityDividerProps } from "./types";
 
 export function ActivityDivider({ state, value = 0, max = 0, children, className }: ActivityDividerProps) {
   const { t } = useTranslation("components");
-  const reduced = useReducedMotion() ?? false;
+  const reduced = useMotionReduced();
   const isPlaylistSync = state === "playlist-sync";
   const isPaused = state === "paused";
 

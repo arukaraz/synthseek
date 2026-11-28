@@ -11,6 +11,18 @@
     "title": "Ungültige Anmeldedaten",
     "description": "Überprüfe deinen Benutzernamen und dein Passwort und versuche es erneut."
   },
+  "TOO_MANY_LOGIN_ATTEMPTS": {
+    "title": "Zu viele Anmeldeversuche",
+    "description": "Warte ein paar Minuten und versuche es dann erneut."
+  },
+  "SETUP_TOKEN_INVALID": {
+    "title": "Einrichtungstoken fehlt oder ist falsch",
+    "description": "Kopiere das Einrichtungstoken aus dem Serverprotokoll und versuche es erneut."
+  },
+  "PLEX_SIGN_IN_NEEDS_SETUP": {
+    "title": "Schließe zuerst die Ersteinrichtung ab",
+    "description": "Erstelle das Administratorkonto auf der Einrichtungsseite und verbinde danach Plex."
+  },
   "CURRENT_PASSWORD_INCORRECT": {
     "title": "Aktuelles Passwort falsch",
     "description": "Das von dir eingegebene aktuelle Passwort ist falsch."
@@ -198,6 +210,34 @@
   "LIBRARY_SOURCE_REAUTH_REQUIRED": {
     "title": "Bibliotheksverbindung abgelaufen",
     "description": "Verbinde dieses Konto erneut, um seine Bibliothek zu laden."
+  },
+  "LIBRARY_SOURCE_NOT_CONNECTED": {
+    "title": "Nicht verbunden",
+    "description": "Verbinde zuerst diese Quelle und versuche es dann erneut."
+  },
+  "LIBRARY_SOURCE_UNAVAILABLE": {
+    "title": "Quelle nicht erreichbar",
+    "description": "Diese Quelle konnte gerade nicht gelesen werden. Versuche es später erneut."
+  },
+  "LIBRARY_SOURCE_SESSION_TOO_LARGE": {
+    "title": "Der eingefügte Text ist zu groß",
+    "description": "Er ist größer, als eine Browsersitzung sein kann. Füge nur den Inhalt der exportierten Cookie-Datei ein."
+  },
+  "LIBRARY_SOURCE_SESSION_UNUSABLE": {
+    "title": "Nichts Verwendbares im eingefügten Text",
+    "description": "Er enthält kein Cookie, das diese Quelle nutzen kann. Exportiere die Cookies im Netscape-Format und füge die ganze Datei ein."
+  },
+  "LIBRARY_SOURCE_SESSION_REFUSED": {
+    "title": "Sitzung nicht akzeptiert",
+    "description": "Die Quelle hat die eingefügte Sitzung nicht akzeptiert. Melde dich im Browser neu an, exportiere eine frische Cookie-Datei und füge sie ein."
+  },
+  "LIBRARY_SOURCE_LINK_NOT_RECOGNIZED": {
+    "title": "Kein Playlist-Link",
+    "description": "Das ist kein Playlist-Link dieser Quelle. Kopiere den Link von der Seite der Playlist selbst."
+  },
+  "LIBRARY_SOURCE_PLAYLIST_UNAVAILABLE": {
+    "title": "Playlist nicht gefunden",
+    "description": "Diese Playlist existiert nicht oder ist privat."
   },
   "LIDARR_CONNECTION_FAILED": {
     "title": "Lidarr-Verbindung fehlgeschlagen",
@@ -558,5 +598,77 @@
   "THEME_CHANGED_ELSEWHERE": {
     "title": "Das Theme hat sich geändert, bevor dein Speichern ankam",
     "description": "Es wurde nichts überschrieben. Deine Änderungen sind weiterhin im Editor, über dem, was sich geändert hat. Prüfe sie und speichere erneut."
+  },
+  "OIDC_NOT_AVAILABLE": {
+    "title": "Diese Anmeldemethode ist nicht verfügbar",
+    "description": "Sie ist auf diesem Server ausgeschaltet oder nicht eingerichtet. Nutze eine andere Methode."
+  },
+  "OIDC_SIGN_IN_EXPIRED": {
+    "title": "Die Anmeldung hat zu lange gedauert",
+    "description": "Beginne noch einmal auf der Anmeldeseite."
+  },
+  "OIDC_USER_NOT_LINKED": {
+    "title": "Mit dieser Identität ist kein Konto verknüpft",
+    "description": "Melde dich anders an und verknüpfe sie in deinem Konto, oder bitte den Admin um ein Konto."
+  },
+  "OIDC_ALREADY_LINKED": {
+    "title": "Diese Identität ist bereits verknüpft",
+    "description": "Sie gehört zu einem Konto auf diesem Server. Hebe die Verknüpfung dort zuerst auf."
+  },
+  "OIDC_LINK_SESSION_MISMATCH": {
+    "title": "Mit einem anderen Konto angemeldet",
+    "description": "Der Identitätsanbieter hat für eine andere Sitzung geantwortet. Starte die Verknüpfung neu."
+  },
+  "OIDC_PROVIDER_REFUSED": {
+    "title": "Der Anbieter hat die Anmeldung abgelehnt",
+    "description": "Prüfe deinen Zugang beim Anbieter und versuche es erneut."
+  },
+  "OIDC_PROVIDER_UNREACHABLE": {
+    "title": "Der Anbieter ist nicht erreichbar",
+    "description": "Versuche es gleich noch einmal oder nutze eine andere Anmeldemethode."
+  },
+  "OIDC_SIGN_IN_FAILED": {
+    "title": "Die Anmeldung wurde nicht abgeschlossen",
+    "description": "Versuche es erneut oder nutze eine andere Anmeldemethode."
+  },
+  "EXTERNAL_IDENTITY_NOT_FOUND": {
+    "title": "Diese verknüpfte Identität gibt es nicht",
+    "description": "Vielleicht wurde sie schon entfernt. Lade neu und versuche es erneut."
+  },
+  "LAST_SIGN_IN_METHOD": {
+    "title": "Das ist die letzte Anmeldemöglichkeit",
+    "description": "Das Konto hat kein Passwort und kein anderes verknüpftes Konto. Füge eines hinzu, bevor du diese entfernst."
+  },
+  "OIDC_CONNECTION_NOT_TESTED": {
+    "title": "Teste zuerst die Verbindung",
+    "description": "Führe Verbindung testen aus und lass den Test bestehen, dann schalte das ein."
+  },
+  "ADMIN_WAY_IN_REQUIRED": {
+    "title": "Kein Administrator käme wieder hinein",
+    "description": "Gib zuerst einem Administrator ein Passwort oder verknüpfe sein Konto beim Anbieter."
+  },
+  "ACCOUNT_PENDING_APPROVAL": {
+    "title": "Dein Konto wartet auf Freigabe",
+    "description": "Ein Admin muss es freigeben, bevor du dich anmelden kannst. Versuche es danach erneut."
+  },
+  "ACCOUNT_NOT_PENDING": {
+    "title": "Dieses Konto wartet nicht auf Freigabe",
+    "description": "Es wurde bereits freigegeben oder entfernt. Lade die Liste neu."
+  },
+  "ACCOUNT_EMAIL_IN_USE": {
+    "title": "Zu dieser E-Mail gibt es schon ein Konto",
+    "description": "Melde dich anders bei diesem Konto an und verknüpfe dann diesen Anbieter in deinem Konto."
+  },
+  "JELLYFIN_SIGN_IN_NOT_AVAILABLE": {
+    "title": "Anmeldung mit Jellyfin ist nicht verfügbar",
+    "description": "Sie ist auf diesem Server ausgeschaltet oder nicht eingerichtet. Nutze eine andere Methode."
+  },
+  "JELLYFIN_SIGN_IN_UNAVAILABLE": {
+    "title": "Jellyfin ist nicht erreichbar",
+    "description": "Versuche es gleich noch einmal oder nutze eine andere Anmeldemethode."
+  },
+  "JELLYFIN_ALREADY_LINKED": {
+    "title": "Dieses Jellyfin-Konto ist bereits verknüpft",
+    "description": "Es gehört zu einem anderen Konto auf diesem Server. Hebe die Verknüpfung dort zuerst auf."
   }
 }

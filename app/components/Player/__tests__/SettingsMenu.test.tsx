@@ -37,12 +37,12 @@ function section(name: string): ReturnType<typeof within> {
 }
 
 function equalizerPresetButton(): HTMLElement {
-  return section(enPlayer.equalizer.caption).getByRole("button", { name: enPlayer.equalizer.preset });
+  return section(enPlayer.equalizer.caption).getByRole("button", { name: new RegExp(`${enPlayer.equalizer.preset}$`) });
 }
 
 function compressorPresetButton(): HTMLElement {
   return section(enPlayer.settings.compressor.caption).getByRole("button", {
-    name: enPlayer.settings.compressor.preset,
+    name: new RegExp(`${enPlayer.settings.compressor.preset}$`),
   });
 }
 
@@ -456,9 +456,9 @@ describe("the transitions section", () => {
   it("names the gapless mode and keeps the blend controls out of sight while there is nothing to blend", () => {
     renderMenu();
 
-    expect(transitions().getByRole("button", { name: enPlayer.settings.transition.mode })).toHaveTextContent(
-      enPlayer.settings.transition.modes.gapless
-    );
+    expect(
+      transitions().getByRole("button", { name: new RegExp(`${enPlayer.settings.transition.mode}$`) })
+    ).toHaveTextContent(enPlayer.settings.transition.modes.gapless);
     expect(transitions().queryByRole("slider", { name: enPlayer.settings.transition.seconds })).toBeNull();
     expect(transitions().getByText(enPlayer.settings.transition.hints.gapless)).toBeInTheDocument();
   });
@@ -466,7 +466,7 @@ describe("the transitions section", () => {
   it("switches mode from its menu, keeping the length and curve already chosen", async () => {
     const { actions, user } = renderMenu();
 
-    await user.click(transitions().getByRole("button", { name: enPlayer.settings.transition.mode }));
+    await user.click(transitions().getByRole("button", { name: new RegExp(`${enPlayer.settings.transition.mode}$`) }));
     await user.click(await screen.findByRole("menuitemradio", { name: enPlayer.settings.transition.modes.crossfade }));
 
     expect(actions.setTransition).toHaveBeenCalledWith({ mode: "crossfade", seconds: 5, curve: "equalPower" });

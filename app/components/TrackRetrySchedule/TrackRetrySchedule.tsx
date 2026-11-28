@@ -1,7 +1,7 @@
 "use client";
 
 import { Clock, History } from "lucide-react";
-import { useState } from "react";
+import { useId, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Popover, PopoverContent, PopoverTrigger } from "@components/ui/Popover";
@@ -14,6 +14,7 @@ import type { TrackRetryScheduleProps } from "./types";
 export function TrackRetrySchedule({ nextRetryAt, retryCount, compact = false }: TrackRetryScheduleProps) {
   const { t } = useTranslation("components");
   const [scheduleOpen, setScheduleOpen] = useState(false);
+  const titleId = useId();
 
   if (!nextRetryAt && retryCount <= 0) return null;
 
@@ -28,8 +29,8 @@ export function TrackRetrySchedule({ nextRetryAt, retryCount, compact = false }:
               <Clock className="size-3.5" aria-hidden />
             </button>
           </PopoverTrigger>
-          <PopoverContent side="top">
-            <p>{t("trackRetrySchedule.watching")}</p>
+          <PopoverContent side="top" aria-labelledby={titleId}>
+            <p id={titleId}>{t("trackRetrySchedule.watching")}</p>
             <p>{t("trackRetrySchedule.nextAttempt", { time: formatTimeUntil(new Date(nextRetryAt)) })}</p>
             {compact && attemptsLabel !== null ? <p>{attemptsLabel}</p> : null}
           </PopoverContent>

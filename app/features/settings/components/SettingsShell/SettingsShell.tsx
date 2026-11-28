@@ -35,7 +35,7 @@ export function SettingsShell({ children }: SettingsShellProps) {
     <SettingsSaveScope>
       <div className={layoutRoot()}>
         <SettingsSidebar className={cn(isRoot ? "flex" : "hidden md:flex")} query={query} onQueryChange={setQuery} />
-        <main className={cn(contentScroll(), isRoot ? "hidden md:flex" : "flex")}>
+        <div data-testid="settings-content" className={cn(contentScroll(), isRoot ? "hidden md:flex" : "flex")}>
           <SettingsBottomDockProvider dock={dock}>
             <div className={pageColumn()}>{blocked ? <SettingsAccessDenied /> : children}</div>
           </SettingsBottomDockProvider>
@@ -43,7 +43,7 @@ export function SettingsShell({ children }: SettingsShellProps) {
             <div ref={setDock} />
             <PageSaveBar />
           </div>
-        </main>
+        </div>
       </div>
       <SettingsPalette open={paletteOpen} onOpenChange={setPaletteOpen} />
     </SettingsSaveScope>

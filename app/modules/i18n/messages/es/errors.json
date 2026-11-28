@@ -11,6 +11,18 @@
     "title": "Credenciales inválidas",
     "description": "Revisa tu usuario y contraseña e inténtalo de nuevo."
   },
+  "TOO_MANY_LOGIN_ATTEMPTS": {
+    "title": "Demasiados intentos de inicio de sesión",
+    "description": "Espera unos minutos y vuelve a intentarlo."
+  },
+  "SETUP_TOKEN_INVALID": {
+    "title": "Falta el token de configuración o no es correcto",
+    "description": "Copia el token de configuración del registro del servidor e inténtalo de nuevo."
+  },
+  "PLEX_SIGN_IN_NEEDS_SETUP": {
+    "title": "Termina primero la configuración inicial",
+    "description": "Crea la cuenta de administrador en la página de configuración y después conecta Plex."
+  },
   "CURRENT_PASSWORD_INCORRECT": {
     "title": "Contraseña actual incorrecta",
     "description": "La contraseña actual que introdujiste es incorrecta."
@@ -198,6 +210,34 @@
   "LIBRARY_SOURCE_REAUTH_REQUIRED": {
     "title": "La conexión con la biblioteca expiró",
     "description": "Vuelve a conectar esa cuenta para cargar su biblioteca."
+  },
+  "LIBRARY_SOURCE_NOT_CONNECTED": {
+    "title": "Sin conectar",
+    "description": "Conecta primero esta fuente y vuelve a intentarlo."
+  },
+  "LIBRARY_SOURCE_UNAVAILABLE": {
+    "title": "Fuente no disponible",
+    "description": "No se pudo leer esta fuente ahora mismo. Inténtalo más tarde."
+  },
+  "LIBRARY_SOURCE_SESSION_TOO_LARGE": {
+    "title": "El texto pegado es demasiado grande",
+    "description": "Es más grande de lo que puede ser una sesión del navegador. Pega solo el contenido del archivo de cookies exportado."
+  },
+  "LIBRARY_SOURCE_SESSION_UNUSABLE": {
+    "title": "No hay nada utilizable en el texto pegado",
+    "description": "No contiene ninguna cookie que esta fuente pueda usar. Exporta las cookies en formato Netscape y pega el archivo completo."
+  },
+  "LIBRARY_SOURCE_SESSION_REFUSED": {
+    "title": "Sesión no aceptada",
+    "description": "La fuente no aceptó la sesión pegada. Vuelve a iniciar sesión en tu navegador, exporta un archivo de cookies nuevo y pégalo."
+  },
+  "LIBRARY_SOURCE_LINK_NOT_RECOGNIZED": {
+    "title": "No es un enlace de lista",
+    "description": "Ese no es un enlace de una lista de esta fuente. Copia el enlace desde la página de la propia lista."
+  },
+  "LIBRARY_SOURCE_PLAYLIST_UNAVAILABLE": {
+    "title": "Lista no encontrada",
+    "description": "Esta lista no existe o es privada."
   },
   "LIDARR_CONNECTION_FAILED": {
     "title": "Fallo de conexión con Lidarr",
@@ -558,5 +598,77 @@
   "THEME_CHANGED_ELSEWHERE": {
     "title": "El tema cambió antes de que llegara tu guardado",
     "description": "No se sobrescribió nada. Tus cambios siguen en el editor, encima de lo que cambió. Revísalos y guarda de nuevo."
+  },
+  "OIDC_NOT_AVAILABLE": {
+    "title": "Este método de acceso no está disponible",
+    "description": "Está desactivado o sin configurar en este servidor. Usa otro método."
+  },
+  "OIDC_SIGN_IN_EXPIRED": {
+    "title": "El inicio de sesión tardó demasiado",
+    "description": "Empieza de nuevo desde la página de acceso."
+  },
+  "OIDC_USER_NOT_LINKED": {
+    "title": "Ninguna cuenta vinculada a esta identidad",
+    "description": "Entra de otra forma y vincúlala desde tu cuenta, o pide una cuenta al administrador."
+  },
+  "OIDC_ALREADY_LINKED": {
+    "title": "Esta identidad ya está vinculada",
+    "description": "Pertenece a una cuenta de este servidor. Desvincúlala allí primero."
+  },
+  "OIDC_LINK_SESSION_MISMATCH": {
+    "title": "Has entrado con otra cuenta",
+    "description": "El proveedor de identidad respondió por otra sesión. Empieza la vinculación de nuevo."
+  },
+  "OIDC_PROVIDER_REFUSED": {
+    "title": "El proveedor rechazó el acceso",
+    "description": "Comprueba tu acceso con el proveedor y vuelve a intentarlo."
+  },
+  "OIDC_PROVIDER_UNREACHABLE": {
+    "title": "No se pudo contactar con el proveedor",
+    "description": "Inténtalo de nuevo en un momento, o usa otro método de acceso."
+  },
+  "OIDC_SIGN_IN_FAILED": {
+    "title": "El inicio de sesión no se completó",
+    "description": "Inténtalo de nuevo, o usa otro método de acceso."
+  },
+  "EXTERNAL_IDENTITY_NOT_FOUND": {
+    "title": "Esa identidad vinculada no existe",
+    "description": "Puede que ya se haya quitado. Recarga e inténtalo de nuevo."
+  },
+  "LAST_SIGN_IN_METHOD": {
+    "title": "Es la última forma de entrar",
+    "description": "La cuenta no tiene contraseña ni otra cuenta vinculada. Añade una antes de quitar esta."
+  },
+  "OIDC_CONNECTION_NOT_TESTED": {
+    "title": "Prueba primero la conexión",
+    "description": "Ejecuta Probar conexión, espera a que se supere y después actívalo."
+  },
+  "ADMIN_WAY_IN_REQUIRED": {
+    "title": "Ningún administrador podría volver a entrar",
+    "description": "Dale antes a un administrador una contraseña o vincula su cuenta en el proveedor."
+  },
+  "ACCOUNT_PENDING_APPROVAL": {
+    "title": "Tu cuenta está pendiente de aprobación",
+    "description": "Un administrador tiene que aprobarla antes de que puedas entrar. Vuelve a intentarlo cuando lo haga."
+  },
+  "ACCOUNT_NOT_PENDING": {
+    "title": "Esta cuenta no está pendiente de aprobación",
+    "description": "Ya se aprobó o se eliminó. Recarga la lista."
+  },
+  "ACCOUNT_EMAIL_IN_USE": {
+    "title": "Ese correo ya tiene una cuenta",
+    "description": "Entra en esa cuenta de otra forma y vincula este proveedor desde tu cuenta."
+  },
+  "JELLYFIN_SIGN_IN_NOT_AVAILABLE": {
+    "title": "El acceso con Jellyfin no está disponible",
+    "description": "Está desactivado o sin configurar en este servidor. Usa otro método."
+  },
+  "JELLYFIN_SIGN_IN_UNAVAILABLE": {
+    "title": "No se pudo contactar con Jellyfin",
+    "description": "Vuelve a intentarlo en un momento o usa otro método de acceso."
+  },
+  "JELLYFIN_ALREADY_LINKED": {
+    "title": "Esta cuenta de Jellyfin ya está vinculada",
+    "description": "Pertenece a otra cuenta de este servidor. Desvincúlala allí primero."
   }
 }

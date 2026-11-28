@@ -1,4 +1,7 @@
+import type { Ref } from "react";
+
 export interface PasswordFieldProps {
+  inputRef?: Ref<HTMLInputElement>;
   id: string;
   value: string;
   onChange: (value: string) => void;

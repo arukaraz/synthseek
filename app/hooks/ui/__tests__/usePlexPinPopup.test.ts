@@ -132,4 +132,79 @@ describe("usePlexPinPopup", () => {
     expect(spies.toastError).toHaveBeenCalledWith("timed out");
     expect(onResolved).not.toHaveBeenCalled();
   });
+
+  describe("with an onFailure handler", () => {
+    const start = async () => ({ pinId: "pin-1", authUrl: "https://plex.tv/auth" });
+
+    it("hands a blocked popup to the handler instead of a toast", async () => {
+      vi.spyOn(window, "open").mockReturnValue(null);
+      const onFailure = vi.fn();
+      const { result } = renderHook(() => usePlexPinPopup({ start, poll: vi.fn(), onResolved: vi.fn(), onFailure }));
+
+      await act(async () => {
+        await result.current.start();
+      });
+
+      expect(onFailure).toHaveBeenCalledWith({ kind: "popupBlocked" });
+      expect(result.current.phase).toBe("error");
+      expect(spies.toastError).not.toHaveBeenCalled();
+    });
+
+    it("hands a timeout to the handler instead of a toast", async () => {
+      vi.spyOn(window, "open").mockReturnValue(fakeWindow());
+      const onFailure = vi.fn();
+      const { result } = renderHook(() =>
+        usePlexPinPopup({ start, poll: vi.fn().mockResolvedValue(null), onResolved: vi.fn(), onFailure })
+      );
+
+      await act(async () => {
+        await result.current.start();
+      });
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(POLL_TIMEOUT_MS);
+      });
+
+      expect(onFailure).toHaveBeenCalledWith({ kind: "timeout" });
+      expect(spies.toastError).not.toHaveBeenCalled();
+    });
+
+    it("hands the error that stopped the polling to the handler, whatever its type", async () => {
+      vi.spyOn(window, "open").mockReturnValue(fakeWindow());
+      const refusal = { data: { appCode: "PLEX_USER_NOT_LINKED" } };
+      const onFailure = vi.fn();
+      const { result } = renderHook(() =>
+        usePlexPinPopup({ start, poll: vi.fn().mockRejectedValue(refusal), onResolved: vi.fn(), onFailure })
+      );
+
+      await act(async () => {
+        await result.current.start();
+      });
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(POLL_INTERVAL_MS);
+      });
+
+      expect(onFailure).toHaveBeenCalledWith({ kind: "failed", error: refusal });
+      expect(spies.toastError).not.toHaveBeenCalled();
+    });
+
+    it("hands the error that stopped the pin from starting to the handler", async () => {
+      const failure = new Error("plex is down");
+      const onFailure = vi.fn();
+      const { result } = renderHook(() =>
+        usePlexPinPopup({
+          start: () => Promise.reject(failure),
+          poll: vi.fn(),
+          onResolved: vi.fn(),
+          onFailure,
+        })
+      );
+
+      await act(async () => {
+        await result.current.start();
+      });
+
+      expect(onFailure).toHaveBeenCalledWith({ kind: "failed", error: failure });
+      expect(spies.toastError).not.toHaveBeenCalled();
+    });
+  });
 });

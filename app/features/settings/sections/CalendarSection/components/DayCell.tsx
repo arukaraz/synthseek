@@ -85,7 +85,7 @@ export function DayCell({
   return (
     <Popover open={isOpen} onOpenChange={(next) => (next ? undefined : onClose())}>
       <PopoverAnchor asChild>{cell}</PopoverAnchor>
-      <PopoverContent align="start" className="max-w-none p-3">
+      <PopoverContent align="start" className="max-w-none p-3" aria-label={label}>
         <DayPanel iso={day.iso} releaseId={open?.releaseId ?? null} releases={day.releases} today={today} />
       </PopoverContent>
     </Popover>

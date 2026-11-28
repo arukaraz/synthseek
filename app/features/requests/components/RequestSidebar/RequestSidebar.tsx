@@ -3,6 +3,7 @@
 import { useHoldRequestListRows } from "@hooks/api";
 import { useInfiniteScroll } from "@hooks/ui/useInfiniteScroll";
 import { useScrollEdges } from "@hooks/ui/useScrollEdges";
+import { listPositionAttributes, listPositionOf } from "@utils/list-position";
 
 import { RequestsEmptyState } from "../RequestsEmptyState";
 import { RequestSidebarItem } from "./RequestSidebarItem";
@@ -11,6 +12,7 @@ import type { RequestSidebarProps } from "./types";
 
 export function RequestSidebar({
   items,
+  total,
   selectedId,
   onSelect,
   searchQuery,
@@ -54,17 +56,23 @@ export function RequestSidebar({
     <div className={`${sidebarContainer()} ${className ?? ""}`} data-cy="requests-sidebar" data-part="sidebar">
       <ul ref={edges.ref} className={sidebarList()}>
         {hasPreviousPage ? (
-          <li role="presentation">
+          <li aria-hidden="true">
             <div ref={previousSentinelRef} className={sidebarSentinel()} />
           </li>
         ) : null}
-        {items.map((item) => (
-          <li key={item.id} className={sidebarListItem()}>
+        {items.map((item, index) => (
+          <li
+            key={item.id}
+            className={sidebarListItem()}
+            {...listPositionAttributes(
+              hasPreviousPage || total === undefined ? undefined : listPositionOf(index, total)
+            )}
+          >
             <RequestSidebarItem request={item} isSelected={item.id === selectedId} onSelect={() => onSelect(item.id)} />
           </li>
         ))}
         {hasNextPage ? (
-          <li role="presentation">
+          <li aria-hidden="true">
             <div ref={nextSentinelRef} className={sidebarSentinel()} />
           </li>
         ) : null}

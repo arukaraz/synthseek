@@ -15,7 +15,12 @@ import {
   roleLabel,
   roleTone,
   sortMembers,
+  isOnlyWayIn,
+  oidcFormSeed,
+  oidcLabelOf,
+  oidcSecretToSend,
 } from "../helpers";
+import { SECRET_SENTINEL } from "../../../components/constants";
 import type { MemberSort, ServerPrivacy } from "../types";
 
 import enSettings from "@modules/i18n/messages/en/settings.json";
@@ -150,10 +155,25 @@ describe("sortMembers", () => {
     expect(sorted.map((row) => row.requestCount)).toEqual([1, 5]);
   });
 
-  it("sorts by plex type", () => {
-    const rows = [createMockUser({ id: "a", isPlexUser: true }), createMockUser({ id: "b", isPlexUser: false })];
-    const sorted = sortMembers(rows, { field: "type", direction: "asc" });
-    expect(sorted.map((row) => row.isPlexUser)).toEqual([false, true]);
+  it.each(["asc", "desc"] as const)("keeps accounts waiting for approval first when sorting %s", (direction) => {
+    const rows = [
+      createMockUser({ id: "a", username: "alice" }),
+      createMockUser({ id: "z", username: "zed", pendingApproval: true }),
+      createMockUser({ id: "b", username: "bob" }),
+    ];
+    const sorted = sortMembers(rows, { field: "user", direction });
+    expect(sorted[0]?.id).toBe("z");
+  });
+
+  it("sorts by how many ways each member has to sign in, fewest first", () => {
+    const plex = { id: "p", provider: "plex" as const, displayName: null };
+    const rows = [
+      createMockUser({ id: "both", hasPassword: true, signInIdentities: [plex] }),
+      createMockUser({ id: "password", hasPassword: true, signInIdentities: [] }),
+      createMockUser({ id: "three", hasPassword: true, signInIdentities: [plex, { ...plex, id: "q" }] }),
+    ];
+    const sorted = sortMembers(rows, { field: "signIn", direction: "asc" });
+    expect(sorted.map((row) => row.id)).toEqual(["password", "both", "three"]);
   });
 
   it("sorts by role rank with owner highest", () => {
@@ -221,5 +241,71 @@ describe("sameServerPrivacy", () => {
     { nowPlayingEnabled: false },
   ])("sees a change in %o", (change) => {
     expect(sameServerPrivacy(server, { ...server, ...change })).toBe(false);
+  });
+});
+
+describe("the single sign-on provider form", () => {
+  const stored = {
+    enabled: true,
+    issuerUrl: "https://auth.example.com/",
+    clientId: "synthseek",
+    clientSecret: "the-stored-secret",
+    scopes: "openid profile email",
+    buttonLabel: "Authentik",
+    lastTestPassedAt: "2026-11-27T10:00:00.000Z",
+    providerFirst: true,
+    autoRedirect: false,
+  };
+
+  it("never seeds the form with whatever the server sent as the secret, nor the fields other writers own", () => {
+    expect(oidcFormSeed(stored)).toEqual({
+      enabled: true,
+      issuerUrl: "https://auth.example.com/",
+      clientId: "synthseek",
+      clientSecret: "",
+      scopes: "openid profile email",
+      buttonLabel: "Authentik",
+    });
+  });
+
+  it("sends a typed secret as typed", () => {
+    expect(oidcSecretToSend("new-secret", true)).toBe("new-secret");
+  });
+
+  it("keeps the stored secret when nothing was typed", () => {
+    expect(oidcSecretToSend("", true)).toBe(SECRET_SENTINEL);
+  });
+
+  it("sends an empty secret when none is stored and none was typed", () => {
+    expect(oidcSecretToSend("", false)).toBe("");
+  });
+
+  it("names the provider by its button label, or by the default when the label is blank", () => {
+    expect(oidcLabelOf("  Authentik ")).toBe("Authentik");
+    expect(oidcLabelOf("   ")).toBe(enSettings.members.signsIn.oidcFallback);
+    expect(oidcLabelOf(undefined)).toBe(enSettings.members.signsIn.oidcFallback);
+  });
+});
+
+describe("isOnlyWayIn", () => {
+  it("is true for an account with no password and a single linked account", () => {
+    expect(
+      isOnlyWayIn(
+        createMockUser({ hasPassword: false, signInIdentities: [{ id: "i", provider: "oidc", displayName: null }] })
+      )
+    ).toBe(true);
+  });
+
+  it("is false once a password or a second account is there", () => {
+    const one = [{ id: "i", provider: "oidc" as const, displayName: null }];
+    expect(isOnlyWayIn(createMockUser({ hasPassword: true, signInIdentities: one }))).toBe(false);
+    expect(
+      isOnlyWayIn(
+        createMockUser({
+          hasPassword: false,
+          signInIdentities: [...one, { id: "j", provider: "jellyfin", displayName: null }],
+        })
+      )
+    ).toBe(false);
   });
 });

@@ -101,6 +101,7 @@ export function SubsonicSourceCard({ initial }: SubsonicSourceCardProps) {
           id={`${fieldId}-username`}
           value={draft.username}
           onChange={(value) => setField("username", value)}
+          autoComplete="off"
         />
       </SettingsField>
 

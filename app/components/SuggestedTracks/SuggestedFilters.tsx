@@ -50,7 +50,7 @@ export function SuggestedFilters({ years, saving, onApply }: SuggestedFiltersPro
           <Filter className="size-4" aria-hidden />
         </button>
       </PopoverTrigger>
-      <PopoverContent align="end" className={suggestedFilterPanel()}>
+      <PopoverContent align="end" className={suggestedFilterPanel()} aria-label={label}>
         <div className={suggestedFilterHead()}>
           <span className={suggestedFilterLabel()}>{t("suggestedTracks.years.label")}</span>
           <span className={suggestedFilterValue()}>{yearsLabel(draft, t)}</span>

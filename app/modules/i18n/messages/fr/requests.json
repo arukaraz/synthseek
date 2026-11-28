@@ -171,8 +171,6 @@
     "prioritized": "Priorisée",
     "explicit": "Explicite",
     "disc": "Disque {{number}}",
-    "showDetails": "Afficher les détails de {{title}}",
-    "hideDetails": "Masquer les détails de {{title}}",
     "actionsFor": "Actions pour {{title}}",
     "nextTry": "prochain essai {{time}}",
     "noTrySet": "en attente du prochain balayage",

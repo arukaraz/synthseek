@@ -133,7 +133,7 @@ export function SearchResultsWidget() {
     <div className="flex h-full flex-col" data-cy="search-results">
       <div className="border-fg/10 flex-shrink-0 border-b">
         <div className="p-4 pb-3 sm:p-6 sm:pb-4">
-          <h3 className="text-fg mb-1 text-base font-semibold sm:text-lg">{t("results.heading")}</h3>
+          <h2 className="text-fg mb-1 text-base font-semibold sm:text-lg">{t("results.heading")}</h2>
           <p className="text-fg/60 text-sm" data-cy="result-count">
             {t("results.count", { count: flatResults.length, query })}
           </p>

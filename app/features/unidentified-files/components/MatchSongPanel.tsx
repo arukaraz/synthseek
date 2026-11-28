@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Button } from "@components/ui/Button";
+import { InlineError } from "@components/ui/InlineError";
 import { Input } from "@components/ui/Input";
 import { Notice } from "@components/ui/Notice";
 import { PreviewAudition } from "@components/ui/PreviewButton";
@@ -160,6 +161,7 @@ export function MatchSongPanel({ group, file, onBack }: MatchSongPanelProps) {
       </div>
 
       <div className={panelFooter()}>
+        <InlineError error={assign.error ?? ignore.error ?? resolveLink.error} />
         <div className={footerActions()}>
           <span className={footerNote()}>{t("libraryScan.review.match.secondCopy")}</span>
           <div className={footerButtons()}>

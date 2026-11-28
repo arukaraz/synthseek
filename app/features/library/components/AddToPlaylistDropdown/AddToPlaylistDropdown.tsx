@@ -58,7 +58,7 @@ export function AddToPlaylistDropdown({ trackIds, onDone, trigger }: AddToPlayli
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>{trigger}</PopoverTrigger>
 
-      <PopoverContent align="end" className={dropdownContent()}>
+      <PopoverContent align="end" className={dropdownContent()} aria-label={t("playlists.dropdown.addToPlaylist")}>
         <div className={scrollList()}>
           {playlists.isLoading ? (
             <div className={loadingRow()}>

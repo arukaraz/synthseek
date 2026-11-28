@@ -77,13 +77,22 @@ describe("TrendingHeroNav", () => {
     render(<TrendingHeroNav {...buildProps({ total: 4, currentIndex: 2 })} />);
 
     const dots = screen.getAllByRole("button", { name: /Go to slide/ });
-    expect(dots[2].className).not.toEqual(dots[0].className);
+    expect(dots[2].firstElementChild?.className).not.toEqual(dots[0].firstElementChild?.className);
+  });
+
+  it("draws each dot inside its button, which only grows to a 24 px target inside the accessibility mode", () => {
+    render(<TrendingHeroNav {...buildProps({ total: 4, currentIndex: 0 })} />);
+
+    const [active] = screen.getAllByRole("button", { name: /Go to slide/ });
+    expect(active).toHaveClass("a11y-mode:h-6", "a11y-mode:min-w-6");
+    expect(active.className).not.toMatch(/(^| )(h-6|min-w-6|w-6)( |$)/);
+    expect(active.firstElementChild).toHaveClass("h-1", "w-5");
   });
 
   it("clamps the active dot to the last visible dot when currentIndex overflows the cap", () => {
     render(<TrendingHeroNav {...buildProps({ total: 12, currentIndex: 11 })} />);
 
     const dots = screen.getAllByRole("button", { name: /Go to slide/ });
-    expect(dots[MAX_DOTS - 1].className).not.toEqual(dots[0].className);
+    expect(dots[MAX_DOTS - 1].firstElementChild?.className).not.toEqual(dots[0].firstElementChild?.className);
   });
 });

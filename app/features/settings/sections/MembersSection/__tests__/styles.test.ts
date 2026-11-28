@@ -36,13 +36,13 @@ describe("MembersSection styles", () => {
   });
 
   it("maps the pill tone variants", () => {
-    expect(pill({ tone: "plex" })).toContain("text-warning-soft");
+    expect(pill({ tone: "pending" })).toContain("text-warning-soft");
     expect(pill({ tone: "local" })).toContain("text-fg/60");
   });
 
   it("keeps the pill on a single line", () => {
-    expect(pill({ tone: "plex" })).toContain("whitespace-nowrap");
-    expect(pill({ tone: "plex" })).toContain("shrink-0");
+    expect(pill({ tone: "pending" })).toContain("whitespace-nowrap");
+    expect(pill({ tone: "pending" })).toContain("shrink-0");
   });
 
   it("maps the importRow disabled variants", () => {

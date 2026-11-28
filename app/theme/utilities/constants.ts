@@ -1,0 +1,1 @@
+export const SHORT_WINDOW_MAX_HEIGHT_PX = 280;

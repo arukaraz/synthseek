@@ -44,3 +44,11 @@ export const quotaValue = cva("text-fg tabular-nums");
 export const quotaNote = cva("text-fg/50 w-full text-xs");
 
 export const quotaMessage = cva("text-fg/60 text-sm");
+
+export const waysInList = cva("m-0 flex list-none flex-col gap-2 p-0");
+
+export const waysInRow = cva("border-fg/10 bg-fg/5 rounded-lg border p-3");
+
+export const waysInStatus = cva("text-fg/50 truncate text-xs");
+
+export const waysInNote = cva("text-fg/60 text-xs");

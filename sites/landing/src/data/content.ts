@@ -14,8 +14,8 @@ export const SETUP_STEPS = [
     body: "One Docker compose file, one command.",
   },
   {
-    title: "Run the wizard",
-    body: "Admin account, download source, optional Plex sign-in and API keys.",
+    title: "Answer four questions",
+    body: "Create the admin account, then connect a media server, a download source and a contact email for MusicBrainz, or skip any of those three.",
   },
   {
     title: "Invite your people",
@@ -43,7 +43,7 @@ export const FAQ_ITEMS = [
   {
     question: "What do I need before installing?",
     answer:
-      "Docker and two folders: one where completed downloads land, one where your library lives. A running slskd instance with its own Soulseek account is the peer-to-peer source, and it is optional. The wizard and Settings take care of the rest, media servers included.",
+      "Docker and two folders: one where completed downloads land, one where your library lives. A running slskd instance with its own Soulseek account is the peer-to-peer source, and it is optional. First-run setup and Settings take care of the rest, media servers included.",
   },
   {
     question: "What happens when a download is wrong?",
@@ -58,6 +58,6 @@ export const FAQ_ITEMS = [
   {
     question: "Can I control what other users do?",
     answer:
-      "Yes. Roles decide who administers, whose requests import directly, and whose wait for approval. Administrator-only sections are hidden from members entirely.",
+      "Yes. Roles decide who administers, whose requests import directly, and whose wait for approval. Administrator-only sections are hidden from members entirely. Members sign in with a password, or with Plex, Jellyfin or an OpenID Connect provider you set up.",
   },
 ];

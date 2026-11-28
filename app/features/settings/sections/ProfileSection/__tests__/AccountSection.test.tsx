@@ -22,6 +22,7 @@ vi.mock("../components/LanguageCard", () => ({ LanguageCard: () => <div data-tes
 vi.mock("../components/MyRequestPresetCard", () => ({
   MyRequestPresetCard: () => <div data-testid="request-preset-card" />,
 }));
+vi.mock("../components/WaysInCard", () => ({ WaysInCard: () => <div data-testid="ways-in-card" /> }));
 
 import { AccountSection } from "../AccountSection";
 
@@ -44,6 +45,11 @@ describe("AccountSection", () => {
     expect(screen.getByTestId("request-preset-card")).toBeInTheDocument();
     expect(screen.getByTestId("edit-card")).toBeInTheDocument();
     expect(screen.getByTestId("password-card")).toBeInTheDocument();
+  });
+
+  it("puts the ways to sign in right above the password", () => {
+    render(<AccountSection />);
+    expect(screen.getByTestId("ways-in-card").nextElementSibling).toBe(screen.getByTestId("password-card"));
   });
 
   it("puts the profile editor right under the profile, then the language, then quota and request preset side by side in one row", () => {

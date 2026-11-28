@@ -84,6 +84,7 @@ export function LidarrTagsInput({ label, value, onChange, suggestions }: LidarrT
         </PopoverAnchor>
         <PopoverContent
           align="start"
+          aria-label={label}
           onOpenAutoFocus={(event) => event.preventDefault()}
           className="max-h-56 w-(--radix-popover-trigger-width) space-y-0.5 overflow-y-auto p-1"
         >

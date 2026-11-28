@@ -50,8 +50,8 @@
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .share-fan-item {
+.share-fan-item {
+  @variant motion-reduce {
     transition: opacity 0.18s ease;
     transition-delay: 0ms;
   }

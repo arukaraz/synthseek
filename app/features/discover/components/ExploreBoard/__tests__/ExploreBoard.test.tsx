@@ -215,7 +215,7 @@ describe("ExploreBoard", () => {
 
     const { container } = render(<ExploreBoard />, { wrapper: TooltipProvider });
     fireEvent.click(screen.getByRole("button", { name: i18n.t("discover:board.customize") }));
-    fireEvent.click(within(tile(container, "g")).getByRole("button", { name: "Large" }));
+    fireEvent.click(within(tile(container, "g")).getByRole("button", { name: /Large$/ }));
 
     expect(saveMock.mock.calls.at(-1)?.[0]).toEqual({
       ...TWO_TILES,
@@ -269,7 +269,7 @@ describe("ExploreBoard", () => {
 
     const { container } = render(<ExploreBoard />, { wrapper: TooltipProvider });
     fireEvent.click(screen.getByRole("button", { name: i18n.t("discover:board.customize") }));
-    fireEvent.click(within(tile(container, "a")).getByRole("button", { name: "Large" }));
+    fireEvent.click(within(tile(container, "a")).getByRole("button", { name: /Large$/ }));
 
     expect(saveMock.mock.calls.at(-1)?.[0].items[0]).toEqual({
       kind: "builtin",

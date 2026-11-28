@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 
 import { Button } from "@components/ui/Button";
 import { Checkbox } from "@components/ui/Checkbox";
+import { InlineError } from "@components/ui/InlineError";
 import { Input } from "@components/ui/Input";
 import { Notice } from "@components/ui/Notice";
 import { Spinner } from "@components/ui/Spinner";
@@ -202,6 +203,7 @@ export function MatchAlbumPanel({ group, onBack }: MatchAlbumPanelProps) {
       </div>
 
       <div className={panelFooter()}>
+        <InlineError error={assign.error ?? ignore.error ?? resolveLink.error} />
         {searchedWithoutResult ? (
           <div className={footerActions()}>
             <span className={footerNote()}>{t("libraryScan.review.match.matchedBy")}</span>

@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import { cn } from "@utils/cn";
 import { sizeClasses } from "./styles";
 import type { ProgressBarProps } from "./types";
@@ -10,11 +11,18 @@ export function ProgressBar({
   isActive = false,
   gradient = "from-primary-500 to-accent-500",
   size = "md",
+  label,
   className,
 }: ProgressBarProps) {
+  const { t } = useTranslation("components");
   return (
     <div
       className={cn("bg-surface/40 overflow-hidden rounded-full", sizeClasses[size], className)}
+      role="progressbar"
+      aria-label={label ?? t("a11yMode.progress.generic")}
+      aria-valuemin={0}
+      aria-valuemax={100}
+      aria-valuenow={Math.round(Math.min(100, Math.max(0, progress)))}
       data-testid="progress-bar"
       data-progress={progress}
       data-loading={isActive}

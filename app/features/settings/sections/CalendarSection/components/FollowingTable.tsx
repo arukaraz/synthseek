@@ -103,7 +103,7 @@ export function FollowingTable({ items, selection }: FollowingTableProps) {
     },
     {
       key: "more",
-      header: "",
+      header: <span className="sr-only">{t("following.columnActions")}</span>,
       className: "w-12",
       cell: (item) => (
         <ReleaseMoreMenu

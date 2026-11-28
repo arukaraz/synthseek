@@ -6,7 +6,7 @@ import type { PublicUser } from "@api/__generated__/types";
 
 interface MutationOptions {
   onSuccess?: (user: PublicUser) => void;
-  onError?: (error: { message?: string }) => void;
+  onError?: (error: { message?: string; data?: { appCode?: string } }) => void;
 }
 
 interface CapturedOptions {
@@ -19,7 +19,7 @@ const spies = vi.hoisted(() => {
     meSetData: vi.fn(),
     setupRequiredSetData: vi.fn(),
     setupRequiredInvalidate: vi.fn(),
-    errorToast: vi.fn(),
+    toast: { error: vi.fn(), success: vi.fn(), warning: vi.fn() },
     captured,
   };
 });
@@ -43,9 +43,7 @@ vi.mock("@utils/trpc", () => ({
   },
 }));
 
-vi.mock("@modules/errors", () => ({
-  errorToast: spies.errorToast,
-}));
+vi.mock("sonner", () => ({ toast: spies.toast }));
 
 const buildUser = (): PublicUser => ({
   id: "user_1",
@@ -74,21 +72,21 @@ describe("useSetupBootstrap", () => {
     expect(spies.setupRequiredSetData).not.toHaveBeenCalled();
   });
 
-  it("on error delegates to errorToast with the error and the setup fallback key", () => {
+  it("shows no toast on error, because the form says what went wrong in place", () => {
     renderHook(() => useSetupBootstrap());
 
-    const error = { message: "Username taken" };
-    spies.captured.options?.onError?.(error);
+    spies.captured.options?.onError?.({ message: "Username taken" });
 
-    expect(spies.errorToast).toHaveBeenCalledWith(error, "auth.setupFailed");
+    expect(spies.toast.error).not.toHaveBeenCalled();
+    expect(spies.setupRequiredInvalidate).not.toHaveBeenCalled();
   });
 
-  it("on error still delegates to errorToast when no message is provided", () => {
+  it("asks the server again whether setup is required when it answers that setup was already completed", () => {
     renderHook(() => useSetupBootstrap());
 
-    const error = { message: undefined };
-    spies.captured.options?.onError?.(error);
+    spies.captured.options?.onError?.({ message: "done", data: { appCode: "SETUP_ALREADY_COMPLETED" } });
 
-    expect(spies.errorToast).toHaveBeenCalledWith(error, "auth.setupFailed");
+    expect(spies.setupRequiredInvalidate).toHaveBeenCalledTimes(1);
+    expect(spies.setupRequiredSetData).not.toHaveBeenCalled();
   });
 });

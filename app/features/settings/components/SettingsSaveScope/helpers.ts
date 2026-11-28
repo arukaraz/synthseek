@@ -1,4 +1,4 @@
-import type { SaveEntry } from "./types";
+import type { SaveEntry, SaveOutcome } from "./types";
 
 export function sameEntryState(previous: SaveEntry | undefined, next: SaveEntry): boolean {
   return (
@@ -30,14 +30,20 @@ export function dirtyLabels(entries: readonly SaveEntry[]): string[] {
   return [...new Set(entries.map((entry) => entry.label).filter((label): label is string => label !== null))];
 }
 
-export async function saveEach(entries: readonly SaveEntry[]): Promise<boolean> {
+export async function saveEachOutcome(entries: readonly SaveEntry[]): Promise<SaveOutcome> {
   let saved = true;
+  let failure: unknown = null;
   for (const entry of entries) {
     try {
       await entry.save();
-    } catch {
+    } catch (error) {
+      if (saved) failure = error;
       saved = false;
     }
   }
-  return saved;
+  return { saved, failure };
+}
+
+export async function saveEach(entries: readonly SaveEntry[]): Promise<boolean> {
+  return (await saveEachOutcome(entries)).saved;
 }

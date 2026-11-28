@@ -1,23 +1,19 @@
 "use client";
 
-import { cn } from "@utils/cn";
+import { useListPosition } from "@hooks/ui/useListPosition";
 import { artworkImage } from "@utils/artworkProxy";
+import { listPositionAttributes } from "@utils/list-position";
 import { playlistOriginLabel } from "@utils/playlist";
 import Image from "next/image";
 import { useTranslation } from "react-i18next";
 
 import { CardCoverActions } from "./CardCoverActions";
 import { CardPlayButton } from "./CardPlayButton";
-import {
-  cardInitials,
-  handleCardActivationKey,
-  mosaicTiles,
-  onOwnClick,
-  playlistSubtitle,
-  statusDotClass,
-} from "./helpers";
+import { CardStatusDot } from "./CardStatusDot";
+import { cardInitials, mosaicTiles, onOwnClick, playlistSubtitle } from "./helpers";
 import { PlaylistCardMenu } from "./PlaylistCardMenu";
 import { PlaylistVisibilityMark } from "./PlaylistVisibilityMark";
+import { RowPrimaryButton } from "./RowPrimaryButton";
 import {
   cardBody,
   cardBodyRow,
@@ -30,7 +26,6 @@ import {
   cardRoot,
   cardSideColumn,
   cardStatusBadge,
-  cardStatusDot,
   cardSubtitle,
   cardTitle,
 } from "./styles";
@@ -39,8 +34,10 @@ import type { PlaylistCardProps } from "./types";
 export function PlaylistCard({ item, onOpen, onPlay, onOpenWorkshop, chrome = "overlay" }: PlaylistCardProps) {
   const { t } = useTranslation("library");
   const { t: tDetail } = useTranslation("contentDetail");
+  const position = useListPosition();
   const tiles = mosaicTiles(item.images, item.image);
   const origin = playlistOriginLabel(item.origin, t);
+  const subtitle = playlistSubtitle(item, origin, t);
   const activates = onOpen !== undefined;
   const openLabel = activates ? tDetail("openDetail", { name: item.name }) : undefined;
 
@@ -48,12 +45,9 @@ export function PlaylistCard({ item, onOpen, onPlay, onOpenWorkshop, chrome = "o
     <li
       data-part="media-tile"
       data-type="playlist"
+      {...listPositionAttributes(position)}
       className={cardRoot({ interactive: activates })}
-      role={activates ? "button" : undefined}
-      tabIndex={activates ? 0 : undefined}
-      aria-label={openLabel}
       onClick={activates && onOpen ? onOwnClick(onOpen) : undefined}
-      onKeyDown={activates && onOpen ? (event) => handleCardActivationKey(event, onOpen) : undefined}
     >
       <div className={cardCover()}>
         {tiles.length === 0 ? (
@@ -84,7 +78,7 @@ export function PlaylistCard({ item, onOpen, onPlay, onOpenWorkshop, chrome = "o
           </div>
         )}
         <span className={cardStatusBadge()}>
-          <span className={cn(cardStatusDot(), statusDotClass(item.status))} />
+          <CardStatusDot status={item.status} />
           {item.completed_tracks}/{item.total_tracks}
         </span>
         {onPlay && chrome === "overlay" ? <CardCoverActions name={item.name} order="inOrder" onPlay={onPlay} /> : null}
@@ -96,9 +90,9 @@ export function PlaylistCard({ item, onOpen, onPlay, onOpenWorkshop, chrome = "o
       <div className={cardBodyRow()}>
         <div className={cardBody()}>
           <p className={cardTitle()} data-part="media-tile-title">
-            {item.name}
+            {openLabel === undefined ? item.name : <RowPrimaryButton label={openLabel}>{item.name}</RowPrimaryButton>}
           </p>
-          <p className={cardSubtitle()}>{playlistSubtitle(item, origin, t)}</p>
+          <p className={cardSubtitle()}>{subtitle}</p>
           <p className={cardMeta()}>{t("page.counts.tracks", { count: item.total_tracks })}</p>
         </div>
         <div className={cardSideColumn()}>

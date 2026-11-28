@@ -64,6 +64,14 @@ describe("MonthGrid", () => {
     expect(within(cell).getByRole("button", { name: "+2 more" })).toBeInTheDocument();
   });
 
+  it("names the day panel after the day it opens on", () => {
+    renderMonth([release("a"), release("b")]);
+
+    fireEvent.click(screen.getByRole("gridcell", { name: /November 18.*2 releases/ }));
+
+    expect(screen.getByRole("dialog", { name: /November 18.*2 releases/ })).toBeInTheDocument();
+  });
+
   it("does not draw an overflow button for a day that fits", () => {
     renderMonth([release("a"), release("b")]);
 
@@ -114,8 +122,8 @@ describe("MonthGrid", () => {
   it("names a reissue as one on its chip and leaves the others alone", () => {
     renderMonth([release("a", { reissue: true }), release("b")]);
 
-    expect(screen.getByRole("button", { name: "Artist a, Title a, Album, Reissue, Announced" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Artist b, Title b, Album, Announced" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Artist a: Title a, Album, Reissue, Announced" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Artist b: Title b, Album, Announced" })).toBeInTheDocument();
   });
 
   it("says a release is a reissue in the day list", () => {

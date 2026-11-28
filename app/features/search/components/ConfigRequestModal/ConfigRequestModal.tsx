@@ -14,6 +14,7 @@ import {
   useLidarrProfiles,
   useMyRequestPreset,
 } from "@hooks/api";
+import { InlineError } from "@components/ui/InlineError";
 import { Input } from "@components/ui/Input";
 import { Spinner } from "@components/ui/Spinner";
 import { useAuthContext } from "@modules/providers/AuthProvider";
@@ -312,6 +313,8 @@ export function ConfigRequestModal({
           </>
         )}
       </div>
+
+      <InlineError error={delegateArtistMutation.error} className="px-4 pb-2" />
 
       <RequestFooter summary={footerSummary} note={footerNote} keepRequesting={keepRequesting}>
         <Button

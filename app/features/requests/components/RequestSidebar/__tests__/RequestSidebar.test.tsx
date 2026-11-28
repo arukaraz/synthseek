@@ -74,6 +74,29 @@ describe("RequestSidebar", () => {
     expect(refresh.release).toHaveBeenCalledTimes(1);
   });
 
+  it("gives each request its place in the whole list while the list is read from its start", () => {
+    const items = [
+      makeRequestWithTracks({ id: "a", external_id: "ext-a" }),
+      makeRequestWithTracks({ id: "b", external_id: "ext-b" }),
+    ];
+    render(<RequestSidebar {...props({ items, total: 140, hasNextPage: true })} />);
+
+    const rows = screen.getAllByRole("listitem").filter((row) => row.hasAttribute("aria-posinset"));
+
+    expect(rows.map((row) => row.getAttribute("aria-posinset"))).toEqual(["1", "2"]);
+    expect(rows.map((row) => row.getAttribute("aria-setsize"))).toEqual(["140", "140"]);
+  });
+
+  it("claims no position for a row when earlier pages are not loaded, because it cannot know it", () => {
+    const items = [makeRequestWithTracks({ id: "a", external_id: "ext-a" })];
+    render(<RequestSidebar {...props({ items, total: 140, hasPreviousPage: true })} />);
+
+    for (const row of screen.getAllByRole("listitem")) {
+      expect(row).not.toHaveAttribute("aria-posinset");
+      expect(row).not.toHaveAttribute("aria-setsize");
+    }
+  });
+
   it("renders the empty state when there are no items", () => {
     render(<RequestSidebar {...props({})} />);
 

@@ -30,6 +30,13 @@ export interface ModalTopbarProps {
 export interface ConnectPromptProps {
   source: LibrarySourceDescription | undefined;
   expired?: boolean;
+  inline?: boolean;
+}
+
+export interface PlaylistLinkFieldProps {
+  source: LibrarySourceDescription;
+  connected: boolean;
+  onLoaded: (item: LibraryItem) => void;
 }
 
 export interface ModalToolbarProps {
@@ -54,6 +61,7 @@ export interface MasterTableProps {
   draft: LibraryDraft;
   hiddenOnMobile?: boolean;
   selectionBar: ReactNode;
+  footer?: ReactNode;
 }
 
 export interface TriStateToggleProps {
@@ -149,6 +157,7 @@ export interface ModalBottombarProps {
   hasChanges: boolean;
   onRefresh: () => void;
   isRefreshing: boolean;
+  refreshable?: boolean;
 }
 
 export interface AutoWatchTogglesProps {

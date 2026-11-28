@@ -10,6 +10,13 @@ import type {
 } from "@components/Player";
 import type { inferRouterInputs, inferRouterOutputs } from "@trpc/server";
 
+export interface TrackAnnouncementSubject {
+  id: string;
+  title: string;
+  artist: string;
+  playing: boolean;
+}
+
 export type ListeningConnectionStatus = inferRouterOutputs<AppRouter>["playback"]["scrobble"]["connections"][number];
 
 export type ListeningNowRow = inferRouterOutputs<AppRouter>["playback"]["listeningNow"][number];

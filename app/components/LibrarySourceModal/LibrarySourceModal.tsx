@@ -1,12 +1,14 @@
 "use client";
 
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@components/ui/Dialog";
+import { InlineError } from "@components/ui/InlineError";
 import { useSaveLibrarySourceChanges } from "@hooks/api/mutations/library-source/useSaveLibrarySourceChanges";
 import { buildDockItems, seedDockJob } from "@hooks/api/subscriptions";
 import { useInvalidateLibrarySources } from "@hooks/api/queries/library-source/useInvalidateLibrarySources";
 import { useLibrarySourceItems } from "@hooks/api/queries/library-source/useLibrarySourceItems";
 import { useLibrarySources } from "@hooks/api/queries/library-source/useLibrarySources";
 import { useLibrarySubscription } from "@hooks/api/queries/library-source/useLibrarySubscription";
+import { useShortcutGate } from "@hooks/ui/useShortcutGate";
 import { emitFriendlyToast, extractAppCode, resolveFriendlyError } from "@modules/errors";
 import { generateUuid } from "@utils/uuid";
 import { useEffect, useMemo, useState } from "react";
@@ -19,12 +21,13 @@ import { MasterTable } from "./components/MasterTable";
 import { DetailPanel } from "./components/DetailPanel";
 import { SelectionBulkBar } from "./components/SelectionBulkBar";
 import { ConnectPrompt } from "./components/ConnectPrompt";
+import { PlaylistLinkField } from "./components/PlaylistLinkField";
 import { PROVIDER_ERROR_CATEGORY } from "./constants";
-import { aggregateToggleState, resolveToggleTarget } from "./helpers";
+import { aggregateToggleState, itemsWithLinked, modalLayoutOf, resolveToggleTarget, withLinkedItem } from "./helpers";
 import { useFilteredItems } from "./hooks/useFilteredItems";
 import { useLibraryDraftState } from "./hooks/useLibraryDraftState";
-import { detailPaneWrapper, modalGrid, modalRoot, split } from "./styles";
-import type { LibraryFilter, LibraryItemType, LibrarySort, LibrarySourceModalProps } from "./types";
+import { detailPaneWrapper, linkPromptBody, modalGrid, modalRoot, split } from "./styles";
+import type { LibraryFilter, LibraryItem, LibraryItemType, LibrarySort, LibrarySourceModalProps } from "./types";
 
 export function LibrarySourceModal({ provider, open, onOpenChange }: LibrarySourceModalProps) {
   const { t } = useTranslation("library");
@@ -38,6 +41,10 @@ export function LibrarySourceModal({ provider, open, onOpenChange }: LibrarySour
   const invalidateSources = useInvalidateLibrarySources();
 
   const reauthNeeded = items.isError && extractAppCode(items.error) === "LIBRARY_SOURCE_REAUTH_REQUIRED";
+  const linksAccepted = source?.capabilities.playlistLinks.accepted ?? false;
+  const showList = source !== undefined && connected && !reauthNeeded;
+  const showLinkOnly = source !== undefined && !showList && linksAccepted;
+  const [linkedItems, setLinkedItems] = useState<LibraryItem[]>([]);
 
   useEffect(() => {
     if (!items.isError) return;
@@ -73,6 +80,7 @@ export function LibrarySourceModal({ provider, open, onOpenChange }: LibrarySour
     if (!open) return;
     draft.reset(initialWatch);
     setDownload(true);
+    setLinkedItems([]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
 
@@ -81,8 +89,10 @@ export function LibrarySourceModal({ provider, open, onOpenChange }: LibrarySour
   const [direction, setDirection] = useState<"asc" | "desc">("desc");
   const [search, setSearch] = useState("");
 
-  const sourceItems = useMemo(() => items.data ?? [], [items.data]);
+  const listedItems = useMemo(() => (showList ? (items.data ?? []) : []), [showList, items.data]);
+  const sourceItems = useMemo(() => itemsWithLinked(linkedItems, listedItems), [linkedItems, listedItems]);
   const filteredItems = useFilteredItems({ items: sourceItems, filter, sort, direction, search });
+  const visibleItems = showList ? filteredItems : sourceItems;
   const focusedItem = useMemo(
     () => sourceItems.find((i) => i.id === draft.state.focusedId) ?? null,
     [sourceItems, draft.state.focusedId]
@@ -90,6 +100,7 @@ export function LibrarySourceModal({ provider, open, onOpenChange }: LibrarySour
 
   const { setFocus, toggleSelect } = draft;
   const focusedId = draft.state.focusedId;
+  const allows = useShortcutGate();
 
   useEffect(() => {
     if (!open) return;
@@ -101,18 +112,18 @@ export function LibrarySourceModal({ provider, open, onOpenChange }: LibrarySour
       ) {
         return;
       }
-      if (filteredItems.length === 0) return;
-      const currentIdx = focusedId ? filteredItems.findIndex((i) => i.id === focusedId) : -1;
+      if (visibleItems.length === 0) return;
+      const currentIdx = focusedId ? visibleItems.findIndex((i) => i.id === focusedId) : -1;
 
       if (e.key === "ArrowDown") {
         e.preventDefault();
-        const nextIdx = currentIdx < 0 ? 0 : Math.min(currentIdx + 1, filteredItems.length - 1);
-        setFocus(filteredItems[nextIdx].id);
+        const nextIdx = currentIdx < 0 ? 0 : Math.min(currentIdx + 1, visibleItems.length - 1);
+        setFocus(visibleItems[nextIdx].id);
       } else if (e.key === "ArrowUp") {
         e.preventDefault();
         const nextIdx = currentIdx < 0 ? 0 : Math.max(currentIdx - 1, 0);
-        setFocus(filteredItems[nextIdx].id);
-      } else if (e.key === " " || e.code === "Space") {
+        setFocus(visibleItems[nextIdx].id);
+      } else if ((e.key === " " || e.code === "Space") && allows(e)) {
         if (focusedId) {
           e.preventDefault();
           toggleSelect(focusedId);
@@ -121,7 +132,7 @@ export function LibrarySourceModal({ provider, open, onOpenChange }: LibrarySour
     };
     document.addEventListener("keydown", handler);
     return () => document.removeEventListener("keydown", handler);
-  }, [open, filteredItems, focusedId, setFocus, toggleSelect]);
+  }, [open, visibleItems, focusedId, setFocus, toggleSelect, allows]);
 
   useEffect(() => {
     if (!focusedId) return;
@@ -169,6 +180,14 @@ export function LibrarySourceModal({ provider, open, onOpenChange }: LibrarySour
     const target = resolveToggleTarget(importState);
     draft.setImportForItems(selectedItems, target);
     if (!target) draft.setSyncForItems(selectedItems, false);
+  };
+
+  const handleLoaded = (item: LibraryItem) => {
+    if (!listedItems.some((candidate) => candidate.id === item.id)) {
+      setLinkedItems((current) => withLinkedItem(current, item));
+    }
+    if (!item.imported) draft.setImportForItems([item], true);
+    setFocus(item.id);
   };
 
   const handleSave = async () => {
@@ -235,69 +254,87 @@ export function LibrarySourceModal({ provider, open, onOpenChange }: LibrarySour
         <DialogDescription className="sr-only">
           {t("librarySource.dialog.description", { provider: providerName })}
         </DialogDescription>
-        {source && connected && !reauthNeeded ? (
-          <div className={modalGrid()}>
+        {source && (showList || showLinkOnly) ? (
+          <div className={modalGrid({ layout: modalLayoutOf(showList, linksAccepted, linkedItems.length) })}>
             <ModalTopbar provider={provider} name={providerName} />
-            <ModalToolbar
-              providerName={providerName}
-              itemTypes={source.capabilities.itemTypes}
-              watch={source.capabilities.watch}
-              filter={filter}
-              onFilterChange={setFilter}
-              sort={sort}
-              onSortChange={setSort}
-              direction={direction}
-              onDirectionChange={setDirection}
-              search={search}
-              onSearchChange={setSearch}
-              autoWatch={draft.state.autoWatch}
-              onWatchChange={draft.setWatch}
-            />
-            <div className={split()}>
-              <MasterTable
-                items={filteredItems}
-                isLoading={items.isLoading}
-                draft={draft}
-                hiddenOnMobile={Boolean(focusedItem)}
-                selectionBar={
-                  draft.state.selectedIds.size > 0 ? (
-                    <SelectionBulkBar
-                      selectedCount={draft.state.selectedIds.size}
-                      syncState={syncState}
-                      importState={importState}
-                      hasPlaylists={hasPlaylists}
-                      isMixedType={isMixedType}
-                      onActivateSync={handleActivateSync}
-                      onActivateImport={handleActivateImport}
-                      onClear={draft.clearSelection}
-                      disabled={save.isPending}
-                    />
-                  ) : null
-                }
+            {linksAccepted ? <PlaylistLinkField source={source} connected={showList} onLoaded={handleLoaded} /> : null}
+            {showList ? (
+              <ModalToolbar
+                providerName={providerName}
+                itemTypes={source.capabilities.itemTypes}
+                watch={source.capabilities.watch}
+                filter={filter}
+                onFilterChange={setFilter}
+                sort={sort}
+                onSortChange={setSort}
+                direction={direction}
+                onDirectionChange={setDirection}
+                search={search}
+                onSearchChange={setSearch}
+                autoWatch={draft.state.autoWatch}
+                onWatchChange={draft.setWatch}
               />
-              <div className={detailPaneWrapper({ hiddenOnMobile: !focusedItem })}>
-                <DetailPanel
-                  provider={provider}
-                  providerName={providerName}
-                  focusedItem={focusedItem}
-                  draft={draft}
-                  onBack={() => draft.setFocus(null)}
-                />
+            ) : null}
+            {showList || linkedItems.length > 0 ? (
+              <>
+                <div className={split()}>
+                  <MasterTable
+                    items={visibleItems}
+                    isLoading={items.isLoading}
+                    draft={draft}
+                    hiddenOnMobile={Boolean(focusedItem)}
+                    selectionBar={
+                      draft.state.selectedIds.size > 0 ? (
+                        <SelectionBulkBar
+                          selectedCount={draft.state.selectedIds.size}
+                          syncState={syncState}
+                          importState={importState}
+                          hasPlaylists={hasPlaylists}
+                          isMixedType={isMixedType}
+                          onActivateSync={handleActivateSync}
+                          onActivateImport={handleActivateImport}
+                          onClear={draft.clearSelection}
+                          disabled={save.isPending}
+                        />
+                      ) : null
+                    }
+                    footer={showList ? undefined : <ConnectPrompt source={source} expired={reauthNeeded} inline />}
+                  />
+                  <div className={detailPaneWrapper({ hiddenOnMobile: !focusedItem })}>
+                    <DetailPanel
+                      provider={provider}
+                      providerName={providerName}
+                      focusedItem={focusedItem}
+                      draft={draft}
+                      onBack={() => draft.setFocus(null)}
+                    />
+                  </div>
+                </div>
+                <div>
+                  <InlineError error={save.error} className="px-4 py-2" />
+                  <ModalBottombar
+                    download={
+                      source.capabilities.streamsAudio
+                        ? { enabled: download, onChange: setDownload, providerName }
+                        : null
+                    }
+                    totalRows={totalRows}
+                    totalTracks={totalTracks}
+                    onSave={handleSave}
+                    onCancel={() => onOpenChange(false)}
+                    isSaving={save.isPending}
+                    hasChanges={hasChanges}
+                    onRefresh={() => void items.refetch()}
+                    isRefreshing={items.isFetching}
+                    refreshable={showList}
+                  />
+                </div>
+              </>
+            ) : (
+              <div className={linkPromptBody()}>
+                <ConnectPrompt source={source} expired={reauthNeeded} />
               </div>
-            </div>
-            <ModalBottombar
-              download={
-                source.capabilities.streamsAudio ? { enabled: download, onChange: setDownload, providerName } : null
-              }
-              totalRows={totalRows}
-              totalTracks={totalTracks}
-              onSave={handleSave}
-              onCancel={() => onOpenChange(false)}
-              isSaving={save.isPending}
-              hasChanges={hasChanges}
-              onRefresh={() => void items.refetch()}
-              isRefreshing={items.isFetching}
-            />
+            )}
           </div>
         ) : (
           <ConnectPrompt source={source} expired={reauthNeeded} />

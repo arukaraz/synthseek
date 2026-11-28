@@ -34,6 +34,12 @@ function Harness() {
 }
 
 describe("FollowingTable", () => {
+  it("names every column, the one holding the row menu included", () => {
+    render(<Harness />);
+
+    expect(screen.getByRole("columnheader", { name: "Actions" })).toBeInTheDocument();
+  });
+
   it("opens the artist modal when the name is pressed", async () => {
     render(<Harness />);
 

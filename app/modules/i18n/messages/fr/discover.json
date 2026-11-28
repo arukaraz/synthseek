@@ -2,6 +2,18 @@
   "screen": {
     "srHeading": "Découvrir"
   },
+  "finishSetup": {
+    "title": "Terminer la configuration",
+    "progress": "{{done}} sur {{total}}",
+    "listLabel": "Reste à configurer",
+    "setUp": "Configurer",
+    "hide": "Masquer pour l'instant",
+    "items": {
+      "mediaServer": "Serveur multimédia",
+      "downloadSource": "Source de téléchargement",
+      "musicbrainzContact": "E-mail de contact MusicBrainz"
+    }
+  },
   "categories": {
     "screen": {
       "back": "Retour",
@@ -109,9 +121,10 @@
     "title": "Scrobbles récents",
     "listensTitle": "Écoutes récentes",
     "seeMore": "Voir plus",
-    "seeMoreAriaLabel": "Ouvrir le profil {{provider}}",
+    "seeMoreAriaLabel": "Voir plus : profil {{provider}}",
     "scrollLeftAriaLabel": "Défiler à gauche",
     "scrollRightAriaLabel": "Défiler à droite",
+    "railLabel": "Écoutes récentes",
     "ageJustNow": "à l'instant",
     "ageMinutes": "il y a {{count}} min",
     "ageHours": "il y a {{count}} h",

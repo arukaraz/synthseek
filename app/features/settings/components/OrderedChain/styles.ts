@@ -71,7 +71,7 @@ export const chainItemStatus = cva("inline-flex items-center gap-1.5 text-xs", {
 export const chainArrows = cva("relative z-10 flex flex-col");
 
 export const chainArrow = cva(
-  "text-fg/40 hover:text-fg transition-colors disabled:pointer-events-none disabled:opacity-30"
+  "text-fg/40 hover:text-fg a11y-mode:grid a11y-mode:size-6 a11y-mode:place-items-center transition-colors disabled:pointer-events-none disabled:opacity-30"
 );
 
 export const chainHint = cva("text-fg/50 mt-2 px-1 text-xs");

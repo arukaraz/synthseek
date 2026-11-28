@@ -399,13 +399,13 @@ describe("PlaylistDetailBody editing", () => {
       <PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} onNavigate={vi.fn()} />
     );
 
-    await user.click(screen.getByRole("button", { name: "Filter and sort" }));
+    await user.click(screen.getByRole("button", { name: /Filter and sort/ }));
     await user.click(screen.getByRole("menuitemradio", { name: "Name" }));
 
     const ascTitles = screen.getAllByText(/Apple|Banana/).map((node) => node.textContent);
     expect(ascTitles).toEqual(["Apple", "Banana"]);
 
-    await user.click(screen.getByRole("button", { name: "Filter and sort" }));
+    await user.click(screen.getByRole("button", { name: /Filter and sort/ }));
     await user.click(screen.getByRole("button", { name: "Descending" }));
 
     const descTitles = screen.getAllByText(/Apple|Banana/).map((node) => node.textContent);

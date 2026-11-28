@@ -59,11 +59,11 @@ export const arrangeTools = cva(
 );
 
 export const arrangeHandle = cva(
-  "text-fg/60 hover:text-fg flex size-5 shrink-0 cursor-grab touch-none items-center justify-center rounded-md outline-none active:cursor-grabbing"
+  "text-fg/60 hover:text-fg a11y-mode:size-6 flex size-5 shrink-0 cursor-grab touch-none items-center justify-center rounded-md outline-none active:cursor-grabbing"
 );
 
 export const arrangeButton = cva(
-  "text-fg/60 hover:text-destructive-vivid hover:bg-destructive-vivid/10 focus-visible:ring-primary-400 flex size-5 shrink-0 items-center justify-center rounded-md outline-none focus-visible:ring-2"
+  "text-fg/60 hover:text-destructive-vivid hover:bg-destructive-vivid/10 focus-visible:ring-primary-400 a11y-mode:size-6 flex size-5 shrink-0 items-center justify-center rounded-md outline-none focus-visible:ring-2"
 );
 
 export const arrangeTileBody = cva("size-full overflow-hidden");

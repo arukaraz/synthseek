@@ -19,7 +19,7 @@ export const cardRoot = cva(
   {
     variants: {
       interactive: {
-        true: "focus-visible:ring-primary-500/60 cursor-pointer rounded-lg outline-none focus-visible:ring-2",
+        true: "has-[[data-row-primary]:focus-visible]:ring-primary-500/60 cursor-pointer rounded-lg has-[[data-row-primary]:focus-visible]:ring-2",
         false: "",
       },
     },
@@ -48,7 +48,8 @@ export const cardSelectBox = cva(
     variants: {
       shown: {
         true: "opacity-100",
-        false: "focus-within:opacity-100 sm:opacity-0 sm:group-hover:opacity-100 sm:pointer-coarse:opacity-100",
+        false:
+          "focus-within:opacity-100 a11y-mode:opacity-100 sm:opacity-0 sm:group-hover:opacity-100 sm:pointer-coarse:opacity-100 sm:[@media(hover:none)]:opacity-100",
       },
     },
     defaultVariants: { shown: false },
@@ -71,11 +72,15 @@ export const cardStatusBadge = cva(
 
 export const cardStatusDot = cva("size-1.5 shrink-0 rounded-full");
 
+export const cardStatusIcon = cva("hidden size-3 shrink-0 a11y-mode:block");
+
 export const cardCoverActions = cva(
-  "pointer-events-none absolute inset-0 z-1 grid grid-flow-col place-content-center gap-2 transition-opacity focus-within:opacity-100 has-data-[state=open]:opacity-100 sm:opacity-0 sm:group-hover:opacity-100"
+  "pointer-events-none absolute inset-0 z-1 grid grid-flow-col place-content-center gap-2 transition-opacity focus-within:opacity-100 has-data-[state=open]:opacity-100 a11y-mode:opacity-100 sm:opacity-0 sm:group-hover:opacity-100 sm:[@media(hover:none)]:opacity-100"
 );
 
-export const cardCoverScrim = cva("absolute inset-0 -z-1 bg-veil/45");
+export const cardCoverScrim = cva(
+  "absolute inset-0 -z-1 bg-veil/45 sm:a11y-mode:bg-transparent sm:[@media(hover:none)]:bg-transparent"
+);
 
 export const cardCoverAction = cva(
   "focus-visible:ring-primary-400 bg-primary-500 text-primary-foreground pointer-events-auto grid size-10 place-items-center rounded-full backdrop-blur-sm transition-transform hover:scale-105 focus-visible:ring-2 focus-visible:outline-none disabled:opacity-60"
@@ -103,7 +108,7 @@ export const cardBodyRow = cva("flex min-w-0 items-start gap-1");
 export const cardBody = cva("flex min-w-0 flex-1 flex-col gap-0.5 px-0.5");
 
 export const listRow = cva(
-  "focus-visible:ring-primary-500/60 flex min-w-0 cursor-pointer items-center gap-3 rounded-lg py-1.5 outline-none focus-visible:ring-2 max-sm:select-none max-sm:[-webkit-touch-callout:none]",
+  "has-[[data-row-primary]:focus-visible]:ring-primary-500/60 flex min-w-0 cursor-pointer items-center gap-3 rounded-lg py-1.5 has-[[data-row-primary]:focus-visible]:ring-2 max-sm:select-none max-sm:[-webkit-touch-callout:none]",
   {
     variants: {
       selected: { true: "bg-primary-500/12", false: "" },
@@ -129,6 +134,8 @@ export const listRowTitle = cva("text-fg truncate text-15 font-semibold");
 export const listRowSubtitle = cva("text-fg/60 truncate text-13");
 
 export const listRowCheck = cva("pointer-events-none shrink-0");
+
+export const rowPrimary = cva("block w-full min-w-0 cursor-[inherit] truncate text-start outline-none");
 
 export const cardTitle = cva("text-fg truncate text-sm font-semibold");
 

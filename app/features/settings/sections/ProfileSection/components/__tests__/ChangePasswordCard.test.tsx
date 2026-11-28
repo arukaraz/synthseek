@@ -33,6 +33,19 @@ describe("ChangePasswordCard", () => {
     expect(screen.getByLabelText(enSettings.profile.password.newAriaLabel)).toBeInTheDocument();
   });
 
+  it("tells the browser which password is the current one and which is the new one", () => {
+    render(<ChangePasswordCard user={createMockUser({ plex_username: null, hasPassword: true })} />);
+
+    expect(screen.getByLabelText(enSettings.profile.password.currentAriaLabel)).toHaveAttribute(
+      "autocomplete",
+      "current-password"
+    );
+    expect(screen.getByLabelText(enSettings.profile.password.newAriaLabel)).toHaveAttribute(
+      "autocomplete",
+      "new-password"
+    );
+  });
+
   it("lets an account that has a password change it while Plex is linked too", () => {
     render(<ChangePasswordCard user={createMockUser({ plex_username: "plexuser", hasPassword: true })} />);
     expect(screen.getByLabelText(enSettings.profile.password.currentAriaLabel)).toBeInTheDocument();
@@ -40,9 +53,19 @@ describe("ChangePasswordCard", () => {
   });
 
   it("tells an account that signs in only with Plex where to set a password", () => {
-    render(<ChangePasswordCard user={createMockUser({ plex_username: "plexuser", hasPassword: false })} />);
+    render(
+      <ChangePasswordCard user={createMockUser({ plex_username: "plexuser", plexLinked: true, hasPassword: false })} />
+    );
     expect(screen.getByText(enSettings.profile.password.managedByPlex)).toBeInTheDocument();
     expect(screen.queryByLabelText(enSettings.profile.password.currentAriaLabel)).not.toBeInTheDocument();
+  });
+
+  it("does not send an account that signs in with another linked account to Plex", () => {
+    render(
+      <ChangePasswordCard user={createMockUser({ plex_username: null, plexLinked: false, hasPassword: false })} />
+    );
+    expect(screen.getByText(enSettings.profile.password.managedElsewhere)).toBeInTheDocument();
+    expect(screen.queryByText(enSettings.profile.password.managedByPlex)).not.toBeInTheDocument();
   });
 
   it("keeps the submit button disabled until both fields are valid", async () => {

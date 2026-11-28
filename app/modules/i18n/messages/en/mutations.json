@@ -16,7 +16,13 @@
     "noNewImported": "No new users imported",
     "imported_one": "Imported {{count}} user{{skipped}}",
     "imported_other": "Imported {{count}} users{{skipped}}",
-    "importedSkipped": " ({{count}} skipped)"
+    "importedSkipped": " ({{count}} skipped)",
+    "approved": "Account approved",
+    "approveFailed": "Failed to approve the account",
+    "rejected": "Account rejected and removed",
+    "rejectFailed": "Failed to reject the account",
+    "identityUnlinked": "Sign-in method removed",
+    "identityUnlinkFailed": "Failed to remove the sign-in method"
   },
   "settings": {
     "audioAnalysisSaved": "Audio analysis speed saved",
@@ -46,6 +52,7 @@
     "enrichmentFailed": "Failed to update enrichment settings",
     "spotifyFailed": "Failed to update Spotify settings",
     "finishWizardFailed": "Could not finish setup",
+    "dismissSetupFailed": "Could not hide the setup card",
     "formattingSaved": "Formatting saved",
     "downloadSourcesSaved": "Download sources updated",
     "downloadSourceOrderSaved": "Order of the download sources saved",
@@ -80,6 +87,15 @@
     "recycleBinSaved": "Recycle bin settings saved",
     "duplicateResolutionSaved": "Duplicate handling saved",
     "duplicateResolutionFailed": "Failed to save how duplicates are handled",
+    "signInSaved": "Sign-in screen setting saved",
+    "signInFailed": "Failed to save the sign-in screen setting",
+    "oidcSaved": "Single sign-on provider saved",
+    "oidcFailed": "Failed to save the single sign-on provider",
+    "oidcTestFailed": "Failed to test the connection",
+    "oidcSignInModeSaved": "Sign-in options saved",
+    "oidcSignInModeFailed": "Failed to save the sign-in options",
+    "accountProvisioningSaved": "Account creation saved",
+    "accountProvisioningFailed": "Failed to save account creation",
     "recycleBinSaveFailed": "Failed to save recycle bin settings",
     "recycleBinEmptied_one": "Recycle bin emptied, {{count}} file removed",
     "recycleBinEmptied_other": "Recycle bin emptied, {{count}} files removed",
@@ -113,12 +129,16 @@
   "auth": {
     "changePasswordFailed": "Failed to change password",
     "loginFailed": "Login failed",
-    "setupFailed": "Setup failed",
     "updateProfileFailed": "Failed to update profile",
     "plexUnlinkFailed": "Failed to disconnect Plex",
     "passwordChanged": "Password changed",
     "profileUpdated": "Profile updated",
-    "plexUnlinked": "Plex account disconnected"
+    "plexUnlinked": "Plex account disconnected",
+    "oidcLinkFailed": "Failed to start linking the account",
+    "jellyfinLinked": "Jellyfin account linked",
+    "jellyfinLinkFailed": "Failed to link the Jellyfin account",
+    "identityUnlinked": "Sign-in method removed",
+    "identityUnlinkFailed": "Failed to remove the sign-in method"
   },
   "oauth": {
     "denyFailed": "Failed to cancel authorization",

@@ -14,10 +14,20 @@ describe("SelectMenu", () => {
     const { rerender } = render(
       <SelectMenu value={null} options={OPTIONS} onChange={vi.fn()} ariaLabel="Path" placeholder="Pick one" />
     );
-    expect(screen.getByRole("button", { name: "Path" })).toHaveTextContent("Pick one");
+    expect(screen.getByRole("button", { name: /Path$/ })).toHaveTextContent("Pick one");
 
     rerender(<SelectMenu value="archive" options={OPTIONS} onChange={vi.fn()} ariaLabel="Path" />);
-    expect(screen.getByRole("button", { name: "Path" })).toHaveTextContent("Archive");
+    expect(screen.getByRole("button", { name: /Path$/ })).toHaveTextContent("Archive");
+  });
+
+  it("starts the name of the trigger with the choice it draws", () => {
+    const { rerender } = render(
+      <SelectMenu value="archive" options={OPTIONS} onChange={vi.fn()} ariaLabel="Path" size="lg" />
+    );
+    expect(screen.getByRole("button", { name: "Archive /mnt/archive Path" })).toBeInTheDocument();
+
+    rerender(<SelectMenu value={null} options={OPTIONS} onChange={vi.fn()} ariaLabel="Path" placeholder="Pick one" />);
+    expect(screen.getByRole("button", { name: "Pick one Path" })).toBeInTheDocument();
   });
 
   it("hands back the option picked, with its own value", async () => {
@@ -25,7 +35,7 @@ describe("SelectMenu", () => {
     const onChange = vi.fn();
     render(<SelectMenu value="music" options={OPTIONS} onChange={onChange} ariaLabel="Path" />);
 
-    await user.click(screen.getByRole("button", { name: "Path" }));
+    await user.click(screen.getByRole("button", { name: /Path$/ }));
     await user.click(await screen.findByRole("menuitemradio", { name: /Archive/ }));
 
     expect(onChange).toHaveBeenCalledWith("archive");
@@ -35,7 +45,7 @@ describe("SelectMenu", () => {
     const user = userEvent.setup();
     render(<SelectMenu value="music" options={OPTIONS} onChange={vi.fn()} ariaLabel="Path" />);
 
-    await user.click(screen.getByRole("button", { name: "Path" }));
+    await user.click(screen.getByRole("button", { name: /Path$/ }));
     const option = await screen.findByRole("menuitemradio", { name: /Archive/ });
 
     expect(option).toHaveClass("items-start");
@@ -57,7 +67,7 @@ describe("SelectMenu", () => {
       />
     );
 
-    await user.click(screen.getByRole("button", { name: "Count" }));
+    await user.click(screen.getByRole("button", { name: /Count$/ }));
     await user.click(await screen.findByRole("menuitemradio", { name: "Two" }));
 
     expect(onChange).toHaveBeenCalledWith(2);
@@ -67,15 +77,15 @@ describe("SelectMenu", () => {
     const { rerender } = render(
       <SelectMenu value="archive" options={OPTIONS} onChange={vi.fn()} ariaLabel="Path" size="lg" />
     );
-    expect(screen.getByRole("button", { name: "Path" })).toHaveTextContent("/mnt/archive");
+    expect(screen.getByRole("button", { name: /Path$/ })).toHaveTextContent("/mnt/archive");
 
     rerender(<SelectMenu value="archive" options={OPTIONS} onChange={vi.fn()} ariaLabel="Path" />);
-    expect(screen.getByRole("button", { name: "Path" })).not.toHaveTextContent("/mnt/archive");
+    expect(screen.getByRole("button", { name: /Path$/ })).not.toHaveTextContent("/mnt/archive");
   });
 
   it("cannot be opened while disabled", () => {
     render(<SelectMenu value="music" options={OPTIONS} onChange={vi.fn()} ariaLabel="Path" disabled />);
 
-    expect(screen.getByRole("button", { name: "Path" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: /Path$/ })).toBeDisabled();
   });
 });

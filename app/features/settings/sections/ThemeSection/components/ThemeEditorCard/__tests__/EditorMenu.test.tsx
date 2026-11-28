@@ -39,6 +39,13 @@ describe("EditorMenu", () => {
     expect(screen.queryByRole("link")).not.toBeInTheDocument();
   });
 
+  it("names the menu panel after its trigger", async () => {
+    render(<EditorMenu editor={makeEditor()} panel={null} onShare={vi.fn()} />);
+    await openMenu();
+
+    expect(await screen.findByRole("dialog", { name: "Theme options" })).toBeInTheDocument();
+  });
+
   it("gives every row an info button named for it", async () => {
     render(<EditorMenu editor={makeEditor()} panel={null} onShare={vi.fn()} />);
     await openMenu();
@@ -120,7 +127,7 @@ describe("EditorMenu", () => {
     render(<EditorMenu editor={editor} panel={null} onShare={vi.fn()} />);
     await openMenu();
 
-    await userEvent.click(await screen.findByRole("button", { name: "Start from" }));
+    await userEvent.click(await screen.findByRole("button", { name: /^Synthseek Start from$/ }));
     await userEvent.click(await screen.findByRole("menuitemradio", { name: "Ocean" }));
 
     expect(fetchPreset).toHaveBeenCalledWith("ocean");
@@ -137,7 +144,7 @@ describe("EditorMenu", () => {
     render(<EditorMenu editor={editor} panel={null} onShare={vi.fn()} />);
     await openMenu();
 
-    await userEvent.click(await screen.findByRole("button", { name: "Start from" }));
+    await userEvent.click(await screen.findByRole("button", { name: /^Synthseek Start from$/ }));
     await userEvent.click(await screen.findByRole("menuitemradio", { name: "Midnight" }));
 
     await vi.waitFor(() => expect(errorToast).toHaveBeenCalledTimes(1));

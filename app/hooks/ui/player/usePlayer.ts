@@ -402,6 +402,7 @@ export function usePlayer(): { view: PlayerView | null; actions: PlayerActions }
     playing: sounding,
     stopped: !mirroring && session.halt === "stopped",
     loading: mirroring ? false : session.loading,
+    failing: !mirroring && session.consecutiveFailures > 0 && !session.playing && !session.loading,
     shuffle: mirroring && playingOn !== null ? playingOn.shuffle : session.shuffle,
     repeat: mirroring && playingOn !== null ? playingOn.repeat : session.repeat,
     volume: mirroring && playingOn !== null ? playingOn.volume : session.volume,

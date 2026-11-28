@@ -5,8 +5,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { REDUCED_MOTION_QUERY } from "@hooks/ui/constants";
-import { useMediaQuery } from "@hooks/ui/useMediaQuery";
+import { useMotionReduced } from "@hooks/ui/useMotionReduced";
 import { useSwipe } from "@hooks/ui/useSwipe";
 import { cn } from "@utils/cn";
 
@@ -28,7 +27,7 @@ import type { HighlightGalleryProps } from "./types";
 
 export function HighlightGallery({ slides, mediaPath, onError }: HighlightGalleryProps) {
   const { t } = useTranslation("settings");
-  const reducedMotion = useMediaQuery(REDUCED_MOTION_QUERY);
+  const reducedMotion = useMotionReduced();
   const [index, setIndex] = useState(0);
   const [choice, setChoice] = useState<boolean | null>(null);
   const [hovering, setHovering] = useState(false);

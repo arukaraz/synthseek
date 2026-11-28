@@ -126,6 +126,21 @@ describe("buildTrackColumns", () => {
     expect(screen.getByText("--")).toBeInTheDocument();
   });
 
+  it("gives the actions column a header name for assistive technology", () => {
+    const { header } = columnOf("actions");
+    render(
+      <table>
+        <thead>
+          <tr>
+            <th>{typeof header === "function" ? header() : header}</th>
+          </tr>
+        </thead>
+      </table>
+    );
+
+    expect(screen.getByRole("columnheader", { name: "Actions" })).toBeInTheDocument();
+  });
+
   it("replaces the old queue button column with the actions menu", () => {
     const { columns } = libraryPathColumn();
     const keys = columns.map((entry) => entry.key);

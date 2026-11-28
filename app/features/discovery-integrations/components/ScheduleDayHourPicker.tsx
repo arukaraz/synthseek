@@ -40,7 +40,11 @@ export function ScheduleDayHourPicker({ value, onChange, disabled }: ScheduleDay
           <ChevronDown className="h-4 w-4 shrink-0 opacity-60" />
         </button>
       </PopoverTrigger>
-      <PopoverContent align="start" className={schedulePickerContent()}>
+      <PopoverContent
+        align="start"
+        className={schedulePickerContent()}
+        aria-label={t("discoveryIntegrations.schedule.picker")}
+      >
         <div className={schedulePickerSection()}>
           <span className={schedulePickerSectionLabel()}>{t("discoveryIntegrations.schedule.day")}</span>
           <div className="grid grid-cols-4 gap-1.5">

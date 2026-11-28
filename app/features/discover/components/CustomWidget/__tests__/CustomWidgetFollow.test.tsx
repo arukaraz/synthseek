@@ -33,6 +33,12 @@ vi.mock("next/image", () => ({
   default: ({ src }: { src: string }) => <img src={src} alt="" />,
 }));
 
+function todayDivider(): HTMLElement {
+  const item = screen.getByText("Today").closest("li");
+  if (item === null) throw new Error("The Today divider is not a list item");
+  return item;
+}
+
 function follow(state: "announced" | "available" | "in_library", reissue = false) {
   return { catalogArtistId: "ar1", autoRequest: false, state, reissue };
 }
@@ -129,7 +135,7 @@ describe("follow rows in a widget", () => {
 
     show("calendar", createFeedAlbumResult([...upcoming, ...recent]), "M");
 
-    expect(screen.getByRole("separator")).toHaveTextContent("Today");
+    expect(todayDivider()).toHaveTextContent("Today");
     expect(screen.getAllByText(/^Next u/).map((node) => node.textContent)).toEqual(["Next u1", "Next u2", "Next u3"]);
     expect(screen.getAllByText(/^Past r/).map((node) => node.textContent)).toEqual(["Past r1", "Past r2", "Past r3"]);
   });
@@ -146,7 +152,7 @@ describe("follow rows in a widget", () => {
 
     expect(screen.getAllByText(/^Next u/).map((node) => node.textContent)).toEqual(["Next u1", "Next u2", "Next u3"]);
     expect(screen.getAllByText(/^Past r/).map((node) => node.textContent)).toEqual(["Past r1", "Past r2", "Past r3"]);
-    const divider = screen.getByRole("separator");
+    const divider = todayDivider();
     expect(divider.previousElementSibling).toHaveTextContent("Next u3");
     expect(divider.nextElementSibling).toHaveTextContent("Past r1");
   });
@@ -160,7 +166,25 @@ describe("follow rows in a widget", () => {
       ])
     );
 
-    expect(screen.getByRole("separator")).toHaveTextContent("Today");
+    expect(todayDivider()).toHaveTextContent("Today");
+  });
+
+  it("keeps the Today divider inside the list as a plain item, with no role that a list may not hold", () => {
+    show(
+      "calendar",
+      createFeedAlbumResult([
+        createFeedAlbumRow({ id: "p", name: "Past", releaseDate: "2000-01-01", follow: follow("in_library") }),
+        createFeedAlbumRow({ id: "n", name: "Next", releaseDate: "2999-01-01", follow: follow("announced") }),
+      ])
+    );
+
+    const divider = todayDivider();
+
+    expect(screen.queryByRole("separator")).not.toBeInTheDocument();
+    expect(divider).not.toHaveAttribute("role");
+    expect(divider.parentElement?.tagName).toBe("UL");
+    const list = divider.closest("ul");
+    expect(Array.from(list?.children ?? []).every((child) => child.tagName === "LI")).toBe(true);
   });
 
   it("places the divider between upcoming and past releases when the newest comes first", () => {
@@ -172,7 +196,7 @@ describe("follow rows in a widget", () => {
       ])
     );
 
-    const divider = screen.getByRole("separator");
+    const divider = todayDivider();
     expect(divider).toHaveTextContent("Today");
     expect(divider.previousElementSibling).toHaveTextContent("Next");
     expect(divider.nextElementSibling).toHaveTextContent("Past");
@@ -187,7 +211,7 @@ describe("follow rows in a widget", () => {
       ])
     );
 
-    const divider = screen.getByRole("separator");
+    const divider = todayDivider();
     expect(divider.previousElementSibling).toHaveTextContent("Next");
     expect(divider.nextElementSibling).toHaveTextContent("Out");
   });
@@ -200,7 +224,7 @@ describe("follow rows in a widget", () => {
       ])
     );
 
-    expect(screen.queryByRole("separator")).not.toBeInTheDocument();
+    expect(screen.queryByText("Today")).not.toBeInTheDocument();
   });
 
   it("points an empty follows feed at the Followed artists tab", () => {

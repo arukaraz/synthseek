@@ -82,7 +82,7 @@ function row(name: string) {
 }
 
 async function pick(user: ReturnType<typeof userEvent.setup>, trigger: string, option: string) {
-  await user.click(screen.getByRole("button", { name: trigger }));
+  await user.click(screen.getByRole("button", { name: new RegExp(`${trigger}$`) }));
   await user.click(await screen.findByRole("menuitemradio", { name: option }));
 }
 
@@ -258,7 +258,7 @@ describe("the condition editor", () => {
     await openNew(user);
 
     await pick(user, "Condition 1, what to look at", "Artist");
-    await user.click(screen.getByRole("button", { name: "Condition 1, how to compare" }));
+    await user.click(screen.getByRole("button", { name: /Condition 1, how to compare$/ }));
 
     const options = (await screen.findAllByRole("menuitemradio")).map((option) => option.textContent);
     expect(options).toEqual(["is", "contains", "is not"]);
@@ -339,7 +339,9 @@ describe("the condition editor", () => {
     await user.click(screen.getByRole("button", { name: "Remove condition 1" }));
 
     expect(screen.queryByRole("button", { name: "Remove condition 2" })).not.toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Condition 1, what to look at" })).toHaveTextContent("Quality requested");
+    expect(screen.getByRole("button", { name: /Condition 1, what to look at$/ })).toHaveTextContent(
+      "Quality requested"
+    );
   });
 
   it("stops at twelve conditions", async () => {

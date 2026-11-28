@@ -1,5 +1,6 @@
 import { EQUALIZER_MAX_DB, EQUALIZER_MIN_DB } from "@hooks/ui/player/constants";
 import { clampGainDb, steppedGainDb } from "@hooks/ui/player/equalizer";
+import { nameAfterVisibleText } from "@utils/accessibleName";
 
 import {
   ALL_PLAYER_MODES,
@@ -17,6 +18,7 @@ import type {
   PanelAnchorPoint,
   PanelEdge,
   MoreMenuLayout,
+  NamedControlProps,
   PlayerAttention,
   PlayerListeningMember,
   PlayerLyrics,
@@ -317,6 +319,14 @@ export function returnFocusTo(...selectors: string[]): void {
     ?.focus();
 }
 
+export function returnFocusToOpener(opener: Element | null, ...selectors: string[]): void {
+  if (opener instanceof HTMLElement && opener.isConnected && opener !== document.body) {
+    opener.focus();
+    return;
+  }
+  returnFocusTo(...selectors);
+}
+
 export function lyricLineState(
   lyrics: PlayerLyrics | null,
   active: number | null,
@@ -341,8 +351,23 @@ export function emptyReason(view: Pick<PlayerView, "lyricsLoading" | "lyricsFail
   return view.lyricsLoading ? "loading" : "empty";
 }
 
-export function labelled(label: string): { "aria-label": string; title: string } {
+export function labelledOnHover(label: string): NamedControlProps {
   return { "aria-label": label, title: label };
+}
+
+export function labelled(label: string): NamedControlProps {
+  return { ...labelledOnHover(label), "data-button-name": label };
+}
+
+export function labelledBelow(label: string): NamedControlProps {
+  return { ...labelled(label), "data-button-name-below": "" };
+}
+
+export function labelledAfterContent(
+  label: string,
+  visibleText: readonly (string | null)[]
+): { "aria-label": string; title: string } {
+  return { "aria-label": nameAfterVisibleText(label, ...visibleText), title: label };
 }
 
 export function effectivePlayerMode(mode: PlayerMode, target: HTMLElement | null): PlayerMode {

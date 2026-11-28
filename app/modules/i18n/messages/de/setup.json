@@ -1,87 +1,126 @@
 {
   "shell": {
-    "eyebrow": "Ersteinrichtung",
     "loading": "Einrichtung wird geladen",
-    "progress": "Schritt {{current}} von {{total}}",
-    "back": "Zurück"
+    "loadError": "Dein Einrichtungsfortschritt konnte nicht geladen werden.",
+    "retry": "Erneut versuchen"
+  },
+  "frame": {
+    "progress": "Frage {{current}} von {{total}}",
+    "progressReady": "Alle {{total}} Fragen sind beantwortet, bereit zum Abschließen",
+    "label": "{{number}} · {{name}}",
+    "steps": {
+      "account": "Du",
+      "media": "Wiedergabe",
+      "downloads": "Neue Musik",
+      "metadata": "Tags",
+      "summary": "Fertig"
+    }
   },
   "actions": {
+    "back": "Zurück",
     "continue": "Weiter",
-    "skip": "Überspringen",
-    "saving": "Wird gespeichert..."
+    "skip": "Vorerst überspringen",
+    "recordFailed": "Deine Antwort konnte nicht gespeichert werden. Bitte versuche es erneut."
   },
-  "admin": {
-    "title": "Erstelle dein Administratorkonto",
-    "description": "Dies ist das erste Konto auf dieser Synthseek-Installation. Du kannst später weitere Personen einladen.",
-    "creating": "Administrator wird erstellt...",
-    "submit": "Administrator erstellen",
-    "createError": "Das Administratorkonto konnte nicht erstellt werden. Bitte versuche es erneut.",
+  "account": {
+    "title": "Fangen wir mit deinem Konto an.",
+    "submit": "Konto erstellen",
+    "creating": "Wird erstellt...",
+    "createError": "Das Konto konnte nicht erstellt werden. Bitte versuche es erneut.",
+    "tokenLabel": "Einrichtungs-Token",
+    "tokenPlaceholder": "Token einfügen",
+    "tokenHint": "Das Token steht beim Start des Servers im Serverprotokoll.",
+    "tokenMissing": "Füge das Einrichtungs-Token aus dem Serverprotokoll ein.",
     "emailLabel": "E-Mail",
     "emailPlaceholder": "du@domain.com",
     "emailError": "Gib eine gültige E-Mail-Adresse ein.",
     "usernameLabel": "Benutzername",
     "usernamePlaceholder": "admin",
-    "usernameHint": "Mind. 3 Zeichen",
-    "usernameError": "Verwende zwischen 3 und 32 Zeichen.",
+    "usernameHint": "Mindestens 3 Zeichen",
+    "usernameError": "Verwende 3 bis 32 Zeichen.",
     "passwordHint": "Mindestens 8 Zeichen",
-    "passwordError": "Verwende mindestens 8 Zeichen."
+    "passwordError": "Verwende mindestens 8 Zeichen.",
+    "throttled": {
+      "visible": "Zu viele Versuche. Versuche es in {{time}} erneut.",
+      "announce": "Zu viele Versuche. Du kannst es in {{duration}} erneut versuchen.",
+      "released": "Du kannst es erneut versuchen."
+    }
   },
-  "slskd": {
-    "title": "Mit slskd verbinden (optional)",
-    "description": "Synthseek erreicht das Soulseek-Netzwerk über deinen slskd-Daemon. Du kannst dies später in den Einstellungen tun.",
-    "apiUrlLabel": "API-URL",
-    "apiUrlPlaceholder": "http://localhost:5030",
+  "media": {
+    "title": "Wo spielt deine Musik?",
+    "description": "Wähle den Server, auf dem deine Bibliothek schon liegt, falls vorhanden.",
+    "groupLabel": "Medienserver",
+    "existing": "Nutze ich bereits",
+    "none": "Vorerst keiner",
+    "noneCaption": "Synthseek spielt sie selbst ab"
+  },
+  "connect": {
+    "title": "{{server}} verbinden.",
+    "urlLabel": "{{server}}-URL",
+    "urlError": "Gib eine vollständige URL mit http:// oder https:// ein, etwa http://host:port.",
+    "navidromeUrlPlaceholder": "http://navidrome:4533",
+    "jellyfinUrlPlaceholder": "http://jellyfin:8096",
+    "usernameLabel": "Benutzername",
+    "passwordLabel": "Passwort",
     "apiKeyLabel": "API-Schlüssel",
-    "testIdle": "Verbindung testen",
-    "testBusy": "Wird getestet...",
-    "passed": "Verbindung verifiziert.",
-    "failed": "slskd konnte nicht erreicht werden. Überprüfe die URL und den API-Schlüssel.",
-    "failedReason": "Verbindung fehlgeschlagen: {{reason}}",
-    "overrideLink": "Ohne verifizierte Verbindung fortfahren",
-    "overrideArmed": "Es wird ohne verifizierte Verbindung fortgefahren. Du kannst dies später in den Einstellungen beheben.",
-    "saveFailed": "Die slskd-Verbindung konnte nicht gespeichert werden. Bestätige die URL und den API-Schlüssel und versuche es erneut.",
-    "blockedHint": "Teste die Verbindung oder überspringe diesen Schritt, um fortzufahren"
+    "apiKeyHint": "Erstelle einen im Jellyfin-Dashboard unter API-Schlüssel.",
+    "test": "Verbindung testen",
+    "testing": "Wird getestet...",
+    "passed": "{{server}} verbunden.",
+    "unreachable": "{{server}} ist unter dieser Adresse nicht erreichbar. Prüfe die URL und ob der Server läuft.",
+    "unauthorized": "{{server}} hat diese Zugangsdaten abgelehnt. Prüfe sie und versuche es erneut.",
+    "saveFailed": "Die Verbindung zu {{server}} konnte nicht gespeichert werden. Bitte versuche es erneut."
   },
   "plex": {
-    "title": "Plex verbinden (optional)",
-    "description": "Erlaubt Synthseek, deine Bibliothek nach jedem Import zu scannen und Playlists zu spiegeln. Du kannst dies später in den Einstellungen tun.",
-    "blockedHint": "Verbinde Plex oder überspringe diesen Schritt, um fortzufahren",
-    "intro": "Es öffnet sich ein Pop-up, in dem du dich bei plex.tv anmelden kannst.",
+    "intro": "Ein Popup öffnet sich, in dem du dich bei plex.tv anmeldest.",
     "connect": "Mit <0>Plex</0> anmelden",
     "connecting": "Warte auf Plex...",
     "saving": "Wird gespeichert...",
-    "connected": "Plex verbunden. Fahre mit dem nächsten Schritt fort.",
-    "noServers": "In diesem Konto wurden keine Plex-Server gefunden. Du kannst überspringen und später einen hinzufügen.",
-    "timeout": "Die Plex-Anmeldung hat das Zeitlimit überschritten. Versuche es erneut, oder überspringe und verbinde Plex später in den Einstellungen.",
-    "popupUnfinished": "Die Plex-Anmeldung wurde nicht abgeschlossen. Öffne das Pop-up erneut und genehmige den Zugriff, oder überspringe diesen Schritt.",
-    "serverPickerIntro": "Wähle den Plex-Server, den Synthseek verwenden soll:",
+    "connected": "Plex verbunden.",
+    "noServers": "Für dieses Konto wurden keine Plex-Server gefunden. Du kannst überspringen und später einen hinzufügen.",
+    "timeout": "Die Plex-Anmeldung ist abgelaufen. Versuche es erneut oder überspringe und verbinde Plex später in den Einstellungen.",
+    "popupUnfinished": "Die Plex-Anmeldung wurde nicht abgeschlossen. Öffne das Popup erneut und bestätige den Zugriff, oder überspringe diese Frage.",
+    "serverPickerIntro": "Wähle den Plex-Server, den Synthseek ansprechen soll:",
     "serverLocal": "lokal",
-    "serverRemote": "remote"
+    "serverRemote": "extern"
   },
-  "enrichment": {
-    "title": "Metadaten-Anreicherung (optional)",
-    "description": "Verbessert, wie Synthseek Titel kennzeichnet, bewertet und empfiehlt. Alle Schlüssel sind optional, aber empfohlen.",
-    "saveFailed": "Deine Einstellungen konnten nicht gespeichert werden. Überprüfe die Angaben und versuche es erneut.",
-    "lastfmLabel": "Last.fm-API-Schlüssel",
-    "lastfmHint": "Systemweiter Last.fm-API-Schlüssel. Wird von allen Benutzern gemeinsam genutzt.",
-    "fanartLabel": "FanART-API-Schlüssel",
-    "fanartHint": "Bezug von Coverbildern.",
-    "songlinkLabel": "Songlink-API-Schlüssel",
-    "songlinkHint": "Löst Titel-URLs plattformübergreifend für plattformübergreifende Playlist-Importe auf. Synthseek verwendet standardmäßig den öffentlichen Endpunkt. Lass es leer, es sei denn, du hast einen Schlüssel.",
-    "acoustidLabel": "AcoustID-API-Schlüssel",
-    "acoustidHint": "Audio-Fingerprinting-Ausweichweg für Titel ohne zuverlässige Tag-Metadaten.",
-    "musicbrainzLabel": "MusicBrainz-Kontakt-E-Mail",
-    "musicbrainzPlaceholder": "du@beispiel.com",
-    "musicbrainzHint": "Erforderlich. Ohne sie teilt Synthseek eine ratenbegrenzte E-Mail."
+  "downloads": {
+    "title": "Wie soll neue Musik ankommen?",
+    "description": "Synthseek lädt über Soulseek mit deinem slskd herunter.",
+    "apiUrlLabel": "slskd-API-URL",
+    "apiUrlPlaceholder": "http://localhost:5030",
+    "apiKeyLabel": "API-Schlüssel",
+    "apiKeyHint": "Füge den API-Schlüssel zum Testen ein.",
+    "testIdle": "Verbindung testen",
+    "testBusy": "Wird getestet...",
+    "passed": "Verbindung bestätigt.",
+    "failed": "slskd ist nicht erreichbar. Prüfe URL und API-Schlüssel.",
+    "failedReason": "Verbindung fehlgeschlagen: {{reason}}",
+    "overrideLink": "Ohne bestätigte Verbindung fortfahren",
+    "overrideArmed": "Weiter ohne bestätigte Verbindung. Du kannst das später in den Einstellungen beheben.",
+    "saveFailed": "Die slskd-Verbindung konnte nicht gespeichert werden. Prüfe URL und API-Schlüssel und versuche es erneut."
   },
-  "done": {
-    "title": "Alles bereit",
-    "description": "Synthseek ist startklar. Du kannst alles später in den Einstellungen anpassen.",
-    "cardHeading": "Einrichtung abgeschlossen",
-    "cardBody": "slskd, Plex und die Metadaten-Anreicherung können jederzeit hinzugefügt oder bearbeitet werden.",
-    "primaryRest": "Zum Dashboard",
-    "primaryBusy": "Wird abgeschlossen...",
-    "primaryRetry": "Erneut versuchen",
+  "metadata": {
+    "title": "Eine E-Mail hält deine Tags schnell.",
+    "label": "MusicBrainz-Kontakt-E-Mail",
+    "placeholder": "du@beispiel.com",
+    "hint": "MusicBrainz verlangt von jeder App, sich zu identifizieren. Ohne sie teilen sich Abfragen ein langsameres Limit.",
+    "emailError": "Gib eine gültige E-Mail-Adresse ein.",
+    "saveFailed": "Deine Einstellungen konnten nicht gespeichert werden. Prüfe die Angaben und versuche es erneut."
+  },
+  "summary": {
+    "title": "Das war alles.",
+    "answered": "Erledigt",
+    "skipped": "Später",
+    "open": "Nicht gesetzt",
+    "questions": {
+      "account": "Admin",
+      "media": "Medienserver",
+      "downloads": "Downloads",
+      "metadata": "Metadaten"
+    },
+    "finish": "Zum Board",
+    "finishing": "Wird abgeschlossen...",
     "failed": "Die Einrichtung konnte nicht abgeschlossen werden. Bitte versuche es erneut."
   }
 }

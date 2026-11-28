@@ -17,6 +17,10 @@ vi.mock("@hooks/api/mutations/users/useUpdateUser", () => ({
   useUpdateUser: () => mutation,
 }));
 
+vi.mock("../MemberWaysIn", () => ({
+  MemberWaysIn: ({ memberId }: { memberId: string }) => <div data-testid="ways-in">{memberId}</div>,
+}));
+
 afterEach(() => {
   cleanup();
   vi.clearAllMocks();
@@ -24,13 +28,13 @@ afterEach(() => {
 
 describe("EditUserDialog", () => {
   it("renders nothing when no member is provided", () => {
-    const { container } = render(<EditUserDialog member={null} open onOpenChange={vi.fn()} />);
+    const { container } = render(<EditUserDialog member={null} oidcLabel="SSO" open onOpenChange={vi.fn()} />);
     expect(container).toBeEmptyDOMElement();
   });
 
   it("prefills the form with the member values", () => {
     const member = createMockUser({ username: "alice", email: "alice@example.com", role: Role.enum.admin });
-    render(<EditUserDialog member={member} open onOpenChange={vi.fn()} />);
+    render(<EditUserDialog member={member} oidcLabel="SSO" open onOpenChange={vi.fn()} />);
 
     expect(screen.getByLabelText(enSettings.members.edit.usernameAriaLabel)).toHaveValue("alice");
     expect(screen.getByLabelText(enSettings.members.edit.emailAriaLabel)).toHaveValue("alice@example.com");
@@ -38,7 +42,7 @@ describe("EditUserDialog", () => {
 
   it("sends only changed fields to the update mutation", async () => {
     const member = createMockUser({ id: "m1", username: "alice", email: "alice@example.com", role: Role.enum.member });
-    render(<EditUserDialog member={member} open onOpenChange={vi.fn()} />);
+    render(<EditUserDialog member={member} oidcLabel="SSO" open onOpenChange={vi.fn()} />);
 
     const usernameInput = screen.getByLabelText(enSettings.members.edit.usernameAriaLabel);
     await userEvent.clear(usernameInput);
@@ -53,7 +57,7 @@ describe("EditUserDialog", () => {
 
   it("includes a new password when provided", async () => {
     const member = createMockUser({ id: "m2", username: "bob", email: "bob@example.com", role: Role.enum.member });
-    render(<EditUserDialog member={member} open onOpenChange={vi.fn()} />);
+    render(<EditUserDialog member={member} oidcLabel="SSO" open onOpenChange={vi.fn()} />);
 
     await userEvent.type(screen.getByLabelText(enSettings.members.edit.passwordAriaLabel), "newsecret");
     await userEvent.click(screen.getByRole("button", { name: enSettings.members.edit.submit }));
@@ -66,7 +70,7 @@ describe("EditUserDialog", () => {
 
   it("prefills the member's own quotas and leaves an unset one empty", () => {
     const member = createMockUser({ role: Role.enum.member, quotaTracks: 40, quotaStorageGb: null });
-    render(<EditUserDialog member={member} open onOpenChange={vi.fn()} />);
+    render(<EditUserDialog member={member} oidcLabel="SSO" open onOpenChange={vi.fn()} />);
 
     expect(screen.getByLabelText(enSettings.members.edit.quotaTracksAriaLabel)).toHaveValue("40");
     expect(screen.getByLabelText(enSettings.members.edit.quotaStorageAriaLabel)).toHaveValue("");
@@ -74,7 +78,7 @@ describe("EditUserDialog", () => {
 
   it("hides the quota fields once the chosen role is not member", async () => {
     const member = createMockUser({ role: Role.enum.member });
-    render(<EditUserDialog member={member} open onOpenChange={vi.fn()} />);
+    render(<EditUserDialog member={member} oidcLabel="SSO" open onOpenChange={vi.fn()} />);
 
     await userEvent.click(screen.getByRole("radio", { name: enSettings.members.roleOptions.trusted }));
 
@@ -84,7 +88,7 @@ describe("EditUserDialog", () => {
 
   it("sends a changed quota and clears an emptied one back to the global", async () => {
     const member = createMockUser({ id: "m3", role: Role.enum.member, quotaTracks: 40, quotaStorageGb: 2.5 });
-    render(<EditUserDialog member={member} open onOpenChange={vi.fn()} />);
+    render(<EditUserDialog member={member} oidcLabel="SSO" open onOpenChange={vi.fn()} />);
 
     const tracksInput = screen.getByLabelText(enSettings.members.edit.quotaTracksAriaLabel);
     await userEvent.clear(tracksInput);
@@ -100,7 +104,7 @@ describe("EditUserDialog", () => {
 
   it("leaves unchanged quotas out of the update", async () => {
     const member = createMockUser({ id: "m4", role: Role.enum.member, quotaTracks: 40, quotaStorageGb: 2.5 });
-    render(<EditUserDialog member={member} open onOpenChange={vi.fn()} />);
+    render(<EditUserDialog member={member} oidcLabel="SSO" open onOpenChange={vi.fn()} />);
 
     await userEvent.type(screen.getByLabelText(enSettings.members.edit.passwordAriaLabel), "newsecret");
     await userEvent.click(screen.getByRole("button", { name: enSettings.members.edit.submit }));
@@ -113,7 +117,7 @@ describe("EditUserDialog", () => {
 
   it("blocks saving a new password shorter than the minimum and says what it needs", async () => {
     const member = createMockUser({ role: Role.enum.member });
-    render(<EditUserDialog member={member} open onOpenChange={vi.fn()} />);
+    render(<EditUserDialog member={member} oidcLabel="SSO" open onOpenChange={vi.fn()} />);
 
     await userEvent.type(screen.getByLabelText(enSettings.members.edit.passwordAriaLabel), "short");
 
@@ -123,7 +127,7 @@ describe("EditUserDialog", () => {
 
   it("blocks saving while a quota is not a valid amount", async () => {
     const member = createMockUser({ role: Role.enum.member });
-    render(<EditUserDialog member={member} open onOpenChange={vi.fn()} />);
+    render(<EditUserDialog member={member} oidcLabel="SSO" open onOpenChange={vi.fn()} />);
 
     await userEvent.type(screen.getByLabelText(enSettings.members.edit.quotaTracksAriaLabel), "2.5");
 
@@ -132,7 +136,7 @@ describe("EditUserDialog", () => {
 
   it("shows the owner role note and disables the role control for owners", () => {
     const member = createMockUser({ id: "owner", username: "owner", isOwner: true, role: Role.enum.admin });
-    render(<EditUserDialog member={member} open onOpenChange={vi.fn()} />);
+    render(<EditUserDialog member={member} oidcLabel="SSO" open onOpenChange={vi.fn()} />);
 
     expect(screen.getByText(enSettings.members.edit.ownerRoleNote)).toBeInTheDocument();
     for (const radio of screen.getAllByRole("radio")) {

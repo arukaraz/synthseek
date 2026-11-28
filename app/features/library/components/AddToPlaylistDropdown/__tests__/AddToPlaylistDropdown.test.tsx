@@ -87,6 +87,13 @@ async function open() {
 }
 
 describe("AddToPlaylistDropdown", () => {
+  it("names the panel after the action it offers", async () => {
+    renderDropdown();
+    await open();
+
+    expect(screen.getByRole("dialog", { name: dropdown.addToPlaylist })).toBeInTheDocument();
+  });
+
   it("lists local and imported-sync-off playlists but excludes imported-syncing ones", async () => {
     playlistsQuery.items = [
       makePlaylist({ id: "pl-local", name: "Local Mix", source_provider: null, sync_enabled: false }),

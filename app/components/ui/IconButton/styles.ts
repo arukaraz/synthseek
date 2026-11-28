@@ -10,7 +10,7 @@ export const variantClasses = {
 };
 
 export const sizeClasses = {
-  sm: "rounded-md p-1",
+  sm: "relative rounded-md p-1 after:absolute after:-inset-0.5 after:content-['']",
   md: "rounded-lg p-1.5",
   lg: "grid size-7.5 shrink-0 place-items-center rounded-lg",
 };

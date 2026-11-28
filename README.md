@@ -45,7 +45,7 @@ https://github.com/user-attachments/assets/50c3988e-7ec1-41dc-9a9e-a8407043b552
 
 ## Quick start
 
-Requires [Docker](https://docs.docker.com/get-docker/) with [Compose](https://docs.docker.com/compose/install/). The setup wizard asks for a running [slskd](https://github.com/slskd/slskd), the peer-to-peer source, and lets you skip that step if you use other sources.
+Requires [Docker](https://docs.docker.com/get-docker/) with [Compose](https://docs.docker.com/compose/install/). First-run setup asks for a running [slskd](https://github.com/slskd/slskd), the peer-to-peer source, and lets you skip that question if you use other sources.
 
 Use the provided [docker-compose.yml](docker-compose.yml) as a starting point:
 
@@ -53,7 +53,7 @@ Use the provided [docker-compose.yml](docker-compose.yml) as a starting point:
 docker compose up -d
 ```
 
-Open the web interface and follow the setup wizard: an admin account, slskd, then an optional Plex sign-in and API keys. Your music folder is the `/music` volume in the compose file. The full walkthrough is in [Getting Started](https://docs.synthseek.dev/getting-started/).
+Open the web interface and answer the first-run questions: an admin account, which needs a setup token printed in the container log, then optionally a media server, slskd and a MusicBrainz contact email. Your music folder is the `/music` volume in the compose file. The full walkthrough is in [Getting Started](https://docs.synthseek.dev/getting-started/).
 
 ## What it does
 
@@ -113,14 +113,15 @@ Open the web interface and follow the setup wizard: an admin account, slskd, the
 - A Discover board each member arranges, with mixes from Last.fm and ListenBrainz, sets and stations built from your own plays, charts, and artists and albums similar to what you play
 - Follow artists to see their releases on a calendar and get a notice when something new is out, with automatic requests as an option
 - Lidarr delegation, with tag and monitor-scope selection
-- Library import from Spotify, and playlist import from Plex, Navidrome or Jellyfin
+- Library import from Spotify and YouTube, playlist import from Plex, Navidrome or Jellyfin, and import of a Spotify or YouTube playlist from its link. YouTube can restrict an account used through automated tools, so the docs advise a secondary one
 - Playlist import from JSPF, XSPF, or CSV, tracks from an M3U file added to a playlist you have, and export as JSPF, or as M3U with each file's path on the server
 
 [AI assistants](https://docs.synthseek.dev/ai-assistants/) · [Integrations](https://docs.synthseek.dev/integrations/)
 
 ### Run it
 
-- Multi-user, with local accounts or Plex OAuth, member management, and per-user libraries
+- Multi-user, with sign-in by password, Plex, Jellyfin or your own OpenID Connect provider, member management, and per-user libraries
+- An accessibility mode, with options for motion, transparency, contrast and text size
 - Optional approval for members' requests, and download quotas per member and for the whole library
 - A responsive web interface that works on a phone as well as a desktop
 - Available in English, Español, Deutsch, and Français

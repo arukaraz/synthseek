@@ -52,6 +52,7 @@ export function EnrichmentCard({ initial }: EnrichmentCardProps) {
           value={draft.musicbrainzEmail}
           onChange={(v) => setField("musicbrainzEmail", v)}
           type="email"
+          autoComplete="email"
           placeholder={t("metadata.enrichment.musicbrainzEmail.placeholder")}
         />
       </SettingsField>

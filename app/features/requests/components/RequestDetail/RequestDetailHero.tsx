@@ -291,6 +291,8 @@ export function RequestDetailHero({ request, tracks, onBack }: RequestDetailHero
         open={rejectPendingOpen}
         onOpenChange={setRejectPendingOpen}
         count={pendingApprovalCount}
+        error={actions.rejectError}
+        pending={actions.isRejecting}
         onConfirm={reject}
       />
     </div>

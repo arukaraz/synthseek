@@ -1,4 +1,5 @@
 import {
+  Accessibility,
   Activity,
   ArrowUpCircle,
   AudioLines,
@@ -71,6 +72,14 @@ export const SETTINGS_PAGE_BY_ID = {
     labelKey: "shell.pages.playback.title",
     descriptionKey: "shell.pages.playback.description",
     icon: AudioLines,
+  },
+  accessibility: {
+    id: "accessibility",
+    group: "you",
+    href: "/settings/accessibility",
+    labelKey: "shell.pages.accessibility.title",
+    descriptionKey: "shell.pages.accessibility.description",
+    icon: Accessibility,
   },
   connections: {
     id: "connections",
@@ -266,6 +275,7 @@ export const JOB_NAME_KEYS: Record<JobSummary["id"], ParseKeys<"settings">> = {
   "playback-source-links": "jobs.registry.playback-source-links.name",
   "smart-playlists": "jobs.registry.smart-playlists.name",
   "release-watch": "jobs.registry.release-watch.name",
+  "sign-in-background": "jobs.registry.sign-in-background.name",
 };
 
 export const JOB_DESCRIPTION_KEYS: Record<JobSummary["id"], ParseKeys<"settings">> = {
@@ -281,6 +291,7 @@ export const JOB_DESCRIPTION_KEYS: Record<JobSummary["id"], ParseKeys<"settings"
   "playback-source-links": "jobs.registry.playback-source-links.description",
   "smart-playlists": "jobs.registry.smart-playlists.description",
   "release-watch": "jobs.registry.release-watch.description",
+  "sign-in-background": "jobs.registry.sign-in-background.description",
 };
 
 export const SOURCE_TITLE_KEYS: Readonly<Record<DownloadSourceKey, ParseKeys<"settings">>> = {

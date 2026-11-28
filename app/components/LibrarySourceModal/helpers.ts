@@ -11,6 +11,7 @@ import type {
   LibraryItem,
   LibraryItemType,
   LibrarySort,
+  ModalLayout,
   ToggleAggregateState,
   WatchCapabilities,
 } from "./types";
@@ -83,6 +84,20 @@ export function aggregateToggleState(values: ReadonlyArray<boolean>): ToggleAggr
 
 export function resolveToggleTarget(state: ToggleAggregateState): boolean {
   return state !== "on";
+}
+
+export function withLinkedItem(linked: ReadonlyArray<LibraryItem>, item: LibraryItem): LibraryItem[] {
+  return [item, ...linked.filter((candidate) => candidate.id !== item.id)];
+}
+
+export function itemsWithLinked(linked: ReadonlyArray<LibraryItem>, listed: ReadonlyArray<LibraryItem>): LibraryItem[] {
+  const listedIds = new Set(listed.map((item) => item.id));
+  return [...linked.filter((item) => !listedIds.has(item.id)), ...listed];
+}
+
+export function modalLayoutOf(showList: boolean, linksAccepted: boolean, linkedCount: number): ModalLayout {
+  if (showList) return linksAccepted ? "listWithLink" : "list";
+  return linkedCount > 0 ? "list" : "linkOnly";
 }
 
 export function libraryTypeTone(type: LibraryItem["type"]): "playlist" | "album" | "liked" {

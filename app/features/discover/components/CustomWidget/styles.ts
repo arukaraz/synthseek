@@ -65,7 +65,7 @@ export const cardCover = cva("bg-surface-sunken relative overflow-hidden [&_img]
 });
 
 export const cardRequestAction = cva(
-  "absolute z-10 opacity-0 transition focus-within:opacity-100 [@media(hover:none)]:opacity-100",
+  "absolute z-10 opacity-0 transition focus-within:opacity-100 a11y-mode:opacity-100 [@media(hover:none)]:opacity-100",
   {
     variants: {
       placement: {
@@ -78,7 +78,7 @@ export const cardRequestAction = cva(
 );
 
 export const cardAction = cva(
-  "text-overlay-fg focus-visible:ring-primary-400 absolute right-2 bottom-2 z-10 flex size-9 items-center justify-center rounded-full border border-hairline/20 bg-veil/55 opacity-0 backdrop-blur-sm transition outline-none group-hover/card:opacity-100 hover:bg-mix-acc focus-visible:opacity-100 focus-visible:ring-2 [@media(hover:none)]:opacity-100 [&_svg]:size-4 [&_svg]:fill-current"
+  "text-overlay-fg focus-visible:ring-primary-400 absolute right-2 bottom-2 z-10 flex size-9 items-center justify-center rounded-full border border-hairline/20 bg-veil/55 opacity-0 backdrop-blur-sm transition outline-none group-hover/card:opacity-100 hover:bg-mix-acc focus-visible:opacity-100 group-has-[:focus-visible]/card:opacity-100 a11y-mode:opacity-100 focus-visible:ring-2 [@media(hover:none)]:opacity-100 [&_svg]:size-4 [&_svg]:fill-current"
 );
 
 export const cardCopy = cva("flex min-w-0 flex-col", {
@@ -267,7 +267,7 @@ export const mosaicGrid = cva(
 export const mosaicTile = cva("bg-surface-sunken relative min-h-0 overflow-hidden rounded-lg [&_img]:object-cover");
 
 export const mosaicButton = cva(
-  "text-overlay-fg focus-visible:ring-primary-400 absolute inset-0 flex items-center justify-center rounded-lg opacity-0 outline-none transition hover:bg-veil/45 hover:opacity-100 focus-visible:opacity-100 focus-visible:ring-2 focus-visible:ring-inset [@media(hover:none)]:opacity-100 [&_svg]:size-5 [&_svg]:fill-current"
+  "text-overlay-fg focus-visible:ring-primary-400 absolute inset-0 flex items-center justify-center rounded-lg opacity-0 outline-none transition hover:bg-veil/45 hover:opacity-100 focus-visible:opacity-100 focus-visible:ring-2 focus-visible:ring-inset a11y-mode:opacity-100 [@media(hover:none)]:opacity-100 [&_svg]:size-5 [&_svg]:fill-current"
 );
 
 export function mosaicVars(columns: number, rows: number): CssVars {

@@ -5,7 +5,8 @@ import { Square } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { PlayGlyph } from "./PlayGlyph";
-import { labelled } from "./helpers";
+import { PLAYBACK_PROBLEM_ID } from "./constants";
+import { labelledBelow } from "./helpers";
 import { playButton, playCluster, stopBadge } from "./styles";
 import type { PlayStopBadgeProps } from "./types";
 
@@ -13,12 +14,13 @@ export function PlayStopBadge({ view, actions, size, arrow, face, folds }: PlayS
   const { t } = useTranslation("player");
 
   return (
-    <div className={playCluster()}>
+    <div className={playCluster()} data-play-cluster>
       <button
         type="button"
         className={playButton({ size })}
         onClick={actions.togglePlay}
-        {...labelled(view.playing ? t("controls.pause") : t("controls.play"))}
+        aria-describedby={view.failing ? PLAYBACK_PROBLEM_ID : undefined}
+        {...labelledBelow(view.playing ? t("controls.pause") : t("controls.play"))}
       >
         <PlayGlyph view={view} spin={arrow} face={face} />
       </button>
@@ -27,7 +29,7 @@ export function PlayStopBadge({ view, actions, size, arrow, face, folds }: PlayS
         className={cn(stopBadge({ size }), folds)}
         onClick={actions.stop}
         disabled={view.stopped}
-        {...labelled(t("controls.stop"))}
+        {...labelledBelow(t("controls.stop"))}
       >
         <Square className={size === "stage" ? "size-2.5 fill-current" : "size-2 fill-current"} />
       </button>

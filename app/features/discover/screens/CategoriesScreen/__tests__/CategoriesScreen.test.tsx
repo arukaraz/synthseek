@@ -77,7 +77,7 @@ describe("CategoriesScreen", () => {
     useCategoriesMock.mockReturnValue(createMockQuery<CategoriesPayload>(buildPayload(genres)));
 
     renderWithProviders(<CategoriesScreen />);
-    fireEvent.click(screen.getByText("Rock"));
+    fireEvent.click(screen.getByRole("button", { name: "Rock" }));
 
     expect(mockRouter.push).toHaveBeenCalledWith("/discover/category/rock?name=Rock");
   });

@@ -56,7 +56,11 @@ export function NavidromeCard({ initial }: NavidromeCardProps) {
       </SettingsField>
 
       <SettingsField label={t("mediaServers.navidrome.username")}>
-        <SettingsTextInput value={draft.username} onChange={(value) => setField("username", value)} />
+        <SettingsTextInput
+          value={draft.username}
+          onChange={(value) => setField("username", value)}
+          autoComplete="off"
+        />
       </SettingsField>
 
       <SettingsField label={t("mediaServers.navidrome.password")}>

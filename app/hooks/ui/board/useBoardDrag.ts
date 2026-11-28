@@ -3,8 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { PointerEvent as ReactPointerEvent } from "react";
 
-import { REDUCED_MOTION_QUERY } from "../constants";
-import { useMediaQuery } from "../useMediaQuery";
+import { useMotionReduced } from "../useMotionReduced";
 import { BOARD_TILE_SELECTOR, DRAG_DWELL_MS, DRAG_REORDER_TRAVEL_PX } from "./constants";
 import {
   autoscrollDelta,
@@ -48,7 +47,7 @@ export function useBoardDrag<T extends BoardDragItem>(options: UseBoardDragOptio
   const optionsRef = useRef(options);
   optionsRef.current = options;
   const stillnessRef = useRef(false);
-  stillnessRef.current = useMediaQuery(REDUCED_MOTION_QUERY);
+  stillnessRef.current = useMotionReduced();
   const cancelRef = useRef<(() => void) | null>(null);
   const landedRef = useRef<(() => void) | null>(null);
 

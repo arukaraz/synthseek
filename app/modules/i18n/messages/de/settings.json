@@ -1,4 +1,64 @@
 {
+  "accessibility": {
+    "mode": {
+      "label": "Barrierefreiheitsmodus",
+      "description": "Macht Text und Bedienelemente besser sichtbar und leichter bedienbar und zeigt mehr von der Oberfläche auf einmal."
+    },
+    "motion": {
+      "label": "Bewegung reduzieren",
+      "description": "Beruhigt Animationen und Bewegungen in der ganzen App."
+    },
+    "transparency": {
+      "label": "Transparenz reduzieren",
+      "description": "Ersetzt durchsichtige, unscharfe Flächen durch undurchsichtige. Standardmäßig folgt das deiner Wahl bei Bewegung reduzieren."
+    },
+    "contrast": {
+      "label": "Mehr Kontrast",
+      "description": "Macht Ränder und Umrisse besser sichtbar. Der Barrierefreiheitsmodus nutzt ihn immer."
+    },
+    "choices": {
+      "auto": "Meinem Gerät folgen",
+      "on": "An",
+      "off": "Aus"
+    },
+    "toastDuration": {
+      "label": "Dauer von Benachrichtigungen",
+      "description": "Wie lange eine Benachrichtigung auf dem Bildschirm bleibt. Standard sind 2 Sekunden, mit eingeschaltetem Barrierefreiheitsmodus 4 Sekunden.",
+      "options": {
+        "default": "Standard",
+        "2": "2 Sekunden",
+        "4": "4 Sekunden",
+        "8": "8 Sekunden",
+        "sticky": "Bis ich sie schließe"
+      }
+    },
+    "shortcuts": {
+      "label": "Tastenkürzel mit einer Taste",
+      "description": "Lässt eine einzelne Taste, etwa die Leertaste oder /, etwas auslösen. Schalte das aus, wenn du versehentlich Tasten drückst. Kürzel mit Strg oder Befehl funktionieren weiter."
+    },
+    "textSize": {
+      "label": "Textgröße",
+      "description": "Macht den Text nur in diesem Browser größer. Sie kommt zur Textgröße und zum Zoom deines Browsers hinzu.",
+      "options": {
+        "normal": "Normal",
+        "large": "Groß",
+        "larger": "Größer",
+        "largest": "Am größten"
+      }
+    },
+    "buttonNames": {
+      "label": "Schaltflächennamen anzeigen",
+      "description": "Schreibt den Namen der Symbolschaltflächen im Player und in Werkzeugleisten neben ihr Symbol, damit du ihn einem Sprachsteuerungswerkzeug sagen kannst. Schaltflächen, die sich in jeder Zeile oder Karte wiederholen, behalten nur ihr Symbol."
+    },
+    "monoAudio": {
+      "label": "Mono-Audio",
+      "description": "Spielt auf beiden Ohren denselben Ton ab, für Hören mit nur einem Ohr. Gilt für die Wiedergabe in der App, nicht für kurze Vorschauen."
+    },
+    "reactiveWave": {
+      "label": "Bewegte Wellenform",
+      "description": "Lässt die Wellenform der Suchleiste mit der Musik schwellen und fallen. Schalte sie aus, damit sie ruhig bleibt. Bewegung reduzieren ist ein eigener Schalter."
+    }
+  },
   "requestPreset": {
     "choiceAriaLabel": "Welche Einstellungen Anfragen nutzen",
     "unavailable": "Die Anfrage-Voreinstellung konnte nicht geladen werden. Versuche es später erneut.",
@@ -901,6 +961,91 @@
     "loading": "Mitglieder werden geladen...",
     "empty": "Noch keine Mitglieder.",
     "loadError": "Mitglieder konnten nicht geladen werden: {{message}}",
+    "signIn": {
+      "cardTitle": "Anmeldeseite",
+      "cardDescription": "Was jeder sieht, bevor er sich anmeldet.",
+      "libraryCovers": {
+        "label": "Albumcover aus dieser Bibliothek auf der Anmeldeseite zeigen",
+        "description": "Wer die Anmeldeseite öffnen kann, sieht diese Cover, mit oder ohne Konto. Sie werden zufällig aus deiner Bibliothek gewählt und regelmäßig erneuert. Schalte das aus, um den schlichten Hintergrund zu behalten."
+      },
+      "providerFirst": {
+        "label": "Single-Sign-on-Schaltfläche zuerst zeigen",
+        "description": "Die Schaltfläche des Anbieters wird zur Hauptaktion, und das Passwortformular klappt hinter einen Link."
+      },
+      "autoRedirect": {
+        "label": "Direkt zum Anbieter weiterleiten",
+        "description": "Wer die Anmeldeseite öffnet, wird sofort zum Anbieter geschickt. Nach einer Abmeldung oder einer fehlgeschlagenen Anmeldung bleibt die Anmeldeseite stehen."
+      },
+      "needsTest": "Verfügbar, sobald der Single-Sign-on-Anbieter einen Verbindungstest bestanden hat.",
+      "lockout": "Funktioniert der Anbieter nicht mehr, hänge ?{{param}} an die Anmeldeadresse, um das Passwortformular zurückzuholen, oder starte den Server mit FORCE_LOCAL_SIGN_IN=true.",
+      "forcedLocal": "FORCE_LOCAL_SIGN_IN ist auf dem Server gesetzt: Single Sign-on ist aus, und das Passwortformular wird immer angeboten, bis es entfernt wird.",
+      "accountCreation": {
+        "label": "Bei der ersten Anmeldung ein Konto anlegen",
+        "description": "Wer sich per Single Sign-on oder mit Jellyfin anmeldet und hier kein Konto hat, bekommt eines. Neue Konten warten in der Benutzerliste auf die Freigabe durch einen Admin."
+      }
+    },
+    "oidc": {
+      "cardTitle": "Single Sign-on (OpenID Connect)",
+      "cardDescription": "Lass Leute sich mit ihrem Konto bei einem Identitätsanbieter wie Authentik, Authelia oder Keycloak anmelden.",
+      "enabled": {
+        "label": "Single Sign-on anbieten",
+        "description": "Zeigt die Schaltfläche des Anbieters auf der Anmeldeseite, sobald Aussteller und Client-ID ausgefüllt sind."
+      },
+      "issuerUrl": {
+        "label": "Aussteller-URL",
+        "helper": "Die Adresse des Anbieters für diese Anwendung, ohne /.well-known/openid-configuration.",
+        "placeholder": "https://auth.example.com/application/o/synthseek/"
+      },
+      "clientId": {
+        "label": "Client-ID"
+      },
+      "clientSecret": {
+        "label": "Client-Geheimnis",
+        "helper": "Nur schreibbar: Nach dem Speichern wird es nie wieder angezeigt. Leer lassen, um das gespeicherte zu behalten.",
+        "storedPlaceholder": "Gespeichert. Gib ein neues ein, um es zu ersetzen."
+      },
+      "scopes": {
+        "label": "Scopes",
+        "helper": "Durch Leerzeichen getrennt. openid wird immer ergänzt."
+      },
+      "buttonLabel": {
+        "label": "Beschriftung der Schaltfläche",
+        "helper": "Was auf der Anmeldeschaltfläche steht. Leer lassen, um Single Sign-on zu zeigen.",
+        "placeholder": "Single Sign-on"
+      },
+      "callback": {
+        "label": "Rückrufadresse",
+        "helper": "Trage diese Adresse beim Anbieter als Weiterleitungs-URI ein.",
+        "copyAriaLabel": "Rückrufadresse kopieren",
+        "copied": "Rückrufadresse kopiert",
+        "copyFailed": "Die Rückrufadresse konnte nicht kopiert werden",
+        "missing": "Setze zuerst PUBLIC_BASE_URL auf dem Server. Der Anbieter braucht eine öffentliche Adresse, zu der er Leute zurückschicken kann."
+      },
+      "test": {
+        "action": "Verbindung testen",
+        "testing": "Wird getestet...",
+        "saveFirst": "Speichere zuerst deine Änderungen. Der Test prüft den gespeicherten Anbieter.",
+        "passed": "Der Anbieter hat wie erwartet geantwortet.",
+        "failed": "Der Test ist nicht bestanden",
+        "lastPassed": "Zuletzt bestanden am {{date}}",
+        "neverPassed": "Noch kein Test bestanden."
+      },
+      "failures": {
+        "notConfigured": "Gib die Aussteller-URL und die Client-ID ein, speichere und teste dann.",
+        "addressRefused": "Die Adresse des Anbieters darf Synthseek nicht kontaktieren.",
+        "unreachable": "Synthseek konnte den Anbieter nicht erreichen.",
+        "timeout": "Der Anbieter hat zu lange für die Antwort gebraucht.",
+        "notAnIssuer": "Diese Adresse antwortet nicht wie ein OpenID-Connect-Anbieter.",
+        "issuerMismatch": "Der Anbieter nennt einen anderen Aussteller als den eingegebenen.",
+        "noAuthorizationEndpoint": "Der Anbieter veröffentlicht keine nutzbare Anmeldeadresse.",
+        "noTokenEndpoint": "Der Anbieter veröffentlicht keine nutzbare Token-Adresse.",
+        "codeFlowUnsupported": "Der Anbieter bietet die Anmeldung per Autorisierungscode, die Synthseek nutzt, nicht an.",
+        "noUsableSigningAlgorithm": "Der Anbieter signiert seine Token auf eine Art, die Synthseek nicht prüfen kann.",
+        "jwksUnreachable": "Synthseek konnte die Signaturschlüssel des Anbieters nicht abrufen.",
+        "jwksInvalid": "Die Signaturschlüssel des Anbieters fehlen oder sind nicht lesbar.",
+        "unexpected": "Der Test ist aus einem unerwarteten Grund fehlgeschlagen."
+      }
+    },
     "toolbar": {
       "createLocal": "Lokalen Benutzer erstellen",
       "importPlex": "Plex-Benutzer importieren"
@@ -913,11 +1058,37 @@
       "joined": "Beigetreten",
       "quota": "Kontingent",
       "selectAll": "Alle Mitglieder auswählen",
-      "selectMember": "{{username}} auswählen"
+      "selectMember": "{{username}} auswählen",
+      "signsInWith": "Meldet sich an mit",
+      "actions": "Aktionen"
     },
     "type": {
       "plex": "Plex-Benutzer",
       "local": "Lokaler Benutzer"
+    },
+    "signsIn": {
+      "password": "Passwort",
+      "plex": "Plex",
+      "jellyfin": "Jellyfin",
+      "oidcFallback": "Single Sign-on",
+      "none": "Noch keine Anmeldemöglichkeit"
+    },
+    "pending": {
+      "badge": "Wartet auf Freigabe",
+      "approve": "{{username}} freigeben",
+      "reject": "{{username}} ablehnen",
+      "rejectTitle": "Dieses Konto ablehnen",
+      "rejectMessage": "{{username}} ablehnen? Das Konto wird entfernt und kann sich nicht anmelden.",
+      "rejectConfirm": "Ablehnen"
+    },
+    "waysIn": {
+      "title": "Anmeldemöglichkeiten",
+      "unlink": "{{method}} trennen",
+      "unlinkTitle": "Diese Anmeldung trennen",
+      "unlinkMessage": "{{method}} von {{username}} trennen? Damit ist keine Anmeldung mehr möglich.",
+      "unlinkConfirm": "Trennen",
+      "lastWayIn": "Das ist die einzige Anmeldemöglichkeit des Kontos. Setze oben ein Passwort, speichere und trenne sie dann.",
+      "none": "Keine verknüpften Konten."
     },
     "role": {
       "owner": "Eigentümer",
@@ -978,9 +1149,9 @@
       "passwordAriaLabel": "Neues Passwort",
       "ownerRoleNote": "Das Eigentümerkonto muss ein Administrator bleiben.",
       "quotaTracksLabel": "Eigenes Titelkontingent",
-      "quotaTracksAriaLabel": "Titelkontingent dieses Mitglieds",
+      "quotaTracksAriaLabel": "Eigenes Titelkontingent: Titelkontingent dieses Mitglieds",
       "quotaStorageLabel": "Eigenes Speicherkontingent (GB)",
-      "quotaStorageAriaLabel": "Speicherkontingent dieses Mitglieds in Gigabyte",
+      "quotaStorageAriaLabel": "Eigenes Speicherkontingent (GB): Speicherkontingent dieses Mitglieds in Gigabyte",
       "quotaPlaceholder": "Globales Kontingent verwenden",
       "quotaNote": "Lass ein Kontingent leer, um das globale zu verwenden. Null bedeutet kein Limit für dieses Mitglied.",
       "submit": "Änderungen speichern"
@@ -1164,7 +1335,37 @@
       "newLabel": "Neues Passwort",
       "newAriaLabel": "Neues Passwort",
       "submit": "Passwort ändern",
-      "managedByPlex": "Du meldest dich mit Plex an. Um ein Passwort zu nutzen, trenne Plex unter Verbindungen."
+      "managedByPlex": "Du meldest dich mit Plex an. Um ein Passwort zu nutzen, trenne Plex unter Verbindungen.",
+      "managedElsewhere": "Dieses Konto hat kein Passwort: Es meldet sich mit einem verknüpften Konto an. Ein Admin kann ein Passwort dafür setzen."
+    },
+    "waysIn": {
+      "title": "Anmeldemöglichkeiten",
+      "description": "Die Konten, mit denen du dich anmelden kannst. Eines muss immer bleiben.",
+      "password": "Passwort",
+      "passwordSet": "Gesetzt",
+      "passwordNone": "Nicht gesetzt",
+      "plexHint": "Verknüpfe oder trenne Plex unter Verbindungen, Dienste.",
+      "plexManage": "Dienste öffnen",
+      "linkedAs": "Verknüpft als {{name}}",
+      "linked": "Verknüpft",
+      "notLinked": "Nicht verknüpft",
+      "link": "Verknüpfen",
+      "unlink": "Trennen",
+      "unlinkLabel": "{{method}} trennen",
+      "unlinkTitle": "{{method}} trennen",
+      "unlinkMessage": "Nach dem Trennen kannst du dich nicht mehr mit {{method}} anmelden.",
+      "unlinkConfirm": "Trennen",
+      "lastWayIn": "Das ist deine einzige Anmeldemöglichkeit, deshalb lässt sie sich nicht trennen. Verknüpfe zuerst ein anderes Konto oder bitte einen Admin, dir ein Passwort zu setzen.",
+      "linkedNotice": "{{method}} ist verknüpft. Du kannst dich jetzt damit anmelden.",
+      "jellyfin": {
+        "title": "Jellyfin verknüpfen",
+        "description": "Gib einmal deinen Jellyfin-Benutzernamen und dein Passwort ein, um das Konto zu verknüpfen.",
+        "usernameLabel": "Jellyfin-Benutzername",
+        "passwordLabel": "Jellyfin-Passwort",
+        "cancel": "Abbrechen",
+        "submit": "Verknüpfen",
+        "submitting": "Wird verknüpft..."
+      }
     },
     "connected": {
       "title": "Dienste",
@@ -1179,6 +1380,15 @@
         "notConnected": "Nicht verbunden",
         "notConfigured": "Bitte einen Administrator, Spotify zuerst zu konfigurieren.",
         "needsReconnect": "Spotify akzeptiert diese Verbindung nicht mehr. Verbinde sie neu, damit deine Bibliothek synchron bleibt."
+      },
+      "session": {
+        "connected": "Verbunden",
+        "connectedAs": "Verbunden als {{username}}",
+        "notConnected": "Nicht verbunden",
+        "needsReconnect": "{{provider}} akzeptiert die gespeicherte Sitzung nicht mehr. Füge unten eine neue ein, um dich erneut zu verbinden.",
+        "disconnectTitle": "{{provider}} trennen?",
+        "disconnectMessage": "Die gespeicherte {{provider}}-Sitzung wird vom Server gelöscht. Bereits importierte Playlists bleiben in deiner Bibliothek.",
+        "loadFailed": "Die Quellen, die du mit einer Browsersitzung verbindest, konnten nicht geprüft werden. Lade die Seite neu, um es erneut zu versuchen."
       },
       "plex": {
         "name": "Plex",
@@ -1336,6 +1546,7 @@
       "description": "Die neuesten Zeilen aus der aktiven Protokolldatei.",
       "searchPlaceholder": "Protokolle durchsuchen",
       "searchAriaLabel": "Protokolle durchsuchen",
+      "terminalLabel": "Protokollzeilen",
       "linesAriaLabel": "Zu ladende Zeilen",
       "linesLabel": "Zu ladende Zeilen",
       "refreshAriaLabel": "Intervall der automatischen Aktualisierung",
@@ -1526,6 +1737,10 @@
       "release-watch": {
         "name": "Veröffentlichungen im Blick",
         "description": "Prüft zweimal täglich, ob die Künstler, denen Nutzer folgen, Neues veröffentlicht haben."
+      },
+      "sign-in-background": {
+        "name": "Hintergrund der Anmeldung",
+        "description": "Erstellt den Hintergrund der Anmeldeseite aus einer frischen Auswahl der Albumcover dieser Bibliothek. Läuft nur, solange diese Option aktiv ist."
       }
     }
   },
@@ -1686,6 +1901,10 @@
         "title": "Privatsphäre",
         "description": "Was die anderen Mitglieder dieses Servers von dir sehen können."
       },
+      "accessibility": {
+        "title": "Barrierefreiheit",
+        "description": "Bewegung, Transparenz, Kontrast und weitere Wege, Synthseek leichter nutzbar zu machen."
+      },
       "notifications": {
         "title": "Benachrichtigungen"
       },
@@ -1771,6 +1990,7 @@
       "entries": {
         "navidromeAccount": "Navidrome-Konto",
         "jellyfinAccount": "Jellyfin-Konto",
+        "youtubeAccount": "YouTube-Konto",
         "lastfmFeeds": "Last.fm-Entdeckungsfeeds",
         "listenbrainzFeeds": "ListenBrainz-Entdeckungsfeeds",
         "listenbrainzAutoRequest": "ListenBrainz-Playlists automatisch anfragen",
@@ -1781,10 +2001,16 @@
       },
       "keywords": {
         "playbackAccount": "lautstärke normalisierung lautheit gain autoplay ähnliche titel",
+        "youtubeAccount": "cookies sitzung playlists gelikte musik importieren",
         "playbackBrowser": "equalizer kompressor crossfade gapless übergang konvertierung bitrate mp3",
         "theme": "dunkel mitternacht ozean farbe eigenes css schrift schriftart radius schatten importieren exportieren darstellung",
         "language": "englisch spanisch französisch deutsch",
         "members": "rolle vertrauenswürdig kontingent anfrage voreinstellung qualität format",
+        "signIn": "login einloggen anmeldung hintergrund cover mosaik öffentlich besucher anonym",
+        "oidc": "sso single sign-on openid oidc authentik authelia keycloak aussteller client id geheimnis rückruf weiterleitung uri",
+        "signInMode": "sso single sign-on anbieter zuerst weiterleitung automatisch passwortformular lokal",
+        "accountCreation": "sso single sign-on jellyfin neue konten registrierung freigabe wartend",
+        "waysIn": "sso single sign-on openid jellyfin verknüpfen trennen anmeldung passwort identität",
         "board": "dichte textgröße hintergrund vorlagen anordnen anordnung widgets darstellung",
         "scrobble": "scrobble wiedergaben hörverlauf",
         "privacy": "privat sichtbarkeit teilen aktuelle wiedergabe inkognito verlauf löschen name",
@@ -1797,7 +2023,17 @@
         "updates": "updates aktualisierung version release changelog patchnotes",
         "timeout": "zeitlimit timeout wartezeit warten",
         "logout": "abmelden ausloggen logout sitzung",
-        "following": "kalender"
+        "following": "kalender",
+        "accessibility": "barrierefreiheit modus screenreader tastatur sehen leichter sehhilfe",
+        "accessibilityMotion": "bewegung animation animationen reduzieren beruhigen",
+        "accessibilityTransparency": "transparenz unschärfe glas durchsichtig",
+        "accessibilityContrast": "kontrast rand ränder umriss",
+        "accessibilityToast": "benachrichtigung benachrichtigungen meldung dauer zeit sekunden schließen",
+        "accessibilityShortcuts": "kürzel tastenkürzel tastatur taste leertaste schrägstrich",
+        "accessibilityTextSize": "textgröße schrift schriftgröße größer vergrößern zoom lesen",
+        "accessibilityButtonNames": "schaltflächennamen beschriftung symbole sprachsteuerung sprechen sagen",
+        "accessibilityMonoAudio": "mono audio ton ohr ohren schwerhörig hören balance stereo",
+        "accessibilityReactiveWave": "wellenform suchleiste welle bewegung flackern blitzen musik reaktion"
       }
     },
     "palette": {

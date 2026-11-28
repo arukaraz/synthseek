@@ -204,3 +204,63 @@
 @custom-variant active (&:where([data-active="true"], [data-active="true"] *));
 @custom-variant selected (&:where([data-selected="true"], [data-selected="true"] *));
 @custom-variant expanded (&:where([data-expanded="true"], [data-expanded="true"] *));
+
+@custom-variant motion-reduce {
+  @media (prefers-reduced-motion: reduce) {
+    &:where(:root:not([data-a11y-motion="off"]), :root:not([data-a11y-motion="off"]) *) {
+      @slot;
+    }
+  }
+  &:where(:root[data-a11y-motion="on"], :root[data-a11y-motion="on"] *) {
+    @slot;
+  }
+}
+
+@custom-variant motion-safe {
+  @media (prefers-reduced-motion: no-preference) {
+    &:where(:root:not([data-a11y-motion="on"]), :root:not([data-a11y-motion="on"]) *) {
+      @slot;
+    }
+  }
+  &:where(:root[data-a11y-motion="off"], :root[data-a11y-motion="off"] *) {
+    @slot;
+  }
+}
+
+@custom-variant reduce-transparency {
+  @media (prefers-reduced-motion: reduce) {
+    &:where(
+      :root:not([data-a11y-motion="off"]):not([data-a11y-transparency]),
+      :root:not([data-a11y-motion="off"]):not([data-a11y-transparency]) *
+    ) {
+      @slot;
+    }
+  }
+  &:where(
+    :root[data-a11y-motion="on"]:not([data-a11y-transparency]),
+    :root[data-a11y-motion="on"]:not([data-a11y-transparency]) *
+  ) {
+    @slot;
+  }
+  &:where(:root[data-a11y-transparency="on"], :root[data-a11y-transparency="on"] *) {
+    @slot;
+  }
+}
+
+@custom-variant more-contrast {
+  @media (prefers-contrast: more) {
+    &:where(:root:not([data-a11y-contrast="off"]), :root:not([data-a11y-contrast="off"]) *) {
+      @slot;
+    }
+  }
+  &:where(:root[data-a11y-contrast="on"], :root[data-a11y-contrast="on"] *) {
+    @slot;
+  }
+  &:where(:root[data-a11y-mode="on"], :root[data-a11y-mode="on"] *) {
+    @slot;
+  }
+}
+
+@custom-variant short-window (@media (max-height: 280px));
+
+@custom-variant a11y-mode (&:where(:root[data-a11y-mode="on"], :root[data-a11y-mode="on"] *));

@@ -71,6 +71,37 @@ describe("usePlayPauseShortcut", () => {
     expect(togglePlay).not.toHaveBeenCalled();
   });
 
+  it("toggles inside the player's own full screen stage, which is a dialog", () => {
+    const togglePlay = vi.fn();
+    renderHook(() => usePlayPauseShortcut(togglePlay));
+    const host = mount("<div role='dialog' data-player-stage><button type='button'>Next</button></div>");
+    const stage = host.querySelector("[data-player-stage]");
+    const button = host.querySelector("button");
+    if (stage === null || button === null) throw new Error("no stage");
+
+    const onStage = pressSpace(stage);
+    const onButton = pressSpace(button);
+
+    expect(togglePlay).toHaveBeenCalledTimes(2);
+    expect(onStage.defaultPrevented).toBe(true);
+    expect(onButton.defaultPrevented).toBe(true);
+  });
+
+  it("leaves Space to a dialog or a menu opened from the stage", () => {
+    const togglePlay = vi.fn();
+    renderHook(() => usePlayPauseShortcut(togglePlay));
+    const host = mount(
+      "<div role='dialog' data-player-stage><div role='menu'><div role='menuitem' tabindex='0'>Sleep timer</div></div></div><div role='dialog'><button type='button'>Save</button></div>"
+    );
+
+    host.querySelectorAll("[tabindex], [role='dialog']:not([data-player-stage]) button").forEach((item) => {
+      pressSpace(item);
+    });
+
+    expect(host.querySelectorAll("[tabindex], [role='dialog']:not([data-player-stage]) button")).toHaveLength(2);
+    expect(togglePlay).not.toHaveBeenCalled();
+  });
+
   it("keeps the focused element's own Space handler from running, as a menu trigger or a card would open", () => {
     const togglePlay = vi.fn();
     const ownHandler = vi.fn();

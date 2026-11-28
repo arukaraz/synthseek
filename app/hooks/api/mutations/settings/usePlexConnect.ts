@@ -7,6 +7,8 @@ import i18n from "@locale";
 import { errorToast } from "@modules/errors";
 import { trpc } from "@utils/trpc";
 
+import type { FeedbackOptions } from "./types";
+
 const POLL_INTERVAL_MS = 2000;
 const POLL_TIMEOUT_MS = 2 * 60 * 1000;
 
@@ -25,7 +27,7 @@ type ConnectState =
   | { kind: "done" }
   | { kind: "error"; message: string };
 
-export function usePlexConnect() {
+export function usePlexConnect({ silent = false }: FeedbackOptions = {}) {
   const utils = trpc.useUtils();
   const startMutation = trpc.settings.plexConnectStart.useMutation();
   const pollMutation = trpc.settings.plexConnectPoll.useMutation();
@@ -63,7 +65,7 @@ export function usePlexConnect() {
         cleanup();
         const message = i18n.t("mutations:plexConnect.timedOut");
         setState({ kind: "error", message });
-        toast.error(message);
+        if (!silent) toast.error(message);
       }, POLL_TIMEOUT_MS);
 
       intervalRef.current = setInterval(async () => {
@@ -77,15 +79,15 @@ export function usePlexConnect() {
           cleanup();
           const message = error instanceof Error ? error.message : i18n.t("mutations:plexConnect.loginFailed");
           setState({ kind: "error", message });
-          errorToast(error, "plexConnect.loginFailed");
+          if (!silent) errorToast(error, "plexConnect.loginFailed");
         }
       }, POLL_INTERVAL_MS);
     } catch (error) {
       const message = error instanceof Error ? error.message : i18n.t("mutations:plexConnect.loginFailed");
       setState({ kind: "error", message });
-      errorToast(error, "plexConnect.loginFailed");
+      if (!silent) errorToast(error, "plexConnect.loginFailed");
     }
-  }, [cleanup, pollMutation, startMutation]);
+  }, [cleanup, pollMutation, startMutation, silent]);
 
   const saveServer = useCallback(
     async (uri: string) => {
@@ -96,14 +98,14 @@ export function usePlexConnect() {
         await utils.settings.get.invalidate();
         await utils.settings.plexStatus.invalidate();
         setState({ kind: "done" });
-        toast.success(i18n.t("mutations:plexConnect.connected"));
+        if (!silent) toast.success(i18n.t("mutations:plexConnect.connected"));
       } catch (error) {
         const message = error instanceof Error ? error.message : i18n.t("mutations:plexConnect.saveFailed");
         setState({ kind: "error", message });
-        errorToast(error, "plexConnect.saveFailed");
+        if (!silent) errorToast(error, "plexConnect.saveFailed");
       }
     },
-    [saveMutation, state, utils.settings.get, utils.settings.plexStatus]
+    [saveMutation, state, silent, utils.settings.get, utils.settings.plexStatus]
   );
 
   return { state, start, saveServer, reset };

@@ -35,9 +35,7 @@ export function FileJobDialog({ job, report, onHide }: FileJobDialogProps) {
         </DialogHeader>
 
         <div className={progressBody()}>
-          <div role="progressbar" aria-label={title} aria-valuemin={0} aria-valuemax={100} aria-valuenow={percent}>
-            <ProgressBar progress={percent} isActive />
-          </div>
+          <ProgressBar progress={percent} isActive label={title} />
           <p className={progressCount()} aria-live="polite">
             {report === null
               ? t("files.progress.starting")

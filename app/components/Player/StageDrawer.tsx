@@ -1,14 +1,15 @@
 "use client";
 
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 
+import { useMotionReduced } from "@hooks/ui/useMotionReduced";
 import { stageDrawer, stageDrawerFade } from "@utils/animations";
 
 import { stageDrawerFrame } from "./styles";
 import type { StageDrawerProps } from "./types";
 
 export function StageDrawer({ open, children }: StageDrawerProps) {
-  const reduceMotion = useReducedMotion() === true;
+  const reduceMotion = useMotionReduced();
 
   return (
     <AnimatePresence initial={false}>

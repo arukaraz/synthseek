@@ -1,25 +1,25 @@
 import { renderHook } from "@testing-library/react";
 import { beforeEach, describe, expect, it } from "vitest";
 
-import { APP_TITLE } from "@components/Player";
+import { publishNowPlayingTitle, readNowPlayingTitle } from "@utils/nowPlayingTitle";
 
 import { usePlayerDocumentTitle } from "../useDocumentTitle";
 
 beforeEach(() => {
-  document.title = "";
+  publishNowPlayingTitle(null);
 });
 
 describe("usePlayerDocumentTitle", () => {
-  it("puts what is playing in the tab title", () => {
+  it("hands what is playing to the owner of the tab title", () => {
     renderHook(() => usePlayerDocumentTitle("Digital Love - Daft Punk"));
 
-    expect(document.title).toBe("Digital Love - Daft Punk");
+    expect(readNowPlayingTitle()).toBe("Digital Love - Daft Punk");
   });
 
-  it("falls back to the product name when nothing is playing", () => {
+  it("publishes nothing when nothing is playing", () => {
     renderHook(() => usePlayerDocumentTitle(null));
 
-    expect(document.title).toBe(APP_TITLE);
+    expect(readNowPlayingTitle()).toBeNull();
   });
 
   it("follows the queue on to the next track", () => {
@@ -29,7 +29,7 @@ describe("usePlayerDocumentTitle", () => {
 
     rerender("One More Time - Daft Punk");
 
-    expect(document.title).toBe("One More Time - Daft Punk");
+    expect(readNowPlayingTitle()).toBe("One More Time - Daft Punk");
   });
 
   it("gives the tab title back when the player goes away", () => {
@@ -37,6 +37,6 @@ describe("usePlayerDocumentTitle", () => {
 
     unmount();
 
-    expect(document.title).toBe(APP_TITLE);
+    expect(readNowPlayingTitle()).toBeNull();
   });
 });

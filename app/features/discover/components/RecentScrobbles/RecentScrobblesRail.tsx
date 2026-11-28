@@ -30,7 +30,7 @@ export function RecentScrobblesRail({ scrobbles }: RecentScrobblesRailProps) {
   return (
     <div className={railWrap()}>
       <span className={axisLine()} aria-hidden />
-      <div ref={edges.ref} className={rail()}>
+      <div ref={edges.ref} className={rail()} role="region" tabIndex={0} aria-label={t("recentScrobbles.railLabel")}>
         {scrobbles.map((s) => (
           <RecentScrobbleNode key={s.id} scrobble={s} />
         ))}

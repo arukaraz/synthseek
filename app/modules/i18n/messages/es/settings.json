@@ -1,4 +1,64 @@
 {
+  "accessibility": {
+    "mode": {
+      "label": "Modo de accesibilidad",
+      "description": "Hace que el texto y los controles se vean y se usen mejor, y muestra más de la interfaz a la vez."
+    },
+    "motion": {
+      "label": "Reducir el movimiento",
+      "description": "Suaviza las animaciones y el movimiento de toda la aplicación."
+    },
+    "transparency": {
+      "label": "Reducir la transparencia",
+      "description": "Cambia los paneles translúcidos y borrosos por paneles sólidos. Por defecto sigue lo que elijas en Reducir el movimiento."
+    },
+    "contrast": {
+      "label": "Más contraste",
+      "description": "Hace que los bordes y los contornos se vean mejor. El modo de accesibilidad siempre lo usa."
+    },
+    "choices": {
+      "auto": "Seguir mi dispositivo",
+      "on": "Encendido",
+      "off": "Apagado"
+    },
+    "toastDuration": {
+      "label": "Duración de las notificaciones",
+      "description": "Cuánto tiempo se queda una notificación en pantalla. Por defecto son 2 segundos, o 4 con el modo de accesibilidad encendido.",
+      "options": {
+        "default": "Por defecto",
+        "2": "2 segundos",
+        "4": "4 segundos",
+        "8": "8 segundos",
+        "sticky": "Hasta que la cierres"
+      }
+    },
+    "shortcuts": {
+      "label": "Atajos de una sola tecla",
+      "description": "Deja que una tecla sola, como Espacio o /, haga algo. Apágalo si pulsas teclas sin querer. Los atajos con Ctrl o Comando siguen funcionando."
+    },
+    "textSize": {
+      "label": "Tamaño del texto",
+      "description": "Agranda el texto solo en este navegador. Se suma al tamaño de texto y al zoom del propio navegador.",
+      "options": {
+        "normal": "Normal",
+        "large": "Grande",
+        "larger": "Más grande",
+        "largest": "El más grande"
+      }
+    },
+    "buttonNames": {
+      "label": "Mostrar el nombre de los botones",
+      "description": "Escribe el nombre de los botones de icono del reproductor y de las barras de herramientas junto a su icono, para poder decírselo a una herramienta de control por voz. Los botones que se repiten en cada fila o tarjeta conservan solo su icono."
+    },
+    "monoAudio": {
+      "label": "Audio mono",
+      "description": "Reproduce el mismo sonido en los dos oídos, para quien oye con un solo oído. Se aplica a la reproducción dentro de la app, no a las previsualizaciones cortas."
+    },
+    "reactiveWave": {
+      "label": "Onda en movimiento",
+      "description": "Deja que la onda de la barra de reproducción suba y baje con la música. Apágalo para que se mantenga estable. Reducir el movimiento es otro interruptor."
+    }
+  },
   "requestPreset": {
     "choiceAriaLabel": "Qué ajustes usan las solicitudes",
     "unavailable": "No se pudo cargar el preset de solicitud. Inténtalo más tarde.",
@@ -904,6 +964,91 @@
     "loading": "Cargando miembros...",
     "empty": "Aún no hay miembros.",
     "loadError": "No se pudieron cargar los miembros: {{message}}",
+    "signIn": {
+      "cardTitle": "Pantalla de inicio de sesión",
+      "cardDescription": "Lo que ve cualquiera antes de iniciar sesión.",
+      "libraryCovers": {
+        "label": "Mostrar carátulas de álbumes de esta biblioteca en la pantalla de inicio de sesión",
+        "description": "Cualquiera que pueda abrir la página de inicio de sesión verá estas carátulas, tenga cuenta o no. Se eligen al azar de tu biblioteca y se renuevan con regularidad. Desactívalo para mantener el fondo liso."
+      },
+      "providerFirst": {
+        "label": "Mostrar primero el botón de inicio de sesión único",
+        "description": "El botón del proveedor pasa a ser la acción principal y el formulario de contraseña se pliega tras un enlace."
+      },
+      "autoRedirect": {
+        "label": "Ir directamente al proveedor",
+        "description": "Al abrir la pantalla de inicio de sesión se envía a la gente al proveedor en el acto. Tras cerrar sesión o un intento fallido, se queda en la pantalla de inicio de sesión."
+      },
+      "needsTest": "Disponible cuando el proveedor de inicio de sesión único haya superado una prueba de conexión.",
+      "lockout": "Si el proveedor deja de funcionar, añade ?{{param}} a la dirección de inicio de sesión para recuperar el formulario de contraseña, o arranca el servidor con FORCE_LOCAL_SIGN_IN=true.",
+      "forcedLocal": "FORCE_LOCAL_SIGN_IN está activo en el servidor: el inicio de sesión único está apagado y el formulario de contraseña se ofrece siempre hasta que se quite.",
+      "accountCreation": {
+        "label": "Crear una cuenta en el primer inicio de sesión",
+        "description": "Quien entre con inicio de sesión único o con Jellyfin y no tenga cuenta aquí recibe una. Las cuentas nuevas esperan a que un administrador las apruebe en la lista de usuarios."
+      }
+    },
+    "oidc": {
+      "cardTitle": "Inicio de sesión único (OpenID Connect)",
+      "cardDescription": "Permite entrar con la cuenta de un proveedor de identidad como Authentik, Authelia o Keycloak.",
+      "enabled": {
+        "label": "Ofrecer inicio de sesión único",
+        "description": "Muestra el botón del proveedor en la pantalla de inicio de sesión cuando el emisor y el ID de cliente estén rellenos."
+      },
+      "issuerUrl": {
+        "label": "URL del emisor",
+        "helper": "La dirección del proveedor para esta aplicación, sin /.well-known/openid-configuration.",
+        "placeholder": "https://auth.example.com/application/o/synthseek/"
+      },
+      "clientId": {
+        "label": "ID de cliente"
+      },
+      "clientSecret": {
+        "label": "Secreto de cliente",
+        "helper": "Solo escritura: no se vuelve a mostrar una vez guardado. Déjalo vacío para conservar el guardado.",
+        "storedPlaceholder": "Guardado. Escribe uno nuevo para sustituirlo."
+      },
+      "scopes": {
+        "label": "Ámbitos",
+        "helper": "Separados por espacios. openid se añade siempre."
+      },
+      "buttonLabel": {
+        "label": "Texto del botón",
+        "helper": "Lo que dice el botón de inicio de sesión. Déjalo vacío para mostrar Inicio de sesión único.",
+        "placeholder": "Inicio de sesión único"
+      },
+      "callback": {
+        "label": "Dirección de retorno",
+        "helper": "Registra esta dirección como URI de redirección en el proveedor.",
+        "copyAriaLabel": "Copiar la dirección de retorno",
+        "copied": "Dirección de retorno copiada",
+        "copyFailed": "No se pudo copiar la dirección de retorno",
+        "missing": "Configura antes PUBLIC_BASE_URL en el servidor. El proveedor necesita una dirección pública a la que devolver a la gente."
+      },
+      "test": {
+        "action": "Probar conexión",
+        "testing": "Probando...",
+        "saveFirst": "Guarda antes los cambios. La prueba comprueba el proveedor guardado.",
+        "passed": "El proveedor respondió como se esperaba.",
+        "failed": "La prueba no se superó",
+        "lastPassed": "Última prueba superada el {{date}}",
+        "neverPassed": "Todavía no ha superado ninguna prueba."
+      },
+      "failures": {
+        "notConfigured": "Escribe la URL del emisor y el ID de cliente, guarda y luego prueba.",
+        "addressRefused": "La dirección del proveedor es una que Synthseek no tiene permitido contactar.",
+        "unreachable": "Synthseek no pudo contactar con el proveedor.",
+        "timeout": "El proveedor tardó demasiado en responder.",
+        "notAnIssuer": "Esa dirección no responde como un proveedor de OpenID Connect.",
+        "issuerMismatch": "El proveedor indica un emisor distinto del que se escribió.",
+        "noAuthorizationEndpoint": "El proveedor no publica una dirección de inicio de sesión utilizable.",
+        "noTokenEndpoint": "El proveedor no publica una dirección de tokens utilizable.",
+        "codeFlowUnsupported": "El proveedor no ofrece el inicio de sesión con código de autorización que usa Synthseek.",
+        "noUsableSigningAlgorithm": "El proveedor firma sus tokens de una forma que Synthseek no puede comprobar.",
+        "jwksUnreachable": "Synthseek no pudo obtener las claves de firma del proveedor.",
+        "jwksInvalid": "Las claves de firma del proveedor faltan o no se pueden leer.",
+        "unexpected": "La prueba falló por un motivo inesperado."
+      }
+    },
     "toolbar": {
       "createLocal": "Crear usuario local",
       "importPlex": "Importar usuarios de Plex"
@@ -916,11 +1061,37 @@
       "joined": "Se unió",
       "quota": "Cuota",
       "selectAll": "Seleccionar todos los miembros",
-      "selectMember": "Seleccionar a {{username}}"
+      "selectMember": "Seleccionar a {{username}}",
+      "signsInWith": "Entra con",
+      "actions": "Acciones"
     },
     "type": {
       "plex": "Usuario de Plex",
       "local": "Usuario local"
+    },
+    "signsIn": {
+      "password": "Contraseña",
+      "plex": "Plex",
+      "jellyfin": "Jellyfin",
+      "oidcFallback": "Inicio de sesión único",
+      "none": "Aún sin forma de entrar"
+    },
+    "pending": {
+      "badge": "Pendiente de aprobación",
+      "approve": "Aprobar a {{username}}",
+      "reject": "Rechazar a {{username}}",
+      "rejectTitle": "Rechazar esta cuenta",
+      "rejectMessage": "¿Rechazar a {{username}}? La cuenta se elimina y no puede entrar.",
+      "rejectConfirm": "Rechazar"
+    },
+    "waysIn": {
+      "title": "Formas de entrar",
+      "unlink": "Desvincular {{method}}",
+      "unlinkTitle": "Desvincular esta forma de entrar",
+      "unlinkMessage": "¿Desvincular {{method}} de {{username}}? Ya no podrá entrar con ella.",
+      "unlinkConfirm": "Desvincular",
+      "lastWayIn": "Es la única forma de entrar de la cuenta. Pon una contraseña arriba, guarda y después desvincúlala.",
+      "none": "Ninguna cuenta vinculada."
     },
     "role": {
       "owner": "Propietario",
@@ -981,9 +1152,9 @@
       "passwordAriaLabel": "Nueva contraseña",
       "ownerRoleNote": "La cuenta del propietario debe seguir siendo administrador.",
       "quotaTracksLabel": "Cuota de canciones propia",
-      "quotaTracksAriaLabel": "Cuota de canciones de este miembro",
+      "quotaTracksAriaLabel": "Cuota de canciones propia: cuota de canciones de este miembro",
       "quotaStorageLabel": "Cuota de espacio propia (GB)",
-      "quotaStorageAriaLabel": "Cuota de espacio de este miembro en gigabytes",
+      "quotaStorageAriaLabel": "Cuota de espacio propia (GB): cuota de espacio de este miembro en gigabytes",
       "quotaPlaceholder": "Seguir la cuota global",
       "quotaNote": "Deja una cuota vacía para seguir la global. Cero significa sin límite para este miembro.",
       "submit": "Guardar cambios"
@@ -1167,7 +1338,37 @@
       "newLabel": "Nueva contraseña",
       "newAriaLabel": "Nueva contraseña",
       "submit": "Cambiar contraseña",
-      "managedByPlex": "Inicias sesión con Plex. Para usar una contraseña, desconecta Plex en Conexiones."
+      "managedByPlex": "Inicias sesión con Plex. Para usar una contraseña, desconecta Plex en Conexiones.",
+      "managedElsewhere": "Esta cuenta no tiene contraseña: entra con una cuenta vinculada. Un administrador puede ponerle una contraseña."
+    },
+    "waysIn": {
+      "title": "Formas de entrar",
+      "description": "Las cuentas con las que puedes entrar. Siempre tiene que quedar una.",
+      "password": "Contraseña",
+      "passwordSet": "Configurada",
+      "passwordNone": "Sin configurar",
+      "plexHint": "Vincula o desconecta Plex en Conexiones, Servicios.",
+      "plexManage": "Abrir Servicios",
+      "linkedAs": "Vinculada como {{name}}",
+      "linked": "Vinculada",
+      "notLinked": "Sin vincular",
+      "link": "Vincular",
+      "unlink": "Desvincular",
+      "unlinkLabel": "Desvincular {{method}}",
+      "unlinkTitle": "Desvincular {{method}}",
+      "unlinkMessage": "Una vez desvinculada, ya no podrás entrar con {{method}}.",
+      "unlinkConfirm": "Desvincular",
+      "lastWayIn": "Es tu única forma de entrar, así que no se puede desvincular. Vincula antes otra cuenta o pide a un administrador que te ponga una contraseña.",
+      "linkedNotice": "{{method}} está vinculada. Ya puedes entrar con ella.",
+      "jellyfin": {
+        "title": "Vincular Jellyfin",
+        "description": "Escribe una vez tu usuario y tu contraseña de Jellyfin para vincular la cuenta.",
+        "usernameLabel": "Usuario de Jellyfin",
+        "passwordLabel": "Contraseña de Jellyfin",
+        "cancel": "Cancelar",
+        "submit": "Vincular",
+        "submitting": "Vinculando..."
+      }
     },
     "connected": {
       "title": "Servicios",
@@ -1182,6 +1383,15 @@
         "notConnected": "No conectado",
         "notConfigured": "Pide a un administrador que configure Spotify primero.",
         "needsReconnect": "Spotify dejó de aceptar esta conexión. Vuelve a conectarla para mantener tu biblioteca sincronizada."
+      },
+      "session": {
+        "connected": "Conectado",
+        "connectedAs": "Conectado como {{username}}",
+        "notConnected": "Sin conectar",
+        "needsReconnect": "{{provider}} dejó de aceptar la sesión guardada. Pega una nueva abajo para volver a conectar.",
+        "disconnectTitle": "¿Desconectar {{provider}}?",
+        "disconnectMessage": "La sesión guardada de {{provider}} se borra del servidor. Las listas que ya importaste se quedan en tu biblioteca.",
+        "loadFailed": "No se pudieron comprobar las fuentes que conectas con una sesión del navegador. Recarga la página para intentarlo de nuevo."
       },
       "plex": {
         "name": "Plex",
@@ -1339,6 +1549,7 @@
       "description": "Las líneas más recientes del archivo de registro activo.",
       "searchPlaceholder": "Buscar en registros",
       "searchAriaLabel": "Buscar en registros",
+      "terminalLabel": "Líneas del registro",
       "linesAriaLabel": "Líneas a cargar",
       "linesLabel": "Líneas a cargar",
       "refreshAriaLabel": "Intervalo de actualización automática",
@@ -1529,6 +1740,10 @@
       "release-watch": {
         "name": "Vigilancia de lanzamientos",
         "description": "Revisa dos veces al día si los artistas que sigue la gente tienen lanzamientos nuevos."
+      },
+      "sign-in-background": {
+        "name": "Fondo de inicio de sesión",
+        "description": "Crea el fondo de la pantalla de inicio de sesión con una muestra nueva de las carátulas de esta biblioteca. Solo se ejecuta mientras esa opción está activada."
       }
     }
   },
@@ -1689,6 +1904,10 @@
         "title": "Privacidad",
         "description": "Lo que los demás miembros de este servidor pueden ver de ti."
       },
+      "accessibility": {
+        "title": "Accesibilidad",
+        "description": "Movimiento, transparencia, contraste y otras formas de que Synthseek resulte más fácil de usar."
+      },
       "notifications": {
         "title": "Notificaciones"
       },
@@ -1774,6 +1993,7 @@
       "entries": {
         "navidromeAccount": "Cuenta de Navidrome",
         "jellyfinAccount": "Cuenta de Jellyfin",
+        "youtubeAccount": "Cuenta de YouTube",
         "lastfmFeeds": "Feeds de descubrimiento de Last.fm",
         "listenbrainzFeeds": "Feeds de descubrimiento de ListenBrainz",
         "listenbrainzAutoRequest": "Solicitar automáticamente las playlists de ListenBrainz",
@@ -1784,10 +2004,16 @@
       },
       "keywords": {
         "playbackAccount": "normalización de volumen sonoridad ganancia autoplay reproducción automática pistas similares",
+        "youtubeAccount": "cookies sesión listas música que te gusta importar",
         "playbackBrowser": "ecualizador compresor crossfade fundido gapless transición conversión bitrate mp3",
         "theme": "oscuro medianoche océano color personalizado css fuente fuentes radio sombra importar exportar apariencia",
         "language": "inglés español francés alemán",
         "members": "rol confiable cuota preset solicitud calidad formato",
+        "signIn": "login acceso entrar fondo portadas caratulas mosaico publico visitantes anonimos",
+        "oidc": "sso inicio de sesion unico openid oidc authentik authelia keycloak emisor cliente secreto retorno redireccion uri",
+        "signInMode": "sso inicio de sesion unico proveedor primero redireccion automatica formulario contraseña local",
+        "accountCreation": "sso inicio de sesion unico jellyfin cuentas nuevas alta registro aprobacion pendiente",
+        "waysIn": "sso inicio de sesion unico openid jellyfin vincular desvincular entrar contraseña identidad",
         "board": "densidad tamaño de texto fondo plantillas organizar disposición widgets apariencia",
         "scrobble": "scrobble reproducciones historial escucha",
         "privacy": "privado visibilidad compartir reproduciendo ahora incógnito historial borrar nombre",
@@ -1800,7 +2026,17 @@
         "updates": "actualizaciones versión lanzamiento changelog notas",
         "timeout": "tiempo límite timeout espera",
         "logout": "cerrar sesión salir logout desconectar",
-        "following": "calendario"
+        "following": "calendario",
+        "accessibility": "accesibilidad modo lector de pantalla teclado ver más fácil visión",
+        "accessibilityMotion": "movimiento animación animaciones reducir suavizar",
+        "accessibilityTransparency": "transparencia desenfoque cristal translúcido",
+        "accessibilityContrast": "contraste bordes contorno alto",
+        "accessibilityToast": "notificación notificaciones aviso avisos duración tiempo segundos cerrar",
+        "accessibilityShortcuts": "atajo atajos teclado tecla espacio barra",
+        "accessibilityTextSize": "tamaño texto letra fuente grande agrandar zoom lectura",
+        "accessibilityButtonNames": "nombre botones etiquetas iconos voz control hablar decir",
+        "accessibilityMonoAudio": "mono audio sonido oído oídos sordera audición balance estéreo",
+        "accessibilityReactiveWave": "onda barra reproducción forma de onda movimiento destellos parpadeo música reacción"
       }
     },
     "palette": {

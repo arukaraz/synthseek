@@ -28,7 +28,7 @@ export function OAuthConsentScreen() {
   const busy = approve.isPending || deny.isPending;
 
   return (
-    <div className={consentFrame()}>
+    <main className={consentFrame()}>
       <div className={consentColumn()}>
         <LogoIcon className="h-12 w-auto sm:h-14" />
         <div className={consentCard()}>
@@ -94,6 +94,6 @@ export function OAuthConsentScreen() {
           )}
         </div>
       </div>
-    </div>
+    </main>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Button } from "@components/ui/Button";
@@ -12,24 +12,57 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@components/ui/Dialog";
+import { InlineError } from "@components/ui/InlineError";
+import { useAccessibility } from "@modules/providers/AccessibilityProvider";
 
 import { rejectReasonInput } from "./styles";
-import type { RejectApprovalDialogProps } from "./types";
+import type { RejectApprovalDialogProps, RejectPhase } from "./types";
 
-export function RejectApprovalDialog({ open, onOpenChange, count, onConfirm }: RejectApprovalDialogProps) {
+export function RejectApprovalDialog({
+  open,
+  onOpenChange,
+  count,
+  error,
+  pending,
+  onConfirm,
+}: RejectApprovalDialogProps) {
   const { t } = useTranslation("requests");
+  const { mode } = useAccessibility();
   const [reason, setReason] = useState("");
+  const [phase, setPhase] = useState<RejectPhase>("idle");
+  const [failure, setFailure] = useState<unknown>(null);
+
+  useEffect(() => {
+    if (phase === "submitted" && pending) setPhase("running");
+    if (phase !== "running" || pending) return;
+    setPhase("idle");
+    if (error === null || error === undefined) {
+      setReason("");
+      onOpenChange(false);
+      return;
+    }
+    setFailure(error);
+  }, [phase, pending, error, onOpenChange]);
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     const trimmed = reason.trim();
     onConfirm(trimmed.length > 0 ? trimmed : undefined);
-    setReason("");
-    onOpenChange(false);
+    if (!mode) {
+      setReason("");
+      onOpenChange(false);
+      return;
+    }
+    setFailure(null);
+    setPhase("submitted");
   };
 
   const handleOpenChange = (next: boolean) => {
-    if (!next) setReason("");
+    if (!next) {
+      setReason("");
+      setPhase("idle");
+      setFailure(null);
+    }
     onOpenChange(next);
   };
 
@@ -54,11 +87,13 @@ export function RejectApprovalDialog({ open, onOpenChange, count, onConfirm }: R
             />
           </label>
 
+          <InlineError error={failure} />
+
           <DialogFooter>
             <Button variant="ghost" size="sm" onClick={() => handleOpenChange(false)}>
               {t("approval.rejectDialog.cancel")}
             </Button>
-            <Button type="submit" variant="destructive" size="sm">
+            <Button type="submit" variant="destructive" size="sm" disabled={phase !== "idle"}>
               {t("approval.rejectDialog.confirm", { count })}
             </Button>
           </DialogFooter>

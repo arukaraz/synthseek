@@ -5,7 +5,7 @@ import { describe, expect, it, vi } from "vitest";
 import { createPlayerActions, createPlayerView } from "@test/factories";
 import enPlayer from "@modules/i18n/messages/en/player.json";
 
-import { VOLUME_STEP } from "../constants";
+import { VOLUME_PAGE_STEP, VOLUME_STEP } from "../constants";
 import { PlayerVolume } from "../PlayerVolume";
 import type { PlayerView } from "../types";
 
@@ -21,7 +21,7 @@ describe("the volume slider", () => {
     const { slider } = renderVolume({ volume: 0.65 });
 
     expect(slider).toHaveAttribute("aria-valuenow", "65");
-    expect(slider).toHaveAttribute("aria-valuetext", "65%");
+    expect(slider).toHaveAttribute("aria-valuetext", "65 percent");
   });
 
   it("reports nothing coming out while the player is muted, whatever the level is set to", () => {
@@ -64,14 +64,24 @@ describe("setting the volume from the keyboard", () => {
     expect(actions.setVolume).toHaveBeenCalledWith(VOLUME_STEP);
   });
 
-  it("steps with page up and page down too", () => {
+  it("steps with the up and down arrows too", () => {
+    const { actions, slider } = renderVolume({ volume: 0.5 });
+
+    fireEvent.keyDown(slider, { key: "ArrowUp" });
+    expect(actions.setVolume).toHaveBeenCalledWith(0.5 + VOLUME_STEP);
+
+    fireEvent.keyDown(slider, { key: "ArrowDown" });
+    expect(actions.setVolume).toHaveBeenCalledWith(0.5 - VOLUME_STEP);
+  });
+
+  it("moves by a tenth with page up and page down", () => {
     const { actions, slider } = renderVolume({ volume: 0.5 });
 
     fireEvent.keyDown(slider, { key: "PageUp" });
-    expect(actions.setVolume).toHaveBeenCalledWith(0.5 + VOLUME_STEP);
+    expect(actions.setVolume).toHaveBeenCalledWith(0.5 + VOLUME_PAGE_STEP);
 
     fireEvent.keyDown(slider, { key: "PageDown" });
-    expect(actions.setVolume).toHaveBeenCalledWith(0.5 - VOLUME_STEP);
+    expect(actions.setVolume).toHaveBeenCalledWith(0.5 - VOLUME_PAGE_STEP);
   });
 
   it("goes silent and goes full with home and end", () => {

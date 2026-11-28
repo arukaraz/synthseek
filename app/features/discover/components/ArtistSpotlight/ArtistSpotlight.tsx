@@ -8,10 +8,11 @@ import type { MusicItem } from "@api/__generated__/types";
 import { useContentRequestFlow } from "@features/search/components/ContentRequestFlow";
 import { useArtistsForYou } from "@hooks/api/queries/analytics/useArtistsForYou";
 import { useEntityPlayback } from "@hooks/ui/useEntityPlayback";
+import { useMotionReduced } from "@hooks/ui/useMotionReduced";
 import { gradientOverlay } from "@theme/utilities/styles";
 import { fadeIn } from "@utils/animations";
 import { cn } from "@utils/cn";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { AlertCircle, Dices, Users } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -34,7 +35,7 @@ export function ArtistSpotlight({ size, info }: ArtistSpotlightProps) {
   const swapping = pending.length > 0;
   const rolling = swapping && artists.every((item) => pending.includes(item.artist.id));
   const [staggered, setStaggered] = useState(false);
-  const variants = useReducedMotion() ? SWAP_VARIANTS_REDUCED : SWAP_VARIANTS;
+  const variants = useMotionReduced() ? SWAP_VARIANTS_REDUCED : SWAP_VARIANTS;
 
   const { openForResult } = useContentRequestFlow();
   const { shuffleEntity } = useEntityPlayback();

@@ -3,13 +3,16 @@
 import { Radio } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
-import { scrobbleDot, scrobbleStatus } from "./styles";
+import { SCROBBLE_SIGNS } from "./constants";
+import { labelled } from "./helpers";
+import { scrobbleDot, scrobbleSign, scrobbleStatus } from "./styles";
 import type { PlayerScrobbleProps } from "./types";
 
 export function ScrobbleStatus({ state, actionable, lock, size, onToggle }: PlayerScrobbleProps) {
   const { t } = useTranslation("player");
   const label = lock === null ? t(`scrobble.${state}`) : t(`scrobble.locked.${lock}`);
   const icon = size === "stage" ? "size-4" : "size-3.5";
+  const Sign = SCROBBLE_SIGNS[state];
 
   if (!actionable) {
     return (
@@ -22,6 +25,7 @@ export function ScrobbleStatus({ state, actionable, lock, size, onToggle }: Play
       >
         <Radio className={icon} />
         <span className={scrobbleDot({ state })} />
+        <Sign aria-hidden className={scrobbleSign()} />
       </span>
     );
   }
@@ -31,12 +35,12 @@ export function ScrobbleStatus({ state, actionable, lock, size, onToggle }: Play
       type="button"
       className={scrobbleStatus({ state, size })}
       onClick={onToggle}
-      aria-label={label}
+      {...labelled(label)}
       aria-pressed={state !== "off"}
-      title={label}
     >
       <Radio className={icon} />
       <span className={scrobbleDot({ state })} />
+      <Sign aria-hidden className={scrobbleSign()} />
     </button>
   );
 }

@@ -23,6 +23,7 @@ import {
   formatRatio,
   matchesQuery,
   unreadableOn,
+  unsavedNamesOf,
 } from "./helpers";
 import { SectionNav } from "./SectionNav";
 import { controlsColumn, editorLayout, emptyText, rowList, sectionsScroller } from "./styles";
@@ -75,10 +76,11 @@ export function VisualMode({ editor }: EditorModeProps) {
   const listed = searching ? matches : view.showAll ? sectionTokens : essentials;
   const checked = searching ? matches : sectionTokens;
   const changed = useMemo(() => changedNamesOf(draft, checked), [draft, checked]);
+  const unsaved = useMemo(() => unsavedNamesOf(draft, saved, checked), [draft, saved, checked]);
   const hiddenChange =
     !searching &&
     !view.showAll &&
-    sectionTokens.some((token) => !essentials.includes(token) && changed.has(token.name));
+    sectionTokens.some((token) => !essentials.includes(token) && unsaved.has(token.name));
   const canExpand = sectionTokens.length > essentials.length;
   const presetName = t(`presets.${draft.meta.startedFrom}`);
 
@@ -127,6 +129,7 @@ export function VisualMode({ editor }: EditorModeProps) {
                   warning={warning}
                   following={draft.meta.follows.includes(token.name)}
                   changed={changed.has(token.name)}
+                  unsaved={unsaved.has(token.name)}
                   presetName={presetName}
                   baseLabel={token.follows === undefined ? null : copyOf(copy, token.follows).label}
                   families={families}

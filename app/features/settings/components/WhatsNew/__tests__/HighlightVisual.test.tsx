@@ -3,7 +3,7 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vite
 
 const reducedMotion = vi.hoisted(() => ({ value: false }));
 
-vi.mock("@hooks/ui/useMediaQuery", () => ({ useMediaQuery: () => reducedMotion.value }));
+vi.mock("@hooks/ui/useMotionReduced", () => ({ useMotionReduced: () => reducedMotion.value }));
 
 import i18n from "@modules/i18n";
 import enSettings from "@modules/i18n/messages/en/settings.json";

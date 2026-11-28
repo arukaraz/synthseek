@@ -29,6 +29,7 @@ export function ColorRow({
   warning,
   following,
   changed,
+  unsaved,
   presetName,
   baseLabel,
   onWrite,
@@ -99,6 +100,7 @@ export function ColorRow({
         baseLabel={baseLabel}
         presetName={presetName}
         changed={changed}
+        unsaved={unsaved}
         onReset={onReset}
       />
     </div>

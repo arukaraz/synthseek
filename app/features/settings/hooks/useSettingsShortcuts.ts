@@ -2,12 +2,14 @@
 
 import { useEffect, useRef } from "react";
 
+import { useShortcutGate } from "@hooks/ui/useShortcutGate";
 import { isTextEntryTarget } from "@utils/text-entry";
 
 import type { SettingsShortcutHandlers } from "../types";
 
 export function useSettingsShortcuts(handlers: SettingsShortcutHandlers) {
   const latest = useRef(handlers);
+  const allows = useShortcutGate();
 
   useEffect(() => {
     latest.current = handlers;
@@ -21,12 +23,12 @@ export function useSettingsShortcuts(handlers: SettingsShortcutHandlers) {
         latest.current.onPalette();
         return;
       }
-      if (event.key === "/" && !event.metaKey && !event.ctrlKey && !isTextEntryTarget(event.target)) {
+      if (event.key === "/" && !event.metaKey && !event.ctrlKey && allows(event) && !isTextEntryTarget(event.target)) {
         event.preventDefault();
         latest.current.onSearch();
       }
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, []);
+  }, [allows]);
 }

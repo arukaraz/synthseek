@@ -1,4 +1,26 @@
 {
+  "accessibilityPanel": {
+    "open": "Accessibilité",
+    "title": "Accessibilité",
+    "description": "Les changements s'appliquent tout de suite. Ils sont gardés dans ce navigateur et ajoutés à votre compte quand vous vous connectez."
+  },
+  "a11yMode": {
+    "progress": {
+      "generic": "Progression",
+      "downloadStarted": "Téléchargement commencé",
+      "downloadFinished": "Téléchargement terminé, {{done}} titres sur {{total}}",
+      "downloadFailed": "Le téléchargement a échoué",
+      "importStarted": "Import commencé",
+      "importFinished": "Import terminé, {{imported}} importés, {{failed}} en échec",
+      "importFailed": "L'import a échoué"
+    },
+    "plex": {
+      "copy": "Copier le lien de connexion",
+      "copied": "Lien copié",
+      "copyFailed": "Le lien n'a pas pu être copié",
+      "expiring": "Cette connexion Plex expire dans moins de 30 secondes. Recommencez si vous n'avez pas terminé."
+    }
+  },
   "activity": {
     "paused": "En pause"
   },
@@ -75,6 +97,18 @@
     "ascending": "Croissant",
     "descending": "Décroissant"
   },
+  "sessionConnect": {
+    "howTo": "Exportez les cookies de votre navigateur pour {{provider}} dans un fichier texte au format Netscape, par exemple avec une extension d'export de cookies, puis ouvrez le fichier et collez son contenu ci-dessous.",
+    "kept": "Seules les entrées de {{provider}} sont conservées, stockées chiffrées sur le serveur, et ce que vous collez n'est plus jamais affiché.",
+    "warningTitle": "Votre compte {{provider}} pourrait être restreint",
+    "warningBody": "Utiliser un compte au moyen d'outils automatisés peut amener {{provider}} à le restreindre ou à le bannir, temporairement ou définitivement. Un compte secondaire est le choix prudent.",
+    "label": "Contenu du fichier de cookies",
+    "placeholder": "Collez ici le contenu du fichier de cookies",
+    "submit": "Connecter {{provider}}",
+    "reconnect": "Reconnecter {{provider}}",
+    "submitting": "Vérification de la session…",
+    "connected": "{{provider}} connecté"
+  },
   "passwordField": {
     "label": "Mot de passe",
     "show": "Afficher le mot de passe",
@@ -84,7 +118,8 @@
     "ariaLabel": "Logo Synthseek"
   },
   "table": {
-    "empty": "Aucun élément à afficher"
+    "empty": "Aucun élément à afficher",
+    "scrollRegion": "Tableau, défile latéralement"
   },
   "loading": {
     "section": "Chargement...",
@@ -103,6 +138,13 @@
   },
   "trackStatus": {
     "moreInfo": "Plus d'infos : {{label}}"
+  },
+  "pageTitle": {
+    "format": "{{page}} | {{app}}",
+    "nested": "{{page}} · {{parent}}",
+    "login": "Connexion",
+    "setup": "Configuration",
+    "consent": "Autoriser l'accès"
   },
   "header": {
     "primaryNav": "Principal",

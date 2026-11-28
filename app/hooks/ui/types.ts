@@ -87,6 +87,16 @@ export interface UseContentRequestModalsResult {
 
 export type SetupRedirectContext = "app" | "login" | "setup";
 
+export type SetupTarget = "stay" | "home" | "setup" | "loginToSetup" | "loginBack" | "returnPath";
+
+export interface SetupTargetInput {
+  context: SetupRedirectContext;
+  setupRequired: boolean;
+  tokenRequired: boolean;
+  signedIn: boolean;
+  isAdmin: boolean;
+}
+
 export type SetupGate =
   | { status: "resolving" }
   | { status: "error"; retry: () => void }
@@ -100,19 +110,28 @@ export interface PlexPinStart {
   authUrl: string;
 }
 
+export type PlexPinFailure = { kind: "popupBlocked" } | { kind: "timeout" } | { kind: "failed"; error: unknown };
+
 export interface UsePlexPinPopupOptions<TResolved> {
   start: () => Promise<PlexPinStart>;
   poll: (pinId: string) => Promise<TResolved | null>;
   onResolved: (resolved: TResolved) => void;
+  onFailure?: (failure: PlexPinFailure) => void;
   popupBlockedMessage?: string;
   timeoutMessage?: string;
   errorFallbackMessage?: string;
+}
+
+export interface PlexPinSession {
+  authUrl: string;
+  expiresAt: number;
 }
 
 export interface UsePlexPinPopupResult {
   start: () => Promise<void>;
   reset: () => void;
   phase: PlexPinPhase;
+  session: PlexPinSession | null;
   isPending: boolean;
 }
 

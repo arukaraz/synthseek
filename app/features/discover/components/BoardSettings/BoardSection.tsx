@@ -58,7 +58,7 @@ export function BoardSection({
           />
         </StagedWidgetsContext.Provider>
       </div>
-      <aside className={settingsAside()}>
+      <div className={settingsAside()} data-board-settings="">
         <SegmentTabs
           items={BOARD_SETTINGS_TABS.map((value) => ({ value, label: t(BOARD_SETTINGS_TAB_KEYS[value]) }))}
           value={tab}
@@ -78,7 +78,7 @@ export function BoardSection({
         <div className={settingsPanel({ shown: tab === "templates" })}>
           <TemplatesPanel lists={saved} staged={draft.staged !== null} onStage={onStage} onUnstage={draft.unstage} />
         </div>
-      </aside>
+      </div>
     </div>
   );
 }

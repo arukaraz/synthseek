@@ -111,7 +111,7 @@ describe("RecentScrobbles", () => {
     expect(useListenedTracksMock).toHaveBeenCalledWith("lastfm");
     expect(screen.getByTestId("rail")).toHaveAttribute("data-count", "1");
     expect(screen.getByText("Recent Scrobbles")).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Open Last.fm profile" })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: "See more: Last.fm profile" })).toHaveAttribute(
       "href",
       "https://www.last.fm/user/aphex%20twin"
     );
@@ -125,7 +125,7 @@ describe("RecentScrobbles", () => {
 
     expect(useListenedTracksMock).toHaveBeenCalledWith("listenbrainz");
     expect(screen.getByRole("heading", { name: "Recent Listens" })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Open ListenBrainz profile" })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: "See more: ListenBrainz profile" })).toHaveAttribute(
       "href",
       "https://listenbrainz.org/user/aphex%20twin"
     );

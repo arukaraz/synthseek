@@ -626,6 +626,13 @@ export function scrobbleLockFrom(
   return privateSession && !channel.private ? "private" : null;
 }
 
+export function focusedControlNames(element: Element | null): string[] {
+  if (element === null || element === document.body) return [];
+  return [element.getAttribute("aria-label"), element.textContent].filter(
+    (name): name is string => name !== null && name !== ""
+  );
+}
+
 export function isPlayPauseShortcut(event: KeyboardEvent): boolean {
   if (event.defaultPrevented || event.repeat || event.altKey || event.ctrlKey || event.metaKey) return false;
   if (event.key !== " " && event.code !== "Space") return false;

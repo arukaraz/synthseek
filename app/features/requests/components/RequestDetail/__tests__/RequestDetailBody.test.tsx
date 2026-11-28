@@ -158,10 +158,10 @@ describe("RequestDetailBody actions", () => {
   it("opens one track's details at a time, and closes them on a second click", async () => {
     renderBody();
 
-    await userEvent.click(screen.getByRole("button", { name: "Show details of Broken Song" }));
+    await userEvent.click(screen.getByRole("button", { name: /^Broken Song/, expanded: false }));
     expect(screen.getAllByRole("region", { name: "Requested" })).toHaveLength(1);
 
-    await userEvent.click(screen.getByRole("button", { name: "Hide details of Broken Song" }));
+    await userEvent.click(screen.getByRole("button", { name: /^Broken Song/, expanded: true }));
     expect(screen.queryByRole("region", { name: "Requested" })).not.toBeInTheDocument();
   });
 

@@ -1,3 +1,4 @@
+import type { RequestStatus } from "@api/__generated__/types";
 import type { LibraryAlbumItem, LibraryArtistItem, LibraryPlaylistItem } from "@hooks/api/queries/library/types";
 import type { CheckboxPreview } from "@components/ui/Checkbox";
 import type { ReactNode } from "react";
@@ -12,6 +13,7 @@ export interface LibraryCardGridProps {
 
 export interface LibraryInfiniteGridProps<TItem> {
   items: TItem[];
+  total?: number;
   ariaLabel: string;
   density?: LibraryDensity;
   renderCard: (item: TItem) => ReactNode;
@@ -29,6 +31,18 @@ export interface CardPlayButtonProps {
   order: CardPlayOrder;
   onPlay: () => Promise<unknown>;
   placement: "corner" | "inline";
+}
+
+export interface RowPrimaryButtonProps {
+  label: string;
+  pressed?: boolean;
+  children: ReactNode;
+}
+
+export type StatusDotTone = "complete" | "failed" | "active" | "idle";
+
+export interface CardStatusDotProps {
+  status: RequestStatus;
 }
 
 export interface LibraryListRowProps {
